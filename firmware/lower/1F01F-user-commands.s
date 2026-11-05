@@ -1,17 +1,17 @@
-* HP 48GX ROM revision R, #1F01F-#22004: User commands
+* HP 48GX ROM revision R, #1F01F-#22004: User commands of library 002: APPLY and symbolic support, →Q, STO arithmetic, conversion commands, PURGE and ORDER, memory and port commands (ARCHIVE, RESTORE, FREE, MERGE)
 * Addresses in the right-hand comments are those of the original ROM.
 * Most referenced: xFCNAPPLY xWHERE 'REvalSto XEQRCL xPURGE xSTEQ xDUP xDROP ChkExpr1Name xLINFIT xSWAP ä
 * Follows on from the previous file (at #1F01F in the original ROM).
         CON(5)  D/DDER                           * 1F01F  address
         RPL
 
-        ROMPTR 0F0 092                           * 1F024
+        XLIB SymbDER                             * 1F024
 
         ROMPTR 0F0 019                           * 1F02F
 
         CON(5)  nWHEREDER                        * 1F03A  address (the code jumps or points through it)
 
-        CON(5)  OBJ_5A1F8                        * 1F03F  address (the code jumps or points through it)
+        CON(5)  ∂Form                            * 1F03F  address (the code jumps or points through it)
         BSS     3                                * 1F044  zeros
 
 * ob ob' -> %0
@@ -155,13 +155,13 @@ xINTEGRAL:
         HXS 014060626350                         * 1F241
         CON(5)  D/DINTEGRAL                      * 1F257  address
 
-        ROMPTR 0F0 093                           * 1F25C
+        XLIB SymbINTEGRAL                        * 1F25C
 
-        CON(5)  OBJ_5B875                        * 1F267  address (the code jumps or points through it)
+        CON(5)  IntgIntg                         * 1F267  address (the code jumps or points through it)
 
         CON(5)  nWHEREINTG                       * 1F26C  address (the code jumps or points through it)
 
-        CON(5)  OBJ_5A211                        * 1F271  address (the code jumps or points through it)
+        CON(5)  ∫Form                            * 1F271  address (the code jumps or points through it)
         BSS     4                                * 1F276  zeros
 
 * ob ob ob QN -> symf
@@ -190,11 +190,11 @@ XEQINTEG:
         HXS 014370606250                         * 1F319
         CON(5)  D/DSUM                           * 1F32F  address
 
-        ROMPTR 0F0 094                           * 1F334
+        XLIB SymbSUM                             * 1F334
 
         CON(5)  nWHERESUM                        * 1F33F  address (the code jumps or points through it)
 
-        CON(5)  OBJ_5A22A                        * 1F344  address (the code jumps or points through it)
+        CON(5)  ΣForm                            * 1F344  address (the code jumps or points through it)
         BSS     4                                * 1F349  zeros
 
 * ROMPTR 002 0FF |
@@ -210,7 +210,7 @@ WHERE:
         ;                                        * 1F37C
 
 * slots of 002 0FF (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_6DB0C                        * 1F381  slot 0
+        CON(5)  EqwWhere                         * 1F381  slot 0
         CON(5)  xWHERE                           * 1F386  slot 1
 
 * symf {} -> symf
@@ -230,14 +230,14 @@ xWHERE:
         :: CKINFARGS XEQSYMWHERE ;               * 1F3F3
 
 * slots of 002 100 (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_6DB0C                        * 1F407  slot 0
+        CON(5)  EqwWhere                         * 1F407  slot 0
 
 #5B0734122h:
         HXS 2214370B50                           * 1F40C  slot 1
         CON(5)  D/DWHERE                         * 1F420  slot 2
         CON(5)  xWHERE                           * 1F425  slot 3
         CON(5)  nWHEREWHERE                      * 1F42A  slot 4
-        CON(5)  OBJ_5A23E                        * 1F42F  slot 5
+        CON(5)  |Form                            * 1F42F  slot 5
         CON(5)  0                                * 1F434  slot 6: none
 
 * symf QN1 id1..QNn idn -> symf
@@ -276,7 +276,7 @@ xQUOTE:
 #052410h:
         HXS 014250                               * 1F523  slot 0
         CON(5)  nCOLCTQUOTE                      * 1F533  slot 1
-        CON(5)  OBJ_5A26B                        * 1F538  slot 2
+        CON(5)  QUOTEForm                        * 1F538  slot 2
         CON(5)  0                                * 1F53D  slot 3: none
 
 * refs (1): 1F50F
@@ -317,12 +317,12 @@ xAPPLY:
 #059063410h:
         HXS 014360950                            * 1F5D9  slot 0
         CON(5)  D/DAPPLY                         * 1F5EC  slot 1
-        CON(5)  OBJ_5A27F                        * 1F5F1  slot 2
+        CON(5)  APPLYForm                        * 1F5F1  slot 2
 
 * refs (2): 1F5B2 1F5CF
 apply(_,s):
         :: uncrunch ~BINT3;RROLL DUP#1- dvarlsBIND pullrev symcomp SWAPDROP * 1F5F6  slot 3
-          ChkExpr1Name CARCOMP GOTO OBJ_1F6E0.L1 ; * 1F61E
+          ChkExpr1Name CARCOMP GOTO ApplySym.L1 ; * 1F61E
         CON(2)  #A2                              * 1F637  end of the slots: property byte (meaning not yet known)
         ASSEMBLE
         NOP3                                     * 1F639
@@ -334,26 +334,27 @@ apply(_,s):
 * refs (26): 189EA 1F73A 27A80 27C06 2850B 28B0F ...
 xFCNAPPLY:
         :: {'dvar} BIND 0LASTOWDOB! CARCOMP CK1NOLASTWD DEPTH 1GETLAM * 1F640
-          #>?SKIP SETSTACKERR DUP ROMPTR@NOT case OBJ_1F6E0 * 1F668
+          #>?SKIP SETSTACKERR DUP ROMPTR@NOT case ApplySym * 1F668
           CK&DISPATCH0                           * 1F686
           ROMPANY xFCNAPPLY~romptr,any           * 1F68B  romptr any
           BINT8 xFCNAPPLY~program                * 1F695  program
-          BINT5 OBJ_1F776                        * 1F69F  list
+          BINT5 ApplyList                        * 1F69F  list
           BINT4 xFCNAPPLY~array                  * 1F6A9  array
           BINT0 INVFUNCERR                       * 1F6B3  any
         ;                                        * 1F6BD
 
-        CON(5)  OBJ_6D0D7                        * 1F6C2  address (the code jumps or points through it)
+        CON(5)  EqwFcnApply                      * 1F6C2  address (the code jumps or points through it)
 
-        CON(5)  OBJ_56D1F                        * 1F6C7  address (the code jumps or points through it)
+        CON(5)  DerFcn                           * 1F6C7  address (the code jumps or points through it)
 
-        ROMPTR 0F0 097                           * 1F6CC
+        XLIB SymbAPPLY                           * 1F6CC
         NIBHEX  7DBD70000                        * 1F6D7  ×Û..
 
 * refs (5): 1F681 1F7B7 1F811 85E71 85E7B
-OBJ_1F6E0:
+* ob.. #n name -> symb: APPLY to symbolic arguments: builds 'name(args)'
+ApplySym:
         :: DROP CK0NOLASTWD                      * 1F6E0
-OBJ_1F6E0.L1:
+ApplySym.L1:
           1GETLAM #1+ dup nmetasyms 1GETABND #1+ NDROP #1-SWAP symcomp OVER * 1F6EF
           BINT2 psh SINNERMETA pshtop& Cr xFCNAPPLY CK1NOLASTWD NOTNUM? * 1F721
           ?SKIP SETNONEXTERR                     * 1F749
@@ -364,23 +365,25 @@ xFCNAPPLY~program:
         :: SWAPDROP xFCNAPPLY~program~1 ABND COLA_EVAL ; * 1F758
 
 * refs (2): 1F6A4 1F7D5
-OBJ_1F776:
+* List or vector in a name with one index: GET when numeric, otherwise as ApplySym
+ApplyList:
         :: 1GETLAM BINT1 #<>case ARGNUMERR       * 1F776
-          NOTNUM? NOTcase OBJ_1F81B              * 1F78F
-          3PICK REALcase OBJ_1F81B               * 1F79E
-          DROPDUP COLA OBJ_1F6E0                 * 1F7AD
+          NOTNUM? NOTcase ApplyGET               * 1F78F
+          3PICK REALcase ApplyGET                * 1F79E
+          DROPDUP COLA ApplySym                  * 1F7AD
         ;                                        * 1F7BC
 
 * refs (1): 1F6AE
 xFCNAPPLY~array:
-        :: 1GETLAM BINT2 #<>case OBJ_1F776       * 1F7C1
-          NOTNUM? NOTcase OBJ_1F81B              * 1F7DA
-          4PICK TYPEREAL? 4PICK TYPEREAL? ANDcase OBJ_1F81B * 1F7E9
-          DROPDUP COLA OBJ_1F6E0                 * 1F807
+        :: 1GETLAM BINT2 #<>case ApplyList       * 1F7C1
+          NOTNUM? NOTcase ApplyGET               * 1F7DA
+          4PICK TYPEREAL? 4PICK TYPEREAL? ANDcase ApplyGET * 1F7E9
+          DROPDUP COLA ApplySym                  * 1F807
         ;                                        * 1F816
 
 * refs (4): 1F799 1F7A8 1F7E4 1F802
-OBJ_1F81B:
+* Use the element reference as a GET on the object
+ApplyGET:
         :: SWAPDROP 1GETLAM BINT2 #=ITE CK3NOLASTWD CK2NOLASTWD 1GETSWAP * 1F81B
           1PUTLAM {}N 1ABNDSWAP CK2NOLASTWD ' xGET EvalNoCK ; * 1F843
 
@@ -389,9 +392,10 @@ xFCNAPPLY~romptr,any:
         ::                                       * 1F86B
 
 * refs (1): 85E8A
-OBJ_1F870:
+* The function must be allowed in algebraics and take as many arguments as APPLY was given (ARGNUMERR otherwise); -1 means any number
+ApplyRompChk:
           :: DROP ?OKINALG ?SKIP SETSIZEERR      * 1F870
-            OBJ_26BED ?SKIP ARGNUMERR            * 1F889
+            FnInfo ?SKIP ARGNUMERR               * 1F889
             SWAPDROPDUP MINUSONE #= casedrop 1ABNDSWAP * 1F898
             1GETABND #=?SKIP ARGNUMERR ;         * 1F8B1
           COLA_EVAL ;                            * 1F8C5
@@ -447,7 +451,7 @@ StoLT(_,ex):
 * ROMPTR 002 107 →Q
 * refs (1): 189EA
 x->Q:
-        :: CK1 FALSE OBJ_1FA07 ABND ;            * 1F9C4
+        :: CK1 FALSE >Qcore ABND ;               * 1F9C4
         ASSEMBLE
         HST=0   0                                * 1F9E2
         CLRST                                    * 1F9E5
@@ -458,15 +462,16 @@ x->Q:
 * ROMPTR 002 108 →Qπ
 * refs (1): 189EA
 x->QPI:
-        :: CK1 TRUE OBJ_1FA07 ABND ;             * 1F9E9
+        :: CK1 TRUE >Qcore ABND ;                * 1F9E9
 
 * refs (3): 1F9D3 1F9F8 72F51
 * slots of 002 108 (derivative, inverse, ...: used by the symbolic code)
-OBJ_1FA07:
+* ob flag -> symb: →Q (flag false) and →Qπ (flag true), dispatched on real, complex or algebraic
+>Qcore:
         :: {'piflag} BIND STRIPTAGS CK&DISPATCH1 * 1FA07  slot 0
-          BINT1 OBJ_5A9F5                        * 1FA20  real
-          BINT2 OBJ_5AA13                        * 1FA2A  complex
-          BINT9 OBJ_5AA5E                        * 1FA34  algebraic
+          BINT1 %>Q                              * 1FA20  real
+          BINT2 C%>Q                             * 1FA2A  complex
+          BINT9 Symb>Q                           * 1FA34  algebraic
           BINT0 OBJ_72F1F                        * 1FA3E  any
         ;                                        * 1FA48
         CON(5)  NOP                              * 1FA4D  slot 1
@@ -527,7 +532,7 @@ xFORMUNIT:
         ;                                        * 1FB13
 
 * slots of 002 10B (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_6CCCC                        * 1FB18  slot 0
+        CON(5)  EqwInfix                         * 1FB18  slot 0
 
 * refs (2): 28E4D 68CEC
 #72109h:
@@ -554,7 +559,7 @@ xPREDIV:
         ;                                        * 1FB71
 
 * slots of 002 10C (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_6CEC5                        * 1FB76  slot 0
+        CON(5)  EqwPrediv                        * 1FB76  slot 0
         CON(5)  #05060410h                       * 1FB7B  slot 1
         ASSEMBLE
         HST=0   0                                * 1FB80
@@ -926,9 +931,7 @@ xXCOL:
         CON(3)  #002                             * 1FFF4  library
         CON(3)  #133                             * 1FFF7  command
 xYCOL:
-        ::                                       * 1FFFA
-xYCOL.L1:
-          CK1&Dispatch                           * 1FFFF
+        :: CK1&Dispatch                          * 1FFFA
           BINT1 STATYCOL                         * 20004  real
         ;                                        * 2000E
 
@@ -940,7 +943,7 @@ xYCOL.L1:
         CON(3)  #134                             * 20017  command
 xUTPC:
         :: CK2&Dispatch                          * 2001A
-          BINT17 utpn(2r)                        * 20024  real real
+          BINT17 utpc(2r)                        * 20024  real real
         ;                                        * 2002E
 
 * n v x -> x'
@@ -1007,7 +1010,7 @@ xSCLSIGMA:
         CON(3)  #002                             * 200ED  library
         CON(3)  #13A                             * 200F0  command
 xSIGMALINE:
-        :: CK0 OBJ_48BBB ;                       * 200F3
+        :: CK0 StatFitEq ;                       * 200F3
 
 * min width n -> [[]] []
 * ROMPTR 002 13B BINS
@@ -1371,10 +1374,11 @@ xINCR:
 
 * refs (1): 20903
 incr(gn):
-        :: OBJ_20935 %+ SWAP REPLACE ;           * 20917
+        :: IncrArgs %+ SWAP REPLACE ;            * 20917
 
 * refs (2): 2091C 209D2
-OBJ_20935:
+* id -> id % %1: a real variable's value, made private if it is referenced elsewhere, for INCR and DECR
+IncrArgs:
         :: RclRealInVars(nm) REFERENCED? ITE TOTEMPOBADJ DUP * 20935
           SWAP %1 ;                              * 20953
 
@@ -1401,7 +1405,7 @@ xDECR:
 
 * refs (1): 209B9
 decr(gn):
-        :: OBJ_20935 %- SWAP REPLACE ;           * 209CD
+        :: IncrArgs %- SWAP REPLACE ;            * 209CD
 
 * refs (1): 209C3
 decr(ln):
@@ -1640,7 +1644,7 @@ prvar(li)~1:
 * xPICT ->
 * refs (1): 20F2B
 XEQPURGEPICT:
-        :: CKPICT OBJ_46152 KILLGDISP ;          * 20F8A
+        :: CKPICT CkNotPlotting KILLGDISP ;      * 20F8A
 
 * -> x
 * ROMPTR 002 158 MEM
@@ -1692,7 +1696,7 @@ XEQORDER~1:
             AD0EX                                * 210BF
             ABEX    A                            * 210C2
             C=D     A                            * 210C4
-            GOSBVL  SUB_06863                    * 210C6
+            GOSBVL  AdjRefs                      * 210C6
             GOSBVL  GETPTR                       * 210CD
             C=RSTK                               * 210D4
             DAT1=C  A                            * 210D6
@@ -1744,7 +1748,7 @@ xMENU:
 * ID CST
 * refs (1): 3BEBD
 ID_CST:
-          ID CST OBJ_2157E ' nCustomMenu InitMenu ; * 211B4
+          ID CST xSTONoCK ' nCustomMenu InitMenu ; * 211B4
 
 * -> x
 * ROMPTR 002 15D RCLMENU
@@ -1852,7 +1856,7 @@ xMERGE:
 merge(r):
         :: COERCE DUP#0=case SETPORTNOTAV        * 21398
           DUP #>2case SETPORTNOTAV               * 213AC
-          COLA OBJ_0B40C                         * 213BB
+          COLA MergeCard                         * 213BB
         ;                                        * 213C5
 
 * ROMPTR 002 163 FREE
@@ -1928,11 +1932,12 @@ sto(_,to):
         :: TAG> palparse ITE                     * 2150F
           :: DUPTYPEREAL? NOTcaseDROP COERCE     * 21523
             DUP BINT34 #< NOTcaseDROP '          * 21537
-            ROMPTR 0F0 07E SWAP BINT2 ::N RDROPCOLA EVAL ; * 21550
+            XLIB sto(_,to)~1 SWAP BINT2 ::N RDROPCOLA EVAL ; * 21550
           3DROP                                  * 21579
 
 * refs (7): 211C1 2F696 40F4F 42EBD 852CE D45B5 ...
-OBJ_2157E:
+* ob id -> : STO without argument checks
+xSTONoCK:
           :: ' xSTO COLA EvalNoCK                * 2157E
           ;                                      * 21597
         ;                                        * 2159C
@@ -1944,7 +1949,7 @@ sto(bk,nm,s):
 
 * refs (2): 20D45 20D54
 sto(bk,r):
-        :: COLA ROMPTR 0F0 080                   * 215BF
+        :: COLA XLIB sto(bk,r)~1                 * 215BF
         ;                                        * 215D4
 
 * refs (1): 21615
@@ -2030,27 +2035,29 @@ OB>BAKcode:
 
 * refs (3): 1CE91 1EEF6 20B4F
 rcl(to):
-        :: TRUE ROMPTR 0F0 081 ROMPTR 0F0 091 xRCL ; * 21761
+        :: TRUE XLIB PortTagParse XLIB PortRcl xRCL ; * 21761
 
 * refs (2): 85483 854F1
-OBJ_2178B:
+* Skip one object of the caller's stream, then run the next with EvalNoCK and drop the rest
+RunNextNoCK:
         :: RSKIP 'RRDROP COLA EvalNoCK           * 2178B
         ;                                        * 217A4
 
 * refs (3): 854B5 854C9 854E2
-OBJ_217A9:
+PortTagArg~1:
         :: 'RRDROP 'R RSKIP COLA_EVAL ;          * 217A9
 
 * refs (1): 1A3E1
 eval(to):
-        :: TRUE ROMPTR 0F0 081 ROMPTR 0F0 08C xEVAL ; * 217C7
+        :: TRUE XLIB PortTagParse XLIB PortEval xEVAL ; * 217C7
 
 * refs (2): 20F0D 8FCF0
 purge(to):
-        :: FALSE ROMPTR 0F0 081 ROMPTR 0F0 08E xPURGE ; * 217F1
+        :: FALSE XLIB PortTagParse XLIB PortPurge xPURGE ; * 217F1
 
 * refs (1): 40F77
-OBJ_2181B:
+* id -> : PURGE without argument checks
+xPURGENoCK:
         :: ' xPURGE COLA EvalNoCK                * 2181B
         ;                                        * 21834
 
@@ -2134,7 +2141,7 @@ RclBkp(nm,s)?:
 
 * refs (1): 2136E
 restore(bk):
-          :: COLA ROMPTR 0F0 084                 * 21B2F
+          :: COLA XLIB restore(nm,s)~1           * 21B2F
           ;                                      * 21B44
         ;                                        * 21B49
 
@@ -2148,12 +2155,12 @@ DOAPWL:
 
 * refs (3): 212A9 212B3 212BD
 XEQIOBACKUP:
-        :: COLA ROMPTR 0F0 085                   * 21B5A
+        :: COLA XLIB XEQIOBACKUP~1               * 21B5A
         ;                                        * 21B6F
 
 * refs (3): 213E0 2141C C0961
 free(li,r):
-        :: COLA ROMPTR 0F0 086                   * 21B74
+        :: COLA XLIB free(li,r)~1                * 21B74
         ;                                        * 21B89
 
 * refs (1): 856D7
@@ -2239,15 +2246,15 @@ libs:
 
 * refs (2): 3F3ED 3F41A
 GetLibs(di):
-          :: COLA ROMPTR 0F0 087                 * 21D5E
+          :: COLA XLIB libs~1                    * 21D5E
           ;                                      * 21D73
           BINT0 #=casedrop NULL{}                * 21D78
-          ROMPTR 0F0 090 {}N ;                   * 21D87
+          XLIB libs~2 {}N ;                      * 21D87
         FILLTO  #21DBE                           * 21D9C  34 zero nibbles: the next entry stays at #21DBE
 
 * refs (2): 1B194 1B19E
 rpnXROOT~1:
-        :: ' rpnXROOT BINT2 TRUE ROMPTR 0E8 00F ; * 21DBE
+        :: ' rpnXROOT BINT2 TRUE XLIB ListApply ; * 21DBE
 
         # 80000                                  * 21DE7  524288
 

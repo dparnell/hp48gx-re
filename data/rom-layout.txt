@@ -10,7 +10,7 @@
 04000	bints	Built-in binary integers and stack words
 06000	rpl-control	EVAL, COLA, ?SKIP and other control words
 08000	memory	Directories, variables and memory management
-0A000	misc-0A000
+0A000	recovery
 0C000	time	Clock and alarms
 0E000	units	Unit objects and conversion
 10000	units-grob	Unit arithmetic and graphics objects
@@ -23,7 +23,7 @@
 22000	programs	Program structures and library 700
 24000	parser	Parser and compiler
 2A000	reals	Real number arithmetic
-2C000	misc-2C000
+2C000	statistics
 2E000	io	Serial I/O and Kermit
 30000	io-print	I/O and printing
 34000	arrays	Arrays
@@ -38,12 +38,12 @@
 52000	flags	System and user flags
 54000	algebra	Symbolic algebra
 60000	rpl-utils	Control structures and stack utilities
-66000	misc-66000
+66000	equationwriter
 70000	libraries	Library table, access pointers, bank switching
 74000	messages	Message tables
 76000	hash	Hash table of library 002
-78000	misc-78000
+78000	numerics
 7A2B3	fonts	System fonts (10-row, 8-row, minifont) and the minifont remap table
-7C855	misc-7C855
+7C855	array-primitives
 7E000	version	Fill and version strings
 80000	selftest	Self-test code (runs with RAM unconfigured)

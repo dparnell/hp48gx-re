@@ -1,24 +1,27 @@
-* HP 48GX ROM revision R, #AE566-#B1605: Library part 0B4
+* HP 48GX ROM revision R, #AE566-#B1605: Library 0B4: the alarm browser, the Statistics applications, and I/O (send, print, transfer)
 * Addresses in the right-hand comments are those of the original ROM.
+* Most referenced: StatSumForm StatSumCalc StatSumArgs StatSingleForm StatSingleCalc StatSingleArgs StatPredMenu StatPredMH StatPredKey StatPredForm StatPredCalc StatLblYCol
 * Follows on from the previous file (at #AE566 in the original ROM).
         RPL
 
 * ROMPTR 0B4 16F
 * refs (1): A2437
-ROMP_0B4_16F:
+* #msg -> ... flag: Choose message handler: full screen, element count and access, how each line looks, the menu
+AlarmBrowseMH:
         ::                                       * AE566
-          { BINT60 TRUE BINT62 ROMPTR 0B5 0D5 BINT80 ROMPTR 0B5 0D6 BINT81 * AE56B
-            ROMPTR 0B4 170 BINT83                * AE59F
-            :: ' ROMPTR 0B4 171 ; BINT96         * AE5AF
-            :: ROMPTR 0B3 03E TRUE ; }           * AE5CE  ~BBReReadNElems
+          { BINT60 TRUE BINT62 XLIB AlmCount BINT80 XLIB AlmGet BINT81 * AE56B
+            XLIB AlarmBrowseGrob BINT83          * AE59F
+            :: ' XLIB AlarmBrowseMenu ; BINT96   * AE5AF
+            :: XLIB ~BBReReadNElems TRUE ; }     * AE5CE
           EQLookup case                          * AE5ED
           :: EVAL TRUE ;                         * AE5F7
           DROPFALSE ;                            * AE60B
 
 * ROMPTR 0B4 170
 * refs (1): A2437
-ROMP_0B4_170:
-        :: ROMPTR 0B3 038 DUP _chr(31)_ EQUAL ITE * AE615  ~BBGetNStr
+* # -> grob: draws one alarm line: date, time and message
+AlarmBrowseGrob:
+        :: XLIB ~BBGetNStr DUP _chr(31)_ EQUAL ITE * AE615
           :: NULL$ DUP ;                         * AE639
           :: DUP BINT1 BINT3 SUB$ OVER BINT5 BINT24 SUB$ ROT BINT26 OVERLEN$ * AE64D
             SUB$ ;                               * AE689
@@ -30,135 +33,147 @@ ROMP_0B4_170:
 
 * ROMPTR 0B4 171
 * refs (1): A2437
-ROMP_0B4_171:
+* -> menu: EDIT, NEW, PURG and OK
+AlarmBrowseMenu:
         :: NoExitAction                          * AE74C
           {                                      * AE756
             {                                    * AE75B
               :: TakeOver 12GETLAM #0<> ITE      * AE760
                 :: PTR DirLabel: $ "EDIT" ; NULL$ * AE779
               ;                                  * AE79F
-              ROMPTR 0B4 172 }                   * AE7A4
+              XLIB AlarmBrowseEdit }             * AE7A4
             {                                    * AE7B4
-              :: PTR DirLabel: $ "NEW" ; ROMPTR 0B4 173 } * AE7B9
+              :: PTR DirLabel: $ "NEW" ; XLIB AlarmBrowseNew } * AE7B9
             {                                    * AE7E8
               :: TakeOver 12GETLAM #0<> ITE $ "PURG" NULL$ * AE7ED
               ;                                  * AE81D
-              ROMPTR 0B4 174 }                   * AE822
+              XLIB AlarmBrowsePurge }            * AE822
             NullMenuKey NullMenuKey              * AE832
-            { $ "OK" ROMPTR 0B3 02E } }          * AE83C  DoCKeyOK
+            { $ "OK" XLIB DoCKeyOK } }           * AE83C
         ;                                        * AE864
 
 * ROMPTR 0B4 172
 * refs (1): A2437
-ROMP_0B4_172:
+* -> : EDIT key: runs AlarmForm on the highlighted alarm and replaces it
+AlarmBrowseEdit:
         :: TakeOver 12GETLAM #0=case DoBadKey    * AE869
-          18GETLAM ROMPTR 0B3 03F 1LAMBIND 1GETLAM ROMPTR 0B5 0D8 1GETLAM * AE882  ~BBGetN
-          ROMPTR 0B5 0D9 1GETLAM ROMPTR 0B5 0DA 3UNROLL 2DUP SWAP 5ROLL * AE8AC
-          1GETLAM ROMPTR 0B5 0DB BINT12 {}N ROMPTR 0B4 139 NOT?SEMI * AE8DB
-          1GETABND ROMPTR 0B5 0DC ROMPTR 0B3 03E * AE905  ~BBReReadNElems
-          ROMPTR 0B3 026 18GETLAM 12GETLAM #MIN BINT1 #MAX 18PUTLAM FALSE * AE920  ~BBReReadWidth
-          ROMPTR 0B3 019 ;                       * AE94E  ~BBRecalOff&Disp
+          18GETLAM XLIB ~BBGetN 1LAMBIND 1GETLAM XLIB AlmMsg 1GETLAM * AE882
+          XLIB AlmTime 1GETLAM XLIB AlmDate 3UNROLL 2DUP SWAP 5ROLL 1GETLAM * AE8AC
+          XLIB AlmRepeat BINT12 {}N XLIB AlarmForm NOT?SEMI * AE8E0
+          1GETABND XLIB AlmDelete XLIB ~BBReReadNElems XLIB ~BBReReadWidth * AE905
+          18GETLAM 12GETLAM #MIN BINT1 #MAX 18PUTLAM FALSE * AE92B
+          XLIB ~BBRecalOff&Disp ;                * AE94E
 
 * ROMPTR 0B4 173
 * refs (1): A2437
-ROMP_0B4_173:
-        :: TakeOver ROMPTR 0B4 14C ROMPTR 0B4 139 NOT?SEMI * AE95E
-          ROMPTR 0B3 03E                         * AE983  ~BBReReadNElems
-          ROMPTR 0B3 026 18GETLAM 12GETLAM #MIN BINT1 #MAX 18PUTLAM FALSE * AE98E  ~BBReReadWidth
-          ROMPTR 0B3 019 ;                       * AE9BC  ~BBRecalOff&Disp
+* -> : NEW key: runs AlarmForm on a new alarm
+AlarmBrowseNew:
+        :: TakeOver XLIB AlarmDfltFields XLIB AlarmForm NOT?SEMI * AE95E
+          XLIB ~BBReReadNElems XLIB ~BBReReadWidth 18GETLAM 12GETLAM #MIN * AE983
+          BINT1 #MAX 18PUTLAM FALSE XLIB ~BBRecalOff&Disp ; * AE9A8
 
 * ROMPTR 0B4 174
 * refs (1): A2437
-ROMP_0B4_174:
+* -> : PURG key: deletes the highlighted alarm
+AlarmBrowsePurge:
         :: TakeOver 12GETLAM #0=case DoBadKey    * AE9CC
-          18GETLAM ROMPTR 0B3 03F ROMPTR 0B5 0DC * AE9E5  ~BBGetN
-          ROMPTR 0B3 03E                         * AEA00  ~BBReReadNElems
-          ROMPTR 0B3 026 18GETLAM 12GETLAM #MIN BINT1 #MAX 18PUTLAM FALSE * AEA0B  ~BBReReadWidth
-          ROMPTR 0B3 019 ;                       * AEA39  ~BBRecalOff&Disp
+          18GETLAM XLIB ~BBGetN XLIB AlmDelete XLIB ~BBReReadNElems * AE9E5
+          XLIB ~BBReReadWidth 18GETLAM 12GETLAM #MIN BINT1 #MAX 18PUTLAM * AEA0B
+          FALSE XLIB ~BBRecalOff&Disp ;          * AEA34
 
 * ROMPTR 0B4 175
 * refs (1): A2437
-ROMP_0B4_175:
-        :: ROMPTR 0B0 0AB                        * AEA49
+* -> : the STAT key: the choose box of statistics applications
+StatApp:
+        :: XLIB IFNotInForm                      * AEA49
           {                                      * AEA59
-            { # BB01 ROMPTR 0B4 176 }            * AEA5E  "Single-var "
-            { # BB02 ROMPTR 0B4 17D }            * AEA7D  "Frequencies "
-            { # BB03 ROMPTR 0B4 17F }            * AEA9C  "Fit data "
-            { # BB04 ROMPTR 0B4 18F } }          * AEABB  "Summary stats "
-          ROMPTR 0B0 0A9 ;                       * AEADF
+            { # BB01 XLIB StatSingleForm }       * AEA5E  "Single-var "
+            { # BB02 XLIB StatFreqForm }         * AEA7D  "Frequencies "
+            { # BB03 XLIB StatFitForm }          * AEA9C  "Fit data "
+            { # BB04 XLIB StatSumForm } }        * AEABB  "Summary stats "
+          XLIB IFTypeChoose ;                    * AEADF
 
 * ROMPTR 0B4 176
 * refs (1): A2437
-ROMP_0B4_176:
+* -> : "Single-Variable Statistics": ΣDAT, column, sample or population, and checks for the values to compute
+StatSingleForm:
         ::                                       * AEAEF
 
 * ROMPTR 0B4 177
 * refs (1): A2437
-ROMP_0B4_177:
+* Label "ΣDAT:"
+StatLblDat:
           :: # BB06 BINT1 BINT10 ;               * AEAF4  "ΣDAT:"
 
 * ROMPTR 0B4 178
 * refs (1): A2437
-ROMP_0B4_178:
+* Label "Col:"
+StatLblCol:
           :: # BE17 BINT97 BINT10 ; # BB07 BINT1 BINT19 # BB08 BINT14 BINT28 * AEB12  "Col:"  "Type:"  "Mean"
           # BB09 BINT56 BINT28 # BB0A BINT98 BINT28 # BB0B BINT14 BINT37 * AEB58  "Std Dev"  "Variance"  "Total"
           # BB0C BINT56 BINT37 # BB0D BINT98 BINT37 * AEB94  "Maximum"  "Minimum"
 
 * ROMPTR 0B4 179
 * refs (1): A2437
-ROMP_0B4_179:
-          :: 'RROMPTR@ ROMPTR 0B4 031 BINT22 BINT8 BINT67 BINT9 BINT21 * AEBBC
-            { BINT3 } BINT4 # BB0E # BE1A MINUSONE MINUSONE ROMPTR 0B5 0DD ; * AEBEA  "Enter statistical data"  "Arrays in"
+* Field: the statistics data, initially ΣDAT
+StatFldDat:
+          :: 'RROMPTR@ XLIB IFArrayMH BINT22 BINT8 BINT67 BINT9 BINT21 * AEBBC
+            { BINT3 } BINT4 # BB0E # BE1A MINUSONE MINUSONE XLIB StatGetDAT2 ; * AEBEA  "Enter statistical data"  "Arrays in"
 
 * ROMPTR 0B4 17A
 * refs (1): A2437
-ROMP_0B4_17A:
+* Field: the variable column, initially XCOL
+StatFldCol:
           :: 'DROPFALSE BINT115 BINT8 BINT13 BINT9 BINT1 * AEC2C
-            { BINT0 } BINT4 # BB0F MINUSONE MINUSONE %1 ROMPTR 0B5 0E0 DROP ; * AEC4F  "Enter variable column"
+            { BINT0 } BINT4 # BB0F MINUSONE MINUSONE %1 XLIB StatGetCols * AEC4F  "Enter variable column"
+            DROP ;                               * AEC87
           'DROPFALSE BINT22 BINT17 BINT61 BINT9 BINT12 MINUSONE BINT17 * AEC91
-          # BB10 ROMPTR 0B5 0F2 BINT17 ROMPTR 0B5 0F3 DUP 'DROPFALSE BINT7 * AECB9  "Choose statistics type"
-          BINT26 BINT6 BINT9 BINT32 MINUSONE MINUSONE # BB11 MINUSONE * AECED  "Calculate mean?"
-          MINUSONE FALSE DUP 'DROPFALSE BINT49 BINT26 BINT6 BINT9 BINT32 * AED1A
-          MINUSONE MINUSONE # BB12 MINUSONE MINUSONE FALSE DUP 'DROPFALSE * AED47  "Calculate standard deviation?"
-          BINT91 BINT26 BINT6 BINT9 BINT32 MINUSONE MINUSONE # BB13 MINUSONE * AED74  "Calculate variance?"
-          MINUSONE FALSE DUP 'DROPFALSE BINT7 BINT35 BINT6 BINT9 BINT32 * AEDA6
-          MINUSONE MINUSONE # BB14 MINUSONE MINUSONE FALSE DUP 'DROPFALSE * AEDD3  "Calculate column total?"
-          BINT49 BINT35 BINT6 BINT9 BINT32 MINUSONE MINUSONE # BB15 MINUSONE * AEE00  "Calculate column maximum?"
-          MINUSONE FALSE DUP 'DROPFALSE BINT91 BINT35 BINT6 BINT9 BINT32 * AEE32
-          MINUSONE MINUSONE # BB16 MINUSONE MINUSONE FALSE DUP BINT9 DUP * AEE5F  "Calculate column minimum?"
-          'DROPFALSE # BB05 DoInputForm NOT?SEMI * AEE91  "Single-Variable Statistics"
-          ROMPTR 0B4 17B ROMPTR 0B4 17C ;        * AEEAA
+          # BB10 XLIB StatTypeItems BINT17 XLIB StatItemSample DUP * AECB9  "Choose statistics type"
+          'DROPFALSE BINT7 BINT26 BINT6 BINT9 BINT32 MINUSONE MINUSONE * AECE3
+          # BB11 MINUSONE MINUSONE FALSE DUP 'DROPFALSE BINT49 BINT26 BINT6 * AED0B  "Calculate mean?"
+          BINT9 BINT32 MINUSONE MINUSONE # BB12 MINUSONE MINUSONE FALSE DUP * AED3D  "Calculate standard deviation?"
+          'DROPFALSE BINT91 BINT26 BINT6 BINT9 BINT32 MINUSONE MINUSONE * AED6F
+          # BB13 MINUSONE MINUSONE FALSE DUP 'DROPFALSE BINT7 BINT35 BINT6 * AED97  "Calculate variance?"
+          BINT9 BINT32 MINUSONE MINUSONE # BB14 MINUSONE MINUSONE FALSE DUP * AEDC9  "Calculate column total?"
+          'DROPFALSE BINT49 BINT35 BINT6 BINT9 BINT32 MINUSONE MINUSONE * AEDFB
+          # BB15 MINUSONE MINUSONE FALSE DUP 'DROPFALSE BINT91 BINT35 BINT6 * AEE23  "Calculate column maximum?"
+          BINT9 BINT32 MINUSONE MINUSONE # BB16 MINUSONE MINUSONE FALSE DUP * AEE55  "Calculate column minimum?"
+          BINT9 DUP 'DROPFALSE # BB05 DoInputForm NOT?SEMI * AEE87  "Single-Variable Statistics"
+          XLIB StatSingleArgs XLIB StatSingleCalc ; * AEEAA
 
 * ROMPTR 0B4 17B
 * refs (1): A2437
-ROMP_0B4_17B:
-        :: 8PICK ROMPTR 0B5 0E0 SWAPDROP ROMPTR 0B5 0E1 BINT9 ROLL * AEEC5
-          ROMPTR 0B5 0DE 7ROLL ROMPTR 0B0 099 7UNROLL ; * AEEF4
+* field values -> ...: stores the column and ΣDAT and leaves the checks
+StatSingleArgs:
+        :: 8PICK XLIB StatGetCols SWAPDROP XLIB ~STATCOL BINT9 ROLL * AEEC5
+          XLIB StatPutDAT2 7ROLL XLIB ~BINT2;NTHCOMPROM@ 7UNROLL ; * AEEF4
 
 * ROMPTR 0B4 17C
 * refs (1): A2437
-ROMP_0B4_17C:
+* 6 flags -> results: leaves each value that was asked for, tagged
+StatSingleCalc:
         ::                                       * AEF19
           { NULLLAM NULLLAM NULLLAM NULLLAM NULLLAM NULLLAM NULLLAM NULLLAM } * AEF1E
           BIND 6GETLAM IT                        * AEF50
-          :: 8GETLAM 7GETLAM ROMPTR 0B5 0E2 # BB08 msg>TAG ; * AEF5F  "Mean"
+          :: 8GETLAM 7GETLAM XLIB StatFldMean # BB08 msg>TAG ; * AEF5F  "Mean"
           5GETLAM IT                             * AEF8D
-          :: 8GETLAM 7GETLAM ROMPTR 0B5 0E3 # BB09 msg>TAG ; * AEF97  "Std Dev"
+          :: 8GETLAM 7GETLAM XLIB StatFldSDev # BB09 msg>TAG ; * AEF97  "Std Dev"
           4GETLAM IT                             * AEFC5
-          :: 8GETLAM 7GETLAM ROMPTR 0B5 0E4 # BB0A msg>TAG ; * AEFCF  "Variance"
+          :: 8GETLAM 7GETLAM XLIB StatFldVar # BB0A msg>TAG ; * AEFCF  "Variance"
           3GETLAM IT                             * AEFFD
-          :: 8GETLAM 7GETLAM ROMPTR 0B5 0E5 # BB0B msg>TAG ; * AF007  "Total"
+          :: 8GETLAM 7GETLAM XLIB StatFldTotal # BB0B msg>TAG ; * AF007  "Total"
           2GETLAM IT                             * AF035
-          :: 8GETLAM 7GETLAM ROMPTR 0B5 0E6 # BB0C msg>TAG ; * AF03F  "Maximum"
+          :: 8GETLAM 7GETLAM XLIB StatFldMax # BB0C msg>TAG ; * AF03F  "Maximum"
           1GETLAM IT                             * AF06D
-          :: 8GETLAM 7GETLAM ROMPTR 0B5 0E7 # BB0D msg>TAG ; * AF077  "Minimum"
+          :: 8GETLAM 7GETLAM XLIB StatFldMin # BB0D msg>TAG ; * AF077  "Minimum"
           ABND ;                                 * AF0A5
 
 * ROMPTR 0B4 17D
 * refs (1): A2437
-ROMP_0B4_17D:
-        :: ROMPTR 0B4 177 ROMPTR 0B4 178 # BB1A BINT1 BINT19 # BB1B BINT1 * AF0AF  "X-Min:"  "Bin Count:"
-          BINT28 # BB1C BINT64 BINT28 ROMPTR 0B4 179 ROMPTR 0B4 17A * AF0ED  "Bin Width:"
+* -> : "Frequencies": ΣDAT, column, first bin, bin count and width; ends by running BINS
+StatFreqForm:
+        :: XLIB StatLblDat XLIB StatLblCol # BB1A BINT1 BINT19 # BB1B BINT1 * AF0AF  "X-Min:"  "Bin Count:"
+          BINT28 # BB1C BINT64 BINT28 XLIB StatFldDat XLIB StatFldCol * AF0ED  "Bin Width:"
           'DROPFALSE BINT40 BINT17 BINT49 BINT9 BINT1 * AF11C
           { BINT0 } BINT4 # BB1D MINUSONE MINUSONE % -6.5E0 DUP 'DROPFALSE * AF13A  "Enter minimum first bin X value"
           BINT40 BINT26 BINT13 BINT9 BINT1       * AF181
@@ -166,134 +181,153 @@ ROMP_0B4_17D:
           BINT26 BINT25 BINT9 BINT1              * AF1DB
           { BINT0 } BINT4 # BB1F MINUSONE MINUSONE %1 DUP BINT5 DUP * AF1EF  "Enter bin width"
           'DROPFALSE # BB19 DoInputForm NOT?SEMI * AF22B  "Frequencies"
-          ROMPTR 0B4 17E ROMPTR 0B5 0E8 ;        * AF244
+          XLIB StatFreqArgs XLIB StatBins ;      * AF244
 
 * ROMPTR 0B4 17E
 * refs (1): A2437
-ROMP_0B4_17E:
-        :: 5ROLL ROMPTR 0B5 0DE 4PICK ROMPTR 0B5 0E0 SWAPDROP ROMPTR 0B5 0E1 ; * AF25F
+* field values -> ...: stores the column and ΣDAT
+StatFreqArgs:
+        :: 5ROLL XLIB StatPutDAT2 4PICK XLIB StatGetCols SWAPDROP * AF25F
+          XLIB ~STATCOL ;                        * AF289
 
 * ROMPTR 0B4 17F
 * refs (1): A2437
-ROMP_0B4_17F:
-        :: ROMPTR 0B4 177                        * AF299
+* -> : "Fit Data": ΣDAT, X and Y columns and model; ends with correlation and covariance tagged on the stack
+StatFitForm:
+        :: XLIB StatLblDat                       * AF299
 
 * ROMPTR 0B4 180
 * refs (1): A2437
-ROMP_0B4_180:
+* Label "X-Col:"
+StatLblXCol:
           :: # BB21 BINT1 BINT19 ;               * AF2A9  "X-Col:"
 
 * ROMPTR 0B4 181
 * refs (1): A2437
-ROMP_0B4_181:
+* Label "Y-Col:"
+StatLblYCol:
           :: # BB22 BINT49 BINT19 ;              * AF2C7  "Y-Col:"
 
 * ROMPTR 0B4 182
 * refs (1): A2437
-ROMP_0B4_182:
+* Label "Model:"
+StatLblModel:
           :: # BB23 BINT1 BINT28 ;               * AF2E5  "Model:"
 
 * ROMPTR 0B4 183
 * refs (1): A2437
-ROMP_0B4_183:
-          :: 'RROMPTR@ ROMPTR 0B4 031 BINT28 BINT8 # 67 BINT9 BINT21 * AF303
-            { BINT3 } BINT4 # BB0E # BE1A MINUSONE MINUSONE ROMPTR 0B5 0DD ; * AF336  "Enter statistical data"  "Arrays in"
+* Field: the statistics data, for the two-column forms
+StatFldDat2:
+          :: 'RROMPTR@ XLIB IFArrayMH BINT28 BINT8 # 67 BINT9 BINT21 * AF303
+            { BINT3 } BINT4 # BB0E # BE1A MINUSONE MINUSONE XLIB StatGetDAT2 ; * AF336  "Enter statistical data"  "Arrays in"
 
 * ROMPTR 0B4 184
 * refs (1): A2437
-ROMP_0B4_184:
+* Fields: the X and the Y column
+StatFldXYCol:
           :: 'DROPFALSE BINT28 BINT17 BINT13 BINT9 BINT1 * AF378
-            { BINT0 } BINT4 # BB24 MINUSONE MINUSONE %1 ROMPTR 0B5 0E0 * AF39B  "Enter indep column number"
+            { BINT0 } BINT4 # BB24 MINUSONE MINUSONE %1 XLIB StatGetCols * AF39B  "Enter indep column number"
             'DROPFALSE # 49 BINT17 BINT13 BINT9 BINT1 * AF3D3
             { BINT0 } BINT4 # BB25 MINUSONE MINUSONE %2 BINT13 ROLL ; * AF3F6  "Enter dependent column number"
 
 * ROMPTR 0B4 185
 * refs (1): A2437
-ROMP_0B4_185:
+* Field: the statistical model
+StatFldModel:
           :: 'DROPFALSE BINT28 BINT26 BINT91 BINT9 BINT12 MINUSONE BINT17 * AF432
-            # BB26 ROMPTR 0B5 0F5 BINT17 ROMPTR 0B5 0F6 ROMPTR 0B5 0DF ; * AF45F  "Choose statistical model"
-          BINT4 DUP 'RROMPTR@ ROMPTR 0B4 187 # BB20 DoInputForm NOT?SEMI * AF494  "Fit Data"
-          ROMPTR 0B4 186 ROMPTR 0B5 0E9 SWAP # BB27 msg>TAG SWAP # BB28 * AF4C2  "Correlation"  "Covariance"
-          msg>TAG ;                              * AF4FB
+            # BB26 XLIB StatFitItems BINT17 XLIB StatItemLin XLIB StatGetFit ; * AF45F  "Choose statistical model"
+          BINT4 DUP 'RROMPTR@ XLIB StatFitMH # BB20 DoInputForm NOT?SEMI * AF494  "Fit Data"
+          XLIB StatFitArgs XLIB StatFitResults SWAP # BB27 msg>TAG SWAP * AF4C2  "Correlation"
+          # BB28 msg>TAG ;                       * AF4F1  "Covariance"
 
 * ROMPTR 0B4 186
 * refs (1): A2437
-ROMP_0B4_186:
-        :: 4UNROLL ROMPTR 0B5 0E1 ROMPTR 0B5 0DE ROMPTR 0B0 09C 0LASTOWDOB! ; * AF505
+* field values -> : stores the columns, ΣDAT and the model
+StatFitArgs:
+        :: 4UNROLL XLIB ~STATCOL XLIB StatPutDAT2 XLIB NTHEval2 0LASTOWDOB! ; * AF505
 
 * ROMPTR 0B4 187
 * refs (1): A2437
-ROMP_0B4_187:
+* #msg -> ... flag: form message handler: 16 the menu
+StatFitMH:
         :: BINT16 #<>case FALSE                  * AF53A
-          ROMPTR 0B4 188 TrueTrue ;              * AF54E
+          XLIB StatFitMenu TrueTrue ;            * AF54E
 
 * ROMPTR 0B4 188
 * refs (1): A2437
-ROMP_0B4_188:
+* Menu keys: PRED, CANCL and OK
+StatFitMenu:
         {                                        * AF563
           {                                      * AF568
-            :: PTR DirLabel: $ "PRED" ; ROMPTR 0B4 189 } * AF56D
-          { $ "(AN(L" ROMPTR 0B0 059 }           * AF59E  DoKeyCancel
-          { $ "OK" ROMPTR 0B0 05A } }            * AF5C7  DoKeyOK
+            :: PTR DirLabel: $ "PRED" ; XLIB StatPredKey } * AF56D
+          { $ "(AN(L" XLIB DoKeyCancel }         * AF59E
+          { $ "OK" XLIB DoKeyOK } }              * AF5C7
 
 * ROMPTR 0B4 189
 * refs (1): A2437
-ROMP_0B4_189:
-        :: TakeOver ROMPTR 0B0 0C8 ROMPTR 0B4 186 ROMPTR 0B4 18B * AF5EF  GetFieldVals
-          ROMPTR 0B4 18A ROMPTR 0B0 0D8 ;        * AF61A
+* -> : PRED key: stores the fields, runs StatPredForm, and reads the fields back
+StatPredKey:
+        :: TakeOver XLIB GetFieldVals XLIB StatFitArgs XLIB StatPredForm * AF5EF
+          XLIB StatFitVals XLIB SetFieldVals ;   * AF61A
 
 * ROMPTR 0B4 18A
 * refs (1): A2437
-ROMP_0B4_18A:
-        :: ROMPTR 0B5 0DD ROMPTR 0B5 0E0 ROMPTR 0B5 0DF ; * AF635
+* -> field values: ΣDAT, columns and model
+StatFitVals:
+        :: XLIB StatGetDAT2 XLIB StatGetCols XLIB StatGetFit ; * AF635
 
 * ROMPTR 0B4 18B
 * refs (1): A2437
-ROMP_0B4_18B:
-        :: ROMPTR 0B4 177 ROMPTR 0B4 180 ROMPTR 0B4 181 ROMPTR 0B4 182 * AF660
-          # BF32 BINT1 BINT37 # BB2A BINT67 BINT37 ROMPTR 0B4 183 * AF691  "X:"  "Y:"
-          ROMPTR 0B4 184 ROMPTR 0B4 185 'DROPFALSE BINT10 BINT35 BINT49 * AF6C4
-          BINT9 BINT1                            * AF6EE
+* -> : "Predict Values"
+StatPredForm:
+        :: XLIB StatLblDat XLIB StatLblXCol XLIB StatLblYCol * AF660
+          XLIB StatLblModel # BF32 BINT1 BINT37 # BB2A BINT67 BINT37 * AF686  "X:"  "Y:"
+          XLIB StatFldDat2 XLIB StatFldXYCol XLIB StatFldModel 'DROPFALSE * AF6B9
+          BINT10 BINT35 BINT49 BINT9 BINT1       * AF6DF
           { BINT0 } BINT4 # BB2B MINUSONE MINUSONE MINUSONE DUP 'DROPFALSE * AF6F8  "Enter indep value or press PRED"
           # 4C BINT35 BINT49 BINT9 BINT1         * AF72F
           { BINT0 } BINT4 # BB2C MINUSONE MINUSONE MINUSONE DUP BINT6 DUP * AF74D  "Enter dep value or press PRED"
-          'RROMPTR@ ROMPTR 0B4 18C # BB29 DoInputForm NOT?SEMI * AF789  "Predict Values"
-          2DROP ROMPTR 0B4 186 ;                 * AF7AD
+          'RROMPTR@ XLIB StatPredMH # BB29 DoInputForm NOT?SEMI * AF789  "Predict Values"
+          2DROP XLIB StatFitArgs ;               * AF7AD
 
 * ROMPTR 0B4 18C
 * refs (1): A2437
-ROMP_0B4_18C:
+* #msg -> ... flag: form message handler: 16 the menu
+StatPredMH:
         :: BINT16 #<>case FALSE                  * AF7C2
-          ROMPTR 0B4 18D TrueTrue ;              * AF7D6
+          XLIB StatPredMenu TrueTrue ;           * AF7D6
 
 * ROMPTR 0B4 18D
 * refs (1): A2437
-ROMP_0B4_18D:
+* Menu keys: PRED
+StatPredMenu:
         { NullMenuKey NullMenuKey                * AF7EB
-          { $ "PRED" ROMPTR 0B4 18E } }          * AF7FA
+          { $ "PRED" XLIB StatPredCalc } }       * AF7FA
 
 * ROMPTR 0B4 18E
 * refs (1): A2437
-ROMP_0B4_18E:
-        :: TakeOver 5GETLAM BINT5 #< caseDoBadKey ROMPTR 0B0 0C8 * AF826  GetFieldVals
-          2DROP ROMPTR 0B4 186 STATLR 2DROP 5GETLAM * AF84F
+* -> : PRED key: fits the model and on X or Y computes the field from the other
+StatPredCalc:
+        :: TakeOver 5GETLAM BINT5 #< caseDoBadKey XLIB GetFieldVals * AF826
+          2DROP XLIB StatFitArgs STATLR 2DROP 5GETLAM * AF84F
           { BINT5                                * AF86E
-            :: BINT6 ROMPTR 0B0 0C5 ROMPTR 0B5 0EA BINT5 * AF878  ~gFldVal
-              ROMPTR 0B0 0D5 BINT5 ROMPTR 0B0 0A2 ; * AF89D  ~sFldVal
+            :: BINT6 XLIB ~gFldVal XLIB ~STATPREDX BINT5 XLIB ~sFldVal BINT5 * AF878
+              XLIB IFMarkPending ;               * AF8AD
             BINT6                                * AF8BD
-            :: BINT5 ROMPTR 0B0 0C5 ROMPTR 0B5 0EB BINT6 * AF8C2  ~gFldVal
-              ROMPTR 0B0 0D5 BINT6 ROMPTR 0B0 0A2 ; * AF8E7  ~sFldVal
+            :: BINT5 XLIB ~gFldVal XLIB ~STATPREDY BINT6 XLIB ~sFldVal BINT6 * AF8C2
+              XLIB IFMarkPending ;               * AF8F7
           }                                      * AF907
           EQLookup DROP EVAL SetDA123NoCh ;      * AF90C
 
 * ROMPTR 0B4 18F
 * refs (1): A2437
-ROMP_0B4_18F:
-        :: ROMPTR 0B4 177 ROMPTR 0B4 180 ROMPTR 0B4 181 # BB2E BINT1 BINT28 * AF925  "Calculate:"
-          # BB2F BINT11 BINT37 # BB30 BINT29 BINT37 # BB31 BINT50 BINT37 * AF95F  "ΣX"  "ΣY"  "ΣX2"
-          # BB32 # 47 BINT37 # BB33 # 5F BINT37 # BB34 # 77 BINT37 * AF99B  "ΣY2"  "ΣXY"  "NΣ"
-          ROMPTR 0B4 183 ROMPTR 0B4 184 'DROPFALSE BINT4 BINT35 BINT6 BINT9 * AF9E6
-          BINT32 MINUSONE MINUSONE # BB35 MINUSONE MINUSONE FALSE DUP * AFA15  "Calculate sum of X column?"
+* -> : "Summary Statistics": ΣDAT, columns, and checks for the sums to compute
+StatSumForm:
+        :: XLIB StatLblDat XLIB StatLblXCol XLIB StatLblYCol # BB2E BINT1 * AF925  "Calculate:"
+          BINT28 # BB2F BINT11 BINT37 # BB30 BINT29 BINT37 # BB31 BINT50 * AF95A  "ΣX"  "ΣY"  "ΣX2"
+          BINT37 # BB32 # 47 BINT37 # BB33 # 5F BINT37 # BB34 # 77 BINT37 * AF996  "ΣY2"  "ΣXY"  "NΣ"
+          XLIB StatFldDat2 XLIB StatFldXYCol 'DROPFALSE BINT4 BINT35 BINT6 * AF9E6
+          BINT9 BINT32 MINUSONE MINUSONE # BB35 MINUSONE MINUSONE FALSE DUP * AFA10  "Calculate sum of X column?"
           'DROPFALSE BINT22 BINT35 BINT6 BINT9 BINT32 MINUSONE MINUSONE * AFA42
           # BB36 MINUSONE MINUSONE FALSE DUP 'DROPFALSE BINT43 BINT35 BINT6 * AFA6A  "Calculate sum of Y column?"
           BINT9 BINT32 MINUSONE MINUSONE # BB37 MINUSONE MINUSONE FALSE DUP * AFA9C  "Calculate sum of squares of X?"
@@ -303,395 +337,441 @@ ROMP_0B4_18F:
           'DROPFALSE BINT112 BINT35 BINT6 BINT9 BINT32 MINUSONE MINUSONE * AFB5F
           # BB3A MINUSONE MINUSONE FALSE DUP BINT10 BINT9 'DROPFALSE # BB2D * AFB87  "Calculate number of data points?"  "Summary Statistics"
           DoInputForm NOT?SEMI                   * AFBBE
-          ROMPTR 0B4 190 ROMPTR 0B4 191 ;        * AFBC8
+          XLIB StatSumArgs XLIB StatSumCalc ;    * AFBC8
 
 * ROMPTR 0B4 190
 * refs (1): A2437
-ROMP_0B4_190:
-        :: 8ROLL 8ROLL ROMPTR 0B5 0E1 7ROLL ROMPTR 0B5 0DE ; * AFBE3
+* field values -> 6 flags: stores the columns and ΣDAT
+StatSumArgs:
+        :: 8ROLL 8ROLL XLIB ~STATCOL 7ROLL XLIB StatPutDAT2 ; * AFBE3
 
 * ROMPTR 0B4 191
 * refs (1): A2437
-ROMP_0B4_191:
+* 6 flags -> results: leaves each sum that was asked for, tagged
+StatSumCalc:
         ::                                       * AFC12
           { NULLLAM NULLLAM NULLLAM NULLLAM NULLLAM NULLLAM } BIND 6GETLAM * AFC17
           IT                                     * AFC49
-          :: ROMPTR 0B5 0EC # BB2F msg>TAG ;     * AFC4E  "ΣX"
+          :: XLIB ~STATX # BB2F msg>TAG ;        * AFC4E  "ΣX"
           5GETLAM IT                             * AFC72
-          :: ROMPTR 0B5 0ED # BB30 msg>TAG ;     * AFC7C  "ΣY"
+          :: XLIB ~STATY # BB30 msg>TAG ;        * AFC7C  "ΣY"
           4GETLAM IT                             * AFCA0
-          :: ROMPTR 0B5 0EE # BB31 msg>TAG ;     * AFCAA  "ΣX2"
+          :: XLIB ~STATXX # BB31 msg>TAG ;       * AFCAA  "ΣX2"
           3GETLAM IT                             * AFCCE
-          :: ROMPTR 0B5 0EF # BB32 msg>TAG ;     * AFCD8  "ΣY2"
+          :: XLIB ~STATYY # BB32 msg>TAG ;       * AFCD8  "ΣY2"
           2GETLAM IT                             * AFCFC
-          :: ROMPTR 0B5 0F0 # BB33 msg>TAG ;     * AFD06  "ΣXY"
+          :: XLIB ~STATXY # BB33 msg>TAG ;       * AFD06  "ΣXY"
           1GETLAM IT                             * AFD2A
-          :: ROMPTR 0B5 0F1 # BB34 msg>TAG ;     * AFD34  "NΣ"
+          :: XLIB ~STATN # BB34 msg>TAG ;        * AFD34  "NΣ"
           ABND ;                                 * AFD58
 
 * ROMPTR 0B4 192
 * refs (1): A2437
-ROMP_0B4_192:
-        :: ROMPTR 0B0 0AB                        * AFD62
+* -> : the I/O key: the choose box of input and output applications
+IOApp:
+        :: XLIB IFNotInForm                      * AFD62
           {                                      * AFD72
-            { # BA01 ROMPTR 0B4 193 }            * AFD77  "Send to HP 48 "
-            { # BA02 ROMPTR 0B5 0FF }            * AFD96  "Get from HP 48"
+            { # BA01 XLIB IOSendForm }           * AFD77  "Send to HP 48 "
+            { # BA02 XLIB XferGetHP48 }          * AFD96  "Get from HP 48"
             { # BA03 DOPRLCD }                   * AFDB5  "Print display"
-            { # BA04 ROMPTR 0B4 197 }            * AFDCE  "Print "
-            { # BA05 ROMPTR 0B4 1A8 }            * AFDED  "Transfer "
+            { # BA04 XLIB IOPrintForm }          * AFDCE  "Print "
+            { # BA05 XLIB IOXferForm }           * AFDED  "Transfer "
             { # BA06 DOSERVER } }                * AFE0C  "Start Server"
-          ROMPTR 0B0 0A9 ;                       * AFE2A
+          XLIB IFTypeChoose ;                    * AFE2A
 
 * ROMPTR 0B4 193
 * refs (1): A2437
-ROMP_0B4_193:
+* -> : "Send to HP 48": the variables to send
+IOSendForm:
         :: # B989 BINT1 BINT19 'DROPFALSE BINT25 BINT17 # 67 BINT9 BINT21 * AFE3A  "Name:"
           { BINT6 BINT5 } BINT4 # BA07           * AFE76  "Enter names of vars to send"
           { # BA08 TRUE MINUSONE FALSE } MINUSONE MINUSONE MINUSONE ONEONE * AFE99  "Vars in"
-          'RROMPTR@ ROMPTR 0B4 194 # BA09 DoInputForm caseDROP ; * AFED0  "Send to HP 48"
+          'RROMPTR@ XLIB IOSendMH # BA09 DoInputForm caseDROP ; * AFED0  "Send to HP 48"
 
 * ROMPTR 0B4 194
 * refs (1): A2437
-ROMP_0B4_194:
+* #msg -> ... flag: form message handler: 16 the menu
+IOSendMH:
         :: BINT16 #<>case FALSE                  * AFEF9
-          ROMPTR 0B4 195 TrueTrue ;              * AFF0D
+          XLIB IOSendMenu TrueTrue ;             * AFF0D
 
 * ROMPTR 0B4 195
 * refs (1): A2437
-ROMP_0B4_195:
+* Menu keys: SEND
+IOSendMenu:
         { NullMenuKey NullMenuKey                * AFF22
-          { $ "SEND" ROMPTR 0B4 196 } }          * AFF31
+          { $ "SEND" XLIB IOSendKey } }          * AFF31
 
 * ROMPTR 0B4 196
 * refs (1): A2437
-ROMP_0B4_196:
-        :: TakeOver BINT1 ROMPTR 0B0 0C5 ROMPTR 0B5 0FB ; * AFF5D  ~gFldVal
+* -> : SEND key: sends the names in the field by Kermit
+IOSendKey:
+        :: TakeOver BINT1 XLIB ~gFldVal XLIB XferSendHP48 ; * AFF5D
 
 * ROMPTR 0B4 197
 * refs (1): A2437
-ROMP_0B4_197:
+* -> : "Print": what to print and the printer's settings, where wire settings show only with Port on Wire
+IOPrintForm:
         ::                                       * AFF87
 
 * ROMPTR 0B4 198
 * refs (1): A2437
-ROMP_0B4_198:
+* Label "Port:"
+IOLblPort:
           :: # BA0A BINT1 BINT10 ; # B984 BINT1 BINT19 # BA0B BINT8 BINT28 * AFF8C  "Port:"  "Object:"  "Dbl-Space"
           # BA0C BINT52 BINT28                   * AFFD2  "Delay:"
 
 * ROMPTR 0B4 199
 * refs (1): A2437
-ROMP_0B4_199:
+* Label "Xlat:"
+IOLblXlat:
           :: # BA0D BINT49 BINT28 ; # BA0E # 6E BINT28 * AFFE6  "Xlat:"  "Linef"
 
 * ROMPTR 0B4 19A
 * refs (1): A2437
-ROMP_0B4_19A:
+* Label "Baud:"
+IOLblBaud:
           :: # BA0F BINT1 BINT37 ;               * B001D  "Baud:"
 
 * ROMPTR 0B4 19B
 * refs (1): A2437
-ROMP_0B4_19B:
+* Label "Parity:"
+IOLblParity:
           :: # BA10 BINT49 BINT37 ; # BA11 # 67 BINT37 'RROMPTR@ * B003B  "Parity:"  "Len:"
-          ROMPTR 0B4 1A3 BINT31 BINT8 BINT49 BINT9 BINT12 MINUSONE BINT17 * B0077
-          # BA12 ROMPTR 0B5 11F BINT17 ROMPTR 0B5 120 MINUSONE 'DROPFALSE * B00A5  "Choose print port"
-          BINT31 BINT17 BINT97 BINT9 BINT21 MINUSONE BINT4 # BA13 * B00D4  "Enter object(s) to print"
+          XLIB IOPrintPortMH BINT31 BINT8 BINT49 BINT9 BINT12 MINUSONE * B0077
+          BINT17 # BA12 XLIB IOPortItems BINT17 XLIB IOItemIR MINUSONE * B00A0  "Choose print port"
+          'DROPFALSE BINT31 BINT17 BINT97 BINT9 BINT21 MINUSONE BINT4 # BA13 * B00CF  "Enter object(s) to print"
           { # B986 TRUE } MINUSONE MINUSONE MINUSONE 'DROPFALSE BINT1 BINT26 * B0101  "Obs in"
           BINT6 BINT9 BINT32 MINUSONE MINUSONE # BA14 MINUSONE MINUSONE * B0138  "Print extra space between lines?"
-          FALSE MINUSONE 'RROMPTR@ ROMPTR 0B4 1A5 # 4C BINT26 BINT19 BINT9 * B0165
+          FALSE MINUSONE 'RROMPTR@ XLIB IOPrintIRMH # 4C BINT26 BINT19 BINT9 * B0165
           BINT1                                  * B0198
           { BINT0 } BINT4 # BA15 MINUSONE MINUSONE %1.8 MINUSONE 'RROMPTR@ * B019D  "Enter delay between lines"
-          ROMPTR 0B4 1A6 # 49 BINT26 BINT25 BINT9 BINT12 MINUSONE BINT33 * B01D4
-          # BA16 ROMPTR 0B5 12F BINT17 ROMPTR 0B5 131 MINUSONE 'DROPFALSE * B0207  "Choose character translations"
-          # 67 BINT26 BINT6 BINT9 BINT32 MINUSONE MINUSONE # BA17 MINUSONE * B0236  "Print linefeed between lines?"
-          MINUSONE TRUE MINUSONE                 * B026D
+          XLIB IOPrintWireMH # 49 BINT26 BINT25 BINT9 BINT12 MINUSONE BINT33 * B01D4
+          # BA16 XLIB IOTransItems BINT17 XLIB IOTransNewl MINUSONE * B0207  "Choose character translations"
+          'DROPFALSE # 67 BINT26 BINT6 BINT9 BINT32 MINUSONE MINUSONE # BA17 * B0231  "Print linefeed between lines?"
+          MINUSONE MINUSONE TRUE MINUSONE        * B0268
 
 * ROMPTR 0B4 19C
 * refs (1): A2437
-ROMP_0B4_19C:
-          :: 'RROMPTR@ ROMPTR 0B4 1A6 BINT19 BINT35 BINT25 BINT9 BINT12 * B027C
-            MINUSONE BINT4 # BA18 ROMPTR 0B5 125 BINT4 %9600 MINUSONE ; * B02AA  "Choose baud rate"
-          'RROMPTR@ ROMPTR 0B4 1A6 # 49 BINT35 BINT25 BINT9 BINT12 MINUSONE * B02DD
-          BINT33 # BA19 ROMPTR 0B5 126 BINT17 ROMPTR 0B5 127 MINUSONE * B0310  "Choose parity"
-          'RROMPTR@ ROMPTR 0B4 1A6 # 76 BINT35 BINT13 BINT9 BINT1 * B033F
+* Field: baud rate
+IOFldBaud:
+          :: 'RROMPTR@ XLIB IOPrintWireMH BINT19 BINT35 BINT25 BINT9 BINT12 * B027C
+            MINUSONE BINT4 # BA18 XLIB IOBaudItems BINT4 %9600 MINUSONE ; * B02AA  "Choose baud rate"
+          'RROMPTR@ XLIB IOPrintWireMH # 49 BINT35 BINT25 BINT9 BINT12 * B02DD
+          MINUSONE BINT33 # BA19 XLIB IOParityItems BINT17 XLIB IOItemNone * B030B  "Choose parity"
+          MINUSONE 'RROMPTR@ XLIB IOPrintWireMH # 76 BINT35 BINT13 BINT9 * B033A
+          BINT1                                  * B0368
           { BINT0 } BINT4 # BA1A MINUSONE MINUSONE %80 MINUSONE BINT9 DUP * B036D  "Enter printer line length"
-          'RROMPTR@ ROMPTR 0B4 19F # BA1B ROMPTR 0B4 19D BINT9 * B03A9  "Print"
-          ROMPTR 0B0 0AA DoInputForm NOT?SEMI    * B03D3
-          ROMPTR 0B4 19E ;                       * B03E8
+          'RROMPTR@ XLIB IOPrintMH # BA1B XLIB IOPrintVals BINT9 * B03A9  "Print"
+          XLIB IFSetHelps DoInputForm NOT?SEMI   * B03D3
+          XLIB IOPrintStore ;                    * B03E8
 
 * ROMPTR 0B4 19D
 * refs (1): A2437
-ROMP_0B4_19D:
-        :: ROMPTR 0B5 100 MINUSONE BINT37 TestSysFlag ROMPTR 0B5 103 * B03F8  flag -37: Single-space prnt / Double-space prnt
-          ROMPTR 0B5 10C ROMPTR 0B5 104 4ROLLDROP 3UNROLL 5ROLL ; * B0422
+* -> field values: from the flags and I/O settings
+IOPrintVals:
+        :: XLIB PrtGetPort MINUSONE BINT37 TestSysFlag XLIB PrtGetDelayWidth * B03F8  flag -37: Single-space prnt / Double-space prnt
+          XLIB IOGetFields XLIB PrtLinefeed? 4ROLLDROP 3UNROLL 5ROLL ; * B0422
 
 * ROMPTR 0B4 19E
 * refs (1): A2437
-ROMP_0B4_19E:
-        :: ROMPTR 0B5 106 ROT ROMPTR 0B5 105 MINUSONE 3UNROLL ROMPTR 0B5 10D * B044C
-          ROMPTR 0B5 102 BINT37 ROMPTR 0B5 11B DROP ROMPTR 0B5 101 ; * B0481
+* field values -> : stores the settings
+IOPrintStore:
+        :: XLIB PrtPutWidth ROT XLIB PrtLinefeed! MINUSONE 3UNROLL * B044C
+          XLIB IOPutFields XLIB PrtPutDelay BINT37 XLIB FlagPut DROP * B0476
+          XLIB PrtPutPort ;                      * B04A1
 
 * ROMPTR 0B4 19F
 * refs (1): A2437
-ROMP_0B4_19F:
+* #msg -> ... flag: form message handler: 14 first field is 2, 16 the menu, 5 the labels
+IOPrintMH:
         ::                                       * B04B1
           { BINT14 BINT2 BINT16                  * B04B6
-            :: ROMPTR 0B4 1A0 TRUE ; BINT5 ROMPTR 0B4 1A2 } * B04CA
+            :: XLIB IOPrintMenu TRUE ; BINT5 XLIB IOPrintLabels } * B04CA
           EQLookup case                          * B04F9
           :: EVAL TRUE ;                         * B0503
           DROPFALSE ;                            * B0517
 
 * ROMPTR 0B4 1A0
 * refs (1): A2437
-ROMP_0B4_1A0:
+* Menu keys: PRINT
+IOPrintMenu:
         { NullMenuKey NullMenuKey                * B0521
-          { $ "PRINT" ROMPTR 0B4 1A1 } }         * B0530
+          { $ "PRINT" XLIB IOPrintKey } }        * B0530
 
 * ROMPTR 0B4 1A1
 * refs (1): A2437
-ROMP_0B4_1A1:
-        :: TakeOver ROMPTR 0B0 0C8 ROMPTR 0B4 19E BINT2 * B055E  GetFieldVals
-          ROMPTR 0B0 0C5 ROMPTR 0B5 107 ;        * B0583  ~gFldVal
+* -> : PRINT key: stores the settings and prints the Object field
+IOPrintKey:
+        :: TakeOver XLIB GetFieldVals XLIB IOPrintStore BINT2 XLIB ~gFldVal * B055E
+          XLIB PrtObj ;                          * B058E
 
 * ROMPTR 0B4 1A2
 * refs (1): A2437
-ROMP_0B4_1A2:
-        :: BINT39 BINT131 MAKEGROB BINT4 ONE_DO INDEX@ ROMPTR 0B0 012 LOOP * B059E
-          ROMPTR 0B4 1A7 ITE                     * B05D1
-          :: BINT4 ROMPTR 0B0 012 BINT6 ROMPTR 0B0 012 ; * B05E1
-          :: BINT10 BINT5 DO INDEX@ ROMPTR 0B0 012 LOOP ; * B060B
+* -> grob FALSE: message 5: draws the labels for the current port
+IOPrintLabels:
+        :: BINT39 BINT131 MAKEGROB BINT4 ONE_DO INDEX@ XLIB IFDispLabel LOOP * B059E
+          XLIB IOPortIR? ITE                     * B05D1
+          :: BINT4 XLIB IFDispLabel BINT6 XLIB IFDispLabel ; * B05E1
+          :: BINT10 BINT5 DO INDEX@ XLIB IFDispLabel LOOP ; * B060B
           FALSE ;                                * B0639
 
 * ROMPTR 0B4 1A3
 * refs (1): A2437
-ROMP_0B4_1A3:
+* #msg -> ... flag: Port field: 47 changes the lower rows of the form
+IOPrintPortMH:
         :: BINT47 #<>case FALSE                  * B0643
-          ROMPTR 0B4 1A4 TRUE ;                  * B0657
+          XLIB IOPrintPortDisp TRUE ;            * B0657
 
 * ROMPTR 0B4 1A4
 * refs (1): A2437
-ROMP_0B4_1A4:
-        :: BINT26 BINT18 BLANKIT HARDBUFF BINT3 ROMPTR 0B0 012 BINT3 * B066C
-          ROMPTR 0B0 0A2 ROMPTR 0B4 1A7 ITE      * B069A
-          :: BINT4 ROMPTR 0B0 012 BINT4 ROMPTR 0B0 0A2 BINT6 ROMPTR 0B0 012 * B06B5
-            BINT6 ROMPTR 0B0 0A2 ;               * B06EA
-          :: BINT10 BINT5 DO INDEX@ ROMPTR 0B0 012 INDEX@ ROMPTR 0B0 0A2 * B06FF
-            LOOP ;                               * B0733
+* -> : after a port change: blanks and redraws the rows that depend on the port
+IOPrintPortDisp:
+        :: BINT26 BINT18 BLANKIT HARDBUFF BINT3 XLIB IFDispLabel BINT3 * B066C
+          XLIB IFMarkPending XLIB IOPortIR? ITE  * B069A
+          :: BINT4 XLIB IFDispLabel BINT4 XLIB IFMarkPending BINT6 * B06B5
+            XLIB IFDispLabel BINT6 XLIB IFMarkPending ; * B06DF
+          :: BINT10 BINT5 DO INDEX@ XLIB IFDispLabel INDEX@ * B06FF
+            XLIB IFMarkPending LOOP ;            * B0728
           DROP ;                                 * B073D
 
 * ROMPTR 0B4 1A5
 * refs (1): A2437
-ROMP_0B4_1A5:
+* #msg -> ... flag: a field used with infrared only (Delay)
+IOPrintIRMH:
         :: BINT7 #=casedrop                      * B0747
-          :: ROMPTR 0B4 1A7 NOT ;                * B0756
+          :: XLIB IOPortIR? NOT ;                * B0756
           BINT55 #<>case FALSE                   * B0770
-          ROMPTR 0B4 1A7 TRUE ;                  * B077F
+          XLIB IOPortIR? TRUE ;                  * B077F
 
 * ROMPTR 0B4 1A6
 * refs (1): A2437
-ROMP_0B4_1A6:
-        :: BINT7 #=casedrop ROMPTR 0B4 1A7       * B0794
+* #msg -> ... flag: a field used with the wire only
+IOPrintWireMH:
+        :: BINT7 #=casedrop XLIB IOPortIR?       * B0794
           BINT55 #<>case FALSE                   * B07AE
-          ROMPTR 0B4 1A7 NOT TRUE ;              * B07BD
+          XLIB IOPortIR? NOT TRUE ;              * B07BD
 
 * ROMPTR 0B4 1A7
 * refs (1): A2437
-ROMP_0B4_1A7:
-        :: BINT1 ROMPTR 0B0 0C5 ROMPTR 0B0 09A ; * B07D7  ~gFldVal
+* -> flag: is field 1 on Infrared?
+IOPortIR?:
+        :: BINT1 XLIB ~gFldVal XLIB ~BINT3;NTHCOMPROM@ ; * B07D7
 
 * ROMPTR 0B4 1A8
 * refs (1): A2437
-ROMP_0B4_1A8:
-        :: ROMPTR 0B4 198 # BA1C BINT70 BINT10 # B989 BINT1 BINT19 # BA1D * B07FC  "Type:"  "Name:"  "OvrW"
-          # 6E BINT37 # BA1E BINT1 BINT28 ROMPTR 0B4 199 # BA1F # 67 BINT28 * B083E  "Fmt:"  "Chk:"
-          ROMPTR 0B4 19A ROMPTR 0B4 19B 'RROMPTR@ ROMPTR 0B4 1B1 BINT25 * B0885
-          BINT8 BINT25 BINT9 BINT12 MINUSONE BINT33 # BA20 ROMPTR 0B5 11F * B08B0  "Choose transfer port"
-          BINT17 ROMPTR 0B5 121 MINUSONE 'RROMPTR@ ROMPTR 0B4 1B2 BINT91 * B08E3
-          BINT8 BINT37 BINT9 BINT12 MINUSONE BINT17 # BA21 ROMPTR 0B5 122 * B090D  "Choose type of transfer"
-          BINT17 ROMPTR 0B5 123 MINUSONE 'RROMPTR@ ROMPTR 0B4 1B4 BINT25 * B0940
-          BINT17 # 67 BINT9 BINT21               * B096A
+* -> : "Transfer": port, type, names and format, for Kermit and XModem
+IOXferForm:
+        :: XLIB IOLblPort # BA1C BINT70 BINT10 # B989 BINT1 BINT19 # BA1D * B07FC  "Type:"  "Name:"  "OvrW"
+          # 6E BINT37 # BA1E BINT1 BINT28 XLIB IOLblXlat # BA1F # 67 BINT28 * B083E  "Fmt:"  "Chk:"
+          XLIB IOLblBaud XLIB IOLblParity 'RROMPTR@ XLIB IOXferPortMH BINT25 * B0885
+          BINT8 BINT25 BINT9 BINT12 MINUSONE BINT33 # BA20 XLIB IOPortItems * B08B0  "Choose transfer port"
+          BINT17 XLIB IOItemWire MINUSONE 'RROMPTR@ XLIB IOXferTypeMH BINT91 * B08E3
+          BINT8 BINT37 BINT9 BINT12 MINUSONE BINT17 # BA21 * B090D  "Choose type of transfer"
+          XLIB XferProtoItems BINT17 XLIB XferItemKermit MINUSONE 'RROMPTR@ * B0935
+          XLIB IOXferNameMH BINT25 BINT17 # 67 BINT9 BINT21 * B095A
           { BINT6 BINT5 } BINT4 # BA22           * B0983  "Enter names of vars to transfer"
           { # BA08 TRUE MINUSONE FALSE } MINUSONE MINUSONE MINUSONE * B09A6  "Vars in"
-          'RROMPTR@ ROMPTR 0B4 1BF BINT19 BINT26 BINT19 BINT9 BINT12 * B09D8
-          MINUSONE BINT33 # BA23 ROMPTR 0B5 12C BINT17 ROMPTR 0B5 12D * B0A01  "Choose transfer format"
-          MINUSONE 'RROMPTR@ ROMPTR 0B4 1BF # 49 BINT26 BINT25 BINT9 BINT12 * B0A30
-          MINUSONE BINT33 # BA16 ROMPTR 0B5 12F BINT17 ROMPTR 0B5 131 * B0A63  "Choose character translations"
-          MINUSONE 'RROMPTR@ ROMPTR 0B4 1BF # 79 BINT26 BINT7 BINT9 BINT12 * B0A92
-          MINUSONE BINT36 # BA24 ROMPTR 0B5 134 BINT17 ROMPTR 0B5 137 * B0AC5  "Choose checksum type"
-          MINUSONE ROMPTR 0B4 19C 'RROMPTR@ ROMPTR 0B4 1BE # 49 BINT35 * B0AF4
-          BINT25 BINT9 BINT12 MINUSONE BINT33 # BA19 ROMPTR 0B5 126 BINT17 * B0B23  "Choose parity"
-          ROMPTR 0B5 127 MINUSONE 'DROPFALSE # 67 BINT35 BINT6 BINT9 BINT32 * B0B56
-          MINUSONE MINUSONE # BA25 MINUSONE MINUSONE FALSE MINUSONE BINT9 * B0B89  "Overwrite existing variables?"
-          DUP 'RROMPTR@ ROMPTR 0B4 1AB # BA26 ROMPTR 0B4 1A9 BINT9 * B0BB6  "Transfer"
-          ROMPTR 0B0 0AA DoInputForm NOT?SEMI    * B0BE5
-          ROMPTR 0B4 1AA ;                       * B0BFA
+          'RROMPTR@ XLIB IOXferKermitMH BINT19 BINT26 BINT19 BINT9 BINT12 * B09D8
+          MINUSONE BINT33 # BA23 XLIB XferFmtItems BINT17 XLIB XferItemASCII * B0A01  "Choose transfer format"
+          MINUSONE 'RROMPTR@ XLIB IOXferKermitMH # 49 BINT26 BINT25 BINT9 * B0A30
+          BINT12 MINUSONE BINT33 # BA16 XLIB IOTransItems BINT17 * B0A5E  "Choose character translations"
+          XLIB IOTransNewl MINUSONE 'RROMPTR@ XLIB IOXferKermitMH # 79 * B0A87
+          BINT26 BINT7 BINT9 BINT12 MINUSONE BINT36 # BA24 XLIB IOCksumItems * B0AB1  "Choose checksum type"
+          BINT17 XLIB IOCksum3 MINUSONE XLIB IOFldBaud 'RROMPTR@ * B0AE4
+          XLIB IOXferParityMH # 49 BINT35 BINT25 BINT9 BINT12 MINUSONE * B0B09
+          BINT33 # BA19 XLIB IOParityItems BINT17 XLIB IOItemNone MINUSONE * B0B37  "Choose parity"
+          'DROPFALSE # 67 BINT35 BINT6 BINT9 BINT32 MINUSONE MINUSONE # BA25 * B0B66  "Overwrite existing variables?"
+          MINUSONE MINUSONE FALSE MINUSONE BINT9 DUP 'RROMPTR@ XLIB IOXferMH * B0B9D
+          # BA26 XLIB IOXferVals BINT9 XLIB IFSetHelps DoInputForm NOT?SEMI * B0BCB  "Transfer"
+          XLIB IOXferStore ;                     * B0BFA
 
 * ROMPTR 0B4 1A9
 * refs (1): A2437
-ROMP_0B4_1A9:
-        :: ROMPTR 0B5 108 ROMPTR 0B5 123 MINUSONE ROMPTR 0B5 10A * B0C0A
-          ROMPTR 0B5 10C ROMPTR 0B5 10E ;        * B0C35
+* -> field values: from the flags and I/O settings
+IOXferVals:
+        :: XLIB XferGetPort XLIB XferItemKermit MINUSONE XLIB XferGetFormat * B0C0A
+          XLIB IOGetFields XLIB XferOverwrite? ; * B0C35
 
 * ROMPTR 0B4 1AA
 * refs (1): A2437
-ROMP_0B4_1AA:
-        :: ROMPTR 0B5 10F ROMPTR 0B5 10D ROMPTR 0B5 10B 2DROP ROMPTR 0B5 109 ; * B0C50
+* field values -> : stores the settings
+IOXferStore:
+        :: XLIB XferOverwrite! XLIB IOPutFields XLIB XferPutFormat 2DROP * B0C50
+          XLIB XferPutPort ;                     * B0C7B
 
 * ROMPTR 0B4 1AB
 * refs (1): A2437
-ROMP_0B4_1AB:
+* #msg -> ... flag: form message handler: 14 first field is 3, 16 the menu, 5 the labels
+IOXferMH:
         ::                                       * B0C8B
           { BINT14 BINT3 BINT16                  * B0C90
-            :: ROMPTR 0B4 1AC TRUE ; BINT5 ROMPTR 0B4 1B0 } * B0CA4
+            :: XLIB IOXferMenu TRUE ; BINT5 XLIB IOXferLabels } * B0CA4
           EQLookup case                          * B0CD3
           :: EVAL TRUE ;                         * B0CDD
           DROPFALSE ;                            * B0CF1
 
 * ROMPTR 0B4 1AC
 * refs (1): A2437
-ROMP_0B4_1AC:
+* Menu keys: RECV (Kermit), KGET or XRECV, SEND or XSEN
+IOXferMenu:
         {                                        * B0CFB
           {                                      * B0D00
-            :: TakeOver ROMPTR 0B4 1C0 ITE $ "RECV" NULL$ * B0D05
+            :: TakeOver XLIB IOXferKermit? ITE $ "RECV" NULL$ * B0D05
             ;                                    * B0D36
-            ROMPTR 0B4 1AD }                     * B0D3B
+            XLIB IOXferRecvKey }                 * B0D3B
           {                                      * B0D4B
-            :: TakeOver ROMPTR 0B4 1C0 ITE $ "KGET" $ "XRECV" * B0D50
+            :: TakeOver XLIB IOXferKermit? ITE $ "KGET" $ "XRECV" * B0D50
             ;                                    * B0D90
-            ROMPTR 0B4 1AE }                     * B0D95
+            XLIB IOXferGetKey }                  * B0D95
           {                                      * B0DA5
-            :: TakeOver ROMPTR 0B4 1C0 ITE $ "SEND" $ "XSEN" * B0DAA
+            :: TakeOver XLIB IOXferKermit? ITE $ "SEND" $ "XSEN" * B0DAA
             ;                                    * B0DE8
-            ROMPTR 0B4 1AF }                     * B0DED
+            XLIB IOXferSendKey }                 * B0DED
         }                                        * B0DFD
 
 * ROMPTR 0B4 1AD
 * refs (1): A2437
-ROMP_0B4_1AD:
-        :: TakeOver ROMPTR 0B4 1C0 NOTcase DoBadKey * B0E02
-          ROMPTR 0B0 0C8 ROMPTR 0B4 1AA ROMPTR 0B5 118 ; * B0E21  GetFieldVals
+* -> : RECV key: Kermit receive
+IOXferRecvKey:
+        :: TakeOver XLIB IOXferKermit? NOTcase DoBadKey * B0E02
+          XLIB GetFieldVals XLIB IOXferStore XLIB XferRecv ; * B0E21
 
 * ROMPTR 0B4 1AE
 * refs (1): A2437
-ROMP_0B4_1AE:
-        :: TakeOver ROMPTR 0B0 0C8 ROMPTR 0B4 1AA BINT3 * B0E47  GetFieldVals
-          ROMPTR 0B0 0C5 ROMPTR 0B4 1C0 ITE ROMPTR 0B5 117 * B0E6C  ~gFldVal
-          :: TRUE ROMPTR 0B5 119 ;               * B0E92
+* -> : KGET or XRECV key: asks the other side for the named object(s)
+IOXferGetKey:
+        :: TakeOver XLIB GetFieldVals XLIB IOXferStore BINT3 XLIB ~gFldVal * B0E47
+          XLIB IOXferKermit? ITE XLIB XferGet    * B0E77
+          :: TRUE XLIB XferXModem ;              * B0E92
         ;                                        * B0EAC
 
 * ROMPTR 0B4 1AF
 * refs (1): A2437
-ROMP_0B4_1AF:
-        :: TakeOver ROMPTR 0B0 0C8 ROMPTR 0B4 1AA BINT3 * B0EB1  GetFieldVals
-          ROMPTR 0B0 0C5 ROMPTR 0B4 1C0 ITE ROMPTR 0B5 11A * B0ED6  ~gFldVal
-          :: FALSE ROMPTR 0B5 119 ;              * B0EFC
+* -> : SEND or XSEN key: sends the named object(s)
+IOXferSendKey:
+        :: TakeOver XLIB GetFieldVals XLIB IOXferStore BINT3 XLIB ~gFldVal * B0EB1
+          XLIB IOXferKermit? ITE XLIB XferSend   * B0EE1
+          :: FALSE XLIB XferXModem ;             * B0EFC
         ;                                        * B0F16
 
 * ROMPTR 0B4 1B0
 * refs (1): A2437
-ROMP_0B4_1B0:
-        :: BINT39 BINT131 MAKEGROB BINT5 ONE_DO INDEX@ ROMPTR 0B0 012 LOOP * B0F1B
-          ROMPTR 0B4 1C0 case                    * B0F4E
-          :: BINT8 BINT5 DO INDEX@ ROMPTR 0B0 012 LOOP ROMPTR 0B4 1A7 * B0F5E
+* -> grob FALSE: message 5: draws the labels for the current port and protocol
+IOXferLabels:
+        :: BINT39 BINT131 MAKEGROB BINT5 ONE_DO INDEX@ XLIB IFDispLabel LOOP * B0F1B
+          XLIB IOXferKermit? case                * B0F4E
+          :: BINT8 BINT5 DO INDEX@ XLIB IFDispLabel LOOP XLIB IOPortIR? * B0F5E
             caseFALSE BINT10                     * B0F92
-            BINT8 DO INDEX@ ROMPTR 0B0 012 LOOP FALSE ; * B0F9C
-          ROMPTR 0B4 1A7 caseFALSE BINT8         * B0FC5
-          ROMPTR 0B0 012 FALSE ;                 * B0FDA
+            BINT8 DO INDEX@ XLIB IFDispLabel LOOP FALSE ; * B0F9C
+          XLIB IOPortIR? caseFALSE BINT8         * B0FC5
+          XLIB IFDispLabel FALSE ;               * B0FDA
 
 * ROMPTR 0B4 1B1
 * refs (1): A2437
-ROMP_0B4_1B1:
+* #msg -> ... flag: Port field: 47 changes the lower rows
+IOXferPortMH:
         :: BINT47 #<>case FALSE                  * B0FEF
-          ROMPTR 0B4 1B3 TRUE ;                  * B1003
+          XLIB IOXferDisp TRUE ;                 * B1003
 
 * ROMPTR 0B4 1B2
 * refs (1): A2437
-ROMP_0B4_1B2:
+* #msg -> ... flag: Type field: 47 changes the lower rows and the menu
+IOXferTypeMH:
         :: BINT47 #<>case FALSE                  * B1018
-          ROMPTR 0B4 1B3 SetDA3Bad TRUE ;        * B102C
+          XLIB IOXferDisp SetDA3Bad TRUE ;       * B102C
 
 * ROMPTR 0B4 1B3
 * refs (1): A2437
-ROMP_0B4_1B3:
-        :: BINT26 BINT18 BLANKIT HARDBUFF BINT4 ROMPTR 0B0 012 BINT9 * B1046
-          ROMPTR 0B0 0A2 ROMPTR 0B4 1C0 case     * B1074
-          :: BINT8 BINT5 DO INDEX@ ROMPTR 0B0 012 INDEX@ #1- ROMPTR 0B0 0A2 * B108F
-            LOOP ROMPTR 0B4 1A7 caseDROP BINT10  * B10C8
-            BINT8 DO INDEX@ ROMPTR 0B0 012 INDEX@ #1- ROMPTR 0B0 0A2 LOOP * B10E2
-            DROP ;                               * B1116
-          ROMPTR 0B4 1A7 caseDROP BINT8          * B1120
-          ROMPTR 0B0 012 BINT7 ROMPTR 0B0 0A2 DROP ; * B1135
+* -> : after a port or type change: blanks and redraws the rows that depend on them
+IOXferDisp:
+        :: BINT26 BINT18 BLANKIT HARDBUFF BINT4 XLIB IFDispLabel BINT9 * B1046
+          XLIB IFMarkPending XLIB IOXferKermit? case * B1074
+          :: BINT8 BINT5 DO INDEX@ XLIB IFDispLabel INDEX@ #1- * B108F
+            XLIB IFMarkPending LOOP XLIB IOPortIR? caseDROP BINT10 * B10BD
+            BINT8 DO INDEX@ XLIB IFDispLabel INDEX@ #1- XLIB IFMarkPending * B10E2
+            LOOP DROP ;                          * B1111
+          XLIB IOPortIR? caseDROP BINT8          * B1120
+          XLIB IFDispLabel BINT7 XLIB IFMarkPending DROP ; * B1135
 
 * ROMPTR 0B4 1B4
 * refs (1): A2437
-ROMP_0B4_1B4:
+* #msg -> ... flag: Name field: 37 (CHOOS) with Kermit first asks where to choose from
+IOXferNameMH:
         :: BINT37 #<>case FALSE                  * B115A
-          ROMPTR 0B4 1C0 NOTcaseFALSE ROMPTR 0B4 1B5 * B116E
+          XLIB IOXferKermit? NOTcaseFALSE XLIB IOXferChoose * B116E
           TRUE ;                                 * B1189
 
 * ROMPTR 0B4 1B5
 * refs (1): A2437
-ROMP_0B4_1B5:
+* -> flag: choose box of "Local vars" or "Remote PC files"
+IOXferChoose:
         :: NULL$                                 * B1193
           {                                      * B119D
-            { # BA27 ROMPTR 0B4 1B6 }            * B11A2  "Local vars"
-            { # BA28 ROMPTR 0B4 1B7 } }          * B11C1  "Remote PC files"
-          ROMPTR 0B3 066 SetDA123NoCh NOTcaseFALSE EVAL * B11E5  ~ChooseSimple
+            { # BA27 XLIB IOXferLocal }          * B11A2  "Local vars"
+            { # BA28 XLIB IOXferRemote } }       * B11C1  "Remote PC files"
+          XLIB ~ChooseSimple SetDA123NoCh NOTcaseFALSE EVAL * B11E5
         ;                                        * B11FF
 
 * ROMPTR 0B4 1B6
 * refs (1): A2437
-ROMP_0B4_1B6:
-        :: 4GETLAM FALSE SWAP ROMPTR 0B0 077 ROMPTR 0B4 1D8 SetDA123NoCh ; * B1204
+* -> flag: chooses from local variables through BrowseMem
+IOXferLocal:
+        :: 4GETLAM FALSE SWAP XLIB IFFilterArgs XLIB BrowseMem SetDA123NoCh ; * B1204
 
 * ROMPTR 0B4 1B7
 * refs (1): A2437
-ROMP_0B4_1B7:
-        :: ROMPTR 0B0 0C8 ROMPTR 0B4 1AA ROMPTR 0B5 110 * B1238  GetFieldVals
-          { LAM 'RD LAM 'RF } BIND 'RROMPTR@ ROMPTR 0B4 1B8 SPACE$ BINT1 * B125E
-          LAM 'RF ROMPTR 0B5 111 BINT1 ROMPTR 0B3 000 ABND SetDA123NoCh ; * B12A1  ~Choose
+* -> flag: chooses from the remote directory: stores the settings, reads it through Kermit and shows it in a Choose box. LAMs: RD directory, RF files
+IOXferRemote:
+        :: XLIB GetFieldVals XLIB IOXferStore XLIB SrvDir * B1238
+          { LAM 'RD LAM 'RF } BIND 'RROMPTR@ XLIB IOXferRemoteMH SPACE$ * B125E
+          BINT1 LAM 'RF XLIB SrvFiles BINT1 XLIB ~Choose ABND SetDA123NoCh ; * B129C
 
 * ROMPTR 0B4 1B8
 * refs (1): A2437
-ROMP_0B4_1B8:
+* #msg -> ... flag: Choose message handler: title, check marks, menu
+IOXferRemoteMH:
         ::                                       * B12D8
-          { BINT70 ROMPTR 0B4 1B9 BINT61 TRUE BINT83 * B12DD
-            :: ' ROMPTR 0B4 1BA ; }              * B1301
+          { BINT70 XLIB IOXferRemoteTitle BINT61 TRUE BINT83 * B12DD
+            :: ' XLIB IOXferRemoteMenu ; }       * B1301
           EQLookup case                          * B1320
           :: EVAL TRUE ;                         * B132A
           DROPFALSE ;                            * B133E
 
 * ROMPTR 0B4 1B9
 * refs (1): A2437
-ROMP_0B4_1B9:
-        :: # BA29 JstGetTHEMESG LAM 'RD 8GETLAM ROMPTR 0B3 046 3PICK * B1348  "Files in "
-          ROMPTR 0B0 071 #- ROMPTR 0B0 070 DROP &$ ; * B137E
+* -> $: title "Files in " with the directory, shortened to fit
+IOXferRemoteTitle:
+        :: # BA29 JstGetTHEMESG LAM 'RD 8GETLAM XLIB BBAddArrows 3PICK * B1348  "Files in "
+          XLIB ~$>grob;GROBDIMw #- XLIB $FitRight DROP &$ ; * B137E
 
 * ROMPTR 0B4 1BA
 * refs (1): A2437
-ROMP_0B4_1BA:
+* -> menu: CHOOS, check, CANCL and OK
+IOXferRemoteMenu:
         :: NoExitAction                          * B13A8
           { NullMenuKey                          * B13B2
             {                                    * B13BC
-              :: PTR DirLabel: $ "CHOOS" ; ROMPTR 0B4 1BB } * B13C1
+              :: PTR DirLabel: $ "CHOOS" ; XLIB IOXferRemoteCD } * B13C1
             {                                    * B13F4
-              :: TakeOver ROMPTR 0B3 05B ITE NULL$ * B13F9  ~BBEmpty?
-                ROMPTR 0B0 086                   * B1418  ~grobCheckKey
+              :: TakeOver XLIB ~BBEmpty? ITE NULL$ XLIB ~grobCheckKey * B13F9
               ;                                  * B1423
-              ROMPTR 0B3 02A }                   * B1428  DoCKeyCheck
+              XLIB DoCKeyCheck }                 * B1428
             NullMenuKey                          * B1438
-            { $ "(AN(L" ROMPTR 0B3 02D }         * B143D  DoCKeyCancel
-            { $ "OK" ROMPTR 0B3 02E } }          * B1466  DoCKeyOK
+            { $ "(AN(L" XLIB DoCKeyCancel }      * B143D
+            { $ "OK" XLIB DoCKeyOK } }           * B1466
         ;                                        * B148E
 
 * ROMPTR 0B4 1BB
 * refs (1): A2437
-ROMP_0B4_1BB:
-        :: TakeOver # B989 BINT1 BINT19 'RROMPTR@ ROMPTR 0B4 1BC BINT25 * B1493  "Name:"
+* -> : CHOOS key: "Choose Remote Directory", then reads the new directory
+IOXferRemoteCD:
+        :: TakeOver # B989 BINT1 BINT19 'RROMPTR@ XLIB IOXferCDMH BINT25 * B1493  "Name:"
           BINT17 # 67 BINT9 BINT5                * B14C6
           { BINT2 } BINT4 # BA2A MINUSONE BINT1 MINUSONE LAM 'RD ONEONE * B14DF  "Enter name of dir to change to"
           'DROPFALSE # BA2B HARDBUFF TOTEMPOB 1LAMBIND DoInputForm 1GETABND * B151E  "Choose Remote Directory"
           HARDBUFF ZEROZERO GROB! NOT?SEMI       * B1546
-          ROMPTR 0B5 116 ROMPTR 0B5 110 SWAP ' LAM 'RD STOLAM DUP ' LAM 'RF * B155A
-          STOLAM ROMPTR 0B5 111 19PUTLAM ROMPTR 0B3 03E * B15A3  ~BBReReadNElems
-          ROMPTR 0B3 026 BINT1 12GETLAM #MIN 18PUTLAM FALSE * B15C3  ~BBReReadWidth
-          ROMPTR 0B3 019 NULL{} 15PUTLAM OBJ_1A03E ; * B15E7  ~BBRecalOff&Disp
+          XLIB SrvCd XLIB SrvDir SWAP ' LAM 'RD STOLAM DUP ' LAM 'RF STOLAM * B155A
+          XLIB SrvFiles 19PUTLAM XLIB ~BBReReadNElems XLIB ~BBReReadWidth * B15A8
+          BINT1 12GETLAM #MIN 18PUTLAM FALSE XLIB ~BBRecalOff&Disp NULL{} * B15CE
+          15PUTLAM IFRedrawAll ;                 * B15F7

@@ -1,30 +1,32 @@
-* HP 48GX ROM revision R, #7C855-#7E000: not yet identified
+* HP 48GX ROM revision R, #7C855-#7E000: Array primitives in machine code and RPL (inner products in 15 digits, LU decomposition and solving, conversion between real and extended arrays, norms), the TVM variable names and the TVM solver's numeric helpers, then pointers to the symbolic rules: derivatives (D/D...), integrals, WHERE, and the rule tables' ROMPTRs
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: PTYPE>PINFO PYR PV PMT I%YR N MANMENUTRG MANMENUATG FV derprod1 MANMENUCX derquot
+* Most referenced: PTYPE>PINFO Dot%%2Arr ExtArry> PYR Dot%%1Arr LUFactor Dot+1Elem PV PMT LUSolve I%YR DotNextC
 * Follows on from the previous file (at #7C855 in the original ROM).
 
 * refs (9): 7CFF4 7D076 90697 94BD5 94F5F 9814B ...
-OBJ_7C855:
+* arry and three bints -> %% or C%%: inner product in 15 digits of a row and a column of one array
+Dot%%1Arr:
         CON(5)  (*)+5                            * 7C855  primitive code object
         ST=0    0                                * 7C85A
-        GOTO    OBJ_7C861.L1                     * 7C85D
+        GOTO    Dot%%2Arr.L1                     * 7C85D
 
 * refs (11): 7D170 7D233 907A0 924D9 9256F 926FF ...
-OBJ_7C861:
+* As Dot%%1Arr, with two arrays on the stack
+Dot%%2Arr:
         CON(5)  (*)+5                            * 7C861  primitive code object
         ST=1    0                                * 7C866
-OBJ_7C861.L1:
-        GOSUB   SUB_7C9FA                        * 7C869
+Dot%%2Arr.L1:
+        GOSUB   DotArgs                          * 7C869
         D1=D1+  5                                * 7C86D
         A=A-1   A                                * 7C870
-        GOSUB   SUB_7CC71                        * 7C872
+        GOSUB   A*21~jump                        * 7C872
         ST=0    1                                * 7C876
         LC(5)   DOEREL                           * 7C879
         ?D=C    A                                * 7C880
-        GOYES   OBJ_7C861.L2                     * 7C883
+        GOYES   Dot%%2Arr.L2                     * 7C883
         ST=1    1                                * 7C885
         A=A+A   A                                * 7C888
-OBJ_7C861.L2:
+Dot%%2Arr.L2:
         GOSUB   SUB_7CA36                        * 7C88A
         RSTK=C                                   * 7C88E
         CD0EX                                    * 7C890
@@ -32,11 +34,11 @@ OBJ_7C861.L2:
         RSTK=C                                   * 7C895
         GOSUB   SUB_7CA87                        * 7C897
         ?ST=1   2                                * 7C89B
-        GOYES   SUB_7C8CF.L2                     * 7C89E
+        GOYES   DotNext.L2                       * 7C89E
         ?ST=0   1                                * 7C8A0
-        GOYES   OBJ_7C861.L4                     * 7C8A3
-        GOTO    SUB_7C962.L5                     * 7C8A5
-OBJ_7C861.loop3:
+        GOYES   Dot%%2Arr.L4                     * 7C8A3
+        GOTO    DotNextC.L5                      * 7C8A5
+Dot%%2Arr.loop3:
         C=RSTK                                   * 7C8A9
         D0=C                                     * 7C8AB
         A=C     A                                * 7C8AE
@@ -49,32 +51,33 @@ OBJ_7C861.loop3:
         SETHEX                                   * 7C8C0
         D1=D1+  5                                * 7C8C2
         D1=D1+  16                               * 7C8C5
-OBJ_7C861.L4:
-        GOSUB   SUB_7C8CF                        * 7C8C8
-        GONC    OBJ_7C861.loop3                  * 7C8CC
+Dot%%2Arr.L4:
+        GOSUB   DotNext                          * 7C8C8
+        GONC    Dot%%2Arr.loop3                  * 7C8CC
 
 * refs (3): 7C8C8 7CB2A 7CCFE
-SUB_7C8CF:
+* Count down the terms of a real product; after the last, push the result
+DotNext:
         C=R4                                     * 7C8CF
         C=C-1   A                                * 7C8D2
         R4=C                                     * 7C8D4
         RTNNC                                    * 7C8D7
-SUB_7C8CF.L1:
+DotNext.L1:
         GOSBVL  RCAB0                            * 7C8DA
         GOVLNG  PUSH%.L9                         * 7C8E1
-SUB_7C8CF.L2:
+DotNext.L2:
         ?ST=1   1                                * 7C8E8
-        GOYES   SUB_7C8CF.L3                     * 7C8EB
-        GOTO    SUB_7C962.L3                     * 7C8ED
-SUB_7C8CF.L3:
-        GOTO    SUB_7C8CF.L5                     * 7C8F1
-SUB_7C8CF.loop4:
+        GOYES   DotNext.L3                       * 7C8EB
+        GOTO    DotNextC.L3                      * 7C8ED
+DotNext.L3:
+        GOTO    DotNext.L5                       * 7C8F1
+DotNext.loop4:
         GOSUB   GetAbs%%AB1~jump                 * 7C8F5
         C=RSTK                                   * 7C8F9
         RSTK=C                                   * 7C8FB
         D0=C                                     * 7C8FD
         GOSUB   MACCF0~jump                      * 7C900
-        GOSUB   SUB_7CC64                        * 7C904
+        GOSUB   Dot+1Elem                        * 7C904
         A=-A-1  S                                * 7C908
         C=RSTK                                   * 7C90B
         RSTK=C                                   * 7C90D
@@ -91,7 +94,7 @@ SUB_7C8CF.loop4:
         D0=D0+  5                                * 7C92D
         D0=D0+  16                               * 7C930
         GOSUB   MACCF2~jump                      * 7C933
-        GOSUB   SUB_7CC64                        * 7C937
+        GOSUB   Dot+1Elem                        * 7C937
         C=RSTK                                   * 7C93B
         RSTK=C                                   * 7C93D
         D0=C                                     * 7C93F
@@ -105,21 +108,22 @@ SUB_7C8CF.loop4:
         RSTK=C                                   * 7C954
         C=C+A   A                                * 7C956
         RSTK=C                                   * 7C958
-SUB_7C8CF.L5:
-        GOSUB   SUB_7C962                        * 7C95A
-        GOTO    SUB_7C8CF.loop4                  * 7C95E
+DotNext.L5:
+        GOSUB   DotNextC                         * 7C95A
+        GOTO    DotNext.loop4                    * 7C95E
 
 * refs (7): 7C95A 7C9BA 7C9F3 7CBB5 7CC01 7CC4F ...
-SUB_7C962:
+* Count down the terms of a complex product; after the last, push the result
+DotNextC:
         C=R4                                     * 7C962
         C=C-1   A                                * 7C965
         R4=C                                     * 7C967
         RTNNC                                    * 7C96A
-SUB_7C962.L1:
+DotNextC.L1:
         GOSBVL  RCAB0                            * 7C96D
         GOSBVL  RCCD2                            * 7C974
         GOVLNG  C%%CHS.L2                        * 7C97B
-SUB_7C962.loop2:
+DotNextC.loop2:
         GOSUB   GetAbs%%AB1~jump                 * 7C982
         C=RSTK                                   * 7C986
         RSTK=C                                   * 7C988
@@ -141,16 +145,16 @@ SUB_7C962.loop2:
         RSTK=C                                   * 7C9B4
         C=C+A   A                                * 7C9B6
         RSTK=C                                   * 7C9B8
-SUB_7C962.L3:
-        GOSUB   SUB_7C962                        * 7C9BA
-        GONC    SUB_7C962.loop2                  * 7C9BE
-SUB_7C962.loop4:
+DotNextC.L3:
+        GOSUB   DotNextC                         * 7C9BA
+        GONC    DotNextC.loop2                   * 7C9BE
+DotNextC.loop4:
         GOSUB   GetAbs%%AB1~jump                 * 7C9C1
         C=RSTK                                   * 7C9C5
         RSTK=C                                   * 7C9C7
         D0=C                                     * 7C9C9
         GOSUB   MACCF0~jump                      * 7C9CC
-        GOSUB   SUB_7CC64                        * 7C9D0
+        GOSUB   Dot+1Elem                        * 7C9D0
         C=RSTK                                   * 7C9D4
         RSTK=C                                   * 7C9D6
         D0=C                                     * 7C9D8
@@ -164,12 +168,13 @@ SUB_7C962.loop4:
         RSTK=C                                   * 7C9ED
         C=C+A   A                                * 7C9EF
         RSTK=C                                   * 7C9F1
-SUB_7C962.L5:
-        GOSUB   SUB_7C962                        * 7C9F3
-        GONC    SUB_7C962.loop4                  * 7C9F7
+DotNextC.L5:
+        GOSUB   DotNextC                         * 7C9F3
+        GONC    DotNextC.loop4                   * 7C9F7
 
 * refs (3): 7C869 7CAAC 7CC87
-SUB_7C9FA:
+* Pop the three bints; D0 at the array, D1 at the other one (the same with ST 0 clear), D.A the element prolog
+DotArgs:
         GOSBVL  POP2#                            * 7C9FA
         R4=C                                     * 7CA01
         R0=A                                     * 7CA04
@@ -178,10 +183,10 @@ SUB_7C9FA:
         C=DAT1  A                                * 7CA15
         D0=C                                     * 7CA18
         ?ST=0   0                                * 7CA1B
-        GOYES   SUB_7C9FA.L1                     * 7CA1E
+        GOYES   DotArgs.L1                       * 7CA1E
         D1=D1+  5                                * 7CA20
         C=DAT1  A                                * 7CA23
-SUB_7C9FA.L1:
+DotArgs.L1:
         D1=C                                     * 7CA26
         D1=D1+  10                               * 7CA29
         C=DAT1  A                                * 7CA2C
@@ -210,8 +215,8 @@ SUB_7CA36:
 SUB_7CA36.L1:
         A=R0                                     * 7CA60
         A=A-1   A                                * 7CA63
-        GOSUB   SUB_7CC71                        * 7CA65
-        GOSUB   SUB_7CC78                        * 7CA69
+        GOSUB   A*21~jump                        * 7CA65
+        GOSUB   B*21~jump                        * 7CA69
         ST=0    2                                * 7CA6D
         LC(5)   DOEREL                           * 7CA70
         ?D=C    A                                * 7CA77
@@ -233,31 +238,33 @@ SUB_7CA87:
         RTN                                      * 7CA96
 
 * refs (7): 905D4 90895 93CA5 93E7A 93F9C 940F6 ...
-OBJ_7CA98:
+* As Dot%%1Arr with the stride taken from the stack as well
+Dot%%1Stride:
         CON(5)  (*)+5                            * 7CA98  primitive code object
         ST=0    0                                * 7CA9D
-        GOTO    OBJ_7CAA4.L1                     * 7CAA0
+        GOTO    Dot%%2Stride.L1                  * 7CAA0
 
 * refs (3): 941CD 9842F 984C0
-OBJ_7CAA4:
+* As Dot%%2Arr with the stride taken from the stack as well
+Dot%%2Stride:
         CON(5)  (*)+5                            * 7CAA4  primitive code object
         ST=1    0                                * 7CAA9
-OBJ_7CAA4.L1:
-        GOSUB   SUB_7C9FA                        * 7CAAC
+Dot%%2Stride.L1:
+        GOSUB   DotArgs                          * 7CAAC
         C=DAT1  A                                * 7CAB0
         B=C     A                                * 7CAB3
         D1=D1+  5                                * 7CAB5
         A=A-1   A                                * 7CAB8
-        GOSUB   SUB_7CC71                        * 7CABA
-        GOSUB   SUB_7CC78                        * 7CABE
+        GOSUB   A*21~jump                        * 7CABA
+        GOSUB   B*21~jump                        * 7CABE
         ST=0    1                                * 7CAC2
         LC(5)   DOEREL                           * 7CAC5
         ?D=C    A                                * 7CACC
-        GOYES   OBJ_7CAA4.L2                     * 7CACF
+        GOYES   Dot%%2Stride.L2                  * 7CACF
         ST=1    1                                * 7CAD1
         A=A+A   A                                * 7CAD4
         B=B+B   A                                * 7CAD6
-OBJ_7CAA4.L2:
+Dot%%2Stride.L2:
         C=B     A                                * 7CAD8
         RSTK=C                                   * 7CADA
         GOSUB   SUB_7CA36                        * 7CADC
@@ -267,11 +274,11 @@ OBJ_7CAA4.L2:
         RSTK=C                                   * 7CAE7
         GOSUB   SUB_7CA87                        * 7CAE9
         ?ST=1   2                                * 7CAED
-        GOYES   OBJ_7CAA4.L5                     * 7CAF0
+        GOYES   Dot%%2Stride.L5                  * 7CAF0
         ?ST=0   1                                * 7CAF2
-        GOYES   OBJ_7CAA4.L4                     * 7CAF5
-        GOTO    OBJ_7CAA4.L12                    * 7CAF7
-OBJ_7CAA4.loop3:
+        GOYES   Dot%%2Stride.L4                  * 7CAF5
+        GOTO    Dot%%2Stride.L12                 * 7CAF7
+Dot%%2Stride.loop3:
         GOSUB   GetAbs%%AB1~jump                 * 7CAFB
         C=RSTK                                   * 7CAFF
         RSTK=C                                   * 7CB01
@@ -292,22 +299,22 @@ OBJ_7CAA4.loop3:
         RSTK=C                                   * 7CB24
         C=A     A                                * 7CB26
         RSTK=C                                   * 7CB28
-OBJ_7CAA4.L4:
-        GOSUB   SUB_7C8CF                        * 7CB2A
-        GONC    OBJ_7CAA4.loop3                  * 7CB2E
-OBJ_7CAA4.L5:
+Dot%%2Stride.L4:
+        GOSUB   DotNext                          * 7CB2A
+        GONC    Dot%%2Stride.loop3               * 7CB2E
+Dot%%2Stride.L5:
         ?ST=1   1                                * 7CB31
-        GOYES   OBJ_7CAA4.L6                     * 7CB34
-        GOTO    OBJ_7CAA4.L10                    * 7CB36
-OBJ_7CAA4.L6:
-        GOTO    OBJ_7CAA4.L8                     * 7CB3A
-OBJ_7CAA4.loop7:
+        GOYES   Dot%%2Stride.L6                  * 7CB34
+        GOTO    Dot%%2Stride.L10                 * 7CB36
+Dot%%2Stride.L6:
+        GOTO    Dot%%2Stride.L8                  * 7CB3A
+Dot%%2Stride.loop7:
         GOSUB   GetAbs%%AB1~jump                 * 7CB3E
         C=RSTK                                   * 7CB42
         RSTK=C                                   * 7CB44
         D0=C                                     * 7CB46
         GOSUB   MACCF0~jump                      * 7CB49
-        GOSUB   SUB_7CC64                        * 7CB4D
+        GOSUB   Dot+1Elem                        * 7CB4D
         C=RSTK                                   * 7CB51
         RSTK=C                                   * 7CB53
         D0=C                                     * 7CB55
@@ -323,7 +330,7 @@ OBJ_7CAA4.loop7:
         D0=D0+  5                                * 7CB73
         D0=D0+  16                               * 7CB76
         GOSUB   MACCF2~jump                      * 7CB79
-        GOSUB   SUB_7CC64                        * 7CB7D
+        GOSUB   Dot+1Elem                        * 7CB7D
         A=-A-1  S                                * 7CB81
         D1=D1-  5                                * 7CB84
         D1=D1-  16                               * 7CB87
@@ -346,10 +353,10 @@ OBJ_7CAA4.loop7:
         RSTK=C                                   * 7CBAF
         C=A     A                                * 7CBB1
         RSTK=C                                   * 7CBB3
-OBJ_7CAA4.L8:
-        GOSUB   SUB_7C962                        * 7CBB5
-        GOTO    OBJ_7CAA4.loop7                  * 7CBB9
-OBJ_7CAA4.loop9:
+Dot%%2Stride.L8:
+        GOSUB   DotNextC                         * 7CBB5
+        GOTO    Dot%%2Stride.loop7               * 7CBB9
+Dot%%2Stride.loop9:
         GOSUB   GetAbs%%AB1~jump                 * 7CBBD
         C=RSTK                                   * 7CBC1
         RSTK=C                                   * 7CBC3
@@ -377,16 +384,16 @@ OBJ_7CAA4.loop9:
         RSTK=C                                   * 7CBFB
         C=A     A                                * 7CBFD
         RSTK=C                                   * 7CBFF
-OBJ_7CAA4.L10:
-        GOSUB   SUB_7C962                        * 7CC01
-        GONC    OBJ_7CAA4.loop9                  * 7CC05
-OBJ_7CAA4.loop11:
+Dot%%2Stride.L10:
+        GOSUB   DotNextC                         * 7CC01
+        GONC    Dot%%2Stride.loop9               * 7CC05
+Dot%%2Stride.loop11:
         GOSUB   GetAbs%%AB1~jump                 * 7CC08
         C=RSTK                                   * 7CC0C
         RSTK=C                                   * 7CC0E
         D0=C                                     * 7CC10
         GOSUB   MACCF0~jump                      * 7CC13
-        GOSUB   SUB_7CC64                        * 7CC17
+        GOSUB   Dot+1Elem                        * 7CC17
         A=-A-1  S                                * 7CC1B
         D1=D1-  5                                * 7CC1E
         D1=D1-  16                               * 7CC21
@@ -409,9 +416,9 @@ OBJ_7CAA4.loop11:
         RSTK=C                                   * 7CC49
         C=A     A                                * 7CC4B
         RSTK=C                                   * 7CC4D
-OBJ_7CAA4.L12:
-        GOSUB   SUB_7C962                        * 7CC4F
-        GONC    OBJ_7CAA4.loop11                 * 7CC53
+Dot%%2Stride.L12:
+        GOSUB   DotNextC                         * 7CC4F
+        GONC    Dot%%2Stride.loop11              * 7CC53
 
 * refs (13): 7C8BC 7C900 7C918 7C98D 7C9CC 7CB06 ...
 MACCF0~jump:
@@ -422,7 +429,8 @@ MACCF2~jump:
         GOVLNG  MACCF2                           * 7CC5D
 
 * refs (8): 7C904 7C937 7C9D0 7CB4D 7CB7D 7CC17 ...
-SUB_7CC64:
+* D1 past one element (21 nibbles)
+Dot+1Elem:
         D1=D1+  5                                * 7CC64
         D1=D1+  16                               * 7CC67
 
@@ -431,35 +439,36 @@ GetAbs%%AB1~jump:
         GOVLNG  GetAbs%%AB1                      * 7CC6A
 
 * refs (4): 7C872 7CA65 7CABA 7CC96
-SUB_7CC71:
-        GOVLNG  SUB_3768C                        * 7CC71
+A*21~jump:
+        GOVLNG  A*21                             * 7CC71
 
 * refs (3): 7CA69 7CABE 7CCA1
-SUB_7CC78:
-        GOVLNG  SUB_3767E                        * 7CC78
+B*21~jump:
+        GOVLNG  B*21                             * 7CC78
 
 * refs (4): 943B7 944ED 95A95 95CAC
-OBJ_7CC7F:
+* Inner product along a row and a column of one array
+DotRowCol:
         CON(5)  (*)+5                            * 7CC7F  primitive code object
         ST=0    0                                * 7CC84
-        GOSUB   SUB_7C9FA                        * 7CC87
+        GOSUB   DotArgs                          * 7CC87
         D1=D1+  5                                * 7CC8B
         D0=D0+  15                               * 7CC8E
         D0=D0+  15                               * 7CC91
         A=A-1   A                                * 7CC94
-        GOSUB   SUB_7CC71                        * 7CC96
+        GOSUB   A*21~jump                        * 7CC96
         C=R0                                     * 7CC9A
         B=C     A                                * 7CC9D
         B=B-1   A                                * 7CC9F
-        GOSUB   SUB_7CC78                        * 7CCA1
+        GOSUB   B*21~jump                        * 7CCA1
         ST=0    1                                * 7CCA5
         LC(5)   DOEREL                           * 7CCA8
         ?D=C    A                                * 7CCAF
-        GOYES   OBJ_7CC7F.L1                     * 7CCB2
+        GOYES   DotRowCol.L1                     * 7CCB2
         ST=1    1                                * 7CCB4
         A=A+A   A                                * 7CCB7
         B=B+B   A                                * 7CCB9
-OBJ_7CC7F.L1:
+DotRowCol.L1:
         CD1EX                                    * 7CCBB
         C=C+A   A                                * 7CCBE
         D1=C                                     * 7CCC0
@@ -468,9 +477,9 @@ OBJ_7CC7F.L1:
         RSTK=C                                   * 7CCC8
         GOSUB   SUB_7CA87                        * 7CCCA
         ?ST=0   1                                * 7CCCE
-        GOYES   OBJ_7CC7F.L3                     * 7CCD1
-        GOTO    OBJ_7CC7F.L5                     * 7CCD3
-OBJ_7CC7F.loop2:
+        GOYES   DotRowCol.L3                     * 7CCD1
+        GOTO    DotRowCol.L5                     * 7CCD3
+DotRowCol.loop2:
         GOSUB   GetAbs%%AB1~jump                 * 7CCD7
         C=RSTK                                   * 7CCDB
         RSTK=C                                   * 7CCDD
@@ -485,16 +494,16 @@ OBJ_7CC7F.loop2:
         CD0EX                                    * 7CCF7
         RSTK=C                                   * 7CCFA
         SETHEX                                   * 7CCFC
-OBJ_7CC7F.L3:
-        GOSUB   SUB_7C8CF                        * 7CCFE
-        GONC    OBJ_7CC7F.loop2                  * 7CD02
-OBJ_7CC7F.loop4:
+DotRowCol.L3:
+        GOSUB   DotNext                          * 7CCFE
+        GONC    DotRowCol.loop2                  * 7CD02
+DotRowCol.loop4:
         GOSUB   GetAbs%%AB1~jump                 * 7CD05
         C=RSTK                                   * 7CD09
         RSTK=C                                   * 7CD0B
         D0=C                                     * 7CD0D
         GOSUB   MACCF0~jump                      * 7CD10
-        GOSUB   SUB_7CC64                        * 7CD14
+        GOSUB   Dot+1Elem                        * 7CD14
         C=RSTK                                   * 7CD18
         RSTK=C                                   * 7CD1A
         D0=C                                     * 7CD1C
@@ -510,7 +519,7 @@ OBJ_7CC7F.loop4:
         D0=D0+  5                                * 7CD3A
         D0=D0+  16                               * 7CD3D
         GOSUB   MACCF2~jump                      * 7CD40
-        GOSUB   SUB_7CC64                        * 7CD44
+        GOSUB   Dot+1Elem                        * 7CD44
         A=-A-1  S                                * 7CD48
         D1=D1+  5                                * 7CD4B
         D1=D1+  16                               * 7CD4E
@@ -526,9 +535,9 @@ OBJ_7CC7F.loop4:
         CD0EX                                    * 7CD6A
         RSTK=C                                   * 7CD6D
         SETHEX                                   * 7CD6F
-OBJ_7CC7F.L5:
-        GOSUB   SUB_7C962                        * 7CD71
-        GOTO    OBJ_7CC7F.loop4                  * 7CD75
+DotRowCol.L5:
+        GOSUB   DotNextC                         * 7CD71
+        GOTO    DotRowCol.loop4                  * 7CD75
         RPL
 
 * refs (15): 903DC 979D2 97EF3 97FF2 C8819 C8951 ...
@@ -537,22 +546,25 @@ OBJ_7CD79:
         ::                                       * 7CD79
 
 * refs (5): 93806 97D80 9802A 98086 98712
-OBJ_7CD7E:
+* arry -> arry %%arry: a new array of the same size, %% or C%%, filled from the first
+Arry>Ext:
           :: DUP DIMLIMITS OVER TYPERARRY? ITE %%0 ((0,0)) * 7CD7E
-            MAKEARRY OBJ_7CDBF ;                 * 7CDA6
+            MAKEARRY ArryCopyExt ;               * 7CDA6
           SWAPDROP ;                             * 7CDB5
 
 * refs (4): 7CDAB 93C6E 951E4 CAE2F
-OBJ_7CDBF:
-        :: OVERARSIZE OBJ_7D4C5 ;                * 7CDBF
+* arry %%arry -> %%arry: copy elements, real to extended
+ArryCopyExt:
+        :: OVERARSIZE ArryReal>Ext ;             * 7CDBF
 
 * refs (4): C80B1 C80CA C96BC C96D5
 OBJ_7CDD3:
         :: DUP%0CON SWAP                         * 7CDD3
 
 * refs (10): 93947 93A73 93A92 95220 954EB 955ED ...
-OBJ_7CDE2:
-          :: OVERARSIZE OBJ_7D5CF DROP ; ;       * 7CDE2
+* %%arry arry -> arry: copy back, rounding to 12 digits
+ExtArry>:
+          :: OVERARSIZE ArryExt>Real DROP ; ;    * 7CDE2
 
 * refs (4): C7A4B C7F53 C933F CAA8F
 OBJ_7CE00:
@@ -570,44 +582,48 @@ COND~5:
           NextInArray SWAP ;                     * 7CE96
 
 * refs (8): 9242A 92885 979DC 97D8A 97EFD 97FFC ...
-OBJ_7CEA5:
+* Crout LU decomposition with partial pivoting of an extended array; error 501 when bigger than #FFF
+LUFactor:
         :: # FFF OVER#< case doerr501            * 7CEA5
-          DUP #8* !MAKEHXS 2NULLLAM{} BIND DUP OBJ_37A4F #ZERO#ONE * 7CEC3
-          3NULLLAM{} BIND 5GETLAM OBJ_7D28D CkATTNQUIT BEGIN 1GETLAM DUP * 7CEEB
-          OBJ_376C1 5GETLAM OBJ_37013 2DUP#= ?SKIP * 7CF13
+          DUP #8* !MAKEHXS 2NULLLAM{} BIND DUP ArryLOne #ZERO#ONE 3NULLLAM{} * 7CEC3
+          BIND 5GETLAM LUPivot CkATTNQUIT BEGIN 1GETLAM DUP PivotRow 5GETLAM * 7CEF0
+          HXS3! 2DUP#= ?SKIP                     * 7CF1D
           :: SWAPCOLUMNS 3GETLAM DUPTYPEEREL? ITE %%CHS * 7CF2C
             :: C%%CHS C%%CONJ ;                  * 7CF4A
             3PUTLAM ;                            * 7CF5E
-          DROP 5GETLAM FALSE OBJ_7D3CB 3GETLAM OBJ_37941 2GETLAM OBJ_377DD * 7CF68
+          DROP 5GETLAM FALSE OBJ_7D3CB 3GETLAM LUFactor~2 2GETLAM LUFactor~1 * 7CF68
           2PUTLAM 3PUTLAM 1GETLAM 6GETLAM #< WHILE * 7CF90
           :: 1GETLAM #1+ 1PUTLAM ONESWAP 1GETLAM ONE_DO OVER 1GETLAM 2DUP * 7CFAE
-            #1-+ 4UNROLL INDEX@ #1- OBJ_7C855 SWAP3PICK PULL%%EL ROT L%- * 7CFE0
+            #1-+ 4UNROLL INDEX@ #1- Dot%%1Arr SWAP3PICK PULL%%EL ROT L%- * 7CFE0
             SWAPINDEX@ 5GETLAM TRUE OBJ_7D3CB ROTSWAP L%/ ROT PUT%%EL * 7D00D
             6GETLAM ROT#+SWAP NextInArray 6GETLAM #1+ 1GETLAM DO OVER * 7D035
-            1GETLAM 2DUP #1-+ 4UNROLL DUP#1- OBJ_7C855 SWAP3PICK PULL%%EL * 7D05D
+            1GETLAM 2DUP #1-+ 4UNROLL DUP#1- Dot%%1Arr SWAP3PICK PULL%%EL * 7D05D
             ROT L%- ROT PUT%%EL 6GETLAM ROT#+SWAP NextInArray SWAPDROP ; * 7D085
           REPEAT 3GETLAM 2GETLAM ABND ;          * 7D0B2
 
 * refs (7): 92439 928EE 98039 C9E0F C9EF0 CA057 ...
-OBJ_7D0CB:
-        :: 3UNROLL 2GETLAM ONE_DO INDEX@ 1GETLAM OBJ_36FDB 2DUP#= ?SKIP * 7D0CB
+* Solve with the factors of LUFactor: swap the rows, then forward and back substitution
+LUSolve:
+        :: 3UNROLL 2GETLAM ONE_DO INDEX@ 1GETLAM HXS3@ 2DUP#= ?SKIP * 7D0CB
           SWAPCOLUMNS                            * 7D0F8
-          2DROP NextInArray ROT OBJ_7D11B ROTROT2DROP ; * 7D0FD
+          2DROP NextInArray ROT LUBackSub ROTROT2DROP ; * 7D0FD
 
 * refs (4): 7D10C 97AA2 97B5C 97C76
-OBJ_7D11B:
+* Forward and back substitution
+LUBackSub:
         :: 3UNROLL ONEONE 2SWAP 2GETLAM #1+_ONE_DO SWAPINDEX@ 1GETLAM TRUE * 7D11B
           OBJ_7D3CB SWAPROT 6PICK #1+_ONE_DO 5PICK INDEX@ JINDEX@ #1- * 7D148
-          OBJ_7C861 SWAP 5PICK PULL%%EL ROT L%- 4PICK L%/ 5PICK PUT%%EL * 7D170
+          Dot%%2Arr SWAP 5PICK PULL%%EL ROT L%- 4PICK L%/ 5PICK PUT%%EL * 7D170
           4ROLL #1+ 4UNROLL NextInArray ROTDROP 4ROLL 2GETLAM #+ 4UNROLL * 7D1A2
           LOOP ROTDROPROTDROP 2GETLAM DUP#1= caseDROP DUP#1- * 7D1CF
           OVER #* 4UNROLL DUP#1- 6PICK #* 4UNROLL ONE_DO 5PICK ZERO_DO 2OVER * 7D1ED
-          7PICK #+ JINDEX@ OBJ_7C861 SWAP 4PICK PULL%%EL ROT L%- 4PICK * 7D224
+          7PICK #+ JINDEX@ Dot%%2Arr SWAP 4PICK PULL%%EL ROT L%- 4PICK * 7D224
           PUT%%EL ROT #1-UNROT NextInArray 4ROLL 2GETLAM #-#1- 4UNROLL LOOP * 7D256
           ROTDROPROTDROP ;                       * 7D283
 
 * refs (2): 7CEFA 9871C
-OBJ_7D28D:
+* Choose the pivot row in a column by magnitude
+LUPivot:
         CON(5)  (*)+5                            * 7D28D  primitive code object
         ASSEMBLE
         GOSUB   SUB_7D6B0                        * 7D292
@@ -635,16 +651,16 @@ OBJ_7D28D:
         C=C+B   A                                * 7D2CC
         D0=C                                     * 7D2CE
         D0=D0+  10                               * 7D2D1
-        GOSBVL  SUB_3768C                        * 7D2D4
+        GOSBVL  A*21                             * 7D2D4
         ST=0    0                                * 7D2DB
         LC(5)   DOEREL                           * 7D2DE
         ?D=C    A                                * 7D2E5
-        GOYES   OBJ_7D28D.L1                     * 7D2E8
+        GOYES   LUPivot.L1                       * 7D2E8
         ST=1    0                                * 7D2EA
         A=A+A   A                                * 7D2ED
-OBJ_7D28D.L1:
+LUPivot.L1:
         R2=A                                     * 7D2EF
-OBJ_7D28D.loop2:
+LUPivot.loop2:
         C=R3                                     * 7D2F2
         D1=C                                     * 7D2F5
         LC(5)   #49500                           * 7D2F8
@@ -653,16 +669,16 @@ OBJ_7D28D.loop2:
         B=C     A                                * 7D308
         C=R4                                     * 7D30A
         B=C     X                                * 7D30D
-OBJ_7D28D.loop3:
+LUPivot.loop3:
         SETDEC                                   * 7D310
         ?ST=0   0                                * 7D312
-        GOYES   OBJ_7D28D.L6                     * 7D315
+        GOYES   LUPivot.L6                       * 7D315
         D1=D1+  16                               * 7D317
         D1=D1+  10                               * 7D31A
         C=DAT1  W                                * 7D31D
         D1=D1-  5                                * 7D321
         ?C=0    M                                * 7D324
-        GOYES   OBJ_7D28D.L5                     * 7D327
+        GOYES   LUPivot.L5                       * 7D327
         C=DAT1  A                                * 7D329
         P=      4                                * 7D32C
         C=C+B   P                                * 7D32E
@@ -671,63 +687,64 @@ OBJ_7D28D.loop3:
         C=DAT1  W                                * 7D336
         D1=D1-  5                                * 7D33A
         ?C=0    M                                * 7D33D
-        GOYES   OBJ_7D28D.loop4                  * 7D340
+        GOYES   LUPivot.loop4                    * 7D340
         C=DAT1  A                                * 7D342
         C=C+B   P                                * 7D345
         ?D<=C   A                                * 7D348
-        GOYES   OBJ_7D28D.L7                     * 7D34B
-OBJ_7D28D.loop4:
+        GOYES   LUPivot.L7                       * 7D34B
+LUPivot.loop4:
         C=D     A                                * 7D34D
-        GOTO    OBJ_7D28D.L7                     * 7D34F
-OBJ_7D28D.L5:
+        GOTO    LUPivot.L7                       * 7D34F
+LUPivot.L5:
         D1=D1-  16                               * 7D353
         D1=D1-  5                                * 7D356
-OBJ_7D28D.L6:
+LUPivot.L6:
         LC(5)   #49500                           * 7D359
         D=C     A                                * 7D360
         D1=D1+  5                                * 7D362
         C=DAT1  W                                * 7D365
         D1=D1-  5                                * 7D369
         ?C=0    M                                * 7D36C
-        GOYES   OBJ_7D28D.loop4                  * 7D36F
+        GOYES   LUPivot.loop4                    * 7D36F
         C=DAT1  A                                * 7D371
         P=      4                                * 7D374
         C=C+B   P                                * 7D376
-OBJ_7D28D.L7:
+LUPivot.L7:
         SETHEX                                   * 7D379
         P=      0                                * 7D37B
         ?C<=A   A                                * 7D37D
-        GOYES   OBJ_7D28D.L8                     * 7D380
+        GOYES   LUPivot.L8                       * 7D380
         A=C     A                                * 7D382
-OBJ_7D28D.L8:
+LUPivot.L8:
         CD1EX                                    * 7D384
         D=C     A                                * 7D387
         C=R2                                     * 7D389
         C=C+D   A                                * 7D38C
         D1=C                                     * 7D38E
         B=B-1   X                                * 7D391
-        GOC     OBJ_7D28D.L9                     * 7D394
-        GOTO    OBJ_7D28D.loop3                  * 7D397
-OBJ_7D28D.L9:
+        GOC     LUPivot.L9                       * 7D394
+        GOTO    LUPivot.loop3                    * 7D397
+LUPivot.L9:
         DAT0=A  A                                * 7D39B
         D0=D0+  5                                * 7D39E
         A=R3                                     * 7D3A1
         LC(5)   #00015                           * 7D3A4
         ?ST=0   0                                * 7D3AB
-        GOYES   OBJ_7D28D.L10                    * 7D3AE
+        GOYES   LUPivot.L10                      * 7D3AE
         C=C+C   A                                * 7D3B0
-OBJ_7D28D.L10:
+LUPivot.L10:
         A=A+C   A                                * 7D3B2
         R3=A                                     * 7D3B4
         C=RSTK                                   * 7D3B7
         C=C-1   A                                * 7D3B9
         RSTK=C                                   * 7D3BB
-        GOC     OBJ_7D28D.L11                    * 7D3BD
-        GOTO    OBJ_7D28D.loop2                  * 7D3C0
-OBJ_7D28D.L11:
+        GOC     LUPivot.L11                      * 7D3BD
+        GOTO    LUPivot.loop2                    * 7D3C0
+LUPivot.L11:
         GOVLNG  GETPTRLOOP                       * 7D3C4
 
 * refs (5): 7CF77 7D01C 7D148 980F6 9849D
+* Probably: pull an element from an array as a %% or C%%, with a flag for treating zero specially
 OBJ_7D3CB:
         CON(5)  (*)+5                            * 7D3CB  primitive code object
         ST=1    1                                * 7D3D0
@@ -764,7 +781,7 @@ OBJ_7D3CB.L2:
         GOSBVL  PUTCMPEL.L6                      * 7D42B
         B=B-A   A                                * 7D432
         B=B-1   A                                * 7D434
-        GOSBVL  SUB_3767E                        * 7D436
+        GOSBVL  B*21                             * 7D436
         ?ST=0   0                                * 7D43D
         GOYES   OBJ_7D3CB.L3                     * 7D440
         B=B+B   A                                * 7D442
@@ -819,7 +836,8 @@ OBJ_7D3CB.L8:
         GONC    OBJ_7D3CB.loop4                  * 7D4C2  always taken
 
 * refs (2): 7CDC9 93914
-OBJ_7D4C5:
+* Copy the elements of the first array to the second, real to extended
+ArryReal>Ext:
         CON(5)  (*)+5                            * 7D4C5  primitive code object
         GOSBVL  POP#                             * 7D4CA
         GOSUB   SAVPTR~jump_22                   * 7D4D1
@@ -836,27 +854,27 @@ OBJ_7D4C5:
         D1=D1+  10                               * 7D4F2
         C=C-1   A                                * 7D4F5
         ?C=0    A                                * 7D4F7
-        GOYES   OBJ_7D4C5.L1                     * 7D4FA
+        GOYES   ArryReal>Ext.L1                  * 7D4FA
         D1=D1+  5                                * 7D4FC
-OBJ_7D4C5.L1:
+ArryReal>Ext.L1:
         ST=0    1                                * 7D4FF
         ST=1    0                                * 7D502
         ST=0    2                                * 7D505
         ST=0    3                                * 7D508
         LC(5)   DOREAL                           * 7D50B
         ?D=C    A                                * 7D512
-        GOYES   OBJ_7D4C5.L2                     * 7D515
+        GOYES   ArryReal>Ext.L2                  * 7D515
         ST=0    0                                * 7D517
         LC(5)   DOEREL                           * 7D51A
         ?D=C    A                                * 7D521
-        GOYES   OBJ_7D4C5.L2                     * 7D524
+        GOYES   ArryReal>Ext.L2                  * 7D524
         ST=1    1                                * 7D526
         A=A+A   A                                * 7D529
         LC(5)   DOECMP                           * 7D52B
         ?D=C    A                                * 7D532
-        GOYES   OBJ_7D4C5.L2                     * 7D535
+        GOYES   ArryReal>Ext.L2                  * 7D535
         ST=1    0                                * 7D537
-OBJ_7D4C5.L2:
+ArryReal>Ext.L2:
         D0=D0+  10                               * 7D53A
         C=DAT0  A                                * 7D53D
         D=C     A                                * 7D540
@@ -865,57 +883,58 @@ OBJ_7D4C5.L2:
         D0=D0+  10                               * 7D548
         C=C-1   A                                * 7D54B
         ?C=0    A                                * 7D54D
-        GOYES   OBJ_7D4C5.L3                     * 7D550
+        GOYES   ArryReal>Ext.L3                  * 7D550
         D0=D0+  5                                * 7D552
-OBJ_7D4C5.L3:
+ArryReal>Ext.L3:
         LC(5)   DOEREL                           * 7D555
         ?D=C    A                                * 7D55C
-        GOYES   OBJ_7D4C5.L4                     * 7D55F
+        GOYES   ArryReal>Ext.L4                  * 7D55F
         ?ST=1   1                                * 7D561
-        GOYES   OBJ_7D4C5.L5                     * 7D564
+        GOYES   ArryReal>Ext.L5                  * 7D564
         ST=1    2                                * 7D566
-        GONC    OBJ_7D4C5.L5                     * 7D569
-OBJ_7D4C5.L4:
+        GONC    ArryReal>Ext.L5                  * 7D569
+ArryReal>Ext.L4:
         ?ST=0   1                                * 7D56C
-        GOYES   OBJ_7D4C5.L5                     * 7D56F
+        GOYES   ArryReal>Ext.L5                  * 7D56F
         ST=1    3                                * 7D571
-OBJ_7D4C5.L5:
+ArryReal>Ext.L5:
         C=A     A                                * 7D574
-OBJ_7D4C5.loop6:
+ArryReal>Ext.loop6:
         C=C-1   A                                * 7D576
-        GOC     OBJ_7D4C5.L10                    * 7D578
+        GOC     ArryReal>Ext.L10                 * 7D578
         ?ST=1   0                                * 7D57B
-        GOYES   OBJ_7D4C5.L7                     * 7D57E
+        GOYES   ArryReal>Ext.L7                  * 7D57E
         GOSBVL  GETAB1                           * 7D580
         ?ST=0   3                                * 7D587
-        GOYES   OBJ_7D4C5.L9                     * 7D58A
+        GOYES   ArryReal>Ext.L9                  * 7D58A
         D1=D1+  5                                * 7D58C
-        GONC    OBJ_7D4C5.L8                     * 7D58F
-OBJ_7D4C5.L7:
+        GONC    ArryReal>Ext.L8                  * 7D58F
+ArryReal>Ext.L7:
         A=DAT1  W                                * 7D592
         D1=D1+  16                               * 7D596
         GOSBVL  SPLITA                           * 7D599
         SETHEX                                   * 7D5A0
         ?ST=0   3                                * 7D5A2
-        GOYES   OBJ_7D4C5.L9                     * 7D5A5
-OBJ_7D4C5.L8:
+        GOYES   ArryReal>Ext.L9                  * 7D5A5
+ArryReal>Ext.L8:
         D1=D1+  16                               * 7D5A7
         C=C-1   A                                * 7D5AA
-OBJ_7D4C5.L9:
+ArryReal>Ext.L9:
         GOSBVL  PUTAB0                           * 7D5AC
         ?ST=0   2                                * 7D5B3
-        GOYES   OBJ_7D4C5.loop6                  * 7D5B6
+        GOYES   ArryReal>Ext.loop6               * 7D5B6
         A=0     W                                * 7D5B8
         DAT0=A  A                                * 7D5BB
         D0=D0+  5                                * 7D5BE
         DAT0=A  W                                * 7D5C1
         D0=D0+  16                               * 7D5C5
-        GONC    OBJ_7D4C5.loop6                  * 7D5C8
-OBJ_7D4C5.L10:
-        GOTO    OBJ_7D28D.L11                    * 7D5CB
+        GONC    ArryReal>Ext.loop6               * 7D5C8
+ArryReal>Ext.L10:
+        GOTO    LUPivot.L11                      * 7D5CB
 
 * refs (1): 7CDEC
-OBJ_7D5CF:
+* Copy the elements of the first array to the second, extended to real
+ArryExt>Real:
         CON(5)  (*)+5                            * 7D5CF  primitive code object
         ST=0    1                                * 7D5D4
         GOSBVL  POP#                             * 7D5D7
@@ -933,17 +952,17 @@ OBJ_7D5CF:
         D1=D1+  10                               * 7D5FF
         C=C-1   A                                * 7D602
         ?C=0    A                                * 7D604
-        GOYES   OBJ_7D5CF.L1                     * 7D607
+        GOYES   ArryExt>Real.L1                  * 7D607
         D1=D1+  5                                * 7D609
-OBJ_7D5CF.L1:
+ArryExt>Real.L1:
         ST=0    2                                * 7D60C
         ST=0    3                                * 7D60F
         ST=0    0                                * 7D612
         LC(5)   DOREAL                           * 7D615
         ?D=C    A                                * 7D61C
-        GOYES   OBJ_7D5CF.L2                     * 7D61F
+        GOYES   ArryExt>Real.L2                  * 7D61F
         ST=1    0                                * 7D621
-OBJ_7D5CF.L2:
+ArryExt>Real.L2:
         D0=D0+  10                               * 7D624
         C=DAT0  A                                * 7D627
         D=C     A                                * 7D62A
@@ -952,27 +971,27 @@ OBJ_7D5CF.L2:
         D0=D0+  10                               * 7D632
         C=C-1   A                                * 7D635
         ?C=0    A                                * 7D637
-        GOYES   OBJ_7D5CF.L3                     * 7D63A
+        GOYES   ArryExt>Real.L3                  * 7D63A
         D0=D0+  5                                * 7D63C
-OBJ_7D5CF.L3:
+ArryExt>Real.L3:
         LC(5)   DOEREL                           * 7D63F
         ?D=C    A                                * 7D646
-        GOYES   OBJ_7D5CF.L4                     * 7D649
+        GOYES   ArryExt>Real.L4                  * 7D649
         A=A+A   A                                * 7D64B
         ?ST=1   0                                * 7D64D
-        GOYES   OBJ_7D5CF.L5                     * 7D650
+        GOYES   ArryExt>Real.L5                  * 7D650
         ST=1    2                                * 7D652
-        GONC    OBJ_7D5CF.L5                     * 7D655
-OBJ_7D5CF.L4:
+        GONC    ArryExt>Real.L5                  * 7D655
+ArryExt>Real.L4:
         ?ST=0   0                                * 7D658
-        GOYES   OBJ_7D5CF.L5                     * 7D65B
+        GOYES   ArryExt>Real.L5                  * 7D65B
         ST=1    3                                * 7D65D
-OBJ_7D5CF.L5:
+ArryExt>Real.L5:
         C=A     A                                * 7D660
         D=C     A                                * 7D662
-OBJ_7D5CF.loop6:
+ArryExt>Real.loop6:
         D=D-1   A                                * 7D664
-        GOC     OBJ_7D5CF.L8                     * 7D666
+        GOC     ArryExt>Real.L8                  * 7D666
         GOSBVL  GETAB0                           * 7D669
         CD0EX                                    * 7D670
         RSTK=C                                   * 7D673
@@ -984,20 +1003,20 @@ OBJ_7D5CF.loop6:
         DAT1=A  W                                * 7D682
         D1=D1+  16                               * 7D686
         ?ST=1   3                                * 7D689
-        GOYES   OBJ_7D5CF.L7                     * 7D68C
+        GOYES   ArryExt>Real.L7                  * 7D68C
         ?ST=0   2                                * 7D68E
-        GOYES   OBJ_7D5CF.loop6                  * 7D691
+        GOYES   ArryExt>Real.loop6               * 7D691
         D0=D0+  16                               * 7D693
         D0=D0+  5                                * 7D696
         D=D-1   A                                * 7D699
-        GONC    OBJ_7D5CF.loop6                  * 7D69B
-OBJ_7D5CF.L7:
+        GONC    ArryExt>Real.loop6               * 7D69B
+ArryExt>Real.L7:
         A=0     W                                * 7D69E
         DAT1=A  W                                * 7D6A1
         D1=D1+  16                               * 7D6A5
-        GOTO    OBJ_7D5CF.loop6                  * 7D6A8
-OBJ_7D5CF.L8:
-        GOTO    OBJ_7D28D.L11                    * 7D6AC
+        GOTO    ArryExt>Real.loop6               * 7D6A8
+ArryExt>Real.L8:
+        GOTO    LUPivot.L11                      * 7D6AC
 
 * refs (4): 7D292 7D3EB 7D70A 7D7AE
 SUB_7D6B0:
@@ -1015,10 +1034,10 @@ SUB_7D6BF:
         GOYES   SUB_7D6BF.L1                     * 7D6C2
         GOVLNG  PACK                             * 7D6C4
 SUB_7D6BF.L1:
-        GOVLNG  SUB_29F76                        * 7D6CB
+        GOVLNG  PACKq                            * 7D6CB
 
 * refs (1): 36D85
-OBJ_7D6D2:
+VarAdd~1:
         CON(5)  (*)+5                            * 7D6D2  primitive code object
         ST=0    1                                * 7D6D7
         GOTO    OBJ_7D6DE.L1                     * 7D6DA
@@ -1040,7 +1059,7 @@ OBJ_7D6DE.loop2:
         GONC    OBJ_7D6DE.loop2                  * 7D701
 OBJ_7D6DE.L3:
         P=      0                                * 7D704
-        GOTO    OBJ_7D28D.L11                    * 7D706
+        GOTO    LUPivot.L11                      * 7D706
 
 * refs (2): 7D6E6 7D778
 SUB_7D70A:
@@ -1067,7 +1086,7 @@ SUB_7D733:
         ?B=0    W                                * 7D733
         GOYES   SUB_7D733.L1                     * 7D736
         C=DAT1  W                                * 7D738
-        GOSBVL  SUB_2BCAC                        * 7D73C
+        GOSBVL  SPLITC                           * 7D73C
         GOSBVL  RADDF                            * 7D743
         GOSUB   SUB_7D6BF                        * 7D74A
         DAT1=A  W                                * 7D74E
@@ -1113,31 +1132,33 @@ OBJ_7D76D.L3:
         GOTO    OBJ_7D6DE.L3                     * 7D7A5
 
 * refs (1): 36F6A
-OBJ_7D7A9:
+* arry -> %%: the largest absolute value among the elements
+ArryMaxAbs:
         CON(5)  (*)+5                            * 7D7A9  primitive code object
         GOSUB   SUB_7D6B0                        * 7D7AE
         GOSUB   SUB_7D71D                        * 7D7B2
         A=0     W                                * 7D7B6
         R2=A                                     * 7D7B9
         R3=A                                     * 7D7BC
-OBJ_7D7A9.loop1:
+ArryMaxAbs.loop1:
         SETDEC                                   * 7D7BF
         GOSBVL  GETAB1                           * 7D7C1
         A=0     S                                * 7D7C8
         GOSBVL  RCCD2                            * 7D7CB
         P=      3                                * 7D7D2
         GOSBVL  TST15                            * 7D7D4
-        GOC     OBJ_7D7A9.L2                     * 7D7DB
+        GOC     ArryMaxAbs.L2                    * 7D7DB
         GOSBVL  STAB2                            * 7D7DE
-OBJ_7D7A9.L2:
+ArryMaxAbs.L2:
         GOSUB   SUB_7D755                        * 7D7E5
-        GONC    OBJ_7D7A9.loop1                  * 7D7E9
+        GONC    ArryMaxAbs.loop1                 * 7D7E9
         GOSBVL  RCAB2                            * 7D7EC
         P=      0                                * 7D7F3
         GOTO    OBJ_7D3CB.loop4                  * 7D7F5
 
 * refs (6): 8832D 88352 951CB 95202 954CD 955CF
-OBJ_7D7F9:
+* arry -> arry flag: TRUE when a complex array has no imaginary part
+CArry0Im?:
         CON(5)  (*)+5                            * 7D7F9  primitive code object
         C=DAT1  A                                * 7D7FE
         CD1EX                                    * 7D801
@@ -1147,13 +1168,13 @@ OBJ_7D7F9:
         ST=1    1                                * 7D80D
         LC(5)   DOCMP                            * 7D810
         ?C=A    A                                * 7D817
-        GOYES   OBJ_7D7F9.L1                     * 7D81A
+        GOYES   CArry0Im?.L1                     * 7D81A
         ST=0    1                                * 7D81C
         LC(5)   DOECMP                           * 7D81F
         ?C=A    A                                * 7D826
-        GOYES   OBJ_7D7F9.L1                     * 7D829
-        GOTO    OBJ_7D7F9.L5                     * 7D82B
-OBJ_7D7F9.L1:
+        GOYES   CArry0Im?.L1                     * 7D829
+        GOTO    CArry0Im?.L5                     * 7D82B
+CArry0Im?.L1:
         GOSUB   SAVPTR~jump_22                   * 7D82F
         C=DAT1  A                                * 7D833
         D1=C                                     * 7D836
@@ -1164,58 +1185,59 @@ OBJ_7D7F9.L1:
         D1=D1+  5                                * 7D845
         A=A-1   B                                * 7D848
         ?A=0    B                                * 7D84B
-        GOYES   OBJ_7D7F9.L2                     * 7D84E
+        GOYES   CArry0Im?.L2                     * 7D84E
         D=C     A                                * 7D850
         C=DAT1  A                                * 7D852
         GOSBVL  PUTCMPEL.L6                      * 7D855
         C=B     A                                * 7D85C
         D1=D1+  5                                * 7D85E
-OBJ_7D7F9.L2:
+CArry0Im?.L2:
         C=C-1   A                                * 7D861
-OBJ_7D7F9.loop3:
+CArry0Im?.loop3:
         ?ST=1   1                                * 7D863
-        GOYES   OBJ_7D7F9.L4                     * 7D866
+        GOYES   CArry0Im?.L4                     * 7D866
         D1=D1+  10                               * 7D868
-OBJ_7D7F9.L4:
+CArry0Im?.L4:
         D1=D1+  16                               * 7D86B
         A=DAT1  W                                * 7D86E
         ?A#0    M                                * 7D872
-        GOYES   OBJ_7D7F9.L6                     * 7D875
+        GOYES   CArry0Im?.L6                     * 7D875
         D1=D1+  16                               * 7D877
         C=C-1   A                                * 7D87A
-        GONC    OBJ_7D7F9.loop3                  * 7D87C
+        GONC    CArry0Im?.loop3                  * 7D87C
         GOSBVL  GETPTR                           * 7D87F
-OBJ_7D7F9.L5:
+CArry0Im?.L5:
         GOVLNG  NOT.L3                           * 7D886
-OBJ_7D7F9.L6:
+CArry0Im?.L6:
         GOSBVL  GETPTR                           * 7D88D
         GOVLNG  NOT.L2                           * 7D894
 
 * refs (2): 373E0 373FE
-SUB_7D89B:
+* Level: D0 at a %%: round for storing into an array; overflow and underflow set the flags or give errors as the flags say
+%%>%Chk:
         GOSBVL  GETAB0                           * 7D89B
         SETDEC                                   * 7D8A2
         P=      0                                * 7D8A4
         ?B#0    M                                * 7D8A6
-        GOYES   SUB_7D89B.L2                     * 7D8A9
-SUB_7D89B.loop1:
+        GOYES   %%>%Chk.L2                       * 7D8A9
+%%>%Chk.loop1:
         A=0     W                                * 7D8AB
         B=0     W                                * 7D8AE
         RTN                                      * 7D8B1
-SUB_7D89B.L2:
+%%>%Chk.L2:
         C=A     A                                * 7D8B3
         C=C+C   A                                * 7D8B5
-        GOC     SUB_7D89B.L4                     * 7D8B7
+        GOC     %%>%Chk.L4                       * 7D8B7
         LC(5)   #20000                           * 7D8BA
         ?C>A    A                                * 7D8C1
         RTNYES                                   * 7D8C4
         D0=(5)  #80848                           * 7D8C6
         A=DAT0  B                                * 7D8CD
         ?ABIT=0 0                                * 7D8D0
-        GOYES   SUB_7D89B.L3                     * 7D8D5
+        GOYES   %%>%Chk.L3                       * 7D8D5
         LC(5)   ofloerr                          * 7D8D7  "Overflow"
-        GONC    SUB_7D89B.L5                     * 7D8DE
-SUB_7D89B.L3:
+        GONC    %%>%Chk.L5                       * 7D8DE
+%%>%Chk.L3:
         D0=(5)  #80849                           * 7D8E1
         A=DAT0  B                                * 7D8E8
         ABIT=1  0                                * 7D8EB
@@ -1226,38 +1248,39 @@ SUB_7D89B.L3:
         B=-B-1  W                                * 7D8FF
         B=0     S                                * 7D902
         RTN                                      * 7D905
-SUB_7D89B.L4:
+%%>%Chk.L4:
         LC(5)   CMOS                             * 7D907
         ?C<A    A                                * 7D90E
         RTNYES                                   * 7D911
         D0=(5)  #80847                           * 7D913
         A=DAT0  B                                * 7D91A
         ?ABIT=0 3                                * 7D91D
-        GOYES   SUB_7D89B.L6                     * 7D922
+        GOYES   %%>%Chk.L6                       * 7D922
         LC(5)   posunferr                        * 7D924  "Positive Underflow"
         ?A=0    S                                * 7D92B
-        GOYES   SUB_7D89B.L5                     * 7D92E
+        GOYES   %%>%Chk.L5                       * 7D92E
         C=C+1   A                                * 7D930
-SUB_7D89B.L5:
+%%>%Chk.L5:
         GOVLNG  GPErrjmpC                        * 7D932
-SUB_7D89B.L6:
+%%>%Chk.L6:
         ?A#0    S                                * 7D939
-        GOYES   SUB_7D89B.L7                     * 7D93C
+        GOYES   %%>%Chk.L7                       * 7D93C
         D0=(5)  #80848                           * 7D93E
         A=DAT0  B                                * 7D945
         ABIT=1  3                                * 7D948
-        GONC    SUB_7D89B.L8                     * 7D94D
-SUB_7D89B.L7:
+        GONC    %%>%Chk.L8                       * 7D94D
+%%>%Chk.L7:
         D0=(5)  #80848                           * 7D950
         A=DAT0  B                                * 7D957
         ABIT=1  2                                * 7D95A
-SUB_7D89B.L8:
+%%>%Chk.L8:
         DAT0=A  B                                * 7D95F
-        GOTO    SUB_7D89B.loop1                  * 7D962
+        GOTO    %%>%Chk.loop1                    * 7D962
         RPL
 
 * refs (2): 3FB88 992A5
-OBJ_7D966:
+* { N I%YR PV PMT FV }, the variables of the TVM solver
+TvmVars:
         {                                        * 7D966
 
 * refs (6): 3C3AA 9910B B4E3F B4E64 B5084 B50A4
@@ -1286,7 +1309,8 @@ PYR:
         ASSEMBLE
 
 * refs (6): 99347 995BC 9971C 99D35 99DD2 99E84
-SUB_7D9B8:
+* Seven values on the stack -> the 15-digit temporaries: N I%YR PV PMT FV PYR and the payment-at-beginning flag. ST 8 set when that flag is not zero
+TvmArgs:
         LC(5)   #00007                           * 7D9B8
         A=C     A                                * 7D9BF
         A=A+A   A                                * 7D9C1
@@ -1301,7 +1325,7 @@ SUB_7D9B8:
         LC(5)   #00006                           * 7D9DF
         D=C     A                                * 7D9E6
         SETDEC                                   * 7D9E8
-SUB_7D9B8.loop1:
+TvmArgs.loop1:
         D1=D1-  5                                * 7D9EA
         C=DAT1  A                                * 7D9ED
         CD1EX                                    * 7D9F0
@@ -1311,7 +1335,7 @@ SUB_7D9B8.loop1:
         GOSBVL  SPLITA                           * 7D9FD
         GOSBVL  PUTAB0                           * 7DA04
         D=D-1   A                                * 7DA0B
-        GONC    SUB_7D9B8.loop1                  * 7DA0D
+        GONC    TvmArgs.loop1                    * 7DA0D
         ST=0    8                                * 7DA10
         ?B=0    M                                * 7DA13
         RTNYES                                   * 7DA16
@@ -1319,66 +1343,70 @@ SUB_7D9B8.loop1:
         RTN                                      * 7DA1B
 
 * refs (3): 99D5B 99DF8 99EAA
-SUB_7DA1D:
-        GOSUB   SUB_7DA2B                        * 7DA1D
+* -> A/B = i, C/D = temporary 0, N
+TvmI%:
+        GOSUB   TvmI                             * 7DA1D
         RTNC                                     * 7DA21
-        GOVLNG  SUB_78605                        * 7DA24
+        GOVLNG  RCLCDtmp0%%                      * 7DA24
 
 * refs (5): 7DA1D 993F5 99605 99A83 99AB5
-SUB_7DA2B:
+* -> A/B = i = I%YR/PYR/100, PYR checked; error #E603 when i is -1 or below
+TvmI:
         GOSBVL  RCLtmp1%%                        * 7DA2B
-        GOSBVL  SUB_78623                        * 7DA32
-        GOSUB   SUB_7DA74                        * 7DA39
+        GOSBVL  RCLCDtmp5%%                      * 7DA32
+        GOSUB   TvmCheckPyr                      * 7DA39
         RTNC                                     * 7DA3D
         ?B=0    P                                * 7DA40
-        GOYES   SUB_7DA2B.L1                     * 7DA43
+        GOYES   TvmI.L1                          * 7DA43
         GOSBVL  DIVF                             * 7DA45
-SUB_7DA2B.L1:
+TvmI.L1:
         P=      14                               * 7DA4C
         ?B#0    P                                * 7DA4E
-        GOYES   SUB_7DA2B.L2                     * 7DA51
+        GOYES   TvmI.L2                          * 7DA51
         RTN                                      * 7DA53
-SUB_7DA2B.L2:
+TvmI.L2:
         A=A-1   A                                * 7DA55
         A=A-1   A                                * 7DA57
         ?A#0    S                                * 7DA59
-        GOYES   SUB_7DA2B.L3                     * 7DA5C
+        GOYES   TvmI.L3                          * 7DA5C
         RTN                                      * 7DA5E
-SUB_7DA2B.L3:
+TvmI.L3:
         P=      4                                * 7DA60
         ?A=0    P                                * 7DA62
-        GOYES   SUB_7DA2B.L4                     * 7DA65
+        GOYES   TvmI.L4                          * 7DA65
         RTN                                      * 7DA67
-SUB_7DA2B.L4:
+TvmI.L4:
         P=      0                                * 7DA69
         LC(5)   #0E603                           * 7DA6B
         RTNSC                                    * 7DA72
 
 * refs (2): 7DA39 99750
-SUB_7DA74:
+* C/D = PYR: error #E605 unless it is positive
+TvmCheckPyr:
         ?C#0    S                                * 7DA74
-        GOYES   SUB_7DA74.L1                     * 7DA77
+        GOYES   TvmCheckPyr.L1                   * 7DA77
         P=      14                               * 7DA79
         ?D=0    P                                * 7DA7B
-        GOYES   SUB_7DA74.L1                     * 7DA7E
+        GOYES   TvmCheckPyr.L1                   * 7DA7E
         RTNCC                                    * 7DA80
-SUB_7DA74.L1:
+TvmCheckPyr.L1:
         P=      0                                * 7DA82
         LC(5)   #0E605                           * 7DA84
         RTNSC                                    * 7DA8B
 
 * refs (1): 99861
-SUB_7DA8D:
-        GOSBVL  SUB_792C8.L5                     * 7DA8D
+* y^x, with errors for overflow and underflow as a TVM error code
+TvmPow:
+        GOSBVL  Pow15                            * 7DA8D
         RTNNC                                    * 7DA94
-SUB_7DA8D.L1:
+TvmPow.L1:
         ?ST=1   10                               * 7DA97
-        GOYES   SUB_7DA8D.L3                     * 7DA9A
-SUB_7DA8D.L2:
+        GOYES   TVMSolveI~1.L1                   * 7DA9A
+TVMSolveI~1:
         P=      0                                * 7DA9C
         LC(5)   ofloerr                          * 7DA9E  "Overflow"
         RTNSC                                    * 7DAA5
-SUB_7DA8D.L3:
+TVMSolveI~1.L1:
         P=      0                                * 7DAA7
         LC(5)   posunferr                        * 7DAA9  "Positive Underflow"
         ?A=0    S                                * 7DAB0
@@ -1387,9 +1415,10 @@ SUB_7DA8D.L3:
         RTNSC                                    * 7DABC
 
 * refs (3): 99616 99DA0 99EEF
-SUB_7DABE:
+* A/B = i -> (1+i) * PMT in begin mode, PMT otherwise
+TvmBegin:
         GOSBVL  RADD1                            * 7DABE
-        GOSBVL  SUB_78617                        * 7DAC5
+        GOSBVL  RCLCDtmp3%%                      * 7DAC5
         GOSBVL  XYEX                             * 7DACC
         ?ST=0   8                                * 7DAD3
         RTNYES                                   * 7DAD6
@@ -1400,64 +1429,66 @@ SUB_7DADF:
         C=-C-1  S                                * 7DADF
 
 * refs (3): 998AB 998FA 99EBB
-SUB_7DAE2:
+* A/B = i, C/D = n -> (1+i)^n by LNP115 and EXPM115, sparing the rounding at small i; n = 0 handled at the head
+TvmGrowth:
         P=      14                               * 7DAE2
         ?B#0    P                                * 7DAE4
-        GOYES   SUB_7DAE2.L1                     * 7DAE7
+        GOYES   TvmGrowth.L1                     * 7DAE7
         GOSBVL  XYEX                             * 7DAE9
         C=0     W                                * 7DAF0
         D=0     W                                * 7DAF3
         D=D+1   P                                * 7DAF6
         GOSBVL  STCD0                            * 7DAF9
         RTNCC                                    * 7DB00
-SUB_7DAE2.L1:
+TvmGrowth.L1:
         GOSBVL  STAB2                            * 7DB02
         R1=C                                     * 7DB09
         C=D     W                                * 7DB0C
         R4=C                                     * 7DB0F
-        GOSBVL  SUB_78D96.L4                     * 7DB12
+        GOSBVL  LNP115                           * 7DB12
         C=R4                                     * 7DB19
         D=C     W                                * 7DB1C
         C=R1                                     * 7DB1F
         GOSBVL  MULTF                            * 7DB22
-        GOSBVL  SUB_78F86.L6                     * 7DB29
-        GONC    SUB_7DAE2.L2                     * 7DB30
-        GOTO    SUB_7DA8D.L1                     * 7DB33
-SUB_7DAE2.L2:
+        GOSBVL  EXPM115                          * 7DB29
+        GONC    TvmGrowth.L2                     * 7DB30
+        GOTO    TvmPow.L1                        * 7DB33
+TvmGrowth.L2:
         GOSBVL  EXAB0                            * 7DB37
         GOSBVL  RCCD2                            * 7DB3E
         GOSBVL  DIVF                             * 7DB45
         RTNCC                                    * 7DB4C
-SUB_7DAE2.L3:
+TvmGrowth.L3:
         ?XM=0                                    * 7DB4E
-        GOYES   SUB_7DAE2.L4                     * 7DB51
+        GOYES   TvmGrowth.L4                     * 7DB51
         XM=0                                     * 7DB53
         ?P=     3                                * 7DB56
-        GOYES   SUB_7DAE2.L5                     * 7DB59
+        GOYES   TvmGrowth.L5                     * 7DB59
         P=      0                                * 7DB5B
         LC(5)   #00203                           * 7DB5D
         RTNSC                                    * 7DB64
-SUB_7DAE2.L4:
+TvmGrowth.L4:
         RTNCC                                    * 7DB66
-SUB_7DAE2.L5:
+TvmGrowth.L5:
         P=      0                                * 7DB68
         LC(5)   infreserr                        * 7DB6A  "Infinite Result"
         RTNSC                                    * 7DB71
 
 * refs (3): 9964E 996AA 99E73
-SUB_7DB73:
+* DIVF with the TVM error #E601 or #E602 on a zero divide
+TvmDiv:
         XM=0                                     * 7DB73
         GOSBVL  DIVF                             * 7DB76
         ?XM=0                                    * 7DB7D
-        GOYES   SUB_7DAE2.L4                     * 7DB80
+        GOYES   TvmGrowth.L4                     * 7DB80
         XM=0                                     * 7DB82
         ?P=     3                                * 7DB85
-        GOYES   SUB_7DB73.L2                     * 7DB88
-SUB_7DB73.L1:
+        GOYES   TVMSolveI~2.L1                   * 7DB88
+TVMSolveI~2:
         P=      0                                * 7DB8A
         LC(5)   #0E602                           * 7DB8C
         RTNSC                                    * 7DB93
-SUB_7DB73.L2:
+TVMSolveI~2.L1:
         P=      0                                * 7DB95
         LC(5)   #0E601                           * 7DB97
         RTNSC                                    * 7DB9E
@@ -1465,59 +1496,59 @@ SUB_7DB73.L2:
 
 * refs (1): 1A495
 nWHEREIFTE:
-        ROMPTR 0F0 079                           * 7DBA0
+        XLIB nWHEREIFTE~1                        * 7DBA0
 
 * refs (1): 1F03A
 nWHEREDER:
-        ROMPTR 0F0 078                           * 7DBAB
+        XLIB nWHEREDER~1                         * 7DBAB
 
 * refs (1): 1F26C
 nWHEREINTG:
-        ROMPTR 0F0 07C                           * 7DBB6
+        XLIB nWHEREINTG~1                        * 7DBB6
 
 * refs (1): 1F33F
 nWHERESUM:
-        ROMPTR 0F0 07D                           * 7DBC1
+        XLIB nWHERESUM~1                         * 7DBC1
 
 * refs (1): 1F42A
 nWHEREWHERE:
-        ROMPTR 0F0 07A                           * 7DBCC
+        XLIB nWHEREWHERE~1                       * 7DBCC
 
 nWHEREFCNAPP:
-        ROMPTR 0F0 077                           * 7DBD7
+        XLIB nWHEREFCNAPP~1                      * 7DBD7
 
 * refs (1): 1AEED
 D/D*:
-        ROMPTR 0F0 098                           * 7DBE2
+        XLIB D/D*~1                              * 7DBE2
 
 * refs (1): 1AC84
 D/D+:
-        ROMPTR 0F0 099                           * 7DBED
+        XLIB D/D+~1                              * 7DBED
 
 * refs (1): 1ADD6
 D/D-:
-        ROMPTR 0F0 09A                           * 7DBF8
+        XLIB D/D-~1                              * 7DBF8
 
 * refs (1): 1AFE6
 D/D/:
-        ROMPTR 0F0 09B                           * 7DC03
+        XLIB D/D/~1                              * 7DC03
 
 * refs (2): 85FFC 86056
 derquot:
-        :: psh dup OBJ_56D01 addt* pshtop&       * 7DC0E
+        :: psh dup MetaDER addt* pshtop&         * 7DC0E
           { %2 x^ x/ } INNERCOMP 2top& ;         * 7DC2C
 
 * refs (4): 85EDF 85EFD 86024 86047
 derprod1:
-        :: psh OBJ_56D01 pshtop& addt* ;         * 7DC54
+        :: psh MetaDER pshtop& addt* ;           * 7DC54
 
 * refs (1): 1A97D
 D/D=:
-        ROMPTR 0F0 09D                           * 7DC72
+        XLIB D/D=~1                              * 7DC72
 
 * refs (1): 1AA60
 D/DABS:
-        ROMPTR 0F0 09E                           * 7DC7D
+        XLIB D/DABS~1                            * 7DC7D
 
 * refs (1): 860B5
 easyabs:
@@ -1525,262 +1556,262 @@ easyabs:
 
 * refs (1): 1B75C
 D/DACOS:
-        ROMPTR 0F0 09F                           * 7DCA1
+        XLIB D/DACOS~1                           * 7DCA1
 
 * refs (1): 1B85D
 D/DACOSH:
-        ROMPTR 0F0 0A0                           * 7DCAC
+        XLIB D/DACOSH~1                          * 7DCAC
 
 * refs (1): 1BA6A
 D/DALOG:
-        ROMPTR 0F0 0A1                           * 7DCB7
+        XLIB D/DALOG~1                           * 7DCB7
 
 * refs (1): 1B308
 D/DARG:
-        ROMPTR 0F0 0A2                           * 7DCC2
+        XLIB D/DARG~1                            * 7DCC2
 
 * refs (1): 1B6D1
 D/DASIN:
-        ROMPTR 0F0 0A3                           * 7DCCD
+        XLIB D/DASIN~1                           * 7DCCD
 
 * refs (1): 1B818
 D/DASINH:
-        ROMPTR 0F0 0A4                           * 7DCD8
+        XLIB D/DASINH~1                          * 7DCD8
 
 * refs (1): 1B7C9
 D/DATAN:
-        ROMPTR 0F0 0A5                           * 7DCE3
+        XLIB D/DATAN~1                           * 7DCE3
 
 * refs (1): 1B8CF
 D/DATANH:
-        ROMPTR 0F0 0A6                           * 7DCEE
+        XLIB D/DATANH~1                          * 7DCEE
 
 * refs (1): 1AA07
 D/DCHS:
-        :: OBJ_56CD1 derargABND Cr xNEG ;        * 7DCF9
+        :: BindDv derargABND Cr xNEG ;           * 7DCF9
 
 * refs (1): 1AAA5
 D/DCONJ:
-        :: OBJ_56CD1 derargABND Cr xCONJ ;       * 7DD17
+        :: BindDv derargABND Cr xCONJ ;          * 7DD17
 
 * refs (1): 1B53C
 D/DCOS:
-        ROMPTR 0F0 0A7                           * 7DD35
+        XLIB D/DCOS~1                            * 7DD35
 
 * refs (1): 1B633
 D/DCOSH:
-        ROMPTR 0F0 0A8                           * 7DD40
+        XLIB D/DCOSH~1                           * 7DD40
 
 * refs (2): 1B932 1BAE5
 D/DEXP:
-        ROMPTR 0F0 0A9                           * 7DD4B
+        XLIB D/DEXP~1                            * 7DD4B
 
 * refs (1): 1B2B9
 D/DINV:
-        ROMPTR 0F0 0AA                           * 7DD56
+        XLIB D/DINV~1                            * 7DD56
 
 * refs (1): 1B97C
 D/DLN:
-        ROMPTR 0F0 0AB                           * 7DD61
+        XLIB D/DLN~1                             * 7DD61
 
 * refs (1): 1BAAF
 D/DLNP1:
-        ROMPTR 0F0 0AC                           * 7DD6C
+        XLIB D/DLNP1~1                           * 7DD6C
 
 * refs (1): 1B9F3
 D/DLOG:
-        ROMPTR 0F0 0AD                           * 7DD77
+        XLIB D/DLOG~1                            * 7DD77
 
 D/DIFTE:
-        ROMPTR 0F0 0AE                           * 7DD82
+        XLIB D/DIFTE~1                           * 7DD82
 
 * refs (1): 1B4E3
 D/DSIN:
-        ROMPTR 0F0 0AF                           * 7DD8D
+        XLIB D/DSIN~1                            * 7DD8D
 
 * refs (1): 1B5E4
 D/DSINH:
-        ROMPTR 0F0 0B0                           * 7DD98
+        XLIB D/DSINH~1                           * 7DD98
 
 * refs (1): 1B467
 D/DSQ:
-        ROMPTR 0F0 0B1                           * 7DDA3
+        XLIB D/DSQ~1                             * 7DDA3
 
 * refs (1): 1B3B5
 D/DSQRT:
-        ROMPTR 0F0 0B2                           * 7DDAE
+        XLIB D/DSQRT~1                           * 7DDAE
 
 * refs (1): 1B595
 D/DTAN:
-        ROMPTR 0F0 0B3                           * 7DDB9
+        XLIB D/DTAN~1                            * 7DDB9
 
 * refs (1): 1B682
 D/DTANH:
-        ROMPTR 0F0 0B4                           * 7DDC4
+        XLIB D/DTANH~1                           * 7DDC4
 
 * refs (1): 1B0D2
 D/D^:
-        ROMPTR 0F0 0B5                           * 7DDCF
+        XLIB D/D^~1                              * 7DDCF
 
 * refs (2): 8672C 8674A
 D/D^X:
-        ROMPTR 0F0 0B6                           * 7DDDA
+        XLIB D/D^X~1                             * 7DDDA
 
 * refs (2): 8670E 86754
 D/D^Y:
-        ROMPTR 0F0 0B7                           * 7DDE5
+        XLIB D/D^Y~1                             * 7DDE5
 
 D/DDER:
-        ROMPTR 0F0 0B8                           * 7DDF0
+        XLIB D/DDER~1                            * 7DDF0
 
 * refs (1): 1F420
 D/DWHERE:
-        ROMPTR 0F0 0B9                           * 7DDFB
+        XLIB D/DWHERE~1                          * 7DDFB
 
 D/DINTEGRAL:
-        ROMPTR 0F0 0BA                           * 7DE06
+        XLIB D/DINTEGRAL~1                       * 7DE06
 
 D/DSUM:
-        ROMPTR 0F0 0BB                           * 7DE11
+        XLIB D/DSUM~1                            * 7DE11
 
 * refs (1): 1F5EC
 D/DAPPLY:
-        ROMPTR 0F0 0BC                           * 7DE1C
+        XLIB D/DAPPLY~1                          * 7DE1C
 
 * refs (1): 1B2C8
 nINTGINV:
-        ROMPTR 0F0 012                           * 7DE27
+        XLIB nINTGINV~1                          * 7DE27
 
 * refs (1): 1B361
 nINTGSIGN:
-        ROMPTR 0F0 018                           * 7DE32
+        XLIB nINTGSIGN~1                         * 7DE32
 
 * refs (1): 1B3BF
 nINTGSQRT:
-        ROMPTR 0F0 015                           * 7DE3D
+        XLIB nINTGSQRT~1                         * 7DE3D
 
 * refs (1): 1B471
 nINTGSQ:
-        ROMPTR 0F0 014                           * 7DE48
+        XLIB nINTGSQ~1                           * 7DE48
 
 * refs (1): 1B4F2
 nINTGSIN:
-        ROMPTR 0F0 000                           * 7DE53
+        XLIB nINTGSIN~1                          * 7DE53
 
 * refs (1): 1B54B
 nINTGCOS:
-        ROMPTR 0F0 002                           * 7DE5E
+        XLIB nINTGCOS~1                          * 7DE5E
 
 * refs (1): 1B5A4
 nINTGTAN:
-        ROMPTR 0F0 004                           * 7DE69
+        XLIB nINTGTAN~1                          * 7DE69
 
 * refs (1): 1B5F3
 nINTGSINH:
-        ROMPTR 0F0 008                           * 7DE74
+        XLIB nINTGSINH~1                         * 7DE74
 
 * refs (1): 1B642
 nINTGCOSH:
-        ROMPTR 0F0 00B                           * 7DE7F
+        XLIB nINTGCOSH~1                         * 7DE7F
 
 * refs (1): 1B691
 nINTGTANH:
-        ROMPTR 0F0 00D                           * 7DE8A
+        XLIB nINTGTANH~1                         * 7DE8A
 
 * refs (1): 1B6E0
 nINTGASIN:
-        ROMPTR 0F0 005                           * 7DE95
+        XLIB nINTGASIN~1                         * 7DE95
 
 * refs (1): 1B76B
 nINTGACOS:
-        ROMPTR 0F0 006                           * 7DEA0
+        XLIB nINTGACOS~1                         * 7DEA0
 
 * refs (1): 1B7D8
 nINTGATAN:
-        ROMPTR 0F0 007                           * 7DEAB
+        XLIB nINTGATAN~1                         * 7DEAB
 
 * refs (1): 1B98B
 nINTGLN:
-        ROMPTR 0F0 010                           * 7DEB6
+        XLIB nINTGLN~1                           * 7DEB6
 
 * refs (1): 1BA02
 nINTGLOG:
-        ROMPTR 0F0 011                           * 7DEC1
+        XLIB nINTGLOG~1                          * 7DEC1
 
 * refs (1): 1BA79
 nINTGALOG:
-        ROMPTR 0F0 00F                           * 7DECC
+        XLIB nINTGALOG~1                         * 7DECC
 
 * refs (1): 1BAEF
 nINTGEXPM:
-        ROMPTR 0F0 00E                           * 7DED7
+        XLIB nINTGEXPM~1                         * 7DED7
 
 * ->
 * refs (1): 211CB
 nCustomMenu:
-        ROMPTR 0A9 001                           * 7DEE2
+        XLIB MnuCST                              * 7DEE2
 
 * refs (1): 1F533
 nCOLCTQUOTE:
-        ROMPTR 0F0 096                           * 7DEED
+        XLIB nCOLCTQUOTE~1                       * 7DEED
 
 * refs (1): 56E8C
 SPLITWHERE:
-        ROMPTR 0F0 07B                           * 7DEF8
+        XLIB SPLITWHERE~1                        * 7DEF8
 
 * refs (2): 1AC8E 1ADE0
 MANMENU+-:
-        ROMPTR 0F0 0BD                           * 7DF03
+        XLIB MANMENU+-~1                         * 7DF03
 
 * refs (2): 1AEF7 1AFF0
 MANMENU*/:
-        ROMPTR 0F0 0BE                           * 7DF0E
+        XLIB MANMENU*/~1                         * 7DF0E
 
 * refs (1): 1B0DC
 MANMENU^:
-        ROMPTR 0F0 0BF                           * 7DF19
+        XLIB MANMENU^~1                          * 7DF19
 
 * refs (2): 1B93C 1BA74
 MANMENUEXP:
-        ROMPTR 0F0 0C0                           * 7DF24
+        XLIB MANMENUEXP~1                        * 7DF24
 
 * refs (2): 1B986 1B9FD
 MANMENULN:
-        ROMPTR 0F0 0C1                           * 7DF2F
+        XLIB MANMENULN~1                         * 7DF2F
 
 * refs (2): 1AA11 1B2C3
 MANMENUCSIV:
-        ROMPTR 0F0 0C2                           * 7DF3A
+        XLIB MANMENUCSIV~1                       * 7DF3A
 
 * refs (1): 1A987
 MANMENUEQ:
-        ROMPTR 0F0 0C3                           * 7DF45
+        XLIB MANMENUEQ~1                         * 7DF45
 
 * refs (3): 1AAAF 1C80B 1C850
 MANMENUCX:
-        ROMPTR 0F0 0C4                           * 7DF50
+        XLIB MANMENUCX~1                         * 7DF50
 
 * refs (6): 1B4ED 1B546 1B59F 1B5EE 1B63D 1B68C
 MANMENUTRG:
-        ROMPTR 0F0 0C5                           * 7DF5B
+        XLIB MANMENUTRG~1                        * 7DF5B
 
 * refs (6): 1B6DB 1B766 1B7D3 1B822 1B867 1B8D9
 MANMENUATG:
-        ROMPTR 0F0 0C6                           * 7DF66
+        XLIB MANMENUATG~1                        * 7DF66
 
 * refs (13): 48DA1 73135 73149 7315D 73176 7318F ...
 PTYPE>PINFO:
-        ROMPTR 0F1 03B                           * 7DF71
+        XLIB PTYPE>PINFO~1                       * 7DF71
 
 MOVEVAR:
-        ROMPTR 0B5 167                           * 7DF7C
+        XLIB MoveVars                            * 7DF7C
 
 COPYVAR:
-        ROMPTR 0B5 164                           * 7DF87
+        XLIB CopyVars                            * 7DF87
 
 * refs (1): 5FAC2
 EXPR>~1~romptr:
-        ROMPTR 0F1 041                           * 7DF92
+        XLIB EXPR>~1~romptr~1                    * 7DF92
         ASSEMBLE
 EXPR>~1~romptr.L1:
         C=DAT0  B                                * 7DF9D
@@ -1804,7 +1835,7 @@ SUB_7DFB6.L1:
         C=0     S                                * 7DFCF
         D0=(5)  INITEN                           * 7DFD2
         DAT0=C  S                                * 7DFD9
-        GOVLNG  SUB_0ABA0                        * 7DFDD
+        GOVLNG  CountPortLibs                    * 7DFDD
 SUB_7DFB6.L2:
         P=      0                                * 7DFE4
         GOSUB   SUB_7DFF6                        * 7DFE6

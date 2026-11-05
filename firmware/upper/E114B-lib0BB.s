@@ -1,5 +1,6 @@
-* HP 48GX ROM revision R, #E114B-#E1A56: Library part 0BB
+* HP 48GX ROM revision R, #E114B-#E1A56: Message table of the STAT applications
 * Addresses in the right-hand comments are those of the original ROM.
+* Most referenced: BBMessages
 * Follows on from the previous file (at #E114B in the original ROM).
         ENDLENGTH                                * E114B
 
@@ -7,16 +8,18 @@
         LENGTH                                   * E1150  length, to #E1A57
         CON(2)  0                                * E1155  title length
 
+* Library 0BB: Messages of the STAT applications: single-variable statistics, frequencies, fitting and summaries.
 LIB0BB:
         CON(3)  #0BB                             * E1157  library number
         REL(5)  LIB0BB.hash                      * E115A  hash table
-        REL(5)  ROMP_0BB_000                     * E115F  message table
+        REL(5)  BBMessages                       * E115F  message table
         REL(5)  LIB0BB.link                      * E1164  link table
         CON(5)  0                                * E1169  config
 
 * ROMPTR 0BB 000
 * refs (1): E1157
-ROMP_0BB_000:
+* Message table: numbers BB01 onwards.
+BBMessages:
         CON(5)  DOARRY                           * E116E  array 63
         LENGTH                                   * E1173  length, to #E19E0
         CON(5)  DOCSTR                           * E1178  element type
@@ -114,6 +117,6 @@ LIB0BB.hash.L1:
 LIB0BB.link:
         CON(5)  DOHSTR                           * E1A44  link table of library 0BB
         LENGTH                                   * E1A49  length, to #E1A53
-        REL(5)  ROMP_0BB_000                     * E1A4E  000 
+        REL(5)  BBMessages                       * E1A4E  000 
         ENDLENGTH                                * E1A53
         BSS     4                                * E1A53  zeros

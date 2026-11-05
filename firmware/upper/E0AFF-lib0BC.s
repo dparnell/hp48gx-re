@@ -1,5 +1,6 @@
-* HP 48GX ROM revision R, #E0AFF-#E114A: Library part 0BC
+* HP 48GX ROM revision R, #E0AFF-#E114A: Message table of the TIME applications
 * Addresses in the right-hand comments are those of the original ROM.
+* Most referenced: BCMessages
 * Follows on from the previous file (at #E0AFF in the original ROM).
         ENDLENGTH                                * E0AFF
 
@@ -7,16 +8,18 @@
         LENGTH                                   * E0B04  length, to #E114B
         CON(2)  0                                * E0B09  title length
 
+* Library 0BC: Messages of the TIME applications: alarms and setting the time and date.
 LIB0BC:
         CON(3)  #0BC                             * E0B0B  library number
         REL(5)  LIB0BC.hash                      * E0B0E  hash table
-        REL(5)  ROMP_0BC_000                     * E0B13  message table
+        REL(5)  BCMessages                       * E0B13  message table
         REL(5)  LIB0BC.link                      * E0B18  link table
         CON(5)  0                                * E0B1D  config
 
 * ROMPTR 0BC 000
 * refs (1): E0B0B
-ROMP_0BC_000:
+* Message table: numbers BC01 onwards.
+BCMessages:
         CON(5)  DOARRY                           * E0B22  array 59
         LENGTH                                   * E0B27  length, to #E10D4
         CON(5)  DOCSTR                           * E0B2C  element type
@@ -110,6 +113,6 @@ LIB0BC.hash.L1:
 LIB0BC.link:
         CON(5)  DOHSTR                           * E1138  link table of library 0BC
         LENGTH                                   * E113D  length, to #E1147
-        REL(5)  ROMP_0BC_000                     * E1142  000 
+        REL(5)  BCMessages                       * E1142  000 
         ENDLENGTH                                * E1147
         BSS     4                                * E1147  zeros

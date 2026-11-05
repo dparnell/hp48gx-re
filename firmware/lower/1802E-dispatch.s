@@ -1,11 +1,12 @@
-* HP 48GX ROM revision R, #1802E-#1A001: Argument checks and type dispatch
+* HP 48GX ROM revision R, #1802E-#1A001: Out-of-memory dialog (continued), last arguments, the argument-count checks, type dispatch, string logic operators, and the InputForm engine's outer loop
 * Addresses in the right-hand comments are those of the original ROM.
 * Most referenced: CK1&Dispatch CK0 COERCE CK2&Dispatch UNCOERCE SETSIZEERR XEQSTOID SETTYPEERR CK&DISPATCH0 IFECallFieldMH DoInputForm CK1NOLASTWD
 * Follows on from the previous file (at #1802E in the original ROM).
 
 * refs (1): 17FCA
-OBJ_1802E:
-        CON(5)  OBJ_181C8.L1                     * 1802E  code object: the address of its machine code
+* Code object: #key -> flag TRUE when key 1 (YES) or 6 (NO), FALSE for other keys
+VLMYesNoKey:
+        CON(5)  VLMYesNoKey~1                    * 1802E  code object: the address of its machine code
 
         CON(5)  caseFALSE                        * 18033  address (the code jumps or points through it)
 
@@ -13,62 +14,65 @@ OBJ_1802E:
 
         CON(5)  GOTO                             * 1803D  address (the code jumps or points through it)
 
-        CON(5)  OBJ_17FB1.loop1                  * 18042  address (the code jumps or points through it)
+        CON(5)  VLMYesNo.loop1                   * 18042  address (the code jumps or points through it)
         RPL
 
         SEMI                                     * 18047
 
 * refs (3): 17E66 1816E 181F0
-OBJ_1804C:
+* Walk the variables of the current directory, last to first, offering each one; descends into subdirectories
+VLMAskVars:
         :: BEGIN DUP PrevNonNull DUP ITE ROT SWAP * 1804C
           DUP TYPERRP? DUP IT                    * 18074
           :: NOT OVER LastNonNull caseDROP SWAP  * 18088
             REFERENCED? ROTSWAP case NOT         * 180A6
           ;                                      * 180BA
           ITE DROP                               * 180BF
-          :: OBJ_18178 casedrop                  * 180C9
+          :: VLMAskVar casedrop                  * 180C9
             :: IT DROP                           * 180D8
               2RDROP 2RDROP ;                    * 180E7
             NOTcaseDROP DUP                      * 180F6
             TYPERRP? NOTcase purge(_)            * 18100
             DUP LastNonNull NOTcase purge(_)     * 1810F
-            DROP 2RDROP COLA OBJ_181C8           * 18123
+            DROP 2RDROP COLA VLMSubDir           * 18123
           ;                                      * 18137
           NOT_UNTIL CONTEXT@ DUP SYSRRP? caseDROP DUP * 1813C
-          MYRAMROMPAIR DROP CONTEXT! COLA OBJ_1804C * 1815A
+          MYRAMROMPAIR DROP CONTEXT! COLA VLMAskVars * 1815A
         ;                                        * 18173
 
 * refs (2): 17EB1 180CE
-OBJ_18178:
-        :: DUP OBJ_18397 DISPROW5 SPACE$ toklparen &$ NULL$ 3PICK OBJ_15CCF * 18178
-          &$ tokrparen &$ DISPROW6 OBJ_17FB1 ;   * 181AA
+* ob -> flag: show ob's name and type and wait for an answer
+VLMAskVar:
+        :: DUP VLMName$ DISPROW5 SPACE$ toklparen &$ NULL$ 3PICK $+TypeName * 18178
+          &$ tokrparen &$ DISPROW6 VLMYesNo ;    * 181AA
 
 * refs (1): 18132
-OBJ_181C8:
+* Enter a subdirectory while offering variables
+VLMSubDir:
         :: SWAP IT SWAPDROP                      * 181C8
-          DUP CONTEXT! LastNonNull drop;dq OBJ_1804C ; * 181DC
+          DUP CONTEXT! LastNonNull drop;dq VLMAskVars ; * 181DC
         ASSEMBLE
-OBJ_181C8.L1:
+VLMYesNoKey~1:
         D=-D-1  A                                * 181FA
         D0=D0-  2                                * 181FC
         GOSBVL  POP#                             * 181FF
         LC(5)   #00001                           * 18206
         ?C=A    A                                * 1820D
-        GOYES   OBJ_181C8.L2                     * 18210
+        GOYES   VLMYesNoKey~1.L1                 * 18210
         LC(2)   #06                              * 18212
         ?C#A    A                                * 18216
-        GOYES   OBJ_181C8.L5                     * 18219
+        GOYES   VLMYesNoKey~1.L4                 * 18219
         LC(5)   FALSE                            * 1821B
-        GONC    OBJ_181C8.L3                     * 18222
-OBJ_181C8.L2:
+        GONC    VLMYesNoKey~1.L2                 * 18222
+VLMYesNoKey~1.L1:
         LC(5)   TRUE                             * 18225
-OBJ_181C8.L3:
+VLMYesNoKey~1.L2:
         D1=D1-  5                                * 1822C
         D=D-1   A                                * 1822F
         DAT1=C  A                                * 18231
-OBJ_181C8.L4:
+VLMYesNoKey~1.L3:
         GOVLNG  PushTLoop                        * 18234
-OBJ_181C8.L5:
+VLMYesNoKey~1.L4:
         GOVLNG  PushFLoop                        * 1823B
 
 * refs (1): 17D00
@@ -79,8 +83,8 @@ NoMemComLine?:
         A=DAT0  A                                * 18251
         D0=C                                     * 18254
         ?A#0    A                                * 18257
-        GOYES   OBJ_181C8.L5                     * 1825A
-        GONC    OBJ_181C8.L4                     * 1825C
+        GOYES   VLMYesNoKey~1.L4                 * 1825A
+        GONC    VLMYesNoKey~1.L3                 * 1825C
 
 * refs (1): 17D28
 NoLastStack?:
@@ -93,8 +97,8 @@ NoLastStack?.L1:
         A=DAT0  A                                * 18274
         D0=C                                     * 18277
         ?A=0    A                                * 1827A
-        GOYES   OBJ_181C8.L4                     * 1827D
-        GONC    OBJ_181C8.L5                     * 1827F
+        GOYES   VLMYesNoKey~1.L3                 * 1827D
+        GONC    VLMYesNoKey~1.L4                 * 1827F
 
 * refs (1): 17D73
 NoLastArg?:
@@ -104,22 +108,23 @@ NoLastArg?:
         GOTO    NoLastStack?.L1                  * 18291
 
 * refs (3): 387C3 6C927 8D3B9
-OBJ_18295:
+* -> ob1..obn: cut the stack to the saved depth, then push the last arguments (LASTARG, count in LASTARGCOUNT)
+PushLastArgs:
         CON(5)  (*)+5                            * 18295  primitive code object
-        GOSUB   SUB_1831B                        * 1829A
+        GOSUB   GCSavedDepth                     * 1829A
         LC(5)   LASTARGCOUNT                     * 1829E
         CD0EX                                    * 182A5
         RSTK=C                                   * 182A8
         C=0     A                                * 182AA
         C=DAT0  1                                * 182AC
         ?C=0    B                                * 182B0
-        GOYES   OBJ_18295.L3                     * 182B3
+        GOYES   PushLastArgs.L3                  * 182B3
         D=D-C   A                                * 182B5
-        GONC    OBJ_18295.L1                     * 182B7
+        GONC    PushLastArgs.L1                  * 182B7
         C=RSTK                                   * 182BA
         D0=C                                     * 182BC
         GOVLNG  DOMEMERR                         * 182BF
-OBJ_18295.L1:
+PushLastArgs.L1:
         D0=(5)  LASTARG                          * 182C6
         P=C     0                                * 182CD
         A=C     A                                * 182D1
@@ -130,15 +135,15 @@ OBJ_18295.L1:
         A=A-C   A                                * 182DC
         D1=A                                     * 182DE
         P=P-1                                    * 182E1
-OBJ_18295.loop2:
+PushLastArgs.loop2:
         C=DAT0  A                                * 182E3
         DAT1=C  A                                * 182E6
         D0=D0+  5                                * 182E9
         D1=D1+  5                                * 182EC
         P=P-1                                    * 182EF
-        GONC    OBJ_18295.loop2                  * 182F1
+        GONC    PushLastArgs.loop2               * 182F1
         D1=A                                     * 182F4
-OBJ_18295.L3:
+PushLastArgs.L3:
         P=      0                                * 182F7
         C=RSTK                                   * 182F9
         D0=C                                     * 182FB
@@ -150,41 +155,44 @@ OBJ_18295.L3:
 DropSysObs:
         CON(5)  (*)+5                            * 18308  primitive code object
 DropSysObs.L1:
-        GOSUB   SUB_1831B                        * 1830D
+        GOSUB   GCSavedDepth                     * 1830D
 DropSysObs.L2:
         A=DAT0  A                                * 18311
         D0=D0+  5                                * 18314
         PC=(A)                                   * 18317
 
 * refs (2): 1829A 1830D
-SUB_1831B:
+* Cut the stack to the saved depth (DEPTHSAVE) and garbage-collect
+GCSavedDepth:
         D1=(5)  EDITLINE                         * 1831B
         A=DAT1  A                                * 18322
         D1=(5)  DEPTHSAVE                        * 18325
         C=DAT1  A                                * 1832C
         A=A-C   A                                * 1832F
         D1=A                                     * 18331
-        GOTO    SUB_18362.L1                     * 18334
+        GOTO    GCEmptyStack.L1                  * 18334
 
 * refs (3): 17BB8 17F06 18010
-OBJ_18338:
+* -> flag: after garbage collection, more than 80 stack words are free
+VLMRoomOK?:
         CON(5)  (*)+5                            * 18338  primitive code object
-        GOSUB   SUB_18362.L1                     * 1833D
+        GOSUB   GCEmptyStack.L1                  * 1833D
         LC(5)   #00050                           * 18341
         ?D>C    A                                * 18348
-        GOYES   OBJ_18338.L1                     * 1834B
-        GOTO    OBJ_181C8.L5                     * 1834D
-OBJ_18338.L1:
-        GOTO    OBJ_181C8.L4                     * 18351
+        GOYES   VLMRoomOK?.L1                    * 1834B
+        GOTO    VLMYesNoKey~1.L4                 * 1834D
+VLMRoomOK?.L1:
+        GOTO    VLMYesNoKey~1.L3                 * 18351
 
 * refs (1): 17E4D
 DelStack:
         CON(5)  (*)+5                            * 18355  primitive code object
-        GOSUB   SUB_18362                        * 1835A
+        GOSUB   GCEmptyStack                     * 1835A
         GOTO    DropSysObs.L2                    * 1835E
 
 * refs (2): 17C44 1835A
-SUB_18362:
+* Leave one word on the stack and garbage-collect; a label inside also serves as plain SAVPTR/GARBAGECOL/GETPTR
+GCEmptyStack:
         D1=(5)  EDITLINE                         * 18362
         A=DAT1  A                                * 18369
         D1=(5)  DEPTHSAVE                        * 1836C
@@ -192,58 +200,62 @@ SUB_18362:
         DAT1=C  A                                * 1837A
         A=A-C   A                                * 1837D
         D1=A                                     * 1837F
-SUB_18362.L1:
+GCEmptyStack.L1:
         GOSBVL  SAVPTR                           * 18382
         GOSBVL  GARBAGECOL                       * 18389
         GOVLNG  GETPTR                           * 18390
         RPL
 
 * refs (1): 18182
-OBJ_18397:
+* ob -> $: the name of a library, backup or variable as the Out of Memory dialog shows it
+VLMName$:
         :: CK&DISPATCH0                          * 18397
-          #8F_64D2E OBJ_183C4                    * 183A1  library
-          backup OBJ_183C4                       * 183AB  backup
-          BINT0 OBJ_18404                        * 183B5  any
+          #8F_64D2E Port0Name$                   * 183A1  library
+          backup Port0Name$                      * 183AB  backup
+          BINT0 VarName$                         * 183B5  any
         ;                                        * 183BF
 
 * refs (2): 183A6 183B0
-OBJ_183C4:
-        :: $ "0:" SWAP OBJ_183EB &$ ;            * 183C4
+* ob -> $: "0:" and the name of ob in port 0
+Port0Name$:
+        :: $ "0:" SWAP BakName$ &$ ;             * 183C4
 
 * refs (1): 183DC
-OBJ_183EB:
+* backup -> $: the name inside a backup object
+BakName$:
         CON(5)  (*)+5                            * 183EB  primitive code object
         ASSEMBLE
         GOSBVL  SAVPTR                           * 183F0
         A=DAT1  A                                * 183F7
         D0=A                                     * 183FA
         D0=D0+  10                               * 183FD
-        GOTO    OBJ_18404.L1                     * 18400
+        GOTO    VarName$.L1                      * 18400
 
 * refs (1): 183BA
-OBJ_18404:
+* ob -> $: the name of the variable holding ob, cut to 23 characters
+VarName$:
         CON(5)  (*)+5                            * 18404  primitive code object
         A=DAT1  A                                * 18409
         GOSBVL  SAVPTR                           * 1840C
         D0=A                                     * 18413
-        GOSBVL  SUB_0841E                        * 18416
-OBJ_18404.L1:
+        GOSBVL  Name>Start                       * 18416
+VarName$.L1:
         A=0     A                                * 1841D
         A=DAT0  B                                * 1841F
         LC(2)   #17                              * 18422
         ?C>A    B                                * 18426
-        GOYES   OBJ_18404.L2                     * 18429
+        GOYES   VarName$.L2                      * 18429
         A=C     B                                * 1842B
-OBJ_18404.L2:
+VarName$.L2:
         D0=D0+  2                                * 1842E
         CD0EX                                    * 18431
         R3=C                                     * 18434
         R2=A                                     * 18437
-        LC(5)   portnotaverr                     * 1843A  "Port Not Available"
+        LC(5)   #0000A                           * 1843A  the number 10, not message #00A
         A=A+A   A                                * 18441
         C=C+A   A                                * 18443
         R0=C                                     * 18445
-        GOSBVL  SUB_162F4                        * 18448
+        GOSBVL  Temp$AllocR0                     * 18448
         A=R2                                     * 1844F
         LC(5)   #00005                           * 18452
         A=A+A   A                                * 18459
@@ -254,15 +266,15 @@ OBJ_18404.L2:
         C=R3                                     * 18466
         D1=C                                     * 18469
         C=R2                                     * 1846C
-        GOTO    OBJ_18404.L4                     * 1846F
-OBJ_18404.loop3:
+        GOTO    VarName$.L4                      * 1846F
+VarName$.loop3:
         A=DAT1  B                                * 18473
         D1=D1+  2                                * 18476
         DAT0=A  B                                * 18479
         D0=D0+  2                                * 1847C
-OBJ_18404.L4:
+VarName$.L4:
         C=C-1   B                                * 1847F
-        GONC    OBJ_18404.loop3                  * 18482
+        GONC    VarName$.loop3                   * 18482
         GOVLNG  GPOverWrR0Lp                     * 18485
         RPL
 
@@ -270,7 +282,7 @@ OBJ_18404.L4:
 * refs (3): 1A12F 26890 B2738
 PATHDIR:
         :: NULL{} CONTEXT@                       * 1848C
-PATHDIR.L1:
+BrowseCDChoose~1:
           BEGIN DUP RAM-WORDNAME ROTSWAP >HCOMP SWAP MYRAMROMPAIR NOT UNTIL * 1849B
           CDRCOMP ' xHOME >HCOMP ;               * 184C8
 
@@ -368,16 +380,17 @@ DODIRPRG:
 * % -> {}
 * refs (1): 1A1BE
 DOTVARS%:
-        :: ONE{}N ' OBJ_18742 DODIRPRG ;         * 186E8
+        :: ONE{}N ' TVarsMatch? DODIRPRG ;       * 186E8
 
 * refs (1): 1A1C8
 tvars(li):
         :: DUPINCOMP DUP#0= caseDROP ZERO_DO     * 18706
           TYPEREAL? NcaseTYPEERR LOOP            * 1871F
-          ' OBJ_18742 DODIRPRG ;                 * 1872E
+          ' TVarsMatch? DODIRPRG ;               * 1872E
 
 * refs (3): 186F7 18733 187A1
-OBJ_18742:
+* ob id types -> ... flag: ob's type is in the TVARS list; the DODIRPRG filter of TVARS
+TVarsMatch?:
         :: 3PICK ?ROMPTR> XEQTYPE SWAPDROP 6PICK SWAP' %= POSCOMP #0<> ; * 18742
 
 * -> {id1 id2..}
@@ -385,11 +398,12 @@ OBJ_18742:
 DOVARS:
         :: TrueTrue DODIRPRG ;                   * 18779
 
-        :: OBJ_187AB ITE TRUE OBJ_18742          * 1878D
+        :: IdEndsEQ? ITE TRUE TVarsMatch?        * 1878D
         ;                                        * 187A6
 
 * refs (1): 18792
-OBJ_187AB:
+* id -> id flag: the name has two or more characters and ends in EQ
+IdEndsEQ?:
         CON(5)  (*)+5                            * 187AB  primitive code object
         ASSEMBLE
         C=DAT1  A                                * 187B0
@@ -401,7 +415,7 @@ OBJ_187AB:
         D1=D1+  2                                * 187C0
         LC(2)   #02                              * 187C3
         A=A-C   B                                * 187C7
-        GOC     OBJ_187AB.L1                     * 187CA
+        GOC     IdEndsEQ?.L1                     * 187CA
         A=A+A   B                                * 187CD
         CD1EX                                    * 187D0
         C=C+A   A                                * 187D3
@@ -410,23 +424,24 @@ OBJ_187AB:
         A=DAT1  4                                * 187DA
         LC(5)   #05145                           * 187DE
         ?C#A    A                                * 187E5
-        GOYES   OBJ_187AB.L1                     * 187E8
+        GOYES   IdEndsEQ?.L1                     * 187E8
         C=RSTK                                   * 187EA
         D1=C                                     * 187EC
         GOVLNG  PushTLoop                        * 187EF
-OBJ_187AB.L1:
+IdEndsEQ?.L1:
         C=RSTK                                   * 187F6
         D1=C                                     * 187F8
         GOVLNG  PushFLoop                        * 187FB
 
 * refs (3): 38787 72EAA D4A12
-OBJ_18802:
+* -> ob: push LASTROMWDOB
+LastRomWd>:
         CON(5)  (*)+5                            * 18802  primitive code object
         D=D-1   A                                * 18807
-        GONC    OBJ_18802.L1                     * 18809
-        GOSUB   SUB_1882C                        * 1880C
+        GONC    LastRomWd>.L1                    * 18809
+        GOSUB   GCorStackErr                     * 1880C
         D=D-1   A                                * 18810
-OBJ_18802.L1:
+LastRomWd>.L1:
         LC(5)   LASTROMWDOB                      * 18812
         CD0EX                                    * 18819
         A=DAT0  A                                * 1881C
@@ -436,7 +451,8 @@ OBJ_18802.L1:
         GOTO    0LASTOWDOB!.L1                   * 18828
 
 * refs (1): 1880C
-SUB_1882C:
+* Garbage-collect; returns when the stack has a free word, otherwise Insufficient Memory
+GCorStackErr:
         GOSBVL  SAVPTR                           * 1882C
         GOSBVL  GARBAGECOL                       * 18833
         GOSBVL  GETPTR                           * 1883A
@@ -511,13 +527,13 @@ NOT$:
         A=DAT1  A                                * 1890F
         D1=D1+  5                                * 18912
         D=D+1   A                                * 18915
-        GOSUB   SUB_18997                        * 18917
+        GOSUB   Str2Setup                        * 18917
 !XOR$.loop2:
         D=D-1   A                                * 1891B
         GOC     !XOR$.L3                         * 1891D
         A=DAT0  W                                * 18920
         C=DAT1  W                                * 18924
-        GOSUB   SUB_189C6                        * 18928
+        GOSUB   BitOp                            * 18928
         DAT1=A  W                                * 1892C
         D0=D0+  16                               * 18930
         D1=D1+  16                               * 18933
@@ -527,7 +543,7 @@ NOT$:
         GOC     !XOR$.L4                         * 1893B
         A=DAT0  WP                               * 1893E
         C=DAT1  WP                               * 18942
-        GOSUB   SUB_189C6                        * 18946
+        GOSUB   BitOp                            * 18946
         DAT1=A  WP                               * 1894A
 !XOR$.L4:
         P=      0                                * 1894E
@@ -541,7 +557,7 @@ NOT$:
 !NOT$:
         CON(5)  (*)+5                            * 18961  primitive code object
         A=DAT1  A                                * 18966
-        GOSUB   SUB_18997                        * 18969
+        GOSUB   Str2Setup                        * 18969
 !NOT$.loop1:
         D=D-1   A                                * 1896D
         GOC     !NOT$.L2                         * 1896F
@@ -560,7 +576,8 @@ NOT$:
         GOTO    !XOR$.L4                         * 18993
 
 * refs (2): 18917 18969
-SUB_18997:
+* A.A = first string -> D0 = its body, D1 = body of the string on the stack, D.A = whole 16-nibble words, P = nibbles left over
+Str2Setup:
         GOSBVL  SAVPTR                           * 18997
         D0=A                                     * 1899E
         D0=D0+  5                                * 189A1
@@ -577,7 +594,8 @@ SUB_18997:
         RTN                                      * 189C4
 
 * refs (2): 18928 18946
-SUB_189C6:
+* A.W, C.W -> A.W = A AND C when ST3 set, A OR C when ST4 set, else A XOR C. Uses B.W
+BitOp:
         B=A     W                                * 189C6
         A=A&C   W                                * 189C9
         ?ST=1   3                                * 189CD
@@ -645,15 +663,16 @@ CK3:
 CK3NOLASTWD:
         CON(5)  (*)+5                            * 18A68  primitive code object
 CK3NOLASTWD.L1:
-        GOSUB   SUB_18A75                        * 18A6D
+        GOSUB   CK3Args                          * 18A6D
         GOTO    CK0NOLASTWD~1.L1                 * 18A71
 
 * refs (2): 18A6D 18EF9
-SUB_18A75:
+* Check for 3 arguments, as CK1Args
+CK3Args:
         P=      15                               * 18A75
         LC(1)   #3                               * 18A77
         P=      14                               * 18A7A
-        GOTO    SUB_18ABF.L1                     * 18A7C
+        GOTO    CK1Args.L1                       * 18A7C
 
 * ob1 ob2 -> ob1 ob2
 * refs (5): 1E766 1FBA7 1FBC2 1FBF8 1FC2E
@@ -667,15 +686,16 @@ CK2:
 CK2NOLASTWD:
         CON(5)  (*)+5                            * 18A8D  primitive code object
 CK2NOLASTWD.L1:
-        GOSUB   SUB_18A9A                        * 18A92
+        GOSUB   CK2Args                          * 18A92
         GOTO    CK0NOLASTWD~1.L1                 * 18A96
 
 * refs (2): 18A92 18EE8
-SUB_18A9A:
+* Check for 2 arguments, as CK1Args
+CK2Args:
         P=      15                               * 18A9A
         LC(1)   #2                               * 18A9C
         P=      9                                * 18A9F
-        GOTO    SUB_18ABF.L1                     * 18AA1
+        GOTO    CK1Args.L1                       * 18AA1
 
 * ob -> ob
 * refs (13): 1A2C1 1A5E9 1CB10 1CB8B 1F153 1F9C9 ...
@@ -689,15 +709,16 @@ CK1:
 CK1NOLASTWD:
         CON(5)  (*)+5                            * 18AB2  primitive code object
 CK1NOLASTWD.L1:
-        GOSUB   SUB_18ABF                        * 18AB7
+        GOSUB   CK1Args                          * 18AB7
         GOTO    CK0NOLASTWD~1.L1                 * 18ABB
 
 * refs (2): 18AB7 18ED7
-SUB_18ABF:
+* Check that the stack holds 1 argument (else Too Few Arguments), set DEPTHSAVE, and save the argument in LASTARG unless flag -55 is set
+CK1Args:
         P=      15                               * 18ABF
         LC(1)   #1                               * 18AC1
         P=      4                                * 18AC4
-SUB_18ABF.L1:
+CK1Args.L1:
         A=0     W                                * 18AC6
         A=DAT1  WP                               * 18AC9
         R0=A                                     * 18ACD
@@ -711,26 +732,26 @@ SUB_18ABF.L1:
         CPEX    0                                * 18AE5
         D1=(5)  DEPTHSAVE                        * 18AE9
         ?C>=A   A                                * 18AF0
-        GOYES   SUB_18ABF.L3                     * 18AF3
+        GOYES   CK1Args.L3                       * 18AF3
         A=A-C   A                                * 18AF5
         DAT1=A  A                                * 18AF7
         D1=(5)  #80850                           * 18AFA
         C=DAT1  B                                * 18B01
         ?CBIT=1 2                                * 18B04
-        GOYES   SUB_18ABF.loop2                  * 18B09
+        GOYES   CK1Args.loop2                    * 18B09
         D1=(5)  LASTARG                          * 18B0B
         A=R0                                     * 18B12
         DAT1=A  15                               * 18B15
         D1=(5)  LASTARGCOUNT                     * 18B19
         C=DAT1  B                                * 18B20
         ?CBIT=1 4                                * 18B23
-        GOYES   SUB_18ABF.L4                     * 18B28
+        GOYES   CK1Args.L4                       * 18B28
         DAT1=C  S                                * 18B2A
-SUB_18ABF.loop2:
+CK1Args.loop2:
         C=RSTK                                   * 18B2E
         D1=C                                     * 18B30
         RTN                                      * 18B33
-SUB_18ABF.L3:
+CK1Args.L3:
         DAT1=A  A                                * 18B35
         D1=(5)  LASTARGCOUNT                     * 18B38
         C=0     S                                * 18B3F
@@ -738,15 +759,15 @@ SUB_18ABF.L3:
         C=RSTK                                   * 18B46
         D1=C                                     * 18B48
         GOTO    DoErrTFA                         * 18B4B
-SUB_18ABF.L4:
+CK1Args.L4:
         A=0     W                                * 18B4F
         CBIT=0  4                                * 18B52
-SUB_18ABF.L5:
+CK1Args.L5:
         DAT1=C  B                                * 18B57
         DAT1=C  S                                * 18B5A
         D1=(5)  LASTARG4                         * 18B5E
         DAT1=A  10                               * 18B65
-        GOTO    SUB_18ABF.loop2                  * 18B69
+        GOTO    CK1Args.loop2                    * 18B69
 
 * ob1...ob5 -> ob1...ob5
 CK5:
@@ -758,15 +779,16 @@ CK5:
 CK5NOLASTWD:
         CON(5)  (*)+5                            * 18B7A  primitive code object
 CK5NOLASTWD.L1:
-        GOSUB   SUB_18B87                        * 18B7F
+        GOSUB   CK5Args                          * 18B7F
         GOTO    CK0NOLASTWD~1.L1                 * 18B83
 
 * refs (2): 18B7F 18F1B
-SUB_18B87:
+* Check for 5 arguments, as CK1Args
+CK5Args:
         P=      15                               * 18B87
         LC(1)   #5                               * 18B89
         P=      9                                * 18B8C
-        GOTO    SUB_18BAC.L1                     * 18B8E
+        GOTO    CK4Args.L1                       * 18B8E
 
 * ob1...ob5 -> ob1...ob5
 CK4:
@@ -779,15 +801,16 @@ CK4:
 CK4NOLASTWD:
         CON(5)  (*)+5                            * 18B9F  primitive code object
 CK4NOLASTWD.L1:
-        GOSUB   SUB_18BAC                        * 18BA4
+        GOSUB   CK4Args                          * 18BA4
         GOTO    CK0NOLASTWD~1.L1                 * 18BA8
 
 * refs (2): 18BA4 18F0A
-SUB_18BAC:
+* Check for 4 arguments, as CK1Args
+CK4Args:
         P=      15                               * 18BAC
         LC(1)   #4                               * 18BAE
         P=      4                                * 18BB1
-SUB_18BAC.L1:
+CK4Args.L1:
         A=DAT1  15                               * 18BB3
         R0=A                                     * 18BB7
         CD1EX                                    * 18BBA
@@ -807,24 +830,24 @@ SUB_18BAC.L1:
         P=      0                                * 18BE6
         D1=(5)  DEPTHSAVE                        * 18BE8
         ?C>=A   A                                * 18BEF
-        GOYES   SUB_18BAC.L2                     * 18BF2
+        GOYES   CK4Args.L2                       * 18BF2
         A=A-C   A                                * 18BF4
         DAT1=A  A                                * 18BF6
         D1=(5)  #80850                           * 18BF9
         C=DAT1  XS                               * 18C00
         ?CBIT=1 10                               * 18C04
-        GOYES   SUB_18BAC.L3                     * 18C09
+        GOYES   CK4Args.L3                       * 18C09
         D1=(5)  LASTARG                          * 18C0B
         A=R0                                     * 18C12
         DAT1=A  15                               * 18C15
         A=R1                                     * 18C19
         D1=(5)  LASTARGCOUNT                     * 18C1C
         CBIT=1  4                                * 18C23
-        GOTO    SUB_18ABF.L5                     * 18C28
-SUB_18BAC.L2:
-        GOTO    SUB_18ABF.L3                     * 18C2C
-SUB_18BAC.L3:
-        GOTO    SUB_18ABF.loop2                  * 18C30
+        GOTO    CK1Args.L5                       * 18C28
+CK4Args.L2:
+        GOTO    CK1Args.L3                       * 18C2C
+CK4Args.L3:
+        GOTO    CK1Args.loop2                    * 18C30
 
 * ob1...obn %n ->  ob1..obn #n
 * refs (8): 1C788 1FC69 1FC84 1FC9F 1FCBA 1FCD5 ...
@@ -1091,7 +1114,7 @@ COMPEVAL:
 CK1&Dispatch:
         CON(5)  (*)+5                            * 18ECE  primitive code object
         GOSUB   SetLastRomWrd                    * 18ED3
-        GOSUB   SUB_18ABF                        * 18ED7
+        GOSUB   CK1Args                          * 18ED7
         GOTO    EvalNoCK.L4                      * 18EDB
 
 * ->
@@ -1099,7 +1122,7 @@ CK1&Dispatch:
 CK2&Dispatch:
         CON(5)  (*)+5                            * 18EDF  primitive code object
         GOSUB   SetLastRomWrd                    * 18EE4
-        GOSUB   SUB_18A9A                        * 18EE8
+        GOSUB   CK2Args                          * 18EE8
         GOTO    EvalNoCK.L4                      * 18EEC
 
 * ->
@@ -1107,7 +1130,7 @@ CK2&Dispatch:
 CK3&Dispatch:
         CON(5)  (*)+5                            * 18EF0  primitive code object
         GOSUB   SetLastRomWrd                    * 18EF5
-        GOSUB   SUB_18A75                        * 18EF9
+        GOSUB   CK3Args                          * 18EF9
         GOTO    EvalNoCK.L4                      * 18EFD
 
 * ->
@@ -1115,7 +1138,7 @@ CK3&Dispatch:
 CK4&Dispatch:
         CON(5)  (*)+5                            * 18F01  primitive code object
         GOSUB   SetLastRomWrd                    * 18F06
-        GOSUB   SUB_18BAC                        * 18F0A
+        GOSUB   CK4Args                          * 18F0A
         GOTO    EvalNoCK.L4                      * 18F0E
 
 * ->
@@ -1123,7 +1146,7 @@ CK4&Dispatch:
 CK5&Dispatch:
         CON(5)  (*)+5                            * 18F12  primitive code object
         GOSUB   SetLastRomWrd                    * 18F17
-        GOSUB   SUB_18B87                        * 18F1B
+        GOSUB   CK5Args                          * 18F1B
         GOTO    EvalNoCK.L4                      * 18F1F
 
 * comp -> ?
@@ -1986,69 +2009,72 @@ DoInputForm:
               LAM 'IF }                          * 19A09
             BIND FALSE MINUSONE BINT7 NDUPN DROP BINT11 PICK BINT13 #* * 19A1B
             BINT13 PICK #3* OVER #+ DUP BINT16 #+ ROT BINT16 #+ ROT BINT14 * 19A4D
-            #+ ROMPTR 0B0 0DB ROMPTR 0B0 0A3 ROMPTR 0B0 009 8PUTLAM MINUSONE * 19A8E  ~nNullBind
-            5PUTLAM ROMPTR 0B0 020 ROMPTR 0B0 06B ROMPTR 0B0 00B ' * 19ABE
-            DoInputForm~1 ' DoInputForm~3 TrueFalse 8GETLAM ONEFALSE ' * 19AE9
-            11GETLAM ' ROMPTR 0B0 000 POLSetUI OBJ_1A03E KEYINBUFFER? NOT * 19B0C
-            DAsBad? AND IT BlankDA12             * 19B35
+            #+ XLIB ~nNullBind XLIB IFAllDone XLIB IFGetMenu 8PUTLAM * 19A8E
+            MINUSONE 5PUTLAM XLIB IFFirstField# XLIB IFSetField XLIB IFMsg17 * 19AB9
+            ' IFDisplay ' IFKey TrueFalse 8GETLAM ONEFALSE ' 11GETLAM ' * 19AE4
+            XLIB IFErrHandler POLSetUI IFRedrawAll KEYINBUFFER? NOT DAsBad? * 19B16
+            AND IT BlankDA12                     * 19B3A
             POLKeyUI ABND ABND ;                 * 19B49
           ERRTRAP POLResUI&Err POLRestoreUI InitEd&Modes ClrDAsOK ; * 19B5D
 
 * refs (1): 19AE9
-DoInputForm~1:
-        :: DA1OK? ?SKIP ROMPTR 0B0 001           * 19B7B
+* Input form display: redraws what is out of date (title, fields, the edit line, the help line, the menu)
+IFDisplay:
+        :: DA1OK? ?SKIP XLIB IFDispDA1           * 19B7B
           :: NoEditLine? caseTRUE DA2bOK?        * 19B95
           ;                                      * 19BA9
           ?SKIP DispEditLine                     * 19BAE
           :: EditLExists? caseTRUE DA2bOK?       * 19BB8
           ;                                      * 19BCC
-          ?SKIP DoInputForm~2                    * 19BD1
-          ROMPTR 0B0 06E EditLExists? AND IT     * 19BDB
-          :: ROMPTR 0B0 0A8 SetDA3Bad ;          * 19BF5
+          ?SKIP IFDispEdit                       * 19BD1
+          XLIB ~MenuDef@;8GETLAM;EQUAL EditLExists? AND IT * 19BDB
+          :: XLIB IFStartEditMenu SetDA3Bad ;    * 19BF5
           DA3OK? ?SKIP                           * 19C0F
-          :: ?DispMenu ROMPTR 0B0 06E ?SEMI      * 19C19
+          :: ?DispMenu XLIB ~MenuDef@;8GETLAM;EQUAL ?SEMI * 19C19
             EditLExists? ?SEMI                   * 19C33
             DA2bTemp? ?SEMI                      * 19C3D
-            DoInputForm~2 ;                      * 19C47
-          :: DA2aOK? DA2aLess1OK? ClrNewEditL OR ; NOT IT ROMPTR 0B0 002 * 19C51
-          ROMPTR 0B0 0A0 IT ROMPTR 0B0 003       * 19C84
+            IFDispEdit ;                         * 19C47
+          :: DA2aOK? DA2aLess1OK? ClrNewEditL OR ; NOT IT XLIB IFDispDA2a * 19C51
+          XLIB ~9GETLAM;CARCOMP;NOT IT XLIB IFDispPending * 19C84
           ClrDAsOK EditLExists? ?SEMI            * 19C9F
           SetPrgmEntry ;                         * 19CAE
 
 * refs (2): 19BD6 19C47
-DoInputForm~2:
+* Show the current field or edit its text when no key is waiting
+IFDispEdit:
         :: KEYINBUFFER? case SetDA2bBad          * 19CB8
-          TOADISP TRUE 5GETLAM ROMPTR 0B0 017 SetDA2bValid ; * 19CCC
+          TOADISP TRUE 5GETLAM XLIB IFDispHelp SetDA2bValid ; * 19CCC
 
 * refs (1): 19AF3
-DoInputForm~3:
+* #key #plane -> ... flag: the form's key handler. The field's message handler goes first, then the plane decides.
+IFKey:
         :: 5GETLAM BINT8 IFECallFieldMH ?SEMI    * 19CF0
-          BINT1 #=casedrop DoInputForm~4         * 19D09
-          BINT2 #=casedrop ROMPTR 0B0 047        * 19D18
-          BINT3 #=casedrop ROMPTR 0B0 048        * 19D2D
-          BINT4 #=casedrop ROMPTR 0B0 049        * 19D42
-          BINT5 #=casedrop ROMPTR 0B0 04A        * 19D57
-          BINT6 #=casedrop ROMPTR 0B0 04B        * 19D6C
+          BINT1 #=casedrop IFKeyPlane1           * 19D09
+          BINT2 #=casedrop XLIB IFKeysLS         * 19D18
+          BINT3 #=casedrop XLIB IFKeysRS         * 19D2D
+          BINT4 #=casedrop XLIB IFKeysAlpha      * 19D42
+          BINT5 #=casedrop XLIB IFKeysLSAlpha    * 19D57
+          BINT6 #=casedrop XLIB IFKeysRSAlpha    * 19D6C
         ;                                        * 19D81
 
 * refs (1): 19D13
-DoInputForm~4:
+* #key -> ... flag: unshifted keys. Arrows, OK and CANCEL by table, the rest start editing the field.
+IFKeyPlane1:
         ::                                       * 19D86
-          { BINT11 ROMPTR 0B0 05E BINT17 ROMPTR 0B0 05F BINT25 * 19D8B
-            ROMPTR 0B0 05A BINT45                * 19DB5  DoKeyOK
-            ROMPTR 0B0 059 }                     * 19DC5  DoKeyCancel
+          { BINT11 XLIB IFUpKey BINT17 XLIB IFDownKey BINT25 XLIB DoKeyOK * 19D8B
+            BINT45 XLIB DoKeyCancel }            * 19DC0
           #=Lookup caseTRUE EditExstCase         * 19DD5
-          DoInputForm~39                         * 19DE4
-          { BINT11 ROMPTR 0B0 064 BINT17 ROMPTR 0B0 065 BINT18 * 19DE9
-            ROMPTR 0B0 066 BINT16 ROMPTR 0B0 068 BINT26 ROMPTR 0B0 06A * 19E13
-            BINT28 ROMPTR 0B0 05B BINT29 DoBadKey } * 19E3E
+          IFKeyPlane1~1                          * 19DE4
+          { BINT11 XLIB IFGoAbove BINT17 XLIB IFGoBelow BINT18 * 19DE9
+            XLIB IFRightKey BINT16 XLIB IFLeftKey BINT26 XLIB IFPlusMinus * 19E13
+            BINT28 XLIB IFKeyRESET BINT29 DoBadKey } * 19E3E
           #=Lookup caseTRUE BINT1                * 19E5D
           OVER BINT7                             * 19E6C
 * The Very Big List names this address [liste], but it is a pointer inside an object; the name is not used
           #<case ~Key>StdKeyOb;TRUE              * 19E76
           { BINT12 BINT30 BINT35 BINT40 } 3PICK #=POSCOMP #0<> case * 19E80
           ~Key>StdKeyOb;TRUE                     * 19EB2
-          COLA DoInputForm~5                     * 19EB7
+          COLA IFKeyOther                        * 19EB7
         ;                                        * 19EC1
         FILLTO  #19EEC                           * 19EC6  38 zero nibbles: the next entry stays at #19EEC
 
@@ -2062,11 +2088,11 @@ rpnXROOT~any:
 OBJ_19F0F:
         :: 5GETLAM BINT18 IFECallFieldMH ?SEMI   * 19F0F
           EditLExists? case2drop FALSE           * 19F28
-          5GETLAM ROMPTR 0B0 089 NOT case2drop FALSE * 19F37
-          Key>U/SKeyOb 6PUTLAM ' ROMPTR 0B0 04C TRUE ; * 19F56
+          5GETLAM XLIB IFAlg? NOT case2drop FALSE * 19F37
+          Key>U/SKeyOb 6PUTLAM ' XLIB IFTypeKey TRUE ; * 19F56
 
 * refs (1): 19DE4
-DoInputForm~39:
+IFKeyPlane1~1:
         :: BINT1 COLA OBJ_19F0F                  * 19F7A
         ;                                        * 19F8E
 
@@ -2081,7 +2107,7 @@ DoInputForm~39:
 * refs (42): 19CFF 19F1E D5545 D55B0 D55E3 D5681 ...
 * #msg #field -> ... flag: input forms: make #field current and send #msg to its message handler
 IFECallFieldMH:
-        :: SWAP DUP 4PUTLAM ROMPTR 0B0 0B9 EVAL ; * 19FBB
+        :: SWAP DUP 4PUTLAM XLIB IFFldMH@ EVAL ; * 19FBB
 
 * refs (16): 19DD5 19E5D B23B2 BAAB0 BAB30 BABA6 ...
 * # {#1 ob1 #2 ob2 ...} -> ob TRUE | # FALSE

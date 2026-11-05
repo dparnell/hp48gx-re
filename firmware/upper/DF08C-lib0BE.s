@@ -1,5 +1,6 @@
-* HP 48GX ROM revision R, #DF08C-#E04FE: Library part 0BE
+* HP 48GX ROM revision R, #DF08C-#E04FE: Message table of the PLOT applications, as a linked array of strings
 * Addresses in the right-hand comments are those of the original ROM.
+* Most referenced: BEMessages
 * Follows on from the previous file (at #DF08C in the original ROM).
         ENDLENGTH                                * DF08C
 
@@ -7,16 +8,18 @@
         LENGTH                                   * DF091  length, to #E04FF
         CON(2)  0                                * DF096  title length
 
+* Library 0BE: Messages of the PLOT applications: the plot forms and the plot options, for all plot types.
 LIB0BE:
         CON(3)  #0BE                             * DF098  library number
         REL(5)  LIB0BE.hash                      * DF09B  hash table
-        REL(5)  ROMP_0BE_000                     * DF0A0  message table
+        REL(5)  BEMessages                       * DF0A0  message table
         REL(5)  LIB0BE.link                      * DF0A5  link table
         CON(5)  0                                * DF0AA  config
 
 * ROMPTR 0BE 000
 * refs (1): DF098
-ROMP_0BE_000:
+* Message table: numbers BE01 onwards, with 119 entries.
+BEMessages:
         CON(5)  DOLNKARRY                        * DF0AF  linked array 119
         LENGTH                                   * DF0B4  length, to #E0488
         CON(5)  DOCSTR                           * DF0B9  element type
@@ -408,6 +411,6 @@ LIB0BE.hash.L1:
 LIB0BE.link:
         CON(5)  DOHSTR                           * E04EC  link table of library 0BE
         LENGTH                                   * E04F1  length, to #E04FB
-        REL(5)  ROMP_0BE_000                     * E04F6  000 
+        REL(5)  BEMessages                       * E04F6  000 
         ENDLENGTH                                * E04FB
         BSS     4                                * E04FB  zeros

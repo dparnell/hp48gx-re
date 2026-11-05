@@ -1,4 +1,4 @@
-* HP 48GX ROM revision R, #5A01D-#5D01C: Symbolic algebra
+* HP 48GX ROM revision R, #5A01D-#5D01C: Symbolic algebra: the argument forms of ∂, ∫, Σ, | and APPLY, →Q and →Qπ, symbolic integration by patterns, and the RULES transformations
 * Addresses in the right-hand comments are those of the original ROM.
 * Most referenced: meta+ meta* intgLinArg metaneg evalcase: addt* metainv meta/ addtNEG uncrunch meta- dvars?
 * Follows on from the previous file (at #5A01D in the original ROM).
@@ -45,49 +45,57 @@ OBJ_5A14E:
 * refs (2): 8515B 85241
 OBJ_5A1A3:
         :: #1-SWAP dvarlsBIND dup BEGIN #1-SWAP EXPLODE 1GETLAM CARCOMP * 5A1A3
-          OBJ_57676 case IDCONFERR               * 5A1D0
+          ObInMeta case IDCONFERR                * 5A1D0
           DROPNDROP #0=UNTIL DROP 1GETABND ;     * 5A1DF
 
 * refs (1): 1F03F
-OBJ_5A1F8:
-        { OBJ_5A2F7 =1(s)? OBJ_5A4E6 }           * 5A1F8
+* Argument form of ∂ (the slot after the command): { to stack order, count test, finish }, used to turn the algebraic form into a command call
+∂Form:
+        { ∂Args =1(s)? ∂Finish }                 * 5A1F8
 
 * refs (1): 1F271
-OBJ_5A211:
-        { OBJ_5A333 =4(s)? ~DROP';INTEG }        * 5A211
+* Argument form of ∫: { to stack order, count test, finish }
+∫Form:
+        { ∫Args =4(s)? ~DROP';INTEG }            * 5A211
 
 * refs (1): 1F344
-OBJ_5A22A:
-        { OBJ_5A365 =1(s)? }                     * 5A22A
+* Argument form of Σ: { to stack order, count test }
+ΣForm:
+        { ΣArgs =1(s)? }                         * 5A22A
 
 * refs (1): 1F42F
-OBJ_5A23E:
-        { OBJ_5A397 OBJ_5A4B9 OBJ_5A518 }        * 5A23E
+* Argument form of | (WHERE): { to stack order, count test, finish }
+|Form:
+        { |Args |ArgCount? |Finish }             * 5A23E
 
 * refs (1): 1A49A
 OBJ_5A257:
         { OBJ_5A3EC drop;false }                 * 5A257
 
 * refs (1): 1F538
-OBJ_5A26B:
+* Argument form of QUOTE
+QUOTEForm:
         { ~larg;symbn;SWAP#1+ drop;false }       * 5A26B
 
 * refs (1): 1F5F1
-OBJ_5A27F:
-        { OBJ_5A432 drop;=1(s)? OBJ_5A53B }      * 5A27F
+* Argument form of APPLY: { to stack order, count test, finish }
+APPLYForm:
+        { APPLYArgs drop;=1(s)? APPLYFinish }    * 5A27F
 
 * refs (1): 1FB2C
 OBJ_5A298:
         { ~larg;symbn;SWAP#1+_2 drop;false }     * 5A298
 
 * refs (1): 1B238
-OBJ_5A2AC:
+* Argument form of XROOT: its arguments swap places on the stack
+XROOTForm:
         { NOP DROPFALSE                          * 5A2AC
           :: DROP ROTSWAP ' rpnXROOT ; }         * 5A2BB
         BSS     25                               * 5A2DE
 
 * refs (1): 5A1FD
-OBJ_5A2F7:
+* ∂: put the arguments in stack order
+∂Args:
         :: pshzerpsharg SWAPcompSWAP psh         * 5A2F7
           ::                                     * 5A30B
 
@@ -97,16 +105,19 @@ symbn:
         ;                                        * 5A32E
 
 * refs (2): 5A216 C0D1E
-OBJ_5A333:
+* ∫: put the arguments in stack order
+∫Args:
         :: #1-SWAP symcomp OVER#2+UNROL larg symbn SWAP#1+ get1 SWAP#1+ ; * 5A333
 
 * refs (1): 5A22F
-OBJ_5A365:
+* Σ: put the arguments in stack order
+ΣArgs:
         :: pshzerpsharg pshzerpsharg parg& SWAPcompSWAP pshtop& psh symbn * 5A365
           SWAP#1+ ;                              * 5A38D
 
 * refs (1): 5A243
-OBJ_5A397:
+* |: put the expression and the name/value pairs in stack order
+|Args:
         :: OVER pshm1 #1-SWAP #1- ZERO_DO parg& #1-SWAP symcomp psh1& BINT2 * 5A397
           +LOOP larg symbn psh1& pshtop& ;       * 5A3CE
 
@@ -119,7 +130,8 @@ OBJ_5A3EC:
         :: larg symbn SWAP#1+ ;                  * 5A419
 
 * refs (1): 5A284
-OBJ_5A432:
+* APPLY: put the function and arguments in stack order
+APPLYArgs:
         :: PTR addt: xAPPLY pargop SWAPcompSWAP pshtop& SWAPDROP#1- ; * 5A432
 
 * refs (1): 5A29D
@@ -143,12 +155,14 @@ drop;=1(s)?:
         :: DROP #1= ;                            * 5A4A5
 
 * refs (1): 5A248
-OBJ_5A4B9:
+* ... -> flag: | needs an odd number of parts, at least 3
+|ArgCount?:
         :: DROPONE #=casedrpfls #2-              * 5A4B9
           BINT2 #/ DROP #0= ;                    * 5A4CD
 
 * refs (1): 5A207
-OBJ_5A4E6:
+* ... -> ... DERIV: finish as a call to DERIV
+∂Finish:
         :: DROP ROTSWAP ' DERIV ;                * 5A4E6
 
 * refs (1): 5A220
@@ -156,15 +170,17 @@ OBJ_5A4E6:
         :: DROP' INTEG ;                         * 5A504
 
 * refs (1): 5A24D
-OBJ_5A518:
+* ... -> {} #2 WHERE: finish as a call to WHERE, the pairs in a list
+|Finish:
         :: DROP#1- {}N BINT2 ' WHERE ;           * 5A518
 
 * refs (1): 5A28E
-OBJ_5A53B:
+* ... -> {} #2 APPLY: finish as a call to APPLY, the arguments in a list
+APPLYFinish:
         :: DROP#1- {}N BINT2 ' APPLY ;           * 5A53B
 
 * refs (1): 5A748
-OBJ_5A55E:
+ContFrac~1:
         CON(5)  (*)+5                            * 5A55E  primitive code object
         ASSEMBLE
         GOSBVL  SAVPTR                           * 5A563
@@ -174,33 +190,33 @@ OBJ_5A55E:
         A=DAT1  W                                * 5A573
         B=0     A                                * 5A577
         ?A=0    M                                * 5A579
-        GOYES   OBJ_5A55E.L4                     * 5A57C
+        GOYES   ContFrac~1.L4                    * 5A57C
         C=0     A                                * 5A57E
         C=A     X                                * 5A580
         A=0     X                                * 5A583
         P=      13                               * 5A586
         SETDEC                                   * 5A588
-OBJ_5A55E.loop1:
+ContFrac~1.loop1:
         ?A=0    WP                               * 5A58A
-        GOYES   OBJ_5A55E.L2                     * 5A58D
+        GOYES   ContFrac~1.L2                    * 5A58D
         P=P-1                                    * 5A58F
         B=B+1   X                                * 5A591
-        GONC    OBJ_5A55E.loop1                  * 5A594
-OBJ_5A55E.L2:
+        GONC    ContFrac~1.loop1                 * 5A594
+ContFrac~1.L2:
         ?C=0    X                                * 5A597
-        GOYES   OBJ_5A55E.L4                     * 5A59A
+        GOYES   ContFrac~1.L4                    * 5A59A
         A=C     X                                * 5A59C
         A=A+A   X                                * 5A59F
-        GONC    OBJ_5A55E.L3                     * 5A5A2
+        GONC    ContFrac~1.L3                    * 5A5A2
         P=      3                                * 5A5A5
         LC(2)   #99                              * 5A5A7
-OBJ_5A55E.L3:
+ContFrac~1.L3:
         B=B-C   A                                * 5A5AB
         P=      4                                * 5A5AD
         ?B=0    P                                * 5A5AF
-        GOYES   OBJ_5A55E.L4                     * 5A5B2
+        GOYES   ContFrac~1.L4                    * 5A5B2
         B=0     A                                * 5A5B4
-OBJ_5A55E.L4:
+ContFrac~1.L4:
         P=      0                                * 5A5B6
         SETHEX                                   * 5A5B8
         A=B     A                                * 5A5BA
@@ -209,7 +225,7 @@ OBJ_5A55E.L4:
         RPL
 
 * refs (1): 5A7DD
-OBJ_5A5C9:
+ContFrac~2:
         :: BINT1 #=casedrop %1                   * 5A5C9
           %1 SWAP ONE_DO UNROTDUP 3UNROLL %* ROT %+ SWAPLOOP ; * 5A5DD
 
@@ -222,12 +238,14 @@ OBJ_5A5C9:
           LAM 'piflag }                          * 5A614
 
 * refs (3): 5AA04 5AA31 5AA40
-OBJ_5A62E:
+* % %accuracy -> meta: →Q of a real: a sign, then the fraction; with →Qπ (lam piflag) also tries %/π and keeps the simpler
+%>QMeta:
         :: BINT1 M-1stcasechs                    * 5A62E
-          :: OBJ_5A651 addtNEG ;                 * 5A63D
+          :: |%|>QMeta addtNEG ;                 * 5A63D
 
 * refs (1): 5A642
-OBJ_5A651:
+* →Q of a non-negative number; lams d and r hold denominator and remainder
+|%|>QMeta:
           :: DROP 2DUP                           * 5A651
 
 {'d,'r}:
@@ -238,25 +256,27 @@ OBJ_5A651:
 
 Π'r:
               LAM 'r }                           * 5A670
-            BIND OBJ_5A72A DUP#1= case ABND      * 5A680
+            BIND ContFrac DUP#1= case ABND       * 5A680
             ' Π'piflag DRPExitAtLOOP NOTcase ABND * 5A699
             NOTcase ABND                         * 5A6B2
-            2GETLAM 1GETABND %PI %/ OBJ_5A72A DUP#1= case OBJ_5A70C * 5A6BC
-            7PICK 4PICK %> case OBJ_5A70C        * 5A6E4
+            2GETLAM 1GETABND %PI %/ ContFrac DUP#1= case Meta*π * 5A6BC
+            7PICK 4PICK %> case Meta*π           * 5A6E4
             NDROP ;                              * 5A6FD
         ;                                        * 5A707
 
 * refs (2): 5A6DF 5A6F8
-OBJ_5A70C:
+* meta -> meta': multiply by π
+Meta*π:
         :: SWAPUnNDROP PTR addt2: xPI x* ;       * 5A70C
 
 * refs (2): 5A685 5A6D0
-OBJ_5A72A:
+* %x -> meta #n: the fraction for x by continued fractions (lams D, R, est, X, T), to the accuracy of the display
+ContFrac:
         :: %0=case                               * 5A72A
 
 drop(2);<1>:
           :: SWAPDROP BINT1 ;                    * 5A734
-          OBJ_5A55E OVER %EXPONENT BINT0         * 5A748
+          ContFrac~1 OVER %EXPONENT BINT0        * 5A748
           {                                      * 5A75C
 
 Π'D:
@@ -275,18 +295,18 @@ drop(2);<1>:
 Π'T:
             LAM 'T }                             * 5A791
           BIND BINT0 4GETLAM BEGIN DUP %IP SWAP %FP ROT #1+SWAP 1PUTLAM dup * 5A7A1
-          OBJ_5A5C9                              * 5A7DD
+          ContFrac~2                             * 5A7DD
           :: 1GETLAM j%0=case FALSE              * 5A7E2
-            3GETLAM OBJ_5A8A5 FALSE 2DUP %/ 4GETLAM %- DUP%0= casedrpfls * 5A7F6
+            3GETLAM ContFrac~3 FALSE 2DUP %/ 4GETLAM %- DUP%0= casedrpfls * 5A7F6
             %EXPONENT                            * 5A823
-            2GETLAM SWAP %- 5GETLAM OBJ_5A8E8 ;  * 5A828
+            2GETLAM SWAP %- 5GETLAM ContFrac~4 ; * 5A828
           WHILE                                  * 5A846
           :: 2DROP 1GETLAM %1/ ; REPEAT ABND BINT2 SWAPUnNDROP DROPDUP %1 %= * 5A84B
           casedrop BINT1                         * 5A887
           ' x/ BINT3 ;                           * 5A891
 
 * refs (1): 5A7FB
-OBJ_5A8A5:
+ContFrac~3:
         CON(5)  (*)+5                            * 5A8A5  primitive code object
         ASSEMBLE
         GOSBVL  POP#                             * 5A8AA
@@ -300,14 +320,14 @@ OBJ_5A8A5:
         C=R0.F  A                                * 5A8C9
         A=A-C   A                                * 5A8CF
         LC(5)   COLA                             * 5A8D1
-        GONC    OBJ_5A8A5.L1                     * 5A8D8
+        GONC    ContFrac~3.L1                    * 5A8D8
         LC(5)   SKIP                             * 5A8DB
-OBJ_5A8A5.L1:
+ContFrac~3.L1:
         A=C     A                                * 5A8E2
         PC=(A)                                   * 5A8E4
 
 * refs (1): 5A83C
-OBJ_5A8E8:
+ContFrac~4:
         CON(5)  (*)+5                            * 5A8E8  primitive code object
         GOSBVL  POP#                             * 5A8ED
         R0=A.F  B                                * 5A8F4
@@ -319,29 +339,30 @@ OBJ_5A8E8:
         C=DAT1  W                                * 5A908
         D1=A                                     * 5A90C
         ?C#0    S                                * 5A90F
-        GOYES   OBJ_5A8E8.L2                     * 5A912
+        GOYES   ContFrac~4.L2                    * 5A912
         CAEX    X                                * 5A914
         LC(3)   #001                             * 5A917
         ?C<A    X                                * 5A91C
-        GOYES   OBJ_5A8E8.L3                     * 5A91F
+        GOYES   ContFrac~4.L3                    * 5A91F
         P=C     13                               * 5A921
         CPEX    0                                * 5A925
         P=C     14                               * 5A929
         CPEX    1                                * 5A92D
         ?A#0    X                                * 5A931
-        GOYES   OBJ_5A8E8.L1                     * 5A934
+        GOYES   ContFrac~4.L1                    * 5A934
         CSR     B                                * 5A936
-OBJ_5A8E8.L1:
+ContFrac~4.L1:
         A=R0.F  B                                * 5A939
         ?C>A    B                                * 5A93F
-        GOYES   OBJ_5A8E8.L3                     * 5A942
-OBJ_5A8E8.L2:
+        GOYES   ContFrac~4.L3                    * 5A942
+ContFrac~4.L2:
         GOVLNG  PushTLoop                        * 5A944
-OBJ_5A8E8.L3:
+ContFrac~4.L3:
         GOVLNG  PushFLoop                        * 5A94B
 
 * refs (1): 56822
-OBJ_5A952:
+* Probably: the number of significant digits of the display setting, as a real accuracy for ∫ and →Q
+IntegBind~1:
         CON(5)  (*)+5                            * 5A952  primitive code object
         GOSUB   SUB_5A999                        * 5A957
         C=A     B                                * 5A95B
@@ -366,6 +387,7 @@ RclAccuracy:
         GOVLNG  PUSH#LOOP                        * 5A992
 
 * refs (2): 5A957 5A988
+* Reads the display format from system flags at #8084F, for RclAccuracy and IntegBind~1
 SUB_5A999:
         GOSBVL  SAVPTR                           * 5A999
         A=0     A                                * 5A9A0
@@ -399,21 +421,24 @@ SUB_5A999.L2:
         RPL
 
 * refs (3): 1FA25 5AA86 72F98
-OBJ_5A9F5:
-        :: RclAccuracy SWAP OBJ_5A62E CKSYMBN ;  * 5A9F5
+* % -> symb: →Q of a real
+%>Q:
+        :: RclAccuracy SWAP %>QMeta CKSYMBN ;    * 5A9F5
 
 * refs (2): 1FA2F 5AA90
-OBJ_5AA13:
-        :: C%>% RclAccuracy DUPROT BINT2 3UNROLL OBJ_5A62E psh DROPSWAP * 5AA13
-          OBJ_5A62E pshtop& PTR addt: ~CK2&Dispatch IMPLODE ; * 5AA40
+* C% -> symb: →Q of a complex number, as (a,b) from both parts
+C%>Q:
+        :: C%>% RclAccuracy DUPROT BINT2 3UNROLL %>QMeta psh DROPSWAP * 5AA13
+          %>QMeta pshtop& PTR addt: ~CK2&Dispatch IMPLODE ; * 5AA40
 
 * refs (1): 1FA39
-OBJ_5AA5E:
+* symb -> symb': →Q of an algebraic: each number in it
+Symb>Q:
         :: ZEROSWAP EXPLODE BEGIN #1-SWAP        * 5AA5E
           :: CK&DISPATCH0                        * 5AA77
-            BINT1 OBJ_5A9F5                      * 5AA81  real
-            BINT2 OBJ_5AA13                      * 5AA8B  complex
-            BINT0 OBJ_72FCA                      * 5AA95  any
+            BINT1 %>Q                            * 5AA81  real
+            BINT2 C%>Q                           * 5AA8B  complex
+            BINT0 Symb>Q~any                     * 5AA95  any
           ;                                      * 5AA9F
           SINNER unrot over& #0=UNTIL DROP IMPLODE ; * 5AAA4
 
@@ -553,7 +578,7 @@ linear~5:
 intg1:
         :: dvars? NOTcase intgconst              * 5AFAB
           linear? case intglinear                * 5AFBF
-          DUPDUP DUP OBJ_56FD1 BIND BEGIN linear? NOT_WHILE * 5AFCE
+          DUPDUP DUP {'dv,'op,'nm} BIND BEGIN linear? NOT_WHILE * 5AFCE
           :: DUP 1PUTLAM ; REPEAT 1GETLAM 2GETLAM OVER#- #2+ 2PUTLAM #1- * 5AFF1
           tailpsh larg 2GETLAM BEGIN DUP 2PUTLAM intg1~1 ITE * 5B028
           :: OBJ_5B1F4 intg1ok ;                 * 5B050
@@ -572,7 +597,8 @@ intgconst:
         ::                                       * 5B0CD
 
 * refs (2): 5B2B7 5B2E4
-OBJ_5B0D2:
+* meta -> : a term constant in the variable: its integral is term*x
+intgconstx:
           :: PTR addt: lam'dvar meta* ; intg1ok DROP ; * 5B0D2
 
 * M1 M2 M3 M4 -> M1' M2 M3 T
@@ -618,12 +644,12 @@ OBJ_5B1F4:
 * refs (2): 5B235 5B23F
 OBJ_5B28A:
         :: 2DROP #2= case OBJ_5B2D0              * 5B28A
-          tailpsh dvars? ITE intgaddlin OBJ_5B0D2 * 5B2A3
+          tailpsh dvars? ITE intgaddlin intgconstx * 5B2A3
           psh& pullrev psh1&rev ;                * 5B2BC
 
 * refs (1): 5B29E
 OBJ_5B2D0:
-        :: DROP rot larg OBJ_5B0D2 4roll top& rot pullrev psh1&rev ; * 5B2D0
+        :: DROP rot larg intgconstx 4roll top& rot pullrev psh1&rev ; * 5B2D0
         CON(5)  NOP                              * 5B307  address
 
 * Unreferenced NOP between objects: padding
@@ -637,7 +663,7 @@ OBJ_5B2D0:
 
         CON(5)  EXPLODE                          * 5B320  address (the code jumps or points through it)
 
-        CON(5)  OBJ_600A3                        * 5B325  address (the code jumps or points through it)
+        CON(5)  MatSubst                         * 5B325  address (the code jumps or points through it)
 
         CON(5)  SEMI                             * 5B32A  address (the code jumps or points through it)
 
@@ -656,35 +682,36 @@ OBJ_5B34D:
 * refs (26): 5BBA4 82B3D 82BA1 82C0A 82C78 82CF0 ...
 * Integration tables: rule body for F(u) with u linear in the variable: G(u)/u'
 intgLinArg:
-        :: 'R BINT1 OBJ_600A3                    * 5B375
+        :: 'R BINT1 MatSubst                     * 5B375
 
 * refs (3): 5B3ED 5B5B4 5B6FE
 OBJ_5B389:
           :: dvars? ITE linear! FALSE            * 5B389
           ;                                      * 5B3A2
-          pshm1 #1+NDROP 'R SWAP NOTcsdrpfls ?ROMPTR@ SINNER OBJ_5B4FB ; * 5B3A7
+          pshm1 #1+NDROP 'R SWAP NOTcsdrpfls ?ROMPTR@ SINNER Intg/∂&1 ; * 5B3A7
 
 * Unreferenced NOP between objects: padding
         CON(5)  NOP                              * 5B3D4  entry 0
 
 * refs (9): 824F6 8255F 825C8 8268C 826F0 82772 ...
 OBJ_5B3D9:
-        :: 'R BINT1 OBJ_600A3 OBJ_5B389 pshm1 #1+NDROP 'R SWAP NOTcsdrpfls * 5B3D9
-          ?ROMPTR@ SINNER RAD? ?SKIP OBJ_5B4A6   * 5B40B
-          OBJ_5B4FB ;                            * 5B424
+        :: 'R BINT1 MatSubst OBJ_5B389 pshm1 #1+NDROP 'R SWAP NOTcsdrpfls * 5B3D9
+          ?ROMPTR@ SINNER RAD? ?SKIP IntgAngle   * 5B40B
+          Intg/∂&1 ;                             * 5B424
 
 * Unreferenced NOP between objects: padding
         CON(5)  NOP                              * 5B42E  entry 0
 
 * refs (3): 82953 829F3 82A93
 OBJ_5B433:
-        :: 'R BINT1 OBJ_600A3 dvars? DROP linear! pshm1 #1+NDROP 'R SWAP * 5B433
+        :: 'R BINT1 MatSubst dvars? DROP linear! pshm1 #1+NDROP 'R SWAP * 5B433
           NOTcsdrpfls ?ROMPTR@ SINNER RAD? ?SKIP * 5B46A
-          :: OBJ_5B4A6 6ROLL SWAP ;              * 5B483
-          OBJ_5B4FB ;                            * 5B49C
+          :: IntgAngle 6ROLL SWAP ;              * 5B483
+          Intg/∂&1 ;                             * 5B49C
 
 * refs (2): 5B41F 5B488
-OBJ_5B4A6:
+* ...: integrals of trigonometric functions: the factor for DEG or GRAD
+IntgAngle:
         :: DEG? ITE                              * 5B4A6
 
 {180,PI,/,*}_5B4B5:
@@ -695,7 +722,8 @@ OBJ_5B4A6:
           INNERtop& ;                            * 5B4F1
 
 * refs (3): 5B3CA 5B424 5B49C
-OBJ_5B4FB:
+* ... TRUE: finish a rule's result by dividing by the derivative of its linear argument, into lam rhs
+Intg/∂&1:
         ::                                       * 5B4FB
           { lam'dvar Π&1 xDER x/ } INNERtop& CKSYMBN ' Π'rhs STOLAM TRUE ; * 5B500
 
@@ -703,20 +731,20 @@ OBJ_5B4FB:
         CON(5)  NOP                              * 5B541  entry 0
 
 * refs (1): 5BA96
-OBJ_5B546:
-        :: 'R BINT1 OBJ_600A3 dvars? NOTcase OBJ_5B596 * 5B546
-          linear! case OBJ_5B5F0                 * 5B569
+Intg^~5:
+        :: 'R BINT1 MatSubst dvars? NOTcase Intg^~6 * 5B546
+          linear! case Intg^~7                   * 5B569
           NDROP FALSE RSKIP RSKIP RSKIP ;        * 5B578
 
 * refs (1): 5B564
-OBJ_5B596:
-        :: NDROP 'R BINT1 RSKIP OBJ_600A3 OBJ_5B389 pshm1 NDROP DROP DUP * 5B596
+Intg^~6:
+        :: NDROP 'R BINT1 RSKIP MatSubst OBJ_5B389 pshm1 NDROP DROP DUP * 5B596
           NOTcase SKIP                           * 5B5CD
           'R ' Π'rhs STOLAM ;                    * 5B5D7
 
 * refs (1): 5B573
-OBJ_5B5F0:
-        :: NDROP 'R BINT1 OBJ_600A3 dvars? casedrop * 5B5F0
+Intg^~7:
+        :: NDROP 'R BINT1 MatSubst dvars? casedrop * 5B5F0
           :: NDROP RSKIP RSKIP FALSE ;           * 5B613
           NDROP 'R ' Π'rhs STOLAM TRUE RSKIP ;   * 5B631
 
@@ -732,7 +760,7 @@ forcemul?aga:
         ;                                        * 5B69A
 
 * refs (1): 5B910
-OBJ_5B69F:
+Intg^~1:
         ::                                       * 5B69F
           :: M1stFNCcase BINT5                   * 5B6A4
             OVER infarg? casedrop BINT4          * 5B6B3
@@ -740,7 +768,7 @@ OBJ_5B69F:
           PICK DUPTYPEREAL? SWAP TYPECMP? OR ;   * 5B6D6
 
 * refs (1): 5B933
-OBJ_5B6F4:
+Intg^~2:
         :: pargop OBJ_5B389 psh1&rev pshtop& #1-SWAP ; * 5B6F4
 
 * meta -> meta'
@@ -777,65 +805,72 @@ top&pshtop&:
         :: top& pshtop& ;                        * 5B861
 
 * refs (1): 1F267
-OBJ_5B875:
+* Integral slot of ∫: a nested integral
+IntgIntg:
         :: #1- tailpsh larg SWAPDROP#1- lam'dvar dvarlsBIND dvars> #1-SWAP * 5B875
           symcomp pshm1 larg SYMBN psh1& larg CKSYMBN psh1& CKSYMBN SWAPDROP * 5B8A2
           4UNROLL SYMINTEG ZEROSWAP EXPLODE >dvars ABND top& pshtop& FALSE ; * 5B8D4
 
 * refs (1): 1B0E1
-OBJ_5B906:
-        :: OBJ_5B32F OBJ_5B69F ' OBJ_5BA41 SWAP NOTcase EVAL * 5B906
-          DROP OBJ_5B6F4 NOTcaseFALSE            * 5B92E
+* Integral slot of ^: powers of the integration variable, or of a linear argument
+Intg^:
+        :: OBJ_5B32F Intg^~1 ' Intg^~3 SWAP NOTcase EVAL * 5B906
+          DROP Intg^~2 NOTcaseFALSE              * 5B92E
           { IntgPatVars                          * 5B93D
             {                                    * 5B947
 
 '&1^-1':
-              SYMBOL Π&1 %-1 x^ ; OBJ_5B9CE }    * 5B94C
+              SYMBOL Π&1 %-1 x^ ; 'LN(&1)/D&1' } * 5B94C
             {                                    * 5B96F
 
 '&1^(-1,0)':
-              SYMBOL Π&1 C%-1 x^ ; OBJ_5B9CE }   * 5B974
+              SYMBOL Π&1 C%-1 x^ ; 'LN(&1)/D&1' } * 5B974
             {                                    * 5B997
 
 '&1^&2':
-              SYMBOL Π&1 Π&2 x^ ; OBJ_5B9F6 }    * 5B99C
+              SYMBOL Π&1 Π&2 x^ ; '&1^(&2+1)/D' } * 5B99C
           }                                      * 5B9BF
           OBJ_5B34D ;                            * 5B9C4
 
 * refs (2): 5B965 5B98D
-OBJ_5B9CE:
+* 'LN(&1)/∂&1': integral of &1^-1 when &1 is linear
+'LN(&1)/D&1':
         SYMBOL Π&1 xLN lam'dvar Π&1 xDER x/ ;    * 5B9CE
 
 * refs (1): 5B9B5
-OBJ_5B9F6:
+* '&1^(&2+1)/((&2+1)*∂&1)': integral of &1^&2
+'&1^(&2+1)/D':
         SYMBOL Π&1 Π&2 %1 x+ x^ Π&2 %1 x+ lam'dvar Π&1 xDER x* x/ ; * 5B9F6
 
 * refs (1): 5B91A
-OBJ_5BA41:
+Intg^~3:
         ::                                       * 5BA41
           { IntgPatVars                          * 5BA46
             {                                    * 5BA50
 
 '&1^&2'_5BA55:
-              SYMBOL Π&1 Π&2 x^ ; NULL{} OBJ_5BA91 NULL{} } * 5BA55
+              SYMBOL Π&1 Π&2 x^ ; NULL{} Intg^~4 NULL{} } * 5BA55
           }                                      * 5BA82
           OBJ_5B34D ;                            * 5BA87
 
 * refs (1): 5BA73
-OBJ_5BA91:
-        :: OBJ_5B546 Π&1 Π&2 OBJ_5BAB4 OBJ_5BB31 ; * 5BA91
+Intg^~4:
+        :: Intg^~5 Π&1 Π&2 'IFTE(&2==-1)' '&1^&2/(LN(&1)*∂&2)' ; * 5BA91
 
 * refs (1): 5BAA5
-OBJ_5BAB4:
+* Integral of &1^&2 with a symbolic exponent: IFTE(&2==-1, the LN form, the power form)
+'IFTE(&2==-1)':
         SYMBOL Π&2 %-1 x== Π&1 xLN lam'dvar Π&1 xDER x/ Π&1 Π&2 %1 x+ x^ Π&2 * 5BAB4
           %1 x+ lam'dvar Π&1 xDER x* x/ xIFTE ;  * 5BB04
 
 * refs (1): 5BAAA
-OBJ_5BB31:
+* Integral of &1^&2 with the exponent linear in the variable
+'&1^&2/(LN(&1)*∂&2)':
         SYMBOL Π&1 Π&2 x^ Π&1 xLN lam'dvar Π&2 xDER x* x/ ; * 5BB31
 
 * refs (1): 1B941
-OBJ_5BB6D:
+* Integral slot of EXP
+IntgEXP:
         :: OBJ_5B32F                             * 5BB6D
           { IntgPatVars                          * 5BB77
             {                                    * 5BB81
@@ -1047,13 +1082,13 @@ Meta<-->:
 * rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
         PATTERN op0                              * 5BE8D  x+
         RPL
-        ROMPTR 0F0 01F                           * 5BE92  run if it matches
+        XLIB Rule<-->+                           * 5BE92  run if it matches
         PATTERN op1                              * 5BE9D  x-
-        ROMPTR 0F0 020                           * 5BEA2  run if it matches
+        XLIB Rule<-->-                           * 5BEA2  run if it matches
         PATTERN op2                              * 5BEAD  x*
-        ROMPTR 0F0 021                           * 5BEB2  run if it matches
+        XLIB Rule<-->*                           * 5BEB2  run if it matches
         PATTERN op3                              * 5BEBD  x/
-        ROMPTR 0F0 022                           * 5BEC2  run if it matches
+        XLIB Rule<-->/                           * 5BEC2  run if it matches
         CON(1)  #F                               * 5BECD  end of the rules
 
 * associate left term
@@ -1070,19 +1105,19 @@ Meta<-A:
         CON(5)  OBJ_5C9FB                        * 5BEE9  run if it matches
         PATTERN op1 op0                          * 5BEEE  x- x+
         RPL
-        ROMPTR 0F0 023                           * 5BEF3  run if it matches
+        XLIB Rule<-A-+                           * 5BEF3  run if it matches
         PATTERN op1 op1                          * 5BEFE  x- x-
-        ROMPTR 0F0 024                           * 5BF03  run if it matches
+        XLIB Rule<-A--                           * 5BF03  run if it matches
         PATTERN op2 op2                          * 5BF0E  x* x*
         CON(5)  OBJ_5C9FB                        * 5BF13  run if it matches
         PATTERN op2 op3                          * 5BF18  x* x/
         CON(5)  OBJ_5C9FB                        * 5BF1D  run if it matches
         PATTERN op3 op2                          * 5BF22  x/ x*
-        ROMPTR 0F0 025                           * 5BF27  run if it matches
+        XLIB Rule<-A/*                           * 5BF27  run if it matches
         PATTERN op3 op3                          * 5BF32  x/ x/
-        ROMPTR 0F0 026                           * 5BF37  run if it matches
+        XLIB Rule<-A//                           * 5BF37  run if it matches
         PATTERN op4 op2                          * 5BF42  x^ x*
-        ROMPTR 0F0 027                           * 5BF47  run if it matches
+        XLIB Rule<-A^*                           * 5BF47  run if it matches
         CON(1)  #F                               * 5BF52  end of the rules
 
 * associate right term
@@ -1099,19 +1134,19 @@ MetaA->:
         CON(5)  OBJ_5CA32                        * 5BF6E  run if it matches
         PATTERN op0 arg op1                      * 5BF73  x+ arg x-
         RPL
-        ROMPTR 0F0 028                           * 5BF78  run if it matches
+        XLIB RuleA->+-                           * 5BF78  run if it matches
         PATTERN op1 arg op1                      * 5BF83  x- arg x-
-        ROMPTR 0F0 029                           * 5BF88  run if it matches
+        XLIB RuleA->--                           * 5BF88  run if it matches
         PATTERN op2 arg op2                      * 5BF93  x* arg x*
         CON(5)  OBJ_5CA32                        * 5BF98  run if it matches
         PATTERN op3 arg op2                      * 5BF9D  x/ arg x*
         CON(5)  OBJ_5CA32                        * 5BFA2  run if it matches
         PATTERN op2 arg op3                      * 5BFA7  x* arg x/
-        ROMPTR 0F0 02A                           * 5BFAC  run if it matches
+        XLIB RuleA->*/                           * 5BFAC  run if it matches
         PATTERN op3 arg op3                      * 5BFB7  x/ arg x/
         ROMPTR 0F0 02B                           * 5BFBC  run if it matches
         PATTERN op4 arg op4                      * 5BFC7  x^ arg x^
-        ROMPTR 0F0 02C                           * 5BFCC  run if it matches
+        XLIB RuleA->*                            * 5BFCC  run if it matches
         CON(1)  #F                               * 5BFD7  end of the rules
 
 * delete right term
@@ -1130,27 +1165,27 @@ MetaD->:
         RPL
         ROMPTR 0F0 02D                           * 5BFFD  run if it matches
         PATTERN op3 op1                          * 5C008  x/ x-
-        ROMPTR 0F0 02E                           * 5C00D  run if it matches
+        XLIB RuleD->/                            * 5C00D  run if it matches
         PATTERN op4 op0                          * 5C018  x^ x+
-        ROMPTR 0F0 02F                           * 5C01D  run if it matches
+        XLIB RuleD->^+                           * 5C01D  run if it matches
         PATTERN op4 op1                          * 5C028  x^ x-
-        ROMPTR 0F0 030                           * 5C02D  run if it matches
+        XLIB RuleD->^-                           * 5C02D  run if it matches
         PATTERN op7 op0                          * 5C038  xEXP x+
-        ROMPTR 0F0 031                           * 5C03D  run if it matches
+        XLIB RuleD->EXP+                         * 5C03D  run if it matches
         PATTERN op8 op0                          * 5C048  xALOG x+
-        ROMPTR 0F0 031                           * 5C04D  run if it matches
+        XLIB RuleD->EXP+                         * 5C04D  run if it matches
         PATTERN op7 op1                          * 5C058  xEXP x-
-        ROMPTR 0F0 032                           * 5C05D  run if it matches
+        XLIB RuleD->EXP-                         * 5C05D  run if it matches
         PATTERN op8 op1                          * 5C068  xALOG x-
-        ROMPTR 0F0 032                           * 5C06D  run if it matches
+        XLIB RuleD->EXP-                         * 5C06D  run if it matches
         PATTERN op9 op2                          * 5C078  xLN x*
-        ROMPTR 0F0 033                           * 5C07D  run if it matches
+        XLIB RuleD->LN*                          * 5C07D  run if it matches
         PATTERN op10 op2                         * 5C088  xLOG x*
-        ROMPTR 0F0 033                           * 5C08D  run if it matches
+        XLIB RuleD->LN*                          * 5C08D  run if it matches
         PATTERN op9 op3                          * 5C098  xLN x/
-        ROMPTR 0F0 034                           * 5C09D  run if it matches
+        XLIB RuleD->LN/                          * 5C09D  run if it matches
         PATTERN op10 op3                         * 5C0A8  xLOG x/
-        ROMPTR 0F0 034                           * 5C0AD  run if it matches
+        XLIB RuleD->LN/                          * 5C0AD  run if it matches
         CON(1)  #F                               * 5C0B8  end of the rules
 
 * delete left term
@@ -1207,11 +1242,11 @@ Meta->():
         RPL
         ROMPTR 0F0 035                           * 5C15C  run if it matches
         PATTERN op5 op3                          * 5C167  xNEG x/
-        ROMPTR 0F0 036                           * 5C16C  run if it matches
+        XLIB Rule->()NEG                         * 5C16C  run if it matches
         PATTERN op5 op9                          * 5C177  xNEG xLN
-        ROMPTR 0F0 037                           * 5C17C  run if it matches
+        XLIB Rule->()LN                          * 5C17C  run if it matches
         PATTERN op5 op10                         * 5C187  xNEG xLOG
-        ROMPTR 0F0 037                           * 5C18C  run if it matches
+        XLIB Rule->()LN                          * 5C18C  run if it matches
         PATTERN op5 op5                          * 5C197  xNEG xNEG
         CON(5)  2pull2DROP                       * 5C19C  run if it matches
         PATTERN op5 op6                          * 5C1A1  xNEG xINV
@@ -1219,9 +1254,9 @@ Meta->():
         PATTERN op6 op4                          * 5C1AB  xINV x^
         ROMPTR 0F0 038                           * 5C1B0  run if it matches
         PATTERN op6 op7                          * 5C1BB  xINV xEXP
-        ROMPTR 0F0 039                           * 5C1C0  run if it matches
+        XLIB Rule->()INV                         * 5C1C0  run if it matches
         PATTERN op6 op8                          * 5C1CB  xINV xALOG
-        ROMPTR 0F0 039                           * 5C1D0  run if it matches
+        XLIB Rule->()INV                         * 5C1D0  run if it matches
         PATTERN op6 op2                          * 5C1DB  xINV x*
         CON(5)  ~SWAPDROP#1-;COLA;[f(X,Y)]=>[INV(X)/Y]! * 5C1E0  run if it matches
         PATTERN op6 op3                          * 5C1E5  xINV x/
@@ -1242,15 +1277,15 @@ Meta1/():
 * rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
         PATTERN op2                              * 5C210  x*
         RPL
-        ROMPTR 0F0 03A                           * 5C215  run if it matches
+        XLIB Rule1/()*                           * 5C215  run if it matches
         PATTERN op3                              * 5C220  x/
-        ROMPTR 0F0 03B                           * 5C225  run if it matches
+        XLIB Rule1/()/                           * 5C225  run if it matches
         PATTERN op4                              * 5C230  x^
         ROMPTR 0F0 03C                           * 5C235  run if it matches
         PATTERN op7                              * 5C240  xEXP
-        ROMPTR 0F0 03D                           * 5C245  run if it matches
+        XLIB Rule1/()^                           * 5C245  run if it matches
         PATTERN op8                              * 5C250  xALOG
-        ROMPTR 0F0 03D                           * 5C255  run if it matches
+        XLIB Rule1/()^                           * 5C255  run if it matches
         CON(1)  #F                               * 5C260  end of the rules
 
 * double negate & remove prefix
@@ -1263,17 +1298,17 @@ Meta-():
 * rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
         PATTERN op9                              * 5C26D  xLN
         RPL
-        ROMPTR 0F0 03E                           * 5C272  run if it matches
+        XLIB Rule-()LN                           * 5C272  run if it matches
         PATTERN op10                             * 5C27D  xLOG
-        ROMPTR 0F0 03E                           * 5C282  run if it matches
+        XLIB Rule-()LN                           * 5C282  run if it matches
         PATTERN op0                              * 5C28D  x+
-        ROMPTR 0F0 041                           * 5C292  run if it matches
+        XLIB Rule-()+                            * 5C292  run if it matches
         PATTERN op1                              * 5C29D  x-
-        ROMPTR 0F0 042                           * 5C2A2  run if it matches
+        XLIB Rule-()-                            * 5C2A2  run if it matches
         PATTERN op2                              * 5C2AD  x*
         ROMPTR 0F0 03F                           * 5C2B2  run if it matches
         PATTERN op3                              * 5C2BD  x/
-        ROMPTR 0F0 040                           * 5C2C2  run if it matches
+        XLIB Rule-()*                            * 5C2C2  run if it matches
         CON(1)  #F                               * 5C2CD  end of the rules
 
 * EXP(a*b) -> EXP(a)^b
@@ -1286,13 +1321,13 @@ MetaE^:
 * rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
         PATTERN op7 op2                          * 5C2DA  xEXP x*
         RPL
-        ROMPTR 0F0 043                           * 5C2DF  run if it matches
+        XLIB RuleE^*                             * 5C2DF  run if it matches
         PATTERN op8 op2                          * 5C2EA  xALOG x*
-        ROMPTR 0F0 043                           * 5C2EF  run if it matches
+        XLIB RuleE^*                             * 5C2EF  run if it matches
         PATTERN op7 op3                          * 5C2FA  xEXP x/
-        ROMPTR 0F0 044                           * 5C2FF  run if it matches
+        XLIB RuleE^/                             * 5C2FF  run if it matches
         PATTERN op8 op3                          * 5C30A  xALOG x/
-        ROMPTR 0F0 044                           * 5C30F  run if it matches
+        XLIB RuleE^/                             * 5C30F  run if it matches
         CON(1)  #F                               * 5C31A  end of the rules
 
 * EXP(a)^b -> EXP(a*b)
@@ -1305,9 +1340,9 @@ MetaE():
 * rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
         PATTERN op4 arg op7                      * 5C327  x^ arg xEXP
         RPL
-        ROMPTR 0F0 045                           * 5C32C  run if it matches
+        XLIB RuleE()                             * 5C32C  run if it matches
         PATTERN op4 arg op8                      * 5C337  x^ arg xALOG
-        ROMPTR 0F0 045                           * 5C33C  run if it matches
+        XLIB RuleE()                             * 5C33C  run if it matches
         CON(1)  #F                               * 5C347  end of the rules
 
 * LN(a^b) -> b*LN(a)
@@ -1320,9 +1355,9 @@ MetaL*:
 * rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
         PATTERN op9 op4                          * 5C354  xLN x^
         RPL
-        ROMPTR 0F0 046                           * 5C359  run if it matches
+        XLIB RuleL*                              * 5C359  run if it matches
         PATTERN op10 op4                         * 5C364  xLOG x^
-        ROMPTR 0F0 046                           * 5C369  run if it matches
+        XLIB RuleL*                              * 5C369  run if it matches
         CON(1)  #F                               * 5C374  end of the rules
 
 * b*LN(a) -> LN(a^b)
@@ -1335,13 +1370,13 @@ MetaL():
 * rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
         PATTERN op2 arg op9                      * 5C381  x* arg xLN
         RPL
-        ROMPTR 0F0 047                           * 5C386  run if it matches
+        XLIB RuleL()*                            * 5C386  run if it matches
         PATTERN op2 arg op10                     * 5C391  x* arg xLOG
-        ROMPTR 0F0 047                           * 5C396  run if it matches
+        XLIB RuleL()*                            * 5C396  run if it matches
         PATTERN op3 arg op9                      * 5C3A1  x/ arg xLN
-        ROMPTR 0F0 048                           * 5C3A6  run if it matches
+        XLIB RuleL()/                            * 5C3A6  run if it matches
         PATTERN op3 arg op10                     * 5C3B1  x/ arg xLOG
-        ROMPTR 0F0 048                           * 5C3B6  run if it matches
+        XLIB RuleL()/                            * 5C3B6  run if it matches
         CON(1)  #F                               * 5C3C1  end of the rules
 
 * merge common factor on left
@@ -1354,37 +1389,37 @@ Meta<-M:
 * rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
         PATTERN op2 op4 arg arg op4              * 5C3CE  x* x^ arg arg x^
         RPL
-        ROMPTR 0F0 04E                           * 5C3D3  run if it matches
+        XLIB Rule<-M^*                           * 5C3D3  run if it matches
         PATTERN op3 op4 arg arg op4              * 5C3DE  x/ x^ arg arg x^
-        ROMPTR 0F0 04F                           * 5C3E3  run if it matches
+        XLIB Rule<-M^/                           * 5C3E3  run if it matches
         PATTERN op2 op7 arg op7                  * 5C3EE  x* xEXP arg xEXP
-        ROMPTR 0F0 050                           * 5C3F3  run if it matches
+        XLIB Rule<-MEXP*                         * 5C3F3  run if it matches
         PATTERN op2 op8 arg op8                  * 5C3FE  x* xALOG arg xALOG
-        ROMPTR 0F0 050                           * 5C403  run if it matches
+        XLIB Rule<-MEXP*                         * 5C403  run if it matches
         PATTERN op3 op7 arg op7                  * 5C40E  x/ xEXP arg xEXP
-        ROMPTR 0F0 051                           * 5C413  run if it matches
+        XLIB Rule<-MEXP/                         * 5C413  run if it matches
         PATTERN op3 op8 arg op8                  * 5C41E  x/ xALOG arg xALOG
-        ROMPTR 0F0 051                           * 5C423  run if it matches
+        XLIB Rule<-MEXP/                         * 5C423  run if it matches
         PATTERN op0 op9 arg op9                  * 5C42E  x+ xLN arg xLN
-        ROMPTR 0F0 052                           * 5C433  run if it matches
+        XLIB Rule<-MLN+                          * 5C433  run if it matches
         PATTERN op0 op10 arg op10                * 5C43E  x+ xLOG arg xLOG
-        ROMPTR 0F0 052                           * 5C443  run if it matches
+        XLIB Rule<-MLN+                          * 5C443  run if it matches
         PATTERN op1 op9 arg op9                  * 5C44E  x- xLN arg xLN
-        ROMPTR 0F0 053                           * 5C453  run if it matches
+        XLIB Rule<-MLN-                          * 5C453  run if it matches
         PATTERN op1 op10 arg op10                * 5C45E  x- xLOG arg xLOG
-        ROMPTR 0F0 053                           * 5C463  run if it matches
+        XLIB Rule<-MLN-                          * 5C463  run if it matches
         PATTERN op0 op2                          * 5C46E  x+ x*
         ROMPTR 0F0 049                           * 5C473  run if it matches
         PATTERN op1 op2                          * 5C47E  x- x*
-        ROMPTR 0F0 04A                           * 5C483  run if it matches
+        XLIB Rule<-M                             * 5C483  run if it matches
         PATTERN op0 op3                          * 5C48E  x+ x/
         ROMPTR 0F0 049                           * 5C493  run if it matches
         PATTERN op1 op3                          * 5C49E  x- x/
-        ROMPTR 0F0 04A                           * 5C4A3  run if it matches
+        XLIB Rule<-M                             * 5C4A3  run if it matches
         PATTERN op0                              * 5C4AE  x+
         ROMPTR 0F0 049                           * 5C4B3  run if it matches
         PATTERN op1                              * 5C4BE  x-
-        ROMPTR 0F0 04A                           * 5C4C3  run if it matches
+        XLIB Rule<-M                             * 5C4C3  run if it matches
         CON(1)  #F                               * 5C4CE  end of the rules
 
 * merge common factor on right
@@ -1397,17 +1432,17 @@ MetaM->:
 * rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
         PATTERN op0 op2 arg arg op2              * 5C4DB  x+ x* arg arg x*
         RPL
-        ROMPTR 0F0 054                           * 5C4E0  run if it matches
+        XLIB RuleM->                             * 5C4E0  run if it matches
         PATTERN op1 op2 arg arg op2              * 5C4EB  x- x* arg arg x*
-        ROMPTR 0F0 054                           * 5C4F0  run if it matches
+        XLIB RuleM->                             * 5C4F0  run if it matches
         PATTERN op0 op3 arg arg op3              * 5C4FB  x+ x/ arg arg x/
-        ROMPTR 0F0 054                           * 5C500  run if it matches
+        XLIB RuleM->                             * 5C500  run if it matches
         PATTERN op1 op3 arg arg op3              * 5C50B  x- x/ arg arg x/
-        ROMPTR 0F0 054                           * 5C510  run if it matches
+        XLIB RuleM->                             * 5C510  run if it matches
         PATTERN op2 op4 arg arg op4              * 5C51B  x* x^ arg arg x^
-        ROMPTR 0F0 054                           * 5C520  run if it matches
+        XLIB RuleM->                             * 5C520  run if it matches
         PATTERN op3 op4 arg arg op4              * 5C52B  x/ x^ arg arg x^
-        ROMPTR 0F0 054                           * 5C530  run if it matches
+        XLIB RuleM->                             * 5C530  run if it matches
         CON(1)  #F                               * 5C53B  end of the rules
 
 * add fractions
@@ -1420,13 +1455,13 @@ MetaAF:
 * rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
         PATTERN op0 op3                          * 5C548  x+ x/
         RPL
-        ROMPTR 0F0 01C                           * 5C54D  run if it matches
+        XLIB RuleAF                              * 5C54D  run if it matches
         PATTERN op1 op3                          * 5C558  x- x/
-        ROMPTR 0F0 01C                           * 5C55D  run if it matches
+        XLIB RuleAF                              * 5C55D  run if it matches
         PATTERN op0 arg op3                      * 5C568  x+ arg x/
-        ROMPTR 0F0 01E                           * 5C56D  run if it matches
+        XLIB RuleAFarg                           * 5C56D  run if it matches
         PATTERN op1 arg op3                      * 5C578  x- arg x/
-        ROMPTR 0F0 01E                           * 5C57D  run if it matches
+        XLIB RuleAFarg                           * 5C57D  run if it matches
         CON(1)  #F                               * 5C588  end of the rules
 
 * include left term
@@ -1439,13 +1474,13 @@ Meta(<-:
 * rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
         PATTERN op0                              * 5C595  x+
         RPL
-        ROMPTR 0F0 059                           * 5C59A  run if it matches
+        XLIB Rule(<-+                            * 5C59A  run if it matches
         PATTERN op1                              * 5C5A5  x-
-        ROMPTR 0F0 059                           * 5C5AA  run if it matches
+        XLIB Rule(<-+                            * 5C5AA  run if it matches
         PATTERN op2                              * 5C5B5  x*
-        ROMPTR 0F0 05A                           * 5C5BA  run if it matches
+        XLIB Rule(<-*                            * 5C5BA  run if it matches
         PATTERN op3                              * 5C5C5  x/
-        ROMPTR 0F0 05A                           * 5C5CA  run if it matches
+        XLIB Rule(<-*                            * 5C5CA  run if it matches
         CON(1)  #F                               * 5C5D5  end of the rules
 
 * include right term
@@ -1458,13 +1493,13 @@ Meta->):
 * rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
         PATTERN op0                              * 5C5E2  x+
         RPL
-        ROMPTR 0F0 05B                           * 5C5E7  run if it matches
+        XLIB Rule->)+                            * 5C5E7  run if it matches
         PATTERN op1                              * 5C5F2  x-
-        ROMPTR 0F0 05B                           * 5C5F7  run if it matches
+        XLIB Rule->)+                            * 5C5F7  run if it matches
         PATTERN op2                              * 5C602  x*
-        ROMPTR 0F0 05C                           * 5C607  run if it matches
+        XLIB Rule->)*                            * 5C607  run if it matches
         PATTERN op3                              * 5C612  x/
-        ROMPTR 0F0 05C                           * 5C617  run if it matches
+        XLIB Rule->)*                            * 5C617  run if it matches
         CON(1)  #F                               * 5C622  end of the rules
 
 * parenthesise nearest term
@@ -1477,13 +1512,13 @@ Meta(()):
 * rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
         PATTERN op0                              * 5C62F  x+
         RPL
-        ROMPTR 0F0 05D                           * 5C634  run if it matches
+        XLIB Rule(())+                           * 5C634  run if it matches
         PATTERN op1                              * 5C63F  x-
-        ROMPTR 0F0 05D                           * 5C644  run if it matches
+        XLIB Rule(())+                           * 5C644  run if it matches
         PATTERN op2                              * 5C64F  x*
-        ROMPTR 0F0 05E                           * 5C654  run if it matches
+        XLIB Rule(())*                           * 5C654  run if it matches
         PATTERN op3                              * 5C65F  x/
-        ROMPTR 0F0 05E                           * 5C664  run if it matches
+        XLIB Rule(())*                           * 5C664  run if it matches
         CON(1)  #F                               * 5C66F  end of the rules
 
 * change EXP to trig. fns.
@@ -1496,7 +1531,7 @@ Meta->TRG:
 * rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
         PATTERN op7                              * 5C67C  xEXP
         RPL
-        ROMPTR 0F0 063                           * 5C681  run if it matches
+        XLIB Rule->TRG                           * 5C681  run if it matches
         CON(1)  #F                               * 5C68C  end of the rules
 
 * move nearest left term to right
@@ -1505,7 +1540,7 @@ MetaT->:
         CON(5)  (*)+5                            * 5C68D  primitive code object
         ASSEMBLE
         LC(5)   drpmeta/.L1                      * 5C692
-        GOSBVL  SUB_5F6F9                        * 5C699  inline data follows
+        GOSBVL  RuleMatchR4                      * 5C699  inline data follows
 
 * rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
         PATTERN op0                              * 5C6A0  x+
@@ -1518,7 +1553,7 @@ MetaT->:
         CON(5)  OBJ_5D7EF                        * 5C6C3  run if it matches
         PATTERN op4                              * 5C6C8  x=
         RPL
-        ROMPTR 0F0 01A                           * 5C6CD  run if it matches
+        XLIB RuleT->=                            * 5C6CD  run if it matches
         CON(1)  #F                               * 5C6D8  end of the rules
 
 * move nearest right term to left
@@ -1527,20 +1562,20 @@ Meta<-T:
         CON(5)  (*)+5                            * 5C6D9  primitive code object
         ASSEMBLE
         LC(5)   drpmeta/.L1                      * 5C6DE
-        GOSBVL  SUB_5F6F9                        * 5C6E5  inline data follows
+        GOSBVL  RuleMatchR4                      * 5C6E5  inline data follows
 
 * rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
         PATTERN op0                              * 5C6EC  x+
         RPL
-        ROMPTR 0F0 057                           * 5C6F1  run if it matches
+        XLIB Rule<-T+                            * 5C6F1  run if it matches
         PATTERN op1                              * 5C6FC  x-
-        ROMPTR 0F0 057                           * 5C701  run if it matches
+        XLIB Rule<-T+                            * 5C701  run if it matches
         PATTERN op2                              * 5C70C  x*
-        ROMPTR 0F0 058                           * 5C711  run if it matches
+        XLIB Rule<-T*                            * 5C711  run if it matches
         PATTERN op3                              * 5C71C  x/
-        ROMPTR 0F0 058                           * 5C721  run if it matches
+        XLIB Rule<-T*                            * 5C721  run if it matches
         PATTERN op4                              * 5C72C  x=
-        ROMPTR 0F0 01B                           * 5C731  run if it matches
+        XLIB Rule<-T=                            * 5C731  run if it matches
         CON(1)  #F                               * 5C73C  end of the rules
 
 * remove 1st RE,IM; CONJ
@@ -1549,7 +1584,7 @@ Meta->()C%:
         CON(5)  (*)+5                            * 5C73D  primitive code object
         ASSEMBLE
         LC(5)   drpmeta/.L3                      * 5C742
-        GOSBVL  SUB_5F6F9                        * 5C749  inline data follows
+        GOSBVL  RuleMatchR4                      * 5C749  inline data follows
 
 * rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
         PATTERN op0 op3                          * 5C750  xCONJ x+
@@ -1576,11 +1611,11 @@ Meta->()C%:
         PATTERN op1 op7                          * 5C7F0  xRE xNEG
         ROMPTR 0F0 060                           * 5C7F5  run if it matches
         PATTERN op2 op3                          * 5C800  xIM x+
-        ROMPTR 0F0 061                           * 5C805  run if it matches
+        XLIB Rule->()Cx                          * 5C805  run if it matches
         PATTERN op2 op4                          * 5C810  xIM x-
-        ROMPTR 0F0 061                           * 5C815  run if it matches
+        XLIB Rule->()Cx                          * 5C815  run if it matches
         PATTERN op2 op7                          * 5C820  xIM xNEG
-        ROMPTR 0F0 061                           * 5C825  run if it matches
+        XLIB Rule->()Cx                          * 5C825  run if it matches
         PATTERN op1 op5                          * 5C830  xRE x*
         CON(5)  OBJ_5DCEB                        * 5C835  run if it matches
         PATTERN op2 op5                          * 5C83A  xIM x*
@@ -1593,34 +1628,34 @@ Meta->DEF:
         CON(5)  (*)+5                            * 5C845  primitive code object
         ASSEMBLE
         LC(5)   drpmeta/.L2                      * 5C84A
-        GOSBVL  SUB_5F6F9                        * 5C851  inline data follows
+        GOSBVL  RuleMatchR4                      * 5C851  inline data follows
 
 * rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
         PATTERN op0                              * 5C858  xSIN
         RPL
-        ROMPTR 0F0 064                           * 5C85D  run if it matches
+        XLIB Rule->DEFSIN                        * 5C85D  run if it matches
         PATTERN op1                              * 5C868  xCOS
-        ROMPTR 0F0 065                           * 5C86D  run if it matches
+        XLIB Rule->DEFCOS                        * 5C86D  run if it matches
         PATTERN op2                              * 5C878  xTAN
-        ROMPTR 0F0 066                           * 5C87D  run if it matches
+        XLIB Rule->DEFTAN                        * 5C87D  run if it matches
         PATTERN op3                              * 5C888  xSINH
-        ROMPTR 0F0 06A                           * 5C88D  run if it matches
+        XLIB Rule->DEFSINH                       * 5C88D  run if it matches
         PATTERN op4                              * 5C898  xCOSH
-        ROMPTR 0F0 06B                           * 5C89D  run if it matches
+        XLIB Rule->DEFCOSH                       * 5C89D  run if it matches
         PATTERN op5                              * 5C8A8  xTANH
-        ROMPTR 0F0 06C                           * 5C8AD  run if it matches
+        XLIB Rule->DEFTANH                       * 5C8AD  run if it matches
         PATTERN op6                              * 5C8B8  xASIN
-        ROMPTR 0F0 067                           * 5C8BD  run if it matches
+        XLIB Rule->DEFASIN                       * 5C8BD  run if it matches
         PATTERN op7                              * 5C8C8  xACOS
-        ROMPTR 0F0 068                           * 5C8CD  run if it matches
+        XLIB Rule->DEFACOS                       * 5C8CD  run if it matches
         PATTERN op8                              * 5C8D8  xATAN
-        ROMPTR 0F0 069                           * 5C8DD  run if it matches
+        XLIB Rule->DEFATAN                       * 5C8DD  run if it matches
         PATTERN op9                              * 5C8E8  xASINH
-        ROMPTR 0F0 06D                           * 5C8ED  run if it matches
+        XLIB Rule->DEFASINH                      * 5C8ED  run if it matches
         PATTERN op10                             * 5C8F8  xACOSH
-        ROMPTR 0F0 06E                           * 5C8FD  run if it matches
+        XLIB Rule->DEFACOSH                      * 5C8FD  run if it matches
         PATTERN op11                             * 5C908  xATANH
-        ROMPTR 0F0 06F                           * 5C90D  run if it matches
+        XLIB Rule->DEFATANH                      * 5C90D  run if it matches
         CON(1)  #F                               * 5C918  end of the rules
         BSS     4                                * 5C919  zeros
 
@@ -1630,37 +1665,38 @@ MetaTRG*:
         CON(5)  (*)+5                            * 5C91D  primitive code object
         ASSEMBLE
         LC(5)   drpmeta/.L4                      * 5C922
-        GOSBVL  SUB_5F6F9                        * 5C929  inline data follows
+        GOSBVL  RuleMatchR4                      * 5C929  inline data follows
 
 * rewrite rules, read by the interpreter called just before (RuleMatch, #5F6F2)
         PATTERN op2 op0                          * 5C930  xSIN x+
         RPL
-        ROMPTR 0F0 070                           * 5C935  run if it matches
+        XLIB RuleTRG*SIN                         * 5C935  run if it matches
         PATTERN op2 op1                          * 5C940  xSIN x-
-        ROMPTR 0F0 070                           * 5C945  run if it matches
+        XLIB RuleTRG*SIN                         * 5C945  run if it matches
         PATTERN op3 op0                          * 5C950  xCOS x+
-        ROMPTR 0F0 071                           * 5C955  run if it matches
+        XLIB RuleTRG*COS                         * 5C955  run if it matches
         PATTERN op3 op1                          * 5C960  xCOS x-
-        ROMPTR 0F0 071                           * 5C965  run if it matches
+        XLIB RuleTRG*COS                         * 5C965  run if it matches
         PATTERN op5 op0                          * 5C970  xSINH x+
-        ROMPTR 0F0 073                           * 5C975  run if it matches
+        XLIB RuleTRG*SINH                        * 5C975  run if it matches
         PATTERN op5 op1                          * 5C980  xSINH x-
-        ROMPTR 0F0 073                           * 5C985  run if it matches
+        XLIB RuleTRG*SINH                        * 5C985  run if it matches
         PATTERN op6 op0                          * 5C990  xCOSH x+
-        ROMPTR 0F0 074                           * 5C995  run if it matches
+        XLIB RuleTRG*COSH                        * 5C995  run if it matches
         PATTERN op6 op1                          * 5C9A0  xCOSH x-
-        ROMPTR 0F0 074                           * 5C9A5  run if it matches
+        XLIB RuleTRG*COSH                        * 5C9A5  run if it matches
         PATTERN op7 op0                          * 5C9B0  xTANH x+
-        ROMPTR 0F0 075                           * 5C9B5  run if it matches
+        XLIB RuleTRG*TANH                        * 5C9B5  run if it matches
         PATTERN op7 op1                          * 5C9C0  xTANH x-
-        ROMPTR 0F0 075                           * 5C9C5  run if it matches
+        XLIB RuleTRG*TANH                        * 5C9C5  run if it matches
         PATTERN op4 op0                          * 5C9D0  xTAN x+
-        ROMPTR 0F0 072                           * 5C9D5  run if it matches
+        XLIB RuleTRG*TAN                         * 5C9D5  run if it matches
         PATTERN op4 op1                          * 5C9E0  xTAN x-
-        ROMPTR 0F0 072                           * 5C9E5  run if it matches
+        XLIB RuleTRG*TAN                         * 5C9E5  run if it matches
         CON(1)  #F                               * 5C9F0  end of the rules
 
 * refs (6): 5CA05 83BAE 83BC7 83BE0 83BF9 83C17
+* An empty secondary: a table entry and the end of OBJ_5C9FB
 OBJ_5C9F1:
         :: ;                                     * 5C9F1
 
@@ -1797,6 +1833,7 @@ revalcase::
         :: 'R dvarlsBIND                         * 5CD7A
 
 * refs (1): 5CDBB
+* Used with evalcase: apply lam 1's rule to each argument
 OBJ_5CD89:
           :: #1-SWAP pshm1 BEGIN larg PTR evalcase: * 5CD89
             :: 1GETLAM COLA_EVAL ; OBJ_5CD89 unrot over& #0=UNTIL DROP ; * 5CDA7

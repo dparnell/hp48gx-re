@@ -1,6 +1,6 @@
-* HP 48GX ROM revision R, #8C9F6-#8D27B: Library part 0F1
+* HP 48GX ROM revision R, #8C9F6-#8D27B: Library 0F1: the POLAR, PARAMETRIC, TRUTH, SCATTER, HISTOGRAM and BAR plot types, PPAR checks and the plot environment's exit code
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: TRUTH SCATTER POLAR_8C9FD PARAMETRIC HISTOGRAM BAR
+* Most referenced: TRUTH SCATTER PlotEnvOK PlotEnvExit PlotEnvAbort POLAR_8C9FD PARAMETRIC HISTOGRAM BAR
 * Follows on from the previous file (at #8C9F6 in the original ROM).
 
 * ROMPTR 0F1 035 POLAR
@@ -12,21 +12,21 @@
 POLAR_8C9FD:
         :: CK0 'IDPOLAR PUTPTYPE ;               * 8C9FD
 
-        { FALSE OBJ_4BA0D NOP TRUE               * 8CA16
-          { OBJ_47116 OBJ_0C622 OBJ_737F1        * 8CA2F
+        { FALSE DrawPolar NOP TRUE               * 8CA16
+          { ShowCoordsXY OBJ_0C622 OBJ_737F1     * 8CA2F
             { OBJ_73DE8 OBJ_73A8F }              * 8CA43
             :: BINT25 GETLAM PTR NULL:: EQUALcasedrop Message60E * 8CA57
               15GETLAM SWAP %>C% ;               * 8CA75
           }                                      * 8CA89
           FALSE ~';PlotEval                      * 8CA8E
           :: BINT31 TestSysFlag ITE              * 8CA98  flag -31: Connect points / Plot points only
-            :: ' OBJ_4CE0B ;                     * 8CAAC
+            :: ' PlotFcnDot ;                    * 8CAAC
             :: ' PlotFcnPt ;                     * 8CAC0
           ;                                      * 8CAD4
           :: RAD? ITE % 3.49065850399E-2 %2      * 8CAD9
           ;                                      * 8CB02
-          FALSE FALSE FALSE OBJ_73211 OBJ_73270 ROMPTR 0F1 03F OBJ_73526 * 8CB07
-          OBJ_48DCE }                            * 8CB30
+          FALSE FALSE FALSE OBJ_73211 OBJ_73270 XLIB PlotEnvAbort * 8CB07
+          PictMenuTrace AutoScaleEq }            * 8CB2B
 
 * ROMPTR 0F1 036
 * refs (1): 8999A
@@ -36,19 +36,19 @@ POLAR_8C9FD:
 PARAMETRIC:
         :: CK0 'IDPARAMETER PUTPTYPE ;           * 8CB41
 
-        { FALSE OBJ_4BE9F NOP TRUE               * 8CB5A
-          { OBJ_47170 OBJ_0C6BD OBJ_737F1        * 8CB73
+        { FALSE DrawParametric NOP TRUE          * 8CB5A
+          { ShowCoordsY OBJ_0C6BD OBJ_737F1      * 8CB73
             { OBJ_73D84 OBJ_73A35 }              * 8CB87
             :: BINT25 GETLAM PTR NULL:: EQUALcasedrop Message60E * 8CB9B
               15GETLAM SWAP TWO{}N ;             * 8CBB9
           }                                      * 8CBCD
           FALSE ~';PlotEval                      * 8CBD2
           :: BINT31 TestSysFlag ITE              * 8CBDC  flag -31: Connect points / Plot points only
-            :: ' OBJ_4CE0B ;                     * 8CBF0
+            :: ' PlotFcnDot ;                    * 8CBF0
             :: ' PlotFcnPt ;                     * 8CC04
           ;                                      * 8CC18
           :: 16GETLAM 15GETLAM %- BINT130 UNCOERCE %/ ; FALSE FALSE FALSE * 8CC1D
-          OBJ_73211 OBJ_73270 ROMPTR 0F1 03F OBJ_73526 OBJ_48DCE } * 8CC54
+          OBJ_73211 OBJ_73270 XLIB PlotEnvAbort PictMenuTrace AutoScaleEq } * 8CC54
 
 * ROMPTR 0F1 037
 * refs (1): 8999A
@@ -58,13 +58,13 @@ PARAMETRIC:
 TRUTH:
         :: CK0 'IDTRUTH PUTPTYPE ;               * 8CC7F
 
-        { FALSE OBJ_4C4B8 NOP TRUE NULL{} FALSE ~';PlotEval * 8CC98
+        { FALSE DrawTruth NOP TRUE NULL{} FALSE ~';PlotEval * 8CC98
           :: BINT31 TestSysFlag ITE              * 8CCC0  flag -31: Connect points / Plot points only
-            :: ' OBJ_4CE0B ;                     * 8CCD4
+            :: ' PlotFcnDot ;                    * 8CCD4
             :: ' PlotFcnPt ;                     * 8CCE8
           ;                                      * 8CCFC
           :: %%1 10GETLAM %%/>% ; FALSE TRUE TRUE OBJ_73211 OBJ_73270 * 8CD01
-          ROMPTR 0F1 03F OBJ_73594 NOP }         * 8CD33
+          XLIB PlotEnvAbort PictMenuBare NOP }   * 8CD33
 
 * ROMPTR 0F1 038
 * refs (1): 8999A
@@ -75,13 +75,13 @@ SCATTER:
         :: CK0 'IDSCATTER PUTPTYPE ;             * 8CD54
 
         { FALSE                                  * 8CD6D
-          :: DROP OBJ_4C8D1 ; NOP TRUE NULL{} TRUE ~';PlotEval * 8CD77
+          :: DROP DrawScatter ; NOP TRUE NULL{} TRUE ~';PlotEval * 8CD77
           :: BINT31 TestSysFlag ITE              * 8CDA4  flag -31: Connect points / Plot points only
-            :: ' OBJ_4CE0B ;                     * 8CDB8
+            :: ' PlotFcnDot ;                    * 8CDB8
             :: ' PlotFcnPt ;                     * 8CDCC
           ;                                      * 8CDE0
           :: %%1 10GETLAM %%/>% ; TRUE FALSE FALSE OBJ_73211 OBJ_73270 * 8CDE5
-          ROMPTR 0F1 03F OBJ_7355D OBJ_48E28 }   * 8CE17
+          XLIB PlotEnvAbort PictMenu4 AutoScaleScatter } * 8CE17
 
 * ROMPTR 0F1 039
 * refs (1): 8999A
@@ -92,13 +92,13 @@ HISTOGRAM:
         :: CK0 'IDHISTOGRAM PUTPTYPE ;           * 8CE38
 
         { FALSE                                  * 8CE51
-          :: DROP OBJ_4D993 ; NOP TRUE NULL{} FALSE ~';PlotEval * 8CE5B
+          :: DROP DrawHistogram ; NOP TRUE NULL{} FALSE ~';PlotEval * 8CE5B
           :: BINT31 TestSysFlag ITE              * 8CE88  flag -31: Connect points / Plot points only
-            :: ' OBJ_4CE0B ;                     * 8CE9C
+            :: ' PlotFcnDot ;                    * 8CE9C
             :: ' PlotFcnPt ;                     * 8CEB0
           ;                                      * 8CEC4
           :: 16GETLAM 15GETLAM %- %13 %/ ; FALSE FALSE FALSE OBJ_73211 * 8CEC9
-          OBJ_73270 ROMPTR 0F1 03F OBJ_73594 OBJ_48E8C } * 8CF00
+          OBJ_73270 XLIB PlotEnvAbort PictMenuBare AutoScaleHist } * 8CF00
 
 * ROMPTR 0F1 03A
 * refs (1): 8999A
@@ -109,22 +109,24 @@ BAR:
         :: CK0 'IDBAR PUTPTYPE ;                 * 8CF26
 
         { FALSE                                  * 8CF3F
-          :: DROP OBJ_4D9CF ; NOP TRUE NULL{} FALSE ~';PlotEval * 8CF49
+          :: DROP DrawBar ; NOP TRUE NULL{} FALSE ~';PlotEval * 8CF49
           :: BINT31 TestSysFlag ITE              * 8CF76  flag -31: Connect points / Plot points only
-            :: ' OBJ_4CE0B ;                     * 8CF8A
+            :: ' PlotFcnDot ;                    * 8CF8A
             :: ' PlotFcnPt ;                     * 8CF9E
           ;                                      * 8CFB2
-          %1 FALSE FALSE FALSE OBJ_73211 OBJ_73270 ROMPTR 0F1 03F OBJ_73594 * 8CFB7
-          OBJ_48ECD }                            * 8CFE5
+          %1 FALSE FALSE FALSE OBJ_73211 OBJ_73270 XLIB PlotEnvAbort * 8CFB7
+          PictMenuBare AutoScaleBar }            * 8CFE0
 
 * ROMPTR 0F1 03B
 * refs (1): 8999A
+* #type -> list TRUE | FALSE: reads the list that follows the plot-type command
 PTYPE>PINFO~1:
-        :: SWAP OBJ_2708E NOTcasedrop DROPFALSE  * 8CFEF
+        :: SWAP CmdField NOTcasedrop DROPFALSE   * 8CFEF
           SWAP NTHELCOMP ;                       * 8D008
 
 * ROMPTR 0F1 03C
 * refs (1): 8999A
+* Checks a new { name min max } or similar for a PPAR entry before it is stored: one, two or three items
 ChkPut('PPAR',li,s)~1:
         :: SWAPINCOMP DUP #1=case ChkPut('PPAR',li,s)~2 * 8D017
           DUPTWO #=case ChkPut('PPAR',li,s)~3    * 8D030
@@ -139,6 +141,7 @@ ChkPut('PPAR',li,s)~1:
 
 * ROMPTR 0F1 03D
 * refs (1): 8999A
+* Checks the PPAR independent-variable entry: a name, or { name min max } with reals or a one-dimensional array
 CHECKPVARS~3:
         :: DUPTYPELIST? IT                       * 8D0F3
           :: INNERCOMP #3= NOT?INVPPAR TYPEREAL? NOT?INVPPAR DUPTYPEREAL? * 8D102
@@ -149,20 +152,23 @@ CHECKPVARS~3:
 
 * ROMPTR 0F1 03E
 * refs (1): 8999A
-ROMP_0F1_03E:
-        :: OBJ_46B54 1PUTLAM 18GETLAM ' Π'SAVEDDEPTH STO OBJ_4C314 TRUE' * 8D17A
+* Marks the plot environment as ready: keeps the display, saved depth and flag, and shows the menu
+PlotEnvOK:
+        :: BindPlotEnv 1PUTLAM 18GETLAM ' Π'SAVEDDEPTH STO MakeIndep TRUE' * 8D17A
           LAM 'EnvOK STOLAM DispMenu ;           * 8D1A7
 
 * ROMPTR 0F1 03F
 * refs (1): 8999A
-ROMP_0F1_03F:
+* Error exit of the plot environment: purges the independent variable, clears the environment, turns the cursor off and passes the error on
+PlotEnvAbort:
         :: OBJ_73230 ERRJMP INDEPVAR ?PURGE_HERE BINT0 ' Π'PlotEnv_50D3E STO * 8D1C9
           CROSSMARKOFF ERRJMP ;                  * 8D1F6
 
 * ROMPTR 0F1 040
 * refs (1): 8999A
-ROMP_0F1_040:
-        :: ~3GETLAM;#3= IT OBJ_48305             * 8D205
+* Normal exit of the plot environment: turns the cursor off, purges the independent variable and drops the locals
+PlotEnvExit:
+        :: ~3GETLAM;#3= IT BoxToggle             * 8D205
           CROSSMARKOFF INDEPVAR ?PURGE_HERE ABND ABND ; * 8D219
 
 * ROMPTR 0F1 041

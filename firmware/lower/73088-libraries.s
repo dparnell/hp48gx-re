@@ -1,10 +1,11 @@
-* HP 48GX ROM revision R, #73088-#740E0: Library table, access pointers, bank switching
+* HP 48GX ROM revision R, #73088-#740E0: PICTURE environment: the menus of the plotter (ZOOM, (X,Y), TRACE, FCN, EDIT, CANCL), and helpers for its cursor modes, trace and coordinate display
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: TraceMode? ZOOM Y: X: TRACE MsgTab(0) FCN EDIT_73456 (X,Y) (AN(L 'EnvOK
+* Most referenced: TraceMode? PictMenuBare PictPrevEq PictNextEq PictXYKey PictMenuTrace PictTraceKey PictShowXY PictRepeatRight PictRepeatLeft PictMenu4 PictMenu
 * Follows on from the previous file (at #73088 in the original ROM).
 
 * refs (1): 7305B
-OBJ_73088:
+* Checks an algebraic for the pattern x + y*i, used to turn it into a complex number; a stream counter is stepped over the pattern when it is found
+Symb>Pieces~4:
         CON(5)  (*)+5                            * 73088  primitive code object
         A=0     W                                * 7308D
         C=0     W                                * 73090
@@ -18,9 +19,9 @@ OBJ_73088:
         D0=C                                     * 730A7
         LC(5)   xi                               * 730AA
         ?C=A    A                                * 730B1
-        GOYES   OBJ_73088.L1                     * 730B4
+        GOYES   Symb>Pieces~4.L1                 * 730B4
         GOVLNG  nextsym'R.L2                     * 730B6
-OBJ_73088.L1:
+Symb>Pieces~4.L1:
         C=RSTK                                   * 730BD
         CD0EX                                    * 730BF
         R0=C.F  A                                * 730C2
@@ -33,7 +34,7 @@ OBJ_73088.L1:
         A=A-C   W                                * 730E3
         LC(5)   nextsym'R                        * 730E6
         ?A#0    W                                * 730ED
-        GOYES   OBJ_73088.L2                     * 730F0
+        GOYES   Symb>Pieces~4.L2                 * 730F0
         A=R0.F  A                                * 730F2
         AD0EX                                    * 730F8
         C=DAT0  A                                * 730FB
@@ -41,7 +42,7 @@ OBJ_73088.L1:
         DAT0=C  A                                * 73104
         D0=A                                     * 73107
         LC(5)   OBJ_73117                        * 7310A
-OBJ_73088.L2:
+Symb>Pieces~4.L2:
         A=C     A                                * 73111
         PC=(A)                                   * 73113
         RPL
@@ -73,7 +74,7 @@ OBJ_73117:
         :: BINT6 PTYPE>PINFO NOTcaseFALSE ;      * 7319E
 
 * refs (1): 4D286
-OBJ_731B7:
+GraphLoop~1:
         :: BINT5 PTYPE>PINFO NOTcaseFALSE DUPNULLCOMP? * 731B7
           casedrpfls TRUE                        * 731D0
         ;                                        * 731DA
@@ -83,15 +84,17 @@ OBJ_731B7:
         :: BINT12 PTYPE>PINFO NOTcaseFALSE ;     * 731DF
 
 * refs (1): 4D2DB
-OBJ_731F8:
+GraphLoop~2:
         :: BINT13 PTYPE>PINFO ?SEMI              * 731F8
           '                                      * 7320C
 
 * refs (9): 8C902 8C9D2 8CB16 8CC54 8CD29 8CE0D ...
+* Probably: runs ROMPTR 0F1 03E unless the local 'EnvOK is set
 OBJ_73211:
-          :: OBJ_73230 ROMPTR 0F1 03E ; ;        * 73211
+          :: OBJ_73230 XLIB PlotEnvOK ; ;        * 73211
 
 * refs (8): 45C3F 45C62 570EA 5710D 57130 57153 ...
+* Probably: runs the next object when the local 'EnvOK is FALSE
 OBJ_73230:
         ::                                       * 73230
 
@@ -100,41 +103,42 @@ OBJ_73230:
         ;                                        * 73252
 
 * refs (1): 4D91B
-OBJ_73257:
+GraphLoop~3:
         :: BINT14 PTYPE>PINFO ?SEMI              * 73257
           '                                      * 7326B
 
 * refs (9): 8C907 8C9D7 8CB1B 8CC59 8CD2E 8CE12 ...
 OBJ_73270:
           :: GraphicExit DUP NOT?SEMI            * 73270
-            ROMPTR 0F1 040 ;                     * 73284
+            XLIB PlotEnvExit ;                   * 73284
         ;                                        * 73294
 
 * refs (1): 4D925
-OBJ_73299:
+GraphLoop~4:
         :: BINT15 PTYPE>PINFO ?SEMI              * 73299
-          ' ROMPTR 0F1 03F ;                     * 732AD
+          ' XLIB PlotEnvAbort ;                  * 732AD
 
 * refs (1): 4D295
-OBJ_732C2:
+GraphLoop~5:
         :: BINT16 PTYPE>PINFO ?SEMI              * 732C2
-          ' OBJ_73594 ;                          * 732D6
+          ' PictMenuBare ;                       * 732D6
 
 * refs (1): 8C917
-OBJ_732E5:
+* PICTURE menu: ZOOM (X,Y) TRACE FCN EDIT CANCL
+PictMenu:
         :: NoExitAction                          * 732E5
           {                                      * 732EF
 
 * refs (3): 73535 7356C 735A3
 OBJ_732F4:
             {                                    * 732F4
-              :: TakeOver OBJ_4EE42 NOTcase NULL$ * 732F9
+              :: TakeOver EqExists? NOTcase NULL$ * 732F9
                 PTR DirLabel:                    * 73312
 
 ZOOM:
                 $ "ZOOM" ;                       * 73317
-              :: CHECKMENU OBJ_4EE42 NOTcase DoBadKey * 7332E
-                ' OBJ_47D93 InitMenu DispMenu ;  * 73347
+              :: CHECKMENU EqExists? NOTcase DoBadKey * 7332E
+                ' GraphZoomMenu InitMenu DispMenu ; * 73347
             }                                    * 73360
 
 * refs (4): 7353A 73571 735A8 8C54F
@@ -142,24 +146,24 @@ OBJ_73365:
             {                                    * 73365
 
 (X,Y):
-              $ "(X,Y)" OBJ_73B20 }              * 7336A
+              $ "(X,Y)" PictXYKey }              * 7336A
 
 * refs (2): 7353F 8C554
 OBJ_73388:
             {                                    * 73388
-              :: TakeOver OBJ_4EE42 NOTcase NULL$ * 7338D
+              :: TakeOver EqExists? NOTcase NULL$ * 7338D
                 PTR Box/StdLbl:                  * 733A6
 
 TRACE:
                 $ "TRACE" TraceMode? ;           * 733AB
-              OBJ_73792 }                        * 733C9
+              PictTraceKey }                     * 733C9
             {                                    * 733D3
-              :: TakeOver OBJ_4EE42 NOTcase NULL$ * 733D8
+              :: TakeOver EqExists? NOTcase NULL$ * 733D8
                 PTR DirLabel:                    * 733F1
 
 FCN:
                 $ "FCN" ;                        * 733F6
-              :: CHECKMENU OBJ_4EE42 NOTcase DoBadKey * 7340B
+              :: CHECKMENU EqExists? NOTcase DoBadKey * 7340B
                 ' PlotScr*en InitMenu OBJ_4EE60 DispMenu ; * 73424
             }                                    * 73442
 
@@ -170,7 +174,7 @@ OBJ_73447:
 
 EDIT_73456:
                 $ "EDIT" ;                       * 73456
-              :: CHECKMENU ' OBJ_46A40 InitMenu DispMenu ; } * 7346D
+              :: CHECKMENU ' GraphEditMenu InitMenu DispMenu ; } * 7346D
 
 * refs (4): 7354E 73585 735BC 8C563
 OBJ_73495:
@@ -183,10 +187,10 @@ OBJ_73495:
         ;                                        * 734CC
 
 * refs (1): 7357B
-OBJ_734D1:
+PictMenu4~1:
         {                                        * 734D1
-          :: TakeOver OBJ_0C77B ;                * 734D6
-          :: CHECKMENU OBJ_0C7A8 ; }             * 734EA
+          :: TakeOver PictMenu4~2 ;              * 734D6
+          :: CHECKMENU PictMenu4~3 ; }           * 734EA
 
 * refs (6): 73544 73576 735AD 735B2 8C54A 8C559
 OBJ_73503:
@@ -194,17 +198,20 @@ OBJ_73503:
           :: CHECKMENU DoBadKey ; }              * 7350D
 
 * refs (2): 8CB2B 8CC69
-OBJ_73526:
+* PICTURE menu: ZOOM (X,Y) TRACE, a blank key, EDIT CANCL
+PictMenuTrace:
         :: NoExitAction                          * 73526
           { OBJ_732F4 OBJ_73365 OBJ_73388 OBJ_73503 OBJ_73447 OBJ_73495 } ; * 73530
 
 * refs (1): 8CE22
-OBJ_7355D:
+* PICTURE menu with its own fourth key: ZOOM (X,Y), a blank key, the key at #734D1, EDIT CANCL
+PictMenu4:
         :: NoExitAction                          * 7355D
-          { OBJ_732F4 OBJ_73365 OBJ_73503 OBJ_734D1 OBJ_73447 OBJ_73495 } ; * 73567
+          { OBJ_732F4 OBJ_73365 OBJ_73503 PictMenu4~1 OBJ_73447 OBJ_73495 } ; * 73567
 
 * refs (7): 57194 732DB 8C9E7 8CD3E 8CF10 8CFE0 ...
-OBJ_73594:
+* PICTURE menu: ZOOM (X,Y), two blank keys, EDIT CANCL
+PictMenuBare:
         :: NoExitAction                          * 73594
           { OBJ_732F4 OBJ_73365 OBJ_73503 OBJ_73503 OBJ_73447 OBJ_73495 } ; * 7359E
 
@@ -234,6 +241,7 @@ TraceMode?:
         :: 3GETLAM #1= ;                         * 73643
 
 * refs (2): 46CB1 47030
+* -> flag: TRUE when the cursor mode (lam 3) is neither 1 nor 2
 OBJ_73657:
         :: 3GETLAM DUP #1= SWAP #2= OR NOT ;     * 73657
 
@@ -246,21 +254,23 @@ OBJ_73657:
         :: BINT4 3PUTLAM ;                       * 73698
 
 * refs (1): 4D4D4
-OBJ_736AC:
-        :: TakeOver OBJ_46DF6 BINT16 REPKEY? NOT?SEMI * 736AC
+* Left arrow with repeat while the key stays down
+PictRepeatLeft:
+        :: TakeOver TraceStepLeft BINT16 REPKEY? NOT?SEMI * 736AC
           BEGIN BINT16 REPKEY? WHILE             * 736CA
-          :: OBJ_46DF6 ; REPEAT ;                * 736DE
+          :: TraceStepLeft ; REPEAT ;            * 736DE
 
 * refs (1): 4D5C4
-OBJ_736F7:
-        :: TakeOver OBJ_46E0F BINT18 REPKEY? NOT?SEMI * 736F7
+* Right arrow with repeat while the key stays down
+PictRepeatRight:
+        :: TakeOver TraceStepRight BINT18 REPKEY? NOT?SEMI * 736F7
           BEGIN BINT18 REPKEY? WHILE             * 73715
-          :: OBJ_46E0F ; REPEAT ;                * 73729
+          :: TraceStepRight ; REPEAT ;           * 73729
 
 * refs (1): 735E4
 OBJ_73742:
         :: OBJ_7376A IT                          * 73742
-          :: OBJ_47209 OBJ_47236 ;               * 73751
+          :: ShowCoordX ShowCoordY ;             * 73751
         ;                                        * 73765
 
 * refs (1): 73747
@@ -268,7 +278,8 @@ OBJ_7376A:
         :: 16GETLAM DUP #1= SWAP #3= OR ;        * 7376A
 
 * refs (1): 733C9
-OBJ_73792:
+* TRACE key: turn trace mode on, when the plot type has a trace
+PictTraceKey:
         :: CHECKMENU TraceMode? case OBJ_4EE60   * 73792
           BINT27 GETLAM OBJ_737D3 NOTcase DoBadKey * 737AB
           ~BINT4;3PUTLAM DispMenu.1 ;            * 737C4
@@ -285,34 +296,36 @@ OBJ_737F1:
 
 * refs (1): 737FB
 OBJ_73846:
-        :: OBJ_4BF71 case                        * 73846
+        :: EqTwoCurves? case                     * 73846
           :: BINT1 GetEqN NOTcasedrop FALSE      * 73855
             SWAP #1= ITE ~1stArgb(ex);SYMBN ~1stArgRpn(ex);SYMBN * 7386E
             TRUE ;                               * 73887
-          GetEqN NOTcaseFALSE OBJ_49B7D          * 73891
+          GetEqN NOTcaseFALSE EqRHS              * 73891
           TRUE ;                                 * 738A0
 
-        :: TakeOver OBJ_470B7 ~16GETLAM;#1= IT   * 738AA
-          :: OBJ_47209 OBJ_47236 ;               * 738C3
+        :: TakeOver CursRight ~16GETLAM;#1= IT   * 738AA
+          :: ShowCoordX ShowCoordY ;             * 738C3
           BINT18 REPKEY? NOT?SEMI                * 738D7
           ~16GETLAM;#1= NOTcase                  * 738E6
           :: BEGIN BINT18 REPKEY? WHILE          * 738F0
-            :: OBJ_470B7 ; REPEAT ;              * 73909
+            :: CursRight ; REPEAT ;              * 73909
           BEGIN BINT18 REPKEY? WHILE             * 73922
           ::                                     * 73936
-            :: OBJ_470B7 OBJ_47209 ; ;           * 7393B
+            :: CursRight ShowCoordX ; ;          * 7393B
           REPEAT ;                               * 73954
 
 * refs (3): 0C631 0C6CC 73BFE
-OBJ_7395E:
-        :: TakeOver ~BINT27;GETLAM OBJ_46905 OVER #>ITE #1+ DROPONE * 7395E
+* Next equation: step lam 27 round the list
+PictNextEq:
+        :: TakeOver ~BINT27;GETLAM EqCurveCount OVER #>ITE #1+ DROPONE * 7395E
           OBJ_737D3 NOTcase DoBadKey             * 73986
         ;                                        * 73995
 
 * refs (3): 0C640 0C6DB 73C0D
-OBJ_7399A:
+* Previous equation: step lam 27 round the list
+PictPrevEq:
         :: TakeOver ~BINT27;GETLAM BINT1 OVER #<ITE #1- * 7399A
-          :: DROP OBJ_46905 ; OBJ_737D3 NOTcase DoBadKey * 739BD
+          :: DROP EqCurveCount ; OBJ_737D3 NOTcase DoBadKey * 739BD
         ;                                        * 739E0
 
 * refs (2): 73A3A 73A94
@@ -324,28 +337,30 @@ OBJ_739E5:
 
 * refs (1): 8CB91
 OBJ_73A35:
-        :: OBJ_739E5 # 52 SWAP BINT20 OBJ_4686A HARDBUFF2 BINT47 BINT2 * 73A35
+        :: OBJ_739E5 # 52 SWAP BINT20 %>CoordGrob HARDBUFF2 BINT47 BINT2 * 73A35
           BINT131 BINT7 GROB!ZERODRP HARDBUFF2 BINT47 BINT2 GROB! ; * 73A67
 
 * refs (3): 47245 8C84E 8CA4D
 OBJ_73A8F:
-        :: OBJ_739E5 BINT54 SWAP BINT13 OBJ_4686A HARDBUFF2 # 49 BINT2 * 73A8F
+        :: OBJ_739E5 BINT54 SWAP BINT13 %>CoordGrob HARDBUFF2 # 49 BINT2 * 73A8F
           BINT131 BINT7 GROB!ZERODRP HARDBUFF2 # 49 BINT2 GROB! ; * 73AC1
 
 * refs (2): 46B31 4D8C1
 OBJ_73AEE:
-        :: TakeOver OBJ_4EC12 CK0NOLASTWD Π'SAVEDDEPTH #1+ ' Π'SAVEDDEPTH * 73AEE
+        :: TakeOver PictCoordsOb CK0NOLASTWD Π'SAVEDDEPTH #1+ ' Π'SAVEDDEPTH * 73AEE
           STO ;                                  * 73B16
 
 * refs (2): 4D8EE 7337E
-OBJ_73B20:
+* (X,Y) key: toggle the coordinate display
+PictXYKey:
         :: TakeOver MENUOFF? IT CHECKMENU        * 73B20
           16GETLAM #3= ITE                       * 73B39
           :: BINT1 16PUTLAM ; CHECKMENU          * 73B48
 
 * refs (1): 47281
-OBJ_73B61:
-          :: CLEARMENU TraceMode? case OBJ_4EEA1 * 73B61
+* Show Y: and X: in the coordinate line
+PictShowXY:
+          :: CLEARMENU TraceMode? case TraceEnter * 73B61
             BINT1 16PUTLAM                       * 73B7A
 
 Y::
@@ -353,13 +368,13 @@ Y::
 
 X::
             $ "X: " $>grob HARDBUFF2 BINT0 BINT2 GROB! $>grob HARDBUFF2 # 41 * 73B94
-            BINT2 GROB! OBJ_47209 OBJ_47236 ;    * 73BD1
+            BINT2 GROB! ShowCoordX ShowCoordY ;  * 73BD1
         ;                                        * 73BEA
 
 * refs (1): 8C83A
 OBJ_73BEF:
-        :: BINT3 EQcasedrop OBJ_7395E            * 73BEF
-          BINT4 EQcasedrop OBJ_7399A             * 73C03
+        :: BINT3 EQcasedrop PictNextEq           * 73BEF
+          BINT4 EQcasedrop PictPrevEq            * 73C03
 
 * refs (1): 4633E
 OBJ_73C12:
@@ -370,7 +385,7 @@ OBJ_73C12:
               :: LEFTCOL #> IT #1-               * 73C62
               ;                                  * 73C7B
             ;                                    * 73C80
-            OBJ_4782B ROT BINT0 #=casedrop       * 73C85
+            COL>%X ROT BINT0 #=casedrop          * 73C85
             :: OBJ_73CF8 ~TOTEMPOB;CROSS_OFF;7PUTLAM CROSS_HAIRS ; * 73C99
             #1=case                              * 73CB2
             :: OBJ_73CF8 ~TOTEMPOB;CROSS_OFF;7PUTLAM 8GETLAM DUP RIGHTCOL #< * 73CB7
@@ -379,9 +394,9 @@ OBJ_73C12:
 
 * refs (2): 73C9E 73CBC
 OBJ_73CF8:
-            :: OBJ_46955 NOTcase OBJ_46C1B       * 73CF8
-              DUPTYPEREAL? NOTcasedrop OBJ_46C1B * 73D0C
-              DUP ~BINT25;PUTLAM OBJ_46D24 ;     * 73D1B
+            :: PlotEvalAt NOTcase TraceUndefPolar * 73CF8
+              DUPTYPEREAL? NOTcasedrop TraceUndefPolar * 73D0C
+              DUP ~BINT25;PUTLAM %>WinRow ;      * 73D1B
             ~TOTEMPOB;CROSS_OFF;7PUTLAM 8GETLAM DUP LEFTCOL #> IT #1- * 73D2F
             TOTEMPOB 8PUTLAM CROSS_HAIRS ;       * 73D52
         ;                                        * 73D66
@@ -391,9 +406,10 @@ OBJ_73CF8:
         :: TOTEMPOB CROSS_OFF 7PUTLAM ;          * 73D6B
 
 * refs (1): 8CB8C
+* Writes the current x in the coordinate line
 OBJ_73D84:
         :: TraceMode? ITE 15GETLAM OBJ_73DFC     * 73D84
-          BINT38 SWAP BINT9 OBJ_4686A HARDBUFF2 BINT8 BINT2 BINT47 BINT7 * 73D9D
+          BINT38 SWAP BINT9 %>CoordGrob HARDBUFF2 BINT8 BINT2 BINT47 BINT7 * 73D9D
           GROB!ZERODRP HARDBUFF2 BINT8 BINT2 GROB! ; * 73DCA
 
 * refs (3): 47218 8C849 8CA48
@@ -402,8 +418,8 @@ OBJ_73DE8:
 
 * refs (3): 47821 48CC4 73D98
 OBJ_73DFC:
-          :: 8GETLAM OBJ_4782B ;                 * 73DFC
-          BINT54 SWAP BINT13 OBJ_4686A HARDBUFF2 BINT8 BINT2 # 41 BINT7 * 73E10
+          :: 8GETLAM COL>%X ;                    * 73DFC
+          BINT54 SWAP BINT13 %>CoordGrob HARDBUFF2 BINT8 BINT2 # 41 BINT7 * 73E10
           GROB!ZERODRP HARDBUFF2 BINT8 BINT2 GROB! ; * 73E42
 
 MsgTab(0):

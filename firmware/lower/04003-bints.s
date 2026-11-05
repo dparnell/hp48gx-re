@@ -1,4 +1,4 @@
-* HP 48GX ROM revision R, #04003-#05FFF: Built-in binary integers and stack words
+* HP 48GX ROM revision R, #04003-#05FFF: Power off and wake-up, card and config checks, the low-battery text, lite sleep, TOUCHTAB key assignments, error traps, built-in binary integers and stack words
 * Addresses in the right-hand comments are those of the original ROM.
 * Most referenced: BINT2 BINT4 BINT3 BINT9 BINT6 BINT5 BINT7 BINT17 BINT8 NULL{} BINT10 ERRSET
 * Follows on from the previous file (at #04003 in the original ROM).
@@ -217,12 +217,12 @@ BINT43:
 * ->
 * refs (6): 1A328 2DB49 3A9D8 3AC25 3E0FB 42136
 TurnOff:
-        :: OBJ_4231A ALARM? ?SEMI                * 041A7
+        :: BusyOn ALARM? ?SEMI                   * 041A7
           DEEPSLEEP InitEnab ~IT;ShowInvRomp ?FlashAlert ; * 041BB
 
 * refs (1): 17FE8
 off!:
-        :: OBJ_4231A DEEPSLEEP DROP ;            * 041D4
+        :: BusyOn DEEPSLEEP DROP ;               * 041D4
 
 * -> flag
 * refs (2): 041BB 041DE
@@ -231,14 +231,14 @@ DEEPSLEEP:
         ASSEMBLE
         GOSUB   SAVPTR~jump_2                    * 041F2
         ST=0    15                               * 041F6
-        GOSBVL  SUB_00672                        * 041F9
-        GOSUBL  SUB_049B8                        * 04200
+        GOSBVL  CkLowBat                         * 041F9
+        GOSUBL  AlarmDue?                        * 04200
         GOC     DEEPSLEEP.L4                     * 04206
-        GOSBVL  SUB_09D49                        * 04209
+        GOSBVL  BankNone                         * 04209
         GOSUB   DeepSleep                        * 04210
-        GOSBVL  SUB_00655                        * 04214
+        GOSBVL  ArmKeyPoll                       * 04214
         P=      0                                * 0421B
-        GOSBVL  SUB_098DB                        * 0421D
+        GOSBVL  ReconfigBus                      * 0421D
         ?ST=1   3                                * 04224
         GOYES   DEEPSLEEP.loop2                  * 04227
         ?ST=0   4                                * 04229
@@ -247,7 +247,7 @@ DEEPSLEEP:
 DEEPSLEEP.L1:
         ?ST=1   0                                * 04235
         GOYES   DEEPSLEEP.loop2                  * 04238
-        GOSBVL  SUB_0A464                        * 0423A
+        GOSBVL  HomeOK?                          * 0423A
         GONC    DEEPSLEEP.L3                     * 04241
 DEEPSLEEP.loop2:
         GOVLNG  Warmstart                        * 04244
@@ -273,18 +273,19 @@ ShowInvRomp:
 * Puts calc into "deep sleep" Low power mode, display off Wakeup on ON key or interrupt
 * refs (3): 0283D 04210 042AE
 DeepSleep:
-        GOSUB   DeepSleep~1                      * 04292  inline data follows
-        GOSUB   SUB_042E0                        * 04296
-        GOSUB   SUB_0432B                        * 0429A
-        GOSUB   SUB_04337                        * 0429E
-        GOSUB   SUB_042CC                        * 042A2  inline data follows
-        GOSUB   SUB_043C9                        * 042A6
-        GOSUB   SUB_043E0                        * 042AA
+        GOSUB   PushT1Ctl                        * 04292  inline data follows
+        GOSUB   PreOff                           * 04296
+        GOSUB   OffChecks                        * 0429A
+        GOSUB   OffWait                          * 0429E
+        GOSUB   PopT1Ctl                         * 042A2  inline data follows
+        GOSUB   WakeChecks                       * 042A6
+        GOSUB   WakeSort                         * 042AA
         GOC     DeepSleep                        * 042AE
-        GOVLNG  OBJ_4231A.L1                     * 042B1
+        GOVLNG  BusyOn.L1                        * 042B1
 
 * refs (1): 04292
-DeepSleep~1:
+* -> : push the timer control bytes on the return stack, under the return address
+PushT1Ctl:
         C=RSTK                                   * 042B8
         A=C     A                                * 042BA
         D1=(5)  TIMER1CTRL                       * 042BC
@@ -293,7 +294,8 @@ DeepSleep~1:
         PC=A                                     * 042C8
 
 * refs (1): 042A2
-SUB_042CC:
+* -> : restore the timer control bytes pushed by PushT1Ctl
+PopT1Ctl:
         C=RSTK                                   * 042CC
         A=C     A                                * 042CE
         C=RSTK                                   * 042D0
@@ -302,24 +304,26 @@ SUB_042CC:
         PC=A                                     * 042DC
 
 * refs (1): 04296
-SUB_042E0:
+* -> : before turning off: clear the next-alarm time and the awake mode, reprogram TIMER2, stop TIMER1 and the serial port, and restore the display registers
+PreOff:
         A=0     W                                * 042E0
-        GOSBVL  SUB_01A96                        * 042E3
+        GOSBVL  SetNextAlarm                     * 042E3
         ST=0    0                                * 042EA
         C=0     A                                * 042ED
-        GOSBVL  SUB_01ABD                        * 042EF
-        GOSBVL  SUB_0148C                        * 042F6
+        GOSBVL  SetT2Awake                       * 042EF
+        GOSBVL  SetT2Wake                        * 042F6
         D1=(5)  TIMER1CTRL                       * 042FD
         LC(2)   #50                              * 04304
         DAT1=C  B                                * 04308
         D1=(2)  #10                              * 0430B
         C=0     A                                * 0430F
         DAT1=C  1                                * 04311
-        GOVLNG  SUB_01CEC.L1                     * 04315
+        GOVLNG  DispRestore                      * 04315
         BSS     1                                * 0431C  zeros
 
 * refs (1): 043EE
-SUB_0431D:
+* C.XS = TIMER2 control -> ST11 = its interrupt bit
+T2Int>ST11:
         ST=0    11                               * 0431D
         C=C+C   XS                               * 04320
         RTNNC                                    * 04323
@@ -327,13 +331,15 @@ SUB_0431D:
         RTN                                      * 04329
 
 * refs (1): 0429A
-SUB_0432B:
-        GOSUB   SUB_0443A                        * 0432B
-        GOSUB   SUB_04457                        * 0432F
-        GOTO    SUB_04457.L1                     * 04333
+* -> : before turning off: restart if the cards changed, check the config and port CRCs
+OffChecks:
+        GOSUB   CkCards                          * 0432B
+        GOSUB   CkConfCRC                        * 0432F
+        GOTO    CkPort1CRC                       * 04333
 
 * refs (1): 0429E
-SUB_04337:
+* -> ST12 set if ON woke the machine: annunciators off, keyboard idle and buffer flushed, then SHUTDN until something wakes it
+OffWait:
         D1=(5)  NOP1MASK14                       * 04337
         LC(1)   #8                               * 0433E
         DAT1=C  1                                * 04341
@@ -343,12 +349,12 @@ SUB_04337:
         A=A&C   B                                * 04350
         DAT1=A  B                                * 04354
         INTOFF                                   * 04357
-        GOSBVL  SUB_00DF8                        * 0435B
+        GOSBVL  KbdOut0                          * 0435B
         GOSBVL  Flush                            * 04362
-        GOSBVL  SUB_00D3B                        * 04369
+        GOSBVL  ClrKeyState                      * 04369
         ST=0    12                               * 04370
-        GOSUB   SUB_04391                        * 04373
-        GOSBVL  SUB_00E0B                        * 04377
+        GOSUB   ShutdnInRAM                      * 04373
+        GOSBVL  KbdOutAll                        * 04377
         INTON                                    * 0437E
         GOSBVL  OnKeyStable?                     * 04382
         RTNNC                                    * 04389
@@ -356,7 +362,8 @@ SUB_04337:
         RTN                                      * 0438F
 
 * refs (2): 04373 043BE
-SUB_04391:
+* -> : write SHUTDN and RTN into RAM at #80524 and run them there: the ROM may be powered down while the CPU sleeps
+ShutdnInRAM:
         D1=(5)  =IR_16Hz_Clock                   * 04391
         C=DAT1  A                                * 04398
         D1=C                                     * 0439B
@@ -366,51 +373,54 @@ SUB_04391:
         DAT1=C  A                                * 043AD
         CD1EX                                    * 043B0
         PC=C                                     * 043B3
-SUB_04391.L1:
+ShutdnInRAM.L1:
         GOSBVL  ScrOff+                          * 043B7
-        GOSUB   SUB_04391                        * 043BE
-        GOVLNG  SUB_002FF.L4                     * 043C2
+        GOSUB   ShutdnInRAM                      * 043BE
+        GOVLNG  BatSleep.L4                      * 043C2
 
 * refs (1): 042A6
-SUB_043C9:
-        GOSUB   SUB_0443A                        * 043C9
-        GOSUB   SUB_04457                        * 043CD
-        GOSUB   SUB_04457.L1                     * 043D1
+* -> : after waking: check the cards and the CRCs; a failure restarts with reason 5
+WakeChecks:
+        GOSUB   CkCards                          * 043C9
+        GOSUB   CkConfCRC                        * 043CD
+        GOSUB   CkPort1CRC                       * 043D1
         RTNC                                     * 043D5
         P=      5                                * 043D8
         GOLONG  Warmstart.L1                     * 043DA
 
 * refs (1): 042AA
-SUB_043E0:
-        GOSUBL  SUB_002DA                        * 043E0
+* -> carry clear to carry on running; carry set to go back to sleep: after waking, service TIMER2 and the battery. Unless ON (ST12) or a timer interrupt (ST11) woke it, return; otherwise wait for ON to be released and show the display
+WakeSort:
+        GOSUBL  WaitMPClear                      * 043E0
         D0=(2)  #2F                              * 043E6
         C=DAT0  XS                               * 043EA
-        GOSUB   SUB_0431D                        * 043EE
+        GOSUB   T2Int>ST11                       * 043EE
         GOSUBL  srvc_timer2                      * 043F2
-        GOSUBL  SUB_00672                        * 043F8
+        GOSUBL  CkLowBat                         * 043F8
         ?ST=1   12                               * 043FE
-        GOYES   SUB_043E0.L1                     * 04401
+        GOYES   WakeSort.L1                      * 04401
         ?ST=1   11                               * 04403
         RTNYES                                   * 04406
-SUB_043E0.L1:
+WakeSort.L1:
         LC(1)   #F                               * 04408
-        GOSUBL  SUB_01ABD                        * 0440B
-        GOSUBL  SUB_01485                        * 04411
-SUB_043E0.loop2:
+        GOSUBL  SetT2Awake                       * 0440B
+        GOSUBL  SetT2WakeClk                     * 04411
+WakeSort.loop2:
         LC(2)   #90                              * 04417
         A=C     A                                * 0441B
-SUB_043E0.loop3:
+WakeSort.loop3:
         GOSUBL  OnKeyDown?                       * 0441D
-        GOC     SUB_043E0.loop2                  * 04423
+        GOC     WakeSort.loop2                   * 04423
         A=A-1   B                                * 04426
-        GONC    SUB_043E0.loop3                  * 04429
+        GONC    WakeSort.loop3                   * 04429
         GOSUBL  FlushAttn                        * 0442C
         GOSUBL  ScrOn+                           * 04432
         RTNCC                                    * 04438
 
 * refs (2): 0432B 043C9
-SUB_0443A:
-        GOSUBL  SUB_00735                        * 0443A
+* -> : compare the card status with PortStat; a change restarts through the interrupt code's path
+CkCards:
+        GOSUBL  WaitCardStat                     * 0443A
         D0=(5)  PortStat                         * 04440
         A=DAT0  XS                               * 04447
         ?C=A    XS                               * 0444B
@@ -418,14 +428,18 @@ SUB_0443A:
         GOVLNG  Interrupt.loop10                 * 04450
 
 * refs (2): 0432F 043CD
-SUB_04457:
+* -> : compare COMPCONFCRC with the stored word; a mismatch goes to DEEPSLEEP's restart
+CkConfCRC:
         GOSBVL  COMPCONFCRC                      * 04457
         A=0     A                                * 0445E
         A=DAT0  4                                * 04460
         ?C=A    A                                * 04464
         RTNYES                                   * 04467
         GOTO    DEEPSLEEP.loop2                  * 04469
-SUB_04457.L1:
+
+* refs (2): 04333 043D1
+* -> carry set if nothing to do or the CRC is the same; carry clear if it changed: if the flags at #8052F say port 1 needs it, compute the CRC of its 128K or 32K and store it in Port1CRC. The test at #044BF only leaves its result in carry
+CkPort1CRC:
         D0=(5)  #8052F                           * 0446D
         A=DAT0  B                                * 04474
         ?ABIT=0 3                                * 04477
@@ -436,30 +450,32 @@ SUB_04457.L1:
         R0=C                                     * 04489
         LC(5)   #40000                           * 0448C
         ?ABIT=1 5                                * 04493
-        GOYES   SUB_04457.L2                     * 04498
+        GOYES   CkPort1CRC.L1                    * 04498
         LC(5)   #10000                           * 0449A
-SUB_04457.L2:
+CkPort1CRC.L1:
         B=C     A                                * 044A1
         LC(5)   #C0000                           * 044A3
-        GOSUB   SUB_044D6                        * 044AA
+        GOSUB   CRCBlock                         * 044AA
         D0=(5)  Port1CRC                         * 044AE
         A=0     A                                * 044B5
         A=DAT0  4                                * 044B7
         DAT0=C  4                                * 044BB
         ?C=A    A                                * 044BF
-        GOYES   SUB_04457.L3                     * 044C2
-SUB_04457.L3:
+        GOYES   CkPort1CRC.L2                    * 044C2
+CkPort1CRC.L2:
         C=R0                                     * 044C4
         RSTK=C                                   * 044C7
         GOSBVL  CSRW5                            * 044C9
         PC=C                                     * 044D0
 
 * refs (3): 8081A 819F6 81A45
-SUB_044D4:
+* C.A = start, B.A = end: CRCBlock with the length made from B-C
+CRCRange:
         B=B-C   A                                * 044D4
 
 * refs (1): 044AA
-SUB_044D6:
+* C.A = start, B.A = length in nibbles -> C.A = CRC. Reads the two halves of the block through the CRC circuit 16 nibbles at a time, as the self-test does. A.A = CRC with the top nibble adjusted
+CRCBlock:
         P=      0                                * 044D6
         D0=C                                     * 044D8
         BSRB.F  A                                * 044DB
@@ -471,7 +487,7 @@ SUB_044D6:
         A=0     A                                * 044EF
         DAT1=A  4                                * 044F1
         AD0EX                                    * 044F5
-SUB_044D6.loop1:
+CRCBlock.loop1:
         D0=A                                     * 044F8
         RSTK=C                                   * 044FB
         CAEX    A                                * 044FD
@@ -479,20 +495,20 @@ SUB_044D6.loop1:
         C=C+A   A                                * 04501
         D1=C                                     * 04503
         C=B     A                                * 04506
-SUB_044D6.loop2:
+CRCBlock.loop2:
         A=DAT0  W                                * 04508
         D0=D0+  16                               * 0450C
         A=DAT1  W                                * 0450F
         D1=D1+  16                               * 04513
         C=C-1   A                                * 04516
-        GONC    SUB_044D6.loop2                  * 04518
+        GONC    CRCBlock.loop2                   * 04518
         C=RSTK                                   * 0451B
         A=C     A                                * 0451D
         C=RSTK                                   * 0451F
         A=A+C   A                                * 04521
         A=A+C   A                                * 04523
         D=D-1   A                                * 04525
-        GONC    SUB_044D6.loop1                  * 04527
+        GONC    CRCBlock.loop1                   * 04527
         C=0     A                                * 0452A
         D0=(5)  #00104                           * 0452C
         C=DAT0  4                                * 04533
@@ -509,7 +525,7 @@ AlertStatus:
         CON(5)  (*)+5                            * 04544  primitive code object
         GOSUB   SAVPTR~jump_2                    * 04549
         ST=0    15                               * 0454D
-        GOSBVL  SUB_00672                        * 04550
+        GOSBVL  CkLowBat                         * 04550
         GOSBVL  AllowIntr                        * 04557
         D0=(5)  LPD_HIST                         * 0455E
         C=0     A                                * 04565
@@ -527,90 +543,95 @@ Alert$:
         C=0     A                                * 04588
         LC(2)   #16                              * 0458A
         GOSBVL  MAKE$                            * 0458E
-        GOSUB   SUB_045A0                        * 04595
+        GOSUB   LowBat$Fill                      * 04595
         GOVLNG  Ticks>wd$.L1                     * 04599
 
 * refs (1): 04595
-SUB_045A0:
+* D0 at a 22-character string body, R1.P = bits (0 alarm due, 1 system battery, 2 port 1, 3 port 2): write the line "LowBat(S,P1,P2) Alarm" with spaces after it
+LowBat$Fill:
         P=      0                                * 045A0
         C=0     A                                * 045A2
         LC(2)   #16                              * 045A4
         D=C     A                                * 045A8
         A=R1                                     * 045AA
         ?A#0    P                                * 045AD
-        GOYES   SUB_045A0.L1                     * 045B0
-        GOSUB   SUB_04661                        * 045B2
+        GOYES   LowBat$Fill.L1                   * 045B0
+        GOSUB   PadSpaces                        * 045B2
         RTNSC                                    * 045B6
-SUB_045A0.L1:
+LowBat$Fill.L1:
         B=A     P                                * 045B8
         LC(1)   #1                               * 045BB
         B=B&C   P                                * 045BE
         LC(1)   #E                               * 045C2
         A=A&C   P                                * 045C5
         ?A=0    P                                * 045C9
-        GOYES   SUB_045A0.L5                     * 045CC
+        GOYES   LowBat$Fill.L5                   * 045CC
         LC(14)  #28746142776F4C                  * 045CE
         DAT0=C  14                               * 045DE
         D0=D0+  14                               * 045E2
         D=D-CON A,7                              * 045E5
         ?ABIT=0 1                                * 045EB
-        GOYES   SUB_045A0.L2                     * 045F0
+        GOYES   LowBat$Fill.L2                   * 045F0
         ABIT=0  1                                * 045F2
         LC(2)   #53                              * 045F7
-        GOSUB   SUB_0467A                        * 045FB
+        GOSUB   PutChar                          * 045FB
         ?A=0    P                                * 045FF
-        GOYES   SUB_045A0.L4                     * 04602
-        GOSUB   SUB_04676                        * 04604
-SUB_045A0.L2:
+        GOYES   LowBat$Fill.L4                   * 04602
+        GOSUB   PutComma                         * 04604
+LowBat$Fill.L2:
         ?ABIT=0 3                                * 04608
-        GOYES   SUB_045A0.L3                     * 0460D
+        GOYES   LowBat$Fill.L3                   * 0460D
         ABIT=0  3                                * 0460F
         LC(4)   #3150                            * 04614
-        GOSUB   SUB_04684                        * 0461A
+        GOSUB   Put2Chars                        * 0461A
         ?A=0    P                                * 0461E
-        GOYES   SUB_045A0.L4                     * 04621
-        GOSUB   SUB_04676                        * 04623
-SUB_045A0.L3:
+        GOYES   LowBat$Fill.L4                   * 04621
+        GOSUB   PutComma                         * 04623
+LowBat$Fill.L3:
         LC(4)   #3250                            * 04627
-        GOSUB   SUB_04684                        * 0462D
-SUB_045A0.L4:
+        GOSUB   Put2Chars                        * 0462D
+LowBat$Fill.L4:
         LC(2)   #29                              * 04631
-        GOSUB   SUB_0467A                        * 04635
+        GOSUB   PutChar                          * 04635
         ?B=0    P                                * 04639
-        GOYES   SUB_04661                        * 0463C
+        GOYES   PadSpaces                        * 0463C
         LC(4)   #203B                            * 0463E
-        GOSUB   SUB_04684                        * 04644
-SUB_045A0.L5:
+        GOSUB   Put2Chars                        * 04644
+LowBat$Fill.L5:
         LC(10)  #6D72616C41                      * 04648
         DAT0=C  10                               * 04654
         D0=D0+  10                               * 04658
         D=D-CON A,5                              * 0465B
 
 * refs (2): 045B2 04639
-SUB_04661:
+* D0, D.A = characters left -> : pad with spaces
+PadSpaces:
         LC(2)   #20                              * 04661
-        GOTO    SUB_04661.L2                     * 04665
-SUB_04661.loop1:
+        GOTO    PadSpaces.L2                     * 04665
+PadSpaces.loop1:
         DAT0=C  B                                * 04669
         D0=D0+  2                                * 0466C
-SUB_04661.L2:
+PadSpaces.L2:
         D=D-1   A                                * 0466F
-        GONC    SUB_04661.loop1                  * 04671
+        GONC    PadSpaces.loop1                  * 04671
         RTNCC                                    * 04674
 
 * refs (2): 04604 04623
-SUB_04676:
+* D0, D.A -> : append a comma
+PutComma:
         LC(2)   #2C                              * 04676
 
 * refs (2): 045FB 04635
-SUB_0467A:
+* C.B = character, D0, D.A -> : append it and count it
+PutChar:
         DAT0=C  B                                * 0467A
         D0=D0+  2                                * 0467D
         D=D-1   A                                * 04680
         RTN                                      * 04682
 
 * refs (3): 0461A 0462D 04644
-SUB_04684:
+* C = two characters, D0, D.A -> : append them and count them
+Put2Chars:
         DAT0=C  4                                * 04684
         D0=D0+  4                                * 04688
         D=D-1   A                                * 0468B
@@ -620,7 +641,8 @@ SUB_04684:
 * refs (4): 041F2 04549 04584 04763
 SAVPTR~jump_2:
         GOVLNG  SAVPTR                           * 04691
-SAVPTR~jump_2.L1:
+* Restart point: reset the keyboard state and input stream, then run FIRSTPROC
+RunFirstProc~1:
         P=      0                                * 04698
         LC(1)   #1                               * 0469A
         D1=(5)  DISABLE_KBD                      * 0469D
@@ -637,13 +659,13 @@ SAVPTR~jump_2.L1:
         D1=(5)  NOALARMSRV                       * 046D2
         C=0     A                                * 046D9
         DAT1=C  1                                * 046DB
-        GOSBVL  SUB_01485                        * 046DF
+        GOSBVL  SetT2WakeClk                     * 046DF
         GOSUBL  GETPTR                           * 046E6
         D0=(5)  FIRSTPROC                        * 046EC
         C=DAT0  A                                * 046F3
         D0=C                                     * 046F6
         D0=D0+  5                                * 046F9
-SAVPTR~jump_2.L2:
+RunFirstProc~1.L1:
         A=DAT0  A                                * 046FC
         D0=D0+  5                                * 046FF
         PC=(A)                                   * 04702
@@ -663,7 +685,7 @@ GETTOUCH:
         ST=1    0                                * 04719
 GETTOUCH.L1:
         AD1EX                                    * 0471C
-        GOSUB   SUB_0477E                        * 0471F
+        GOSUB   KbdResume                        * 0471F
         D1=(5)  #8066A                           * 04723
         A=DAT1  S                                * 0472A
         D1=D1-  1                                * 0472E
@@ -693,7 +715,8 @@ GETTOUCH.L3:
         GOVLNG  PushFLoop                        * 04777
 
 * refs (2): 0471F 04813
-SUB_0477E:
+* -> : drive all OUT lines with the keyboard scan held off, clear KEYSTATE if no key is down, then re-enable and raise a scan with RSI
+KbdResume:
         LC(3)   #1FF                             * 0477E
         D1=(5)  SAVE_OR                          * 04783
         DAT1=C  3                                * 0478A
@@ -703,9 +726,9 @@ SUB_0477E:
         DAT1=C  1                                * 0479B
         GOSBVL  CINRTN                           * 0479F
         ?C#0    X                                * 047A6
-        GOYES   SUB_0477E.L1                     * 047A9
-        GOSBVL  SUB_00D3B                        * 047AB
-SUB_0477E.L1:
+        GOYES   KbdResume.L1                     * 047A9
+        GOSBVL  ClrKeyState                      * 047AB
+KbdResume.L1:
         C=0     P                                * 047B2
         D1=(5)  DISABLE_KBD                      * 047B5
         DAT1=C  1                                * 047BC
@@ -736,12 +759,12 @@ adrKEYBUFFER:
         RSTK=C                                   * 047FD
         D1=D1+  5                                * 047FF
         A=DAT1  A                                * 04802
-        GOSBVL  SUB_00C8D                        * 04805
+        GOSBVL  KeyDown?                         * 04805
         C=RSTK                                   * 0480C
         A=C     A                                * 0480E
         GOC     adrKEYBUFFER.L2                  * 04810
 adrKEYBUFFER.L1:
-        GOSUB   SUB_0477E                        * 04813
+        GOSUB   KbdResume                        * 04813
         LC(5)   FALSE                            * 04817
         GOTO    adrKEYBUFFER.L3                  * 0481E
 adrKEYBUFFER.L2:
@@ -752,7 +775,7 @@ adrKEYBUFFER.L2:
 adrKEYBUFFER.L3:
         D1=A                                     * 04836
         DAT1=C  A                                * 04839
-        GOTO    SAVPTR~jump_2.L2                 * 0483C
+        GOTO    RunFirstProc~1.L1                * 0483C
 
 * ( -> C.A ) Sets carry if buffer is empty.Else returns key in C.B (and in @KEYSTORE) Uses: A.S C.S C.A D1 (sets P=0)
 * refs (6): 02360 80048 808BA 80F3B 81020 81577
@@ -784,16 +807,18 @@ POPKEY:
         RPL
 
 * refs (1): 421BD
-GETKEY~10:
-        :: OBJ_01E5E OBJ_048A9 LiteSlp ;         * 04890
+* -> : the idle step of key wait: show held shifts, keep the clock display up, and sleep lightly until something happens
+IdleSleep:
+        :: ShowHeldAnn IdleClock LiteSlp ;       * 04890
 
 * refs (1): 0489A
-OBJ_048A9:
-        :: OBJ_0E7CE case                        * 048A9
-          :: ~DispTimeReq?;DA1IsStat?;AND case OBJ_39AD8 * 048B8
-            OBJ_0CEEA ;                          * 048CC
+* -> : update the clock in the status area if it is on, and drop it when the status area has gone
+IdleClock:
+        :: ClkOn? case                           * 048A9
+          :: ~DispTimeReq?;DA1IsStat?;AND case ?HdrClock * 048B8
+            ClkOff ;                             * 048CC
           ~DispTimeReq?;DA1IsStat?;AND case      * 048D6
-          :: OBJ_0CED9 OBJ_39AD8 ;               * 048E0
+          :: ClkOn ?HdrClock ;                   * 048E0
         ;                                        * 048F4
 
 * refs (2): 048BD 048D6
@@ -812,22 +837,22 @@ LiteSlp:
 * Puts calc into "lite sleep" Low power mode with display on Wakeup on any key or interrupt
 * refs (2): 02807 0491E
 liteslp:
-        GOSBVL  SUB_00E0B                        * 04929
+        GOSBVL  KbdOutAll                        * 04929
         ST=0    13                               * 04930
         GOSUB   Attn?                            * 04933
         GOC     liteslp.L1                       * 04937
         GOSUB   KeyInBuff?                       * 0493A
         GOC     liteslp.L1                       * 0493E
-        GOSUB   SUB_049B8                        * 04941
+        GOSUB   AlarmDue?                        * 04941
         GOC     liteslp.L1                       * 04945
-        GOSUB   SUB_049DB                        * 04948
+        GOSUB   TimedOut?                        * 04948
         GOC     liteslp.L1                       * 0494C
-        GOSUB   SUB_049ED                        * 0494F
+        GOSUB   UartPending?                     * 0494F
         GONC    liteslp.L2                       * 04953
 liteslp.L1:
-        GOVLNG  OBJ_4231A.L1                     * 04956
+        GOVLNG  BusyOn.L1                        * 04956
 liteslp.L2:
-        GOSBVL  SUB_42359                        * 0495D
+        GOSBVL  BusyOff                          * 0495D
         D1=(5)  NOP1MASK14                       * 04964
         LC(1)   #8                               * 0496B
         DAT1=C  1                                * 0496E
@@ -862,20 +887,22 @@ KeyInBuff?:
         RTN                                      * 049B6
 
 * refs (2): 04200 04941
-SUB_049B8:
+* -> carry set if an alarm is due and alarm servicing is not off (flag test at #801)
+AlarmDue?:
         P=      0                                * 049B8
         LC(3)   #801                             * 049BA
         GOSBVL  NoIgnoreAlm.L1                   * 049BF
-        GOC     SUB_049B8.L1                     * 049C6
+        GOC     AlarmDue?.L1                     * 049C6
         D1=(5)  ALARMSDUE                        * 049C9
         C=DAT1  S                                * 049D0
         ?C#0    S                                * 049D4
         RTNYES                                   * 049D7
-SUB_049B8.L1:
+AlarmDue?.L1:
         RTNCC                                    * 049D9
 
 * refs (1): 04948
-SUB_049DB:
+* -> carry set if the top nibble of TIMEOUTCLK is 0
+TimedOut?:
         D1=(5)  TIMEOUTCLK                       * 049DB
         C=DAT1  S                                * 049E2
         ?C=0    S                                * 049E6
@@ -883,12 +910,13 @@ SUB_049DB:
         RTN                                      * 049EB
 
 * refs (1): 0494F
-SUB_049ED:
+* -> carry set if bytes wait in the serial buffer and the flag coded #202 is set
+UartPending?:
         P=      0                                * 049ED
         D1=(5)  uart_buf_end                     * 049EF
         C=DAT1  X                                * 049F6
         ?C=0    X                                * 049FA
-        GOYES   SUB_049B8.L1                     * 049FD
+        GOYES   AlarmDue?.L1                     * 049FD
         LC(3)   #202                             * 049FF
         GOVLNG  NoIgnoreAlm.L1                   * 04A04
 
@@ -901,8 +929,8 @@ GETPROC.L1:
         GOSUBL  SAVPTR                           * 04A12
         GOSUBL  POP#                             * 04A18
         R0=A                                     * 04A1E
-        GOSUB   SUB_04B15                        * 04A21
-        GOSUB   SUB_04B76                        * 04A25
+        GOSUB   TouchTab@                        * 04A21
+        GOSUB   TouchEntry                       * 04A25
         A=DAT0  A                                * 04A29
         GOSUBL  GETPTR                           * 04A2C
         DAT1=A  A                                * 04A32
@@ -919,28 +947,30 @@ GETDF:
         GOTO    GETPROC.L1                       * 04A48
 
 * refs (3): 021EC 3A695 411BB
-OBJ_04A4C:
+* ob #menukey -> : store ob as key #menukey's DF action in TOUCHTAB
+SETDF:
         CON(5)  (*)+5                            * 04A4C  primitive code object
         P=      8                                * 04A51
-        GOTO    OBJ_04A57.L1                     * 04A53
+        GOTO    SETPROC.L1                       * 04A53
 
 * refs (8): 3A69A 3FCD2 3FCFF 3FD2C 3FD59 3FD86 ...
-OBJ_04A57:
+* ob #menukey -> : store ob as key #menukey's PROC action in TOUCHTAB, making or growing that table if needed
+SETPROC:
         CON(5)  (*)+5                            * 04A57  primitive code object
         P=      4                                * 04A5C
-OBJ_04A57.L1:
+SETPROC.L1:
         GOSUBL  POP#                             * 04A5E
         R0=A                                     * 04A64
         GOSUBL  SAVPTR                           * 04A67
-OBJ_04A57.loop2:
-        GOSUB   SUB_04B15                        * 04A6D
+SETPROC.loop2:
+        GOSUB   TouchTab@                        * 04A6D
         C=R0                                     * 04A71
-        GONC    OBJ_04A57.L5                     * 04A74
+        GONC    SETPROC.L5                       * 04A74
         ?B<C    A                                * 04A77
-        GOYES   OBJ_04A57.L4                     * 04A7A
+        GOYES   SETPROC.L4                       * 04A7A
         ?P=     1                                * 04A7C
-        GOYES   OBJ_04A57.L3                     * 04A7F
-        GOSUB   SUB_04B76                        * 04A81
+        GOYES   SETPROC.L3                       * 04A7F
+        GOSUB   TouchEntry                       * 04A81
         R0=A                                     * 04A85
         GOSUBL  GETPTR                           * 04A88
         A=DAT1  A                                * 04A8E
@@ -954,8 +984,8 @@ OBJ_04A57.loop2:
         A=DAT0  A                                * 04AA4
         D0=D0+  5                                * 04AA7
         PC=(A)                                   * 04AAA
-OBJ_04A57.L3:
-        GOSUB   SUB_04B8A                        * 04AAE
+SETPROC.L3:
+        GOSUB   TouchEntry2                      * 04AAE
         A=R3                                     * 04AB2
         DAT0=A  A                                * 04AB5
         D0=D0+  5                                * 04AB8
@@ -966,32 +996,33 @@ OBJ_04A57.L3:
         A=DAT0  A                                * 04AC9
         D0=D0+  5                                * 04ACC
         PC=(A)                                   * 04ACF
-OBJ_04A57.L4:
-        GOSUB   SUB_04BA5                        * 04AD3
+SETPROC.L4:
+        GOSUB   TouchGrowSize                    * 04AD3
         C=D     A                                * 04AD7
-        GOSUB   SUB_04BEC                        * 04AD9
-        GOSUB   SUB_04C70                        * 04ADD
-        GOTO    OBJ_04A57.loop2                  * 04AE1
-OBJ_04A57.L5:
+        GOSUB   RoomOrGCP                        * 04AD9
+        GOSUB   TouchGrowAll                     * 04ADD
+        GOTO    SETPROC.loop2                    * 04AE1
+SETPROC.L5:
         ?B<C    A                                * 04AE5
-        GOYES   OBJ_04A57.L7                     * 04AE8
-        GOSUB   SUB_04B94                        * 04AEA
-        GOSUB   SUB_04BEC                        * 04AEE
-OBJ_04A57.loop6:
-        GOSUB   SUB_04C2C                        * 04AF2
-        GOTO    OBJ_04A57.loop2                  * 04AF6
-OBJ_04A57.L7:
-        GOSUB   SUB_04BA5                        * 04AFA
+        GOYES   SETPROC.L7                       * 04AE8
+        GOSUB   TouchTabSize                     * 04AEA
+        GOSUB   RoomOrGCP                        * 04AEE
+SETPROC.loop6:
+        GOSUB   TouchAddTab                      * 04AF2
+        GOTO    SETPROC.loop2                    * 04AF6
+SETPROC.L7:
+        GOSUB   TouchGrowSize                    * 04AFA
         C=R0                                     * 04AFE
         B=C     A                                * 04B01
-        GOSUB   SUB_04B94                        * 04B03
+        GOSUB   TouchTabSize                     * 04B03
         C=C+D   A                                * 04B07
-        GOSUB   SUB_04BEC                        * 04B09
-        GOSUB   SUB_04C70                        * 04B0D
-        GOTO    OBJ_04A57.loop6                  * 04B11
+        GOSUB   RoomOrGCP                        * 04B09
+        GOSUB   TouchGrowAll                     * 04B0D
+        GOTO    SETPROC.loop6                    * 04B11
 
 * refs (4): 04A21 04A6D 04C2C 04CAE
-SUB_04B15:
+* P = table selector (8 DF, 4 PROC, 2, 1) -> D0 at the table in TOUCHTAB, B.A = entries per table, C.S top bit set if this table exists. TOUCHTAB starts with one nibble of table bits and a count byte
+TouchTab@:
         D0=(5)  TOUCHTAB                         * 04B15
         C=DAT0  A                                * 04B1C
         D0=C                                     * 04B1F
@@ -1006,37 +1037,38 @@ SUB_04B15:
         D0=D0+  2                                * 04B36
         AD0EX                                    * 04B39
         ?P=     8                                * 04B3C
-        GOYES   SUB_04B15.L4                     * 04B3F
+        GOYES   TouchTab@.L4                     * 04B3F
         C=C+C   S                                * 04B41
-        GONC    SUB_04B15.L1                     * 04B44
+        GONC    TouchTab@.L1                     * 04B44
         A=A+C   A                                * 04B47
-SUB_04B15.L1:
+TouchTab@.L1:
         ?P=     4                                * 04B49
-        GOYES   SUB_04B15.L4                     * 04B4C
+        GOYES   TouchTab@.L4                     * 04B4C
         C=C+C   S                                * 04B4E
-        GONC    SUB_04B15.L2                     * 04B51
+        GONC    TouchTab@.L2                     * 04B51
         A=A+C   A                                * 04B54
-SUB_04B15.L2:
+TouchTab@.L2:
         ?P=     2                                * 04B56
-        GOYES   SUB_04B15.L4                     * 04B59
+        GOYES   TouchTab@.L4                     * 04B59
         C=C+C   S                                * 04B5B
-        GONC    SUB_04B15.L3                     * 04B5E
+        GONC    TouchTab@.L3                     * 04B5E
         A=A+C   A                                * 04B61
-SUB_04B15.L3:
+TouchTab@.L3:
         D0=A                                     * 04B63
         D0=D0+  5                                * 04B66
         AD0EX                                    * 04B69
         C=C+C   A                                * 04B6C
-SUB_04B15.L4:
+TouchTab@.L4:
         C=C+C   S                                * 04B6E
         D0=A                                     * 04B71
         RTN                                      * 04B74
 
 * refs (2): 04A25 04A81
-SUB_04B76:
+* A.A = table address, R0 = key -> D0 at that key's 5-nibble entry
+TouchEntry:
         C=R0                                     * 04B76
         C=C-1   A                                * 04B79
-SUB_04B76.L1:
+TouchEntry.L1:
         D=C     A                                * 04B7B
         C=C+C   A                                * 04B7D
         C=C+C   A                                * 04B7F
@@ -1046,14 +1078,16 @@ SUB_04B76.L1:
         RTN                                      * 04B88
 
 * refs (1): 04AAE
-SUB_04B8A:
+* As TouchEntry for the 10-nibble entries of table 1
+TouchEntry2:
         C=R0                                     * 04B8A
         C=C-1   A                                * 04B8D
         C=C+C   A                                * 04B8F
-        GONC    SUB_04B76.L1                     * 04B91
+        GONC    TouchEntry.L1                    * 04B91
 
 * refs (2): 04AEA 04B03
-SUB_04B94:
+* B.A = entries, P -> C.A = nibbles of one table (doubled for table 1)
+TouchTabSize:
         C=B     A                                * 04B94
         C=C+C   A                                * 04B96
         C=C+C   A                                * 04B98
@@ -1064,7 +1098,8 @@ SUB_04B94:
         RTN                                      * 04BA3
 
 * refs (2): 04AD3 04AFA
-SUB_04BA5:
+* B.A = old count, R0 = new count -> R1 = nibbles added per plain table, D.A = total for all tables present
+TouchGrowSize:
         C=R0                                     * 04BA5
         C=C-B   A                                * 04BA8
         D=C     A                                * 04BAA
@@ -1078,17 +1113,17 @@ SUB_04BA5:
         D0=A                                     * 04BC1
         A=DAT0  S                                * 04BC4
         A=A+A   S                                * 04BC8
-        GONC    SUB_04BA5.L1                     * 04BCB
+        GONC    TouchGrowSize.L1                 * 04BCB
         D=D+C   A                                * 04BCE
-SUB_04BA5.L1:
+TouchGrowSize.L1:
         A=A+A   S                                * 04BD0
-        GONC    SUB_04BA5.L2                     * 04BD3
+        GONC    TouchGrowSize.L2                 * 04BD3
         D=D+C   A                                * 04BD6
-SUB_04BA5.L2:
+TouchGrowSize.L2:
         A=A+A   S                                * 04BD8
-        GONC    SUB_04BA5.L3                     * 04BDB
+        GONC    TouchGrowSize.L3                 * 04BDB
         D=D+C   A                                * 04BDE
-SUB_04BA5.L3:
+TouchGrowSize.L3:
         A=A+A   S                                * 04BE0
         RTNNC                                    * 04BE3
         D=D+C   A                                * 04BE6
@@ -1096,7 +1131,8 @@ SUB_04BA5.L3:
         RTN                                      * 04BEA
 
 * refs (3): 04AD9 04AEE 04B09
-SUB_04BEC:
+* C.A = nibbles needed -> : as RoomOrGC, keeping P and leaving D.A = the amount
+RoomOrGCP:
         D=C     A                                * 04BEC
         GOSUBL  ROOM                             * 04BEE
         DCEX    A                                * 04BF4
@@ -1112,14 +1148,15 @@ SUB_04BEC:
         DCEX    A                                * 04C17
         ?D>=C   A                                * 04C19
         RTNYES                                   * 04C1C
-SUB_04BEC.L1:
+RoomOrGCP.L1:
         GOSUBL  GETPTR                           * 04C1E
         P=      0                                * 04C24
         GOLONG  DOMEMERR                         * 04C26
 
 * refs (1): 04AF2
-SUB_04C2C:
-        GOSUB   SUB_04B15                        * 04C2C
+* Insert the table selected by P, filled with F, and set its bit in TOUCHTAB
+TouchAddTab:
+        GOSUB   TouchTab@                        * 04C2C
         C=P     15                               * 04C30
         R2=C                                     * 04C34
         GOSUBL  MOVEDSD                          * 04C37
@@ -1139,17 +1176,18 @@ SUB_04C2C:
         RTN                                      * 04C6E
 
 * refs (2): 04ADD 04B0D
-SUB_04C70:
+* Grow all four tables to the count in R0 and store the count
+TouchGrowAll:
         C=P     15                               * 04C70
         R2=C                                     * 04C74
         P=      1                                * 04C77
-        GOSUB   SUB_04CAE                        * 04C79
+        GOSUB   TouchGrowTab                     * 04C79
         P=      2                                * 04C7D
-        GOSUB   SUB_04CAE                        * 04C7F
+        GOSUB   TouchGrowTab                     * 04C7F
         P=      4                                * 04C83
-        GOSUB   SUB_04CAE                        * 04C85
+        GOSUB   TouchGrowTab                     * 04C85
         P=      8                                * 04C89
-        GOSUB   SUB_04CAE                        * 04C8B
+        GOSUB   TouchGrowTab                     * 04C8B
         D0=(5)  TOUCHTAB                         * 04C8F
         A=DAT0  A                                * 04C96
         D0=A                                     * 04C99
@@ -1161,15 +1199,16 @@ SUB_04C70:
         RTN                                      * 04CAC
 
 * refs (4): 04C79 04C7F 04C85 04C8B
-SUB_04CAE:
-        GOSUB   SUB_04B15                        * 04CAE
+* Grow the table selected by P, if present, by the amount in R1
+TouchGrowTab:
+        GOSUB   TouchTab@                        * 04CAE
         RTNNC                                    * 04CB2
         A=A+C   A                                * 04CB5
         C=R1                                     * 04CB7
         ?P#     1                                * 04CBA
-        GOYES   SUB_04CAE.L1                     * 04CBD
+        GOYES   TouchGrowTab.L1                  * 04CBD
         C=C+C   A                                * 04CBF
-SUB_04CAE.L1:
+TouchGrowTab.L1:
         RSTK=C                                   * 04CC1
         GOSUBL  MOVEDSD                          * 04CC3
         C=RSTK                                   * 04CC9
@@ -1305,16 +1344,17 @@ ERRSET:
 
 addrTEMPENV:
         D0=(5)  TEMPENV                          * 04E66
-        GOSUB   SUB_04E89                        * 04E6D
+        GOSUB   ProtectEnv                       * 04E6D
         D0=(5)  DOLPENV                          * 04E71
-        GOSUB   SUB_04E89                        * 04E78
+        GOSUB   ProtectEnv                       * 04E78
         D0=A                                     * 04E7C
         A=DAT0  A                                * 04E7F
         D0=D0+  5                                * 04E82
         PC=(A)                                   * 04E85
 
 * refs (2): 04E6D 04E78
-SUB_04E89:
+* D0 at TEMPENV or DOLPENV -> : count one more error trap in the protection word of the top environment
+ProtectEnv:
         C=DAT0  A                                * 04E89
         D0=C                                     * 04E8C
         C=DAT0  A                                * 04E8F
@@ -1337,7 +1377,7 @@ ABORT:
 ERRTRAP:
         CON(5)  (*)+5                            * 04EB8  primitive code object
         ASSEMBLE
-        GOSUB   SUB_04F19                        * 04EBD
+        GOSUB   UnprotEnvs                       * 04EBD
         GOSUBL  SKIPOB                           * 04EC1
         A=DAT0  A                                * 04EC7
         D0=D0+  5                                * 04ECA
@@ -1347,7 +1387,7 @@ ERRTRAP:
 * refs (105): 04EAE 05033 1441A 1442E 14442 14681 ...
 ERRJMP:
         CON(5)  (*)+5                            * 04ED1  primitive code object
-        GOSUB   SUB_04F19                        * 04ED6
+        GOSUB   UnprotEnvs                       * 04ED6
         LC(5)   ERRTRAP                          * 04EDA
         GONC    ERRJMP.L3                        * 04EE1
 ERRJMP.loop1:
@@ -1373,49 +1413,50 @@ ERRJMP.L3:
         PC=(A)                                   * 04F15
 
 * refs (2): 04EBD 04ED6
-SUB_04F19:
+* -> : error unwinding: drop temporary and DO-loop environments down to the newest with a nonzero protection word, and count that word down
+UnprotEnvs:
         GOSUBL  SAVPTR                           * 04F19
         D0=(5)  TEMPENV                          * 04F1F
         C=DAT0  A                                * 04F26
-SUB_04F19.loop1:
+UnprotEnvs.loop1:
         D1=C                                     * 04F29
         A=DAT1  A                                * 04F2C
         ?A=0    A                                * 04F2F
-        GOYES   SUB_04F19.L3                     * 04F32
+        GOYES   UnprotEnvs.L3                    * 04F32
         B=A     A                                * 04F34
         D1=D1+  5                                * 04F36
         A=DAT1  A                                * 04F39
         ?A#0    A                                * 04F3C
-        GOYES   SUB_04F19.L2                     * 04F3F
+        GOYES   UnprotEnvs.L2                    * 04F3F
         C=C+B   A                                * 04F41
-        GONC    SUB_04F19.loop1                  * 04F43
-SUB_04F19.L2:
+        GONC    UnprotEnvs.loop1                 * 04F43
+UnprotEnvs.L2:
         A=A-1   A                                * 04F46
         DAT1=A  A                                * 04F48
-SUB_04F19.L3:
+UnprotEnvs.L3:
         A=DAT0  A                                * 04F4B
         DAT0=C  A                                * 04F4E
         C=C-A   A                                * 04F51
         ?C=0    A                                * 04F53
-        GOYES   SUB_04F19.L4                     * 04F56
+        GOYES   UnprotEnvs.L4                    * 04F56
         GOSUBL  MOVEDSU                          * 04F58
-SUB_04F19.L4:
+UnprotEnvs.L4:
         D0=(5)  DOLPENV                          * 04F5E
         C=DAT0  A                                * 04F65
         D0=C                                     * 04F68
         D1=C                                     * 04F6B
         D1=D1-  10                               * 04F6E
         C=DAT0  A                                * 04F71
-SUB_04F19.loop5:
+UnprotEnvs.loop5:
         D1=D1+  15                               * 04F74
         C=C-1   A                                * 04F77
-        GOC     SUB_04F19.L6                     * 04F79
+        GOC     UnprotEnvs.L6                    * 04F79
         A=DAT1  A                                * 04F7C
         ?A=0    A                                * 04F7F
-        GOYES   SUB_04F19.loop5                  * 04F82
+        GOYES   UnprotEnvs.loop5                 * 04F82
         A=A-1   A                                * 04F84
         DAT1=A  A                                * 04F86
-SUB_04F19.L6:
+UnprotEnvs.L6:
         C=C+1   A                                * 04F89
         DAT0=C  A                                * 04F8B
         CD1EX                                    * 04F8E
@@ -1423,9 +1464,9 @@ SUB_04F19.L6:
         AD0EX                                    * 04F94
         C=C-A   A                                * 04F97
         ?C=0    A                                * 04F99
-        GOYES   SUB_04F19.L7                     * 04F9C
+        GOYES   UnprotEnvs.L7                    * 04F9C
         GOSUBL  MOVEDSU                          * 04F9E
-SUB_04F19.L7:
+UnprotEnvs.L7:
         GOLONG  GETPTR                           * 04FA4
 
 * Error 006h
@@ -1692,16 +1733,17 @@ CDRCOMP~1:
         C=R4                                     * 051E5
         DAT1=C  A                                * 051E8
         D1=D1+  10                               * 051EB
-        GOSUB   SUB_05204                        * 051EE
+        GOSUB   CopyBody                         * 051EE
         C=RSTK                                   * 051F2
         D0=C                                     * 051F4
 &HXS~1.L2:
-        GOSUB   SUB_05204                        * 051F7
+        GOSUB   CopyBody                         * 051F7
         A=R0                                     * 051FB
         GOLONG  %%>C%%.L1                        * 051FE
 
 * refs (2): 051EE 051F7
-SUB_05204:
+* D0 at a pointer to a string-like object, D1 -> : copy its body to D1 by MOVEDOWN, D1 past it
+CopyBody:
         C=DAT0  A                                * 05204
         D0=C                                     * 05207
         D0=D0+  5                                * 0520A
@@ -2591,9 +2633,9 @@ MAKE$N.L2:
         D0=D0+  5                                * 05BD5
         DAT0=A  A                                * 05BD8
         D0=D0+  5                                * 05BDB
-        GOTO    SUB_05CF5.L1                     * 05BDE
+        GOTO    Get2Bodies.L1                    * 05BDE
 MAKE$N.L3:
-        GOVLNG  SUB_04BEC.L1                     * 05BE2
+        GOVLNG  RoomOrGCP.L1                     * 05BE2
 
 * id/lam -> $
 * refs (65): 05EE2 05F33 149F6 14A87 14B40 1542E ...
@@ -2623,7 +2665,7 @@ ID>$.L2:
 * refs (48): 1C7AD 1DEA7 1E10B 1EA80 1EBA1 24802 ...
 %>C%:
         CON(5)  (*)+5                            * 05C27  primitive code object
-        GOSUB   SUB_05CF5                        * 05C2C
+        GOSUB   Get2Bodies                       * 05C2C
         D0=C                                     * 05C30
         D0=D0+  5                                * 05C33
         A=DAT0  W                                * 05C36
@@ -2646,7 +2688,7 @@ ID>$.L2:
 * refs (19): 37982 37AB8 37D2D 51C61 51CCA 51DD8 ...
 %%>C%%:
         CON(5)  (*)+5                            * 05C72  primitive code object
-        GOSUB   SUB_05CF5                        * 05C77
+        GOSUB   Get2Bodies                       * 05C77
         D0=D0+  16                               * 05C7B
         A=DAT0  A                                * 05C7E
         R1=A                                     * 05C81
@@ -2687,7 +2729,8 @@ ID>$.L2:
         PC=(A)                                   * 05CF1
 
 * refs (2): 05C2C 05C77
-SUB_05CF5:
+* -> A = first 16 nibbles of the body of level 1, also in R0, C.A = pointer to level 2, D0 at level 1's body, D1 on level 2. After SAVPTR
+Get2Bodies:
         GOSUBL  SAVPTR                           * 05CF5
         C=DAT1  A                                * 05CFB
         D0=C                                     * 05CFE
@@ -2697,13 +2740,13 @@ SUB_05CF5:
         D1=D1+  5                                * 05D0B
         C=DAT1  A                                * 05D0E
         RTN                                      * 05D11
-SUB_05CF5.L1:
+Get2Bodies.L1:
         D1=(5)  DSKTOP                           * 05D13
         C=DAT1  A                                * 05D1A
         D1=C                                     * 05D1D
         RTNCC                                    * 05D20
         BSS     3                                * 05D22  zeros
-SUB_05CF5.L2:
+Get2Bodies.L2:
         GOSUB   SafGarbD-1                       * 05D25
         GONC    C%>%.L1                          * 05D29  always taken
 
@@ -2712,7 +2755,7 @@ SUB_05CF5.L2:
 C%>%:
         CON(5)  (*)+5                            * 05D2C  primitive code object
         D=D-1   A                                * 05D31
-        GOC     SUB_05CF5.L2                     * 05D33
+        GOC     Get2Bodies.L2                    * 05D33
 C%>%.L1:
         A=DAT1  A                                * 05D36
         D1=D1-  5                                * 05D39
@@ -2908,46 +2951,47 @@ MEM:
         PC=(A)                                   * 05F8D
 
 * refs (1): 0661D
-SUB_05F91:
+* B.A = low, D.A = high -> carry set if a pointer into [B,D) is on the data stack, return stack or at INTRPPTR; then D1 is at it. ST0 set
+RefInRange?:
         ST=1    0                                * 05F91
         D1=(5)  DSKTOP                           * 05F94
         C=DAT1  A                                * 05F9B
         D1=C                                     * 05F9E
-        GOTO    SUB_05F91.L3                     * 05FA1
-SUB_05F91.loop1:
+        GOTO    RefInRange?.L3                   * 05FA1
+RefInRange?.loop1:
         ?B>C    A                                * 05FA5
-        GOYES   SUB_05F91.L2                     * 05FA8
+        GOYES   RefInRange?.L2                   * 05FA8
         ?D>C    A                                * 05FAA
         RTNYES                                   * 05FAD
-SUB_05F91.L2:
+RefInRange?.L2:
         D1=D1+  5                                * 05FAF
-SUB_05F91.L3:
+RefInRange?.L3:
         C=DAT1  A                                * 05FB2
         ?C#0    A                                * 05FB5
-        GOYES   SUB_05F91.loop1                  * 05FB8
+        GOYES   RefInRange?.loop1                * 05FB8
         D1=(5)  RSKTOP                           * 05FBA
         C=DAT1  A                                * 05FC1
         D1=C                                     * 05FC4
-        GONC    SUB_05F91.L5                     * 05FC7
-SUB_05F91.loop4:
+        GONC    RefInRange?.L5                   * 05FC7
+RefInRange?.loop4:
         ?B>C    A                                * 05FCA
-        GOYES   SUB_05F91.L5                     * 05FCD
+        GOYES   RefInRange?.L5                   * 05FCD
         ?D>C    A                                * 05FCF
         RTNYES                                   * 05FD2
-SUB_05F91.L5:
+RefInRange?.L5:
         D1=D1-  5                                * 05FD4
         C=DAT1  A                                * 05FD7
         ?C#0    A                                * 05FDA
-        GOYES   SUB_05F91.loop4                  * 05FDD
+        GOYES   RefInRange?.loop4                * 05FDD
         D1=(5)  INTRPPTR                         * 05FDF
         LC(2)   #24                              * 05FE6
         A=C     B                                * 05FEA
-SUB_05F91.loop6:
+RefInRange?.loop6:
         C=DAT1  A                                * 05FED
         ?B>C    A                                * 05FF0
-        GOYES   SUB_05F91.L7                     * 05FF3
+        GOYES   RefInRange?.L7                   * 05FF3
         ?D>C    A                                * 05FF5
         RTNYES                                   * 05FF8
-SUB_05F91.L7:
+RefInRange?.L7:
         D1=D1+  5                                * 05FFA
         A=A-1   B                                * 05FFD

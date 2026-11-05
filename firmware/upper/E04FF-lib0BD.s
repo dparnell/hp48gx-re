@@ -1,5 +1,6 @@
-* HP 48GX ROM revision R, #E04FF-#E0AFE: Library part 0BD
+* HP 48GX ROM revision R, #E04FF-#E0AFE: Message table of the SYMBOLIC applications
 * Addresses in the right-hand comments are those of the original ROM.
+* Most referenced: BDMessages
 * Follows on from the previous file (at #E04FF in the original ROM).
         ENDLENGTH                                * E04FF
 
@@ -7,16 +8,18 @@
         LENGTH                                   * E0504  length, to #E0AFF
         CON(2)  0                                * E0509  title length
 
+* Library 0BD: Messages of the SYMBOLIC applications: Integrate, Differentiate, Taylor poly, Isolate var, Solve quad and Manip expr.
 LIB0BD:
         CON(3)  #0BD                             * E050B  library number
         REL(5)  LIB0BD.hash                      * E050E  hash table
-        REL(5)  ROMP_0BD_000                     * E0513  message table
+        REL(5)  BDMessages                       * E0513  message table
         REL(5)  LIB0BD.link                      * E0518  link table
         CON(5)  0                                * E051D  config
 
 * ROMPTR 0BD 000
 * refs (1): E050B
-ROMP_0BD_000:
+* Message table: numbers BD01 onwards.
+BDMessages:
         CON(5)  DOARRY                           * E0522  array 39
         LENGTH                                   * E0527  length, to #E0A88
         CON(5)  DOCSTR                           * E052C  element type
@@ -90,6 +93,6 @@ LIB0BD.hash.L1:
 LIB0BD.link:
         CON(5)  DOHSTR                           * E0AEC  link table of library 0BD
         LENGTH                                   * E0AF1  length, to #E0AFB
-        REL(5)  ROMP_0BD_000                     * E0AF6  000 
+        REL(5)  BDMessages                       * E0AF6  000 
         ENDLENGTH                                * E0AFB
         BSS     4                                * E0AFB  zeros

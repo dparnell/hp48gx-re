@@ -1,4 +1,4 @@
-* HP 48GX ROM revision R, #4C082-#4F0AB: Plotting
+* HP 48GX ROM revision R, #4C082-#4F0AB: Plotting: plot loops and pixel drawing per plot type, PICTURE scrolling and key handlers, cursor, mark and crosshair drawing
 * Addresses in the right-hand comments are those of the original ROM.
 * Most referenced: CHECKMENU CROSS_OFF CROSS_HAIRS PPAR>ZPAR EXITFCNsto NEWINDEP CROSSMARKOFF ClrLastPt CROSSMARKON TURNMENUOFF PurgePlotVars PlotFcnPt
 * Follows on from the previous file (at #4C082 in the original ROM).
@@ -12,7 +12,7 @@
 NEWINDEP:
         CON(5)  (*)+5                            * 4C09B  primitive code object
         ASSEMBLE
-        GOSUB   SUB_4C0BE                        * 4C0A0
+        GOSUB   POP%>D1Ob                        * 4C0A0
 NEWINDEP.L1:
         DAT1=A  W                                * 4C0A4
         GOSBVL  GETPTR                           * 4C0A8
@@ -23,7 +23,8 @@ NEWINDEP.L1:
         PC=(A)                                   * 4C0BA
 
 * refs (2): 4C0A0 4C0D9
-SUB_4C0BE:
+* POP1%, then point D1 past the prolog of the object now on the stack; A.W = the real's value
+POP%>D1Ob:
         GOSBVL  POP1%                            * 4C0BE
         P=      0                                * 4C0C5
         SETHEX                                   * 4C0C7
@@ -33,9 +34,10 @@ SUB_4C0BE:
         RTN                                      * 4C0D2
 
 * refs (2): 4925C 4C120
-OBJ_4C0D4:
+* % unit -> unit: as NEWINDEP for a unit object: overwrite its number in place
+NEWINDEPU:
         CON(5)  (*)+5                            * 4C0D4  primitive code object
-        GOSUB   SUB_4C0BE                        * 4C0D9
+        GOSUB   POP%>D1Ob                        * 4C0D9
         D1=D1+  5                                * 4C0DD
         GOTO    NEWINDEP.L1                      * 4C0E0
         RPL
@@ -48,25 +50,29 @@ PurgePlotVars:
           ~RclDepnd;1get(li)? ?PURGE_HERE ;      * 4C102
 
 * refs (1): 4BC5B
-OBJ_4C111:
-        :: 19GETLAM 15GETLAM OBJ_4C0D4 ;         * 4C111
+* -> : plot loop with units: copy the new x into the unit object in lam 19
+IndepUnitStep:
+        :: 19GETLAM 15GETLAM NEWINDEPU ;         * 4C111
 
 * refs (8): 48A0D 4BB48 4BE59 8A598 8B224 8B29D ...
-OBJ_4C12A:
+* -> : the plot loop: BEGIN run the step (lam 2), next x UNTIL past the end; then one more point if PlotOneMore?
+PlotLoop:
         :: BEGIN 2GETLAM EVAL NEXTSTEP LASTPT? UNTIL PlotOneMore? NOT?SEMI * 4C12A
           2GETLAM EVAL ;                         * 4C157
 
 * refs (2): 4C508 4C526
-OBJ_4C166:
+* -> : TRUTH: run down one column from the top: set pixels where the test isn't 0
+TruthColumn:
         :: 3GETLAM 1GETLAM NEWINDEP BEGIN 2GETLAM * 4C166
           :: PlotEval DUPTYPEREAL? IT            * 4C184
             :: %0= ?SEMI                         * 4C198
               15GETLAM GETXPOS 3GETLAM GETYPOS PIXON3 ; * 4C1A7
           ;                                      * 4C1C5
-          3GETLAM DUP 19GETLAM %- NEWINDEP OBJ_4C1F2 UNTIL ; * 4C1CA
+          3GETLAM DUP 19GETLAM %- NEWINDEP TruthColDone? UNTIL ; * 4C1CA
 
 * refs (1): 4C1E3
-OBJ_4C1F2:
+* -> flag: TRUE at the bottom of the column, or on ATTN
+TruthColDone?:
         :: 1GETLAM 3GETLAM %< caseTRUE 3GETLAM   * 4C1F2
           12GETLAM %< caseTRUE ATTNFLG@          * 4C210
           #0<> ;                                 * 4C224
@@ -81,22 +87,24 @@ ClrLastPt:
         :: BINT1 ClrLastPt ;                     * 4C251
 
 * refs (4): 4C378 4C3AF 4C413 4C8A5
-OBJ_4C265:
+* #x #y #i -> #i..: draw the line from curve i's last point, if it has one, and make this point the last
+JoinLastPt:
         :: 20GETLAM 4PICK PULLREALEL SWAPDROP %-1=case * 4C265
-          :: DROP OBJ_4C440 ;                    * 4C283
+          :: DROP LastPt! ;                      * 4C283
           COERCE 21GETLAM 5PICK PULLREALEL SWAPDROP COERCE 4PICK 4PICK * 4C297
-          DRAWLINE#3 OBJ_4C440 ;                 * 4C2BF
+          DRAWLINE#3 LastPt! ;                   * 4C2BF
 
 * refs (3): 48FEF 4DAB7 B639E
-OBJ_4C2CE:
+* -> : show PICT and draw: axes first if the type wants them (element 4 of its info) and flag -29 is clear, then the plot, then PICTURE
+AxesAndDraw:
         :: GDISPCENTER TURNMENUOFF GETPTYPE ~BINT4;PTYPE>PINFO;NOTcaseFALSE * 4C2CE
           BINT29                                 * 4C2E7
           TestSysFlag NOT AND IT drax            * 4C2EC
-          draw OBJ_4DA3F ;                       * 4C305
+          draw GraphEnter ;                      * 4C305
 
 * refs (11): 488FA 48B2F 4BB0C 4BC88 4C4BD 57285 ...
-* Probably: create the independent variable for plotting in the current directory and point lam 15 at the stored copy
-OBJ_4C314:
+* -> : make the independent variable: give lam 15's value lam 17's number, and create the variable
+MakeIndep:
         :: 15GETLAM 17GETLAM NEWINDEP INDEPVAR 15GETLAM OVER CREATE * 4C314
           rcl(nm)?;drop 15PUTLAM ;               * 4C33C
 
@@ -104,55 +112,62 @@ OBJ_4C314:
 * %y #i -> : FUNCTION plot: plot y of curve i at the current x, joined to the last point; a non-real y breaks the curve
 PlotFcnPt:
         :: SWAP DUPTYPEREAL? NOTcasedrop ClrLastPt * 4C34B
-          GETYPOS 1GETLAM SWAP2DUP PIXON3 OBJ_4C265 ; * 4C364
+          GETYPOS 1GETLAM SWAP2DUP PIXON3 JoinLastPt ; * 4C364
 
 * refs (1): 4BA3F
-OBJ_4C382:
+* %r #i -> : POLAR connected: polar to rectangular at the angle in lam 15, set the pixel, join to the last point
+PlotPolarLine:
         :: SWAP DUPTYPEREAL? NOTcasedrop ClrLastPt * 4C382
-          15GETLAM PtoR 2DUP PIXON3 OBJ_4C265 ;  * 4C39B
+          15GETLAM PtoR 2DUP PIXON3 JoinLastPt ; * 4C39B
 
 * refs (1): 4BEBD
-OBJ_4C3B9:
+* C% #i -> : PARAMETRIC, points only; anything not complex breaks the curve
+PlotParamDot:
         :: SWAPDUP TYPECMP? NOTcasedrop ClrLastPt * 4C3B9
-          OBJ_4C41D PIXON3 DROP ;                * 4C3D2
+          C%>XYPos PIXON3 DROP ;                 * 4C3D2
 
 * refs (3): 4BED1 8A4D2 8B1E2
-OBJ_4C3E6:
+* C% #i -> : PARAMETRIC, connected; anything not complex breaks the curve
+PlotParamLine:
         :: SWAP DUP TYPECMP? NOTcasedrop ClrLastPt * 4C3E6
-          OBJ_4C41D 2DUP PIXON3 OBJ_4C265 ;      * 4C404
+          C%>XYPos 2DUP PIXON3 JoinLastPt ;      * 4C404
 
 * refs (2): 4C3D2 4C404
-OBJ_4C41D:
+* C% -> #x #y: complex user coordinates to pixels
+C%>XYPos:
         :: C%>% SWAP GETXPOS SWAP GETYPOS ;      * 4C41D
 
 * refs (5): 48A8A 48AD5 48B1B 4C28D 4C2C4
-OBJ_4C440:
+* #x #y #i -> : make the point the last point of curve i (arrays in lams 20 and 21)
+LastPt!:
         :: 21GETLAM SWAP UNCOERCE 4PICK PUTEL DROP 20GETLAM SWAP UNCOERCE * 4C440
           ROT PUTEL DROP ;                       * 4C472
 
 * refs (2): 1E1D0 4C300
 drax:
-        :: CHECKPICT BINT0 OBJ_4A874 ROTDROP drax_4C639 DROP ABND ABND ; * 4C486
+        :: CHECKPICT BINT0 PlotBind ROTDROP drax_4C639 DROP ABND ABND ; * 4C486
 
 * refs (1): 8CCA2
-OBJ_4C4B8:
-        :: OBJ_4C314 OBJ_4C55D ZERO_DO ERRSET    * 4C4B8
-          :: 15GETLAM 17GETLAM NEWINDEP OBJ_50D02 DUP ALGeq? case doerr607 * 4C4D1
-            2PUTLAM BEGIN OBJ_4C166 NEXTSTEP LASTPT? UNTIL PlotOneMore? * 4C4FE
+* -> : TRUTH draw: for each expression scan columns with TruthColumn
+DrawTruth:
+        :: MakeIndep TruthYRange ZERO_DO ERRSET  * 4C4B8
+          :: 15GETLAM 17GETLAM NEWINDEP EqIndexed DUP ALGeq? case doerr607 * 4C4D1
+            2PUTLAM BEGIN TruthColumn NEXTSTEP LASTPT? UNTIL PlotOneMore? * 4C4FE
             NOT?SEMI                             * 4C521
-            OBJ_4C166 ;                          * 4C526
+            TruthColumn ;                        * 4C526
           ERRTRAP PLOTERR ~ATTNFLG@;#0=?SEMI;ExitAtLOOP LOOP ATTNFLGCLR * 4C530
           18GETLAM RESETDEPTH PurgePlotVars ;    * 4C549
 
 * refs (1): 4C4C2
-OBJ_4C55D:
+* -> %lo %hi: the dependent range, sorted, default YRNG
+TruthYRange:
         :: RclDepnd DUPTYPELIST? ITE             * 4C55D
           :: INCOMPDROP SWAP DUPTYPEARRY? IT DROP%0b * 4C571
             sort(2r) ;                           * 4C58F
 
 RclYminYmax:
           :: GETPMIN&MAX C%>% SWAPDROP SWAP C%>% SWAPDROP SWAP ; * 4C599
-          DUP 1PUTLAM TOTEMPOB 3PICK CREATE OBJ_6FFB7 %- 12PUTLAM * 4C5C6
+          DUP 1PUTLAM TOTEMPOB 3PICK CREATE TruthYRange~1 %- 12PUTLAM * 4C5C6
           rcl(nm)?;drop 3PUTLAM ;                * 4C5EE
 
 * refs (1): 6C87D
@@ -160,7 +175,8 @@ RclYminYmax:
         :: #2/ SWAP #2/ ;                        * 4C5FD
 
 * refs (2): 4BBC0 4EDCA
-OBJ_4C616:
+* symb -> symb': the left side of an equation for curve 0, the right side after it
+EqSide:
         :: rceq! INDEX@ #0=ITE ~1stArgb(ex);SYMBN ~1stArgRpn(ex);SYMBN ; * 4C616
 
 * refs (1): 4C49F
@@ -168,7 +184,8 @@ drax_4C639:
         :: RclMaxStdPict drax~1 ;                * 4C639
 
 * refs (5): 45083 451AA 465D6 4EF0F D410E
-OBJ_4C64D:
+* ob -> flag: TRUE if ob is a valid tick spacing: a real, a binary integer, or a list of two of the same type
+AxTick?:
         :: DUPTYPEREAL? OVER TYPEHSTR? OR OVER TYPELIST? OR NOTcasedrop * 4C64D
           FALSE                                  * 4C67A
           DUPTYPELIST? NOTcasedrop TRUE          * 4C67F
@@ -178,11 +195,13 @@ OBJ_4C64D:
           TYPEHSTR? SWAP TYPEHSTR? AND ;         * 4C6CA
 
 * refs (2): 4A9E7 4B53B
-OBJ_4C6E3:
+* ob ob' -> : Invalid PPAR error unless both are strings
+Ck2Strings:
         :: TYPECSTR? NOT?INVPPAR TYPECSTR? NOT?INVPPAR ; * 4C6E3
 
 * refs (1): 4A8A6
-OBJ_4C701:
+* Probably: an independent-variable list {id lo hi} taken apart, with the id kept
+PlotBind~1:
         :: DUPTYPELIST? NOT?SEMI                 * 4C701
           INNERCOMP BINT2 EQcase {}N             * 4C710
           BINT3 EQUAL case2DROP 2DROP            * 4C724
@@ -200,7 +219,8 @@ drax~5:
           SWAP PIXON3 ;                          * 4C7C4
 
 * refs (1): 4BCE2
-OBJ_4C7D3:
+* ob #i -> : CONIC, points only: plot real y, breaking the curve where it isn't real
+PlotConicDot:
         :: SWAPDUP TYPECMP? ITE                  * 4C7D3
           :: C%>% %0= ; TRUE                     * 4C7E7
           case                                   * 4C800
@@ -209,12 +229,13 @@ OBJ_4C7D3:
           DROP ClrLastPt ;                       * 4C837
 
 * refs (1): 4BCF6
-OBJ_4C846:
+* ob #i -> : CONIC, connected: as PlotConicDot, joined to the last point
+PlotConicLine:
         :: SWAP DUP TYPECMP? ITE                 * 4C846
           :: C%>% %0= ; TRUE                     * 4C85F
           case                                   * 4C878
           :: DUPTYPEREAL? NOTcasedrop ClrLastPt  * 4C87D
-            GETYPOS 1GETLAM SWAP2DUP PIXON3 OBJ_4C265 ; * 4C891
+            GETYPOS 1GETLAM SWAP2DUP PIXON3 JoinLastPt ; * 4C891
           DROP ClrLastPt ;                       * 4C8AF
 
 * refs (3): 4BCC4 4C4F9 B63EE
@@ -226,7 +247,8 @@ doerr607:
         RPL
 
 * refs (1): 8CD81
-OBJ_4C8D1:
+* -> : SCATTER draw: a pixel for each row of ΣDAT's two columns
+DrawScatter:
         :: RclXYCol&äDAT DUP MDIMSDROP 5UNROLL #1+_ONE_DO OVER PULLREALEL * 4C8D1
           GETYPOS SWAP4PICK PULLREALEL GETXPOS ROT PIXON3 ROT 4PICK#+ ROT * 4C8F9
           4PICK#+ ROT ~ATTNFLG@;#0=?SEMI;ExitAtLOOP LOOP 4DROP ; * 4C926
@@ -250,7 +272,7 @@ bins(3r):
 * refs (1): 4C9EC
 bins(3r)~1:
         :: STATGETXCOL rclä DUP MDIMS ITE        * 4CA00
-          :: DUP UNCOERCE 5PICK %< case OBJ_2D2E7 * 4CA1E
+          :: DUP UNCOERCE 5PICK %< case ErrBadStatPar * 4CA1E
             4UNROLLROT COERCE 3UNROLL ;          * 4CA41
           :: ROTDROP BINT1 3UNROLL BINT1 3UNROLL ; * 4CA55
           #1+_ONE_DO OVER PULLREALEL 5PICK 7PICK bins(3r)~3 6UNROLL * 4CA78
@@ -266,7 +288,8 @@ bins(3r)~2:
           XEQ>VECTOR ;                           * 4CB5E
 
 * refs (2): 4D9C5 4D9F7
-OBJ_4CB68:
+* [] #col ... -> : BAR and HISTOGRAM: draw one filled bar for each element of the column
+DrawBars:
         :: 15GETLAM 6GETLAM 10GETLAM getxpos SWAP #0= OVER #0<> ANDcase * 4CB68
           ERRJMP                                 * 4CB9A
           4GETLAM 10GETLAM %%>% %* ROT 4ROLL DUP MDIMSDROP 4UNROLL ZERO_DO * 4CB9F
@@ -277,15 +300,16 @@ OBJ_4CB68:
           INDEX@ DUP#1+ UNCOERCE2                * 4CC5D
 
 * refs (1): 4CC99
-OBJ_4CC6C:
-          :: 8PICK %* COERCE BINT9 PICK #+ ; SWAP OBJ_4CC6C DUP 5UNROLL * 4CC6C
+* #i -> #x: BAR: the column where bar i starts
+BarLeftCol:
+          :: 8PICK %* COERCE BINT9 PICK #+ ; SWAP BarLeftCol DUP 5UNROLL * 4CC6C
           #-DUP #>1 IT                           * 4CCA8
           :: #1- 4ROLL #1+ 4UNROLL ;             * 4CCB7
-          OBJ_4CCF8 SWAP3PICK #+SWAP ~ATTNFLG@;#0=?SEMI;ExitAtLOOP LOOP * 4CCD5
-          5DROP ;                                * 4CCEE
+          BarFill SWAP3PICK #+SWAP ~ATTNFLG@;#0=?SEMI;ExitAtLOOP LOOP 5DROP ; * 4CCD5
 
 * refs (1): 4CCD5
-OBJ_4CCF8:
+* #x #y #w #h -> : BAR: fill one bar, cut to fit PICT; a bar right of PICT ends the loop
+BarFill:
         :: OVER #0=case 4DROP                    * 4CCF8
           GBUFFGROBDIM 6PICK OVER#< NOTcase      * 4CD0C
           :: 6DROP ExitAtLOOP ;                  * 4CD20
@@ -296,12 +320,14 @@ OBJ_4CCF8:
           :: ROTROT2DROP 4PICK #- ; 2DROP MAKEGROB INVGROB GBUFF 2SWAP GROB! ; * 4CD9D
 
 * refs (1): 4BA2B
-OBJ_4CDD9:
+* %r #i -> : POLAR, points only
+PlotPolarDot:
         :: SWAP DUPTYPEREAL? NOTcasedrop ClrLastPt * 4CDD9
           15GETLAM PtoR PIXON3 DROP ;            * 4CDF2
 
 * refs (10): 4BA7B 8C8B7 8C987 8CAB6 8CBFA 8CCDE ...
-OBJ_4CE0B:
+* %y #i -> : FUNCTION, points only: set the pixel at the current x; a non-real y breaks the curve
+PlotFcnDot:
         :: SWAP DUPTYPEREAL? NOTcasedrop ClrLastPt * 4CE0B
           SWAPDROP GETYPOS 1GETLAM SWAP PIXON3 ; * 4CE24
         BSS     10                               * 4CE42  zeros
@@ -313,13 +339,14 @@ EXITFCNsto:
 * ->
 * refs (1): 4F036
 DOGRAPHIC:
-        :: GDISPCENTER OBJ_4CE83 ;               * 4CE6F
+        :: GDISPCENTER PictScroll ;              * 4CE6F
 
 * refs (5): 4CE79 4D4B1 6A8D3 6B547 6C393
-OBJ_4CE83:
-        :: TURNMENUOFF OBJ_46BA7 'NOP ' OBJ_4CF8E TrueTrue NULL{} ONEFALSE' * 4CE83
-          GraphicExit '                          * 4CEB0
-          :: ClrDAsOK ERRJMP ; ClrDA1IsStat ParOuterLoop COLA OBJ_5108F * 4CEBA
+* -> : the scrolling view of PICT (the ◀ key from the stack, or from the EquationWriter): an outer loop with PictScrollKeys
+PictScroll:
+        :: TURNMENUOFF BindPictEnv 'NOP ' PictScrollKeys TrueTrue NULL{} * 4CE83
+          ONEFALSE' GraphicExit '                * 4CEAB
+          :: ClrDAsOK ERRJMP ; ClrDA1IsStat ParOuterLoop COLA PictLeave * 4CEBA
         ;                                        * 4CEE2
 
 * refs (4): 45AF5 4CEB0 69C1E 73275
@@ -345,13 +372,14 @@ ExitFcn:
           BIND ;                                 * 4CF84
 
 * refs (1): 4CE9C
-OBJ_4CF8E:
+* #key #plane -> ob TRUE | FALSE: hard keys of the scrolling view: arrows scroll, right shift jumps to the edge
+PictScrollKeys:
         :: SWAP BINT11 #=casedrop                * 4CF8E
           :: BINT1 ?CaseKeyDef SCROLLUP BINT3 ?CaseKeyDef JUMPTOP * 4CFA2
             DROPDEADTRUE ;                       * 4CFC5
           BINT16 #=casedrop                      * 4CFCF
-          :: BINT1 ?CaseKeyDef SCROLLLEFT BINT2 ?CaseKeyDef OBJ_4D0E7 BINT3 * 4CFD9
-            ?CaseKeyDef JUMPLEFT DROPDEADTRUE ;  * 4D001
+          :: BINT1 ?CaseKeyDef SCROLLLEFT BINT2 ?CaseKeyDef ScrollToGraph * 4CFD9
+            BINT3 ?CaseKeyDef JUMPLEFT DROPDEADTRUE ; * 4CFFC
           BINT17 #=casedrop                      * 4D015
           :: BINT1 ?CaseKeyDef SCROLLDOWN BINT3 ?CaseKeyDef JUMPBOT * 4D01F
             DROPDEADTRUE ;                       * 4D042
@@ -366,10 +394,11 @@ OBJ_4CF8E:
           'DoBadKeyT ;                           * 4D0DD
 
 * refs (1): 4CFF7
-OBJ_4D0E7:
-        :: TakeOver OBJ_6DE82 case               * 4D0E7
+* -> : left-shift left arrow in the scrolling view: into PICTURE, or back if the EquationWriter is open
+ScrollToGraph:
+        :: TakeOver EqwActive? case              * 4D0E7
           :: ATTNFLGCLR ~EXITFCNsto;TOADISP ;    * 4D0FB
-          EXITFCNsto OBJ_4D1AA ;                 * 4D10F
+          EXITFCNsto GraphRes ;                  * 4D10F
 
 * ob -> DoBadKey T
 * refs (11): 4CFC5 4D00B 4D042 4D079 4D0B0 4D7EA ...
@@ -397,23 +426,25 @@ SCROLLRIGHT:
         :: TakeOver REPEATER BINT18 WINDOWRIGHT ; * 4D18C
 
 * refs (2): 4D114 4DA4E
-OBJ_4D1AA:
-        :: BINT0 OBJ_6FFFD GETRES GetRes 4PUTLAM 3DROP COLA OBJ_4D1DC * 4D1AA
+* -> : take the plot parameters and go into PICTURE
+GraphRes:
+        :: BINT0 OBJ_6FFFD GETRES GetRes 4PUTLAM 3DROP COLA GraphLoop * 4D1AA
         ;                                        * 4D1D7
 
 * refs (2): 48A44 4D1D2
-OBJ_4D1DC:
+* ... -> : PICTURE: set up its lams (cursor in lams 7 and 8, sizes 13 and 14, mode 3, coordinates state 16, menu 22, type info 23) and run the outer loop
+GraphLoop:
         :: GBUFFGROBDIM #1- 14PUTLAM #1- 13PUTLAM WINDOWCORNER # 41 #+ * 4D1DC
           TOTEMPOB 8PUTLAM BINT32 #+ TOTEMPOB 7PUTLAM 16GETLAM 20PUTLAM * 4D20E
           4GETLAM 21PUTLAM BINT1 BINT27 PUTLAM BINT0 16PUTLAM ~BINT0;3PUTLAM * 4D236
           %0_2A2B4 TOTEMPOB 1PUTLAM BINT0 TOTEMPOB 4PUTLAM GETPTYPE DUP * 4D25E
-          OBJ_731B7 IT ~BINT23;PUTLAM            * 4D286
-          OBJ_732C2 22PUTLAM CROSS_HAIRS 1GETLAM BINT28 ONE_DO ISTOP-INDEX * 4D295
-          #1+ GETLAM LOOP ABND ABND OBJ_46BA7 GETPTYPE OBJ_731F8 ' * 4D2B8
+          GraphLoop~1 IT ~BINT23;PUTLAM          * 4D286
+          GraphLoop~5 22PUTLAM CROSS_HAIRS 1GETLAM BINT28 ONE_DO ISTOP-INDEX * 4D295
+          #1+ GETLAM LOOP ABND ABND BindPictEnv GETPTYPE GraphLoop~2 ' * 4D2B8
           :: DUP                                 * 4D2E5
 
 * refs (1): 330FD
-NUMSOLVE~45:
+NUMSOLVE~25:
             :: BINT3 #> ; case2drop 'DoBadKeyT   * 4D2EF
             SWAP DUP#<7 case2drpfls BINT11       * 4D30D
             #=casedrop                           * 4D321
@@ -421,17 +452,17 @@ NUMSOLVE~45:
               :: TakeOver TraceMode? caseDoBadKey ~3GETLAM;#3= * 4D335
                 caseDoBadKey WINDOWTOP?          * 4D34E
                 IT JUMPTOP                       * 4D358
-                BINT7 TOPROW OBJ_47021 ;         * 4D362
+                BINT7 TOPROW CursJumpTo ;        * 4D362
               BINT2 ?CaseKeyDef DoBadKey DROP'   * 4D376
               :: TakeOver TraceMode? case        * 4D38A
                 :: BINT3 OBJ_735CB ;             * 4D39E
-                ~16GETLAM;#1= OBJ_4BF5D ~3GETLAM;#3= case * 4D3B2
-                :: OBJ_46E28 BINT11 OBJ_48238 ;  * 4D3C6
+                ~16GETLAM;#1= ?ClrCoords ~3GETLAM;#3= case * 4D3B2
+                :: RepeatCursKey BINT11 BoxCursUp ; * 4D3C6
                 ~3GETLAM;#0= case                * 4D3DF
-                :: OBJ_46E28 BINT11 OBJ_4DCEC ;  * 4D3E9
-                OBJ_46E28 BINT11                 * 4D402
+                :: RepeatCursKey BINT11 PlainCursUp ; * 4D3E9
+                RepeatCursKey BINT11             * 4D402
                 :: WINDOWTOP? IT WINDOWUP        * 4D40C
-                  CROSS_OFF 7GETLAM !#1-IF>0 OBJ_4703F ; * 4D420
+                  CROSS_OFF 7GETLAM !#1-IF>0 CursDot ; * 4D420
               ;                                  * 4D439
               TRUE ;                             * 4D43E
             BINT16 #=casedrop                    * 4D448
@@ -439,46 +470,46 @@ NUMSOLVE~45:
               :: TakeOver TraceMode? caseDoBadKey ~3GETLAM;#3= * 4D461
                 caseDoBadKey WINDOWLEFT?         * 4D47A
                 IT JUMPLEFT                      * 4D484
-                LEFTCOL OBJ_4728B ;              * 4D48E
+                LEFTCOL CursToCol ;              * 4D48E
               BINT2 ?CaseKeyDef                  * 4D49D
-              :: EXITFCNsto OBJ_4CE83 ; DROP'    * 4D4A7
-              :: TakeOver TraceMode? case OBJ_736AC * 4D4C0
-                ~16GETLAM;#1= OBJ_0C811 ~3GETLAM;#3= case * 4D4D9
-                :: OBJ_46E28 BINT16 OBJ_4881E ;  * 4D4ED
+              :: EXITFCNsto PictScroll ; DROP'   * 4D4A7
+              :: TakeOver TraceMode? case PictRepeatLeft * 4D4C0
+                ~16GETLAM;#1= GraphLoop~6 ~3GETLAM;#3= case * 4D4D9
+                :: RepeatCursKey BINT16 BoxCursLeft ; * 4D4ED
                 ~3GETLAM;#0= case                * 4D506
-                :: OBJ_46E28 BINT16 OBJ_4DDAF ;  * 4D510
-                OBJ_46E28 BINT16 OBJ_470E9 ;     * 4D529
+                :: RepeatCursKey BINT16 PlainCursLeft ; * 4D510
+                RepeatCursKey BINT16 CursLeft ;  * 4D529
               TRUE ;                             * 4D53D
             BINT18 #=casedrop                    * 4D547
             :: BINT3 ?CaseKeyDef                 * 4D551
               :: TakeOver TraceMode? caseDoBadKey ~3GETLAM;#3= * 4D560
                 caseDoBadKey WINDOWRIGHT?        * 4D579
                 IT JUMPRIGHT                     * 4D583
-                RIGHTCOL OBJ_4728B ;             * 4D58D
+                RIGHTCOL CursToCol ;             * 4D58D
               BINT2 ?CaseKeyDef DoBadKey DROP'   * 4D59C
-              :: TakeOver TraceMode? case OBJ_736F7 * 4D5B0
-                ~16GETLAM;#1= OBJ_0C811 ~3GETLAM;#3= case * 4D5C9
-                :: OBJ_46E28 BINT18 OBJ_4842C ;  * 4D5DD
+              :: TakeOver TraceMode? case PictRepeatRight * 4D5B0
+                ~16GETLAM;#1= GraphLoop~6 ~3GETLAM;#3= case * 4D5C9
+                :: RepeatCursKey BINT18 BoxCursRight ; * 4D5DD
                 ~3GETLAM;#0= case                * 4D5F6
-                :: OBJ_46E28 BINT18 OBJ_4DDE6 ;  * 4D600
-                OBJ_46E28 BINT18 OBJ_470B7 ;     * 4D619
+                :: RepeatCursKey BINT18 PlainCursRight ; * 4D600
+                RepeatCursKey BINT18 CursRight ; * 4D619
               TRUE ;                             * 4D62D
             BINT17 #=casedrop                    * 4D637
             :: BINT3 ?CaseKeyDef                 * 4D641
               :: TakeOver TraceMode? caseDoBadKey ~3GETLAM;#3= * 4D650
                 caseDoBadKey WINDOWBOT?          * 4D669
                 IT JUMPBOT                       * 4D673
-                BINT7 BOTROW OBJ_47021 ;         * 4D67D
-              BINT2 ?CaseKeyDef OBJ_48873 DROP'  * 4D691
+                BINT7 BOTROW CursJumpTo ;        * 4D67D
+              BINT2 ?CaseKeyDef PictKeyEQ DROP'  * 4D691
               :: TakeOver TraceMode? case        * 4D6A5
                 :: BINT4 OBJ_735CB ;             * 4D6B9
-                ~16GETLAM;#1= OBJ_4BF5D ~3GETLAM;#3= case * 4D6CD
-                :: OBJ_46E28 BINT17 OBJ_481D9 ;  * 4D6E1
+                ~16GETLAM;#1= ?ClrCoords ~3GETLAM;#3= case * 4D6CD
+                :: RepeatCursKey BINT17 BoxCursDown ; * 4D6E1
                 ~3GETLAM;#0= case                * 4D6FA
-                :: OBJ_46E28 BINT17 OBJ_4DD73 ;  * 4D704
-                OBJ_46E28 BINT17                 * 4D71D
+                :: RepeatCursKey BINT17 PlainCursDown ; * 4D704
+                RepeatCursKey BINT17             * 4D71D
                 :: WINDOWBOT? IT WINDOWDOWN      * 4D727
-                  CROSS_OFF 7GETLAM 13GETLAM !#1+IF<dim-1 OBJ_4703F ; * 4D73B
+                  CROSS_OFF 7GETLAM 13GETLAM !#1+IF<dim-1 CursDot ; * 4D73B
               ;                                  * 4D759
               TRUE ;                             * 4D75E
             BINT12 #=casedrop                    * 4D768
@@ -487,7 +518,7 @@ NUMSOLVE~45:
               :: CHECKMENU DoPrevRow DispMenu ; BINT3 ?CaseKeyDef * 4D7A4
               :: CHECKMENU 22Lget EVAL InitMenu DispMenu ; DROPDEADTRUE ; * 4D7C7
             BINT28 #=casedrop                    * 4D7F4
-            :: BINT2 ?CaseKeyDef OBJ_4576C BINT1 ?CaseKeyDef OBJ_4EBD1 * 4D7FE
+            :: BINT2 ?CaseKeyDef PictKeyERASE BINT1 ?CaseKeyDef PictKeyDEL * 4D7FE
               DROPDEADTRUE ;                     * 4D821
             BINT45 #=casedrop                    * 4D82B
             :: BINT1 ?CaseKeyDef ~EXITFCNsto;TOADISP BINT3 ?CaseKeyDef * 4D835
@@ -495,13 +526,14 @@ NUMSOLVE~45:
             BINT35 #=casedrop DROPFALSE          * 4D862
             BINT40 #=casedrop DROPFALSE          * 4D871
             SWAP BINT1 #<> case DROPDEADTRUE     * 4D880
-            BINT39 ?CaseKeyDef OBJ_4E3E3 BINT14 ?CaseKeyDef OBJ_45681 BINT25 * 4D899
-            ?CaseKeyDef OBJ_73AEE BINT26 ?CaseKeyDef OBJ_50EE3 BINT44 * 4D8BC
-            ?CaseKeyDef MENUOFF BINT49 ?CaseKeyDef OBJ_73B20 DROPDEADTRUE ; * 4D8DA
-          TrueTrue BINT25 PICK ONEFALSE GETPTYPE DUP OBJ_73257 SWAP * 4D8FD
-          OBJ_73299 ClrDA1IsStat ERRSET ParOuterLoop ERRTRAP * 4D925
+            BINT39 ?CaseKeyDef PictKeyMARK BINT14 ?CaseKeyDef PictKeyPICT> * 4D899
+            BINT25 ?CaseKeyDef OBJ_73AEE BINT26 ?CaseKeyDef PictKey+/- * 4D8B7
+            BINT44 ?CaseKeyDef MENUOFF BINT49 ?CaseKeyDef PictXYKey * 4D8D5
+            DROPDEADTRUE ;                       * 4D8F3
+          TrueTrue BINT25 PICK ONEFALSE GETPTYPE DUP GraphLoop~3 SWAP * 4D8FD
+          GraphLoop~4 ClrDA1IsStat ERRSET ParOuterLoop ERRTRAP * 4D925
           :: Π'SAVEDDEPTH RESETDEPTH ERRJMP ; Π'SAVEDDEPTH RESETDEPTH * 4D93E
-          OBJ_5108F ;                            * 4D961
+          PictLeave ;                            * 4D961
 
 * refs (8): 471B6 47679 4817F 4BD05 4C102 4E8B1 ...
 ~RclDepnd;1get(li)?:
@@ -512,41 +544,45 @@ NUMSOLVE~45:
         :: 1stArgb(ex) ::N ;                     * 4D97F
 
 * refs (1): 8CE65
-OBJ_4D993:
+* -> : HISTOGRAM draw: count ΣDAT's column into bins, then draw bars
+DrawHistogram:
         :: 15GETLAM 4GETLAM 16GETLAM 3PICK %- OVER %/ bins(3r) DROPONE * 4D993
-          OBJ_4CB68 ;                            * 4D9C5
+          DrawBars ;                             * 4D9C5
 
 * refs (1): 8CF53
-OBJ_4D9CF:
-        :: rclä STATGETXCOL COERCE BINT1 3PICK OBJ_2CF08 2DROP OBJ_4CB68 ; * 4D9CF
+* -> : BAR draw: the column of ΣDAT as bars
+DrawBar:
+        :: rclä STATGETXCOL COERCE BINT1 3PICK ChkStatCols 2DROP DrawBars ; * 4D9CF
         BSS     12                               * 4DA01  zeros
 
 * refs (22): 0C9F4 46C70 46CA7 47D84 482BA 482CE ...
 CROSS_HAIRS:
-        :: ~8GETLAM;7GETLAM CROSSGROB OBJ_4DEAE DUP4PUTLAM OBJ_4DB18 ; * 4DA0D
+        :: ~8GETLAM;7GETLAM CROSSGROB OBJ_4DEAE DUP4PUTLAM DrawCross ; * 4DA0D
         BSS     15                               * 4DA30  zeros
 
 * refs (3): 1E2C4 4C30A AA43D
-OBJ_4DA3F:
-        :: GDISPCENTER COLA OBJ_4D1AA            * 4DA3F
+* -> : show PICT and enter PICTURE
+GraphEnter:
+        :: GDISPCENTER COLA GraphRes             * 4DA3F
         ;                                        * 4DA53
 
 * refs (1): 686C5
-OBJ_4DA58:
+EqwParseText~1:
         :: FALSE' 'EL STO TRUE ;                 * 4DA58
 
 * refs (22): 0C9E5 46C57 46CBB 4703A 470CB 470FD ...
 CROSS_OFF:
-        :: BINT4 ~8GETLAM;7GETLAM OBJ_4E092 ;    * 4DA76
+        :: BINT4 ~8GETLAM;7GETLAM CursRestore ;  * 4DA76
 
 * refs (4): 4D09C 4D105 4D844 734B8
 ~EXITFCNsto;TOADISP:
         :: EXITFCNsto TOADISP ;                  * 4DA8F
 
 * refs (7): 47C18 481CF 49696 49B19 49B41 4E76C ...
-OBJ_4DAA3:
+* -> : leave the present PICTURE, then erase and draw again
+ERASE&DRAW:
         :: EXITFCNsto                            * 4DAA3
-          :: DOERASE OBJ_4C2CE ; ;               * 4DAAD
+          :: DOERASE AxesAndDraw ; ;             * 4DAAD
 
         :: INDEPVAR                              * 4DAC6
           :: OVER TYPESYMB? NOTcaseDROP ONE{}N   * 4DAD0
@@ -555,6 +591,7 @@ OBJ_4DAA3:
         ASSEMBLE
 
 * refs (2): 65906 6591E
+* Probably: check that the byte at #0011C allows it, else warm start
 SUB_4DAFD:
         D0=(5)  #0011C                           * 4DAFD
         C=DAT0  XS                               * 4DB04
@@ -566,33 +603,40 @@ SUB_4DAFD:
         RPL
 
 * refs (3): 4DA26 4DD64 4ECD0
-OBJ_4DB18:
+* grob #x #y ... -> : draw the crosshair grob over the saved picture (flag -32 picks the colour)
+DrawCross:
         :: TOTEMPOB 4ROLL ~BINT32;TestSysFlag OBJ_4DF67 GBUFF 2SWAP GROB! ; * 4DB18
 
 * refs (1): 47026
-OBJ_4DB45:
+* #pos #lam -> : with the crosshair off, store a cursor coordinate
+CursLam!:
         :: CROSS_OFF TOTEMPSWAP PUTLAM CROSS_HAIRS ; * 4DB45
 
 * refs (2): 47053 4DE54
-OBJ_4DB63:
-        :: OBJ_4DC76 IT OBJ_4DBB3                * 4DB63
+* -> : DOT+: set the pixel at the cursor, and fix the mark if the cursor is next to it
+DotOn:
+        :: CursNearMark? IT MarkDotOn            * 4DB63
           ~8GETLAM;7GETLAM PIXON3 CROSS_HAIRS ;  * 4DB77
 
 * refs (2): 4704E 4DE9A
-OBJ_4DB8B:
-        :: OBJ_4DC76 IT OBJ_4DBD1                * 4DB8B
+* -> : DOT-: clear the pixel at the cursor, and fix the mark if the cursor is next to it
+DotOff:
+        :: CursNearMark? IT MarkDotOff           * 4DB8B
           ~8GETLAM;7GETLAM PIXOFF3 CROSS_HAIRS ; * 4DB9F
 
 * refs (1): 4DB72
-OBJ_4DBB3:
-        :: OBJ_4DBEA INVGROB 4UNROLL GROB! ;     * 4DBB3
+* -> : put the pixel into the picture saved under the mark, inverted
+MarkDotOn:
+        :: MarkPatch INVGROB 4UNROLL GROB! ;     * 4DBB3
 
 * refs (1): 4DB9A
-OBJ_4DBD1:
-        :: OBJ_4DBEA 4UNROLL GROB! ;             * 4DBD1
+* -> : take the pixel out of the picture saved under the mark
+MarkDotOff:
+        :: MarkPatch 4UNROLL GROB! ;             * 4DBD1
 
 * refs (2): 4DBB8 4DBD6
-OBJ_4DBEA:
+* ... -> ...: where the cursor is in the saved mark grob (lam 11); a grob too small leaves the caller
+MarkPatch:
         :: CURRENTMARK? DROP 8GETLAM ROT#- #2+ 7GETLAM ROT#- #2+ 11GETLAM * 4DBEA
           DUP TYPEGROB? NOTcase                  * 4DC1C
 
@@ -603,7 +647,8 @@ OBJ_4DC2B:
           3UNROLL ONEONE MAKEGROB ;              * 4DC62
 
 * refs (2): 4DB68 4DB90
-OBJ_4DC76:
+* -> flag: TRUE if the cursor is within 3 pixels of the mark in both directions
+CursNearMark?:
         :: CURRENTMARK? NOTcaseFALSE 7GETLAM     * 4DC76
           2DUP#< ?SWAP #- #<3 SWAP 8GETLAM 2DUP#< ?SWAP #- #<3 AND ; * 4DC8A
 
@@ -623,43 +668,48 @@ OBJ_4DCC6:
         RPL
 
 * refs (1): 4D3F8
-OBJ_4DCEC:
+* -> : cursor up with no drawing mode
+PlainCursUp:
         :: OBJ_4DCC6 WINDOWTOP? IT WINDOWUP      * 4DCEC
           ~8GETLAM;7GETLAM CursCorner 7GETLAM !#1-IF>0 * 4DD05
 
 * refs (3): 4DDA5 4DDDC 4DE18
-OBJ_4DD19:
+* ... -> : restore what was under the crosshair at the old place and draw it at the new
+PlainCursMoved:
           :: ~8GETLAM;7GETLAM CROSSGROB OBJ_4DEB3 4GETLAM GBUFF BINT11 ROLL * 4DD19
-            BINT11 ROLL GROB! GBUFF 5UNROLL SUBGROB DUP4PUTLAM OBJ_4DB18 ; * 4DD41
+            BINT11 ROLL GROB! GBUFF 5UNROLL SUBGROB DUP4PUTLAM DrawCross ; * 4DD41
         ;                                        * 4DD6E
 
 * refs (1): 4D713
-OBJ_4DD73:
+* -> : cursor down with no drawing mode
+PlainCursDown:
         :: OBJ_4DCC6 WINDOWBOT? IT WINDOWDOWN    * 4DD73
           ~8GETLAM;7GETLAM CursCorner 7GETLAM 13GETLAM !#1+IF<dim-1 * 4DD8C
-          OBJ_4DD19 ;                            * 4DDA5
+          PlainCursMoved ;                       * 4DDA5
 
 * refs (2): 0C8ED 4D51F
-OBJ_4DDAF:
+* -> : cursor left with no drawing mode
+PlainCursLeft:
         :: OBJ_4DCC6 WINDOWLEFT? IT WINDOWLEFT   * 4DDAF
-          ~8GETLAM;7GETLAM CursCorner 8GETLAM !#1-IF>0 OBJ_4DD19 ; * 4DDC8
+          ~8GETLAM;7GETLAM CursCorner 8GETLAM !#1-IF>0 PlainCursMoved ; * 4DDC8
 
 * refs (2): 0C8E8 4D60F
-OBJ_4DDE6:
+* -> : cursor right with no drawing mode
+PlainCursRight:
         :: OBJ_4DCC6 WINDOWRIGHT? IT WINDOWRIGHT * 4DDE6
           ~8GETLAM;7GETLAM CursCorner 8GETLAM 14GETLAM !#1+IF<dim-1 * 4DDFF
-          OBJ_4DD19 ;                            * 4DE18
+          PlainCursMoved ;                       * 4DE18
 
 * refs (1): 3E8B6
 {GRAPH\DOT+}~1:
         :: CHECKMENU ~3GETLAM;#2= ITE ~BINT0;3PUTLAM * 4DE22
-          :: OBJ_4EE6F BINT2 3PUTLAM CROSS_OFF OBJ_4DB63 ; * 4DE3B
+          :: OBJ_4EE6F BINT2 3PUTLAM CROSS_OFF DotOn ; * 4DE3B
           DispMenu ;                             * 4DE5E
 
 * refs (1): 3E8EB
 {GRAPH\DOT-}~1:
         :: CHECKMENU ~3GETLAM;#1=_2 ITE ~BINT0;3PUTLAM * 4DE68
-          :: OBJ_4EE6F BINT1 3PUTLAM CROSS_OFF OBJ_4DB8B ; * 4DE81
+          :: OBJ_4EE6F BINT1 3PUTLAM CROSS_OFF DotOff ; * 4DE81
           DispMenu ;                             * 4DEA4
 
 * refs (2): 4DA1C 4ECCB
@@ -667,8 +717,9 @@ OBJ_4DEAE:
         ::                                       * 4DEAE
 
 * refs (2): 48481 4DD28
+* Probably: the area of PICT under the crosshair, smaller at the edges of PICT
 OBJ_4DEB3:
-          :: 3UNROLL 14GETLAM SWAP 13GETLAM OBJ_4DFFD ITE * 4DEB3
+          :: 3UNROLL 14GETLAM SWAP 13GETLAM CrossInside? ITE * 4DEB3
             :: OBJ_4E10C BINT9 ROLL 5UNROLL SUBGROB 5UNROLL 4PICK 3UNROLL * 4DED6
               4PICK 3UNROLL ;                    * 4DF03
             :: DROPSWAPDROP OVER #2- OVER #2- 2DUP 6ROLL #3+ 6ROLL #3+ ; * 4DF12
@@ -676,6 +727,7 @@ OBJ_4DEB3:
           GBUFF 5UNROLL SUBGROB ;                * 4DF53
 
 * refs (2): 484E5 4DB2C
+* Probably: combine the crosshair grob with the saved picture: OR it in, or with flag TRUE invert it
 OBJ_4DF67:
         CON(5)  (*)+5                            * 4DF67  primitive code object
         ASSEMBLE
@@ -727,7 +779,8 @@ OBJ_4DF67.L4:
         GOVLNG  GETPTRLOOP                       * 4DFF6
 
 * refs (1): 4DECC
-OBJ_4DFFD:
+* #x #y #w #h -> flag: TRUE if the crosshair's arms stick out of PICT at x, y
+CrossInside?:
         CON(5)  (*)+5                            * 4DFFD  primitive code object
         CD1EX                                    * 4E002
         R0=C.F  A                                * 4E005
@@ -750,10 +803,10 @@ OBJ_4DFFD:
         GOSUB   SUB_4E06F                        * 4E046
         GOSUB   SUB_4E07D                        * 4E04A
         LC(5)   FALSE                            * 4E04E
-        GOTO    OBJ_4DFFD.L2                     * 4E055
-OBJ_4DFFD.L1:
+        GOTO    CrossInside?.L2                  * 4E055
+CrossInside?.L1:
         LC(5)   TRUE                             * 4E059
-OBJ_4DFFD.L2:
+CrossInside?.L2:
         A=R0.F  A                                * 4E060
         AD1EX                                    * 4E066
         A=C     A                                * 4E069
@@ -772,16 +825,17 @@ SUB_4E07D:
         A=A-1   A                                * 4E07D
         A=A-1   A                                * 4E07F
         ?C>A    A                                * 4E081
-        GOYES   OBJ_4DFFD.L1                     * 4E084
+        GOYES   CrossInside?.L1                  * 4E084
         C=C-1   A                                * 4E086
-        GOC     OBJ_4DFFD.L1                     * 4E088
+        GOC     CrossInside?.L1                  * 4E088
         C=C-1   A                                * 4E08B
-        GOC     OBJ_4DFFD.L1                     * 4E08D
+        GOC     CrossInside?.L1                  * 4E08D
         RTN                                      * 4E090
         RPL
 
 * refs (2): 4DA85 4E4A6
-OBJ_4E092:
+* #lam -> : put the picture kept in the lam back at the crosshair's corner
+CursRestore:
         :: CursCorner ROT GETLAM GBUFF 2SWAP GROB! ; * 4E092
 
 * refs (11): 4820B 48260 4845E 4884B 4DD0A 4DD91 ...
@@ -814,6 +868,7 @@ CursCorner.L4:
         GOTO    CursCorner.loop2                 * 4E108
 
 * refs (1): 4DEDB
+* Probably: work out how much of the crosshair fits at the edges of PICT, as corners and arm lengths
 OBJ_4E10C:
         CON(5)  (*)+5                            * 4E10C  primitive code object
         GOSBVL  POP2#                            * 4E111
@@ -957,12 +1012,13 @@ LINECHANGE:
 
 * refs (2): 3E820 4E659
 \MARK:
-        :: CHECKMENU COLA OBJ_4E3E3              * 4E3CA
+        :: CHECKMENU COLA PictKeyMARK            * 4E3CA
         ;                                        * 4E3DE
 
 * refs (2): 4D8A3 4E3D9
-OBJ_4E3E3:
-        :: TakeOver OBJ_4579E EQCURSOR? case2drop * 4E3E3
+* -> : PICTURE MARK key: set, or move, the mark
+PictKeyMARK:
+        :: TakeOver ?NEWMARK EQCURSOR? case2drop * 4E3E3
           :: 11GETLAM 4PUTLAM %0_2A2B4 TOTEMPOB 1PUTLAM CROSS_OFF * 4E3FC
             CROSS_HAIRS ;                        * 4E41F
           CROSS_OFF PREMARKON CROSS_HAIRS NEWMARK ; * 4E429
@@ -977,7 +1033,7 @@ EQCURSOR?:
 
 * refs (3): 482C9 4E42E 4E6DB
 PREMARKON:
-        :: BINT11 3UNROLL OBJ_4E092 ;            * 4E497
+        :: BINT11 3UNROLL CursRestore ;          * 4E497
 
 * refs (3): 457B2 4980F 4E438
 NEWMARK:
@@ -992,7 +1048,7 @@ OBJ_4E519:
 
 * refs (1): 3E85C
 \BOX:
-        :: CHECKMENU OBJ_4579E CROSSMARKOFF ~8GETLAM;7GETLAM DRAWBOX# * 4E55A
+        :: CHECKMENU ?NEWMARK CROSSMARKOFF ~8GETLAM;7GETLAM DRAWBOX# * 4E55A
           CROSSMARKON ;                          * 4E578
 
 * #x1 #y1 #x2 #y2 ->
@@ -1004,23 +1060,24 @@ DRAWBOX#:
 
 * refs (1): 3E881
 \CIRCLE:
-        :: CHECKMENU OBJ_4579E CROSSMARKOFF FALSE 3UNROLL UNCOERCE2 * 4E5E6
-          ~8GETLAM;7GETLAM UNCOERCE2 2DUP 6ROLL 6ROLL OBJ_4FE6C CROSSMARKON ; * 4E609
+        :: CHECKMENU ?NEWMARK CROSSMARKOFF FALSE 3UNROLL UNCOERCE2 * 4E5E6
+          ~8GETLAM;7GETLAM UNCOERCE2 2DUP 6ROLL 6ROLL ArcTrace CROSSMARKON ; * 4E609
 
 * refs (1): 3E834
 \LINE:
-        :: CHECKMENU OBJ_4579E CROSSMARKOFF ~8GETLAM;7GETLAM DRAWLINE#3 * 4E631
+        :: CHECKMENU ?NEWMARK CROSSMARKOFF ~8GETLAM;7GETLAM DRAWLINE#3 * 4E631
           OBJ_4E519 CROSS_HAIRS \MARK ;          * 4E64F
 
 * refs (1): 3E848
 \TLINE:
-        :: CHECKMENU OBJ_4579E CROSSMARKOFF ~8GETLAM;7GETLAM TOGGLELINE#3 * 4E663
+        :: CHECKMENU ?NEWMARK CROSSMARKOFF ~8GETLAM;7GETLAM TOGGLELINE#3 * 4E663
           CROSSMARKON ;                          * 4E681
 
 * refs (2): 46CAC 4702B
-OBJ_4E68B:
+* -> : when coordinates are shown (lam 16 = 1), refresh both
+?ShowCoords:
         :: ~16GETLAM;#1= NOT?SEMI                * 4E68B
-          OBJ_47209 OBJ_47236 ;                  * 4E69A
+          ShowCoordX ShowCoordY ;                * 4E69A
 
 * refs (1): 4E2A2
 ~DispMenu;BINT0;16PUTLAM:
@@ -1047,21 +1104,23 @@ sub(go,<0>,<0>,<83>,<8>):
         ;                                        * 4E74E
 
 * refs (1): 47F27
-OBJ_4E753:
-        :: CHECKMENU PPAR>ZPAR RECORDX&YC% centr(c) OBJ_4DAA3 ; * 4E753
+* -> : ZOOM CNTR: recentre at the crosshair and redraw
+PictKeyCNTR:
+        :: CHECKMENU PPAR>ZPAR RECORDX&YC% centr(c) ERASE&DRAW ; * 4E753
 
 Z-BOX:
-        :: CHECKMENU LookForEQ/äDAT OBJ_4579E EQCURSOR? case2drop DoBadKey * 4E776
+        :: CHECKMENU LookForEQ/äDAT ?NEWMARK EQCURSOR? case2drop DoBadKey * 4E776
 
 * refs (1): 0C9C2
-OBJ_4E799:
+* #x #y -> : BOXZ ZOOM: set PMIN and PMAX from the box between (x,y) and the cursor; a box with no width or height keeps that range
+ZoomToBox:
           :: GBUFFGROBDIM px->c(2rr,2s) C%>% ~8GETLAM;7GETLAM GBUFFGROBDIM * 4E799
             px->c(2rr,2s) C%>% ORDERXY% DUP 4PICK %= IT * 4E7B7
             :: DROPSWAPDROP GETPMIN&MAX SWAP2C%>% SWAPDROP ROTDROP 3UNROLL ; * 4E7DA
             OVER5PICK %= IT                      * 4E802
             :: SWAPDROP ROTDROP GETPMIN&MAX SWAP2C%>% DROPSWAPDROP 4UNROLL * 4E811
               SWAP ;                             * 4E834
-            %>C% pmax(c) %>C% pmin(c) OBJ_4DAA3 ; * 4E83E
+            %>C% pmax(c) %>C% pmin(c) ERASE&DRAW ; * 4E83E
         ;                                        * 4E85C
 
 * refs (1): 3E7DE
@@ -1075,7 +1134,7 @@ label:
 
 * refs (1): 4E870
 label!:
-          :: OBJ_4681A ?SKIP                     * 4E893
+          :: RclAxLabels ?SKIP                   * 4E893
             :: INDEPVAR ID>$ ~RclDepnd;1get(li)? ID>$ ; * 4E8A2
             $>grob SWAP $>grob GBUFFGROBDIM label~1 GETPMIN&MAX SWAP2C%>% * 4E8C0
             ROT 4ROLL 3UNROLL label~3 ;          * 4E8E3
@@ -1083,7 +1142,7 @@ label!:
 
 * refs (1): 4E8D4
 label~1:
-        :: RclAx*s 1get(li)? 3PICK3PICK OBJ_4F20F 4UNROLLROT * 4E901
+        :: RclAx*s 1get(li)? 3PICK3PICK C%>PxRR 4UNROLLROT * 4E901
           r=>rr;rot;*(2rr);+(2rr);r=>r SWAP4ROLL Chkr=>s(s,r) DUPTYPEBINT? * 4E91F
           ITE label~2 4ROLLDROP                  * 4E933
           SWAP3PICK Chkr=>s(s,r) DUPTYPEBINT? NOTcase * 4E942
@@ -1128,20 +1187,22 @@ label~4:
         :: ~setStdWid;COLA;stkdecomp$w $>grob ;  * 4EBBD
 
 * refs (2): 45762 4D81C
-OBJ_4EBD1:
-        :: TakeOver OBJ_4579E GBUFF 3UNROLL CROSSMARKOFF ~8GETLAM;7GETLAM * 4EBD1
+* -> : PICTURE DEL key: clear the area between mark and cursor
+PictKeyDEL:
+        :: TakeOver ?NEWMARK GBUFF 3UNROLL CROSSMARKOFF ~8GETLAM;7GETLAM * 4EBD1
           ORDERXY# SWAP#1+SWAP #1+ GROB!ZERODRP CROSSMARKON ; * 4EBF4
 
 * refs (1): 73AF8
-OBJ_4EC12:
+* -> ob: the coordinates for the X,Y→ key: the cursor's, or when tracing what the plot type's routine gives
+PictCoordsOb:
         :: TraceMode? NOTcase RECORDX&YC%        * 4EC12
           ~BINT23;GETLAM BINT5 NTHELCOMP case EVAL * 4EC26
           RECORDX&YC% ;                          * 4EC3F
 
 * refs (1): 68E95
-OBJ_4EC49:
-        :: 'EL BINT33 GETLAM NOTAND BINT32 GETLAM NOTAND IT OBJ_6C041 * 4EC49
-          TRUE' 'EL STO OBJ_699B9 ;              * 4EC7B
+EqwLoadSymb~7:
+        :: 'EL BINT33 GETLAM NOTAND BINT32 GETLAM NOTAND IT EqwPushUndo * 4EC49
+          TRUE' 'EL STO EqwNoArg? ;              * 4EC7B
 
 * refs (1): 3B3FA
 ~0LASTOWDOB!;CK2NOLASTWD:
@@ -1151,7 +1212,7 @@ OBJ_4EC49:
 * refs (12): 456B8 4574E 45794 477D1 4E50F 4E578 ...
 CROSSMARKON:
         :: CURRENTMARK? IT                       * 4ECAD
-          :: OBJ_4E519 MARKGROB OBJ_4DEAE OBJ_4DB18 ; * 4ECBC
+          :: OBJ_4E519 MARKGROB OBJ_4DEAE DrawCross ; * 4ECBC
           CROSS_HAIRS ;                          * 4ECDA
 
 * refs (1): 3E78C
@@ -1159,28 +1220,30 @@ CROSSMARKON:
         :: CHECKMENU DEPTH #0=case               * 4ECE4
 
 Warning201:
-          :: # 201 OBJ_6BC2D ;                   * 4ECF8
+          :: # 201 EqwFlash ;                    * 4ECF8
           DUP TYPEGROB? NOTcase                  * 4ED11
 
 Warning202:
-          :: # 202 OBJ_6BC2D ;                   * 4ED20
+          :: # 202 EqwFlash ;                    * 4ED20
           CK1NOLASTWD CROSSMARKOFF GBUFF SWAP ~8GETLAM;7GETLAM CKGROBFITS * 4ED39
           4ROLL 3UNROLL GROB! CROSSMARKON ;      * 4ED57
 
 * refs (1): 4BB2F
-OBJ_4ED70:
-        :: ' 15GETLAM ' GETXPOS ' 1PUTLAM BINT28 TestSysFlag case OBJ_4BB98 * 4ED70  flag -28: Sequential plot / Simultaneous plot
-          BINT1 OBJ_4A96E DROP ' ' OBJ_4BF71 ITE OBJ_4C616 OBJ_4B747 * 4EDA7
+* -> : set up the step for one curve, or for all together by flag -28
+PlotSetup1:
+        :: ' 15GETLAM ' GETXPOS ' 1PUTLAM BINT28 TestSysFlag case PlotSimul * 4ED70  flag -28: Sequential plot / Simultaneous plot
+          BINT1 LastPtArrays DROP ' ' EqTwoCurves? ITE EqSide OBJ_4B747 * 4EDA7
           BINT1 BINT31 TestSysFlag ITE           * 4EDD4  flag -31: Connect points / Plot points only
           :: '                                   * 4EDE8
             :: DROP COLA PlotEval                * 4EDF2
             ;                                    * 4EE06
           ;                                      * 4EE0B
-          :: ' OBJ_4EF73 ;                       * 4EE10
+          :: ' PlotEvalY ;                       * 4EE10
           BINT1 3GETLAM BINT9 ::N 2PUTLAM ;      * 4EE24
 
 * refs (6): 57176 73303 73338 73397 733E2 73415
-OBJ_4EE42:
+* -> flag: TRUE if there is an EQ
+EqExists?:
         :: BINT1 GetEqN NOTcaseFALSE DROPTRUE    * 4EE42
         ;                                        * 4EE5B
 
@@ -1193,20 +1256,22 @@ OBJ_4EE6F:
           :: 7GETLAM TOTEMPOB 7PUTLAM 8GETLAM TOTEMPOB 8PUTLAM ; DispMenu.1 ; * 4EE6F
 
 * refs (1): 73B75
-OBJ_4EEA1:
+* -> : run the plot type's routine that turns the trace display on (element 1 of lam 23)
+TraceEnter:
         :: ~BINT23;GETLAM BINT1 NTHCOMPDROP EVAL ; * 4EEA1
 
 * refs (16): 0C9B3 47ACE 47AF1 47BD7 47C2C 47FFE ...
 * -> : save PPAR in ZPAR (with its zoom factors, or 4 4 0) so a zoom can be undone
 PPAR>ZPAR:
-        :: OBJ_496A0 ITE DROP                    * 4EEBF
+        :: RclZPAR ITE DROP                      * 4EEBF
           :: %4 %4 %0_2A2B4 ;                    * 4EED3
           'IDPAR RclPlotVar? ?SKIP MAKEPVARS     * 4EEEC
-          OBJ_49A74 ;                            * 4EF00
+          ZPAR! ;                                * 4EF00
 
 * refs (2): 4A9F6 4B540
-OBJ_4EF0A:
-        :: OBJ_4C64D NOT?INVPPAR ;               * 4EF0A
+* ob -> : Invalid PPAR error unless ob is a valid tick spacing
+CkAxTick:
+        :: AxTick? NOT?INVPPAR ;                 * 4EF0A
 
 * refs (1): 4CA91
 bins(3r)~3:
@@ -1215,7 +1280,8 @@ bins(3r)~3:
           3UNROLL %- SWAP %/ %1+ %IP COERCE ;    * 4EF4B
 
 * refs (2): 4BF3F 4EE1A
-OBJ_4EF73:
+* #i ob -> %: evaluate one curve; a math error breaks the curve (when connected) and skips the point
+PlotEvalY:
         :: BINT28 PUTLAM ERRSET EVALCRUNCH ERRTRAP * 4EF73
           :: ERROR@ # 100 #/ SWAPDROP BINT3 #<>case ERRJMP * 4EF91
             ERRORCLR BINT31 TestSysFlag ?SKIP    * 4EFBE  flag -31: Connect points / Plot points only
@@ -1225,7 +1291,7 @@ OBJ_4EF73:
 
 * refs (1): 1E2FF
 pview(c):
-        :: GBUFFGROBDIM OBJ_4F1A1 NcaseSIZEERR WINDOW# * 4F009
+        :: GBUFFGROBDIM C%>Px? NcaseSIZEERR WINDOW# * 4F009
         ;                                        * 4F022
 
 * refs (1): 1E309

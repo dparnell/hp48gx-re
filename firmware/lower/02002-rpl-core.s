@@ -1,4 +1,4 @@
-* HP 48GX ROM revision R, #02002-#04002: Object prologs, the RPL inner loop and stack primitives
+* HP 48GX ROM revision R, #02002-#04002: Boot and memory-lost sequence, RAM and I/O configuration, warm-start log, object prologs, the RPL inner loop, array element access and stack primitives
 * Addresses in the right-hand comments are those of the original ROM.
 * Most referenced: SWAP DUP DROP BINT1 OVER TRUE ROT FALSE BINT0 #1+ #1- #+
 * Follows on from the previous file (at #02002 in the original ROM).
@@ -15,7 +15,7 @@ norecCSseq.L5:
         P=      12                               * 02020
         GOTO    Warmstart.L1                     * 02022
 norecCSseq.L6:
-        GOSUB   SUB_02708                        * 02026
+        GOSUB   LogWarmstart                     * 02026
         ?P#     9                                * 0202A
         GOYES   norecCSseq.L7                    * 0202D
         GOTO    Coldstart                        * 0202F
@@ -24,9 +24,9 @@ norecCSseq.L7:
         C=0     A                                * 0203A
         DAT0=C  A                                * 0203C
         P=      0                                * 0203F
-        GOSUB   SUB_0249F                        * 02041
-        GOSBVL  SUB_01929                        * 02045
-        GOSBVL  SUB_01BEB                        * 0204C
+        GOSUB   InitDispGrobs                    * 02041
+        GOSBVL  InitIO                           * 02045
+        GOSBVL  BusyAnnOn                        * 0204C
         GOSBVL  FlushAttn                        * 02053
         ST=1    5                                * 0205A
 norecCSseq.loop8:
@@ -35,32 +35,32 @@ norecCSseq.loop8:
         D0=(5)  PortStat                         * 02068
         DAT0=C  1                                * 0206F
         P=      0                                * 02073
-        GOSBVL  SUB_098DB                        * 02075
+        GOSBVL  ReconfigBus                      * 02075
         ?ST=0   3                                * 0207C
         GOYES   norecCSseq.L9                    * 0207F
-        GOSBVL  SUB_09BED                        * 02081
+        GOSBVL  ClrPortStat                      * 02081
         P=      14                               * 02088
         GOTO    Warmstart.L1                     * 0208A
 norecCSseq.L9:
         ?ST=0   4                                * 0208E
         GOYES   norecCSseq.L10                   * 02091
-        GOSBVL  SUB_09BED                        * 02093
+        GOSBVL  ClrPortStat                      * 02093
         GOLONG  Interrupt.L4                     * 0209A
 norecCSseq.L10:
         ?ST=0   0                                * 020A0
         GOYES   norecCSseq.L14                   * 020A3
         ?ST=1   5                                * 020A5
         GOYES   norecCSseq.L11                   * 020A8
-        GOSBVL  SUB_09BED                        * 020AA
+        GOSBVL  ClrPortStat                      * 020AA
         GOTO    Coldstart                        * 020B1
 norecCSseq.L11:
-        LC(5)   SUB_81BA2.L4                     * 020B5  in the self-test area (#80000-#82006): ROM, not RAM
-        GOSUB   SUB_026CA                        * 020BC
+        LC(5)   ReplaceRAMScreen                 * 020B5  in the self-test area (#80000-#82006): ROM, not RAM
+        GOSUB   CallTestROM                      * 020BC
 norecCSseq.loop12:
-        GOSUB   SUB_027A2                        * 020C0
+        GOSUB   BootKeyWait                      * 020C0
         GOC     norecCSseq.L13                   * 020C4
         GOSUBL  Flush                            * 020C7
-        GOSUB   SUB_02388                        * 020CD
+        GOSUB   ErrBeep                          * 020CD
         GOTO    norecCSseq.loop12                * 020D1
 norecCSseq.L13:
         ST=0    5                                * 020D5
@@ -69,13 +69,13 @@ norecCSseq.L13:
 norecCSseq.L14:
         ?ST=1   2                                * 020DF
         GOYES   norecCSseq.L15                   * 020E2
-        GOSBVL  SUB_0A464                        * 020E4
+        GOSBVL  HomeOK?                          * 020E4
         GONC    norecCSseq.L16                   * 020EB
 norecCSseq.L15:
-        GOSUB   SUB_02313                        * 020EE
+        GOSUB   RecoverPrompt                    * 020EE
 norecCSseq.L16:
-        GOSUB   SUB_02593                        * 020F2
-        GOSUB   SUB_0266F                        * 020F6
+        GOSUB   InitMemPtrs                      * 020F2
+        GOSUB   ClrIntrpPtrs                     * 020F6
         D1=(5)  OSAVE                            * 020FA
         C=0     A                                * 02101
         DAT1=C  A                                * 02103
@@ -91,7 +91,7 @@ norecCSseq.L16:
         GOSBVL  SUB_7017C                        * 02130
         D0=(5)  CSPEED                           * 02137
         DAT0=A  A                                * 0213E
-        GOSUBL  SUB_00672                        * 02141
+        GOSUBL  CkLowBat                         * 02141
         D0=(5)  FIRSTPROC                        * 02147
         LC(5)   StartupProc                      * 0214E
         DAT0=C  A                                * 02155
@@ -102,38 +102,39 @@ norecCSseq.L16:
         P=      0                                * 0216B
         SETHEX                                   * 0216D
         INTON                                    * 0216F
-        GOSBVL  SUB_0ABA0                        * 02173
-        GOSBVL  SUB_0AC6A                        * 0217A
+        GOSBVL  CountPortLibs                    * 02173
+        GOSBVL  BuildROMPTAB                     * 0217A
         GOSBVL  D0->Sft1.L1                      * 02181
         ?ST=0   0                                * 02188
         GOYES   norecCSseq.L17                   * 0218B
-        LC(5)   SUB_81BA2.L6                     * 0218D  in the self-test area
-        GOSUB   SUB_026CA                        * 02194
+        LC(5)   NoMemScreen                      * 0218D  in the self-test area
+        GOSUB   CallTestROM                      * 02194
 norecCSseq.L17:
         ?ST=0   5                                * 02198
         GOYES   norecCSseq.L18                   * 0219B
-        LC(5)   SUB_81BA2.L7                     * 0219D  in the self-test area
-        GOSUB   SUB_026CA                        * 021A4
+        LC(5)   BadCardScreen                    * 0219D  in the self-test area
+        GOSUB   CallTestROM                      * 021A4
 norecCSseq.L18:
         P=      0                                * 021A8
         GOSBVL  GETPTR                           * 021AA
-        D0=(5)  OBJ_021C5                        * 021B1
+        D0=(5)  RunFirstProc                     * 021B1
         LC(5)   ROMPOLL                          * 021B8
         A=C     A                                * 021BF
         PC=(A)                                   * 021C1
         RPL
 
 * refs (1): 021B1
-OBJ_021C5:
+* -> : code object run after boot: keyboard state cleared, input stream and INITEN set, then the object in FIRSTPROC runs
+RunFirstProc:
         CODE                                     * 021C5  14 nibbles
           GOSBVL  SAVPTR                         * 021CF
-          GOVLNG  SAVPTR~jump_2.L1               * 021D6
+          GOVLNG  RunFirstProc~1                 * 021D6
         ENDCODE                                  * 021DD
 
 * ->
 * refs (1): 021B8
 ROMPOLL:
-        :: NULL{} BINT7 OBJ_04A4C RclKnownLibs INNERCOMP DUP#0=case DROP * 021DD
+        :: NULL{} BINT7 SETDF RclKnownLibs INNERCOMP DUP#0=case DROP * 021DD
           RunConfig(s) ;                         * 02205
 
 * refs (1): 02205
@@ -144,7 +145,8 @@ RunConfig(s):
 
 * refs (2): 011B5 70193
 * Boot: configure the I/O page
-SUB_02241:
+* -> : CONFIG the I/O page at #00100
+ConfigIO:
         P=      0                                * 02241
         LC(5)   #00100                           * 02243
         CONFIG                                   * 0224A
@@ -152,12 +154,13 @@ SUB_02241:
 
 * refs (3): 026F9 700CE 701A7
 * Boot: probe RAM by writing #80000 and looking for a mirror at #90000, then configure 128K or 32K
-SUB_0224F:
+* -> : see the note above: configure the RAM at #80000 at its size
+ConfigRAM:
         P=      0                                * 0224F
         LC(5)   CMOS                             * 02251
         A=C     A                                * 02258
         LC(5)   #C0000                           * 0225A
-        GOSUB   SUB_0229F                        * 02261
+        GOSUB   ConfigRAMAC                      * 02261
         D1=C                                     * 02265
         D0=(5)  HARDRAMEND                       * 02268
         A=DAT1  A                                * 0226F
@@ -177,7 +180,8 @@ SUB_0224F:
         LC(5)   #F0000                           * 02298
 
 * refs (1): 02261
-SUB_0229F:
+* C.A = RAM address, A.A = size mask -> : CONFIG both, and keep the mask and address in the IRAM shadows
+ConfigRAMAC:
         CONFIG                                   * 0229F
         CAEX    A                                * 022A2
         CONFIG                                   * 022A4
@@ -196,7 +200,8 @@ SUB_0229F:
         RTN                                      * 022D7
 
 * refs (3): 011BC 026D4 700A6
-SUB_022D9:
+* -> : CONFIG RAM at #C0000 with a 64K mask, and note that in the IRAM shadows there. Used while the self-test code in ROM at #80000 must stay visible
+ConfigBootRAM:
         P=      0                                * 022D9
         LC(5)   #F0000                           * 022DB
         CONFIG                                   * 022E2
@@ -213,7 +218,8 @@ SUB_022D9:
         RTNCC                                    * 02311
 
 * refs (1): 020EE
-SUB_02313:
+* -> : memory was lost at boot: default contrast, mark the top of RAM, and if ST7 is set show "Try To Recover Memory?" and wait for YES (key A) or NO (key F); other keys beep. Without ST7 memory is cleared at once
+RecoverPrompt:
         D1=(5)  CONTRAST                         * 02313
         P=      0                                * 0231A
         LC(2)   #0E                              * 0231C
@@ -230,34 +236,38 @@ SUB_02313:
         D1=(5)  ROMPARTS                         * 0233F
         DAT1=C  A                                * 02346
         ?ST=0   7                                * 02349
-        GOYES   SUB_02388.L2                     * 0234C
-        LC(5)   SUB_81BA2.L9                     * 0234E  memory-recovery code in the self-test area
-        GOSUB   SUB_026CA                        * 02355
-SUB_02313.loop1:
-        GOSUB   SUB_027A2                        * 02359
-        GOC     SUB_02313.L2                     * 0235D
+        GOYES   ClrMemBoot.L1                    * 0234C
+        LC(5)   TryRecoverScreen                 * 0234E  memory-recovery code in the self-test area
+        GOSUB   CallTestROM                      * 02355
+RecoverPrompt.loop1:
+        GOSUB   BootKeyWait                      * 02359
+        GOC     RecoverPrompt.L2                 * 0235D
         GOSBVL  POPKEY                           * 02360
-        GOC     SUB_02313.loop1                  * 02367
+        GOC     RecoverPrompt.loop1              * 02367
         B=C     A                                * 0236A
         C=0     A                                * 0236C
         LC(2)   #01                              * 0236E
         ?B=C    B                                * 02372
-        GOYES   SUB_02388.L3                     * 02375
+        GOYES   ClrMemBoot.L2                    * 02375
         LC(2)   #06                              * 02377
         ?B=C    B                                * 0237B
-        GOYES   SUB_02388.L1                     * 0237E
-SUB_02313.L2:
-        GOSUB   SUB_02388                        * 02380
-        GOTO    SUB_02313.loop1                  * 02384
+        GOYES   ClrMemBoot                       * 0237E
+RecoverPrompt.L2:
+        GOSUB   ErrBeep                          * 02380
+        GOTO    RecoverPrompt.loop1              * 02384
 
 * refs (2): 020CD 02380
-SUB_02388:
+* -> : short error beep
+ErrBeep:
         P=      0                                * 02388
         LC(2)   #F4                              * 0238A
         GOVLNG  RCKBp                            * 0238E
-SUB_02388.L1:
+
+* refs (1): 0237B
+* NO: clear the screen, then build an empty home directory and all the system pointers
+ClrMemBoot:
         GOSBVL  ClrScrMn                         * 02395
-SUB_02388.L2:
+ClrMemBoot.L1:
         ST=0    7                                * 0239C
         D1=(5)  ROMPARTS                         * 0239F
         C=DAT1  A                                * 023A6
@@ -277,22 +287,23 @@ SUB_02388.L2:
         DAT1=C  A                                * 023DC
         D1=(5)  USEROB                           * 023DF
         DAT1=C  A                                * 023E6
-        GOTO    SUB_02388.L4                     * 023E9
-SUB_02388.L3:
-        LC(5)   SUB_81BA2.L5                     * 023ED  in the self-test area
-        GOSUB   SUB_026CA                        * 023F4
+        GOTO    ClrMemBoot.L3                    * 023E9
+* YES: show the recovering message and try to rebuild from what is in RAM (ST7 set)
+ClrMemBoot.L2:
+        LC(5)   RecoveringScreen                 * 023ED  in the self-test area
+        GOSUB   CallTestROM                      * 023F4
         ST=1    7                                * 023F8
-        GOVLNG  SUB_0A01C.L4                     * 023FB
-SUB_02388.L4:
-        GOSUB   SUB_0249F                        * 02402
-        GOSBVL  SUB_02593                        * 02406
+        GOVLNG  RecoverMem                       * 023FB
+ClrMemBoot.L3:
+        GOSUB   InitDispGrobs                    * 02402
+        GOSBVL  InitMemPtrs                      * 02406
         LC(5)   INTRPPTR                         * 0240D
         A=C     A                                * 02414
         LC(5)   ROMPTAB                          * 02416
         C=C-A   A                                * 0241D
         D1=(5)  INTRPPTR                         * 0241F
         GOSBVL  WIPEOUT                          * 02426
-        GOSUB   SUB_0245E                        * 0242D
+        GOSUB   DefaultFlags                     * 0242D
         D1=(5)  RAMEND                           * 02431
         C=RSTK                                   * 02438
         DAT1=C  A                                * 0243A
@@ -300,14 +311,15 @@ SUB_02388.L4:
         D1=(5)  ERROR                            * 02444
         LC(5)   #00005                           * 0244B
         ?ST=0   7                                * 02452
-        GOYES   SUB_02388.L5                     * 02455
+        GOYES   ClrMemBoot.L4                    * 02455
         C=0     A                                * 02457
-SUB_02388.L5:
+ClrMemBoot.L4:
         DAT1=C  A                                * 02459
         RTN                                      * 0245C
 
 * refs (1): 0242D
-SUB_0245E:
+* -> : default system flags
+DefaultFlags:
         D0=(5)  SystemFlags                      * 0245E
         P=      8                                * 02465
         LC(8)   #00000000                        * 02467
@@ -325,7 +337,8 @@ setflag~jump:
         GOVLNG  setflag                          * 02498
 
 * refs (4): 02041 02402 0A0A2 0AC6A
-SUB_0249F:
+* -> : empty ROMPTAB, then build the display grobs after it: the menu grob VDISP2 (8 x 131), the stack grob ADISP (56 x 131) and an empty GDISP, and set VDISP, VDISP3 and TEMPOB
+InitDispGrobs:
         D1=(5)  ROMPTAB                          * 0249F
         C=0     A                                * 024A6
         DAT1=C  3                                * 024A8
@@ -333,24 +346,25 @@ SUB_0249F:
         CD1EX                                    * 024AF
         D1=(5)  VDISP2                           * 024B2
         LA(15)  #00083000080011F                 * 024B9
-        GOSUB   SUB_02519                        * 024CD
+        GOSUB   MakeGrob                         * 024CD
         D1=(5)  VDISP                            * 024D1
         DAT1=C  A                                * 024D8
         D1=(5)  ADISP                            * 024DB
         LA(7)   #380077F                         * 024E2
-        GOSUB   SUB_02519                        * 024EE
+        GOSUB   MakeGrob                         * 024EE
         D1=(5)  VDISP3                           * 024F2
         DAT1=C  A                                * 024F9
         D1=(5)  GDISP                            * 024FC
         A=0     W                                * 02503
         A=A-1   P                                * 02506
-        GOSUB   SUB_02519                        * 02509
+        GOSUB   MakeGrob                         * 02509
         D1=(5)  TEMPOB                           * 0250D
         DAT1=C  A                                * 02514
         RTN                                      * 02517
 
 * refs (3): 024CD 024EE 02509
-SUB_02519:
+* C.A = address, D1 = pointer variable, A = 15 nibbles (length, height, width) -> C.A past the new grob: write the pointer and the grob header
+MakeGrob:
         DAT1=C  A                                * 02519
         D1=C                                     * 0251C
         LC(5)   DOGROB                           * 0251F
@@ -362,14 +376,16 @@ SUB_02519:
         RTN                                      * 02535
 
 * refs (1): 0B3F5
-SUB_02537:
+* C.A = distance -> : DispPtrs+ with the distance negated
+DispPtrs-:
         C=-C    A                                * 02537
-        GOSUB   SUB_02541                        * 02539
+        GOSUB   DispPtrs+                        * 02539
         C=-C    A                                * 0253D
         RTNCC                                    * 0253F
 
 * refs (4): 02539 0ACE7 70F48 711DE
-SUB_02541:
+* C.A = distance -> : add it to every pointer to the display grobs and to the hardware DISPADDR and MENUADDR, after memory has moved
+DispPtrs+:
         D1=(5)  ADISP                            * 02541
         A=DAT1  A                                * 02548
         A=A+C   A                                * 0254B
@@ -393,7 +409,8 @@ SUB_02541:
         RTNCC                                    * 02591
 
 * refs (3): 020F2 02406 0AC71
-SUB_02593:
+* -> : lay out empty tables after USEROB: CONTEXT, STOPSIGN, TOUCHTAB, DOLPENV, TEMPENV, EDITLINE, the data stack DSKTOP, TEMPTOP and RSKTOP, each ended by its zero words
+InitMemPtrs:
         P=      0                                * 02593
         D1=(5)  USEROB                           * 02595
         C=DAT1  A                                * 0259C
@@ -456,7 +473,8 @@ SUB_02593:
         RTN                                      * 0266D
 
 * refs (2): 020F6 0AC78
-SUB_0266F:
+* -> : zero those of the 37 saved pointers at INTRPPTR that point at TEMPOB up to USEROB or at ROMPARTS and above, since those objects did not survive
+ClrIntrpPtrs:
         P=      0                                * 0266F
         LC(5)   #00024                           * 02671
         RSTK=C                                   * 02678
@@ -469,43 +487,44 @@ SUB_0266F:
         C=DAT1  A                                * 02697
         D=C     A                                * 0269A
         D1=(5)  INTRPPTR                         * 0269C
-SUB_0266F.loop1:
+ClrIntrpPtrs.loop1:
         C=DAT1  A                                * 026A3
         ?B>C    A                                * 026A6
-        GOYES   SUB_0266F.L3                     * 026A9
+        GOYES   ClrIntrpPtrs.L3                  * 026A9
         ?C<A    A                                * 026AB
-        GOYES   SUB_0266F.L2                     * 026AE
+        GOYES   ClrIntrpPtrs.L2                  * 026AE
         ?D>C    A                                * 026B0
-        GOYES   SUB_0266F.L3                     * 026B3
-SUB_0266F.L2:
+        GOYES   ClrIntrpPtrs.L3                  * 026B3
+ClrIntrpPtrs.L2:
         C=0     A                                * 026B5
         DAT1=C  A                                * 026B7
-SUB_0266F.L3:
+ClrIntrpPtrs.L3:
         D1=D1+  5                                * 026BA
         C=RSTK                                   * 026BD
         C=C-1   A                                * 026BF
         RSTK=C                                   * 026C1
-        GONC    SUB_0266F.loop1                  * 026C3
+        GONC    ClrIntrpPtrs.loop1               * 026C3
         C=RSTK                                   * 026C6
         RTN                                      * 026C8
 
 * refs (5): 020BC 02194 021A4 02355 023F4
-SUB_026CA:
-        GOVLNG  SUB_700F7.L1                     * 026CA
-SUB_026CA.L1:
+* C.A = address -> : call code in the self-test ROM at #80000: move RAM to #C0000 so ROM shows through, run it, and move RAM back
+CallTestROM:
+        GOVLNG  CallTestROM~1                    * 026CA
+CallTestROM.L1:
         UNCNFG                                   * 026D1
-        GOSUB   SUB_022D9                        * 026D4
+        GOSUB   ConfigBootRAM                    * 026D4
         GOSUB   SUB_026FD                        * 026D8
         C=RSTK                                   * 026DC
         A=C     A                                * 026DE
-        LC(5)   SUB_026CA.L2                     * 026E0
+        LC(5)   CallTestROM.L2                   * 026E0
         RSTK=C                                   * 026E7
         PC=A                                     * 026E9
-SUB_026CA.L2:
+CallTestROM.L2:
         P=      0                                * 026ED
         LC(5)   #C0000                           * 026EF
         UNCNFG                                   * 026F6
-        GOSUB   SUB_0224F                        * 026F9
+        GOSUB   ConfigRAM                        * 026F9
 
 * refs (1): 026D8
 SUB_026FD:
@@ -513,7 +532,8 @@ SUB_026FD:
         BSS     4                                * 02704  zeros
 
 * refs (3): 01A67 02026 80CA3
-SUB_02708:
+* P = reason -> : push a new entry on the warm-start log that WSLOG shows: entries of reason (1), time (13) and CRC (4) at #80010, the oldest dropped. A bad clock logs time 0. P kept
+LogWarmstart:
         GOSBVL  D0=IRAM                          * 02708
         D0=(4)  #0036                            * 0270F
         D1=C                                     * 02715
@@ -535,10 +555,10 @@ SUB_02708:
         C=P     0                                * 02750
         DAT0=C  1                                * 02754
         RSTK=C                                   * 02758
-        GOSBVL  SUB_011FC                        * 0275A
-        GONC    SUB_02708.L1                     * 02761
+        GOSBVL  GetTimeRaw                       * 0275A
+        GONC    LogWarmstart.L1                  * 02761
         C=0     W                                * 02764
-SUB_02708.L1:
+LogWarmstart.L1:
         A=C     W                                * 02767
         GOSBVL  D0=IRAM                          * 0276A
         D0=(4)  #0011                            * 02771
@@ -556,7 +576,8 @@ SUB_02708.L1:
         RTN                                      * 027A0
 
 * refs (2): 020C0 02359
-SUB_027A2:
+* -> carry set if ON was pressed, else clear with a key in the buffer: wait for a key during boot, in lite sleep, with alarms off. TIMER2 is set for 10 minutes; if it runs out the calculator goes to deep sleep and waits again
+BootKeyWait:
         P=      0                                * 027A2
         LC(3)   #801                             * 027A4
         GOSBVL  setflag                          * 027A9
@@ -568,13 +589,13 @@ SUB_027A2:
         D1=(5)  DISABLE_KBD                      * 027C6
         C=0     A                                * 027CD
         DAT1=C  1                                * 027CF
-SUB_027A2.L1:
+BootKeyWait.L1:
         GOSBVL  GetTimChk                        * 027D3
         B=C     W                                * 027DA
         A=B     W                                * 027DD
-        GOSBVL  SUB_01797                        * 027E0
+        GOSBVL  Ticks10Min                       * 027E0
         A=A+C   W                                * 027E7
-        GOSBVL  SUB_016E9                        * 027EA
+        GOSBVL  SetClockOffs                     * 027EA
         D1=(5)  TIMER2                           * 027F1
         DAT1=C  8                                * 027F8
         D1=(2)  #2F                              * 027FC
@@ -592,9 +613,9 @@ INPUT~1.L1:
         D1=(5)  TIMER2CTRL                       * 0282B
         C=DAT1  1                                * 02832
         ?CBIT=0 3                                * 02836
-        GOYES   SUB_027A2.L1                     * 0283B
+        GOYES   BootKeyWait.L1                   * 0283B
         GOSBVL  DeepSleep                        * 0283D
-        GOTO    SUB_027A2.L1                     * 02844
+        GOTO    BootKeyWait.L1                   * 02844
         FILLTO  #028DE                           * 02848  150 zero nibbles: the next entry stays at #028DE
 
         LENGTH                                   * 028DE  library object without its prolog (its place is the end of the link table before): length, to #0BE0F
@@ -1264,6 +1285,7 @@ Eval(nm):
         ;                                        * 02F6A
 
 * refs (1): 02F5B
+* ob -> ob: after an id is evaluated: a directory (DORRP) is entered through CONTEXT!, otherwise ATTN is checked and the object runs
 Eval(nm)~1:
         CON(5)  (*)+5                            * 02F6F  primitive code object
         ASSEMBLE
@@ -1316,7 +1338,8 @@ ROMSEC:
         ASSEMBLE
 
 * refs (5): 03786 0395F 06612 07055 0C56D
-SUB_03012:
+* A.A = first word of the object, D0 past it -> D0 past the object. SKIPOB with the word already read
+SKIPOBA:
         ST=1    1                                * 03012
         GOTO    SKIPOB.L1                        * 03015
 
@@ -1475,7 +1498,7 @@ DEPTH:
         D0=D0+  5                                * 0317A
         PC=(A)                                   * 0317D
 DEPTH.L1:
-        GOSUB   SUB_03416                        * 03181
+        GOSUB   GC1                              * 03181
         GONC    DUP.L1                           * 03185  always taken
 
 * ob -> ob ob
@@ -1615,7 +1638,7 @@ ROT:
         D0=D0+  5                                * 032B4
         PC=(A)                                   * 032B7
 ROT.L1:
-        GOSUB   SUB_03416                        * 032BB
+        GOSUB   GC1                              * 032BB
         GONC    OVER.L1                          * 032BF  always taken
 
 * 1 2 -> 1 2 1
@@ -1762,7 +1785,8 @@ UNROLL.L3:
         PC=(A)                                   * 03412
 
 * refs (2): 03181 032BB
-SUB_03416:
+* -> : SafeGargb asking for one word
+GC1:
         LC(5)   #00001                           * 03416
 
 * refs (2): 031A5 031D2
@@ -1796,11 +1820,11 @@ MAKEARRY:
         D1=D1+  5                                * 0346C
         A=DAT1  A                                * 0346F
         R3=A                                     * 03472
-        GOSUBL  SUB_0381C                        * 03475
+        GOSUBL  DimCount                         * 03475
         C=D     A                                * 0347B
         A=C     A                                * 0347D
         AR3EX                                    * 0347F
-        GOSUBL  SUB_0384F                        * 03482
+        GOSUBL  DimProduct                       * 03482
         GONC    MAKEARRY.L2                      * 03488
 MAKEARRY.loop1:
         GOLONG  RrErrIM                          * 0348B
@@ -1854,7 +1878,7 @@ MAKEARRY.loop3:
         D1=D1+  5                                * 03523
         D=D-1   A                                * 03526
         GOC     MAKEARRY.L4                      * 03528
-        GOSUB   SUB_03878                        * 0352B
+        GOSUB   DimNext                          * 0352B
         DAT1=C  A                                * 0352F
         GONC    MAKEARRY.loop3                   * 03532
 MAKEARRY.L4:
@@ -2011,7 +2035,7 @@ ARRYEL?:
         GOSUBL  SAVPTR                           * 0369C
         C=A     A                                * 036A2
         RSTK=C                                   * 036A4
-        GOSUB   SUB_0381C                        * 036A6
+        GOSUB   DimCount                         * 036A6
         C=RSTK                                   * 036AA
         D0=C                                     * 036AC
         C=RSTK                                   * 036AF
@@ -2025,7 +2049,7 @@ ARRYEL?:
         B=0     A                                * 036C4
         D1=D1+  5                                * 036C6
 ARRYEL?.loop1:
-        GOSUB   SUB_03878                        * 036C9
+        GOSUB   DimNext                          * 036C9
         A=DAT1  A                                * 036CD
         ?C>A    A                                * 036D0
         GOYES   Push#TLoop.L1                    * 036D3
@@ -2073,7 +2097,7 @@ GETATELN:
         D1=D1-  5                                * 03741
         GOSUBL  SAVPTR                           * 03744
         C=R1                                     * 0374A
-        GOSUB   SUB_038A0                        * 0374D
+        GOSUB   ArrayElAddr                      * 0374D
         ?ST=0   3                                * 03751
         GOYES   GETATELN.L2                      * 03754
         A=DAT0  A                                * 03756
@@ -2094,7 +2118,7 @@ GETATELN.L2:
         D0=A                                     * 0377E
         B=A     A                                * 03781
         A=R2                                     * 03783
-        GOSUBL  SUB_03012                        * 03786
+        GOSUBL  SKIPOBA                          * 03786
         D0=D0+  5                                * 0378C
         CD0EX                                    * 0378F
         C=C-B   A                                * 03792
@@ -2131,16 +2155,17 @@ GETATELN~1:
         C=DAT1  A                                * 037F2
 
 * refs (1): 0C512
-SUB_037F5:
+* C.A = array -> A.A = its element prolog; ST3 clear for an array (DOARRY), set for a linked array. D1 kept
+ArrayType:
         CD1EX                                    * 037F5
         RSTK=C                                   * 037F8
         A=DAT1  A                                * 037FA
         ST=0    3                                * 037FD
         LC(5)   DOARRY                           * 03800
         ?C=A    A                                * 03807
-        GOYES   SUB_037F5.L1                     * 0380A
+        GOYES   ArrayType.L1                     * 0380A
         ST=1    3                                * 0380C
-SUB_037F5.L1:
+ArrayType.L1:
         D1=D1+  10                               * 0380F
         A=DAT1  A                                * 03812
         C=RSTK                                   * 03815
@@ -2148,84 +2173,88 @@ SUB_037F5.L1:
         RTNCC                                    * 0381A
 
 * refs (2): 03475 036A6
-SUB_0381C:
+* A.A = :: of dimensions -> D.A = their count, D0 at the SEMI. A dimension is an inline bint (DOBINT and value) or a pointer
+DimCount:
         D0=A                                     * 0381C
         D0=D0+  5                                * 0381F
         D=0     A                                * 03822
-SUB_0381C.loop1:
+DimCount.loop1:
         LC(5)   DOBINT                           * 03824
-SUB_0381C.loop2:
+DimCount.loop2:
         A=DAT0  A                                * 0382B
         ?C#A    A                                * 0382E
-        GOYES   SUB_0381C.L3                     * 03831
+        GOYES   DimCount.L3                      * 03831
         D0=D0+  10                               * 03833
         D=D+1   A                                * 03836
-        GONC    SUB_0381C.loop2                  * 03838
-SUB_0381C.L3:
+        GONC    DimCount.loop2                   * 03838
+DimCount.L3:
         LC(5)   SEMI                             * 0383B
         ?C=A    A                                * 03842
         RTNYES                                   * 03845
         D0=D0+  5                                * 03847
         D=D+1   A                                * 0384A
-        GONC    SUB_0381C.loop1                  * 0384C
+        GONC    DimCount.loop1                   * 0384C
 
 * refs (1): 03482
-SUB_0384F:
+* A.A = :: of dimensions, D.A = count -> A.A = product; carry set on overflow
+DimProduct:
         D0=A                                     * 0384F
         A=0     A                                * 03852
         D=D-1   A                                * 03854
-        GOC     SUB_0384F.L3                     * 03856
-        GOSUB   SUB_03878                        * 03859
+        GOC     DimProduct.L3                    * 03856
+        GOSUB   DimNext                          * 03859
         B=C     A                                * 0385D
-SUB_0384F.loop1:
+DimProduct.loop1:
         D=D-1   A                                * 0385F
-        GOC     SUB_0384F.L2                     * 03861
-        GOSUB   SUB_03878                        * 03864
+        GOC     DimProduct.L2                    * 03861
+        GOSUB   DimNext                          * 03864
         A=B     A                                * 03868
         GOSUB   MUL#                             * 0386A
         RTNC                                     * 0386E
-        GONC    SUB_0384F.loop1                  * 03871
-SUB_0384F.L2:
+        GONC    DimProduct.loop1                 * 03871
+DimProduct.L2:
         A=B     A                                * 03874
-SUB_0384F.L3:
+DimProduct.L3:
         RTNCC                                    * 03876
 
 * refs (4): 0352B 036C9 03859 03864
-SUB_03878:
+* D0 at a dimension's slot before -> C.A = value of the next dimension, inline bint or pointer to one
+DimNext:
         D0=D0+  5                                * 03878
         A=DAT0  A                                * 0387B
         LC(5)   DOBINT                           * 0387E
         ?C=A    A                                * 03885
-        GOYES   SUB_03878.L1                     * 03888
+        GOYES   DimNext.L1                       * 03888
         AD0EX                                    * 0388A
         D0=D0+  5                                * 0388D
         C=DAT0  A                                * 03890
         D0=A                                     * 03893
         RTN                                      * 03896
-SUB_03878.L1:
+DimNext.L1:
         D0=D0+  5                                * 03898
         C=DAT0  A                                * 0389B
         RTN                                      * 0389E
 
 * refs (2): 0374D 0C53B
-SUB_038A0:
+* C.A = array, A.A = element number from 1, ST3 and R2 as from ArrayType -> D0 at the element. Linked arrays have a table of 5-nibble offsets; fixed-size types multiply by their size (bint 5+5, real 16, ...); others are skipped one by one
+ArrayElAddr:
         D0=C                                     * 038A0
         D0=D0+  15                               * 038A3
         C=DAT0  A                                * 038A6
         D=C     A                                * 038A9
-SUB_038A0.loop1:
+ArrayElAddr.loop1:
         D=D-1   A                                * 038AB
-        GOC     SUB_038A0.L2                     * 038AD
+        GOC     ArrayElAddr.L2                   * 038AD
         D0=D0+  5                                * 038B0
-        GONC    SUB_038A0.loop1                  * 038B3
-SUB_038A0.L2:
+        GONC    ArrayElAddr.loop1                * 038B3
+ArrayElAddr.L2:
         A=A-1   A                                * 038B6
         RTNC                                     * 038B8
         D0=D0+  5                                * 038BB
         B=A     A                                * 038BE
         ?ST=0   3                                * 038C0
-        GOYES   SUB_038A0.L4                     * 038C3
-SUB_038A0.loop3:
+        GOYES   ArrayElAddr.L4                   * 038C3
+ArrayElAddr.loop3:
         B=B+B   A                                * 038C5
         B=B+B   A                                * 038C7
         B=B+A   A                                * 038C9
@@ -2233,61 +2262,61 @@ SUB_038A0.loop3:
         A=A+B   A                                * 038CE
         D0=A                                     * 038D0
         RTNSC                                    * 038D3
-SUB_038A0.L4:
+ArrayElAddr.L4:
         C=R2                                     * 038D5
         D=C     A                                * 038D8
         LC(5)   DOBINT                           * 038DA
         ?D=C    A                                * 038E1
-        GOYES   SUB_038A0.loop3                  * 038E4
+        GOYES   ArrayElAddr.loop3                * 038E4
         LC(5)   DOREAL                           * 038E6
         ?D=C    A                                * 038ED
-        GOYES   SUB_038A0.L9                     * 038F0
+        GOYES   ArrayElAddr.L9                   * 038F0
         LC(5)   DOEREL                           * 038F2
         ?D=C    A                                * 038F9
-        GOYES   SUB_038A0.L7                     * 038FC
+        GOYES   ArrayElAddr.L7                   * 038FC
         LC(5)   DOCMP                            * 038FE
         ?D=C    A                                * 03905
-        GOYES   SUB_038A0.L8                     * 03908
+        GOYES   ArrayElAddr.L8                   * 03908
         LC(5)   DOECMP                           * 0390A
         ?D=C    A                                * 03911
-        GOYES   SUB_038A0.L6                     * 03914
+        GOYES   ArrayElAddr.L6                   * 03914
         LC(5)   DOCHAR                           * 03916
         ?D=C    A                                * 0391D
-        GOYES   SUB_038A0.L5                     * 03920
+        GOYES   ArrayElAddr.L5                   * 03920
         LC(5)   DOROMP                           * 03922
         ?D#C    A                                * 03929
-        GOYES   SUB_038A0.loop11                 * 0392C
+        GOYES   ArrayElAddr.loop11               * 0392C
         B=B+B   A                                * 0392E
         B=B+A   A                                * 03930
-SUB_038A0.L5:
+ArrayElAddr.L5:
         B=B+B   A                                * 03932
-        GONC    SUB_038A0.L10                    * 03934
-SUB_038A0.L6:
+        GONC    ArrayElAddr.L10                  * 03934
+ArrayElAddr.L6:
         B=B+B   A                                * 03937
         A=B     A                                * 03939
-SUB_038A0.L7:
+ArrayElAddr.L7:
         B=B+B   A                                * 0393B
         B=B+B   A                                * 0393D
         B=B+A   A                                * 0393F
         ASL     A                                * 03941
         B=B+A   A                                * 03943
-        GONC    SUB_038A0.L10                    * 03945
-SUB_038A0.L8:
+        GONC    ArrayElAddr.L10                  * 03945
+ArrayElAddr.L8:
         B=B+B   A                                * 03948
-SUB_038A0.L9:
+ArrayElAddr.L9:
         BSL     A                                * 0394A
-SUB_038A0.L10:
+ArrayElAddr.L10:
         AD0EX                                    * 0394C
         A=A+B   A                                * 0394F
         D0=A                                     * 03951
         RTNSC                                    * 03954
-SUB_038A0.loop11:
+ArrayElAddr.loop11:
         B=B-1   A                                * 03956
         RTNC                                     * 03958
         C=D     A                                * 0395B
         A=C     A                                * 0395D
-        GOSUBL  SUB_03012                        * 0395F
-        GONC    SUB_038A0.loop11                 * 03965
+        GOSUBL  SKIPOBA                          * 0395F
+        GONC    ArrayElAddr.loop11               * 03965
 
 * refs (2): 03578 0C522
 LenArD1:
@@ -2360,7 +2389,7 @@ ECUSER:
         ?ST=1   5                                * 039EF
         GOYES   ECUSER~1                         * 039F2
         R2=A                                     * 039F4
-        GOSUBL  SUB_0852C                        * 039F7
+        GOSUBL  DirLinksAdj                      * 039F7
         A=R2                                     * 039FD
         C=R0                                     * 03A00
         GOLONG  MOVEDSU                          * 03A03
@@ -2368,38 +2397,40 @@ ECUSER~1:
         R2=A                                     * 03A09
         AD0EX                                    * 03A0C
         R1=A                                     * 03A0F
-        GOSUB   SUB_03A2E                        * 03A12
+        GOSUB   RoomOrGC                         * 03A12
         A=R1                                     * 03A16
         D0=A                                     * 03A19
-        GOSUBL  SUB_0852C                        * 03A1C
+        GOSUBL  DirLinksAdj                      * 03A1C
         A=R2                                     * 03A22
         C=R0                                     * 03A25
         GOLONG  MOVEDSD                          * 03A28
 
 * refs (1): 03A12
-SUB_03A2E:
+* C.A = nibbles needed -> : make sure ROOM has them, collecting garbage once; otherwise Insufficient Memory
+RoomOrGC:
         ST=0    10                               * 03A2E
-SUB_03A2E.loop1:
+RoomOrGC.loop1:
         D=C     A                                * 03A31
         GOSUBL  ROOM                             * 03A33
         DCEX    A                                * 03A39
         ?D>=C   A                                * 03A3B
         RTNYES                                   * 03A3E
         ?ST=1   10                               * 03A40
-        GOYES   SUB_03A2E.L2                     * 03A43
+        GOYES   RoomOrGC.L2                      * 03A43
         RSTK=C                                   * 03A45
         GOSUBL  GARBAGECOL                       * 03A47
         ST=1    10                               * 03A4D
         C=RSTK                                   * 03A50
-        GONC    SUB_03A2E.loop1                  * 03A52
-SUB_03A2E.L2:
+        GONC    RoomOrGC.loop1                   * 03A52
+RoomOrGC.L2:
         GOSUBL  GETPTR                           * 03A55
         D1=D1+  5                                * 03A5B
         D=D+1   A                                * 03A5E
         GOTO    RrErrIM.L1                       * 03A60
 
 * refs (2): 08534 0864D
-SUB_03A64:
+* -> ST2 = 1 if the low nibble of INITEN was set; that nibble is cleared
+GetINITEN:
         D0=(5)  INITEN                           * 03A64
         A=DAT0  B                                * 03A6B
         ST=0    2                                * 03A6E

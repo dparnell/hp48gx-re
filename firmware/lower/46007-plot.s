@@ -1,44 +1,48 @@
-* HP 48GX ROM revision R, #46007-#49016: Plotting
+* HP 48GX ROM revision R, #46007-#49016: Plotting: PICTURE environment, tracing and cursor keys, the GRAPH menus, ZOOM and box drawing
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: Π'SAVEDDEPTH xrng(2r) yrng(2r) STOAPPLDATA RclPlotVar? 'IDX dup;Vector*­Rcl(nm)? APPprompt1! Trceq SORTASLOW indep(2r) PlotScr*en
+* Most referenced: Π'SAVEDDEPTH ShowCoordX xrng(2r) yrng(2r) RepeatCursKey STOAPPLDATA RclPlotVar? 'IDX ShowCoordY ZoomRedraw PlotCleanup PlotEvalAt
 * Follows on from the previous file (at #46007 in the original ROM).
         RPL
 
 * refs (1): 3C51B
-OBJ_46007:
-        :: MenuRow@ #1=case OBJ_46034            * 46007
-          MenuRow@ BINT7 #=case OBJ_4A678        * 4601B
+* -> : 3D plot menus review: the volume on menu row 1, the eye on menu row 7
+Review3D:
+        :: MenuRow@ #1=case ReviewVol            * 46007
+          MenuRow@ BINT7 #=case ReviewEye        * 4601B
         ;                                        * 4602F
 
 * refs (1): 46016
-OBJ_46034:
-        :: ROMPTR 0B5 08C 5DROP BINT9 ROLL BINT10 ROLL * 46034
+* -> : 3D plot review: the Xvol, Yvol, Zvol, Xrng and Yrng ranges on rows 3 to 7
+ReviewVol:
+        :: XLIB VparVals 5DROP BINT9 ROLL BINT10 ROLL * 46034
 
 _Xvol:_:
-          $ "Xvol:" OBJ_4A834 DISPROW3 7ROLL 8ROLL * 4605D
+          $ "Xvol:" Range$ DISPROW3 7ROLL 8ROLL  * 4605D
 
 _Yvol:_:
-          $ "Yvol:" OBJ_4A834 DISPROW4 5ROLL 6ROLL * 46085
+          $ "Yvol:" Range$ DISPROW4 5ROLL 6ROLL  * 46085
 
 _Zvol:_:
-          $ "Zvol:" OBJ_4A834 DISPROW5 ROT 4ROLL * 460AD
+          $ "Zvol:" Range$ DISPROW5 ROT 4ROLL    * 460AD
 
 _Xrng:__460D5:
-          $ "Xrng:" OBJ_4A834 DISPROW6 SWAP      * 460D5
+          $ "Xrng:" Range$ DISPROW6 SWAP         * 460D5
 
 _Yrng:__460F8:
-          $ "Yrng:" OBJ_4A834 DISPROW7 SetDA2OKTemp ; * 460F8
+          $ "Yrng:" Range$ DISPROW7 SetDA2OKTemp ; * 460F8
 
 * refs (2): 4A83E 4A857
-OBJ_46120:
-        :: BINT8 OBJ_45D2A BINT8 OBJ_45E6F ;     * 46120
+* % -> $: format a number right-aligned in 8 characters for a review screen
+%>$8:
+        :: BINT8 %>$Fit BINT8 PadLeft$ ;         * 46120
 
 * refs (3): 4A4FF 4A5D1 4A73C
 ~SWAP;DECOMP&$:
         :: SWAP DECOMP&$ ;                       * 4613E
 
 * refs (3): 20F94 4B20B 4F386
-OBJ_46152:
+* -> : error "Object In Use" (#9) while a plot is being drawn, seen from the lam 'PlotEnv
+CkNotPlotting:
         :: '                                     * 46152
 
 Π'PlotEnv:
@@ -46,19 +50,19 @@ OBJ_46152:
           BINT9 ERROROUT ;                       * 4617D
 
 * refs (1): 4B4E1
-OBJ_4618C:
+EqwRepRight~1:
         :: OBJ_6F595                             * 4618C
-OBJ_4618C.loop1:
-          #1= TRUE OBJ_6F621 NOTcase OBJ_6F608   * 46196
-          OBJ_6F883 EqwDupBoxParent@ OBJ_679D7 GOTO OBJ_4618C.loop1 ; * 461AF
+EqwRepRight~1.loop1:
+          #1= TRUE EqwFindMove NOTcase EqwBadMove * 46196
+          OBJ_6F883 EqwDupBoxParent@ EqwBoxType@ GOTO EqwRepRight~1.loop1 ; * 461AF
 
 * refs (2): 6B482 6F59F
 OBJ_461CD:
         :: TakeOver                              * 461CD
 
 * refs (1): 6C433
-OBJ_461D7:
-          :: ' OBJ_6A992 ; DUP MenuDef@ EQ caseDROP InitMenu * 461D7
+EqwKeyMap~9:
+          :: ' EqwSelMenu ; DUP MenuDef@ EQ caseDROP InitMenu * 461D7
           DispMenu ;                             * 46204
 
 * refs (2): C0577 C066B
@@ -70,16 +74,16 @@ OBJ_4620E:
 
 Π'vstp:
           LAM 'vstp 6ROLL                        * 4623D
-          :: OBJ_45BE8                           * 46253
+          :: #SKIPOBS                            * 46253
             :: 3DROP RDROP ;                     * 4625D
             :: ROT %CHS 3UNROLL ;                * 46271
             :: 2DROP %- RDROP ; %CHS ROTDROP 'EvalNoCK:_sup xSTO- ; * 4628A
-          OBJ_4588E ;                            * 462BC
+          TraceFcnTo ;                           * 462BC
 
 * refs (1): C0483
 OBJ_462C6:
         :: DUP ~BINT3;#< ?SKIP                   * 462C6
-          :: ROMPTR 0F1 018                      * 462DA
+          :: XLIB YSliceShowY                    * 462DA
 
 Π'dependvar_462EA:
             LAM 'dependvar                       * 462EA
@@ -101,22 +105,23 @@ OBJ_462C6:
         :: BINT24 PUTLAM ;                       * 463A0
 
 * refs (2): 44B09 44B91
-OBJ_463B4:
+* #key -> FALSE | ob TRUE: MatrixWriter: right-shifted keys that keep their normal meaning (CST, VAR and some on the keypad); any other is a bad key
+MWRSKeyOK:
         ::                                       * 463B4
           { BINT9 BINT10 BINT31 BINT32 BINT33 BINT36 BINT37 BINT41 BINT43 } * 463B9
           NTHOF #0=case FALSE                    * 463F0
           'DoBadKeyT ;                           * 463FF
 
 CopyRowsUp:
-        ROMPTR 0EA 057                           * 46409
+        XLIB CopyRowsUp~1                        * 46409
         FILLTO  #4651C                           * 46414  264 zero nibbles: the next entry stays at #4651C
 
 * refs (1): 8F396
 CopyColsLeft:
-        ROMPTR 0EA 059                           * 4651C
+        XLIB CopyColsLeft~1                      * 4651C
 
 * refs (1): 45132
-OBJ_46527:
+AXES>List~1:
         :: DUPTYPECSTR? case                     * 46527
           :: OVER TYPECSTR? NcaseTYPEERR BINT5   * 46536
             PPAR(s);dup;li? NOTcase              * 4654F
@@ -125,18 +130,18 @@ OBJ_46527:
             DROP psh1&rev                        * 4659A
             LOOP DROP #2+ reversym {}N ;         * 465A4
           OVER TYPECMP? NcaseTYPEERR DUP         * 465C2
-          OBJ_4C64D NcaseTYPEERR BINT2           * 465D6
+          AxTick? NcaseTYPEERR BINT2             * 465D6
           {}N ;                                  * 465E5
         FILLTO  #46625                           * 465EF  54 zero nibbles: the next entry stays at #46625
 
 * refs (1): 8F460
 CopyRowsDown:
-        ROMPTR 0EA 05B                           * 46625
+        XLIB CopyRowsDown~1                      * 46625
         FILLTO  #4677E                           * 46630  334 zero nibbles: the next entry stays at #4677E
 
 * refs (1): 8F502
 CopyColsRght:
-        ROMPTR 0EA 05E                           * 4677E
+        XLIB CopyColsRght~1                      * 4677E
 
 * refs (2): 4527C 454A7
 drax~3:
@@ -150,18 +155,21 @@ drax~3:
           HXS># SWAP HXS># SWAP ;                * 46801
 
 * refs (2): 4E898 B615C
-OBJ_4681A:
+* -> $x $y TRUE | FALSE: the axis labels in PPAR's axes field, if it has them
+RclAxLabels:
         :: RclAx*s DUPTYPELIST? NOTcasedrop FALSE * 4681A
           INNERCOMP BINT2 #=casedrop 2DROPFALSE  * 46833
           BINT4 #= IT ROTDROP                    * 46847
           ROTDROP TRUE ;                         * 4685B
 
 * refs (5): 73A53 73AA8 73DAC 73E1F 8C690
-OBJ_4686A:
-        :: OBJ_46888 SWAP RIGHT$3x6 SWAPDROP ;   * 4686A
+* #pixels % #max -> grob: a coordinate in the minifont, at most #max characters, in #pixels
+%>CoordGrob:
+        :: %>$Coord SWAP RIGHT$3x6 SWAPDROP ;    * 4686A
 
 * refs (1): 4686F
-OBJ_46888:
+* % #max -> $: the number in the current format, or with SCI 2 if that is longer than #max
+%>$Coord:
         :: SWAPDUP BINT0 !DcompWidth 1stkdecomp$w DUPLEN$ 4ROLL #<case * 46888
           SWAPDROP                               * 468B0
           DROP savefmt1 ERRSET                   * 468B5
@@ -172,10 +180,11 @@ OBJ_46888:
         :: BINT25 PUTLAM ;                       * 468F1
 
 * refs (2): 7396D 739C7
-OBJ_46905:
+* -> #n: number of equations in a list in EQ, or the curves of a single equation; error if there is no EQ
+EqCurveCount:
         :: EQUATION NOTcase ERRJMP               * 46905
           DUPTYPELIST? NOTcasedrop               * 46919
-          :: BINT1 OBJ_4BABC ;                   * 46923
+          :: BINT1 EqCurves ;                    * 46923
           LENCOMP ;                              * 46937
 
 * refs (2): 46C39 46C98
@@ -183,7 +192,8 @@ OBJ_46905:
         :: Message60E FlashMsg ;                 * 46941
 
 * refs (6): 0C681 0C703 45893 47768 47795 73CFD
-OBJ_46955:
+* % -> ob TRUE | FALSE: set the independent variable to % and evaluate the equation in lam 24. A math error (#3xx) gives FALSE and clears what it left on the stack
+PlotEvalAt:
         :: NEWINDEP BINT24 GETLAM ERRSET EVALCRUNCH ERRTRAP * 46955
           :: ERROR@ # 100 #/ SWAPDROP BINT3 #<>case ERRJMP * 46978
             ERRORCLR Π'SAVEDDEPTH DEPTH #1-SWAP #-Floor0 NDROP FALSE RDROP ; * 469A5
@@ -191,12 +201,14 @@ OBJ_46955:
         BSS     20                               * 469EB
 
 * refs (1): 488A0
-OBJ_469FF:
+* $ -> : show $ in the status area for a moment, keeping the display
+ShowEqBriefly:
         :: Save16 SWAP DISPSTATUS2 SORTASLOW REPEATER BINT17 NOP REPEATER * 469FF
           BINT5 NOP Restore16 ;                  * 46A2C
 
 * refs (1): 7347C
-OBJ_46A40:
+* -> menu: the PICTURE EDIT menu
+GraphEditMenu:
         :: NoExitAction                          * 46A40
 
 {MenuGRAPH\EDIT}:
@@ -209,7 +221,7 @@ OBJ_46A40:
 
 _ERASE_:
               $ "ERASE"                          * 46A86
-              :: CHECKMENU OBJ_4576C ; }         * 46A9A
+              :: CHECKMENU PictKeyERASE ; }      * 46A9A
 
 {GRAPH\MENU}:
             {                                    * 46AB3
@@ -223,7 +235,7 @@ _MENU_:
 
 _PICT->_:
               $ "PICT→"                          * 46AE3
-              :: CHECKMENU OBJ_45681 ; }         * 46AF7
+              :: CHECKMENU PictKeyPICT> ; }      * 46AF7
 
 {GRAPH\X,Y->}:
             {                                    * 46B10
@@ -231,11 +243,12 @@ _PICT->_:
 _X,Y->_:
               $ "X,Y→"                           * 46B15
               :: CHECKMENU OBJ_73AEE ; }         * 46B27
-            OBJ_456C2 OBJ_47D0D }                * 46B40
+            {GRAPH\BLANK} {GRAPH\PICT} }         * 46B40
         ;                                        * 46B4F
 
 * refs (2): 4A88D 8D17F
-OBJ_46B54:
+* -> : bind lam 'PlotEnv to a work grob, and cache 27 lams under the name nohalt for the plot loops
+BindPlotEnv:
         :: BINT8 BINT50 MAKEGROB                 * 46B54
 
 {'PlotEnv}:
@@ -246,7 +259,8 @@ OBJ_46B54:
           BIND BINT27 ' nohalt CACHE ;           * 46B89
 
 * refs (2): 4CE8D 4D2D1
-OBJ_46BA7:
+* -> : bind the lams 'EnvOK, 'EXITFCN and 'SAVEDDEPTH for PICTURE
+BindPictEnv:
         :: FALSE ZEROZERO                        * 46BA7
           {                                      * 46BB6
 
@@ -262,34 +276,40 @@ OBJ_46BA7:
           BIND EXITFCNsto NOP ;                  * 46C07
 
 * refs (4): 0C68B 0C69A 73D07 73D16
-OBJ_46C1B:
+* -> : polar trace: the value is undefined: lam 25 NULL::, keep the cursor's coordinates (lam 7), flash "undefined" unless coordinates are shown
+TraceUndefPolar:
         :: PTR NULL:: ~BINT25;PUTLAM 7GETLAM ~16GETLAM;#1= ?SEMI * 46C1B
           ~Message60E;FlashMsg ;                 * 46C39
 
 * refs (3): 0C6B3 0C73A 458C0
-OBJ_46C43:
-        :: OBJ_46D24 SWAP OBJ_46CCA CROSS_OFF TOTEMPSWAP TOTEMPSWAP 8PUTLAM * 46C43
+* %x %y -> : trace: move the crosshair to the point, kept inside the window
+TraceCursorTo:
+        :: %>WinRow SWAP %>WinCol CROSS_OFF TOTEMPSWAP TOTEMPSWAP 8PUTLAM * 46C43
           7PUTLAM CROSS_HAIRS ;                  * 46C6B
 
 * refs (4): 0C721 0C730 4589D 458AC
-OBJ_46C7A:
+* -> : trace: the value is undefined: lam 25 NULL::, flash "undefined" unless coordinates are shown
+TraceUndef:
         :: RECORDX&YC% PTR NULL:: ~BINT25;PUTLAM ~16GETLAM;#1= ?SEMI * 46C7A
           ~Message60E;FlashMsg ;                 * 46C98
 
 * refs (1): 472AE
-OBJ_46CA2:
-        :: CROSS_HAIRS OBJ_4E68B OBJ_73657 ?SEMI * 46CA2
-          CROSS_OFF OBJ_4703F ;                  * 46CBB
+* -> : after moving the crosshair: show it, update coordinates, and in the DOT modes set the pixel
+CursMoved:
+        :: CROSS_HAIRS ?ShowCoords OBJ_73657 ?SEMI * 46CA2
+          CROSS_OFF CursDot ;                    * 46CBB
 
 * refs (1): 46C52
-OBJ_46CCA:
+* %x -> #col: x as a column of PICT, kept within the window
+%>WinCol:
         :: 6GETLAM 10GETLAM getxpos SWAP #1=?SKIP DROPZERO LEFTCOL 2DUP#< IT * 46CCA
           SWAP                                   * 46CFC
           DROP RIGHTCOL 2DUP#> IT SWAP           * 46D01
           DROP ;                                 * 46D1A
 
 * refs (2): 46C48 73D25
-OBJ_46D24:
+* %y -> #row: y as a row of PICT, kept within the window
+%>WinRow:
         :: 5GETLAM 9GETLAM getypos SWAP #1=?SKIP DROPZERO TOPROW 2DUP#< IT * 46D24
           SWAP                                   * 46D56
           DROP BOTROW 2DUP#> IT SWAP             * 46D5B
@@ -313,16 +333,18 @@ _P_:
         BSS     5                                * 46DF1  zeros
 
 * refs (2): 736B6 736E3
-OBJ_46DF6:
+* -> : trace: left arrow
+TraceStepLeft:
         :: OBJ_4DCC6 BINT2 OBJ_735CB ;           * 46DF6
 
 * refs (2): 73701 7372E
-OBJ_46E0F:
+* -> : trace: right arrow
+TraceStepRight:
         :: OBJ_4DCC6 BINT1 OBJ_735CB ;           * 46E0F
 
 * refs (12): 4D3CB 4D3EE 4D402 4D4F2 4D515 4D529 ...
-* Probably: run the next runstream object, and again after each key-repeat delay while key #kc (from the runstream) is held
-OBJ_46E28:
+* -> : PICTURE: takes #key and action from the runstream. Run the action, refresh coordinates if they are shown, and go on while the key is held
+RepeatCursKey:
         :: TakeOver 'R'R ~16GETLAM;#1= IT        * 46E28
           :: ROT BINT2 ::N ;                     * 46E41
           DUP EVAL ~16GETLAM;#1= IT              * 46E5A
@@ -354,67 +376,76 @@ OBJ_46E28:
           REPEAT 3DROP ;                         * 47012
 
 * refs (2): 4D36C 4D687
-OBJ_47021:
-        :: OBJ_4DB45 OBJ_4E68B OBJ_73657 ?SEMI   * 47021
+* #lam #pos -> : set the crosshair's row or column (lam 7 or 8) to #pos, update coordinates, and in the DOT modes draw
+CursJumpTo:
+        :: CursLam! ?ShowCoords OBJ_73657 ?SEMI  * 47021
           CROSS_OFF                              * 4703A
 
 * refs (5): 46CC0 470DF 4710C 4D42F 4D74F
-OBJ_4703F:
-          :: ~3GETLAM;#1=_2 case OBJ_4DB8B       * 4703F
-            OBJ_4DB63 ;                          * 47053
+* -> : with the cursor in DOT- mode (lam 3 = 1) erase, otherwise draw, the pixel at the cursor
+CursDot:
+          :: ~3GETLAM;#1=_2 case DotOff          * 4703F
+            DotOn ;                              * 47053
         ;                                        * 4705D
 
-        :: ' OBJ_47236 TraceMode? ITE            * 47062
+        :: ' ShowCoordY TraceMode? ITE           * 47062
           :: '                                   * 4707B
-            :: OBJ_47209 OBJ_47236 ; ;           * 47085
-          :: ' OBJ_47209 ;                       * 4709E
+            :: ShowCoordX ShowCoordY ; ;         * 47085
+          :: ' ShowCoordX ;                      * 4709E
         ;                                        * 470B2
 
 * refs (4): 4D623 738B4 7390E 73940
-OBJ_470B7:
+* -> : move the crosshair one column right, scrolling at the window's edge
+CursRight:
         :: WINDOWRIGHT? IT WINDOWRIGHT           * 470B7
-          CROSS_OFF 8GETLAM 14GETLAM !#1+IF<dim-1 OBJ_4703F ; * 470CB
+          CROSS_OFF 8GETLAM 14GETLAM !#1+IF<dim-1 CursDot ; * 470CB
 
 * refs (4): 0C834 0C88E 0C8C0 4D533
-OBJ_470E9:
+* -> : move the crosshair one column left, scrolling at the window's edge
+CursLeft:
         :: WINDOWLEFT? IT WINDOWLEFT             * 470E9
-          CROSS_OFF 8GETLAM !#1-IF>0 OBJ_4703F ; * 470FD
+          CROSS_OFF 8GETLAM !#1-IF>0 CursDot ;   * 470FD
 
 * refs (2): 8C835 8CA34
-OBJ_47116:
-        :: BINT1 16PUTLAM OBJ_471B1 $>grob HARDBUFF2 BINT0 BINT2 GROB! * 47116
-          $>grob HARDBUFF2 # 41 BINT2 GROB! OBJ_47209 OBJ_47236 ; * 47143
+* -> : coordinates on: lam 16 = 1, draw the two labels and the two values in the coordinate line
+ShowCoordsXY:
+        :: BINT1 16PUTLAM CoordLabels $>grob HARDBUFF2 BINT0 BINT2 GROB! * 47116
+          $>grob HARDBUFF2 # 41 BINT2 GROB! ShowCoordX ShowCoordY ; * 47143
 
 * refs (1): 8CB78
-OBJ_47170:
-        :: BINT1 16PUTLAM OBJ_471B1 $>grob HARDBUFF2 BINT0 BINT2 GROB! DROP * 47170
-          OBJ_47209 OBJ_47236 ;                  * 471A2
+* -> : as ShowCoordsXY, with the first label only
+ShowCoordsY:
+        :: BINT1 16PUTLAM CoordLabels $>grob HARDBUFF2 BINT0 BINT2 GROB! * 47170
+          DROP ShowCoordX ShowCoordY ;           * 4719D
 
 * refs (2): 47125 4717F
-OBJ_471B1:
+* -> $y $x: "Y: " and "X: " from the first letters of the dependent and independent variables
+CoordLabels:
         :: ~RclDepnd;1get(li)? ID>$ ONEONE SUB$ $ ": " &$ INDEPVAR ID>$ * 471B1
           ONEONE SUB$ $ ": " &$ ;                * 471E7
 
 * refs (18): 0C7FD 0C848 0C8C5 4708A 470A8 47161 ...
-* Probably: PICTURE: redraw the X field of the coordinate readout
-OBJ_47209:
+* -> : show the first coordinate: when tracing, by the plot type's own routine (element 1 of lam 26)
+ShowCoordX:
         :: TraceMode? NOTcase OBJ_73DE8          * 47209
           BINT26 GETLAM CARCOMP EVAL ;           * 4721D
 
 * refs (10): 0C807 0C84D 4706C 4708F 47166 471A7 ...
-OBJ_47236:
+* -> : show the second coordinate, as ShowCoordX with element 2 of lam 26
+ShowCoordY:
         :: TraceMode? NOTcase OBJ_73A8F          * 47236
           BINT26 GETLAM BINT2 NTHCOMPDROP EVAL ; * 4724A
 
 * refs (2): 45BD9 73837
 OBJ_47268:
         :: BINT0 OBJ_735CB ~16GETLAM;#1= NOT?SEMI * 47268
-          OBJ_73B61 ;                            * 47281
+          PictShowXY ;                           * 47281
 
 * refs (2): 4D493 4D592
-OBJ_4728B:
+* #col -> : bad key while tracing, otherwise move the crosshair to the column
+CursToCol:
         :: TraceMode? case DoBadKey              * 4728B
-          CROSS_OFF TOTEMPOB 8PUTLAM OBJ_46CA2 ; * 4729F
+          CROSS_OFF TOTEMPOB 8PUTLAM CursMoved ; * 4729F
 
 * refs (7): 45A07 8A68D 8B2F2 8B584 8B986 8C0DC ...
 ~'R;EVAL;ERRJMP:
@@ -435,7 +466,7 @@ RclPlotVar?:
 dup;Vector*­Rcl(nm)?:
         :: dup;RclInVars(gn)? NOTcaseFALSE OVER  * 4737D
           'EQ EQUALcase                          * 47391
-          :: OBJ_473E6 OVER EQUALcase TRUE       * 4739B
+          :: PPARIndep OVER EQUALcase TRUE       * 4739B
             GOTO dup;Vector*­Rcl(nm)?.L1 ;       * 473B4
 dup;Vector*­Rcl(nm)?.L1:
           DUPTYPEIDNT? NOTcaseTRUE DUPSAFE@      * 473C3
@@ -443,17 +474,20 @@ dup;Vector*­Rcl(nm)?.L1:
           TRUE ;                                 * 473DC
 
 * refs (3): 15398 473A0 478D5
-OBJ_473E6:
+* -> id: the independent variable of PPAR, X when PPAR doesn't give one
+PPARIndep:
         :: 'IDPAR RclPlotVar? NOTcase 'IDX       * 473E6
           DUPTYPELIST? NOTcasedrop 'IDX          * 473FF
           BINT3 NTHELCOMP NOTcase 'IDX           * 4740E
           1get(li)? ;                            * 47422
 
 * refs (1): 48553
-OBJ_4742C:
-        :: 7GETLAM #1+ OBJ_486D9 ;               * 4742C
+* -> : BOXZ: rubber band for the row after the cursor
+BoxRowBelow:
+        :: 7GETLAM #1+ BoxEdgeH ;                * 4742C
 
 * refs (3): 0DCD1 0DD99 0DE52
+* An empty secondary, used as a table entry
 OBJ_47445:
         :: ;                                     * 47445
 
@@ -543,35 +577,36 @@ _NXEQ__475C4:
 
 _VIEW__475F4:
               $ "VIEW"                           * 475F4
-              :: CHECKMENU OBJ_48873 ; }         * 47606
-            OBJ_47D0D }                          * 4761F
+              :: CHECKMENU PictKeyEQ ; }         * 47606
+            {GRAPH\PICT} }                       * 4761F
         ;                                        * 47629
 
 * refs (1): 475B5
 PlotScr*en~1:
-        :: CHECKMENU OBJ_49B4B 2DROP CRUNCHNoBlame DUPTYPEREAL? NOTcasedrop * 4762E
+        :: CHECKMENU FcnEqArgs 2DROP CRUNCHNoBlame DUPTYPEREAL? NOTcasedrop * 4762E
           ERRJMP                                 * 47651
-          OBJ_49B4B CkEQUtil PointDerivUt ZEROZERO ROT OBJ_49E3E ROTROT2DROP * 47656
-          ~RclDepnd;1get(li)? SWAP INDEPVAR 8GETLAM OBJ_4782B 3PICK %* 5ROLL * 47679
-          SWAP %- ' x* SWAP BINT5 meta+ DROP ' x= BINT7 SYMBN DUP GETRHS * 476A1
-          BINT24 PUTLAM                          * 476E7
+          FcnEqArgs CkEQUtil PointDerivUt ZEROZERO ROT Crunch3Kept * 47656
+          ROTROT2DROP ~RclDepnd;1get(li)? SWAP INDEPVAR 8GETLAM COL>%X 3PICK * 47674
+          %* 5ROLL SWAP %- ' x* SWAP BINT5 meta+ DROP ' x= BINT7 SYMBN DUP * 47697
+          GETRHS BINT24 PUTLAM                   * 476E2
 
 _TanLine_:
           $ "TanLine" >TAG Π'SAVEDDEPTH #1+ ' Π'SAVEDDEPTH STO AtUserStack * 476F1
           DUP OBJ_49D3A                          * 4772C
 
 * refs (2): 47781 477A4
-OBJ_47736:
-          :: GETINDEP GETPMIN&MAX OBJ_4A8F1 %MAXorder SWAP ; DROP 15GETLAM * 47736
-          SWAP OBJ_46955 NOTcase ERRJMP          * 47763
-          BINT28 PUTLAM OBJ_47736 SWAPDROP 15GETLAM SWAP OBJ_46955 NOTcase * 47777
+* -> %min %max: the independent range of the plot
+IndepLoHi:
+          :: GETINDEP GETPMIN&MAX IndepRange %MAXorder SWAP ; DROP 15GETLAM * 47736
+          SWAP PlotEvalAt NOTcase ERRJMP         * 47763
+          BINT28 PUTLAM IndepLoHi SWAPDROP 15GETLAM SWAP PlotEvalAt NOTcase * 47777
           ERRJMP                                 * 4779F
-          OBJ_47736 ROT %>C% SWAP BINT28 GETLAM %>C% CROSSMARKOFF line(2c) * 477A4
+          IndepLoHi ROT %>C% SWAP BINT28 GETLAM %>C% CROSSMARKOFF line(2c) * 477A4
           CROSSMARKON ;                          * 477D1
 
 * refs (1): 47535
 PlotScr*en~2:
-        :: CHECKMENU OBJ_4579E 2DROP PlotScr*en~3 ' PlotScr*en~4 BINT3 ::N ' * 477DB
+        :: CHECKMENU ?NEWMARK 2DROP PlotScr*en~3 ' PlotScr*en~4 BINT3 ::N ' * 477DB
           ExitFcn STO ;                          * 4780D
 
 * refs (1): 477EF
@@ -579,7 +614,8 @@ PlotScr*en~3:
         :: OBJ_73DFC 1GETLAM                     * 4781C
 
 * refs (4): 4768D 4981E 73C85 73E06
-OBJ_4782B:
+* #col -> %x: column to user x, using the origin (lam 6) and scale (lam 10)
+COL>%X:
           :: UNCOERCE%% 6GETLAM %%- 10GETLAM %%/>% ; %MAXorder ; * 4782B
 
 * refs (5): 49030 49B55 49B82 4B751 4BAC6
@@ -592,12 +628,13 @@ Trceq:
           DUP EqList? NOTcase                    * 47880
 
 * refs (1): 478F3
+* Probably: ob id -> tagged: tag ob with the variable an EQ name stands for, following names that hold other names
 OBJ_4788F:
           :: SWAP FastCat? NOTcase ID>TAG        * 4788F
             'EQ EQcase ID>TAG                    * 478A8
             SWAPDROP ;                           * 478B7
           SWAPDROP CARCOMP DUPTYPEIDNT? NOT?SEMI * 478C1
-          OBJ_473E6 OVER EQUAL ?SEMI             * 478D5
+          PPARIndep OVER EQUAL ?SEMI             * 478D5
           dup;RclInVars(gn)? IT OBJ_4788F        * 478E9
         ;                                        * 478F8
 
@@ -620,7 +657,8 @@ IOSetup~1:
         # 61E                                    * 47943  1566
 
 * refs (1): 4A03C
-OBJ_4794D:
+* # 61F: message number of " (OFF SCREEN)"
+MSG(OFFSCREEN):
         # 61F                                    * 4794D  1567
 
         # 620                                    * 47957  1568
@@ -633,7 +671,7 @@ xBESTFIT~1:
 
 * refs (1): 15282
 1FrDisp(st):
-        :: OBJ_479D4 caseDROP                    * 47975
+        :: NoInfo? caseDROP                      * 47975
 
 * refs (4): 15586 15617 15680 9EF0A
 APPprompt1!:
@@ -642,15 +680,16 @@ APPprompt1!:
 
 * refs (1): 99252
 APPprompt2:
-        :: OBJ_479D4 case2DROP                   * 479A7
+        :: NoInfo? case2DROP                     * 479A7
 
 1&2FrDisp(st):
           :: DISPROW1 DISPROW2 SetDA1Valid ;     * 479B6
         ;                                        * 479CF
 
 * refs (4): 15269 220FB 4797A 479AC
-OBJ_479D4:
-        :: PrgmEntry? AppMode? OR OBJ_6DE82 OR EditLExists? OR BINT58 * 479D4
+* -> flag: TRUE when no INFO text should be shown: program or algebraic entry, an application, the EquationWriter, an edit line, flag -58, or a waiting key
+NoInfo?:
+        :: PrgmEntry? AppMode? OR EqwActive? OR EditLExists? OR BINT58 * 479D4
           TestSysFlag OR KEYINBUFFER? OR ;       * 47A01
 
 * refs (16): 1E630 48E00 48E6E 48EB4 48EEB 8A134 ...
@@ -678,62 +717,72 @@ FastCat?:
         :: BINT59 TestSysFlag ;                  * 47AB0  flag -59: Show variables / Show names only
 
 * refs (1): 47E19
-OBJ_47AC4:
-        :: CHECKMENU PPAR>ZPAR TRUE OBJ_47B00 ;  * 47AC4
+* -> : ZOOM ZIN: both axes by the factors in ZPAR
+ZoomIn:
+        :: CHECKMENU PPAR>ZPAR TRUE ZoomHV ;     * 47AC4
 
 * refs (1): 47E3A
-OBJ_47AE2:
-        :: CHECKMENU FALSE PPAR>ZPAR OBJ_47B00 ; * 47AE2
+* -> : ZOOM ZOUT: both axes
+ZoomOut:
+        :: CHECKMENU FALSE PPAR>ZPAR ZoomHV ;    * 47AE2
 
 * refs (2): 47AD8 47AF6
-OBJ_47B00:
-        :: OBJ_47C6D 3PICKSWAP OBJ_47B6E VSCALE DROP OBJ_47B6E HSCALE DROP * 47B00
-          OBJ_47BF5 ;                            * 47B2D
+* flag -> : zoom both axes by ZPAR's factors; TRUE zooms in
+ZoomHV:
+        :: ZPARFactors 3PICKSWAP ZFactor VSCALE DROP ZFactor HSCALE DROP * 47B00
+          ZoomRedraw ;                           * 47B2D
 
 * refs (1): 47BFA
-OBJ_47B37:
-        :: OBJ_496A0 NOTcaseFALSE DROP           * 47B37
+* -> flag: TRUE if ZPAR says to recentre at the crosshairs
+ZRecenter?:
+        :: RclZPAR NOTcaseFALSE DROP             * 47B37
           ROTROT2DROP DUPTYPEREAL? NOTcasedrop FALSE * 47B4B
           %1 %= ;                                * 47B5F
 
 * refs (4): 47B0F 47B1E 48102 4812A
-OBJ_47B6E:
+* %f flag -> %': the factor to give HSCALE or VSCALE: |f| (not 0), taken as above 1 for TRUE and below 1 for FALSE
+ZFactor:
         :: %ABS DUP %0= IT                       * 47B6E
           :: DROP %MINREAL ;                     * 47B87
           DUP %1 %> 3PICK XOR ?SEMI              * 47B9B
           %1 SWAP %/ ;                           * 47BB9
 
 * refs (1): 47E5B
-OBJ_47BCD:
-        :: CHECKMENU PPAR>ZPAR GETSCALE DROPDUP PUTSCALE OBJ_47BF5 ; * 47BCD
+* -> : ZOOM ZSQR: make the y scale equal the x scale
+ZoomSquare:
+        :: CHECKMENU PPAR>ZPAR GETSCALE DROPDUP PUTSCALE ZoomRedraw ; * 47BCD
 
 * refs (8): 47B2D 47BEB 47C63 4801C 48071 48111 ...
-OBJ_47BF5:
-        :: OBJ_47B37 IT                          * 47BF5
+* -> : after a zoom: recentre if ZPAR asks for it, then erase and draw again
+ZoomRedraw:
+        :: ZRecenter? IT                         * 47BF5
           :: RECORDX&YC% centr(c) ;              * 47C04
-          OBJ_4DAA3 ;                            * 47C18
+          ERASE&DRAW ;                           * 47C18
 
         :: CHECKMENU PPAR>ZPAR BINT131 MakeRange(s) BINT64 MakeRange(s) * 47C22
-          ROTSWAP %>C% 3UNROLL %>C% pmin(c) pmax(c) OBJ_47BF5 ; * 47C45
+          ROTSWAP %>C% 3UNROLL %>C% pmin(c) pmax(c) ZoomRedraw ; * 47C45
 
 * refs (3): 47B05 480F8 48120
-OBJ_47C6D:
+* -> %h %v: horizontal and vertical zoom factors from ZPAR, 4 and 4 by default
+ZPARFactors:
         :: '                                     * 47C6D
 
 ZPAR:
           ID ZPAR RclPlotVar? NOTcase            * 47C77
 
 * refs (3): 47CAE 47CD6 47D03
-OBJ_47C90:
+* -> %4 %4
+%4%4:
           :: %4 %4 ;                             * 47C90
-          DUPTYPELIST? NOTcasedrop OBJ_47C90     * 47CA4
+          DUPTYPELIST? NOTcasedrop %4%4          * 47CA4
           INNERCOMP DUP BINT4 #= NOTcase         * 47CB3
-          :: NDROP OBJ_47C90 ;                   * 47CCC
+          :: NDROP %4%4 ;                        * 47CCC
           3DROP DUPTYPEREAL? 3PICK TYPEREAL? AND ?SEMI * 47CE0
-          2DROP OBJ_47C90 ;                      * 47CFE
+          2DROP %4%4 ;                           * 47CFE
 
 * refs (3): 46B45 4761F 47FE5
-OBJ_47D0D:
+* The PICT menu key: back to the PICTURE menu in lam 22
+{GRAPH\PICT}:
         {                                        * 47D0D
           ::                                     * 47D12
 * The Very Big List names this address {PICT\}, but it is a pointer inside an object; the name is not used
@@ -744,12 +793,14 @@ PICT:
           :: CHECKMENU BINT22 GETLAM InitMenu DispMenu ; } * 47D33
 
 * refs (1): 47DCA
-OBJ_47D5B:
-        :: CHECKMENU DOCLLCD TOADISP CROSS_OFF ROMPTR 0B4 0D1 TOGDISP * 47D5B
+* -> : ZOOM ZFACT: run the zoom factor input form
+PictKeyZFACT:
+        :: CHECKMENU DOCLLCD TOADISP CROSS_OFF XLIB PlotZoomForm TOGDISP * 47D5B
           CROSS_HAIRS DispMenu ;                 * 47D84
 
 * refs (2): 0C910 7334C
-OBJ_47D93:
+* -> menu: the PICTURE ZOOM menu
+GraphZoomMenu:
         :: NoExitAction                          * 47D93
           {                                      * 47D9D
             {                                    * 47DA2
@@ -761,7 +812,7 @@ OBJ_47D93:
 
 ZFACT:
                 $ "ZFACT" ;                      * 47DB1
-              OBJ_47D5B }                        * 47DCA
+              PictKeyZFACT }                     * 47DCA
             {                                    * 47DD4
               ::                                 * 47DD9
 * The Very Big List names this address {ZOOM\BOXZ}, but it is a pointer inside an object; the name is not used
@@ -769,129 +820,146 @@ ZFACT:
 
 BOXZ:
                 $ "BOXZ" ;                       * 47DE3
-              OBJ_0C924 }                        * 47DFA
+              GraphZoomMenu~1 }                  * 47DFA
             {                                    * 47E04
 
 ZIN:
-              $ "ZIN" OBJ_47AC4 }                * 47E09
+              $ "ZIN" ZoomIn }                   * 47E09
             {                                    * 47E23
 
 ZOUT:
-              $ "ZOUT" OBJ_47AE2 }               * 47E28
+              $ "ZOUT" ZoomOut }                 * 47E28
             {                                    * 47E44
 
 ZSQR:
-              $ "ZSQR" OBJ_47BCD }               * 47E49
+              $ "ZSQR" ZoomSquare }              * 47E49
             {                                    * 47E65
 
 ZDFLT:
-              $ "ZDFLT" OBJ_48161 }              * 47E6A
+              $ "ZDFLT" ZoomDflt }               * 47E6A
             {                                    * 47E88
 
 HZIN:
-              $ "HZIN" OBJ_4807B }               * 47E8D
+              $ "HZIN" ZoomHIn }                 * 47E8D
             {                                    * 47EA9
 
 HZOUT:
-              $ "HZOUT" OBJ_48099 }              * 47EAE
+              $ "HZOUT" ZoomHOut }               * 47EAE
             {                                    * 47ECC
 
 VZIN:
-              $ "VZIN" OBJ_480B7 }               * 47ED1
+              $ "VZIN" ZoomVIn }                 * 47ED1
             {                                    * 47EED
 
 VZOUT:
-              $ "VZOUT" OBJ_480D5 }              * 47EF2
-            { $ "CNTR" OBJ_4E753 }               * 47F10
+              $ "VZOUT" ZoomVOut }               * 47EF2
+            { $ "CNTR" PictKeyCNTR }             * 47F10
             {                                    * 47F31
 
 ZAUTO:
-              $ "ZAUTO" OBJ_48143 }              * 47F36
-            { $ "ZDECI" OBJ_47FF4 }              * 47F54
-            { $ "ZINTG" OBJ_4802B }              * 47F77
-            { $ "ZTRIG" OBJ_48049 }              * 47F9A
-            { $ "ZLAST" OBJ_4965A } OBJ_456C2 OBJ_47D0D } * 47FBD
+              $ "ZAUTO" ZoomAuto }               * 47F36
+            { $ "ZDECI" ZoomDeci }               * 47F54
+            { $ "ZINTG" ZoomIntg }               * 47F77
+            { $ "ZTRIG" ZoomTrig }               * 47F9A
+            { $ "ZLAST" ZoomLast } {GRAPH\BLANK} {GRAPH\PICT} } * 47FBD
         ;                                        * 47FEF
 
 * refs (1): 47F6D
-OBJ_47FF4:
+* -> : ZOOM ZDECI: 0.1 per pixel on x
+ZoomDeci:
         :: CHECKMENU PPAR>ZPAR %1                * 47FF4
 
 * refs (1): 4803F
-OBJ_48008:
-          :: GETSCALE SWAPDROP PUTSCALE OBJ_47BF5 ; ; * 48008
+* % -> : set the x scale (units per 10 pixels), keep y, redraw
+ZoomScaleX:
+          :: GETSCALE SWAPDROP PUTSCALE ZoomRedraw ; ; * 48008
 
 * refs (1): 47F90
-OBJ_4802B:
-        :: CHECKMENU PPAR>ZPAR %10 OBJ_48008 ;   * 4802B
+* -> : ZOOM ZINTG: 1 per pixel on x
+ZoomIntg:
+        :: CHECKMENU PPAR>ZPAR %10 ZoomScaleX ;  * 4802B
 
 * refs (1): 47FB3
-OBJ_48049:
-        :: CHECKMENU PPAR>ZPAR %%PI %%2 %%/>% %1 PUTSCALE OBJ_47BF5 ; * 48049
+* -> : ZOOM ZTRIG: x scale π/2 per 10 pixels, y scale 1
+ZoomTrig:
+        :: CHECKMENU PPAR>ZPAR %%PI %%2 %%/>% %1 PUTSCALE ZoomRedraw ; * 48049
 
 * refs (1): 47E9F
-OBJ_4807B:
-        :: CHECKMENU PPAR>ZPAR TRUE OBJ_480F3 ;  * 4807B
+* -> : ZOOM HZIN
+ZoomHIn:
+        :: CHECKMENU PPAR>ZPAR TRUE ZoomH ;      * 4807B
 
 * refs (1): 47EC2
-OBJ_48099:
-        :: CHECKMENU PPAR>ZPAR FALSE OBJ_480F3 ; * 48099
+* -> : ZOOM HZOUT
+ZoomHOut:
+        :: CHECKMENU PPAR>ZPAR FALSE ZoomH ;     * 48099
 
 * refs (1): 47EE3
-OBJ_480B7:
-        :: CHECKMENU PPAR>ZPAR TRUE OBJ_4811B ;  * 480B7
+* -> : ZOOM VZIN
+ZoomVIn:
+        :: CHECKMENU PPAR>ZPAR TRUE ZoomV ;      * 480B7
 
 * refs (1): 47F06
-OBJ_480D5:
-        :: CHECKMENU PPAR>ZPAR FALSE OBJ_4811B ; * 480D5
+* -> : ZOOM VZOUT
+ZoomVOut:
+        :: CHECKMENU PPAR>ZPAR FALSE ZoomV ;     * 480D5
 
 * refs (2): 4808F 480AD
-OBJ_480F3:
-        :: OBJ_47C6D DROP OBJ_47B6E HSCALE DROP OBJ_47BF5 ; * 480F3
+* flag -> : zoom the x axis by ZPAR's factor; TRUE zooms in
+ZoomH:
+        :: ZPARFactors DROP ZFactor HSCALE DROP ZoomRedraw ; * 480F3
 
 * refs (2): 480CB 480E9
-OBJ_4811B:
-        :: OBJ_47C6D SWAPDROP OBJ_47B6E VSCALE DROP OBJ_47BF5 ; * 4811B
+* flag -> : zoom the y axis by ZPAR's factor; TRUE zooms in
+ZoomV:
+        :: ZPARFactors SWAPDROP ZFactor VSCALE DROP ZoomRedraw ; * 4811B
 
 * refs (1): 47F4A
-OBJ_48143:
-        :: CHECKMENU PPAR>ZPAR AUTOSCALE OBJ_47BF5 ; * 48143
+* -> : ZOOM ZAUTO
+ZoomAuto:
+        :: CHECKMENU PPAR>ZPAR AUTOSCALE ZoomRedraw ; * 48143
 
 * refs (1): 47E7E
-OBJ_48161:
+* -> : ZOOM ZDFLT: back to the default PPAR, with the plot type and variables kept where they are good
+ZoomDflt:
         :: CHECKMENU PPAR>ZPAR ERRSET            * 48161
           :: INDEPVAR ~RclDepnd;1get(li)? GETPTYPE ; ERRTRAP * 48175
           :: ERRORCLR DropSysObs ID_X ID_Y 'IDFUNCTION ; MAKEPVARS DROP * 48193
-          PUTPTYPE depnd(gn) PUTINDEP OBJ_4DAA3 ; * 481C0
+          PUTPTYPE depnd(gn) PUTINDEP ERASE&DRAW ; * 481C0
 
 * refs (1): 4D6F0
-OBJ_481D9:
+* -> : BOXZ: cursor down, redrawing the rubber band
+BoxCursDown:
         :: OBJ_4DCC6 WINDOWBOT? IT WINDOWDOWN    * 481D9
           ~8GETLAM;7GETLAM DUP 13GETLAM #= 3UNROLL CursCorner 7GETLAM * 481F2
-          13GETLAM !#1+IF<dim-1 OBJ_48472 ?SKIP OBJ_48503 * 48215
-          OBJ_484BD ;                            * 4822E
+          13GETLAM !#1+IF<dim-1 BoxCursOff ?SKIP BoxRowUp? * 48215
+          BoxCursOn ;                            * 4822E
 
 * refs (1): 4D3D5
-OBJ_48238:
+* -> : BOXZ: cursor up, redrawing the rubber band
+BoxCursUp:
         :: OBJ_4DCC6 WINDOWTOP? IT WINDOWUP      * 48238
           ~8GETLAM;7GETLAM DUP#0= 3UNROLL CursCorner 7GETLAM !#1-IF>0 * 48251
-          OBJ_48472 ?SKIP OBJ_4853F              * 4826F
-          OBJ_484BD ;                            * 4827E
+          BoxCursOff ?SKIP BoxRowDown?           * 4826F
+          BoxCursOn ;                            * 4827E
 
 * refs (1): 0C938
-OBJ_48288:
+* #x #y -> : BOXZ: take down the present mark before the box starts
+BoxClrMark:
         :: EQCURSOR? case2drop                   * 48288
           :: 11GETLAM 4PUTLAM %0_2A2B4 TOTEMPOB 1PUTLAM CROSS_OFF * 48297
             CROSS_HAIRS ;                        * 482BA
           CROSS_OFF PREMARKON CROSS_HAIRS ;      * 482C4
 
 * refs (1): 4830A
-OBJ_482D8:
+* -> flag: TRUE if the box has no height or no width (cursor in line with the anchor, lams 2 and 12)
+BoxFlat?:
         :: 2GETLAM 8GETLAM #= 12GETLAM 7GETLAM #= OR ; * 482D8
 
 * refs (2): 0C906 8D214
-OBJ_48305:
-        :: OBJ_482D8 case                        * 48305
+* -> : BOXZ: invert the outline of the rubber band box (draw or erase) with the crosshair off
+BoxToggle:
+        :: BoxFlat? case                         * 48305
           :: CROSS_OFF 2GETLAM 12GETLAM ~8GETLAM;7GETLAM TOGGLELINE#3 * 48314
             CROSS_HAIRS ;                        * 48332
           CROSS_OFF 2GETLAM 12GETLAM 8GETLAM DUP 4PICK #> ITE #1- #1+ * 4833C
@@ -902,106 +970,121 @@ OBJ_48305:
           #1- #1+                                * 483FA
           TOGGLELINE#3 CROSS_HAIRS ;             * 48404
 
-        :: #1=case OBJ_4842C                     * 48413
-          OBJ_4881E ;                            * 48422
+        :: #1=case BoxCursRight                  * 48413
+          BoxCursLeft ;                          * 48422
 
 * refs (2): 4841D 4D5EC
-OBJ_4842C:
+* -> : BOXZ: cursor right, redrawing the rubber band
+BoxCursRight:
         :: OBJ_4DCC6 WINDOWRIGHT? IT WINDOWRIGHT * 4842C
           ~8GETLAM;7GETLAM OVER 14GETLAM #= 3UNROLL CursCorner 8GETLAM * 48445
           14GETLAM !#1+IF<dim-1                  * 48468
 
 * refs (3): 4821F 4826F 4885A
-OBJ_48472:
+* ... -> ...: BOXZ: restore what was under the crosshair before a move
+BoxCursOff:
           :: ~8GETLAM;7GETLAM CROSSGROB OBJ_4DEB3 4GETLAM GBUFF BINT11 ROLL * 48472
             BINT11 ROLL GROB! 8ROLL ;            * 4849A
-          ?SKIP OBJ_4855D                        * 484B3
+          ?SKIP BoxColLeft?                      * 484B3
 
 * refs (3): 4822E 4827E 48869
-OBJ_484BD:
+* ... -> : BOXZ: save what is under the crosshair at its new place and draw it (flag -32 picks the colour)
+BoxCursOn:
           :: GBUFF 5UNROLL SUBGROB DUP4PUTLAM TOTEMPOB 4ROLL * 484BD
             ~BINT32;TestSysFlag OBJ_4DF67 GBUFF 2SWAP GROB! ; * 484E0
         ;                                        * 484FE
 
 * refs (1): 48229
-OBJ_48503:
-        :: 7GETLAM 12GETLAM #> OBJ_48521 ;       * 48503
+* -> : BOXZ: the cursor moved down: if it is below the anchor, update the band for the row above
+BoxRowUp?:
+        :: 7GETLAM 12GETLAM #> BoxRowAbove ;     * 48503
 
 * refs (1): 48517
-OBJ_48521:
-        :: 7GETLAM BINT1 #-Floor0 OBJ_486D9 ;    * 48521
+* -> : BOXZ: rubber band for the row above the cursor
+BoxRowAbove:
+        :: 7GETLAM BINT1 #-Floor0 BoxEdgeH ;     * 48521
 
 * refs (1): 48279
-OBJ_4853F:
-        :: 7GETLAM 12GETLAM #< OBJ_4742C ;       * 4853F
+* -> : BOXZ: the cursor moved up: if it is above the anchor, update the band for the row below
+BoxRowDown?:
+        :: 7GETLAM 12GETLAM #< BoxRowBelow ;     * 4853F
 
 * refs (1): 484B8
-OBJ_4855D:
-        :: 8GETLAM 2GETLAM #> OBJ_4857B ;        * 4855D
+* -> : BOXZ: as BoxRowUp?, for columns
+BoxColLeft?:
+        :: 8GETLAM 2GETLAM #> BoxColLeft ;       * 4855D
 
 * refs (1): 48571
-OBJ_4857B:
-        :: 8GETLAM BINT1 #-Floor0 OBJ_485D0 ;    * 4857B
+* -> : BOXZ: rubber band for the column left of the cursor
+BoxColLeft:
+        :: 8GETLAM BINT1 #-Floor0 BoxEdgeV ;     * 4857B
 
 * refs (1): 48864
-OBJ_48599:
-        :: 8GETLAM 2GETLAM #< OBJ_485B7 ;        * 48599
+* -> : BOXZ: as BoxRowDown?, for columns
+BoxColRight?:
+        :: 8GETLAM 2GETLAM #< BoxColRight ;      * 48599
 
 * refs (1): 485AD
-OBJ_485B7:
-        :: 8GETLAM #1+ OBJ_485D0 ;               * 485B7
+* -> : BOXZ: rubber band for the column right of the cursor
+BoxColRight:
+        :: 8GETLAM #1+ BoxEdgeV ;                * 485B7
 
 * refs (2): 4858F 485C6
-OBJ_485D0:
-        :: 12GETLAM 7GETLAM OBJ_487F6 NOT 5PICK AND ITE 3DROP * 485D0
+* flag #col -> : BOXZ: toggle the strokes that change when the box width changes by one column
+BoxEdgeV:
+        :: 12GETLAM 7GETLAM #Apart? NOT 5PICK AND ITE 3DROP * 485D0
           :: 4PICK IT                            * 485FD
             :: SWAP #1+ SWAP #1- ;               * 4860C
             3PICKSWAP OVER 2GETLAM #= case 4DROP * 4862A
             TOGGLELINE#3 ;                       * 48648
-          12GETLAM 7GETLAM OBJ_487F6 NOT 4PICK NOT AND case 3DROP * 48652
+          12GETLAM 7GETLAM #Apart? NOT 4PICK NOT AND case 3DROP * 48652
           8GETLAM 3UNROLL 3PICKSWAP 5ROLL ?SKIP  * 4867F
           :: ROT #1+ 3UNROLL #1- ;               * 48698
           OVER 2GETLAM #= case 4DROP             * 486B6
           TOGGLELINE#3 ;                         * 486CF
 
 * refs (2): 4743B 48535
-OBJ_486D9:
-        :: 2GETLAM 8GETLAM OBJ_487F6 NOT 5PICK AND ITE 3DROP * 486D9
+* flag #row -> : BOXZ: toggle the strokes that change when the box height changes by one row
+BoxEdgeH:
+        :: 2GETLAM 8GETLAM #Apart? NOT 5PICK AND ITE 3DROP * 486D9
           :: 4PICK IT                            * 48706
             :: SWAP #1+ SWAP #1- ;               * 48715
             3UNROLL SWAPROT OVER DUP 12GETLAM #= case 4DROP * 48733
             TOGGLELINE#3 ;                       * 4875B
-          2GETLAM 8GETLAM OBJ_487F6 NOT 4PICK NOT AND case 3DROP * 48765
+          2GETLAM 8GETLAM #Apart? NOT 4PICK NOT AND case 3DROP * 48765
           7GETLAM 3UNROLL 3PICKSWAP 5ROLL ?SKIP  * 48792
           :: ROT #1+ 3UNROLL #1- ;               * 487AB
           SWAP4ROLL 3UNROLL DUP 12GETLAM #= case 4DROP * 487C9
           TOGGLELINE#3 ;                         * 487EC
 
 * refs (4): 485DF 4865C 486E8 4876F
-OBJ_487F6:
+* #a #b -> #lo #hi flag: put in order; TRUE if they differ by more than 1
+#Apart?:
         :: 2DUP#> IT SWAP                        * 487F6
           2DUPSWAP #- #>1 ;                      * 4880A
 
 * refs (2): 48422 4D4FC
-OBJ_4881E:
+* -> : BOXZ: cursor left, redrawing the rubber band
+BoxCursLeft:
         :: OBJ_4DCC6 WINDOWLEFT? IT WINDOWLEFT   * 4881E
           ~8GETLAM;7GETLAM OVER #0= 3UNROLL CursCorner 8GETLAM !#1-IF>0 * 48837
-          OBJ_48472 ?SKIP OBJ_48599              * 4885A
-          OBJ_484BD ;                            * 48869
+          BoxCursOff ?SKIP BoxColRight?          * 4885A
+          BoxCursOn ;                            * 48869
 
 * refs (2): 47610 4D69B
-OBJ_48873:
+* -> : show the current equation (lam 24 when tracing, else the first of EQ) for a moment
+PictKeyEQ:
         :: TakeOver TraceMode? ITE ~BINT24;GETLAM;TRUE ~BINT1;GetEqN * 48873
           NOTcase DoBadKey                       * 48891
-          ->StkStr22! OBJ_469FF ;                * 4889B
+          ->StkStr22! ShowEqBriefly ;            * 4889B
         BSS     5                                * 488AA  zeros
 
 * refs (1): 477F9
 PlotScr*en~4:
         :: GDISPCENTER TURNMENUOFF PLOTPREP 2DROP 3UNROLL DUP TOTEMPOB * 488AF
-          15PUTLAM 17PUTLAM 16PUTLAM %0_2A2B4 GetRes 4PUTLAM OBJ_4B9D6 * 488D7
-          OBJ_4C314 ERRSET                       * 488FA
-          :: BINT2 OBJ_4A96E DROP ' 15GETLAM ' GETXPOS ' 1PUTLAM BINT1 * 48904
+          15PUTLAM 17PUTLAM 16PUTLAM %0_2A2B4 GetRes 4PUTLAM IndepUnit! * 488D7
+          MakeIndep ERRSET                       * 488FA
+          :: BINT2 LastPtArrays DROP ' 15GETLAM ' GETXPOS ' 1PUTLAM BINT1 * 48904
             GetEqN NOTcase ERRJMP                * 4893B
             DUP ALGeq? IT GETRHS                 * 4894A
             5ROLL #1= ITE                        * 4895E
@@ -1010,42 +1093,45 @@ PlotScr*en~4:
               DUP ALGeq? IT GETRHS               * 4899A
             ;                                    * 489AE
             ' PlotEval BINT1 ' PlotScr*en~5 4ROLL ' PlotEval BINT2 ' * 489B3
-            PlotScr*en~5 BINT11 ::N 2PUTLAM 19GETLAM TYPEEXT? ITE OBJ_4BC06 * 489E5
-            OBJ_4C12A                            * 48A0D
+            PlotScr*en~5 BINT11 ::N 2PUTLAM 19GETLAM TYPEEXT? ITE * 489E5
+            PlotLoopUnit PlotLoop                * 48A08
           ;                                      * 48A12
-          ERRTRAP OBJ_4B4EB ~ATTNFLG@;#0=?SEMI;ExitAtLOOP ATTNFLGCLR * 48A17
-          18GETLAM RESETDEPTH INDEPVAR ?PURGE_HERE GDISPCENTER OBJ_4D1DC ; * 48A2B
+          ERRTRAP PlotErrExit ~ATTNFLG@;#0=?SEMI;ExitAtLOOP ATTNFLGCLR * 48A17
+          18GETLAM RESETDEPTH INDEPVAR ?PURGE_HERE GDISPCENTER GraphLoop ; * 48A2B
 
 * refs (2): 489C7 489E5
 PlotScr*en~5:
         :: SWAP DUPTYPEREAL? NOTcasedrop ClrLastPt * 48A4E
-          GETYPOS 1GETLAM SWAP2DUP PIXON3 3PICK #2= NOTcase OBJ_4C440 * 48A67
+          GETYPOS 1GETLAM SWAP2DUP PIXON3 3PICK #2= NOTcase LastPt! * 48A67
           ROTDROP PlotScr*en~6 ;                 * 48A8F
 
 * refs (1): 48A94
 PlotScr*en~6:
         :: PlotScr*en~16 20GETLAM BINT1 PULLREALEL SWAPDROP %-1=case * 48A9E
-          :: DROP BINT2 3UNROLL OBJ_4C440 ;      * 48AC1
+          :: DROP BINT2 3UNROLL LastPt! ;        * 48AC1
           COERCE 21GETLAM BINT1 PULLREALEL SWAPDROP COERCE PlotScr*en~16 * 48ADF
-          4PICK 4PICK DRAWLINE#3 BINT2 3UNROLL OBJ_4C440 ; * 48B02
+          4PICK 4PICK DRAWLINE#3 BINT2 3UNROLL LastPt! ; * 48B02
 
 * refs (7): 48D05 48D1E 48D2D 48D41 48D5A 48D6E ...
-OBJ_48B25:
-        :: PurgePlotVars OBJ_4C314 ;             * 48B25
+* -> : drop the temporary plot variables and make the independent variable again
+PlotCleanup:
+        :: PurgePlotVars MakeIndep ;             * 48B25
 
 * refs (3): 497A3 49925 49981
-OBJ_48B39:
+* symb id guess -> %root ...: FCN: run the solver; on failure or ATTN show its message and leave the caller
+FcnSolve:
         :: SYMBNUMSOLVE NOTcase                  * 48B39
           :: 2RDROP JstGetTHEMESG ~DispCoord1;BINT2;16PUTLAM ; * 48B48
           ATTN# OVER #= case                     * 48B61
           :: SWAPDROP 2RDROP GETTHEMESG ~DispCoord1;BINT2;16PUTLAM ; * 48B75
-          OBJ_33D8C OVER                         * 48B93
+          RootZero OVER                          * 48B93
 * The Very Big List names this address äline, but it is a pointer inside an object; the name is not used
           #= ITE DROPNULL$ GETTHEMESG            * 48B9D
           SWAP ;                                 * 48BB1
 
 * refs (3): 200FD 48FBD B7EE6
-OBJ_48BBB:
+* -> symb: the current regression model as an expression in X, with slope and intercept from STATLR
+StatFitEq:
         :: STATLR ChkReakäPAR 5UNROLL 4DROP ' xLINFIT EQcasedrop * 48BBB
           :: 'IDX 'x* ' x+ BINT5 SYMBN ;         * 48BE3
           ' xLOGFIT EQcasedrop                   * 48C0B
@@ -1055,7 +1141,8 @@ OBJ_48BBB:
           'IDX SWAP ' x^ ' x* BINT5 SYMBN ;      * 48C8D
 
 * refs (3): 4997C 49B5F 49B9B
-OBJ_48CBA:
+* -> id %x: FCN: independent variable and the cursor's x, with the variable's units, as a first guess
+FcnGuess:
         :: INDEPVAR OBJ_73DFC TOTEMPOB 15GETLAM OVER NEWINDEP 19GETLAM * 48CBA
           DUPTYPEEXT? NOTcaseDROP UM>U           * 48CE2
         ;                                        * 48CF1
@@ -1063,79 +1150,88 @@ OBJ_48CBA:
 
 * refs (1): 474AB
 PlotScr*en~7:
-        :: CHECKMENU OBJ_48B25 ERRSET PlotScr*en~11 ERRTRAP * 48CFB
+        :: CHECKMENU PlotCleanup ERRSET PlotScr*en~11 ERRTRAP * 48CFB
 
 * refs (2): 48D55 48D82
-OBJ_48D19:
-          :: OBJ_48B25 ERRJMP ; OBJ_48B25 ;      * 48D19
+* FCN: the ERRTRAP arm: tidy up the plot variables and carry the error on
+FcnErrArm:
+          :: PlotCleanup ERRJMP ; PlotCleanup ;  * 48D19
 
 * refs (1): 474CE
 PlotScr*en~8:
-        :: CHECKMENU OBJ_48B25 ERRSET PlotScr*en~13 ERRTRAP OBJ_48D19 * 48D37
-          OBJ_48B25 ;                            * 48D5A
+        :: CHECKMENU PlotCleanup ERRSET PlotScr*en~13 ERRTRAP FcnErrArm * 48D37
+          PlotCleanup ;                          * 48D5A
 
 * refs (1): 47556
 PlotScr*en~9:
-        :: CHECKMENU OBJ_48B25 ERRSET PlotScr*en~14 ERRTRAP OBJ_48D19 * 48D64
-          OBJ_48B25 ;                            * 48D87
+        :: CHECKMENU PlotCleanup ERRSET PlotScr*en~14 ERRTRAP FcnErrArm * 48D64
+          PlotCleanup ;                          * 48D87
         BSS     1                                * 48D91  zeros
 
 * refs (1): 491DA
 AUTOSCALE~1:
         :: GETPTYPE BINT17 PTYPE>PINFO case EVAL * 48D92
-          :: OBJ_49017 OBJ_491E4 2DROP ; ;       * 48DB0
+          :: AutoInit AutoSample 2DROP ; ;       * 48DB0
 
 * refs (2): 8CB30 8CC6E
-OBJ_48DCE:
-        :: OBJ_49017 ' OBJ_48F4A 8PUTLAM OBJ_491E4 DUP TYPEBINT? * 48DCE
+* -> : AUTOSCALE for POLAR and PARAMETRIC: sample the equation to get the x and y ranges
+AutoScaleEq:
+        :: AutoInit ' AutoPoint 8PUTLAM AutoSample DUP TYPEBINT? * 48DCE
 * The Very Big List names this address ScaleY=ScaleX, but it is a pointer inside an object; the name is not used
-          case2DROP OBJ_49478                    * 48DF6
+          case2DROP AutoWiden                    * 48DF6
           xrng(2r) ;                             * 48E00
 
 * refs (1): 8C9EC
-OBJ_48E0A:
+* -> : AUTOSCALE for CONIC: make the scales equal
+AutoScaleSq:
         :: GETSCALE DROP DUP PUTSCALE ;          * 48E0A
 
 * refs (1): 8CE27
-OBJ_48E28:
+* -> : AUTOSCALE for SCATTER: the ranges of the two ΣDAT columns
+AutoScaleScatter:
         ::                                       * 48E28
 
 * refs (2): 48E91 48ED2
-OBJ_48E2D:
+* -> [] #xcol #ycol: ΣDAT and its columns from ΣPAR
+RclΣCols:
           :: rclä ChkReakäPAR 3DROP COERCE2 ;    * 48E2D
 
 * refs (1): 200E2
 xSCLSIGMA~1:
-          :: ROT OBJ_2CF08 DUP 4ROLL MinMaxCol(ra,s) OBJ_49478 xrng(2r) SWAP * 48E4B
-            MinMaxCol(ra,s) OBJ_49293 ;          * 48E78
+          :: ROT ChkStatCols DUP 4ROLL MinMaxCol(ra,s) AutoWiden xrng(2r) * 48E4B
+            SWAP MinMaxCol(ra,s) AutoSetY ;      * 48E73
         ;                                        * 48E87
 
 * refs (1): 8CF15
-OBJ_48E8C:
-        :: OBJ_48E2D DROP DUPROT OBJ_2CF08 SWAPDROPSWAP MinMaxCol(ra,s) * 48E8C
-          OBJ_49478 xrng(2r) %0_2A2B4 STATN OBJ_49587 ; * 48EAF
+* -> : AUTOSCALE for HISTOGRAM: x from the data column, then y
+AutoScaleHist:
+        :: RclΣCols DROP DUPROT ChkStatCols SWAPDROPSWAP MinMaxCol(ra,s) * 48E8C
+          AutoWiden xrng(2r) %0_2A2B4 STATN AutoMargin ; * 48EAF
 
 * refs (1): 8CFE5
-OBJ_48ECD:
-        :: OBJ_48E2D %0_2A2B4 PUTRES %0_2A2B4 STATN xrng(2r) DROP * 48ECD
+* -> : AUTOSCALE for BAR: y from the data, including 0
+AutoScaleBar:
+        :: RclΣCols %0_2A2B4 PUTRES %0_2A2B4 STATN xrng(2r) DROP * 48ECD
           MinMaxCol(ra,s) 2DUP %= ITE DROP%0b    * 48EF5
           :: DUP %0< casedrop %0_2A2B4           * 48F0E
             SWAPDUP %0> NOT?SEMI                 * 48F27
             DROP%0b ;                            * 48F36
-          OBJ_49293 ;                            * 48F40
+          AutoSetY ;                             * 48F40
 
 * refs (1): 48DDD
-OBJ_48F4A:
+* ob -> : AUTOSCALE: fold one sample into the x range, by plot type (complex for parametric, polar otherwise)
+AutoPoint:
         :: GETPTYPE 'IDPARAMETER EQITE           * 48F4A
           :: DUP TYPECMP? case C%>%              * 48F5E
             %0_2A2B4 ;                           * 48F77
-          :: 2GETLAM %POL>%REC ; 6GETLAM 7GETLAM 4ROLL OBJ_494EC 7PUTLAM * 48F81
+          :: 2GETLAM %POL>%REC ; 6GETLAM 7GETLAM 4ROLL AutoMinMax 7PUTLAM * 48F81
           6PUTLAM ;                              * 48FAE
 
 * refs (1): 0C7BC
-OBJ_48FB8:
-        :: OBJ_48BBB DOSTOE 'IDFUNCTION PUTPTYPE %1 'IDX DUP PUTINDEP * 48FB8
-          XEQSTOID EXITFCNsto OBJ_4C2CE ;        * 48FE5
+* -> : ΣLINE drawing: make the fit equation the EQ, as a FUNCTION of X, and draw
+PlotStatFit:
+        :: StatFitEq DOSTOE 'IDFUNCTION PUTPTYPE %1 'IDX DUP PUTINDEP * 48FB8
+          XEQSTOID EXITFCNsto AxesAndDraw ;      * 48FE5
 
 * ->
 * refs (2): 46A13 4A005

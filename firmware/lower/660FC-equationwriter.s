@@ -1,119 +1,122 @@
-* HP 48GX ROM revision R, #660FC-#69141: not yet identified
+* HP 48GX ROM revision R, #660FC-#69141: EquationWriter: root and sum handlers, size and placement of the box tree, drawing, bracket and bar grobs, RAM accessors, box record fields, work-stack frames, handler tables, start of the expression parser
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: EqwBoxCount EqwCurBox@ EqwBoxFirst@ EqwPOP#>Box EqwNewBox EqwCurBox! EqwBoxCount#2+ EqwBoxParent@ EqwBoxCount#3+ EqwBoxNext@ EqwBoxLast! #3*
+* Most referenced: EqwBoxCount EqwCurBox@ EqwBoxFirst@ EqwPOP#>Box EqwNewBox EqwCurBox! EqwBoxCount#2+ EqwBoxParent@ EqwBoxRefY@ EqwBoxCount#3+ EqwBoxNext@ EqwBoxLast!
 * Follows on from the previous file (at #660FC in the original ROM).
         RPL
 
 * refs (1): 68443
 OBJ_660FC:
-        :: OBJ_66C8B EqwBoxFirst@ OBJ_67AAF #9+ ; * 660FC
+        :: OBJ_66C8B EqwBoxFirst@ EqwBoxH@ #9+ ; * 660FC
 
 * refs (1): 68448
 OBJ_6611A:
-        :: OBJ_66C8B OBJ_6799C EqwBoxFirst@ OBJ_67AAF #9+ OVER EqwBoxFirst@ * 6611A
-          OBJ_67987 DUP OBJ_67AE2 SWAP 4UNROLL ROTOVER 2DUP#< IT DROPDUP * 66142
-          #- ROTOVER OBJ_65EC7 DUPUNROT #+ 4UNROLL SWAP OBJ_67AAF #+ * 6616F
-          OBJ_67BBB ;                            * 6619C
+        :: OBJ_66C8B EqwDupBoxPrev@ EqwBoxFirst@ EqwBoxH@ #9+ OVER * 6611A
+          EqwBoxFirst@ EqwDupBoxNext@ DUP EqwBoxRefY@ SWAP 4UNROLL ROTOVER * 6613D
+          2DUP#< IT DROPDUP                      * 66160
+          #- ROTOVER OBJ_65EC7 DUPUNROT #+ 4UNROLL SWAP EqwBoxH@ #+ EqwBoxH! ; * 6616F
 
 * refs (1): 65EFE
 OBJ_661A6:
-        :: SKIP OBJ_66331 OBJ_6FD85              * 661A6
-          :: OBJ_6DFDE EqwCurBox@ OBJ_6F42D OBJ_44DFE ; OBJ_6FDB6 OBJ_66255 * 661BA
-          OBJ_6FDC6 OBJ_662B9 BINT8 OBJ_6E433 OBJ_6E00B OBJ_67E0C * 661E2
-          EqwBoxSecond@ EqwDupBoxFirst@ DUP EqwBoxCount#1+ EqwBoxNext! BINT0 * 66200
-          3PICK BINT9 BINT7 OBJ_6DD2D EqwNewLeafBox EqwBoxCount EqwBoxLast! * 6621E
-          EqwBoxCount EqwCurBox! OBJ_6E4F6 ;     * 66241
+        :: SKIP OBJ_66331 EqwIf2                 * 661A6
+          :: EqwSmaller EqwCurBox@ EqwBlankCell OBJ_44DFE ; EqwIf4 OBJ_66255 * 661BA
+          EqwIf6 OBJ_662B9 BINT8 #<>RDROP EqwLarger EqwFrm5@ EqwBoxSecond@ * 661E2
+          EqwDupBoxFirst@ DUP EqwBoxCount#1+ EqwBoxNext! BINT0 3PICK BINT9 * 66205
+          BINT7 OBJ_6DD2D EqwNewLeafBox EqwBoxCount EqwBoxLast! EqwBoxCount * 66228
+          EqwCurBox! EqwRelayoutCur ;            * 66246
 
 * refs (1): 661DD
 OBJ_66255:
-        :: OBJ_6E1C7 DUP tok= OBJ_6CB70 EqwBoxObj! DUPZERO OVER * 66255
-          EqwBoxParent@ BINT5 OBJ_6DAE9 EqwBoxCount OVER EqwBoxParent@ OVER * 6627D
+        :: EqwCurNext@ DUP tok= EqwTextGrob EqwBoxObj! DUPZERO OVER * 66255
+          EqwBoxParent@ BINT5 EqwCellBox EqwBoxCount OVER EqwBoxParent@ OVER * 6627D
           EqwBoxLast! DUPUNROT EqwBoxNext! EqwCurBox! ; * 662A0
 
 * refs (1): 661E7
 OBJ_662B9:
-        :: OBJ_67E0C EqwBoxFirst@ EqwBoxFirst@ DUPZERO EqwBox#18! Push3Zeros * 662B9
+        :: EqwFrm5@ EqwBoxFirst@ EqwBoxFirst@ DUPZERO EqwBox#18! Push3Zeros * 662B9
           4PICK #1+ EqwDupBoxParent@ BINT7 BINT6 OBJ_6DD2D EqwNewBox * 662DC
           EqwBoxCount SWAPDUP EqwBoxParent@ 3PICK EqwBoxFirst! #1+ OVER * 662FF
           EqwBoxPrev! EqwCurBox! ;               * 66322
 
 * refs (1): 661B0
 OBJ_66331:
-        :: OBJ_65E13 OBJ_67E34 #2+ BINT9 #=casedrop * 66331
-          :: OBJ_67E64 EqwBoxSecond@ EqwDupBoxFirst@ OBJ_6D523 EqwBoxLast! ; * 6634F
+        :: OBJ_65E13 EqwDupFrmN1@ #2+ BINT9 #=casedrop * 66331
+          :: EqwFrmN5@ EqwBoxSecond@ EqwDupBoxFirst@ EqwNoNext EqwBoxLast! ; * 6634F
           BINT7 #=casedrop                       * 66372
-          :: OBJ_67E64 EqwBoxFirst@ DUP#1+ DUPUNROT EqwBoxFirst! DUP#1+ SWAP * 6637C
+          :: EqwFrmN5@ EqwBoxFirst@ DUP#1+ DUPUNROT EqwBoxFirst! DUP#1+ SWAP * 6637C
             EqwBoxPrev! ;                        * 663A4
           SWAPDROP #5= NOT?SEMI                  * 663AE
-          OBJ_6E1C7 OBJ_6D523 EqwDupBoxParent@ OVER EqwBoxLast! * 663BD
+          EqwCurNext@ EqwNoNext EqwDupBoxParent@ OVER EqwBoxLast! * 663BD
           EqwFontHeight OBJ_65EC7 ;              * 663D6
 
 * refs (1): 1B233
 OBJ_663E5:
         :: SKIP OBJ_6656B EqwBoxCount#3+ EqwBoxCount#1+ OBJ_6CFB5 SWAPDROP * 663E5
-          OBJ_6E0D2 #+ #6+ SWAP #2+ 2DUPHALF #1+ OBJ_6D8DC EqwBoxCount #5+ * 66408
-          DUPZERO EqwBoxCount#2+ EqwCurBox@ OBJ_6D39D OBJ_6E0D2 OBJ_6E0C0 * 6643A
-          2DUPHALF #3+ OBJ_6D990 EqwNewBox EqwBoxCount EqwBoxCount#2+ * 66458
-          EqwCurBox@ BINT1 BINT4 BINT0 OBJ_6D779 BINT4 OBJ_6DC51 4ROLL #1+ * 66476
-          4UNROLL EqwNewLeafBox EqwBoxCount#2+ DUP EqwBoxCount BINT0 * 664A3
-          EqwCurBox@ OBJ_6D39D OBJ_6D7DD OBJ_6D779 2DUPHALF #1+ OBJ_6D990 * 664C1
-          Push3Zeros BINT0 EqwBoxCount#1+ BINT0 #THREE#FOUR BINT2 OBJ_6D7DD * 664E4
-          OBJ_6DC51 OBJ_6DFDE ZEROZERO ZEROZERO EqwBoxCount#1- OBJ_6D163 * 66507
-          OBJ_6D4CE OBJ_6D5EB ;                  * 66525
+          EqwFontW-1 #+ #6+ SWAP #2+ 2DUPHALF #1+ OBJ_6D8DC EqwBoxCount #5+ * 66408
+          DUPZERO EqwBoxCount#2+ EqwCurBox@ EqwPlainArgs EqwFontW-1 * 6643A
+          EqwFontH-1 2DUPHALF #3+ OBJ_6D990 EqwNewBox EqwBoxCount * 66453
+          EqwBoxCount#2+ EqwCurBox@ BINT1 BINT4 BINT0 EqwFontH#2+ BINT4 * 66471
+          OBJ_6DC51 4ROLL #1+ 4UNROLL EqwNewLeafBox EqwBoxCount#2+ DUP * 66494
+          EqwBoxCount BINT0 EqwCurBox@ EqwPlainArgs EqwFontW#2+ EqwFontH#2+ * 664B7
+          2DUPHALF #1+ OBJ_6D990 Push3Zeros BINT0 EqwBoxCount#1+ BINT0 * 664D5
+          #THREE#FOUR BINT2 EqwFontW#2+ OBJ_6DC51 EqwSmaller ZEROZERO * 664F8
+          ZEROZERO EqwBoxCount#1- EqwCellArgs3 EqwNew3 EqwCurNew ; * 66516
 
 * refs (1): 68439
 OBJ_66534:
         :: SWAPDROP ZEROSWAP OBJ_66C8B EqwDupBoxFirst@ SWAP EqwBoxLast@ * 66534
-          OBJ_67AE2 DUPUNROT OBJ_67C16 ;         * 66557
+          EqwBoxRefY@ DUPUNROT EqwBoxRefY! ;     * 66557
 
 * refs (1): 663EF
 OBJ_6656B:
         :: SKIP                                  * 6656B
-          :: OBJ_65E13 OBJ_6F36A EqwDupBoxFirst@ OBJ_6D523 DUP OBJ_6F42D * 66575
-            EqwBoxObj! OVER EqwBoxPrev@ DUP OBJ_6F42D EqwBoxObj! ZEROSWAP * 66598
-            OBJ_68593 EqwBoxLast! ;              * 665BB
-          BINT4 OBJ_6E433 OBJ_6E00B OBJ_67E0C EqwBoxLast@ EqwDupBoxFirst@ * 665CA
-          DUPZERO 4PICK BINT5 OBJ_6DAE9 2DUP EqwBoxCount EqwBoxNext! * 665E8
-          EqwBoxCount EqwBoxLast! BINT7 3PICK EqwBoxPrev@ OBJ_68593 * 6660B
-          OBJ_6D7DD OBJ_66FF1 EqwBoxObj! EqwDupBoxParent@ SWAP EqwBoxPrev@ * 66629
-          OBJ_66660 2DROP EqwBoxCount EqwCurBox! ; * 66647
+          :: OBJ_65E13 EqwFrmLast@ EqwDupBoxFirst@ EqwNoNext DUP * 66575
+            EqwBlankCell EqwBoxObj! OVER EqwBoxPrev@ DUP EqwBlankCell * 66593
+            EqwBoxObj! ZEROSWAP EqwBoxSizeH! EqwBoxLast! ; * 665B1
+          BINT4 #<>RDROP EqwLarger EqwFrm5@ EqwBoxLast@ EqwDupBoxFirst@ * 665CA
+          DUPZERO 4PICK BINT5 EqwCellBox 2DUP EqwBoxCount EqwBoxNext! * 665E8
+          EqwBoxCount EqwBoxLast! BINT7 3PICK EqwBoxPrev@ EqwBoxSizeH! * 6660B
+          EqwFontW#2+ EqwBarGrob EqwBoxObj! EqwDupBoxParent@ SWAP * 66629
+          EqwBoxPrev@ OBJ_66660 2DROP EqwBoxCount EqwCurBox! ; * 66642
 
 * refs (2): 66647 6841B
 OBJ_66660:
-        :: OBJ_6799C OVER EqwBoxNext@ DUP OBJ_67AE2 OVER * 66660
+        :: EqwDupBoxPrev@ OVER EqwBoxNext@ DUP EqwBoxRefY@ OVER * 66660
 
 * refs (1): 666A6
 OBJ_66683:
-          :: OBJ_67AAA SWAP OBJ_67AE2 #-Floor0 ; 4ROLL OBJ_66683 #MAX #+OVER * 66683
-          OBJ_67AAF #MAX OBJ_44CD2 OBJ_44DB3 OBJ_44D9A ; * 666B5
+          :: EqwDupBoxH@ SWAP EqwBoxRefY@ #-Floor0 ; 4ROLL OBJ_66683 #MAX * 66683
+          #+OVER EqwBoxH@ #MAX OBJ_44CD2 OBJ_44DB3 OBJ_44D9A ; * 666B0
 
 * refs (5): 69DB1 6A159 6B115 6B7B3 6C4C4
-OBJ_666D3:
-        :: OBJ_66CD6 BINT1 OBJ_6670A ;           * 666D3
+* -> : place the whole tree (from box 1) and draw it into the display grob
+EqwDrawAll:
+        :: EqwPlaceAll BINT1 EqwDrawBox ;        * 666D3
 
 * refs (1): 66769
-OBJ_666EC:
-        :: BEGIN DUP OBJ_6670A OBJ_6FEE1 ;       * 666EC
+* #first -> : draw a box and its following siblings
+EqwDrawKids:
+        :: BEGIN DUP EqwDrawBox EqwNextUntil ;   * 666EC
 
 * refs (2): 666E2 666FB
-OBJ_6670A:
+* #b -> : draw a box. A leaf whose drawn bit (+01 bit 3) is clear gets the bit set and its grob put at x,y with XYGROBDISP; other boxes go on to their children
+EqwDrawBox:
         CON(5)  (*)+5                            * 6670A  primitive code object
         ASSEMBLE
         ST=0    10                               * 6670F
-OBJ_6670A.loop1:
+EqwDrawBox.loop1:
         LC(5)   #00009                           * 66712
         D=D-C   A                                * 66719
-        GONC    OBJ_6670A.L2                     * 6671B
-        GOSBVL  SUB_6DDAB                        * 6671E
-        GOC     OBJ_6670A.loop1                  * 66725
-OBJ_6670A.L2:
+        GONC    EqwDrawBox.L2                    * 6671B
+        GOSBVL  EqwGC                            * 6671E
+        GOC     EqwDrawBox.loop1                 * 66725
+EqwDrawBox.L2:
         D=D+C   A                                * 66728
         GOSBVL  POP#                             * 6672A
         R1=A.F  A                                * 66731
-        GOSBVL  SUB_67A51                        * 66737
+        GOSBVL  EqwA>Box                         * 66737
         A=DAT0  S                                * 6673E
         ?A=0    S                                * 66742
-        GOYES   OBJ_6670A.L3                     * 66745
+        GOYES   EqwDrawBox.L3                    * 66745
         AD0EX                                    * 66747
         LC(5)   #00024                           * 6674A
         A=A+C   A                                * 66751
@@ -123,16 +126,16 @@ OBJ_6670A.L2:
         GOSBVL  SUB_67918                        * 6675C
         C=R2                                     * 66763
         D0=C                                     * 66766
-        LC(5)   OBJ_666EC                        * 66769
+        LC(5)   EqwDrawKids                      * 66769
         A=C     A                                * 66770
         PC=(A)                                   * 66772
-OBJ_6670A.L3:
+EqwDrawBox.L3:
         D0=D0+  1                                * 66776
         A=DAT0  S                                * 66779
         A=A+A   S                                * 6677D
-        GONC    OBJ_6670A.L4                     * 66780
-        GOVLNG  OBJ_685B2.L1                     * 66783
-OBJ_6670A.L4:
+        GONC    EqwDrawBox.L4                    * 66780
+        GOVLNG  EqwBoxPlaceH!.L1                 * 66783
+EqwDrawBox.L4:
         A=DAT0  S                                * 6678A
         P=      15                               * 6678E
         LC(1)   #8                               * 66790
@@ -142,7 +145,7 @@ OBJ_6670A.L4:
         D0=D0+  4                                * 6679D
         A=0     A                                * 667A0
         A=DAT0  X                                * 667A2
-        GOSBVL  SUB_680FB                        * 667A6
+        GOSBVL  EqwPush#A                        * 667A6
         D0=D0-  3                                * 667AD
         A=0     A                                * 667B0
         A=DAT0  X                                * 667B2
@@ -179,85 +182,90 @@ OBJ_6670A.L4:
         RPL
 
 * refs (8): 68E2C 68EE5 692F1 69A27 6A14F 6D546 ...
-OBJ_6681A:
+* #b -> : measure and lay out again from the box's parent up to the root, running the size handlers of each level and folding the children's sizes into the parent
+EqwRelayout:
         :: BEGIN EqwBoxParent@ DUP#0= case drop;q_58A0C * 6681A
-          :: EqwDupBoxFirst@ BEGIN OBJ_6689C     * 66838
-OBJ_6681A.L1:
-            OBJ_6FEE1                            * 6684C
-OBJ_6681A.L2:
+          :: EqwDupBoxFirst@ BEGIN EqwSizeBox    * 66838
+EqwRelayout.L1:
+            EqwNextUntil                         * 6684C
+EqwRelayout.L2:
           ;                                      * 66851
-          ZEROSWAP EqwDupBoxFirst@ ZEROZERO 4PICK OBJ_679D7 #1= ITE * 66856
-          OBJ_66933 OBJ_66956                    * 66879
+          ZEROSWAP EqwDupBoxFirst@ ZEROZERO 4PICK EqwBoxType@ #1= ITE * 66856
+          EqwSizeRow EqwSizeCol                  * 66879
           DUP ?SKIP SWAPDROP                     * 66883
           NOT_UNTIL ;                            * 66892
 
 * refs (1): 66847
-OBJ_6689C:
+* #b -> #b: run the size handler of a box (table by +14), or walk down to the first child; leaves the caller's loop through RDROP when there is nothing below
+EqwSizeBox:
         CON(5)  (*)+5                            * 6689C  primitive code object
         ASSEMBLE
         GOSBVL  EqwPOP#>Box                      * 668A1
         D1=D1-  5                                * 668A8
         D=D-1   A                                * 668AB
-OBJ_6689C.loop1:
+EqwSizeBox.loop1:
         A=DAT0  S                                * 668AD
         D0=D0+  10                               * 668B1
         D0=D0+  10                               * 668B4
         A=0     A                                * 668B7
         A=DAT0  B                                * 668B9
         ?A#0    S                                * 668BC
-        GOYES   OBJ_6689C.L3                     * 668BF
+        GOYES   EqwSizeBox.L3                    * 668BF
         ?A=0    B                                * 668C1
-        GOYES   OBJ_6689C.L3                     * 668C4
+        GOYES   EqwSizeBox.L3                    * 668C4
         A=A+1   B                                * 668C6
-        GONC    OBJ_6689C.L2                     * 668C9
-        GOVLNG  SUB_6845F.L5                     * 668CC
-OBJ_6689C.L2:
+        GONC    EqwSizeBox.L2                    * 668C9
+        GOVLNG  EqwBoxSizeH@~1.L5                * 668CC
+EqwSizeBox.L2:
         A=A-1   B                                * 668D3
-        GOSBVL  SUB_683D2                        * 668D6
-        D0=(5)  OBJ_6681A.L1                     * 668DD
+        GOSBVL  EqwSizeH>A                       * 668D6
+        D0=(5)  EqwRelayout.L1                   * 668DD
         PC=(A)                                   * 668E4
-OBJ_6689C.L3:
+EqwSizeBox.L3:
         D0=D0+  10                               * 668E8
         A=0     A                                * 668EB
         A=DAT0  X                                * 668ED
         ?A=0    A                                * 668F1
-        GOYES   OBJ_6689C.L4                     * 668F4
+        GOYES   EqwSizeBox.L4                    * 668F4
         R3=A.F  A                                * 668F6
         D1=D1+  5                                * 668FC
         D=D+1   A                                * 668FF
         GOSBVL  SUB_67918                        * 66901
         A=R3.F  A                                * 66908
-        GOSBVL  SUB_67A3D                        * 6690E
-        GOTO    OBJ_6689C.loop1                  * 66915
-OBJ_6689C.L4:
+        GOSBVL  EqwA>BoxR2                       * 6690E
+        GOTO    EqwSizeBox.loop1                 * 66915
+EqwSizeBox.L4:
         D1=D1+  5                                * 66919
         D=D+1   A                                * 6691C
-        D0=(5)  OBJ_6681A.L2                     * 6691E
+        D0=(5)  EqwRelayout.L2                   * 6691E
         LA(5)   RDROP                            * 66925
         PC=(A)                                   * 6692F
         RPL
 
 * refs (1): 66879
-OBJ_66933:
-        :: BINT0 4ROLL OBJ_66A0A OVER#+ OBJ_669B5 ; * 66933
+* Fold the children of a row (type 1) into the parent's size
+EqwSizeRow:
+        :: BINT0 4ROLL EqwRowLoop OVER#+ EqwSizeRow~1 ; * 66933
 
 * refs (1): 6687E
-OBJ_66956:
-        :: ROT BEGIN OBJ_68550 #0=?SKIP          * 66956
-          :: 5ROLLDROP OBJ_68550 5UNROLL ; OBJ_67A98 4ROLL #MAX 3UNROLL * 6696F
-          OBJ_67AAA ROT#+ SWAP OBJ_6FEE1 ZEROSWAP * 6699C
+* Fold the children of a column into the parent's size: the widest child's width, the sum of the heights
+EqwSizeCol:
+        :: ROT BEGIN EqwDupBoxPlaceH@ #0=?SKIP   * 66956
+          :: 5ROLLDROP EqwDupBoxPlaceH@ 5UNROLL ; EqwDupBoxW@ 4ROLL #MAX * 6696F
+          3UNROLL EqwDupBoxH@ ROT#+ SWAP EqwNextUntil ZEROSWAP * 66997
 
 * refs (1): 6694C
-OBJ_669B5:
-          :: OBJ_66B19 6UNROLL 4PICK 4ROLLROT OBJ_6CE8E OVER 4ROLL OBJ_684D4 * 669B5
-            ROT DUP#0=ITE DROP SWAPDROP OBJ_66BC1 SWAP ; * 669E2
+EqwSizeRow~1:
+          :: EqwSizeCol~1 6UNROLL 4PICK 4ROLLROT EqwBoxWH! OVER 4ROLL * 669B5
+            EqwRunPlaceH ROT DUP#0=ITE DROP SWAPDROP EqwSizeCol~2 SWAP ; * 669DD
         ;                                        * 66A05
 
 * refs (1): 66942
-OBJ_66A0A:
+* Walk the children of a row, keeping the largest ascent and depth and the summed width
+EqwRowLoop:
         CON(5)  (*)+5                            * 66A0A  primitive code object
         ASSEMBLE
-OBJ_66A0A.loop1:
+EqwRowLoop.loop1:
         GOSBVL  EqwPOP#>Box                      * 66A0F
         D1=D1+  15                               * 66A16
         D1=D1+  10                               * 66A19
@@ -266,13 +274,13 @@ OBJ_66A0A.loop1:
         A=0     A                                * 66A22
         A=DAT0  B                                * 66A24
         ?A#0    B                                * 66A27
-        GOYES   OBJ_66A0A.L2                     * 66A2A
+        GOYES   EqwRowLoop.L2                    * 66A2A
         D1=D1-  5                                * 66A2C
         D=D-1   A                                * 66A2F
-        GONC    OBJ_66A0A.L3                     * 66A31
-OBJ_66A0A.L2:
-        GOSBVL  SUB_68573                        * 66A34
-OBJ_66A0A.L3:
+        GONC    EqwRowLoop.L3                    * 66A31
+EqwRowLoop.L2:
+        GOSBVL  EqwPush#H                        * 66A34
+EqwRowLoop.L3:
         C=0     A                                * 66A3B
         D0=D0-  5                                * 66A3D
         C=DAT0  X                                * 66A40
@@ -292,21 +300,21 @@ OBJ_66A0A.L3:
         AR3EX                                    * 66A74
         C=R1                                     * 66A77
         C=A-C   A                                * 66A7A
-        GONC    OBJ_66A0A.L4                     * 66A7C
+        GONC    EqwRowLoop.L4                    * 66A7C
         C=0     A                                * 66A7F
-OBJ_66A0A.L4:
+EqwRowLoop.L4:
         A=R3                                     * 66A81
         ?C<=A   A                                * 66A84
-        GOYES   OBJ_66A0A.L5                     * 66A87
+        GOYES   EqwRowLoop.L5                    * 66A87
         A=C     A                                * 66A89
-OBJ_66A0A.L5:
+EqwRowLoop.L5:
         R3=A                                     * 66A8B
         GOSBVL  POP#                             * 66A8E
         C=R1                                     * 66A95
         ?C>=A   A                                * 66A98
-        GOYES   OBJ_66A0A.L6                     * 66A9B
+        GOYES   EqwRowLoop.L6                    * 66A9B
         C=A     A                                * 66A9D
-OBJ_66A0A.L6:
+EqwRowLoop.L6:
         R1=C                                     * 66A9F
         GOSBVL  POP#                             * 66AA2
         C=R0                                     * 66AA9
@@ -330,20 +338,21 @@ OBJ_66A0A.L6:
         D=D+1   A                                * 66AEE
         A=R2                                     * 66AF0
         ?A=0    A                                * 66AF3
-        GOYES   OBJ_66A0A.L7                     * 66AF6
+        GOYES   EqwRowLoop.L7                    * 66AF6
         CD0EX                                    * 66AF8
         R2=C                                     * 66AFB
         GOSBVL  SUB_67918                        * 66AFE
         C=R2                                     * 66B05
         D0=C                                     * 66B08
-        GOTO    OBJ_66A0A.loop1                  * 66B0B
-OBJ_66A0A.L7:
+        GOTO    EqwRowLoop.loop1                 * 66B0B
+EqwRowLoop.L7:
         A=DAT0  A                                * 66B0F
         D0=D0+  5                                * 66B12
         PC=(A)                                   * 66B15
 
 * refs (1): 669BA
-OBJ_66B19:
+* Probably: compare the new height and width with those in the box; FALSE when both are unchanged
+EqwSizeCol~1:
         CON(5)  (*)+5                            * 66B19  primitive code object
         D1=D1+  15                               * 66B1E
         D1=D1+  5                                * 66B21
@@ -351,10 +360,10 @@ OBJ_66B19:
         D1=D1-  10                               * 66B27
         LC(5)   BINT0                            * 66B2A
         ?C=A    A                                * 66B31
-        GOYES   OBJ_66B19.L1                     * 66B34
+        GOYES   EqwSizeCol~1.L1                  * 66B34
         D1=D1-  10                               * 66B36
-        GOTO    OBJ_66B19.L4                     * 66B39
-OBJ_66B19.L1:
+        GOTO    EqwSizeCol~1.L4                  * 66B39
+EqwSizeCol~1.L1:
         A=DAT1  A                                * 66B3D
         AD0EX                                    * 66B40
         D0=D0+  5                                * 66B43
@@ -377,32 +386,34 @@ OBJ_66B19.L1:
         A=DAT0  X                                * 66B78
         C=R3                                     * 66B7C
         ?C#A    A                                * 66B7F
-        GOYES   OBJ_66B19.L3                     * 66B82
+        GOYES   EqwSizeCol~1.L3                  * 66B82
         D0=D0+  3                                * 66B84
         A=DAT0  X                                * 66B87
         C=R2                                     * 66B8B
         D0=C                                     * 66B8E
         C=R1                                     * 66B91
         ?C#A    A                                * 66B94
-        GOYES   OBJ_66B19.L3                     * 66B97
-OBJ_66B19.L2:
+        GOYES   EqwSizeCol~1.L3                  * 66B97
+EqwSizeCol~1.L2:
         GOVLNG  PushFLoop                        * 66B99
-OBJ_66B19.L3:
+EqwSizeCol~1.L3:
         C=R2                                     * 66BA0
         D0=C                                     * 66BA3
-OBJ_66B19.L4:
+EqwSizeCol~1.L4:
         GOVLNG  PushTLoop                        * 66BA6
 
 * refs (9): 49AAB 694AE 6A339 6A3ED 6EA23 6F77F ...
-OBJ_66BAD:
+* #v -> flag: TRUE when bit 19 is set in a value of field +18, which marks the box of an operator
+EqwIdxOp?:
         CON(5)  (*)+5                            * 66BAD  primitive code object
         GOSBVL  POP#                             * 66BB2
         A=A+A   A                                * 66BB9
-        GOC     OBJ_66B19.L4                     * 66BBB
-        GONC    OBJ_66B19.L2                     * 66BBE
+        GOC     EqwSizeCol~1.L4                  * 66BBB
+        GONC    EqwSizeCol~1.L2                  * 66BBE
 
 * refs (1): 669F6
-OBJ_66BC1:
+* Probably: store the reference point (+08, +0B) of a box, turning the flag below it to TRUE when the old value differed
+EqwSizeCol~2:
         CON(5)  (*)+5                            * 66BC1  primitive code object
         D1=D1+  10                               * 66BC6
         GOSBVL  EqwPOP#>Box                      * 66BC9
@@ -423,27 +434,27 @@ OBJ_66BC1:
         D1=D1+  10                               * 66C04
         D=D-1   A                                * 66C07
         ?C#A    A                                * 66C09
-        GOYES   OBJ_66BC1.L2                     * 66C0C
-OBJ_66BC1.loop1:
+        GOYES   EqwSizeCol~2.L2                  * 66C0C
+EqwSizeCol~2.loop1:
         A=DAT0  A                                * 66C0E
         D0=D0+  5                                * 66C11
         PC=(A)                                   * 66C14
-OBJ_66BC1.L2:
+EqwSizeCol~2.L2:
         LC(5)   TRUE                             * 66C18
         D1=D1+  5                                * 66C1F
         DAT1=C  A                                * 66C22
         D1=D1-  5                                * 66C25
-        GOTO    OBJ_66BC1.loop1                  * 66C28
+        GOTO    EqwSizeCol~2.loop1               * 66C28
         RPL
 
 * refs (1): 6842A
 OBJ_66C2C:
-        :: OBJ_66C8B EqwBoxFirst@ OBJ_67AAF #1+ ; * 66C2C
+        :: OBJ_66C8B EqwBoxFirst@ EqwBoxH@ #1+ ; * 66C2C
 
 * refs (1): 6842F
 OBJ_66C4A:
-        :: EqwDupBoxFirst@ OBJ_67ABC SWAP #2/ SWAPROT EqwBoxParent@ * 66C4A
-          EqwBoxFirst@ OBJ_67AE2 #+ #2- ;        * 66C6D
+        :: EqwDupBoxFirst@ EqwBoxWH@ SWAP #2/ SWAPROT EqwBoxParent@ * 66C4A
+          EqwBoxFirst@ EqwBoxRefY@ #+ #2- ;      * 66C6D
 
 * refs (1): 68434
 OBJ_66C86:
@@ -451,49 +462,56 @@ OBJ_66C86:
 
 * refs (5): 66101 6611F 66543 66C31 66CBD
 OBJ_66C8B:
-          :: OBJ_67A98 #2/ SWAP ; EqwBoxLast@ OBJ_67AE2 #2+ ; * 66C8B
+          :: EqwDupBoxW@ #2/ SWAP ; EqwBoxLast@ EqwBoxRefY@ #2+ ; * 66C8B
 
 * refs (1): 6843E
 OBJ_66CB8:
-        :: OBJ_66C8B EqwBoxPrev@ EqwBoxPrev@ OBJ_67AE2 ; * 66CB8
+        :: OBJ_66C8B EqwBoxPrev@ EqwBoxPrev@ EqwBoxRefY@ ; * 66CB8
 
 * refs (2): 666D8 69BF1
-OBJ_66CD6:
-        :: BINT1 BINT27 OVER OBJ_67AE2 2DUP#> ITE * 66CD6
+* -> #1 ...: the root's reference goes at row 27 of the grob, or lower when the box is taller; then every box gets its x,y
+EqwPlaceAll:
+        :: BINT1 BINT27 OVER EqwBoxRefY@ 2DUP#> ITE * 66CD6
           :: DUPUNROT #- ;                       * 66CF9
           :: SWAPDROP BINT0 ;                    * 66D0D
           3PICKOVER                              * 66D21
 
 * refs (1): 44DF4
-OBJ_66D26:
-          :: OVER BINT0 OBJ_67B67 OBJ_67BA1 ; #+ BINT0 ROT EqwBoxFirst@ GOTO * 66D26
-          OBJ_66D67.L1 ;                         * 66D5D
+* #b #y -> : put a box at x = 0 and this y
+EqwBoxX0Y!:
+          :: OVER BINT0 EqwBoxX! EqwBoxY! ; #+ BINT0 ROT EqwBoxFirst@ GOTO * 66D26
+          EqwPlaceAll~1 ;                        * 66D5D
 
 * refs (1): 66DDA
-OBJ_66D67:
-        :: OBJ_6812C 3UNROLL                     * 66D67
-OBJ_66D67.L1:
-          BEGIN 3PICKOVER OBJ_67AE2 #- OVERSWAP 4PICKSWAP OBJ_66E61 * 66D76
-          OBJ_67A98 OBJ_66DB2 NOT_UNTIL 2DROP ;  * 66D99
+* #b -> : place the children of a row: each goes at y = reference - its +08, x grows by each width
+EqwPlaceRow:
+        :: EqwRowStart 3UNROLL                   * 66D67
+EqwPlaceAll~1:
+          BEGIN 3PICKOVER EqwBoxRefY@ #- OVERSWAP 4PICKSWAP EqwMoveBox * 66D76
+          EqwDupBoxW@ EqwPlaceNext NOT_UNTIL 2DROP ; * 66D99
 
 * refs (2): 66D9E 66E4D
-OBJ_66DB2:
-        :: ROT#+SWAP OBJ_679EA ?SKIP             * 66DB2
-          :: DUP OBJ_679D2 #1=case OBJ_66D67     * 66DC6
-            OBJ_66DF3 ;                          * 66DDF
-          OBJ_67969 ;                            * 66DE9
+* Recurse into a placed child (EqwPlaceRow for type 1, EqwPlaceCol otherwise), then step to its next sibling
+EqwPlaceNext:
+        :: ROT#+SWAP EqwBoxLeaf? ?SKIP           * 66DB2
+          :: DUP EqwDupBoxType@ #1=case EqwPlaceRow * 66DC6
+            EqwPlaceCol ;                        * 66DDF
+          EqwNext? ;                             * 66DE9
 
 * refs (1): 66DDF
-OBJ_66DF3:
-        :: DUP OBJ_67AD5 OVER OBJ_67A7E #+SWAP EqwDupBoxFirst@ SWAP * 66DF3
-          OBJ_67A8B SWAP BEGIN 3PICKOVER OBJ_67AD5 #- OVERSWAP 4PICK * 66E1B
-          OBJ_66E61 OBJ_67AAA OBJ_66DB2 NOT_UNTIL 2DROP ; * 66E43
+* #b -> : place the children of a column: each goes at x = centre - its +0B, y grows by each height
+EqwPlaceCol:
+        :: DUP EqwBoxRefX@ OVER EqwBoxX@ #+SWAP EqwDupBoxFirst@ SWAP * 66DF3
+          EqwBoxY@ SWAP BEGIN 3PICKOVER EqwBoxRefX@ #- OVERSWAP 4PICK * 66E1B
+          EqwMoveBox EqwDupBoxH@ EqwPlaceNext NOT_UNTIL 2DROP ; * 66E43
 
 * refs (2): 66D94 66E43
-OBJ_66E61:
-        :: OBJ_68017 3PICK OBJ_67CA2 OBJ_44DD6 ; * 66E61
+* #b #x #y: store a position with EqwBoxXY! and clear the box's drawn bit
+EqwMoveBox:
+        :: EqwBoxXY! 3PICK EqwBoxUndrawn EqwMoveBox~1 ; * 66E61
 
 * refs (2): 6E0F3 6F44B
+* Blank cell grob for the small size level
 OBJ_66E7F:
         GROB    "images/66E7F.png"               * 66E7F  4 x 6
         BSS     6                                * 66E9F  zeros
@@ -518,7 +536,7 @@ OBJ_66F11:
         GROB    "images/66F11.png"               * 66F11  16 x 18
 
 * refs (1): 6CB98
-OBJ_66F6D:
+KeyAccent~4:
         GROB    "images/66F6D.png"               * 66F6D  3 x 8
 
 * refs (1): 44C55
@@ -526,21 +544,23 @@ OBJ_66F91:
         GROB    "images/66F91.png"               * 66F91  6 x 6
 
 * refs (2): 6E0FE 6F446
+* Blank cell grob for the medium size level
 OBJ_66FB1:
         GROB    "images/66FB1.png"               * 66FB1  6 x 8
 
 * refs (1): 6FB22
-OBJ_66FD5:
+EqwSelectBox~1:
         GROB    "images/66FD5.png"               * 66FD5  5 x 4
 
 * refs (6): 44D31 6662E 6CE20 6CF38 6D828 6DA3F
-OBJ_66FF1:
+* #w -> grob: 2 rows high, top row black: the fraction bar and the vinculum of a root
+EqwBarGrob:
         :: BINT2 SWAP MAKEGROB                   * 66FF1
 
 Code_67005:
           CODE                                   * 67005  34 nibbles
             ST=0    0                            * 6700F
-            GOSUB   SUB_67036                    * 67012
+            GOSUB   EqwBarGrob~1                 * 67012
             C=R1.F  A                            * 67016
             D=C     A                            * 6701C
             A=R0.F  A                            * 6701E
@@ -553,7 +573,7 @@ Code_67005:
         ASSEMBLE
 
 * refs (1): 67012
-SUB_67036:
+EqwBarGrob~1:
         A=DAT1  A                                * 67036
         AD1EX                                    * 67039
         R0=A.F  A                                * 6703C
@@ -571,13 +591,13 @@ SUB_67036:
         CSRB.F  A                                * 67066
         CSRB.F  A                                * 6706B
         ?SB=0                                    * 67070
-        GOYES   SUB_67036.L1                     * 67073
+        GOYES   EqwBarGrob~1.L1                  * 67073
         C=C+1   A                                * 67075
-SUB_67036.L1:
+EqwBarGrob~1.L1:
         ?C#0    S                                * 67077
-        GOYES   SUB_67036.L2                     * 6707A
+        GOYES   EqwBarGrob~1.L2                  * 6707A
         C=C+1   A                                * 6707C
-SUB_67036.L2:
+EqwBarGrob~1.L2:
         R4=C.F  A                                * 6707E
         DCEX    A                                * 67084
         R1=C.F  A                                * 67086
@@ -586,42 +606,43 @@ SUB_67036.L2:
         C=A     A                                * 67099
         AD1EX                                    * 6709B
         ?ST=0   0                                * 6709E
-        GOYES   SUB_67036.L3                     * 670A1
+        GOYES   EqwBarGrob~1.L3                  * 670A1
         A=A+C   A                                * 670A3
-SUB_67036.L3:
+EqwBarGrob~1.L3:
         D1=A                                     * 670A5
         D=D-1   A                                * 670A8
         RTNC                                     * 670AA
         LC(1)   #F                               * 670AD
         D=D-1   A                                * 670B0
-        GOC     SUB_67036.L5                     * 670B2
-SUB_67036.loop4:
+        GOC     EqwBarGrob~1.L5                  * 670B2
+EqwBarGrob~1.loop4:
         DAT1=C  1                                * 670B5
         D1=D1+  1                                * 670B9
         D=D-1   A                                * 670BC
-        GONC    SUB_67036.loop4                  * 670BE
-SUB_67036.L5:
+        GONC    EqwBarGrob~1.loop4               * 670BE
+EqwBarGrob~1.L5:
         C=C-1   S                                * 670C1
-        GONC    SUB_67036.L6                     * 670C4
+        GONC    EqwBarGrob~1.L6                  * 670C4
         D1=D1-  1                                * 670C7
         LC(1)   #7                               * 670CA
         DAT1=C  P                                * 670CD
         RTNCC                                    * 670D1
-SUB_67036.L6:
+EqwBarGrob~1.L6:
         C=C-1   S                                * 670D3
-        GOC     SUB_67036.L8                     * 670D6
+        GOC     EqwBarGrob~1.L8                  * 670D6
         C=0     P                                * 670D9
-SUB_67036.loop7:
+EqwBarGrob~1.loop7:
         C=C+C   P                                * 670DC
         C=C+1   P                                * 670DF
         C=C-1   S                                * 670E2
-        GONC    SUB_67036.loop7                  * 670E5
+        GONC    EqwBarGrob~1.loop7               * 670E5
         DAT1=C  1                                * 670E8
-SUB_67036.L8:
+EqwBarGrob~1.L8:
         RTNCC                                    * 670EC
 
 * refs (1): 44CAF
-OBJ_670EE:
+* grob -> grob: draw an integral sign down a blank grob
+EqwIntegralGrob:
         CON(5)  (*)+5                            * 670EE  primitive code object
         GOSUB   SUB_67136                        * 670F3
         LC(2)   #08                              * 670F7
@@ -637,7 +658,7 @@ OBJ_670EE:
         D1=D1+  2                                * 67119
         LC(1)   #2                               * 6711C
         DAT1=C  B                                * 6711F
-OBJ_670EE.L1:
+EqwIntegralGrob.L1:
         GOVLNG  GETPTRLOOP                       * 67122
 
 * refs (4): 6710F 67131 67173 671A8
@@ -656,7 +677,7 @@ SUB_67136:
         D1=D1+  10                               * 67140
         C=DAT1  A                                * 67143
         C=C-CON A,5                              * 67146
-        GOC     OBJ_670EE.L1                     * 6714C
+        GOC     EqwIntegralGrob.L1               * 6714C
         D=C     A                                * 6714F
         D1=D1+  10                               * 67151
         RTN                                      * 67154
@@ -666,7 +687,8 @@ SAVPTR~jump_21:
         GOVLNG  SAVPTR                           * 67156
 
 * refs (1): 44CE1
-OBJ_6715D:
+* grob -> grob: draw the left part of a radical sign down a blank grob
+EqwRadicalGrob:
         CON(5)  (*)+5                            * 6715D  primitive code object
         GOSUB   SUB_67136                        * 67162
         LC(2)   #0C                              * 67166
@@ -682,31 +704,34 @@ OBJ_6715D:
         D1=D1+  2                                * 67186
         LC(1)   #4                               * 67189
         DAT1=C  B                                * 6718C
-        GOTO    OBJ_670EE.L1                     * 6718F
+        GOTO    EqwIntegralGrob.L1               * 6718F
 
 * refs (1): 44D8B
-OBJ_67193:
+* grob -> grob: draw a vertical line down a blank grob
+EqwVBarGrob:
         CON(5)  (*)+5                            * 67193  primitive code object
         GOSUB   SUB_67136                        * 67198
         LC(5)   #00004                           * 6719C
         D=D+C   A                                * 671A3
         LC(1)   #1                               * 671A5
         GOSUB   SUB_67129                        * 671A8
-        GOTO    OBJ_670EE.L1                     * 671AC
+        GOTO    EqwIntegralGrob.L1               * 671AC
 
 * refs (1): 6D4A1
-OBJ_671B0:
+* grob -> grob: draw a right parenthesis of the grob's height
+EqwRParenGrob:
         CON(5)  (*)+5                            * 671B0  primitive code object
         ST=0    0                                * 671B5
         ST=0    3                                * 671B8
-        GOTO    OBJ_671BF.L1                     * 671BB
+        GOTO    EqwLParenGrob.L1                 * 671BB
 
 * refs (1): 44C64
-OBJ_671BF:
+* grob -> grob: draw a left parenthesis of the grob's height
+EqwLParenGrob:
         CON(5)  (*)+5                            * 671BF  primitive code object
         ST=1    0                                * 671C4
         ST=0    3                                * 671C7
-OBJ_671BF.L1:
+EqwLParenGrob.L1:
         GOSBVL  SAVPTR                           * 671CA
         A=DAT1  A                                * 671D1
         D1=A                                     * 671D4
@@ -722,92 +747,94 @@ OBJ_671BF.L1:
         GOSBVL  w->W                             * 671F4
         B=A     A                                * 671FB
         ?ST=0   3                                * 671FD
-        GOYES   OBJ_671BF.L2                     * 67200
+        GOYES   EqwLParenGrob.L2                 * 67200
         LC(1)   #8                               * 67202
         DAT1=C  P                                * 67205
-        GOSUB   SUB_672D2                        * 67209
+        GOSUB   EqwParenRow                      * 67209
         LC(1)   #4                               * 6720D
         DAT1=C  P                                * 67210
         D1=D1+  1                                * 67214
         P=      15                               * 67217
         LC(1)   #1                               * 67219
         P=      0                                * 6721C
-        GOSUB   SUB_672C4                        * 6721E
+        GOSUB   EqwParenDot                      * 6721E
         D1=D1-  1                                * 67222
-        GONC    OBJ_671BF.L5                     * 67225
-OBJ_671BF.L2:
+        GONC    EqwLParenGrob.L5                 * 67225
+EqwLParenGrob.L2:
         D=D-1   A                                * 67228
         P=      15                               * 6722A
         LC(1)   #1                               * 6722C
         ?ST=0   0                                * 6722F
-        GOYES   OBJ_671BF.L3                     * 67232
+        GOYES   EqwLParenGrob.L3                 * 67232
         LC(1)   #8                               * 67234
-OBJ_671BF.L3:
+EqwLParenGrob.L3:
         P=      0                                * 67237
-        GOSUB   SUB_672C4                        * 67239
-        GOSUB   SUB_672D2                        * 6723D
+        GOSUB   EqwParenDot                      * 67239
+        GOSUB   EqwParenRow                      * 6723D
         P=      15                               * 67241
         LC(1)   #2                               * 67243
         ?ST=0   0                                * 67246
-        GOYES   OBJ_671BF.L4                     * 67249
+        GOYES   EqwLParenGrob.L4                 * 67249
         LC(1)   #4                               * 6724B
-OBJ_671BF.L4:
+EqwLParenGrob.L4:
         P=      0                                * 6724E
-        GOSUB   SUB_672C4                        * 67250
-OBJ_671BF.L5:
+        GOSUB   EqwParenDot                      * 67250
+EqwLParenGrob.L5:
         P=      15                               * 67254
         LC(1)   #2                               * 67256
         ?ST=1   0                                * 67259
-        GOYES   OBJ_671BF.L6                     * 6725C
+        GOYES   EqwLParenGrob.L6                 * 6725C
         LC(1)   #4                               * 6725E
-OBJ_671BF.L6:
+EqwLParenGrob.L6:
         P=      0                                * 67261
         C=0     A                                * 67263
         LC(1)   #5                               * 67265
         D=D-C   A                                * 67268
-OBJ_671BF.loop7:
-        GOSUB   SUB_672D2                        * 6726A
-        GOSUB   SUB_672C4                        * 6726E
+EqwLParenGrob.loop7:
+        GOSUB   EqwParenRow                      * 6726A
+        GOSUB   EqwParenDot                      * 6726E
         D=D-1   A                                * 67272
-        GONC    OBJ_671BF.loop7                  * 67274
+        GONC    EqwLParenGrob.loop7              * 67274
         P=      15                               * 67277
         ?ST=1   3                                * 67279
-        GOYES   OBJ_671BF.L10                    * 6727C
+        GOYES   EqwLParenGrob.L10                * 6727C
         LC(1)   #2                               * 6727E
         ?ST=0   0                                * 67281
-        GOYES   OBJ_671BF.loop8                  * 67284
+        GOYES   EqwLParenGrob.loop8              * 67284
         LC(1)   #4                               * 67286
-OBJ_671BF.loop8:
+EqwLParenGrob.loop8:
         P=      0                                * 67289
-        GOSUB   SUB_672D2                        * 6728B
-        GOSUB   SUB_672C4                        * 6728F
-        GOSUB   SUB_672D2                        * 67293
+        GOSUB   EqwParenRow                      * 6728B
+        GOSUB   EqwParenDot                      * 6728F
+        GOSUB   EqwParenRow                      * 67293
         P=      15                               * 67297
         LC(1)   #1                               * 67299
         ?ST=0   0                                * 6729C
-        GOYES   OBJ_671BF.L9                     * 6729F
+        GOYES   EqwLParenGrob.L9                 * 6729F
         LC(1)   #8                               * 672A1
-OBJ_671BF.L9:
+EqwLParenGrob.L9:
         P=      0                                * 672A4
-        GOSUB   SUB_672C4                        * 672A6
-        GOTO    OBJ_670EE.L1                     * 672AA
-OBJ_671BF.L10:
+        GOSUB   EqwParenDot                      * 672A6
+        GOTO    EqwIntegralGrob.L1               * 672AA
+EqwLParenGrob.L10:
         LC(1)   #5                               * 672AE
         DAT1=C  P                                * 672B1
-        GOSUB   SUB_672D2                        * 672B5
+        GOSUB   EqwParenRow                      * 672B5
         LC(1)   #2                               * 672B9
         DAT1=C  P                                * 672BC
-        GOTO    OBJ_671BF.loop8                  * 672C0
+        GOTO    EqwLParenGrob.loop8              * 672C0
 
 * refs (6): 6721E 67239 67250 6726E 6728F 672A6
-SUB_672C4:
+* OR the nibble in C.S into the grob row at D1
+EqwParenDot:
         A=DAT1  S                                * 672C4
         A=A!C   S                                * 672C8
         DAT1=A  S                                * 672CC
         RTN                                      * 672D0
 
 * refs (6): 67209 6723D 6726A 6728B 67293 672B5
-SUB_672D2:
+* D1 += B: next grob row
+EqwParenRow:
         CD1EX                                    * 672D2
         C=C+B   A                                * 672D5
         D1=C                                     * 672D7
@@ -819,7 +846,8 @@ OBJ_672DC:
         # C17                                    * 672DC  3095
 
 * refs (11): 68909 69599 695E9 69950 699EB 69AF4 ...
-OBJ_672E6:
+* -> #n: frames on the work stack (KEYLIST - STACKNUM)
+EqwFrames:
         CON(5)  (*)+5                            * 672E6  primitive code object
         ASSEMBLE
         LC(5)   KEYLIST                          * 672EB
@@ -837,7 +865,7 @@ OBJ_672E6:
 
 * refs (2): 6AC8F 6C3DE
 OBJ_6731D:
-        :: OBJ_67519 OBJ_6773D OBJ_673D6 #+ ;    * 6731D
+        :: EqwKidsLevel EqwPastFrames EqwStkFree@ #+ ; * 6731D
 
 * refs (14): 65C22 65DD7 65DE1 65F0D 6620F 663F9 ...
 * -> #n+1: boxes in use + 1, the index the next new box gets
@@ -873,7 +901,8 @@ EqwBoxCount#1-:
         GOTO    EqwBoxCount.L1                   * 6736D
 
 * refs (6): 6CE2F 6CE3E 6D50F 6D550 6DAD0 6DD5F
-OBJ_67371:
+* -> #n-2
+EqwBoxCount#2-:
         CON(5)  (*)+5                            * 67371  primitive code object
         LC(5)   #FFFFE                           * 67376
         GOTO    EqwBoxCount.L1                   * 6737D
@@ -895,17 +924,19 @@ EqwBoxCount.L2:
         GOTO    EqwBoxParent@.L3                 * 6739E
 
 * refs (4): 6867F 69FD8 6C096 6CDAD
-OBJ_673A2:
+* -> #n: free box records (SAVECROSS)
+EqwBoxesFree@:
         CON(5)  (*)+5                            * 673A2  primitive code object
         LC(5)   SAVECROSS                        * 673A7
-OBJ_673A2.L1:
+EqwBoxesFree@.L1:
         CD0EX                                    * 673AE
         A=DAT0  A                                * 673B1
         D0=C                                     * 673B4
         GOTO    EqwBoxParent@.L3                 * 673B7
 
 * refs (5): 6C0A0 6C97C 6CB84 6CBA2 6F432
-OBJ_673BB:
+* -> #size: the current size level: 0 large, 1 medium, 2 and up small (AppCount)
+EqwSize@:
         CON(5)  (*)+5                            * 673BB  primitive code object
         LC(5)   AppCount                         * 673C0
         CD0EX                                    * 673C7
@@ -915,113 +946,129 @@ OBJ_673BB:
         GOTO    EqwBoxCount.L2                   * 673D2
 
 * refs (7): 0C4ED 6732C 676D9 69192 6A037 6C1D1 ...
-OBJ_673D6:
+* -> #n: free slots of the object stack (EqPtr)
+EqwStkFree@:
         CON(5)  (*)+5                            * 673D6  primitive code object
         LC(5)   EqPtr                            * 673DB
-        GOTO    OBJ_673A2.L1                     * 673E2
+        GOTO    EqwBoxesFree@.L1                 * 673E2
 
 * refs (4): 0C4E8 676F7 69FC9 6C1E0
-OBJ_673E6:
+* -> #n: slots of the object stack (VIEWLEVEL)
+EqwStkSize@:
         CON(5)  (*)+5                            * 673E6  primitive code object
         LC(5)   VIEWLEVEL                        * 673EB
-        GOTO    OBJ_673A2.L1                     * 673F2
+        GOTO    EqwBoxesFree@.L1                 * 673F2
 
 * refs (2): 67537 69FDD
-OBJ_673F6:
+* -> #n: free frames (STACKNUM)
+EqwFrmFree@:
         CON(5)  (*)+5                            * 673F6  primitive code object
         LC(5)   STACKNUM                         * 673FB
-        GOTO    OBJ_673A2.L1                     * 67402
+        GOTO    EqwBoxesFree@.L1                 * 67402
 
 * refs (3): 675F8 67742 69FD3
-OBJ_67406:
+* -> #n: frames allocated (KEYLIST)
+EqwFrmSize@:
         CON(5)  (*)+5                            * 67406  primitive code object
         LC(5)   KEYLIST                          * 6740B
-        GOTO    OBJ_673A2.L1                     * 67412
+        GOTO    EqwBoxesFree@.L1                 * 67412
 
 * refs (61): 4B8F0 65AA6 65B8C 65F99 660AC 661C4 ...
 * -> #box: the current (cursor) box, kept in FONTHEIGHT
 EqwCurBox@:
         CON(5)  (*)+5                            * 67416  primitive code object
         LC(5)   FONTHEIGHT                       * 6741B
-        GOTO    OBJ_673A2.L1                     * 67422
+        GOTO    EqwBoxesFree@.L1                 * 67422
 
 * refs (4): 69D1F 6AAE6 6C8B4 6E8C5
-OBJ_67426:
+* #size -> : set the size level
+EqwSize!:
         CON(5)  (*)+5                            * 67426  primitive code object
         GOSBVL  POP#                             * 6742B
         LC(5)   AppCount                         * 67432
         CD0EX                                    * 67439
         DAT0=A  B                                * 6743C
-        GOTO    OBJ_67765.L2                     * 6743F
+        GOTO    EqwSlot!.L2                      * 6743F
 
 * refs (2): 4B8FA 6E20D
-OBJ_67443:
+* #box -> #box: DUP, then EqwCurBox!
+EqwDupCurBox!:
         CON(5)  DupAndThen                       * 67443  code object: the address of its machine code
 
 * refs (22): 65D00 65D9B 65E04 66246 662AF 66327 ...
 * #box -> : make a box current
+* The EquationWriter borrows RAM words of the outer loop: MENULEVEL boxes in use, SAVECROSS boxes free, FONTHEIGHT current box, AppCount size level, ITEM1STATE the box table (a hex string), PAINTTREE the undo list, EqPtr/VIEWLEVEL object stack free/size, STACKNUM/KEYLIST frames free/size, PDCHXS size in nibbles of the slot area on the data stack
 EqwCurBox!:
         CON(5)  (*)+5                            * 67448  primitive code object
         LC(5)   FONTHEIGHT                       * 6744D
-        GOTO    OBJ_67458.L1                     * 67454
+        GOTO    EqwBoxesFree!.L1                 * 67454
 
 * refs (5): 6868E 6A0B9 6C578 6CDB7 6E8CF
-OBJ_67458:
+* #n ->
+EqwBoxesFree!:
         CON(5)  (*)+5                            * 67458  primitive code object
         LC(5)   SAVECROSS                        * 6745D
-OBJ_67458.L1:
-        GOVLNG  OBJ_11495.L3                     * 67464
+EqwBoxesFree!.L1:
+        GOVLNG  PADCOUNT!.L3                     * 67464
 
 * refs (5): 6A0C3 6A54B 6C596 6CDC1 6E8C0
-OBJ_6746B:
+* #n ->
+EqwBoxCount!:
         CON(5)  (*)+5                            * 6746B  primitive code object
         LC(5)   MENULEVEL                        * 67470
-        GOTO    OBJ_67458.L1                     * 67477
+        GOTO    EqwBoxesFree!.L1                 * 67477
 
 * refs (5): 676F2 67733 6919C 6A0D2 6C5A0
-OBJ_6747B:
+* #n ->
+EqwStkFree!:
         CON(5)  (*)+5                            * 6747B  primitive code object
         LC(5)   EqPtr                            * 67480
-        GOTO    OBJ_67458.L1                     * 67487
+        GOTO    EqwBoxesFree!.L1                 * 67487
 
 * refs (3): 67706 6A0CD 6C56E
-OBJ_6748B:
+* #n ->
+EqwStkSize!:
         CON(5)  (*)+5                            * 6748B  primitive code object
         LC(5)   VIEWLEVEL                        * 67490
-        GOTO    OBJ_67458.L1                     * 67497
+        GOTO    EqwBoxesFree!.L1                 * 67497
 
 * refs (4): 6754B 675F3 6A0B4 6C587
-OBJ_6749B:
+* #n ->
+EqwFrmFree!:
         CON(5)  (*)+5                            * 6749B  primitive code object
         LC(5)   STACKNUM                         * 674A0
-        GOTO    OBJ_67458.L1                     * 674A7
+        GOTO    EqwBoxesFree!.L1                 * 674A7
 
 * refs (3): 67602 6A0BE 6C58C
-OBJ_674AB:
+* #n ->
+EqwFrmSize!:
         CON(5)  (*)+5                            * 674AB  primitive code object
         LC(5)   KEYLIST                          * 674B0
-        GOTO    OBJ_67458.L1                     * 674B7
+        GOTO    EqwBoxesFree!.L1                 * 674B7
 
 * refs (3): 6912E 69454 6EB9F
-OBJ_674BB:
+* -> : drop the top frame
+EqwFrmPop:
         CON(5)  (*)+5                            * 674BB  primitive code object
         LC(5)   STACKNUM                         * 674C0
         CD0EX                                    * 674C7
         A=DAT0  A                                * 674CA
         A=A+1   A                                * 674CD
         DAT0=A  A                                * 674CF
-        GOTO    OBJ_67765.L2                     * 674D2
+        GOTO    EqwSlot!.L2                      * 674D2
 
 * refs (3): 6CDC6 6D4E7 6E8A7
-OBJ_674D6:
+* -> #level: data stack level of slot 0. The slots lie at the bottom of the stack, from EDITLINE - PDCHXS upwards, and hold in order: the objects of the boxes (newest first), the frames, the object stack
+EqwSlot0Level:
         CON(5)  (*)+5                            * 674D6  primitive code object
-        GOSUB   SUB_674EA                        * 674DB
-OBJ_674D6.L1:
+        GOSUB   EqwSlotDepth                     * 674DB
+EqwSlot0Level.L1:
         GOSBVL  GETPTR                           * 674DF
         GOTO    EqwBoxParent@.L3                 * 674E6
 
 * refs (2): 674DB 6751E
-SUB_674EA:
+* -> A.A = stack level of slot 0 (SAVPTR done, D1 clobbered)
+EqwSlotDepth:
         GOSBVL  SAVPTR                           * 674EA
         D0=(5)  EDITLINE                         * 674F1
         C=DAT0  A                                * 674F8
@@ -1036,35 +1083,38 @@ SUB_674EA:
         RTN                                      * 67517
 
 * refs (7): 67322 67607 6770B 67C71 68254 6A4E2 ...
-OBJ_67519:
+* -> #level: stack level of the first slot after the box objects
+EqwKidsLevel:
         CON(5)  (*)+5                            * 67519  primitive code object
-        GOSUB   SUB_674EA                        * 6751E
+        GOSUB   EqwSlotDepth                     * 6751E
         D0=(5)  MENULEVEL                        * 67522
         C=DAT0  A                                * 67529
         A=A+C   A                                * 6752C
-        GOTO    OBJ_674D6.L1                     * 6752E
+        GOTO    EqwSlot0Level.L1                 * 6752E
         RPL
 
 * refs (5): 68F62 6947C 6C82D 6EF55 6F02C
-OBJ_67532:
-        :: OBJ_673F6 DUP#0=IT OBJ_675E4 DUP#1- OBJ_6749B OBJ_6755A ; * 67532
+* ob5 ob4 ob3 ob2 ob1 -> : push a frame of five objects, growing the area if it is full. Item 1 is a state, 2 the precedence, 4 the operator, 5 the operator's box
+EqwFrmPush:
+        :: EqwFrmFree@ DUP#0=IT EqwFrmGrow DUP#1- EqwFrmFree! EqwFrmStore ; * 67532
 
 * refs (1): 67550
-OBJ_6755A:
+* ob5..ob1 #free -> : store the five objects in the frame at that free count
+EqwFrmStore:
         CON(5)  (*)+5                            * 6755A  primitive code object
         ASSEMBLE
         LC(5)   MENULEVEL                        * 6755F
         CD0EX                                    * 67566
         A=DAT0  A                                * 67569
         D0=C                                     * 6756C
-        GOSUB   SUB_676C5                        * 6756F
+        GOSUB   A*5                              * 6756F
         R0=A                                     * 67573
         GOSBVL  POP#                             * 67576
         A=A-1   A                                * 6757D
-        GOSUB   SUB_676C5                        * 6757F
-        GOSUB   SUB_676C5                        * 67583
+        GOSUB   A*5                              * 6757F
+        GOSUB   A*5                              * 67583
         R1=A                                     * 67587
-        GOSUB   SUB_675BE                        * 6758A
+        GOSUB   EqwSlotAddr                      * 6758A
         A=R1                                     * 6758E
         C=C+A   A                                * 67591
         D0=C                                     * 67593
@@ -1077,10 +1127,11 @@ OBJ_6755A:
         D1=D1+  10                               * 675AC
         LC(5)   #00005                           * 675AF
         D=D+C   A                                * 675B6
-        GOLONG  OBJ_685B2.L1                     * 675B8
+        GOLONG  EqwBoxPlaceH!.L1                 * 675B8
 
 * refs (4): 6758A 67778 677AD 67F00
-SUB_675BE:
+* R0 = offset of a slot in nibbles -> C.A = its address, R2 = D0
+EqwSlotAddr:
         LC(5)   PDCHXS                           * 675BE
         CD0EX                                    * 675C5
         R2=C.F  A                                * 675C8
@@ -1094,25 +1145,30 @@ SUB_675BE:
         RPL
 
 * refs (1): 67541
-OBJ_675E4:
-        :: #6+ DUP OBJ_6749B OBJ_67406 #6+ OBJ_674AB OBJ_67519 #1+ BINT30 * 675E4
+* #free -> #free+6: add six frames, 30 slots
+EqwFrmGrow:
+        :: #6+ DUP EqwFrmFree! EqwFrmSize@ #6+ EqwFrmSize! EqwKidsLevel #1+ * 675E4
+          BINT30                                 * 67611
 
 * refs (2): 6771F 6A4FB
-OBJ_67616:
-          :: OBJ_67682 ZERO_DO OBJ_6C7F6 OVER UNROLL LOOP DROP ; ; * 67616
+* #level #n -> : insert n blank slots above that level
+EqwSlotsInsert:
+          :: EqwSlotArea+ ZERO_DO EqwBlank OVER UNROLL LOOP DROP ; ; * 67616
 
 * refs (2): 6A06E 6C819
-OBJ_67648:
+* #nibbles -> : set the size of the slot area (PDCHXS)
+EqwSlotArea!:
         CON(5)  (*)+5                            * 67648  primitive code object
         ASSEMBLE
         GOSBVL  POP#                             * 6764D
         LC(5)   PDCHXS                           * 67654
         CD0EX                                    * 6765B
         DAT0=A  A                                * 6765E
-        GOTO    OBJ_67765.L2                     * 67661
+        GOTO    EqwSlot!.L2                      * 67661
 
 * refs (1): 69FEC
-EqwRuleKey0~9:
+* -> #nibbles
+EqwSlotArea@:
         CON(5)  (*)+5                            * 67665  primitive code object
         GOSBVL  SAVPTR                           * 6766A
         D0=(5)  PDCHXS                           * 67671
@@ -1120,7 +1176,8 @@ EqwRuleKey0~9:
         GOVLNG  PUSH#ALOOP                       * 6767B
 
 * refs (3): 6761B 6A979 6C30C
-OBJ_67682:
+* #n -> #n: add n slots to the size of the slot area
+EqwSlotArea+:
         CON(5)  (*)+5                            * 67682  primitive code object
         LC(5)   PDCHXS                           * 67687
         CD1EX                                    * 6768E
@@ -1133,16 +1190,17 @@ OBJ_67682:
         C=DAT1  A                                * 676A3
         D1=A                                     * 676A6
         A=C     A                                * 676A9
-        GOSUB   SUB_676C5                        * 676AB
+        GOSUB   A*5                              * 676AB
         C=R0                                     * 676AF
         A=A+C   A                                * 676B2
         LC(5)   PDCHXS                           * 676B4
         CD0EX                                    * 676BB
         DAT0=A  A                                * 676BE
-        GOTO    OBJ_67765.L2                     * 676C1
+        GOTO    EqwSlot!.L2                      * 676C1
 
 * refs (8): 6756F 6757F 67583 676AB 67771 677A6 ...
-SUB_676C5:
+* A.A *= 5 (C.A = the old A)
+A*5:
         C=A     A                                * 676C5
         A=A+A   A                                * 676C7
         A=A+A   A                                * 676C9
@@ -1150,61 +1208,66 @@ SUB_676C5:
         RTN                                      * 676CD
 
 * refs (3): 68ACB 691BA 69874
-OBJ_676CF:
+* ob -> ob: DUP, then EqwStkPush
+EqwDupStkPush:
         CON(5)  DupAndThen                       * 676CF  code object: the address of its machine code
         RPL
 
 * refs (4): 6894F 68E72 690F2 6910B
-OBJ_676D4:
-        :: OBJ_673D6 DUP#0=IT                    * 676D4
-          :: DROP BINT15 OBJ_6747B OBJ_673E6 BINT15 #+ OBJ_6748B OBJ_67519 * 676E3
-            #1+ OBJ_6773D BINT15 OBJ_67616 BINT15 ; * 67710
-          #1-DUP OBJ_6747B EqwBoxCount           * 6772E
+* ob -> : push onto the object stack, adding 15 slots when it is full
+EqwStkPush:
+        :: EqwStkFree@ DUP#0=IT                  * 676D4
+          :: DROP BINT15 EqwStkFree! EqwStkSize@ BINT15 #+ EqwStkSize! * 676E3
+            EqwKidsLevel #1+ EqwPastFrames BINT15 EqwSlotsInsert BINT15 ; * 6770B
+          #1-DUP EqwStkFree! EqwBoxCount         * 6772E
 
 * refs (5): 67327 67715 691A6 6A03C 6C1CC
-OBJ_6773D:
-          :: OBJ_67406 OBJ_68183 #+ ; #+ OBJ_67765 ; * 6773D
+* #i -> #i+5*frames: slot index past the frame area
+EqwPastFrames:
+          :: EqwFrmSize@ #5* #+ ; #+ EqwSlot! ;  * 6773D
 
 * refs (1): 6775B
-OBJ_67765:
+* ob #i -> : store a slot
+EqwSlot!:
         CON(5)  (*)+5                            * 67765  primitive code object
         ASSEMBLE
         GOSBVL  POP#                             * 6776A
-        GOSUB   SUB_676C5                        * 67771
+        GOSUB   A*5                              * 67771
         R0=A                                     * 67775
-        GOSUB   SUB_675BE                        * 67778
+        GOSUB   EqwSlotAddr                      * 67778
         D0=C                                     * 6777C
         C=DAT1  A                                * 6777F
         D1=D1+  5                                * 67782
         D=D+1   A                                * 67785
         DAT0=C  A                                * 67787
-OBJ_67765.L1:
+EqwSlot!.L1:
         C=R2                                     * 6778A
-OBJ_67765.L2:
+EqwSlot!.L2:
         D0=C                                     * 6778D
-OBJ_67765.L3:
+EqwSlot!.L3:
         A=DAT0  A                                * 67790
         D0=D0+  5                                * 67793
         PC=(A)                                   * 67796
 
 * refs (1): 691B0
-OBJ_6779A:
+* #i -> ob: read a slot
+EqwSlot@:
         CON(5)  (*)+5                            * 6779A  primitive code object
         GOSBVL  POP#                             * 6779F
-        GOSUB   SUB_676C5                        * 677A6
+        GOSUB   A*5                              * 677A6
         R0=A                                     * 677AA
-        GOSUB   SUB_675BE                        * 677AD
+        GOSUB   EqwSlotAddr                      * 677AD
         D0=C                                     * 677B1
         C=DAT0  A                                * 677B4
         D1=D1-  5                                * 677B7
         D=D-1   A                                * 677BA
         DAT1=C  A                                * 677BC
-        GOTO    OBJ_67765.L1                     * 677BF
+        GOTO    EqwSlot!.L1                      * 677BF
 
 * refs (1): 69567
-OBJ_677C3:
+EqwSeparator~1:
         CON(5)  (*)+5                            * 677C3  primitive code object
-        GOSUB   SUB_67E7B                        * 677C8
+        GOSUB   EqwTopFrame2                     * 677C8
         C=R2                                     * 677CC
         CD0EX                                    * 677CF
         CD1EX                                    * 677D2
@@ -1212,65 +1275,68 @@ OBJ_677C3:
         GOVLNG  OBJ_28318.L1                     * 677D7
 
 * refs (5): 69CDE 69D57 69D6B 6AE4C 6C8DC
-OBJ_677DE:
+* -> : drop everything above the EquationWriter's stack marker, with the marker, and give the memory back
+EqwDropToMark:
         CON(5)  (*)+5                            * 677DE  primitive code object
         ST=0    0                                * 677E3
-        GOTO    OBJ_677EA.L1                     * 677E6
+        GOTO    EqwMarkDepth.L1                  * 677E6
 
 * refs (11): 69D15 69D5C 6A960 6AE74 6AED3 6AF50 ...
-OBJ_677EA:
+* -> #n: level of the EquationWriter's stack marker (EqwMark), 0 when it is not on the stack
+EqwMarkDepth:
         CON(5)  (*)+5                            * 677EA  primitive code object
         ST=1    0                                * 677EF
-OBJ_677EA.L1:
+EqwMarkDepth.L1:
         GOSBVL  SAVPTR                           * 677F2
         D0=(5)  EDITLINE                         * 677F9
         C=DAT0  A                                * 67800
         D0=C                                     * 67803
         D0=D0-  5                                * 67806
         B=0     A                                * 67809
-        LC(5)   OBJ_6C7E5                        * 6780B
-OBJ_677EA.loop2:
+        LC(5)   EqwMark                          * 6780B
+EqwMarkDepth.loop2:
         A=DAT1  A                                * 67812
         B=B+1   A                                * 67815
         ?C=A    A                                * 67817
-        GOYES   OBJ_677EA.L3                     * 6781A
+        GOYES   EqwMarkDepth.L3                  * 6781A
         D1=D1+  5                                * 6781C
         AD1EX                                    * 6781F
         CD0EX                                    * 67822
         ?C>A    A                                * 67825
-        GOYES   OBJ_677EA.L4                     * 67828
+        GOYES   EqwMarkDepth.L4                  * 67828
         D1=A                                     * 6782A
         B=0     A                                * 6782D
-OBJ_677EA.L3:
+EqwMarkDepth.L3:
         A=B     A                                * 6782F
         ?ST=0   0                                * 67831
-        GOYES   OBJ_677EA.L5                     * 67834
+        GOYES   EqwMarkDepth.L5                  * 67834
         GOVLNG  PUSH#ALOOP                       * 67836
-OBJ_677EA.L4:
+EqwMarkDepth.L4:
         CD0EX                                    * 6783D
         D1=A                                     * 67840
-        GOC     OBJ_677EA.loop2                  * 67843
-OBJ_677EA.L5:
+        GOC     EqwMarkDepth.loop2               * 67843
+EqwMarkDepth.L5:
         ?A#0    A                                * 67846
-        GOYES   OBJ_677EA.L6                     * 67849
+        GOYES   EqwMarkDepth.L6                  * 67849
         ST=1    0                                * 6784B
-OBJ_677EA.L6:
+EqwMarkDepth.L6:
         D1=D1+  5                                * 6784E
         CD1EX                                    * 67851
         RSTK=C                                   * 67854
         GOSBVL  ADJMEM                           * 67856
         GOSBVL  GETPTR                           * 6785D
         ?ST=1   0                                * 67864
-        GOYES   OBJ_677EA.L7                     * 67867
+        GOYES   EqwMarkDepth.L7                  * 67867
         C=RSTK                                   * 67869
         D1=C                                     * 6786B
-OBJ_677EA.L7:
+EqwMarkDepth.L7:
         A=DAT0  A                                * 6786E
         D0=D0+  5                                * 67871
         PC=(A)                                   * 67874
 
 * refs (1): 69503
-OBJ_67878:
+* #from #to -> #b: the box in that range with the largest non-negative field +18
+EqwMaxIdxBox:
         CON(5)  (*)+5                            * 67878  primitive code object
         GOSBVL  POP2#                            * 6787D
         CAEX    A                                * 67884
@@ -1278,22 +1344,22 @@ OBJ_67878:
         C=0     A                                * 67888
         R1=C                                     * 6788A
         R3=C                                     * 6788D
-OBJ_67878.loop1:
+EqwMaxIdxBox.loop1:
         R0=A                                     * 67890
-        GOSUB   SUB_67A51                        * 67893
+        GOSUB   EqwA>Box                         * 67893
         D0=D0+  10                               * 67897
         D0=D0+  14                               * 6789A
         C=DAT0  X                                * 6789D
         A=C     X                                * 678A1
         A=A+A   X                                * 678A4
-        GOC     OBJ_67878.L2                     * 678A7
+        GOC     EqwMaxIdxBox.L2                  * 678A7
         A=R1                                     * 678AA
         ?C<=A   X                                * 678AD
-        GOYES   OBJ_67878.L2                     * 678B0
+        GOYES   EqwMaxIdxBox.L2                  * 678B0
         R1=C                                     * 678B2
         C=R0                                     * 678B5
         R3=C                                     * 678B8
-OBJ_67878.L2:
+EqwMaxIdxBox.L2:
         A=R0                                     * 678BB
         A=A+1   A                                * 678BE
         C=R2                                     * 678C0
@@ -1301,7 +1367,7 @@ OBJ_67878.L2:
         C=RSTK                                   * 678C6
         RSTK=C                                   * 678C8
         ?C>=A   A                                * 678CA
-        GOYES   OBJ_67878.loop1                  * 678CD
+        GOYES   EqwMaxIdxBox.loop1               * 678CD
         A=R3                                     * 678CF
         GOTO    EqwBoxParent@.L3                 * 678D2
 
@@ -1338,7 +1404,7 @@ EqwBoxParent@.L3:
         NIBHEX  10A1347                          * 6790A  ..C
 * the rest of GOSUB #67918 at #67910
         NIBHEX  400                              * 67911  .
-        GOTO    OBJ_67765.L3                     * 67914
+        GOTO    EqwSlot!.L3                      * 67914
 
 * refs (8): 6675C 667B6 66901 66AFE 67910 68112 ...
 SUB_67918:
@@ -1372,12 +1438,14 @@ SUB_67918.L2:
         RPL
 
 * refs (2): 66DE9 6FEE6
-OBJ_67969:
+* #b -> #next TRUE, or FALSE at the last sibling
+EqwNext?:
         :: EqwBoxNext@ DUP#0= casedrpfls TRUE    * 67969
         ;                                        * 67982
 
 * refs (7): 44C91 44CFF 44D4F 65DCD 66142 6A19A ...
-OBJ_67987:
+* #b -> #b #next
+EqwDupBoxNext@:
         CON(5)  DupAndThen                       * 67987  code object: the address of its machine code
 
 * refs (17): 65CD6 65CDB 65D1E 65D55 65EB3 65EB8 ...
@@ -1390,7 +1458,8 @@ EqwBoxNext@:
         GOTO    EqwBoxParent@.L1                 * 67998
 
 * refs (5): 66124 66665 6A1A4 6CD58 6E12C
-OBJ_6799C:
+* #b -> #b #prev
+EqwDupBoxPrev@:
         CON(5)  DupAndThen                       * 6799C  code object: the address of its machine code
 
 * refs (15): 4B8FF 665A2 6661F 66642 66CC2 66CC7 ...
@@ -1413,7 +1482,8 @@ EqwBoxFirst@:
         GOTO    EqwBoxParent@.L1                 * 679BC
 
 * refs (1): 6F342
-OBJ_679C0:
+* #b -> #b #last
+EqwDupBoxLast@:
         CON(5)  DupAndThen                       * 679C0  code object: the address of its machine code
 
 * refs (14): 44D72 65CCC 65DB9 66552 665DE 66CA4 ...
@@ -1424,11 +1494,13 @@ EqwBoxLast@:
         GOTO    EqwBoxParent@.L1                 * 679CE
 
 * refs (4): 66DD0 6F720 6FA3B 6FA5E
-OBJ_679D2:
+* #b -> #b #type
+EqwDupBoxType@:
         CON(5)  DupAndThen                       * 679D2  code object: the address of its machine code
 
 * refs (8): 461B9 6686A 6B7C7 6F5FE 6F630 6F6BC ...
-OBJ_679D7:
+* #b -> #type: 0 leaf, 1 row, otherwise a column (field +00)
+EqwBoxType@:
         CON(5)  (*)+5                            * 679D7  primitive code object
         GOSUB   EqwPOP#>Box                      * 679DC
         A=0     A                                * 679E0
@@ -1436,7 +1508,8 @@ OBJ_679D7:
         GOTO    EqwBoxParent@.L2                 * 679E6
 
 * refs (10): 66DBC 68F80 68FCB 694C7 6E8E8 6E9BA ...
-OBJ_679EA:
+* #b -> #b flag: TRUE for a leaf (type 0)
+EqwBoxLeaf?:
         CON(5)  (*)+5                            * 679EA  primitive code object
         GOSUB   EqwPOP#>Box                      * 679EF
         D1=D1-  5                                * 679F3
@@ -1445,17 +1518,18 @@ OBJ_679EA:
         C=R2                                     * 679FC
         D0=C                                     * 679FF
         ?A=0    S                                * 67A02
-        GOYES   OBJ_679EA.L1                     * 67A05
+        GOYES   EqwBoxLeaf?.L1                   * 67A05
         LC(5)   FALSE                            * 67A07
-        GONC    OBJ_679EA.L2                     * 67A0E
-OBJ_679EA.L1:
+        GONC    EqwBoxLeaf?.L2                   * 67A0E
+EqwBoxLeaf?.L1:
         LC(5)   TRUE                             * 67A11
-OBJ_679EA.L2:
+EqwBoxLeaf?.L2:
         A=C     A                                * 67A18
         PC=(A)                                   * 67A1A
 
 * refs (1): 6A005
-EqwRuleKey0~10:
+* #b -> #size: the box's size level (low 3 bits of field +01)
+EqwBoxSize@:
         CON(5)  (*)+5                            * 67A1E  primitive code object
         GOSUB   EqwPOP#>Box                      * 67A23
         D0=D0+  1                                * 67A27
@@ -1466,14 +1540,16 @@ EqwRuleKey0~10:
         GOTO    EqwBoxParent@.L2                 * 67A37
 
 * refs (5): 6A71D 6DF64 6DF85 6DFA4 6F0DF
-SUB_67A3B:
+* A.A = #b-1 -> D0 at box b's fields; D0 is first restored from R2
+EqwA+1>Box:
         A=A+1   A                                * 67A3B
 
 * refs (1): 6690E
-SUB_67A3D:
+* A.A = #b -> as EqwA>Box, D0 first restored from R2
+EqwA>BoxR2:
         C=R2.F  A                                * 67A3D
         D0=C                                     * 67A43
-        GOTO    SUB_67A51                        * 67A46
+        GOTO    EqwA>Box                         * 67A46
 
 * refs (22): 668A1 66A0F 66B64 66BC9 678E7 679DC ...
 * POP# -> D0 at box n's fields (table at ITEM1STATE, 42 nibbles a box); the RPL IP saved in R2
@@ -1482,7 +1558,8 @@ EqwPOP#>Box:
         GOSBVL  POP#                             * 67A4A
 
 * refs (6): 66737 67893 67A46 68323 6B3B2 6DF47
-SUB_67A51:
+* A.A = #b -> D0 at box b's fields, the old D0 in R2
+EqwA>Box:
         A=A-1   A                                * 67A51
         A=A+A   A                                * 67A53
         C=A     A                                * 67A55
@@ -1501,71 +1578,83 @@ SUB_67A51:
         RTN                                      * 67A7C
 
 * refs (2): 66E07 67AFE
-OBJ_67A7E:
+* #b -> #x (field +05)
+EqwBoxX@:
         CON(5)  (*)+5                            * 67A7E  primitive code object
         LC(2)   #05                              * 67A83
         GOTO    EqwBoxParent@.L1                 * 67A87
 
 * refs (3): 66E1B 67B08 6FB18
-OBJ_67A8B:
+* #b -> #y (field +02)
+EqwBoxY@:
         CON(5)  (*)+5                            * 67A8B  primitive code object
         LC(2)   #02                              * 67A90
         GOTO    EqwBoxParent@.L1                 * 67A94
 
 * refs (5): 66988 66C90 66D99 67AC1 6CD71
-OBJ_67A98:
+* #b -> #b #width
+EqwDupBoxW@:
         CON(5)  DupAndThen                       * 67A98  code object: the address of its machine code
 
 * refs (7): 44D0E 44D1D 44D54 6B826 6CE0C 6D334 ...
-OBJ_67A9D:
+* #b -> #width (field +11)
+EqwBoxW@:
         CON(5)  (*)+5                            * 67A9D  primitive code object
         LC(2)   #11                              * 67AA2
         GOTO    EqwBoxParent@.L1                 * 67AA6
 
 * refs (7): 44C96 44D77 66688 6699C 66E48 6D24E ...
-OBJ_67AAA:
+* #b -> #b #height
+EqwDupBoxH@:
         CON(5)  DupAndThen                       * 67AAA  code object: the address of its machine code
 
 * refs (10): 6610B 6612E 66192 666B5 66C3B 67ACB ...
-OBJ_67AAF:
+* #b -> #height (field +0E)
+EqwBoxH@:
         CON(5)  (*)+5                            * 67AAF  primitive code object
         LC(2)   #0E                              * 67AB4
         GOTO    EqwBoxParent@.L1                 * 67AB8
         RPL
 
 * refs (5): 65A0B 66C54 6AD25 6CE4D 6FB45
-OBJ_67ABC:
-        :: OBJ_67A98 SWAP OBJ_67AAF ;            * 67ABC
+* #b -> #w #h
+EqwBoxWH@:
+        :: EqwDupBoxW@ SWAP EqwBoxH@ ;           * 67ABC
 
 * refs (5): 65D5A 66DFD 66E2F 6CD8A 6D3CA
-OBJ_67AD5:
+* #b -> #x: the box's horizontal centre, from its left edge (field +0B)
+EqwBoxRefX@:
         CON(5)  (*)+5                            * 67AD5  primitive code object
         ASSEMBLE
         LC(2)   #0B                              * 67ADA
         GOTO    EqwBoxParent@.L1                 * 67ADE
 
 * refs (19): 44C73 44D9F 6614C 66557 66679 66692 ...
-* Probably: EquationWriter: #box -> vertical reference (field #08)
-OBJ_67AE2:
+* #b -> #y: the box's vertical reference, from its top (field +08)
+EqwBoxRefY@:
         CON(5)  (*)+5                            * 67AE2  primitive code object
         LC(2)   #08                              * 67AE7
         GOTO    EqwBoxParent@.L1                 * 67AEB
 
 * refs (4): 44DC2 6AD16 6B7BD 6FAE6
-OBJ_67AEF:
+* #b -> #b #x #y
+EqwDupBoxXY@:
         CON(5)  DupAndThen                       * 67AEF  code object: the address of its machine code
         RPL
 
 * refs (1): 6E7B2
-OBJ_67AF4:
-        :: DUP OBJ_67A7E SWAP OBJ_67A8B ;        * 67AF4
+* #b -> #x #y
+EqwBoxXY@:
+        :: DUP EqwBoxX@ SWAP EqwBoxY@ ;          * 67AF4
 
 * refs (11): 694D6 69FA1 6A2B2 6A32A 6AD02 6EA1E ...
-OBJ_67B12:
+* #b -> #b #v
+EqwDupBox#18@:
         CON(5)  DupAndThen                       * 67B12  code object: the address of its machine code
 
 * refs (6): 694A9 6AC71 6EC80 6F667 6F8E7 6FE91
-OBJ_67B17:
+* #b -> #v: the box's place in the expression's object stream (field +18): 0 none, -1 belongs to the enclosing box, bit 19 set for an operator
+EqwBox#18@:
         CON(5)  (*)+5                            * 67B17  primitive code object
         ASSEMBLE
         GOSUB   EqwPOP#>Box                      * 67B1C
@@ -1575,33 +1664,34 @@ OBJ_67B17:
         C=DAT0  X                                * 67B28
         A=C     X                                * 67B2C
         C=C+1   X                                * 67B2F
-        GOC     OBJ_67B17.L2                     * 67B32
+        GOC     EqwBox#18@.L2                    * 67B32
         C=A     X                                * 67B35
         C=C+C   X                                * 67B38
-        GOC     OBJ_67B17.L3                     * 67B3B
-OBJ_67B17.loop1:
+        GOC     EqwBox#18@.L3                    * 67B3B
+EqwBox#18@.loop1:
         C=R2                                     * 67B3E
         D0=C                                     * 67B41
         GOTO    EqwBoxParent@.L3                 * 67B44
-OBJ_67B17.L2:
+EqwBox#18@.L2:
         A=0     A                                * 67B48
         A=A-1   A                                * 67B4A
-        GOC     OBJ_67B17.loop1                  * 67B4C
-OBJ_67B17.L3:
+        GOC     EqwBox#18@.loop1                 * 67B4C
+EqwBox#18@.L3:
         LC(3)   #7FF                             * 67B4F
         A=A&C   X                                * 67B54
         LC(5)   CMOS                             * 67B58
         A=A!C   A                                * 67B5F
-        GOTO    OBJ_67B17.loop1                  * 67B63
+        GOTO    EqwBox#18@.loop1                 * 67B63
 
 * refs (1): 66D35
-OBJ_67B67:
+* #b #x ->
+EqwBoxX!:
         CON(5)  (*)+5                            * 67B67  primitive code object
         LC(2)   #05                              * 67B6C
-OBJ_67B67.L1:
+EqwBoxX!.L1:
         R1=C.F  B                                * 67B70
         GOSBVL  POP#                             * 67B76
-OBJ_67B67.L2:
+EqwBoxX!.L2:
         C=A     A                                * 67B7D
         RSTK=C                                   * 67B7F
         GOSUB   EqwPOP#>Box                      * 67B81
@@ -1612,76 +1702,83 @@ OBJ_67B67.L2:
         D0=A                                     * 67B92
         C=RSTK                                   * 67B95
         DAT0=C  X                                * 67B97
-        GOLONG  OBJ_685B2.L1                     * 67B9B
+        GOLONG  EqwBoxPlaceH!.L1                 * 67B9B
 
 * refs (1): 66D3A
-OBJ_67BA1:
+* #b #y ->
+EqwBoxY!:
         CON(5)  (*)+5                            * 67BA1  primitive code object
         LC(2)   #02                              * 67BA6
-        GOTO    OBJ_67B67.L1                     * 67BAA
+        GOTO    EqwBoxX!.L1                      * 67BAA
 
 * refs (4): 6CD80 6CE9D 6D348 6D657
-OBJ_67BAE:
+* #b #w ->
+EqwBoxW!:
         CON(5)  (*)+5                            * 67BAE  primitive code object
         LC(2)   #11                              * 67BB3
-        GOTO    OBJ_67B67.L1                     * 67BB7
+        GOTO    EqwBoxX!.L1                      * 67BB7
 
 * refs (4): 6619C 6CE98 6D267 6D316
-OBJ_67BBB:
+* #b #h ->
+EqwBoxH!:
         CON(5)  (*)+5                            * 67BBB  primitive code object
         LC(2)   #0E                              * 67BC0
-        GOTO    OBJ_67B67.L1                     * 67BC4
+        GOTO    EqwBoxX!.L1                      * 67BC4
 
 * refs (2): 6A640 6D541
-OBJ_67BC8:
+* #b #parent ->
+EqwBoxParent!:
         CON(5)  (*)+5                            * 67BC8  primitive code object
         LC(2)   #1B                              * 67BCD
-        GOTO    OBJ_67B67.L1                     * 67BD1
+        GOTO    EqwBoxX!.L1                      * 67BD1
 
 * refs (7): 65D7D 65DDC 65E68 65E9F 66322 663A4 ...
 * #b #prev -> : set the previous-sibling link
 EqwBoxPrev!:
         CON(5)  (*)+5                            * 67BD5  primitive code object
         LC(2)   #21                              * 67BDA
-        GOTO    OBJ_67B67.L1                     * 67BDE
+        GOTO    EqwBoxX!.L1                      * 67BDE
 
 * refs (15): 65DE6 65E95 66214 662AA 66606 6A60E ...
 * #b #next -> : set the next-sibling link
 EqwBoxNext!:
         CON(5)  (*)+5                            * 67BE2  primitive code object
         LC(2)   #1E                              * 67BE7
-        GOTO    OBJ_67B67.L1                     * 67BEB
+        GOTO    EqwBoxX!.L1                      * 67BEB
 
 * refs (6): 65D6E 65E5E 66313 66395 6D230 6E9FB
 * #b #first -> : set the first-child link
 EqwBoxFirst!:
         CON(5)  (*)+5                            * 67BEF  primitive code object
         LC(2)   #24                              * 67BF4
-        GOTO    OBJ_67B67.L1                     * 67BF8
+        GOTO    EqwBoxX!.L1                      * 67BF8
 
 * refs (17): 6623C 662A0 66368 663D1 665C0 66610 ...
 * #b #last -> : set the last-child link
 EqwBoxLast!:
         CON(5)  (*)+5                            * 67BFC  primitive code object
         LC(2)   #27                              * 67C01
-        GOTO    OBJ_67B67.L1                     * 67C05
+        GOTO    EqwBoxX!.L1                      * 67C05
 
 * refs (5): 44D40 65D5F 67C32 6CD9E 6D352
-OBJ_67C09:
+* #b #x ->
+EqwBoxRefX!:
         CON(5)  (*)+5                            * 67C09  primitive code object
         LC(2)   #0B                              * 67C0E
-        GOTO    OBJ_67B67.L1                     * 67C12
+        GOTO    EqwBoxX!.L1                      * 67C12
 
 * refs (6): 44C7D 44DA4 66561 67C2D 6D280 6E163
-OBJ_67C16:
+* #b #y ->
+EqwBoxRefY!:
         CON(5)  (*)+5                            * 67C16  primitive code object
         LC(2)   #08                              * 67C1B
-        GOTO    OBJ_67B67.L1                     * 67C1F
+        GOTO    EqwBoxX!.L1                      * 67C1F
         RPL
 
 * refs (3): 44E17 6CE75 6DBBB
-OBJ_67C23:
-        :: 3PICKSWAP OBJ_67C16 OBJ_67C09 ;       * 67C23
+* #b #x #y -> : set both reference fields (+0B, +08)
+EqwBoxRef!:
+        :: 3PICKSWAP EqwBoxRefY! EqwBoxRefX! ;   * 67C23
 
 * refs (11): 662D2 6953F 6A2E9 6A384 6CEBB 6D221 ...
 * #b #v -> : set field +18 (12 bits; #800 marks a value from #8xxxx, FFF is -1)
@@ -1691,7 +1788,7 @@ EqwBox#18!:
         GOSUB   EqwBox#18!~1                     * 67C41
         LC(2)   #18                              * 67C45
         R1=C.F  B                                * 67C49
-        GOTO    OBJ_67B67.L2                     * 67C4F
+        GOTO    EqwBoxX!.L2                      * 67C4F
 
 * refs (1): 67C41
 EqwBox#18!~1:
@@ -1705,32 +1802,36 @@ EqwBox#18!~1:
         RPL
 
 * refs (3): 6B7DB 6FAF0 6FBFE
-OBJ_67C6C:
-        :: OBJ_67519 #1-SWAP #-PICK ;            * 67C6C
+* #b -> obj: the object in the box's slot, for a leaf its grob
+EqwBoxObj@:
+        :: EqwKidsLevel #1-SWAP #-PICK ;         * 67C6C
 
 * refs (2): 6CDFD 6D212
-OBJ_67C85:
+* #b #type ->
+EqwBoxType!:
         CON(5)  (*)+5                            * 67C85  primitive code object
         ASSEMBLE
         GOSBVL  POP#                             * 67C8A
         ASRC                                     * 67C91
         GOSUB   EqwPOP#>Box                      * 67C94
-OBJ_67C85.L1:
+EqwBoxType!.L1:
         DAT0=A  S                                * 67C98
-        GOLONG  OBJ_685B2.L1                     * 67C9C
+        GOLONG  EqwBoxPlaceH!.L1                 * 67C9C
 
 * refs (2): 66E70 6824F
-OBJ_67CA2:
+* #b -> : clear the drawn bit, +01 bit 3
+EqwBoxUndrawn:
         CON(5)  (*)+5                            * 67CA2  primitive code object
         GOSUBL  EqwPOP#>Box                      * 67CA7
         D0=D0+  1                                * 67CAD
         A=DAT0  S                                * 67CB0
         A=A+A   S                                * 67CB4
         ASRB                                     * 67CB7
-        GOTO    OBJ_67C85.L1                     * 67CBA
+        GOTO    EqwBoxType!.L1                   * 67CBA
 
 * refs (4): 69BF6 6B110 6B11A 6E767
-OBJ_67CBE:
+* -> : clear the drawn bit of every box, so that the next draw paints them all
+EqwAllUndrawn:
         CON(5)  (*)+5                            * 67CBE  primitive code object
         LC(5)   MENULEVEL                        * 67CC3
         CD0EX                                    * 67CCA
@@ -1743,31 +1844,33 @@ OBJ_67CBE:
         LC(1)   #7                               * 67CE1
         P=      0                                * 67CE4
         D0=D0+  11                               * 67CE6
-OBJ_67CBE.loop1:
+EqwAllUndrawn.loop1:
         A=A-1   A                                * 67CE9
-        GOC     OBJ_67CBE.L2                     * 67CEB
+        GOC     EqwAllUndrawn.L2                 * 67CEB
         A=DAT0  S                                * 67CEE
         A=A&C   S                                * 67CF2
         DAT0=A  S                                * 67CF6
         D0=D0+  16                               * 67CFA
         D0=D0+  16                               * 67CFD
         D0=D0+  10                               * 67D00
-        GOTO    OBJ_67CBE.loop1                  * 67D03
-OBJ_67CBE.L2:
+        GOTO    EqwAllUndrawn.loop1              * 67D03
+EqwAllUndrawn.L2:
         C=RSTK                                   * 67D07
-        GOLONG  OBJ_67765.L2                     * 67D09
+        GOLONG  EqwSlot!.L2                      * 67D09
 
 * refs (1): 6F9A5
-OBJ_67D0F:
+* -> #b: the selectable leaf with the smallest x: a leaf with size handler 0 or 1 and a non-zero +18
+EqwLeftmostLeaf:
         CON(5)  (*)+5                            * 67D0F  primitive code object
         ST=0    0                                * 67D14
-        GOTO    OBJ_67D1B.L1                     * 67D17
+        GOTO    EqwRightmostLeaf.L1              * 67D17
 
 * refs (2): 6C438 6F9C3
-OBJ_67D1B:
+* -> #b: the selectable leaf with the largest x
+EqwRightmostLeaf:
         CON(5)  (*)+5                            * 67D1B  primitive code object
         ST=1    0                                * 67D20
-OBJ_67D1B.L1:
+EqwRightmostLeaf.L1:
         GOSBVL  SAVPTR                           * 67D23
         D0=(5)  MENULEVEL                        * 67D2A
         B=0     A                                * 67D31
@@ -1780,21 +1883,21 @@ OBJ_67D1B.L1:
         D0=D0+  10                               * 67D47
         C=0     X                                * 67D4A
         ?ST=1   0                                * 67D4D
-        GOYES   OBJ_67D1B.L2                     * 67D50
+        GOYES   EqwRightmostLeaf.L2              * 67D50
         C=C-1   X                                * 67D52
-OBJ_67D1B.L2:
+EqwRightmostLeaf.L2:
         R2=C                                     * 67D55
-OBJ_67D1B.loop3:
+EqwRightmostLeaf.loop3:
         B=B+1   A                                * 67D58
         A=DAT0  S                                * 67D5A
         D0=D0+  5                                * 67D5E
         ?A=0    S                                * 67D61
-        GOYES   OBJ_67D1B.L4                     * 67D64
+        GOYES   EqwRightmostLeaf.L4              * 67D64
         D0=D0+  15                               * 67D66
         D0=D0+  15                               * 67D69
         D0=D0+  7                                * 67D6C
-        GOTO    OBJ_67D1B.L8                     * 67D6F
-OBJ_67D1B.L4:
+        GOTO    EqwRightmostLeaf.L8              * 67D6F
+EqwRightmostLeaf.L4:
         A=DAT0  X                                * 67D73
         D0=D0+  15                               * 67D77
         C=DAT0  B                                * 67D7A
@@ -1804,70 +1907,73 @@ OBJ_67D1B.L4:
         D0=D0+  15                               * 67D87
         D0=D0+  3                                * 67D8A
         ?C=0    X                                * 67D8D
-        GOYES   OBJ_67D1B.L8                     * 67D90
+        GOYES   EqwRightmostLeaf.L8              * 67D90
         D=D-1   B                                * 67D92
-        GOC     OBJ_67D1B.L5                     * 67D95
+        GOC     EqwRightmostLeaf.L5              * 67D95
         D=D-1   B                                * 67D98
-        GOC     OBJ_67D1B.L8                     * 67D9B
-OBJ_67D1B.L5:
+        GOC     EqwRightmostLeaf.L8              * 67D9B
+EqwRightmostLeaf.L5:
         C=R2                                     * 67D9E
         ?ST=1   0                                * 67DA1
-        GOYES   OBJ_67D1B.L6                     * 67DA4
+        GOYES   EqwRightmostLeaf.L6              * 67DA4
         ?C<A    X                                * 67DA6
-        GOYES   OBJ_67D1B.L8                     * 67DA9
-        GONC    OBJ_67D1B.L7                     * 67DAB
-OBJ_67D1B.L6:
+        GOYES   EqwRightmostLeaf.L8              * 67DA9
+        GONC    EqwRightmostLeaf.L7              * 67DAB
+EqwRightmostLeaf.L6:
         ?C>A    X                                * 67DAE
-        GOYES   OBJ_67D1B.L8                     * 67DB1
-OBJ_67D1B.L7:
+        GOYES   EqwRightmostLeaf.L8              * 67DB1
+EqwRightmostLeaf.L7:
         R2=A                                     * 67DB3
         C=B     A                                * 67DB6
         R0=C                                     * 67DB8
-OBJ_67D1B.L8:
+EqwRightmostLeaf.L8:
         C=RSTK                                   * 67DBB
         C=C-1   A                                * 67DBD
-        GOC     OBJ_67D1B.L9                     * 67DBF
+        GOC     EqwRightmostLeaf.L9              * 67DBF
         RSTK=C                                   * 67DC2
-        GOTO    OBJ_67D1B.loop3                  * 67DC4
-OBJ_67D1B.L9:
+        GOTO    EqwRightmostLeaf.loop3           * 67DC4
+EqwRightmostLeaf.L9:
         GOVLNG  PUSH#LOOP                        * 67DC8
 
 * refs (2): 68D4B 6E753
-OBJ_67DCF:
+* -> ob: item 2 of the top frame, the operator's precedence
+EqwFrm2@:
         CON(5)  (*)+5                            * 67DCF  primitive code object
-        GOSUB   SUB_67E77                        * 67DD4
+        GOSUB   EqwTopFrame                      * 67DD4
         D0=D0+  5                                * 67DD8
-        GOTO    OBJ_67E0C.L1                     * 67DDB
+        GOTO    EqwFrm5@.L1                      * 67DDB
 
 * refs (13): 68891 688E1 68913 6904D 690CF 6943B ...
-* Probably: EquationWriter: item 1 (a state code) of the top 5-object frame on its work stack
-OBJ_67DDF:
+* -> ob: item 1 of the top frame, a state code: 0 for an open parenthesis, otherwise the argument the operator has reached
+EqwFrm1@:
         CON(5)  (*)+5                            * 67DDF  primitive code object
-        GOSUB   SUB_67E77                        * 67DE4
-        GOTO    OBJ_67E0C.L1                     * 67DE8
+        GOSUB   EqwTopFrame                      * 67DE4
+        GOTO    EqwFrm5@.L1                      * 67DE8
 
 * refs (6): 6893B 690DE 69982 699D2 6E375 6E96A
-OBJ_67DEC:
+* -> ob: item 4 of the top frame, the operator
+EqwFrm4@:
         CON(5)  (*)+5                            * 67DEC  primitive code object
-        GOSUB   SUB_67E77                        * 67DF1
+        GOSUB   EqwTopFrame                      * 67DF1
         D0=D0+  15                               * 67DF5
-        GOTO    OBJ_67E0C.L1                     * 67DF8
+        GOTO    EqwFrm5@.L1                      * 67DF8
 
 * refs (2): 4B891 6E712
-OBJ_67DFC:
+* -> ob: item 3 of the top frame
+EqwFrm3@:
         CON(5)  (*)+5                            * 67DFC  primitive code object
-        GOSUB   SUB_67E77                        * 67E01
+        GOSUB   EqwTopFrame                      * 67E01
         D0=D0+  10                               * 67E05
-        GOTO    OBJ_67E0C.L1                     * 67E08
+        GOTO    EqwFrm5@.L1                      * 67E08
 
 * refs (13): 4B8E1 65CC7 65D0F 65DB4 661FB 662BE ...
-* Probably: EquationWriter: item 5 (a box number) of the top frame on its work stack
-OBJ_67E0C:
+* -> #box: item 5 of the top frame, the box of the operator
+EqwFrm5@:
         CON(5)  (*)+5                            * 67E0C  primitive code object
-        GOSUB   SUB_67E77                        * 67E11
+        GOSUB   EqwTopFrame                      * 67E11
         D0=D0+  15                               * 67E15
         D0=D0+  5                                * 67E18
-OBJ_67E0C.L1:
+EqwFrm5@.L1:
         A=DAT0  A                                * 67E1B
         C=R2                                     * 67E1E
         D0=C                                     * 67E21
@@ -1878,44 +1984,50 @@ OBJ_67E0C.L1:
         PC=(A)                                   * 67E30
 
 * refs (7): 65E36 6633B 6959E 69955 69AF9 6C05F ...
-OBJ_67E34:
+* #n -> #n ob: item 1 of frame n
+EqwDupFrmN1@:
         CON(5)  DupAndThen                       * 67E34  code object: the address of its machine code
 
 * refs (1): 6AA91
-OBJ_67E39:
+* #n -> ob: item 1 of frame n, frame 1 being the oldest
+EqwFrmN1@:
         CON(5)  (*)+5                            * 67E39  primitive code object
-        GOSUB   SUB_67EB4                        * 67E3E
-        GONC    OBJ_67E0C.L1                     * 67E42  always taken
+        GOSUB   EqwFrameN                        * 67E3E
+        GONC    EqwFrm5@.L1                      * 67E42  always taken
 
 * refs (1): 6C073
-OBJ_67E45:
+* #n -> ob
+EqwFrmN3@:
         CON(5)  (*)+5                            * 67E45  primitive code object
-        GOSUB   SUB_67EB4                        * 67E4A
+        GOSUB   EqwFrameN                        * 67E4A
         D0=D0+  10                               * 67E4E
-        GONC    OBJ_67E0C.L1                     * 67E51  always taken
+        GONC    EqwFrm5@.L1                      * 67E51  always taken
 
 * refs (6): 6F13A 6F2A7 6F31F 6F3CE 6F55E 6FF36
-OBJ_67E54:
+* #n -> ob
+EqwFrmN4@:
         CON(5)  (*)+5                            * 67E54  primitive code object
-        GOSUB   SUB_67EB4                        * 67E59
+        GOSUB   EqwFrameN                        * 67E59
         D0=D0+  15                               * 67E5D
-        GOTO    OBJ_67E0C.L1                     * 67E60
+        GOTO    EqwFrm5@.L1                      * 67E60
 
 * refs (12): 65E4A 66354 66381 6C069 6E253 6F180 ...
-* Probably: EquationWriter: #n -> item 5 of frame n of its work stack
-OBJ_67E64:
+* #n -> #box
+EqwFrmN5@:
         CON(5)  (*)+5                            * 67E64  primitive code object
-        GOSUB   SUB_67EB4                        * 67E69
+        GOSUB   EqwFrameN                        * 67E69
         D0=D0+  10                               * 67E6D
         D0=D0+  10                               * 67E70
-        GOTO    OBJ_67E0C.L1                     * 67E73
+        GOTO    EqwFrm5@.L1                      * 67E73
 
 * refs (5): 67DD4 67DE4 67DF1 67E01 67E11
-SUB_67E77:
-        GOSUB   SUB_67E9E                        * 67E77
+* -> D0 at the top frame, one stack level reserved
+EqwTopFrame:
+        GOSUB   EqwNeed1                         * 67E77
 
 * refs (3): 677C8 67F4A 69670
-SUB_67E7B:
+* -> D0 at the top frame, R2 = the RPL IP, R3 = frames in use
+EqwTopFrame2:
         LC(5)   STACKNUM                         * 67E7B
         CD0EX                                    * 67E82
         RSTK=C                                   * 67E85
@@ -1925,29 +2037,32 @@ SUB_67E7B:
         A=A-C   A                                * 67E94
         R3=A                                     * 67E96
         C=RSTK                                   * 67E99
-        GONC    SUB_67EB8.L1                     * 67E9B
+        GONC    EqwFrameN2.L1                    * 67E9B
 
 * refs (4): 67E77 67EB1 67EB4 680EE
-SUB_67E9E:
+* Make room for one more stack level (D.A), collecting garbage if needed
+EqwNeed1:
         ST=0    10                               * 67E9E
         D=D-1   A                                * 67EA1
         RTNNC                                    * 67EA3
         C=0     A                                * 67EA6
         C=C+1   A                                * 67EA8
-        GOSBVL  SUB_6DDAB                        * 67EAA
-        GOC     SUB_67E9E                        * 67EB1
+        GOSBVL  EqwGC                            * 67EAA
+        GOC     EqwNeed1                         * 67EB1
 
 * refs (4): 67E3E 67E4A 67E59 67E69
-SUB_67EB4:
-        GOSUB   SUB_67E9E                        * 67EB4
+* Pop #n -> D0 at frame n, one stack level reserved
+EqwFrameN:
+        GOSUB   EqwNeed1                         * 67EB4
 
 * refs (2): 67F14 67F3A
-SUB_67EB8:
+* Pop #n -> D0 at frame n
+EqwFrameN2:
         GOSBVL  POP#                             * 67EB8
         R3=A                                     * 67EBF
         LC(5)   KEYLIST                          * 67EC2
         CD0EX                                    * 67EC9
-SUB_67EB8.L1:
+EqwFrameN2.L1:
         A=DAT0  A                                * 67ECC
         R0=A                                     * 67ECF
         D0=(5)  MENULEVEL                        * 67ED2
@@ -1958,27 +2073,29 @@ SUB_67EB8.L1:
         C=R0                                     * 67EE5
         C=C-A   A                                * 67EE8
         A=C     A                                * 67EEA
-        GOSUBL  SUB_676C5                        * 67EEC
+        GOSUBL  A*5                              * 67EEC
         C=R1                                     * 67EF2
         A=A+C   A                                * 67EF5
-        GOSUBL  SUB_676C5                        * 67EF7
+        GOSUBL  A*5                              * 67EF7
         R0=A                                     * 67EFD
-        GOSUBL  SUB_675BE                        * 67F00
+        GOSUBL  EqwSlotAddr                      * 67F00
         D0=C                                     * 67F06
         RTN                                      * 67F09
 
 * refs (6): 695A8 6995F 69B03 6F17B 6F47D 6F518
-OBJ_67F0B:
+* #n ob -> : set item 1 of frame n
+EqwFrmN1!:
         CON(5)  (*)+5                            * 67F0B  primitive code object
-        GOSUB   SUB_67F24                        * 67F10
-        GOSUB   SUB_67EB8                        * 67F14
-OBJ_67F0B.L1:
+        GOSUB   EqwPopR4                         * 67F10
+        GOSUB   EqwFrameN2                       * 67F14
+EqwFrmN1!.L1:
         C=R4                                     * 67F18
         DAT0=C  A                                * 67F1B
-        GOLONG  OBJ_685B2.L1                     * 67F1E
+        GOLONG  EqwBoxPlaceH!.L1                 * 67F1E
 
 * refs (2): 67F10 67F36
-SUB_67F24:
+* Pop level 1 into R4
+EqwPopR4:
         C=DAT1  A                                * 67F24
         R4=C                                     * 67F27
         D1=D1+  5                                * 67F2A
@@ -1986,17 +2103,18 @@ SUB_67F24:
         RTN                                      * 67F2F
 
 * refs (5): 699F5 6F171 6F1FD 6F3E7 6F58B
-OBJ_67F31:
+* #n ob -> : set item 4 of frame n
+EqwFrmN4!:
         CON(5)  (*)+5                            * 67F31  primitive code object
-        GOSUB   SUB_67F24                        * 67F36
-        GOSUB   SUB_67EB8                        * 67F3A
+        GOSUB   EqwPopR4                         * 67F36
+        GOSUB   EqwFrameN2                       * 67F3A
         D0=D0+  15                               * 67F3E
-        GOTO    OBJ_67F0B.L1                     * 67F41
+        GOTO    EqwFrmN1!.L1                     * 67F41
 
 * refs (7): 688FF 68D64 68E36 690BB 695B7 6987E ...
 OBJ_67F45:
         CON(5)  (*)+5                            * 67F45  primitive code object
-        GOSUB   SUB_67E7B                        * 67F4A
+        GOSUB   EqwTopFrame2                     * 67F4A
         D0=D0+  15                               * 67F4E
         A=DAT0  A                                * 67F51
         D0=A                                     * 67F54
@@ -2044,12 +2162,12 @@ OBJ_67F45.L4:
         AD1EX                                    * 67FE0
         PC=(A)                                   * 67FE3
 OBJ_67F45.L5:
-        GOLONG  OBJ_685B2.L1                     * 67FE7
+        GOLONG  EqwBoxPlaceH!.L1                 * 67FE7
 
 * refs (1): 67FCC
 OBJ_67FED:
         CON(5)  (*)+5                            * 67FED  primitive code object
-        GOSUB   OBJ_68724.L1+4                   * 67FF2
+        GOSUB   EqwParseStep~8.L1+4              * 67FF2
         GOTO    EqwBoxParent@.L3+1               * 67FF6
         NIBHEX  13569EF                          * 67FFA  1eé
 OBJ_67FED.L1:
@@ -2060,7 +2178,8 @@ OBJ_67FED.L1:
         GOVLNG  Errjmp                           * 68010
 
 * refs (1): 66E66
-OBJ_68017:
+* #b #x #y: set a box's position, each coordinate only when it differs; when nothing changed it returns to the caller's caller with the arguments dropped
+EqwBoxXY!:
         CON(5)  (*)+5                            * 68017  primitive code object
         D1=D1+  10                               * 6801C
         GOSUBL  EqwPOP#>Box                      * 6801F
@@ -2070,41 +2189,41 @@ OBJ_68017:
         C=DAT0  X                                * 6802D
         ST=0    1                                * 68031
         ?C#0    A                                * 68034
-        GOYES   OBJ_68017.L1                     * 68037
+        GOYES   EqwBoxXY!.L1                     * 68037
         ST=1    1                                * 68039
-OBJ_68017.L1:
+EqwBoxXY!.L1:
         RSTK=C                                   * 6803C
         GOSBVL  POP#                             * 6803E
         C=RSTK                                   * 68045
         CAEX    A                                * 68047
         R1=C                                     * 68049
         R4=A.F  A                                * 6804C
-        GOSUB   SUB_680FB                        * 68052
+        GOSUB   EqwPush#A                        * 68052
         A=R4.F  A                                * 68056
         C=R1                                     * 6805C
         ST=0    2                                * 6805F
         ?C=A    A                                * 68062
-        GOYES   OBJ_68017.L2                     * 68065
+        GOYES   EqwBoxXY!.L2                     * 68065
         DAT0=C  X                                * 68067
         ST=1    2                                * 6806B
-OBJ_68017.L2:
+EqwBoxXY!.L2:
         D0=D0+  3                                * 6806E
         D1=D1+  5                                * 68071
         C=0     A                                * 68074
         C=DAT0  X                                * 68076
         ?ST=0   1                                * 6807A
-        GOYES   OBJ_68017.L3                     * 6807D
+        GOYES   EqwBoxXY!.L3                     * 6807D
         ?C=0    A                                * 6807F
-        GOYES   OBJ_68017.L3                     * 68082
+        GOYES   EqwBoxXY!.L3                     * 68082
         ST=0    1                                * 68084
-OBJ_68017.L3:
+EqwBoxXY!.L3:
         RSTK=C                                   * 68087
         GOSBVL  POP#                             * 68089
         C=RSTK                                   * 68090
         CAEX    A                                * 68092
         R1=C                                     * 68094
         R4=A.F  A                                * 68097
-        GOSUB   SUB_680FB                        * 6809D
+        GOSUB   EqwPush#A                        * 6809D
         A=R4.F  A                                * 680A1
         C=R1                                     * 680A7
         ?C#A    A                                * 680AA
@@ -2135,12 +2254,13 @@ drop;false;true_680B4.L3:
         ?ST=1   1                                * 680E9
         GOYES   drop;false;true_680B4            * 680EC
 drop;false;true_680B4.L4:
-        GOSUB   SUB_67E9E                        * 680EE
+        GOSUB   EqwNeed1                         * 680EE
         D1=D1-  5                                * 680F2
-        GOLONG  OBJ_685B2.L1                     * 680F5
+        GOLONG  EqwBoxPlaceH!.L1                 * 680F5
 
 * refs (6): 667A6 68052 6809D 68140 68159 6DE76
-SUB_680FB:
+* A.A -> pushed as a bint, D0 kept relative to the box table (a push may collect garbage and move the table)
+EqwPush#A:
         R3=A                                     * 680FB
         LC(5)   ITEM1STATE                       * 680FE
         CD0EX                                    * 68105
@@ -2157,20 +2277,21 @@ SUB_680FB:
         RTN                                      * 6812A
 
 * refs (1): 66D6C
-OBJ_6812C:
+* #b -> #x #first #ref: where the children of a row start
+EqwRowStart:
         CON(5)  (*)+5                            * 6812C  primitive code object
         GOSUBL  EqwPOP#>Box                      * 68131
         D0=D0+  5                                * 68137
         A=0     A                                * 6813A
         A=DAT0  X                                * 6813C
-        GOSUB   SUB_680FB                        * 68140
+        GOSUB   EqwPush#A                        * 68140
         AD0EX                                    * 68144
         LC(5)   #0001F                           * 68147
         A=A+C   A                                * 6814E
         D0=A                                     * 68150
         A=0     A                                * 68153
         A=DAT0  X                                * 68155
-        GOSUB   SUB_680FB                        * 68159
+        GOSUB   EqwPush#A                        * 68159
         LC(5)   #00022                           * 6815D
         AD0EX                                    * 68164
         A=A-C   A                                * 68167
@@ -2184,13 +2305,14 @@ OBJ_6812C:
         GOLONG  EqwBoxParent@.L2                 * 6817D
 
 * refs (4): 65A83 67747 6A57D 6C814
-OBJ_68183:
+* #n -> #5n
+#5*:
         CON(5)  (*)+5                            * 68183  primitive code object
         GOSBVL  POP#                             * 68188
         C=A     A                                * 6818F
         A=A+A   A                                * 68191
         A=A+A   A                                * 68193
-OBJ_68183.L1:
+#5*.L1:
         A=A+C   A                                * 68195
         GOLONG  EqwBoxParent@.L3                 * 68197
 
@@ -2201,92 +2323,102 @@ OBJ_68183.L1:
         GOSBVL  POP#                             * 681A2
         C=A     A                                * 681A9
         C=C+C   A                                * 681AB
-        GOTO    OBJ_68183.L1                     * 681AD
+        GOTO    #5*.L1                           * 681AD
 
 * refs (5): 686B6 6A0AF 6A4AB 6C846 6C909
-OBJ_681B1:
+* hxs -> : store the box table, a hex string
+EqwBoxTab!:
         CON(5)  (*)+5                            * 681B1  primitive code object
         LC(5)   ITEM1STATE                       * 681B6
-OBJ_681B1.L1:
+EqwBoxTab!.L1:
         A=DAT1  A                                * 681BD
         D1=D1+  5                                * 681C0
         D=D+1   A                                * 681C3
         CD0EX                                    * 681C5
         DAT0=A  A                                * 681C8
-OBJ_681B1.L2:
+EqwBoxTab!.L2:
         D0=C                                     * 681CB
         A=DAT0  A                                * 681CE
         D0=D0+  5                                * 681D1
         PC=(A)                                   * 681D4
 
 * refs (4): 6B8DF 6C0DC 6C136 6C55F
-OBJ_681D8:
+* {} -> : store the undo list (PAINTTREE)
+EqwUndo!:
         CON(5)  (*)+5                            * 681D8  primitive code object
         LC(5)   PAINTTREE                        * 681DD
-        GOTO    OBJ_681B1.L1                     * 681E4
+        GOTO    EqwBoxTab!.L1                    * 681E4
 
 * refs (4): 68693 69FE2 6A091 6A456
-OBJ_681E8:
+* -> hxs
+EqwBoxTab@:
         CON(5)  (*)+5                            * 681E8  primitive code object
         LC(5)   ITEM1STATE                       * 681ED
-OBJ_681E8.L1:
+EqwBoxTab@.L1:
         ST=0    10                               * 681F4
         R0=C                                     * 681F7
-OBJ_681E8.loop2:
+EqwBoxTab@.loop2:
         D=D-1   A                                * 681FA
-        GONC    OBJ_681E8.L3                     * 681FC
-        GOSBVL  SUB_6DDAB                        * 681FF
-        GOC     OBJ_681E8.loop2                  * 68206
-OBJ_681E8.L3:
+        GONC    EqwBoxTab@.L3                    * 681FC
+        GOSBVL  EqwGC                            * 681FF
+        GOC     EqwBoxTab@.loop2                 * 68206
+EqwBoxTab@.L3:
         D1=D1-  5                                * 68209
         C=R0                                     * 6820C
         CD0EX                                    * 6820F
         A=DAT0  A                                * 68212
         DAT1=A  A                                * 68215
-        GOTO    OBJ_681B1.L2                     * 68218
+        GOTO    EqwBoxTab!.L2                    * 68218
 
 * refs (4): 6B8BC 6C046 6C12C 6E83E
-OBJ_6821C:
+* -> {}
+EqwUndo@:
         CON(5)  (*)+5                            * 6821C  primitive code object
         LC(5)   PAINTTREE                        * 68221
-        GOTO    OBJ_681E8.L1                     * 68228
+        GOTO    EqwBoxTab@.L1                    * 68228
         RPL
 
 * refs (4): 6CE34 6D648 6DEEB 6E9EC
-OBJ_6822C:
-        :: DUP BINT11 UNROLL OBJ_68277           * 6822C
+* obj fields #b -> : refill the fields of an existing box from +00 to +14 and give it a new object
+EqwBoxRefill:
+        :: DUP BINT11 UNROLL EqwBoxFill14        * 6822C
 
 * refs (11): 44E2B 4B90E 65CF6 65EEA 6626E 66598 ...
 * #b obj -> : put obj into box b's slot on the data stack and clear the flag in +01
 EqwBoxObj!:
-          :: SWAPDUP OBJ_67CA2 OBJ_67519 SWAP#- dup;drop(s) #2- UNROLL ; ; * 68245
+          :: SWAPDUP EqwBoxUndrawn EqwKidsLevel SWAP#- dup;drop(s) #2- * 68245
+            UNROLL ;                             * 68268
+        ;                                        * 68272
 
 * refs (1): 68240
-OBJ_68277:
+* As EqwBoxFill, fields up to +14 only (ST 3 set)
+EqwBoxFill14:
         CON(5)  (*)+5                            * 68277  primitive code object
         ASSEMBLE
         ST=1    3                                * 6827C
-        GOTO    OBJ_682A6.L1                     * 6827F
+        GOTO    EqwBoxFill.L1                    * 6827F
         RPL
 
 * refs (3): 65F76 6CF10 6D5AA
-OBJ_68283:
-        :: DUP BINT18 UNROLL OBJ_682A6 EqwBoxObj! ; * 68283
+* Arguments of EqwNewBox, #b -> : refill all the fields of an existing box
+EqwBoxRefillAll:
+        :: DUP BINT18 UNROLL EqwBoxFill EqwBoxObj! ; * 68283
 
 * refs (1): 68297
-OBJ_682A6:
+* Fill box #b from the arguments of EqwNewBox
+EqwBoxFill:
         CON(5)  (*)+5                            * 682A6  primitive code object
         ASSEMBLE
         ST=0    3                                * 682AB
-OBJ_682A6.L1:
+EqwBoxFill.L1:
         GOSUBL  EqwPOP#>Box                      * 682AE
         ST=0    4                                * 682B4
-        GOSUB   SUB_68329                        * 682B7
-        GOTO    OBJ_685B2.L2                     * 682BB
-OBJ_682A6.L2:
+        GOSUB   EqwFillFields                    * 682B7
+        GOTO    EqwBoxPlaceH!.L2                 * 682BB
+EqwBoxFill.L2:
         D0=C                                     * 682BF
         D0=D0-  5                                * 682C2
-        LC(5)   OBJ_6867A                        * 682C5
+        LC(5)   EqwBoxesGrow                     * 682C5
         A=C     A                                * 682CC
         PC=(A)                                   * 682CE
 
@@ -2303,19 +2435,20 @@ EqwNewBox:
         CON(5)  (*)+5                            * 682DE  primitive code object
         ST=0    4                                * 682E3
 EqwNewBox.L1:
-        GOSUB   SUB_682F7                        * 682E6
-        LC(5)   OBJ_6D4E2                        * 682EA
+        GOSUB   EqwTakeBox                       * 682E6
+        LC(5)   EqwSlotAdd                       * 682EA
         A=C     A                                * 682F1
         PC=(A)                                   * 682F3
 
 * refs (4): 682E6 6861D 6862C 6863B
-SUB_682F7:
+* Take a free box record and fill it from the stack; grows the table with EqwBoxesGrow when none is free
+EqwTakeBox:
         ST=0    3                                * 682F7
         LC(5)   SAVECROSS                        * 682FA
         CD0EX                                    * 68301
         A=DAT0  A                                * 68304
         ?A=0    A                                * 68307
-        GOYES   OBJ_682A6.L2                     * 6830A
+        GOYES   EqwBoxFill.L2                    * 6830A
         A=A-1   A                                * 6830C
         DAT0=A  A                                * 6830E
         D0=(5)  MENULEVEL                        * 68311
@@ -2323,10 +2456,11 @@ SUB_682F7:
         A=A+1   A                                * 6831B
         DAT0=A  A                                * 6831D
         D0=C                                     * 68320
-        GOSUBL  SUB_67A51                        * 68323
+        GOSUBL  EqwA>Box                         * 68323
 
 * refs (1): 682B7
-SUB_68329:
+* Pop the fields from the stack into the record at D0: type, then six 3-nibble fields, the object, +14, +16 and the links. The size level comes from AppCount
+EqwFillFields:
         GOSBVL  POP#                             * 68329
         DAT0=A  1                                * 68330
         D0=D0+  1                                * 68334
@@ -2336,13 +2470,13 @@ SUB_68329:
         D0=C                                     * 68344
         LC(1)   #7                               * 68347
         ?C>=A   P                                * 6834A
-        GOYES   SUB_68329.L1                     * 6834D
+        GOYES   EqwFillFields.L1                 * 6834D
         A=C     P                                * 6834F
-SUB_68329.L1:
+EqwFillFields.L1:
         DAT0=A  1                                * 68352
         D0=D0+  1                                * 68356
         P=      5                                * 68359
-        GOSUB   SUB_683BB                        * 6835B
+        GOSUB   EqwPopFields                     * 6835B
         A=DAT1  A                                * 6835F
         D1=D1+  5                                * 68362
         D=D+1   A                                * 68365
@@ -2351,22 +2485,22 @@ SUB_68329.L1:
         DAT0=A  B                                * 68374
         D0=D0+  2                                * 68377
         ?ST=1   3                                * 6837A
-        GOYES   SUB_68329.L3                     * 6837D
+        GOYES   EqwFillFields.L3                 * 6837D
         GOSBVL  POP#                             * 6837F
         D=D-1   A                                * 68386
         DAT0=A  B                                * 68388
         D0=D0+  2                                * 6838B
         P=      5                                * 6838E
         ?ST=0   4                                * 68390
-        GOYES   SUB_68329.L2                     * 68393
+        GOYES   EqwFillFields.L2                 * 68393
         P=      3                                * 68395
-SUB_68329.L2:
-        GOSUB   SUB_683BB                        * 68397
+EqwFillFields.L2:
+        GOSUB   EqwPopFields                     * 68397
         ?ST=0   4                                * 6839B
-        GOYES   SUB_68329.L3                     * 6839E
+        GOYES   EqwFillFields.L3                 * 6839E
         C=0     W                                * 683A0
         DAT0=C  6                                * 683A3
-SUB_68329.L3:
+EqwFillFields.L3:
         D1=D1-  5                                * 683A7
         A=R3.F  A                                * 683AA
         DAT1=A  A                                * 683B0
@@ -2375,21 +2509,24 @@ SUB_68329.L3:
         RTN                                      * 683B9
 
 * refs (3): 6835B 68397 683CB
-SUB_683BB:
+* Pop P+1 bints into 3-nibble fields at D0
+EqwPopFields:
         GOSBVL  POP#                             * 683BB
         DAT0=A  X                                * 683C2
         D0=D0+  3                                * 683C6
         P=P-1                                    * 683C9
-        GONC    SUB_683BB                        * 683CB
+        GONC    EqwPopFields                     * 683CB
         P=      0                                * 683CE
         RTN                                      * 683D0
 
 * refs (2): 668D6 6847C
-SUB_683D2:
-        LC(5)   SUB_683D9.L1                     * 683D2
+* A.A = index -> A.A = the size handler
+EqwSizeH>A:
+        LC(5)   EqwTable>A.L1                    * 683D2
 
 * refs (1): 684F8
-SUB_683D9:
+* A.A = index, C.A = table -> A.A = the word at that index
+EqwTable>A:
         CD1EX                                    * 683D9
         RSTK=C                                   * 683DC
         C=A     A                                * 683DE
@@ -2404,7 +2541,8 @@ SUB_683D9:
         D1=C                                     * 683F3
         RTN                                      * 683F6
 
-SUB_683D9.L1:
+* Size handlers, indexed by field +14; #FF runs OBJ_6FE73 instead
+EqwTable>A.L1:
         CON(5)  OBJ_65A29                        * 683F8  address (the code jumps or points through it)
 
         CON(5)  OBJ_44C3C                        * 683FD  address (the code jumps or points through it)
@@ -2423,7 +2561,8 @@ SUB_683D9.L1:
 
         CON(5)  OBJ_44D68                        * 68420  address (the code jumps or points through it)
 
-SUB_683D9.L2:
+* Placement handlers, indexed by field +16; -1 runs EqwPlaceH-1
+EqwTable>A.L2:
         CON(5)  OBJ_65A06                        * 68425  address (the code jumps or points through it)
 
         CON(5)  OBJ_66C2C                        * 6842A  address (the code jumps or points through it)
@@ -2443,78 +2582,82 @@ SUB_683D9.L2:
         CON(5)  DupAndThen                       * 6844D  address (the code jumps or points through it)
 
 * refs (2): 6AABE 6D1CC
-OBJ_68452:
+* #b -> ob: push the box's size handler
+EqwBoxSizeH@:
         CON(5)  (*)+5                            * 68452  primitive code object
-        GOSUB   SUB_6845F                        * 68457
-        GOTO    OBJ_685B2.L1                     * 6845B
+        GOSUB   EqwBoxSizeH@~1                   * 68457
+        GOTO    EqwBoxPlaceH!.L1                 * 6845B
 
 * refs (1): 68457
-SUB_6845F:
+EqwBoxSizeH@~1:
         GOSUBL  EqwPOP#>Box                      * 6845F
         D0=D0+  10                               * 68465
         D0=D0+  10                               * 68468
         C=DAT0  B                                * 6846B
         C=C+1   B                                * 6846E
-        GOC     SUB_6845F.L1                     * 68471
+        GOC     EqwBoxSizeH@~1.L1                * 68471
         C=C-1   B                                * 68474
         A=0     A                                * 68477
         A=C     B                                * 68479
-        GOSUB   SUB_683D2                        * 6847C
+        GOSUB   EqwSizeH>A                       * 6847C
         D1=D1-  5                                * 68480
         DAT1=A  A                                * 68483
         D=D-1   A                                * 68486
         RTN                                      * 68488
-SUB_6845F.L1:
+EqwBoxSizeH@~1.L1:
         C=R2                                     * 6848A
         D0=C                                     * 6848D
         LC(5)   #0002A                           * 68490
         BCEX    A                                * 68497
         RSTK=C                                   * 68499
         C=0     A                                * 6849B
-SUB_6845F.loop2:
+EqwBoxSizeH@~1.loop2:
         A=A-B   A                                * 6849D
-        GOC     SUB_6845F.L3                     * 6849F
+        GOC     EqwBoxSizeH@~1.L3                * 6849F
         C=C+1   A                                * 684A2
-        GONC    SUB_6845F.loop2                  * 684A4
-SUB_6845F.L3:
+        GONC    EqwBoxSizeH@~1.loop2             * 684A4
+EqwBoxSizeH@~1.L3:
         A=C     A                                * 684A7
         C=RSTK                                   * 684A9
         B=C     A                                * 684AB
         A=A+1   A                                * 684AD
         GOSBVL  SUB_67918                        * 684AF
         LC(5)   OBJ_6FE73                        * 684B6
-SUB_6845F.loop4:
+EqwBoxSizeH@~1.loop4:
         A=C     A                                * 684BD
         PC=(A)                                   * 684BF
-SUB_6845F.L5:
+EqwBoxSizeH@~1.L5:
         C=R2                                     * 684C3
         D0=C                                     * 684C6
         LC(5)   OBJ_6FE69                        * 684C9
-        GOTO    SUB_6845F.loop4                  * 684D0
+        GOTO    EqwBoxSizeH@~1.loop4             * 684D0
 
 * refs (1): 669DD
-OBJ_684D4:
+* #index -> : run placement handler number index
+EqwRunPlaceH:
         CON(5)  (*)+5                            * 684D4  primitive code object
         GOSBVL  POP#                             * 684D9
         C=A     A                                * 684E0
         C=C+1   A                                * 684E2
-        GONC    OBJ_684D4.L1                     * 684E4
-        LC(5)   OBJ_68500                        * 684E7
-        GOC     SUB_6845F.loop4                  * 684EE
-OBJ_684D4.L1:
-        LC(5)   SUB_683D9.L2                     * 684F1
-        GOSUB   SUB_683D9                        * 684F8
+        GONC    EqwRunPlaceH.L1                  * 684E4
+        LC(5)   EqwPlaceH-1                      * 684E7
+        GOC     EqwBoxSizeH@~1.loop4             * 684EE
+EqwRunPlaceH.L1:
+        LC(5)   EqwTable>A.L2                    * 684F1
+        GOSUB   EqwTable>A                       * 684F8
         PC=(A)                                   * 684FC
         RPL
 
 * refs (1): 684E7
-OBJ_68500:
-        :: EqwDupBoxFirst@ OBJ_6FE78 OBJ_2708E ?SKIP * 68500
-          :: DROPDUP EqwBoxSecond@ OBJ_6FE78 OBJ_2708E DROP ; * 68519
+* Placement handler -1: the reference comes from the object of the first child that has one
+EqwPlaceH-1:
+        :: EqwDupBoxFirst@ EqwPlaceH-1~1 CmdField ?SKIP * 68500
+          :: DROPDUP EqwBoxSecond@ EqwPlaceH-1~1 CmdField DROP ; * 68519
           BINT6 NTHCOMPDROP EVAL ;               * 6853C
 
 * refs (3): 66965 66979 6A186
-OBJ_68550:
+* #b -> #b #index: the placement handler, -1 for FF
+EqwDupBoxPlaceH@:
         CON(5)  DupAndThen                       * 68550  code object: the address of its machine code
 
         CON(5)  (*)+5                            * 68555  primitive code object
@@ -2524,75 +2667,80 @@ OBJ_68550:
         D0=D0+  12                               * 68563
         A=0     A                                * 68566
         A=DAT0  B                                * 68568
-        GOSUB   SUB_68573                        * 6856B
-        GOTO    OBJ_685B2.L1                     * 6856F
+        GOSUB   EqwPush#H                        * 6856B
+        GOTO    EqwBoxPlaceH!.L1                 * 6856F
 
 * refs (2): 66A34 6856B
-SUB_68573:
+* A.B -> pushed as a bint, FF as -1
+EqwPush#H:
         A=A+1   B                                * 68573
-        GONC    SUB_68573.L1                     * 68576
+        GONC    EqwPush#H.L1                     * 68576
         LC(5)   MINUSONE                         * 68579
         D1=D1-  5                                * 68580
         DAT1=C  A                                * 68583
         D=D-1   A                                * 68586
         RTN                                      * 68588
-SUB_68573.L1:
+EqwPush#H.L1:
         A=A-1   B                                * 6858A
         GOLONG  SUB_67918                        * 6858D
 
 * refs (6): 4B8EB 665BB 66624 6DBD4 6E154 6F45F
-OBJ_68593:
+* #b #index -> : set the size handler (field +14)
+EqwBoxSizeH!:
         CON(5)  (*)+5                            * 68593  primitive code object
         GOSUBL  EqwPOP#>Box                      * 68598
         GOSBVL  POP#                             * 6859E
         D0=D0+  10                               * 685A5
         D0=D0+  10                               * 685A8
         DAT0=A  B                                * 685AB
-        GOTO    OBJ_685B2.L1                     * 685AE
+        GOTO    EqwBoxPlaceH!.L1                 * 685AE
 
 * refs (2): 6A3B1 6CE43
-OBJ_685B2:
+* #b #index -> : set the placement handler (field +16)
+EqwBoxPlaceH!:
         CON(5)  (*)+5                            * 685B2  primitive code object
         GOSUBL  EqwPOP#>Box                      * 685B7
         GOSBVL  POP#                             * 685BD
         D0=D0+  10                               * 685C4
         D0=D0+  12                               * 685C7
         DAT0=A  B                                * 685CA
-OBJ_685B2.L1:
+EqwBoxPlaceH!.L1:
         C=R2                                     * 685CD
         D0=C                                     * 685D0
-OBJ_685B2.L2:
+EqwBoxPlaceH!.L2:
         A=DAT0  A                                * 685D3
         D0=D0+  5                                * 685D6
         PC=(A)                                   * 685D9
 
 * refs (1): 6D4D3
-OBJ_685DD:
+* -> : make sure three box records are free
+EqwNeed3Boxes:
         CON(5)  (*)+5                            * 685DD  primitive code object
         LC(5)   SAVECROSS                        * 685E2
         CD0EX                                    * 685E9
         A=DAT0  A                                * 685EC
         D0=C                                     * 685EF
         A=A-CON A,3                              * 685F2
-        GOC     OBJ_685DD.L1                     * 685F8
-        GOTO    OBJ_685B2.L2                     * 685FB
-OBJ_685DD.L1:
-        LC(5)   OBJ_6867A                        * 685FF
-        GOTO    SUB_6845F.loop4                  * 68606
+        GOC     EqwNeed3Boxes.L1                 * 685F8
+        GOTO    EqwBoxPlaceH!.L2                 * 685FB
+EqwNeed3Boxes.L1:
+        LC(5)   EqwBoxesGrow                     * 685FF
+        GOTO    EqwBoxSizeH@~1.loop4             * 68606
 
 * refs (1): 6D4D8
-OBJ_6860A:
+* The stack holds the arguments of three EqwNewBox calls: take the three boxes in one go, stepping the stack pointer over each group
+EqwNew3Boxes:
         CON(5)  (*)+5                            * 6860A  primitive code object
         ST=0    4                                * 6860F
         LC(5)   #000A0                           * 68612
         GOSUB   SUB_68670                        * 68619
-        GOSUB   SUB_682F7                        * 6861D
+        GOSUB   EqwTakeBox                       * 6861D
         LC(5)   #FFF65                           * 68621
         GOSUB   SUB_68670                        * 68628
-        GOSUB   SUB_682F7                        * 6862C
+        GOSUB   EqwTakeBox                       * 6862C
         LC(5)   #FFF65                           * 68630
         GOSUB   SUB_68670                        * 68637
-        GOSUB   SUB_682F7                        * 6863B
+        GOSUB   EqwTakeBox                       * 6863B
         C=DAT1  A                                * 6863F
         RSTK=C                                   * 68642
         LC(5)   #00050                           * 68644
@@ -2606,7 +2754,7 @@ OBJ_6860A:
         D1=D1-  5                                * 68664
         C=RSTK                                   * 68667
         DAT1=C  A                                * 68669
-        GOTO    OBJ_685B2.L2                     * 6866C
+        GOTO    EqwBoxPlaceH!.L2                 * 6866C
 
 * refs (5): 68619 68628 68637 6864B 6865B
 SUB_68670:
@@ -2617,233 +2765,256 @@ SUB_68670:
         RPL
 
 * refs (2): 682C5 685FF
-OBJ_6867A:
-        :: OBJ_673A2 BINT20 #+ OBJ_67458 OBJ_681E8 BINT20 * 6867A
+* -> : add 20 records to the box table
+EqwBoxesGrow:
+        :: EqwBoxesFree@ BINT20 #+ EqwBoxesFree! EqwBoxTab@ BINT20 * 6867A
 
 * refs (4): 6A0A0 6A46F 6A492 6C83C
-OBJ_6869D:
-          :: BINT42 #* ; EXPAND OBJ_681B1 ;      * 6869D
+* #n -> #42n: nibbles of n box records
+Eqw#42*:
+          :: BINT42 #* ; EXPAND EqwBoxTab! ;     * 6869D
 
 * refs (4): 69237 6B88A 6BC0F 6C0EB
-OBJ_686C0:
-        :: OBJ_4DA58 18PUTLAM                    * 686C0
+* -> : parse the text typed so far into boxes
+EqwParseText:
+        :: EqwParseText~1 18PUTLAM               * 686C0
 
 * refs (1): 6892C
-OBJ_686CF:
-          :: BEGIN ?ATTNQUIT OBJ_68701 AGAIN ; DROP 5UNROLL PutGNTData ; * 686CF
+* Run EqwParseStep until it leaves through RDROP, then store the token state
+EqwParseLoop:
+          :: BEGIN ?ATTNQUIT EqwParseStep AGAIN ; DROP 5UNROLL PutGNTData ; * 686CF
 
 * refs (1): 686DE
-OBJ_68701:
-        :: OBJ_69A31 OBJ_6979D OBJ_69323 OBJ_688C3 8GETLAM nultrior * 68701
+* Handle one token
+EqwParseStep:
+        :: OBJ_69A31 EqwParseStep~4 EqwParseStep~3 OBJ_688C3 8GETLAM * 68701
+          nultrior                               * 6871F
 
 * refs (1): 697B6
-OBJ_68724:
-          :: DROP 2RDROP 7GETLAM OBJ_6BC03 EQ case OBJ_68873 * 68724
-            OBJ_688EB ;                          * 6874C
-          TRUE 18PUTLAM tok' tok=casedrop OBJ_69020 * 68756
-          OBJ_68B3E casedrop                     * 6876F
+EqwParseStep~8:
+          :: DROP 2RDROP 7GETLAM EqwParseStep~6 EQ case EqwParseEnd * 68724
+            EqwParseStep~1 ;                     * 6874C
+          TRUE 18PUTLAM tok' tok=casedrop EqwNextToken * 68756
+          EqwToken casedrop                      * 6876F
           :: 2RDROP 5ROLL 6ROLL ;                * 68779
           ?SEMI                                  * 68792
-          DROPZERO GetGNTData OBJ_25D03 case     * 68797
-          :: case OBJ_68E45                      * 687AB
+          DROPZERO GetGNTData ParseReal case     * 68797
+          :: case EqwParseStep~2                 * 687AB
             COLA OBJ_687FB                       * 687BA
           ;                                      * 687C4
           ngsizecase OBJ_687FB                   * 687C9
-          OBJ_24609 !*trior OBJ_68E45 SWAP COMPILEID ROT * 687D3
-OBJ_68724.L1:
+          Tok>Name !*trior EqwParseStep~2 SWAP COMPILEID ROT * 687D3
+EqwParseStep~8.L1:
           ORNOT casedrop                         * 687F1
 
 * refs (3): 687BF 687CE 68823
 OBJ_687FB:
-          :: 5ROLLDROP COLA OBJ_697CA            * 687FB
+          :: 5ROLLDROP COLA EqwParseStep~5       * 687FB
           ;                                      * 6880F
-          OBJ_274D1 OBJ_6E026 NOTcasedrop OBJ_687FB * 68814
-          OBJ_26BED NOTcase                      * 68828
-          :: OBJ_24681 2DROP COLA OBJ_68E45      * 68832
+          ?AlgUnary OBJ_6E026 NOTcasedrop OBJ_687FB * 68814
+          FnInfo NOTcase                         * 68828
+          :: PutTok 2DROP COLA EqwParseStep~2    * 68832
           ;                                      * 6884B
-          8UNROLL 8UNROLL 8UNROLL 5DROP COLA OBJ_68CF6 * 68850
+          8UNROLL 8UNROLL 8UNROLL 5DROP COLA EqwFunction * 68850
         ;                                        * 6886E
 
 * refs (2): 68747 68B20
-OBJ_68873:
-        :: OBJ_69147 OBJ_27797 OBJ_69495 ~BINT0;1PUTLAM BEGIN OBJ_67DDF #0= * 68873
-          WHILE                                  * 6889B
-          :: GetGNTData DROP tokrparen DUP OBJ_6934B PutGNTData * 688A0
+* Close every open frame at the end of the text
+EqwParseEnd:
+        :: EqwNoArg?case AlgFail                 * 68873
+          EqwAfterArg ~BINT0;1PUTLAM BEGIN EqwFrm1@ #0= WHILE * 68882
+          :: GetGNTData DROP tokrparen DUP EqwInsertToken PutGNTData * 688A0
 
 * refs (3): 68715 68B0C 69057
 OBJ_688C3:
-            :: OBJ_690C0 ~BINT1;1PUTLAM ; ;      * 688C3
-          REPEAT OBJ_67DDF #1=case               * 688DC
+            :: EqwCloseFrame ~BINT1;1PUTLAM ; ;  * 688C3
+          REPEAT EqwFrm1@ #1=case                * 688DC
 
 * refs (3): 6874C 6894A 68968
-OBJ_688EB:
+EqwParseStep~1:
           :: GetGNTData TrueTrue ;               * 688EB
-          OBJ_67F45 OBJ_69941 OBJ_672E6 #1= OBJ_67DDF BINT4 #= AND NOTcase * 688FF
-          OBJ_686CF                              * 6892C
-          OBJ_69594 ~BINT1;1PUTLAM OBJ_67DEC OBJ_69188 EQcasedrop OBJ_688EB * 68931
-          OBJ_676D4 EqwCurBox@ EqwBoxPrev@ EqwCurBox! OBJ_69495 OBJ_688EB ; * 6894F
+          OBJ_67F45 OBJ_69941 EqwFrames #1= EqwFrm1@ BINT4 #= AND NOTcase * 688FF
+          EqwParseLoop                           * 6892C
+          EqwFrmArg-1 ~BINT1;1PUTLAM EqwFrm4@ OBJ_69188 EQcasedrop * 68931
+          EqwParseStep~1                         * 6894A
+          EqwStkPush EqwCurBox@ EqwBoxPrev@ EqwCurBox! EqwAfterArg * 6894F
+          EqwParseStep~1 ;                       * 68968
 
 * refs (2): 6C4BF 8D3F5
-OBJ_68972:
-        :: TRUE BINT33 PUTLAM FALSE SWAP OBJ_28B41 ZERO_DO ?ATTNQUIT * 68972
+* ob -> : build the boxes of a symbolic: each object of its RPN stream goes through the parser as if typed. Used to edit an object and by a library that shows an expression
+EqwLoadSymb:
+        :: TRUE BINT33 PUTLAM FALSE SWAP Symb>Pieces ZERO_DO ?ATTNQUIT * 68972
           OBJ_68BE3                              * 6899F
           :: ' x= EQcasedrop                     * 689A4
             :: OBJ_698CE DUP NOT?SEMI            * 689B8
               6DROP SYNTAXERR ;                  * 689CC
-            DUP OBJ_6F8AB caseDROP tokuscore     * 689DB
-            EQcasedrop OBJ_68CE2                 * 689EF
+            DUP EqwLoadSymb~6 caseDROP tokuscore * 689DB
+            EQcasedrop EqwLoadSymb~3             * 689EF
             DUPTYPECSTR? case                    * 689F9
-            :: OBJ_68B3E DROP ?SEMI              * 68A03
-              $>ID OBJ_68AC1 ;                   * 68A17
+            :: EqwToken DROP ?SEMI               * 68A03
+              $>ID EqwOperand ;                  * 68A17
             DUPTYPECHAR? case                    * 68A26
             :: CHR>$ OBJ_68BE3 &$ ISTOP-INDEX #1- UNROLL ; * 68A30
-            DUPTYPECMP? case OBJ_68C47           * 68A58
+            DUPTYPECMP? case EqwLoadComplex      * 68A58
             DUPTYPEREAL? case                    * 68A67
-            :: DUP %0< case OBJ_68C06            * 68A71
-              OBJ_68AC1 ;                        * 68A8A
-            DUPTYPEIDNT? case OBJ_68AC1          * 68A94
-            OBJ_274D1 OBJ_26BED case OBJ_68CF6   * 68AA3
+            :: DUP %0< case EqwNegReal           * 68A71
+              EqwOperand ;                       * 68A8A
+            DUPTYPEIDNT? case EqwOperand         * 68A94
+            ?AlgUnary FnInfo case EqwFunction    * 68AA3
             DUPTYPEROMP? NOTcase                 * 68AB7
 
 * refs (4): 68A1C 68A8A 68A9E 68AE4
-OBJ_68AC1:
-            :: ~BINT1;1PUTLAM OBJ_676CF OBJ_6DE96 ; * 68AC1
-            DUPROMPTR@ casedrop OBJ_68AC1        * 68ADA
+* ob -> : an operand from the object stream: state 1, push it and make its text box
+EqwOperand:
+            :: ~BINT1;1PUTLAM EqwDupStkPush EqwOperandText ; * 68AC1
+            DUPROMPTR@ casedrop EqwOperand       * 68ADA
             BINT4 ERROROUT ;                     * 68AE9
 
 * refs (2): 68BCF 68BFC
 OBJ_68AF8:
-          :: OBJ_69A31 OBJ_68BD9 OBJ_68BB6 OBJ_688C3 NOP ; LOOP OBJ_68873 * 68AF8
-          6DROP FALSE BINT33 PUTLAM ;            * 68B25
+          :: OBJ_69A31 EqwLoadSymb~2 EqwLoadSymb~1 OBJ_688C3 NOP ; LOOP * 68AF8
+          EqwParseEnd 6DROP FALSE BINT33 PUTLAM ; * 68B20
 
 * refs (2): 6876F 68A08
-OBJ_68B3E:
-        :: TrueFalse ROT NoDecSep tok=casedrop OBJ_6940E * 68B3E
-          toklparen tok=casedrop OBJ_69142       * 68B5C
-          tokrparen tok=casedrop OBJ_69002       * 68B6B
-          tok; tok=casedrop OBJ_6940E            * 68B7A
+* $ -> flag flag: handle a separator token: ( ) ; = the list separator and the angle sign
+EqwToken:
+        :: TrueFalse ROT NoDecSep tok=casedrop EqwSeparator * 68B3E
+          toklparen tok=casedrop EqwToken~1      * 68B5C
+          tokrparen tok=casedrop EqwRParen       * 68B6B
+          tok; tok=casedrop EqwSeparator         * 68B7A
           tok= tok=casedrop OBJ_698CE            * 68B89
-          tokanglesign tok=casedrop OBJ_699B4    * 68B98
+          tokanglesign tok=casedrop EqwToken~2   * 68B98
           ROTROT2DROP FalseFalse ;               * 68BA7
 
 * refs (1): 68B07
-OBJ_68BB6:
-        :: OBJ_68BE3 2DROP OBJ_6EEC4 OBJ_69941 OBJ_68AF8 ; * 68BB6
+EqwLoadSymb~1:
+        :: OBJ_68BE3 2DROP ISTOP#1- OBJ_69941 OBJ_68AF8 ; * 68BB6
 
 * refs (1): 68B02
-OBJ_68BD9:
-        :: OBJ_6EEC4                             * 68BD9
+EqwLoadSymb~2:
+        :: ISTOP#1-                              * 68BD9
 
 * refs (4): 6899F 68A3A 68BBB 69106
 OBJ_68BE3:
-          :: ISTOP-INDEX ROLL ; OBJ_6986F OBJ_68AF8 ; * 68BE3
+          :: ISTOP-INDEX ROLL ; EqwOperandBox OBJ_68AF8 ; * 68BE3
 
 * refs (1): 68A85
-OBJ_68C06:
-        :: %CHS OBJ_68C7E ' xNEG                 * 68C06
+* % -> : a negative real from the stream: load its absolute value, then NEG
+EqwNegReal:
+        :: %CHS EqwNegReal~1 ' xNEG              * 68C06
 
 * refs (3): 68C51 68C60 68C79
-OBJ_68C1F:
+EqwLoadComplex~1:
           :: ISTOP-INDEX #1+UNROLL ; ISTOP@ #2+ ISTOPSTO ; * 68C1F
 
 * refs (1): 68A62
-OBJ_68C47:
-        :: toklparen OBJ_68C1F v->(c) SWAP OBJ_68C1F DPRADIX? tok, tok; * 68C47
-          RPITE OBJ_68C1F                        * 68C74
+* C% -> : load a complex number as tokens: ( re , im ), with the angle sign in polar mode (flag -16)
+EqwLoadComplex:
+        :: toklparen EqwLoadComplex~1 v->(c) SWAP EqwLoadComplex~1 DPRADIX? * 68C47
+          tok, tok; RPITE EqwLoadComplex~1       * 68C6A
 
 * refs (2): 68C10 68C97
-OBJ_68C7E:
+EqwNegReal~1:
           :: ISTOP-INDEX UNROLL ;                * 68C7E
-          tokrparen OBJ_68C7E ISTOP@ #5+ ISTOPSTO BINT16 TestSysFlag * 68C92  flag -16: coordinate system
+          tokrparen EqwNegReal~1 ISTOP@ #5+ ISTOPSTO BINT16 TestSysFlag * 68C92  flag -16: coordinate system
           NOT?SEMI                               * 68CB5
           tokanglesign ISTOP-INDEX #3- UNROLL ISTOP@ #1+ ISTOPSTO ; * 68CBA
 
 * refs (1): 689F4
-OBJ_68CE2:
+EqwLoadSymb~3:
         :: ~';xFORMUNIT #72109h BINT2            * 68CE2
 
 * refs (2): 68869 68AB2
-OBJ_68CF6:
-          :: OBJ_6EE65 6PUTLAM SWAP 5PUTLAM DUP4PUTLAM OBJ_26E61 DROP * 68CF6
-            7PUTLAM 2PUTLAM NOTcase OBJ_68E90    * 68D1E
-            OBJ_69147                            * 68D32
-            :: 2RDROP OBJ_27797 ;                * 68D37
-OBJ_68CF6.loop1:
-            OBJ_67DCF 2GETLAM #< ?GOTO OBJ_68CF6.L2 OBJ_67F45 OBJ_690C0 GOTO * 68D4B
-            OBJ_68CF6.loop1                      * 68D73
-OBJ_68CF6.L2:
-            BINT2 5GETLAM OBJ_6E2D0 BINT3 3PUTLAM OBJ_69495 5GETLAM * 68D78
+* ob -> : a function or operator: look up precedence and argument count, close frames of higher precedence, open its frame
+EqwFunction:
+          :: EqwNoIdx? 6PUTLAM SWAP 5PUTLAM DUP4PUTLAM OBJ_26E61 DROP * 68CF6
+            7PUTLAM 2PUTLAM NOTcase EqwLoadSymb~4 * 68D1E
+            EqwNoArg?case                        * 68D32
+            :: 2RDROP AlgFail ;                  * 68D37
+EqwFunction.loop1:
+            EqwFrm2@ 2GETLAM #< ?GOTO EqwFunction.L2 OBJ_67F45 EqwCloseFrame * 68D4B
+            GOTO EqwFunction.loop1               * 68D6E
+EqwFunction.L2:
+            BINT2 5GETLAM EqwRunHook BINT3 3PUTLAM EqwAfterArg 5GETLAM * 68D78
 
 * refs (1): 68EC2
-OBJ_68D9B:
+* Make the box of an operator: the handler when it has one, else its text with spaces around it
+EqwOperatorBox:
             :: BINT33 GETLAM NOTcase 8GETLAM     * 68D9B
               DUP ->StrExpr(_) ;                 * 68DB4
             DUPLEN$ #>1 IT                       * 68DC3
             :: SPACE$ DUPROT &$ SWAP&$ ;         * 68DD2
-            OBJ_6D62A DUP OBJ_2708E ITE EVAL     * 68DF0
-            :: DROP OBJ_6CCCC ;                  * 68E09
-            OBJ_6DF1D EqwCurBox! DUP OBJ_6681A OBJ_68EEF OBJ_67F45 ; * 68E1D
+            EqwText>L22 DUP CmdField ITE EVAL    * 68DF0
+            :: DROP EqwInfix ;                   * 68E09
+            EqwRenumber EqwCurBox! DUP EqwRelayout EqwFrameOp OBJ_67F45 ; * 68E1D
         ;                                        * 68E40
 
 * refs (3): 687B5 687DD 68846
-OBJ_68E45:
-        :: OBJ_69147                             * 68E45
-          :: ~BINT1;1PUTLAM OBJ_69824 8GETLAM OBJ_6D62A PutGNTData DROPDUP * 68E4F
-            OBJ_676D4 OBJ_6DEAA ;                * 68E72
+EqwParseStep~2:
+        :: EqwNoArg?case                         * 68E45
+          :: ~BINT1;1PUTLAM EqwTokenRead 8GETLAM EqwText>L22 PutGNTData * 68E4F
+            DROPDUP EqwStkPush EqwParseStep~7 ;  * 68E6D
           6DROP OBJ_691E7 ;                      * 68E81
 
 * refs (1): 68D2D
-OBJ_68E90:
-        :: OBJ_4EC49 NOTcase OBJ_691E7           * 68E90
-          BINT2 3PUTLAM 5GETLAM BINT1 OVER OBJ_6E2D0 OBJ_68D9B OBJ_6D62A * 68EA4
-          OBJ_2708E ?SKIP OBJ_6E311              * 68ECC
-          EVAL OVER OBJ_6681A EqwCurBox!         * 68EDB
+EqwLoadSymb~4:
+        :: EqwLoadSymb~7 NOTcase OBJ_691E7       * 68E90
+          BINT2 3PUTLAM 5GETLAM BINT1 OVER EqwRunHook EqwOperatorBox * 68EA4
+          EqwText>L22 CmdField ?SKIP EqwLoadSymb~5 * 68EC7
+          EVAL OVER EqwRelayout EqwCurBox!       * 68EDB
 
 * refs (2): 68E31 69319
-OBJ_68EEF:
+* Push the frame of the operator held in lams 3-7 and read the next token
+EqwFrameOp:
           :: 5GETLAM dup;#nm? NOT OVER TYPEROMP? OR ITE * 68EEF
             :: BINT0 ' xFCNAPPLY THREE{}N ;      * 68F17
             :: 6GETLAM NOT?SEMI                  * 68F35
               ZEROSWAP TWO{}N ;                  * 68F44
-            4GETLAM 7GETLAM 3GETLAM OBJ_67532 OBJ_69020 ~BINT0;1PUTLAM ; * 68F53
+            4GETLAM 7GETLAM 3GETLAM EqwFrmPush EqwNextToken ~BINT0;1PUTLAM ; * 68F53
         ;                                        * 68F76
 
 * refs (5): 68FDA 694FE 6A1B3 6EC58 6F392
-OBJ_68F7B:
-        :: OBJ_679EA case DUP                    * 68F7B
-          DUPDUP OBJ_6A75D #MAX OVER OBJ_6A705 ROTOVER #= IT EqwBoxFirst@ * 68F8F
-          DUP BEGIN DUP OBJ_679EA ITE DUP OBJ_68F7B * 68FBC
-          4ROLL #MIN SWAP4ROLL #MAX SWAPROT OBJ_6FEE1 ; * 68FDF
+* #b -> #lo #hi: the lowest and highest box numbers in the subtree of b
+EqwTreeRange:
+        :: EqwBoxLeaf? case DUP                  * 68F7B
+          DUPDUP EqwLastLeaf #MAX OVER EqwFirstLeaf ROTOVER #= IT * 68F8F
+          EqwBoxFirst@                           * 68FB7
+          DUP BEGIN DUP EqwBoxLeaf? ITE DUP EqwTreeRange * 68FBC
+          4ROLL #MIN SWAP4ROLL #MAX SWAPROT EqwNextUntil ; * 68FDF
 
 * refs (1): 68B75
-OBJ_69002:
+* Handle a right parenthesis
+EqwRParen:
         :: OBJ_698D3 BINT5 OBJ_69659 OBJ_698FB OBJ_698FB * 69002
 
 * refs (7): 6876A 68F67 6917E 6942C 69919 699E6 ...
-OBJ_69020:
-          :: GetGNTData DROP GetNextToken OBJ_69824 PutGNTData ; * 69020
+* -> : read the next token into the parser's state (GetGNTData/PutGNTData)
+EqwNextToken:
+          :: GetGNTData DROP GetNextToken EqwTokenRead PutGNTData ; * 69020
 
 * refs (1): 69061
 OBJ_69043:
-          :: RDROP OBJ_67DDF #0=case OBJ_688C3   * 69043
-            OBJ_69098 OBJ_69043 OBJ_69941 OBJ_69553 2DROP BINT5 #=?SKIP * 6905C
-            OBJ_6994B OBJ_6996E OBJ_69996 ;      * 6907F
+          :: RDROP EqwFrm1@ #0=case OBJ_688C3    * 69043
+            EqwCloseArg OBJ_69043 OBJ_69941 OBJ_69553 2DROP BINT5 #=?SKIP * 6905C
+            EqwFrmArg+1 EqwArgDone OBJ_69996 ;   * 6907F
         ;                                        * 69093
 
 * refs (3): 6905C 6948B 69932
-OBJ_69098:
-        :: 'R OBJ_69553 NOT?GOTO OBJ_690C0 SWAPDROP caseDROP OBJ_67F45 * 69098
+* Close the top frame if its operator has all its arguments
+EqwCloseArg:
+        :: 'R OBJ_69553 NOT?GOTO EqwCloseFrame SWAPDROP caseDROP OBJ_67F45 * 69098
 
 * refs (3): 688C8 68D69 690AC
-OBJ_690C0:
-          :: OBJ_6996E OBJ_69495 OBJ_67DDF #0=?SKIP * 690C0
-            :: OBJ_67DEC                         * 690D9
-              :: DUPTYPELIST? NOTcase OBJ_676D4  * 690E3
+* Finish the top frame: run its hook and drop it
+EqwCloseFrame:
+          :: EqwArgDone EqwAfterArg EqwFrm1@ #0=?SKIP * 690C0
+            :: EqwFrm4@                          * 690D9
+              :: DUPTYPELIST? NOTcase EqwStkPush * 690E3
                 INNERCOMP                        * 690F7
 
 * refs (1): 6A109
-EqwRuleKey0~11:
-                :: ZERO_DO OBJ_68BE3 OBJ_676D4 LOOP ; ; * 690FC
+EqwRuleKey0~9:
+                :: ZERO_DO OBJ_68BE3 EqwStkPush LOOP ; ; * 690FC
             ;                                    * 6911F
-            OBJ_67E0C EqwCurBox! OBJ_674BB ;     * 69124
+            EqwFrm5@ EqwCurBox! EqwFrmPop ;      * 69124
           COLA_EVAL ;                            * 69138

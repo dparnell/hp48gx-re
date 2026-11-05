@@ -1,85 +1,86 @@
-* HP 48GX ROM revision R, #06000-#08000: EVAL, COLA, ?SKIP and other control words
+* HP 48GX ROM revision R, #06000-#08000: Garbage collection, moving memory and adjusting references, EVAL, COLA and return-stack words, DO loops, temporary environments, identifier and library name lookup
 * Addresses in the right-hand comments are those of the original ROM.
 * Most referenced: ' COLA EVAL SAVPTR ?SKIP ABND LOOP INDEX@ BEGIN GETPTR POP# RDROP
 * Follows on from the previous file (at #06000 in the original ROM).
-        GONC    SUB_05F91.loop6                  * 06000
+        GONC    RefInRange?.loop6                * 06000
         D1=(5)  TEMPENV                          * 06003
         C=DAT1  A                                * 0600A
         D1=C                                     * 0600D
-        GOC     SUB_05F91.L12                    * 06010
-SUB_05F91.loop8:
+        GOC     RefInRange?.L12                  * 06010
+RefInRange?.loop8:
         D0=A                                     * 06013
         D0=D0-  15                               * 06016
         D1=D1+  10                               * 06019
-SUB_05F91.loop9:
+RefInRange?.loop9:
         C=DAT1  A                                * 0601C
         ?B>C    A                                * 0601F
-        GOYES   SUB_05F91.L10                    * 06022
+        GOYES   RefInRange?.L10                  * 06022
         ?D>C    A                                * 06024
         RTNYES                                   * 06027
-SUB_05F91.L10:
+RefInRange?.L10:
         D1=D1+  5                                * 06029
         C=DAT1  A                                * 0602C
         ?B>C    A                                * 0602F
-        GOYES   SUB_05F91.L11                    * 06032
+        GOYES   RefInRange?.L11                  * 06032
         ?D>C    A                                * 06034
         RTNYES                                   * 06037
-SUB_05F91.L11:
+RefInRange?.L11:
         D1=D1+  5                                * 06039
         D0=D0-  10                               * 0603C
-        GONC    SUB_05F91.loop9                  * 0603F
-SUB_05F91.L12:
+        GONC    RefInRange?.loop9                * 0603F
+RefInRange?.L12:
         A=DAT1  A                                * 06042
         ?A#0    A                                * 06045
-        GOYES   SUB_05F91.loop8                  * 06048
+        GOYES   RefInRange?.loop8                * 06048
         D1=(5)  TOUCHTAB                         * 0604A
         C=DAT1  A                                * 06051
         D1=C                                     * 06054
         D1=D1-  2                                * 06057
-SUB_05F91.loop13:
+RefInRange?.loop13:
         D1=D1+  5                                * 0605A
         C=DAT1  A                                * 0605D
         ?C=0    A                                * 06060
-        GOYES   SUB_05F91.L14                    * 06063
+        GOYES   RefInRange?.L14                  * 06063
         ?B>C    A                                * 06065
-        GOYES   SUB_05F91.loop13                 * 06068
+        GOYES   RefInRange?.loop13               * 06068
         ?D<=C   A                                * 0606A
-        GOYES   SUB_05F91.loop13                 * 0606D
+        GOYES   RefInRange?.loop13               * 0606D
         RTNSC                                    * 0606F
-SUB_05F91.L14:
+RefInRange?.L14:
         ST=0    0                                * 06071
         RTNCC                                    * 06074
 
 * refs (6): 061C1 061E0 06213 06243 0624D 0628A
-SUB_06076:
+* C.A = pointer, B.A = TEMPOB, A.A = TEMPTOP -> : garbage collector, mark phase: a pointer into TEMPOB finds the end of its object by skipping, and raises the top nibble of the link word there. The return address stays on the stack
+GCMark:
         D=C     A                                * 06076
         C=RSTK                                   * 06078
         DCEX    A                                * 0607A
         ?B<=C   A                                * 0607C
-        GOYES   SUB_06076.L1                     * 0607F
+        GOYES   GCMark.L1                        * 0607F
         ?C>=A   A                                * 06081
-        GOYES   SUB_06076.L2                     * 06084
-SUB_06076.L1:
+        GOYES   GCMark.L2                        * 06084
+GCMark.L1:
         C=D     A                                * 06086
         RSTK=C                                   * 06088
         RTN                                      * 0608A
-SUB_06076.L2:
+GCMark.L2:
         D0=C                                     * 0608C
-SUB_06076.loop3:
+GCMark.loop3:
         GOSBVL  SKIPOB                           * 0608F
-SUB_06076.loop4:
+GCMark.loop4:
         LC(5)   SEMI                             * 06096
         A=DAT0  A                                * 0609D
         ?C#A    A                                * 060A0
-        GOYES   SUB_06076.L5                     * 060A3
+        GOYES   GCMark.L5                        * 060A3
         D0=D0+  5                                * 060A5
-        GONC    SUB_06076.loop4                  * 060A8
-SUB_06076.L5:
+        GONC    GCMark.loop4                     * 060A8
+GCMark.L5:
         P=      4                                * 060AB
         LC(1)   #2                               * 060AD
         A=A+C   P                                * 060B0
         P=      0                                * 060B3
-        GONC    SUB_06076.loop3                  * 060B5
+        GONC    GCMark.loop3                     * 060B5
         P=      4                                * 060B8
         LC(1)   #F                               * 060BA
         A=C     P                                * 060BD
@@ -92,31 +93,32 @@ SUB_06076.L5:
         RTN                                      * 060D3
 
 * refs (6): 0631F 0633E 06371 063A1 063AB 063E6
-SUB_060D5:
+* C.A = pointer, D1 at it -> : garbage collector, update phase: a pointer into TEMPOB is moved by the offset the sweep left in the link word of its object
+GCAdjPtr:
         ?C<=A   A                                * 060D5
         RTNYES                                   * 060D8
         D0=(5)  TEMPTOP                          * 060DA
         A=DAT0  A                                * 060E1
         ?C>=A   A                                * 060E4
-        GOYES   SUB_060D5.L4                     * 060E7
+        GOYES   GCAdjPtr.L4                      * 060E7
         D0=C                                     * 060E9
         C=RSTK                                   * 060EC
         D=C     A                                * 060EE
-SUB_060D5.loop1:
+GCAdjPtr.loop1:
         GOSBVL  SKIPOB                           * 060F0
         LC(5)   SEMI                             * 060F7
-SUB_060D5.loop2:
+GCAdjPtr.loop2:
         A=DAT0  A                                * 060FE
         ?C#A    A                                * 06101
-        GOYES   SUB_060D5.L3                     * 06104
+        GOYES   GCAdjPtr.L3                      * 06104
         D0=D0+  5                                * 06106
-        GONC    SUB_060D5.loop2                  * 06109
-SUB_060D5.L3:
+        GONC    GCAdjPtr.loop2                   * 06109
+GCAdjPtr.L3:
         P=      4                                * 0610C
         LC(1)   #2                               * 0610E
         A=A+C   P                                * 06111
         P=      0                                * 06114
-        GONC    SUB_060D5.loop1                  * 06116
+        GONC    GCAdjPtr.loop1                   * 06116
         P=      4                                * 06119
         D0=D0+  5                                * 0611B
         A=DAT0  P                                * 0611E
@@ -127,7 +129,7 @@ SUB_060D5.L3:
         DAT1=C  A                                * 0612B
         C=D     A                                * 0612E
         RSTK=C                                   * 06130
-SUB_060D5.L4:
+GCAdjPtr.L4:
         D0=(5)  TEMPOB                           * 06132
         A=DAT0  A                                * 06139
         RTN                                      * 0613C
@@ -178,7 +180,7 @@ GARBAGECOL.L3:
         D1=C                                     * 061BB
         GONC    GARBAGECOL.L5                    * 061BE
 GARBAGECOL.loop4:
-        GOSUB   SUB_06076                        * 061C1
+        GOSUB   GCMark                           * 061C1
         D1=D1+  5                                * 061C5
 GARBAGECOL.L5:
         C=DAT1  A                                * 061C8
@@ -189,7 +191,7 @@ GARBAGECOL.L5:
         D1=C                                     * 061DA
         GONC    GARBAGECOL.L7                    * 061DD
 GARBAGECOL.loop6:
-        GOSUB   SUB_06076                        * 061E0
+        GOSUB   GCMark                           * 061E0
 GARBAGECOL.L7:
         D1=D1-  5                                * 061E4
         C=DAT1  A                                * 061E7
@@ -207,7 +209,7 @@ GARBAGECOL.L8:
         CSRC                                     * 0620D
 GARBAGECOL.loop9:
         C=DAT1  A                                * 06210
-        GOSUB   SUB_06076                        * 06213
+        GOSUB   GCMark                           * 06213
         D1=D1+  5                                * 06217
         D=D-1   S                                * 0621A
         GONC    GARBAGECOL.loop9                 * 0621D
@@ -221,10 +223,10 @@ GARBAGECOL.loop10:
         D0=(5)  GARBSCRATCH2                     * 06236
         DAT0=C  A                                * 0623D
         C=DAT1  A                                * 06240
-        GOSUB   SUB_06076                        * 06243
+        GOSUB   GCMark                           * 06243
         D1=D1+  5                                * 06247
         C=DAT1  A                                * 0624A
-        GOSUB   SUB_06076                        * 0624D
+        GOSUB   GCMark                           * 0624D
         D1=D1+  5                                * 06251
         D0=(5)  GARBSCRATCH2                     * 06254
         C=DAT0  A                                * 0625B
@@ -246,7 +248,7 @@ GARBAGECOL.L12:
         D1=D1+  3                                * 06284
         GONC    GARBAGECOL.L14                   * 06287
 GARBAGECOL.loop13:
-        GOSUB   SUB_06076                        * 0628A
+        GOSUB   GCMark                           * 0628A
         D1=D1+  5                                * 0628E
 GARBAGECOL.L14:
         C=DAT1  A                                * 06291
@@ -299,7 +301,7 @@ GARBAGECOL.L17:
         D1=C                                     * 06319
         GOC     GARBAGECOL.L19                   * 0631C
 GARBAGECOL.loop18:
-        GOSUB   SUB_060D5                        * 0631F
+        GOSUB   GCAdjPtr                         * 0631F
         D1=D1+  5                                * 06323
 GARBAGECOL.L19:
         C=DAT1  A                                * 06326
@@ -310,7 +312,7 @@ GARBAGECOL.L19:
         D1=C                                     * 06338
         GONC    GARBAGECOL.L21                   * 0633B
 GARBAGECOL.loop20:
-        GOSUB   SUB_060D5                        * 0633E
+        GOSUB   GCAdjPtr                         * 0633E
 GARBAGECOL.L21:
         D1=D1-  5                                * 06342
         C=DAT1  A                                * 06345
@@ -328,7 +330,7 @@ GARBAGECOL.L22:
         CSRC                                     * 0636B
 GARBAGECOL.loop23:
         C=DAT1  A                                * 0636E
-        GOSUB   SUB_060D5                        * 06371
+        GOSUB   GCAdjPtr                         * 06371
         D1=D1+  5                                * 06375
         D=D-1   S                                * 06378
         GONC    GARBAGECOL.loop23                * 0637B
@@ -342,10 +344,10 @@ GARBAGECOL.loop24:
         D0=(5)  GARBSCRATCH2                     * 06394
         DAT0=C  A                                * 0639B
         C=DAT1  A                                * 0639E
-        GOSUB   SUB_060D5                        * 063A1
+        GOSUB   GCAdjPtr                         * 063A1
         D1=D1+  5                                * 063A5
         C=DAT1  A                                * 063A8
-        GOSUB   SUB_060D5                        * 063AB
+        GOSUB   GCAdjPtr                         * 063AB
         D1=D1+  5                                * 063AF
         D0=(5)  GARBSCRATCH2                     * 063B2
         C=DAT0  A                                * 063B9
@@ -366,7 +368,7 @@ GARBAGECOL.L26:
         D1=D1+  3                                * 063E0
         GONC    GARBAGECOL.L28                   * 063E3
 GARBAGECOL.loop27:
-        GOSUB   SUB_060D5                        * 063E6
+        GOSUB   GCAdjPtr                         * 063E6
         D1=D1+  5                                * 063EA
 GARBAGECOL.L28:
         C=DAT1  A                                * 063ED
@@ -473,7 +475,7 @@ DOADJ.L2:
         C=C-B   A                                * 0650D
         AD0EX                                    * 0650F
         ABEX    A                                * 06512
-        GOSUB   SUB_06863                        * 06514
+        GOSUB   AdjRefs                          * 06514
         GOSUB   GETPTR                           * 06518
         D1=D1-  5                                * 0651C
         A=DAT0  A                                * 0651F
@@ -508,7 +510,7 @@ PUSH#.loop1:
         C=C-A   A                                * 0656B
         C=C-D   A                                * 0656D
         GOC     PUSH#.L3                         * 0656F
-        GOSUB   SUB_06B00                        * 06572
+        GOSUB   TempInsert                       * 06572
         AD0EX                                    * 06576
         D0=A                                     * 06579
         LC(5)   DOBINT                           * 0657C
@@ -578,11 +580,11 @@ REFERENCED?.L2:
         ?ST=0   1                                * 0660A
         GOYES   REFERENCED?.L3                   * 0660D
         D0=C                                     * 0660F
-        GOSUBL  SUB_03012                        * 06612
+        GOSUBL  SKIPOBA                          * 06612
         CD0EX                                    * 06618
 REFERENCED?.L3:
         D=C     A                                * 0661B
-        GOSUB   SUB_05F91                        * 0661D
+        GOSUB   RefInRange?                      * 0661D
         GOSUB   GETPTR                           * 06621
         D1=D1-  5                                * 06625
         LC(5)   FALSE                            * 06628
@@ -788,24 +790,25 @@ ROOM:
         RTNCC                                    * 0681C
 
 * refs (6): 068B0 068CF 068F8 06902 06934 06957
-SUB_0681E:
+* C.A = pointer, D1 at it, D.A = distance -> carry set: add the distance if the pointer lies in [A,B); with ST2 also tests the range in R0, R1 and the distance in D0
+PtrAdj:
         ?C<A    A                                * 0681E
-        GOYES   SUB_0681E.L1                     * 06821
+        GOYES   PtrAdj.L1                        * 06821
         ?B<=C   A                                * 06823
-        GOYES   SUB_0681E.L1                     * 06826
+        GOYES   PtrAdj.L1                        * 06826
         C=C+D   A                                * 06828
         DAT1=C  A                                * 0682A
         RTNSC                                    * 0682D
-SUB_0681E.L1:
+PtrAdj.L1:
         ?ST=0   2                                * 0682F
         RTNYES                                   * 06832
         AR1EX                                    * 06834
         ABEX    A                                * 06837
         AR0EX                                    * 06839
         ?C<A    A                                * 0683C
-        GOYES   SUB_0681E.L2                     * 0683F
+        GOYES   PtrAdj.L2                        * 0683F
         ?B<=C   A                                * 06841
-        GOYES   SUB_0681E.L2                     * 06844
+        GOYES   PtrAdj.L2                        * 06844
         DCEX    A                                * 06846
         CD0EX                                    * 06848
         DCEX    A                                * 0684B
@@ -814,25 +817,27 @@ SUB_0681E.L1:
         C=D     A                                * 06852
         CD0EX                                    * 06854
         D=C     A                                * 06857
-SUB_0681E.L2:
+PtrAdj.L2:
         AR0EX                                    * 06859
         ABEX    A                                * 0685C
         AR1EX                                    * 0685E
         RTNSC                                    * 06861
 
 * refs (8): 06514 069A2 069D3 06A3A 06A72 08AE8 ...
-SUB_06863:
+* C.A = distance, A.A, B.A = range -> C.A: add the distance to every pointer into the range: data stack, return stack, TEMPENV, TOUCHTAB and the system pointers from VDISP on (#36 of them, twice over). Interrupts see no half-done state as PADJSAVE holds the return addresses
+AdjRefs:
         D=C     A                                * 06863
         C=ST                                     * 06865
         ST=0    2                                * 06867
-        GOTO    SUB_0686E.L1                     * 0686A
+        GOTO    AdjRefs2.L1                      * 0686A
 
 * refs (5): 06C06 06CFD 088FF 08B14 64AAA
-SUB_0686E:
+* As AdjRefs with a second range in R0, R1 and distance in D0 (ST2 set): two blocks that trade places
+AdjRefs2:
         D=C     A                                * 0686E
         C=ST                                     * 06870
         ST=1    2                                * 06872
-SUB_0686E.L1:
+AdjRefs2.L1:
         D1=(5)  PADJSAVE1                        * 06875
         DAT1=C  1                                * 0687C
         C=RSTK                                   * 06880
@@ -844,78 +849,78 @@ SUB_0686E.L1:
         D1=(5)  DSKTOP                           * 06894
         C=DAT1  A                                * 0689B
         D1=C                                     * 0689E
-        GOTO    SUB_0686E.L3                     * 068A1
-SUB_0686E.loop2:
+        GOTO    AdjRefs2.L3                      * 068A1
+AdjRefs2.loop2:
         D1=D1+  5                                * 068A5
-SUB_0686E.L3:
+AdjRefs2.L3:
         C=DAT1  A                                * 068A8
         ?C=0    A                                * 068AB
-        GOYES   SUB_0686E.L4                     * 068AE
-        GOSUB   SUB_0681E                        * 068B0
-        GOC     SUB_0686E.loop2                  * 068B4
-SUB_0686E.L4:
+        GOYES   AdjRefs2.L4                      * 068AE
+        GOSUB   PtrAdj                           * 068B0
+        GOC     AdjRefs2.loop2                   * 068B4
+AdjRefs2.L4:
         D1=(5)  RSKTOP                           * 068B7
         C=DAT1  A                                * 068BE
         D1=C                                     * 068C1
-SUB_0686E.loop5:
+AdjRefs2.loop5:
         D1=D1-  5                                * 068C4
         C=DAT1  A                                * 068C7
         ?C=0    A                                * 068CA
-        GOYES   SUB_0686E.L6                     * 068CD
-        GOSUB   SUB_0681E                        * 068CF
-        GOC     SUB_0686E.loop5                  * 068D3
-SUB_0686E.L6:
+        GOYES   AdjRefs2.L6                      * 068CD
+        GOSUB   PtrAdj                           * 068CF
+        GOC     AdjRefs2.loop5                   * 068D3
+AdjRefs2.L6:
         D1=(5)  TEMPENV                          * 068D6
         C=DAT1  A                                * 068DD
         D1=C                                     * 068E0
-        GOTO    SUB_0686E.L9                     * 068E3
-SUB_0686E.loop7:
+        GOTO    AdjRefs2.L9                      * 068E3
+AdjRefs2.loop7:
         CD0EX                                    * 068E7
         D0=D0-  10                               * 068EA
         CD0EX                                    * 068ED
         D1=D1+  10                               * 068F0
-SUB_0686E.loop8:
+AdjRefs2.loop8:
         RSTK=C                                   * 068F3
         C=DAT1  A                                * 068F5
-        GOSUB   SUB_0681E                        * 068F8
+        GOSUB   PtrAdj                           * 068F8
         D1=D1+  5                                * 068FC
         C=DAT1  A                                * 068FF
-        GOSUB   SUB_0681E                        * 06902
+        GOSUB   PtrAdj                           * 06902
         D1=D1+  5                                * 06906
         C=RSTK                                   * 06909
         CD0EX                                    * 0690B
         D0=D0-  10                               * 0690E
         CD0EX                                    * 06911
         ?C#0    A                                * 06914
-        GOYES   SUB_0686E.loop8                  * 06917
-SUB_0686E.L9:
+        GOYES   AdjRefs2.loop8                   * 06917
+AdjRefs2.L9:
         C=DAT1  A                                * 06919
         ?C#0    A                                * 0691C
-        GOYES   SUB_0686E.loop7                  * 0691F
+        GOYES   AdjRefs2.loop7                   * 0691F
         D1=(5)  TOUCHTAB                         * 06921
         C=DAT1  A                                * 06928
         D1=C                                     * 0692B
         D1=D1+  3                                * 0692E
-        GONC    SUB_0686E.L11                    * 06931
-SUB_0686E.loop10:
-        GOSUB   SUB_0681E                        * 06934
+        GONC    AdjRefs2.L11                     * 06931
+AdjRefs2.loop10:
+        GOSUB   PtrAdj                           * 06934
         D1=D1+  5                                * 06938
-SUB_0686E.L11:
+AdjRefs2.L11:
         C=DAT1  A                                * 0693B
         ?C#0    A                                * 0693E
-        GOYES   SUB_0686E.loop10                 * 06941
+        GOYES   AdjRefs2.loop10                  * 06941
         D1=(5)  VDISP                            * 06943
         P=      14                               * 0694A
         LC(2)   #35                              * 0694C
         P=C     14                               * 06950
-SUB_0686E.loop12:
+AdjRefs2.loop12:
         C=DAT1  A                                * 06954
-        GOSUB   SUB_0681E                        * 06957
+        GOSUB   PtrAdj                           * 06957
         D1=D1+  5                                * 0695B
         P=P-1                                    * 0695E
-        GONC    SUB_0686E.loop12                 * 06960
+        GONC    AdjRefs2.loop12                  * 06960
         C=C-1   S                                * 06963
-        GONC    SUB_0686E.loop12                 * 06966
+        GONC    AdjRefs2.loop12                  * 06966
         P=      0                                * 06969
         C=ST                                     * 0696B
         D1=(5)  PADJSAVE1                        * 0696D
@@ -938,7 +943,7 @@ MOVERSD:
         C=DAT0  A                                * 0699B
         BCEX    A                                * 0699E
         C=-C    A                                * 069A0
-        GOSUB   SUB_06863                        * 069A2
+        GOSUB   AdjRefs                          * 069A2
         C=C+A   A                                * 069A6
         D1=C                                     * 069A8
         BCEX    A                                * 069AB
@@ -957,7 +962,7 @@ MOVEDSU:
         B=A     A                                * 069CC
         A=DAT0  A                                * 069CE
         A=A+1   A                                * 069D1
-        GOSUB   SUB_06863                        * 069D3
+        GOSUB   AdjRefs                          * 069D3
         A=A-1   A                                * 069D7
         D0=(5)  DSKTOP                           * 069D9
         A=A+C   A                                * 069E0
@@ -996,7 +1001,7 @@ MOVEDSD:
         D0=(5)  DSKTOP                           * 06A2E
         A=DAT0  A                                * 06A35
         C=-C    A                                * 06A38
-        GOSUB   SUB_06863                        * 06A3A
+        GOSUB   AdjRefs                          * 06A3A
         D0=A                                     * 06A3E
         A=A+C   A                                * 06A41
         D1=A                                     * 06A43
@@ -1020,7 +1025,7 @@ MOVERSU:
         A=DAT0  A                                * 06A6B
         ABEX    A                                * 06A6E
         B=B+1   A                                * 06A70
-        GOSUB   SUB_06863                        * 06A72
+        GOSUB   AdjRefs                          * 06A72
         B=B-1   A                                * 06A76
         ABEX    A                                * 06A78
         D0=A                                     * 06A7A
@@ -1077,7 +1082,8 @@ CREATETEMP:
         RTNC                                     * 06AFD
 
 * refs (1): 06572
-SUB_06B00:
+* B.A = size, C.A = free nibbles, D1 at RSKTOP's value -> D0 at the new slot: open a TEMPOB slot at TEMPTOP by moving the return stack up, write its link word, and update AVMEM and TEMPTOP
+TempInsert:
         GOSUB   DIV5                             * 06B00
         D0=(5)  AVMEM                            * 06B04
         DAT0=C  A                                * 06B0B
@@ -1150,6 +1156,7 @@ NOTREF?:
         ASSEMBLE
 
 * refs (3): 06E50 0B101 0B88F
+* Probably: move a block towards lower addresses past others, using the free room (A.A) as a buffer: A.A = free, C.A = size, D0 and D1 the two ends; calls AdjRefs2 first. See also the next routine for the other direction
 SUB_06BD6:
         R2=A.F  A                                * 06BD6
         D=C     A                                * 06BDC
@@ -1166,7 +1173,7 @@ SUB_06BD6:
         C=D     A                                * 06BFF
         C=-C    A                                * 06C01
         CD0EX                                    * 06C03
-        GOSUBL  SUB_0686E                        * 06C06
+        GOSUBL  AdjRefs2                         * 06C06
         CD0EX                                    * 06C0C
         C=-C    A                                * 06C0F
         A=C     A                                * 06C11
@@ -1223,6 +1230,7 @@ SUB_06BD6.L2:
         RTN                                      * 06CD5
 
 * refs (2): 06E70 0B841
+* Probably: move a block towards higher addresses past others, with the free room as a buffer, as the routine before does the other way
 SUB_06CD7:
         R2=A.F  A                                * 06CD7
         D=C     A                                * 06CDD
@@ -1236,7 +1244,7 @@ SUB_06CD7:
         B=C     A                                * 06CF7
         C=D     A                                * 06CF9
         C=C-A   A                                * 06CFB
-        GOSUBL  SUB_0686E                        * 06CFD
+        GOSUBL  AdjRefs2                         * 06CFD
         B=A     A                                * 06D03
         A=R0.F  A                                * 06D05
         R1=A.F  A                                * 06D0B
@@ -1388,7 +1396,7 @@ NOP:
         C=B     A                                * 06EF0
         CD0EX                                    * 06EF2
         RSTK=C                                   * 06EF5
-        GOSUB   SUB_06F30                        * 06EF7
+        GOSUB   RstkNextOb                       * 06EF7
         ?C#A    A                                * 06EFB
         GOYES   'R.L2                            * 06EFE
         AD0EX                                    * 06F00
@@ -1410,7 +1418,8 @@ NOP:
         PC=(A)                                   * 06F2C
 
 * refs (2): 06EF7 06F72
-SUB_06F30:
+* D0 at a return-stack slot + 5 -> C = PRLG, A.A = the code word of the next object in that stream, D0 at the object: the saved pointer steps past the object
+RstkNextOb:
         D0=D0-  5                                * 06F30
         C=DAT0  A                                * 06F33
         RSTK=C                                   * 06F36
@@ -1436,7 +1445,7 @@ SUB_06F30:
         C=B     A                                * 06F6B
         CD0EX                                    * 06F6D
         RSTK=C                                   * 06F70
-        GOSUB   SUB_06F30                        * 06F72
+        GOSUB   RstkNextOb                       * 06F72
         ?C#A    A                                * 06F76
         GOYES   'REVAL.L1                        * 06F79
         AD0EX                                    * 06F7B
@@ -1510,20 +1519,21 @@ COLA.L3:
 * -> ::
 R@:
         CON(5)  (*)+5                            * 07012  primitive code object
-        GOSUB   SUB_07035                        * 07017
+        GOSUB   Rest>::                          * 07017
         GOTO    '.L2                             * 0701B
 
 * -> ::
 * refs (2): 3EDFC 3EE29
 R>:
         CON(5)  (*)+5                            * 0701F  primitive code object
-        GOSUB   SUB_07035                        * 07024
+        GOSUB   Rest>::                          * 07024
         LC(5)   #00005                           * 07028
         B=B-C   A                                * 0702F
         GOTO    '.L3                             * 07031
 
 * refs (2): 07017 07024
-SUB_07035:
+* -> A.A = new ::, a copy of what remains of the stream on top of the return stack, from the pointer there to its SEMI
+Rest>:::
         C=B     A                                * 07035
         CD0EX                                    * 07037
         D0=D0-  5                                * 0703A
@@ -1533,19 +1543,19 @@ SUB_07035:
         B=A     A                                * 07049
         D0=(5)  DOCOL                            * 0704B
         AD0EX                                    * 07052
-        GOSUBL  SUB_03012                        * 07055
+        GOSUBL  SKIPOBA                          * 07055
         D0=D0+  5                                * 0705B
         CD0EX                                    * 0705E
         C=C-B   A                                * 07061
         R3=C                                     * 07063
         ST=0    10                               * 07066
-SUB_07035.loop1:
+Rest>::.loop1:
         GOSUBL  CREATETEMP                       * 07069
-        GONC    SUB_07035.L2                     * 0706F
+        GONC    Rest>::.L2                       * 0706F
         GOSBVL  St10Gb                           * 07072
         C=R3                                     * 07079
-        GONC    SUB_07035.loop1                  * 0707C
-SUB_07035.L2:
+        GONC    Rest>::.loop1                    * 0707C
+Rest>::.L2:
         LC(5)   DOCOL                            * 0707F
         DAT0=C  A                                * 07086
         AD0EX                                    * 07089
@@ -1586,7 +1596,8 @@ RPITE.L1:
         C=RSTK                                   * 070F5
 
 * refs (1): 07273
-SUB_070F7:
+* C.A = address -> : PC=(A) through C
+JumpIndC:
         A=C     A                                * 070F7
         PC=(A)                                   * 070F9
 
@@ -1724,7 +1735,7 @@ WHILE.L1:
 * refs (273): 10C7C 10C90 153E8 1545F 1D0B5 2C405 ...
 INDEX@:
         CON(5)  (*)+5                            * 07221  primitive code object
-        GOSUB   SUB_072D7                        * 07226
+        GOSUB   D0>Index1                        * 07226
 INDEX@.L1:
         C=DAT0  A                                * 0722A
         D0=A                                     * 0722D
@@ -1739,7 +1750,7 @@ INDEX@.L1:
 * refs (42): 20E5C 39D7E 41AF1 4BB9D 4BBDE 51834 ...
 ISTOP@:
         CON(5)  (*)+5                            * 07249  primitive code object
-        GOSUB   SUB_072D7                        * 0724E
+        GOSUB   D0>Index1                        * 0724E
 ISTOP@.L1:
         D0=D0+  5                                * 07252
         GONC    INDEX@.L1                        * 07255  always taken
@@ -1748,14 +1759,14 @@ ISTOP@.L1:
 * refs (15): 36557 41C6B 7D166 7D22E 8DAF6 9352B ...
 JINDEX@:
         CON(5)  (*)+5                            * 07258  primitive code object
-        GOSUB   SUB_072EC                        * 0725D
+        GOSUB   D0>Index2                        * 0725D
         GONC    INDEX@.L1                        * 07261
 
 * -> #
 JSTOP@:
         ?C=A    B                                * 07264
         GOYES   JSTOP@.L1+1                      * 07267
-        GOSUB   SUB_072EC                        * 07269
+        GOSUB   D0>Index2                        * 07269
 * a branch also enters #0726E, where the nibbles decode as GOC #072CD
 JSTOP@.L1:
         GONC    ISTOP@.L1                        * 0726D
@@ -1768,7 +1779,7 @@ INDEXSTO:
         NIBHEX  5                                * 07270
 * the rest of GONC #07298 at #07270
         NIBHEX  72                               * 07271  '
-        GOSUB   SUB_070F7                        * 07273
+        GOSUB   JumpIndC                         * 07273
         GOTO    AGAIN.L2+2                       * 07277
         NIBHEX  1007550                          * 0727B  .pU
 INDEXSTO.L1:
@@ -1785,7 +1796,7 @@ ISTOPSTO:
         CON(5)  (*)+5                            * 07295  primitive code object
         GOSUBL  POP#                             * 0729A
         R0=A                                     * 072A0
-        GOSUB   SUB_072D7                        * 072A3
+        GOSUB   D0>Index1                        * 072A3
 ISTOPSTO.L1:
         D0=D0+  5                                * 072A7
         GONC    INDEXSTO.L1                      * 072AA
@@ -1816,11 +1827,12 @@ JSTOPSTO:
         A=A+1   A                                * 072C8
         NIBHEX  73F                              * 072CA  7
         R0=A                                     * 072CD
-        GOSUB   SUB_072EC                        * 072D0
+        GOSUB   D0>Index2                        * 072D0
         GONC    ISTOPSTO.L1                      * 072D4
 
 * refs (6): 07226 0724E 072A3 07326 07339 073B3
-SUB_072D7:
+* A.A saved in D0 -> D0 at the index of the innermost DO loop, A.A = the D0 it had
+D0>Index1:
         AD0EX                                    * 072D7
         D0=(5)  DOLPENV                          * 072DA
         C=DAT0  A                                * 072E1
@@ -1829,7 +1841,8 @@ SUB_072D7:
         RTN                                      * 072EA
 
 * refs (3): 0725D 07269 072D0
-SUB_072EC:
+* A.A saved in D0 -> D0 at the index of the next DO loop out
+D0>Index2:
         AD0EX                                    * 072EC
         D0=(5)  DOLPENV                          * 072EF
         C=DAT0  A                                * 072F6
@@ -1839,21 +1852,22 @@ SUB_072EC:
         RTN                                      * 07302
 
 * refs (4): 07397 07489 074C5 07558
-SUB_07304:
+* C.A = distance, P = levels-1 -> : add the distance to the top pointers on the data stack, then ADJMEM
+StkAddP:
         D0=(5)  DSKTOP                           * 07304
-SUB_07304.loop1:
+StkAddP.loop1:
         A=DAT0  A                                * 0730B
         A=A+C   A                                * 0730E
         DAT0=A  A                                * 07310
         D0=D0+  5                                * 07313
         P=P-1                                    * 07316
-        GONC    SUB_07304.loop1                  * 07318
+        GONC    StkAddP.loop1                    * 07318
         GOLONG  ADJMEM                           * 0731B
 
 * ->
 STOPLOOP:
         CON(5)  (*)+5                            * 07321  primitive code object
-        GOSUB   SUB_072D7                        * 07326
+        GOSUB   D0>Index1                        * 07326
         D0=D0+  5                                * 0732A
         R0=A                                     * 0732D
         GOTO    LOOP.L3                          * 07330
@@ -1863,7 +1877,7 @@ STOPLOOP:
 LOOP:
         CON(5)  (*)+5                            * 07334  primitive code object
 LOOP.L1:
-        GOSUB   SUB_072D7                        * 07339
+        GOSUB   D0>Index1                        * 07339
         C=DAT0  A                                * 0733D
         R0=A                                     * 07340
         C=C+1   A                                * 07343
@@ -1894,7 +1908,7 @@ LOOP.L3:
         GOSUBL  MOVEUP                           * 07388
         LC(5)   #0000F                           * 0738E
         P=      3                                * 07395
-        GOSUB   SUB_07304                        * 07397
+        GOSUB   StkAddP                          * 07397
         GOSUBL  GETPTR                           * 0739B
         GOTO    RDROP.L1                         * 073A1
 
@@ -1904,7 +1918,7 @@ LOOP.L3:
         CON(5)  (*)+5                            * 073A5  primitive code object
         GOSUBL  POP#                             * 073AA
         R0=A                                     * 073B0
-        GOSUB   SUB_072D7                        * 073B3
+        GOSUB   D0>Index1                        * 073B3
         C=DAT0  A                                * 073B7
         AR0EX                                    * 073BA
         C=C+A   A                                * 073BD
@@ -1982,7 +1996,7 @@ DO.L4:
         DAT1=A  10                               * 0747C
         LC(5)   #FFFF1                           * 07480
         P=      3                                * 07487
-        GOSUB   SUB_07304                        * 07489
+        GOSUB   StkAddP                          * 07489
         GOSUBL  GETPTR                           * 0748D
         GOTO    IDUP.L1                          * 07493
 
@@ -2002,7 +2016,7 @@ ABND:
         GOSUBL  MOVEUP                           * 074BB
         C=D     A                                * 074C1
         P=      2                                * 074C3
-        GOSUB   SUB_07304                        * 074C5
+        GOSUB   StkAddP                          * 074C5
         GOVLNG  GETPTRLOOP                       * 074C9
         RPL
 
@@ -2051,7 +2065,7 @@ DOBIND.L2:
         DAT1=C  10                               * 07550
         C=-C    A                                * 07554
         P=      2                                * 07556
-        GOSUB   SUB_07304                        * 07558
+        GOSUB   StkAddP                          * 07558
         A=B     A                                * 0755C
         D0=A                                     * 0755E
         AD1EX                                    * 07561
@@ -2069,6 +2083,7 @@ DOBIND.L2:
         GOTO    AGAIN.L3                         * 07588
 
 * refs (2): 07567 07571
+* R0 = count, D0 at count pointers, D1 -> : copy them to every second 5-nibble slot from D1+10: part of BIND
 SUB_0758C:
         C=R0                                     * 0758C
         B=C     A                                * 0758F
@@ -2202,7 +2217,7 @@ SET.L5:
 * refs (1): 21CFE
 OFFSRRP:
         CON(5)  (*)+5                            * 076AE  primitive code object
-        GOSUB   SUB_077B2                        * 076B3
+        GOSUB   Home#Lib                         * 076B3
         D=0     A                                * 076B7
         GONC    OFFSRRP.L4                       * 076B9
 OFFSRRP.loop1:
@@ -2243,7 +2258,7 @@ OFFSRRP.L5:
 * refs (5): 18A0B 21CA1 268CC C081B E387D
 TOSRRP:
         CON(5)  (*)+5                            * 07709  primitive code object
-        GOSUB   SUB_077B2                        * 0770E
+        GOSUB   Home#Lib                         * 0770E
         GOVLNG  SET~1.L19                        * 07712
 TOSRRP.loop1:
         B=B-1   X                                * 07719
@@ -2287,7 +2302,7 @@ TOSRRP.L3:
 * refs (1): 21C92
 ONSRRP?:
         CON(5)  (*)+5                            * 0778D  primitive code object
-        GOSUB   SUB_077B2                        * 07792
+        GOSUB   Home#Lib                         * 07792
         GONC    ONSRRP?.L2                       * 07796
 ONSRRP?.loop1:
         C=DAT0  A                                * 07799
@@ -2302,7 +2317,8 @@ ONSRRP?.L3:
         GOTO    COMPILEID.L2                     * 077AE
 
 * refs (4): 076B3 0770E 07792 70E57
-SUB_077B2:
+* #libnum -> A.A = number (11 bits), B.A = attachment count, D0 and D1 in HOME's header. After SAVPTR
+Home#Lib:
         GOSUBL  POP#                             * 077B2
         GOSUBL  SAVPTR                           * 077B8
         D0=(5)  USEROB                           * 077BE
@@ -2321,7 +2337,7 @@ SUB_077B2:
 * refs (1): 08E01
 MAKERRP:
         CON(5)  (*)+5                            * 077E4  primitive code object
-        GOSUB   SUB_07BF9                        * 077E9
+        GOSUB   Lev1#                            * 077E9
         R2=A                                     * 077ED
 * a branch also enters #077F3, where the nibbles decode as RTNSXM
         LC(5)   #0000D                           * 077F0
@@ -2343,7 +2359,8 @@ MAKERRP:
         PC=(A)                                   * 0782D
 
 * refs (4): 078B1 07DD9 07E3C 08F61
-SUB_07831:
+* D0, D1 at counted names -> carry set if they differ; carry clear with D0 past the name if they match
+NameDiff?:
         A=DAT0  B                                * 07831
         C=DAT1  B                                * 07834
         ?C#A    B                                * 07837
@@ -2355,19 +2372,19 @@ SUB_07831:
         P=C     0                                * 07848
         CSR     X                                * 0784C
         B=C     B                                * 0784F
-SUB_07831.loop1:
+NameDiff?.loop1:
         B=B-1   B                                * 07852
-        GOC     SUB_07831.L3                     * 07855
+        GOC     NameDiff?.L3                     * 07855
         A=DAT0  W                                * 07858
         C=DAT1  W                                * 0785C
         D0=D0+  16                               * 07860
         D1=D1+  16                               * 07863
         ?C=A    W                                * 07866
-        GOYES   SUB_07831.loop1                  * 07869
-SUB_07831.L2:
+        GOYES   NameDiff?.loop1                  * 07869
+NameDiff?.L2:
         P=      0                                * 0786B
         RTNSC                                    * 0786D
-SUB_07831.L3:
+NameDiff?.L3:
         P=P-1                                    * 0786F
         GOC     SUB_0787C.L1                     * 07871
         A=DAT0  WP                               * 07874
@@ -2377,7 +2394,7 @@ SUB_07831.L3:
 * a branch also enters #0787D, where the nibbles decode as D0=D0+ 13
 SUB_0787C:
         ?C#A    WP                               * 0787C
-        GOYES   SUB_07831.L2                     * 0787F
+        GOYES   NameDiff?.L2                     * 0787F
         CD0EX                                    * 07881
         C+P+1                                    * 07884
         D0=C                                     * 07887
@@ -2386,12 +2403,13 @@ SUB_0787C.L1:
         RTNCC                                    * 0788C
 
 * refs (2): 079BF 07C1D
-SUB_0788E:
+* R1 = directory, R0 = id body -> : walk the directory's names from the last, back to the first; found goes on to GrclR01A, not found returns carry set
+DirFindName:
         A=R1                                     * 0788E
-        GOSUBL  SUB_08503                        * 07891
+        GOSUBL  Rrp>Last                         * 07891
         A=DAT0  A                                * 07897
         A=-A    A                                * 0789A
-SUB_0788E.L1:
+DirFindName.L1:
         ?A=0    A                                * 0789C
         RTNYES                                   * 0789F
         CD0EX                                    * 078A1
@@ -2402,7 +2420,7 @@ D01<>WP:
         D=C     A                                * 078A9
         C=R0                                     * 078AB
         D1=C                                     * 078AE
-        GOSUB   SUB_07831                        * 078B1
+        GOSUB   NameDiff?                        * 078B1
         C=D     A                                * 078B5
         D0=C                                     * 078B7
         GOC     GrclR01A                         * 078BA
@@ -2412,10 +2430,11 @@ D01<>WP:
 GrclR01A:
         D0=D0-  5                                * 078C3
         A=DAT0  A                                * 078C6
-        GONC    SUB_0788E.L1                     * 078C9
+        GONC    DirFindName.L1                   * 078C9
 
 * refs (2): 079CC 07C68
-SUB_078CC:
+* R1 = directory -> carry set if it is STOPSIGN, else R1 = its parent (GETRRP)
+UpDir:
         A=R1                                     * 078CC
         D0=(5)  STOPSIGN                         * 078CF
         C=DAT0  A                                * 078D6
@@ -2440,7 +2459,7 @@ NTH@LAM:
         C=DAT0  A                                * 078FC
 * a branch also enters #07901, where the nibbles decode as R2=A.F A
 NTH@LAM.L1:
-        GOTO    SUB_07A56.L2+2                   * 078FF
+        GOTO    LibFindName.L2+2                 * 078FF
 * the rest of R2=A.F A at #07901
         NIBHEX  AF02                             * 07903  ú 
         ST=1    0                                * 07907
@@ -2475,7 +2494,7 @@ undo.L1:
         GOYES   DRPExitAtLOOP.L1                 * 07966
         A=R2.F  A                                * 07968
         B=A     A                                * 0796E
-        GOSUB   SUB_07DF3                        * 07970
+        GOSUB   LamInFrame                       * 07970
         GONC    DRPExitAtLOOP.L2                 * 07974
         GOTO    DRPExitAtLOOP.L7                 * 07977
 
@@ -2505,18 +2524,19 @@ DRPExitAtLOOP.L4:
         A=DAT0  A                                * 079B9
         R1=A                                     * 079BC
 DRPExitAtLOOP.loop5:
-        GOSUB   SUB_0788E                        * 079BF
+        GOSUB   DirFindName                      * 079BF
         GOC     DRPExitAtLOOP.L6                 * 079C3
         AD0EX                                    * 079C6
         GONC    DRPExitAtLOOP.loop3              * 079C9
 DRPExitAtLOOP.L6:
-        GOSUB   SUB_078CC                        * 079CC
+        GOSUB   UpDir                            * 079CC
         GONC    DRPExitAtLOOP.loop5              * 079D0
 DRPExitAtLOOP.L7:
         GOTO    ROMPTR@.L2                       * 079D3
 
 * refs (2): 08C4F 08C81
-OBJ_079D7:
+* ob -> ob: code object: if ob is a directory holding CONTEXT or STOPSIGN, they are sent to HOME. Used before a directory is purged or moved
+ContextOut:
         CON(5)  (*)+5                            * 079D7  primitive code object
         C=DAT1  A                                * 079DC
         CD1EX                                    * 079DF
@@ -2568,7 +2588,8 @@ SUB_07A4F:
         PC=(A)                                   * 07A52
 
 * refs (2): 07C61 07CBC
-SUB_07A56:
+* D0 at a library, R0 at a counted name -> R3 = command number, carry clear if found; carry set if not. Compares 16 nibbles at a time through the hash table, entering the library through its access handler if it lies in a covered bank
+LibFindName:
         A=R0                                     * 07A56
         D1=A                                     * 07A59
         C=0     A                                * 07A5C
@@ -2577,15 +2598,15 @@ SUB_07A56:
         RTNYES                                   * 07A64
         LC(2)   #10                              * 07A66
         ?C<=A   B                                * 07A6A
-        GOYES   SUB_07A56.L1                     * 07A6D
+        GOYES   LibFindName.L1                   * 07A6D
         C=A     B                                * 07A6F
-SUB_07A56.L1:
+LibFindName.L1:
         RSTK=C                                   * 07A72
         D1=D1+  2                                * 07A74
         C=DAT1  W                                * 07A77
         D=C     W                                * 07A7B
 * a branch also enters #07A80, where the nibbles decode as BSL A
-SUB_07A56.L2:
+LibFindName.L2:
         D1=D1+  16                               * 07A7E
 * the rest of BSL A at #07A80
 * a branch also enters #07A81, where the nibbles decode as C=DAT1 W
@@ -2597,14 +2618,14 @@ SUB_07A56.L2:
         A=DAT0  A                                * 07A8B
         LC(5)   DOEXT1                           * 07A8E
         ?C#A    A                                * 07A95
-        GOYES   SUB_07AB7.L3                     * 07A98
+        GOYES   JumpC.L3                         * 07A98
         D0=D0+  5                                * 07A9A
         A=DAT0  A                                * 07A9D
         D0=D0+  5                                * 07AA0
         C=DAT0  A                                * 07AA3
         ?C=0    A                                * 07AA6
-        GOYES   SUB_07AB7.L2                     * 07AA9
-        GONC    SUB_07AB7.L1                     * 07AAB
+        GOYES   JumpC.L2                         * 07AA9
+        GONC    JumpC.L1                         * 07AAB
 
 * refs (1): 07AC1
 SUB_07AAE:
@@ -2613,15 +2634,16 @@ SUB_07AAE:
         D1=C                                     * 07AB4
 
 * refs (4): 07B71 07F2A 07F73 08254
-SUB_07AB7:
+* C.A = address -> : PC=C. A GOSUB here is a computed call
+JumpC:
         PC=C                                     * 07AB7
-SUB_07AB7.L1:
+JumpC.L1:
         ST=1    1                                * 07ABB
         CD0EX                                    * 07ABE
         GOSUB   SUB_07AAE                        * 07AC1
-SUB_07AB7.L2:
+JumpC.L2:
         D0=A                                     * 07AC5
-SUB_07AB7.L3:
+JumpC.L3:
         P=      0                                * 07AC8
         C=RSTK                                   * 07ACA
         CD1EX                                    * 07ACC
@@ -2638,13 +2660,13 @@ SUB_07AB7.L3:
         D0=C                                     * 07AE6
         A=DAT0  A                                * 07AE9
         ?A=0    A                                * 07AEC
-        GOYES   SUB_07AB7.L9                     * 07AEF
+        GOYES   JumpC.L9                         * 07AEF
         A=A+C   A                                * 07AF1
-SUB_07AB7.loop4:
+JumpC.loop4:
         D0=D0+  5                                * 07AF3
         C=DAT0  A                                * 07AF6
         ?C=0    A                                * 07AF9
-        GOYES   SUB_07AB7.loop4                  * 07AFC
+        GOYES   JumpC.loop4                      * 07AFC
         AD0EX                                    * 07AFE
         A=A+C   A                                * 07B01
         ST=0    10                               * 07B03
@@ -2652,37 +2674,37 @@ SUB_07AB7.loop4:
         C=C-1   A                                * 07B09
         C=C+C   P                                * 07B0B
         P=C     0                                * 07B0E
-        GONC    SUB_07AB7.L5                     * 07B12
+        GONC    JumpC.L5                         * 07B12
         ST=1    10                               * 07B15
         BCEX    W                                * 07B18
         DCEX    W                                * 07B1B
         BCEX    W                                * 07B1E
-SUB_07AB7.L5:
+JumpC.L5:
         P=P+1                                    * 07B21
         D0=D0+  2                                * 07B23
-SUB_07AB7.loop6:
+JumpC.loop6:
         ?ST=0   10                               * 07B26
-        GOYES   SUB_07AB7.L7                     * 07B29
+        GOYES   JumpC.L7                         * 07B29
         C=DAT0  W                                * 07B2B
         D0=D0+  16                               * 07B2F
         ?B#C    W                                * 07B32
-        GOYES   SUB_07AB7.L8                     * 07B35
-SUB_07AB7.L7:
+        GOYES   JumpC.L8                         * 07B35
+JumpC.L7:
         C=DAT0  WP                               * 07B37
         ?D=C    WP                               * 07B3B
-        GOYES   SUB_07AB7.L10                    * 07B3E
-SUB_07AB7.L8:
+        GOYES   JumpC.L10                        * 07B3E
+JumpC.L8:
         D0=D0+  5                                * 07B40
         CD0EX                                    * 07B43
         C+P+1                                    * 07B46
         D0=C                                     * 07B49
         ?C<A    A                                * 07B4C
-        GOYES   SUB_07AB7.loop6                  * 07B4F
-SUB_07AB7.L9:
+        GOYES   JumpC.loop6                      * 07B4F
+JumpC.L9:
         C=RSTK                                   * 07B51
-        GOSUB   SUB_07B6A                        * 07B53
+        GOSUB   LibAccessEnd                     * 07B53
         RTNSC                                    * 07B57
-SUB_07AB7.L10:
+JumpC.L10:
         CD0EX                                    * 07B59
         C+P+1                                    * 07B5C
         D0=C                                     * 07B5F
@@ -2691,17 +2713,19 @@ SUB_07AB7.L10:
         C=RSTK                                   * 07B68
 
 * refs (2): 07B53 082D7
-SUB_07B6A:
+* -> : P=1: if ST1 says the library needed its access handler, call the handler to cover it again
+LibAccessEnd:
         P=      1                                * 07B6A
         ?ST=0   1                                * 07B6C
-        GOYES   SUB_07B6A.L1                     * 07B6F
-        GOSUB   SUB_07AB7                        * 07B71
-SUB_07B6A.L1:
+        GOYES   LibAccessEnd.L1                  * 07B6F
+        GOSUB   JumpC                            * 07B71
+LibAccessEnd.L1:
         P=      0                                * 07B75
         RTNCC                                    * 07B77
 
 * refs (2): 07CE4 07E65
-SUB_07B79:
+* R2 = library (with the rest of the word), R3 = command -> A.A = new ROMPTR in TEMPOB
+MakeROMPTR:
         LC(5)   #0000B                           * 07B79
         GOSUBL  GETTEMP                          * 07B80
         LC(5)   DOROMP                           * 07B86
@@ -2717,7 +2741,8 @@ SUB_07B79:
         GOLONG  GETPTR                           * 07BA9
 
 * refs (2): 081B4 082F8
-SUB_07BAF:
+* D0 at a counted name -> A.A = new id in TEMPOB
+MakeIDAt:
         C=0     A                                * 07BAF
         C=DAT0  B                                * 07BB1
         C=C+C   A                                * 07BB4
@@ -2743,7 +2768,8 @@ SUB_07BAF:
         GOLONG  GETPTR                           * 07BF3
 
 * refs (9): 077E9 07E5E 08097 080C4 080DF 0811A ...
-SUB_07BF9:
+* -> A.A = bint on level 1 masked to a library number (#7FF), after SAVPTR
+Lev1#:
         GOSUBL  SAVPTR                           * 07BF9
         C=DAT1  A                                * 07BFF
         D1=C                                     * 07C02
@@ -2758,7 +2784,7 @@ SUB_07BF9:
 COMPILEID:
         CON(5)  COMPILEID~1                      * 07C18  code object: the address of its machine code
 COMPILEID.loop1:
-        GOSUB   SUB_0788E                        * 07C1D
+        GOSUB   DirFindName                      * 07C1D
         GOC     COMPILEID.L4                     * 07C21
 COMPILEID.L2:
         GOSUBL  GETPTR                           * 07C24
@@ -2777,12 +2803,12 @@ COMPILEID.L4:
         A=DAT0  A                                * 07C4F
         R2=A                                     * 07C52
         ST=0    11                               * 07C55
-        GOSUBL  SUB_084B2                        * 07C58
+        GOSUBL  ROMPLibTab@                      * 07C58
         GOC     COMPILEID.loop5                  * 07C5E
-        GOSUB   SUB_07A56                        * 07C61
+        GOSUB   LibFindName                      * 07C61
         GONC    COMPILEID.L9                     * 07C65
 COMPILEID.loop5:
-        GOSUB   SUB_078CC                        * 07C68
+        GOSUB   UpDir                            * 07C68
         GONC    COMPILEID.loop1                  * 07C6C
 COMPILEID.L6:
         GOSUBL  GETPTR                           * 07C6F
@@ -2790,7 +2816,7 @@ COMPILEID.L6:
         A=C     A                                * 07C7C
         PC=(A)                                   * 07C7E
 COMPILEID.L7:
-        GOSUBL  SUB_08503                        * 07C82
+        GOSUBL  Rrp>Last                         * 07C82
         CD0EX                                    * 07C88
         R4=C                                     * 07C8B
 COMPILEID.loop8:
@@ -2809,7 +2835,7 @@ COMPILEID.loop8:
         ?A=0    A                                * 07CB4
         GOYES   COMPILEID.loop8                  * 07CB7
         D0=A                                     * 07CB9
-        GOSUB   SUB_07A56                        * 07CBC
+        GOSUB   LibFindName                      * 07CBC
         GOC     COMPILEID.loop8                  * 07CC0
 COMPILEID.L9:
         A=R2                                     * 07CC3
@@ -2823,11 +2849,11 @@ COMPILEID.L9:
         ?C>=A   X                                * 07CDF
         GOYES   COMPILEID.L11                    * 07CE2
 COMPILEID.L10:
-        GOSUB   SUB_07B79                        * 07CE4
+        GOSUB   MakeROMPTR                       * 07CE4
         GOTO    ROMPART.L5                       * 07CE8
 COMPILEID.L11:
         ST=0    11                               * 07CEC
-        GOSUBL  SUB_084F5                        * 07CEF
+        GOSUBL  LibConfig@                       * 07CEF
         A=R3                                     * 07CF5
         A=0     M                                * 07CF8
         A=A+1   A                                * 07CFB
@@ -2889,7 +2915,7 @@ STO.L3:
         GOLONG  DoErrULN                         * 07D89
 STO.L4:
         GOSUBL  GETPTR                           * 07D8F
-        LC(5)   OBJ_08C68                        * 07D95
+        LC(5)   StoId                            * 07D95
         A=C     A                                * 07D9C
         PC=(A)                                   * 07D9E
 
@@ -2915,7 +2941,7 @@ LrclR0A.loop2:
         D0=D0+  5                                * 07DD0
         A=R0                                     * 07DD3
         D1=A                                     * 07DD6
-        GOSUB   SUB_07831                        * 07DD9
+        GOSUB   NameDiff?                        * 07DD9
         C=R1                                     * 07DDD
         D0=C                                     * 07DE0
         GONC    LrclR0A.L3                       * 07DE3
@@ -2927,28 +2953,29 @@ LrclR0A.L3:
         RTNCC                                    * 07DF1
 
 * refs (1): 07970
-SUB_07DF3:
+* B.A = frame number from 1, R0 = name -> : search that TEMPENV frame for the name; not found goes on through LrclR0A, carry set when the frame is exhausted
+LamInFrame:
         D0=(5)  TEMPENV                          * 07DF3
         A=DAT0  A                                * 07DFA
         D0=A                                     * 07DFD
         B=B-1   A                                * 07E00
-SUB_07DF3.loop1:
+LamInFrame.loop1:
         A=DAT0  A                                * 07E02
         ?A=0    A                                * 07E05
         RTNYES                                   * 07E08
         B=B-1   A                                * 07E0A
-        GOC     SUB_07DF3.L2                     * 07E0C
+        GOC     LamInFrame.L2                    * 07E0C
         CD0EX                                    * 07E0F
         C=C+A   A                                * 07E12
         D0=C                                     * 07E14
-        GONC    SUB_07DF3.loop1                  * 07E17
-SUB_07DF3.L2:
+        GONC    LamInFrame.loop1                 * 07E17
+LamInFrame.L2:
         CD0EX                                    * 07E1A
         D0=C                                     * 07E1D
         C=C+A   A                                * 07E20
         D=C     A                                * 07E22
         D0=D0+  10                               * 07E24
-SUB_07DF3.loop3:
+LamInFrame.loop3:
         A=DAT0  A                                * 07E27
         D0=D0+  10                               * 07E2A
         AD0EX                                    * 07E2D
@@ -2956,12 +2983,12 @@ SUB_07DF3.loop3:
         D0=D0+  5                                * 07E33
         A=R0                                     * 07E36
         D1=A                                     * 07E39
-        GOSUB   SUB_07831                        * 07E3C
+        GOSUB   NameDiff?                        * 07E3C
         C=R1                                     * 07E40
         D0=C                                     * 07E43
         GONC    LrclR0A.L3                       * 07E46
         ?D>C    A                                * 07E49
-        GOYES   SUB_07DF3.loop3                  * 07E4C
+        GOYES   LamInFrame.loop3                 * 07E4C
         RTNSC                                    * 07E4E
 
 * #lib #cmd -> ROMPTR
@@ -2970,10 +2997,10 @@ SUB_07DF3.loop3:
         CON(5)  (*)+5                            * 07E50  primitive code object
         GOSUBL  POP#                             * 07E55
         R3=A                                     * 07E5B
-        GOSUB   SUB_07BF9                        * 07E5E
+        GOSUB   Lev1#                            * 07E5E
 #>ROMPTR.L1:
         R2=A                                     * 07E62
-        GOSUB   SUB_07B79                        * 07E65
+        GOSUB   MakeROMPTR                       * 07E65
         DAT1=A  A                                * 07E69
         A=DAT0  A                                * 07E6C
         D0=D0+  5                                * 07E6F
@@ -3031,7 +3058,7 @@ PushXlib:
         D0=D0-  3                                * 07EF3
         A=DAT0  X                                * 07EF6
         ST=0    11                               * 07EFA
-        GOSUB   SUB_084F5                        * 07EFD
+        GOSUB   LibConfig@                       * 07EFD
         RTNC                                     * 07F01
         LC(5)   IRAMBUFF                         * 07F04
         ?C#A    A                                * 07F0B
@@ -3045,7 +3072,7 @@ PushXlib:
         A=DAT0  A                                * 07F22
         C=A     A                                * 07F25
         AD1EX                                    * 07F27
-        GOSUB   SUB_07AB7                        * 07F2A
+        GOSUB   JumpC                            * 07F2A
         D0=A                                     * 07F2E
 PushXlib.L1:
         B=B+1   A                                * 07F31
@@ -3067,7 +3094,7 @@ PushXlib.L1:
         A=A+C   A                                * 07F59
         ?ST=0   1                                * 07F5B
         GOYES   PushXlib.L2                      * 07F5E
-        GOSUB   SUB_07F6E                        * 07F60
+        GOSUB   LibAccessEnd1                    * 07F60
         DAT0=A  A                                * 07F64
 PushXlib.L2:
         RTNCC                                    * 07F67
@@ -3076,10 +3103,11 @@ PushXlib.L3:
         RTNYES                                   * 07F6C
 
 * refs (1): 07F60
-SUB_07F6E:
+* -> : LibAccessEnd for a pointer read through the handler; D1 comes back from #800FA, carry set
+LibAccessEnd1:
         P=      1                                * 07F6E
         CD1EX                                    * 07F70
-        GOSUB   SUB_07AB7                        * 07F73
+        GOSUB   JumpC                            * 07F73
         D0=(5)  #800FA                           * 07F77
         C=DAT0  A                                * 07F7E
         D1=C                                     * 07F81

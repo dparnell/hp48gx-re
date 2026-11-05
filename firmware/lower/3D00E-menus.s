@@ -1,13 +1,14 @@
-* HP 48GX ROM revision R, #3D00E-#3E004: Menus and the built-in libraries 0A1-0A7
+* HP 48GX ROM revision R, #3D00E-#3E004: Last of the unit menus, then the key-action libraries 0A2 (left-shift) and 0A3 (right-shift)
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: RightShift6 RightShift5 RightShift4 RightShift2 RightShift1 LeftShift6 LeftShift5 LeftShift4 LeftShift3 LeftShift2 LeftShift1 ASIN
+* Most referenced: KeyThenMenu KeyLS_MTH ShowEditMenu KeyRS_STO KeyRS_RIGHT KeyRS_PRG KeyRS_MTH KeyRS_DOWN KeyLS_NEG KeyLS_LEFT KeyLS_EVAL KeyLS_DOT
 * Follows on from the previous file (at #3D00E in the original ROM).
         RPL
 
 * ROMPTR 0A7 01B
 * refs (1): 3BE7E
-ROMP_0A7_01B:
-        :: OBJ_3EF14                             * 3D00E
+* The power units menu
+MenuUnitPower:
+        :: UnitMenuKeys                          * 3D00E
 
 {Powr-Units}:
           {                                      * 3D018
@@ -21,8 +22,9 @@ _hp_:
 
 * ROMPTR 0A7 01C
 * refs (1): 3BE7E
-ROMP_0A7_01C:
-        :: OBJ_3EF14                             * 3D041
+* The pressure units menu
+MenuUnitPress:
+        :: UnitMenuKeys                          * 3D041
 
 {Press-Units}:
           {                                      * 3D04B
@@ -54,8 +56,8 @@ _inH2O_:
 
 * ROMPTR 0A7 01D
 * refs (1): 3BE7E
-ROMP_0A7_01D:
-        :: OBJ_3EF14                             * 3D0E2
+MnuUNITSTEMP~1:
+        :: UnitMenuKeys                          * 3D0E2
 
 {Temp-Units}:
           {                                      * 3D0EC
@@ -75,8 +77,8 @@ _øR_:
 
 * ROMPTR 0A7 01E
 * refs (1): 3BE7E
-ROMP_0A7_01E:
-        :: OBJ_3EF14                             * 3D131
+MnuUNITSELEC~1:
+        :: UnitMenuKeys                          * 3D131
 
 {Elec-Units}:
           {                                      * 3D13B
@@ -120,8 +122,8 @@ _Wb_:
 
 * ROMPTR 0A7 01F
 * refs (1): 3BE7E
-ROMP_0A7_01F:
-        :: OBJ_3EF14                             * 3D1E4
+MnuUNITSANGL~1:
+        :: UnitMenuKeys                          * 3D1E4
 
 {Angl-Units}:
           {                                      * 3D1EE
@@ -147,8 +149,8 @@ _sr_:
 
 * ROMPTR 0A7 020
 * refs (1): 3BE7E
-ROMP_0A7_020:
-        :: OBJ_3EF14                             * 3D25D
+MnuUNITSLIGHT~1:
+        :: UnitMenuKeys                          * 3D25D
 
 {Light-Units}:
           {                                      * 3D267
@@ -180,8 +182,8 @@ _lam_:
 
 * ROMPTR 0A7 021
 * refs (1): 3BE7E
-ROMP_0A7_021:
-        :: OBJ_3EF14                             * 3D2EC
+MnuUNITSRAD~1:
+        :: UnitMenuKeys                          * 3D2EC
 
 {Rad-Units}:
           {                                      * 3D2F6
@@ -210,8 +212,8 @@ _R__3D353:
 
 * ROMPTR 0A7 022
 * refs (1): 3BE7E
-ROMP_0A7_022:
-        :: OBJ_3EF14                             * 3D369
+MnuUNITSVISC~1:
+        :: UnitMenuKeys                          * 3D369
 
 {Visc-Units}:
           {                                      * 3D373
@@ -225,32 +227,34 @@ _st__3D384:
 
 * ROMPTR 0A7 023
 * refs (1): 3BE7E
-ROMP_0A7_023:
-        :: OBJ_4A2E9 OBJ_4A33E '                 * 3D39C
-          :: ' ROMPTR 0AA 00A OBJ_3A640 ; ;      * 3D3B0
+MnuIOIOPAR~1:
+        :: InfoMenuSetup ReviewIO '              * 3D39C
+          :: ' XLIB MnuKeysIOPAR RomMenuRows ; ; * 3D3B0
 
 * ROMPTR 0A7 024
 * refs (1): 3BE7E
-ROMP_0A7_024:
-        :: OBJ_4A2E9 OBJ_4A518 '                 * 3D3D4
-          :: ' ROMPTR 0AA 00B OBJ_3A640 ; ;      * 3D3E8
+MnuPRINTPRTPAR~1:
+        :: InfoMenuSetup ReviewPRTPAR '          * 3D3D4
+          :: ' XLIB MnuKeysPRTPAR RomMenuRows ; ; * 3D3E8
 
 * ROMPTR 0A7 025
 * refs (1): 3BE7E
-ROMP_0A7_025:
-        :: SetRebuild OBJ_3F036 '                * 3D40C
-          :: OBJ_3EFB4 OBJ_3F4A6 ; OnlyDefNoShift! ' OBJ_3F3DE ; * 3D420
+* The LIB menu: the libraries attached to the current directory, each opening its own commands
+MenuLIB:
+        :: SetRebuild DirLabelDef '              * 3D40C
+          :: ?EvalKeyOb LibMenuOpen ; OnlyDefNoShift! ' LibMenuRows ; * 3D420
 
 * ROMPTR 0A7 026
 * refs (1): 3BE7E
-ROMP_0A7_026:
-        :: SetRebuild ' OBJ_3F5F7 LabelDef! '    * 3D448
-          :: OBJ_3EFB4 OBJ_3F6A6 ; OnlyDefNoShift! ' OBJ_3F638 ; * 3D466
+* The PORTS menu: the ports that hold something
+MenuPORTS:
+        :: SetRebuild ' PortLabel LabelDef! '    * 3D448
+          :: ?EvalKeyOb PortMenuOpen ; OnlyDefNoShift! ' PortMenuRows ; * 3D466
 
 * ROMPTR 0A7 027
 * refs (1): 3BE7E
-ROMP_0A7_027:
-        :: OBJ_3F036 OBJ_3EFE6                   * 3D48E
+MnuEQLIB~1:
+        :: DirLabelDef SubMenuKeys               * 3D48E
 
 {MenuEQωIä}:
           {                                      * 3D49D
@@ -259,30 +263,31 @@ ROMP_0A7_027:
             {                                    * 3D4A2
 
 _EQωIä_:
-              $ "EQLIB" ROMPTR 0A9 072 }         * 3D4A7
+              $ "EQLIB" XLIB MnuEQLIBEQLIB }     * 3D4A7
 
 {EQωIä\COωIä}:
             {                                    * 3D4CB
 
 _COωIä_:
-              $ "COLIB" ROMPTR 0A9 073 }         * 3D4D0
+              $ "COLIB" XLIB MnuEQLIBCOLIB }     * 3D4D0
 
 {EQωIä\MES}:
             {                                    * 3D4F4
 
 _MES_:
-              $ "MES" ROMPTR 0A9 074 }           * 3D4F9
+              $ "MES" XLIB MnuEQLIBMES }         * 3D4F9
 
 {EQωIä\UTILS}:
             {                                    * 3D519
 
 _UTILS_:
-              $ "UTILS" ROMPTR 0A9 075 }         * 3D51E
+              $ "UTILS" XLIB MnuEQLIBUTILS }     * 3D51E
           }                                      * 3D542
         ;                                        * 3D547
 
 * refs (5): 3C444 3C4CE 3C558 3C5E2 3C66C
-OBJ_3D54C:
+* ob ->: does what the key object does, then goes to the menu named by the next object, except in program entry
+KeyThenMenu:
         :: DoKeyOb 'R PrgmEntry? caseDROP InitMenu * 3D54C
           SetDA3Bad ;                            * 3D56A
 
@@ -313,46 +318,46 @@ LIB0A7.hash.L1:
 LIB0A7.link:
         CON(5)  DOHSTR                           * 3D5D8  link table of library 0A7
         LENGTH                                   * 3D5DD  length, to #3D6AA
-        REL(5)  ROMP_0A7_000                     * 3D5E2  000 
-        REL(5)  ROMP_0A7_001                     * 3D5E7  001 
-        REL(5)  MenuMTH~2                        * 3D5EC  002 
-        REL(5)  MenuMTH~11                       * 3D5F1  003 
-        REL(5)  MenuPr~2                         * 3D5F6  004 
-        REL(5)  ROMP_0A7_005                     * 3D5FB  005 
-        REL(5)  ROMP_0A7_006                     * 3D600  006 
-        REL(5)  ROMP_0A7_007                     * 3D605  007 
-        REL(5)  ROMP_0A7_008                     * 3D60A  008 
-        REL(5)  ROMP_0A7_009                     * 3D60F  009 
-        REL(5)  ROMP_0A7_00A                     * 3D614  00A 
-        REL(5)  ROMP_0A7_00B                     * 3D619  00B 
-        REL(5)  ROMP_0A7_00C                     * 3D61E  00C 
-        REL(5)  ROMP_0A7_00D                     * 3D623  00D 
-        REL(5)  ROMP_0A7_00E                     * 3D628  00E 
-        REL(5)  ROMP_0A7_00F                     * 3D62D  00F 
-        REL(5)  ROMP_0A7_010                     * 3D632  010 
-        REL(5)  ROMP_0A7_011                     * 3D637  011 
-        REL(5)  ROMP_0A7_012                     * 3D63C  012 
-        REL(5)  ROMP_0A7_013                     * 3D641  013 
-        REL(5)  ROMP_0A7_014                     * 3D646  014 
-        REL(5)  ROMP_0A7_015                     * 3D64B  015 
-        REL(5)  ROMP_0A7_016                     * 3D650  016 
-        REL(5)  ROMP_0A7_017                     * 3D655  017 
-        REL(5)  ROMP_0A7_018                     * 3D65A  018 
-        REL(5)  ROMP_0A7_019                     * 3D65F  019 
-        REL(5)  ROMP_0A7_01A                     * 3D664  01A 
-        REL(5)  ROMP_0A7_01B                     * 3D669  01B 
-        REL(5)  ROMP_0A7_01C                     * 3D66E  01C 
-        REL(5)  ROMP_0A7_01D                     * 3D673  01D 
-        REL(5)  ROMP_0A7_01E                     * 3D678  01E 
-        REL(5)  ROMP_0A7_01F                     * 3D67D  01F 
-        REL(5)  ROMP_0A7_020                     * 3D682  020 
-        REL(5)  ROMP_0A7_021                     * 3D687  021 
-        REL(5)  ROMP_0A7_022                     * 3D68C  022 
-        REL(5)  ROMP_0A7_023                     * 3D691  023 
-        REL(5)  ROMP_0A7_024                     * 3D696  024 
-        REL(5)  ROMP_0A7_025                     * 3D69B  025 
-        REL(5)  ROMP_0A7_026                     * 3D6A0  026 
-        REL(5)  ROMP_0A7_027                     * 3D6A5  027 
+        REL(5)  MenuCSTDef                       * 3D5E2  000 
+        REL(5)  MenuVAR                          * 3D5E7  001 
+        REL(5)  MnuMTH~1                         * 3D5EC  002 
+        REL(5)  MnuMTHCONST~1                    * 3D5F1  003 
+        REL(5)  MnuPRG~1                         * 3D5F6  004 
+        REL(5)  MnuSOLVE~1                       * 3D5FB  005 
+        REL(5)  ~SolvrMenu                       * 3D600  006 
+        REL(5)  MenuTVM                          * 3D605  007 
+        REL(5)  MnuPLOT~1                        * 3D60A  008 
+        REL(5)  MnuPLOTPTYPE~1                   * 3D60F  009 
+        REL(5)  MnuPLOTPPAR~1                    * 3D614  00A 
+        REL(5)  Mnu3DPTYPE~1                     * 3D619  00B 
+        REL(5)  Mnu3DVPAR~1                      * 3D61E  00C 
+        REL(5)  MnuSTATPTYPE~1                   * 3D623  00D 
+        REL(5)  MnuSTATSIGPAR~1                  * 3D628  00E 
+        REL(5)  MnuSIGPARMODL~1                  * 3D62D  00F 
+        REL(5)  MnuSTATSIGPAR2~1                 * 3D632  010 
+        REL(5)  MnuSIGPARMODL2~1                 * 3D637  011 
+        REL(5)  MnuUNITS~1                       * 3D63C  012 
+        REL(5)  MenuUnitLength                   * 3D641  013 
+        REL(5)  MenuUnitArea                     * 3D646  014 
+        REL(5)  MenuUnitVol                      * 3D64B  015 
+        REL(5)  MenuUnitTime                     * 3D650  016 
+        REL(5)  MenuUnitSpeed                    * 3D655  017 
+        REL(5)  MenuUnitMass                     * 3D65A  018 
+        REL(5)  MenuUnitForce                    * 3D65F  019 
+        REL(5)  MenuUnitEnergy                   * 3D664  01A 
+        REL(5)  MenuUnitPower                    * 3D669  01B 
+        REL(5)  MenuUnitPress                    * 3D66E  01C 
+        REL(5)  MnuUNITSTEMP~1                   * 3D673  01D 
+        REL(5)  MnuUNITSELEC~1                   * 3D678  01E 
+        REL(5)  MnuUNITSANGL~1                   * 3D67D  01F 
+        REL(5)  MnuUNITSLIGHT~1                  * 3D682  020 
+        REL(5)  MnuUNITSRAD~1                    * 3D687  021 
+        REL(5)  MnuUNITSVISC~1                   * 3D68C  022 
+        REL(5)  MnuIOIOPAR~1                     * 3D691  023 
+        REL(5)  MnuPRINTPRTPAR~1                 * 3D696  024 
+        REL(5)  MenuLIB                          * 3D69B  025 
+        REL(5)  MenuPORTS                        * 3D6A0  026 
+        REL(5)  MnuEQLIB~1                       * 3D6A5  027 
         ENDLENGTH                                * 3D6AA
         ENDLENGTH                                * 3D6AA
         ASSEMBLE
@@ -362,6 +367,7 @@ LIB0A7.link.L1:
         GOTO    LIB0A7.link.L1+1                 * 3D6AC
         BSS     1                                * 3D6B0  zeros
 
+* Library 0A2: Key actions, left-shift plane. Command n is the action of key n+1
 LIB0A2:
         CON(3)  #0A2                             * 3D6B1  library number
         REL(5)  LIB0A2.hash                      * 3D6B4  hash table
@@ -373,82 +379,92 @@ LIB0A2:
 * ROMPTR 0A2 000
 * refs (1): 3D6B1
 LeftShift1:
-        :: MenuKey BINT1 OBJ_41954 ;             * 3D6C8
+        :: MenuKey BINT1 DoMenuKeyLS ;           * 3D6C8
 
 * ROMPTR 0A2 001
 * refs (1): 3D6B1
 LeftShift2:
-        :: MenuKey BINT2 OBJ_41954 ;             * 3D6E1
+        :: MenuKey BINT2 DoMenuKeyLS ;           * 3D6E1
 
 * ROMPTR 0A2 002
 * refs (1): 3D6B1
 LeftShift3:
-        :: MenuKey BINT3 OBJ_41954 ;             * 3D6FA
+        :: MenuKey BINT3 DoMenuKeyLS ;           * 3D6FA
 
 * ROMPTR 0A2 003
 * refs (1): 3D6B1
 LeftShift4:
-        :: MenuKey BINT4 OBJ_41954 ;             * 3D713
+        :: MenuKey BINT4 DoMenuKeyLS ;           * 3D713
 
 * ROMPTR 0A2 004
 * refs (1): 3D6B1
 LeftShift5:
-        :: MenuKey BINT5 OBJ_41954 ;             * 3D72C
+        :: MenuKey BINT5 DoMenuKeyLS ;           * 3D72C
 
 * ROMPTR 0A2 005
 * refs (1): 3D6B1
 LeftShift6:
-        :: MenuKey BINT6 OBJ_41954 ;             * 3D745
+        :: MenuKey BINT6 DoMenuKeyLS ;           * 3D745
 
 * ROMPTR 0A2 006
 * refs (3): 3D6B1 AA39B B1DF0
-ROMP_0A2_006:
-        :: OBJ_3ED84 BINT17 ;                    * 3D75E
+* The left-shift MTH key
+KeyLS_MTH:
+        :: KeyTogFlag BINT17 ;                   * 3D75E
 
 * ROMPTR 0A2 007
 * refs (1): 3D6B1
-ROMP_0A2_007:
-        :: MenuMaker ROMPTR 0A9 03E DoMenuKey ;  * 3D772
+* The left-shift PRG key: opens the menu ROMPTR 0A9 03E
+KeyLS_PRG:
+        :: MenuMaker XLIB MnuCHARS DoMenuKey ;   * 3D772
 
 * ROMPTR 0A2 008
 * refs (1): 3D6B1
-ROMP_0A2_008:
-        :: MenuMaker ROMPTR 0A9 03F DoMenuKey ;  * 3D791
+* The left-shift CST key: opens the menu ROMPTR 0A9 03F
+KeyLS_CST:
+        :: MenuMaker XLIB MnuMODES DoMenuKey ;   * 3D791
 
 * ROMPTR 0A2 009
 * refs (1): 3D6B1
-ROMP_0A2_009:
-        :: MenuMaker ROMPTR 0A9 046 DoMenuKey ;  * 3D7B0
+* The left-shift VAR key: opens the menu ROMPTR 0A9 046
+KeyLS_VAR:
+        :: MenuMaker XLIB MnuMEMORY DoMenuKey ;  * 3D7B0
 
 * ROMPTR 0A2 00A
 * refs (1): 3D6B1
-ROMP_0A2_00A:
-        :: MenuMaker ROMPTR 0A9 049 DoMenuKey ;  * 3D7CF
+* The left-shift up key: opens the menu ROMPTR 0A9 049
+KeyLS_UP:
+        :: MenuMaker XLIB MnuSTACK DoMenuKey ;   * 3D7CF
 
 * ROMPTR 0A2 00B
 * refs (1): 3D6B1
-ROMP_0A2_00B:
+* The left-shift NXT key
+KeyLS_NXT:
         :: MenuMaker # FFFFA SetSomeRow ;        * 3D7EE
 
 * ROMPTR 0A2 00C
 * refs (1): 3D6B1
-ROMP_0A2_00C:
-        ROMPTR 002 023                           * 3D80C  UPDIR
+* The left-shift ' key: UPDIR
+KeyLS_QUOTE:
+        XLIB xUPDIR                              * 3D80C  UPDIR
 
 * ROMPTR 0A2 00D
 * refs (1): 3D6B1
-ROMP_0A2_00D:
-        ROMPTR 002 156                           * 3D817  DEFINE
+* The left-shift STO key: DEFINE
+KeyLS_STO:
+        XLIB xDEFINE                             * 3D817  DEFINE
 
 * ROMPTR 0A2 00E
 * refs (2): 3D6B1 6BBA9
-ROMP_0A2_00E:
-        ROMPTR 002 035                           * 3D822  →NUM
+* The left-shift EVAL key: →NUM
+KeyLS_EVAL:
+        XLIB x>NUM                               * 3D822  →NUM
 
 * ROMPTR 0A2 00F
 * refs (2): 3D6B1 6B9F7
-ROMP_0A2_00F:
-        ROMPTR 002 0C8                           * 3D82D  PICTURE
+* The left-shift left key: PICTURE
+KeyLS_LEFT:
+        XLIB xGRAPH                              * 3D82D  PICTURE
 
 * ROMPTR 0A2 010
 * refs (1): 3D6B1
@@ -458,94 +474,110 @@ ROMP_0A2_00F:
 
 * ROMPTR 0A2 011
 * refs (1): 3D6B1
-ROMP_0A2_011:
-        ROMPTR 002 10F                           * 3D851  SWAP
+* The left-shift right key: SWAP
+KeyLS_RIGHT:
+        XLIB xSWAP                               * 3D851  SWAP
 
 * ROMPTR 0A2 012
 * refs (1): 3D6B1
 ASIN:
-        ROMPTR 002 057                           * 3D85C  ASIN
+        XLIB xASIN                               * 3D85C  ASIN
 
 * ROMPTR 0A2 013
 * refs (1): 3D6B1
-ROMP_0A2_013:
-        ROMPTR 002 058                           * 3D867  ACOS
+* The left-shift COS key: ACOS
+KeyLS_COS:
+        XLIB xACOS                               * 3D867  ACOS
 
 * ROMPTR 0A2 014
 * refs (1): 3D6B1
-ROMP_0A2_014:
-        ROMPTR 002 059                           * 3D872  ATAN
+* The left-shift TAN key: ATAN
+KeyLS_TAN:
+        XLIB xATAN                               * 3D872  ATAN
 
 * ROMPTR 0A2 015
 * refs (1): 3D6B1
-ROMP_0A2_015:
-        ROMPTR 002 050                           * 3D87D  SQ
+* The left-shift √ key: SQ
+KeyLS_SQRT:
+        XLIB xSQ                                 * 3D87D  SQ
 
 * ROMPTR 0A2 016
 * refs (1): 3D6B1
-ROMP_0A2_016:
-        ROMPTR 002 060                           * 3D888  ALOG
+* The left-shift y^x key: ALOG
+KeyLS_POW:
+        XLIB xALOG                               * 3D888  ALOG
 
 * ROMPTR 0A2 017
 * refs (1): 3D6B1
-ROMP_0A2_017:
-        ROMPTR 002 05D                           * 3D893  EXP
+* The left-shift 1/x key: EXP
+KeyLS_INV:
+        XLIB xEXP                                * 3D893  EXP
 
 * ROMPTR 0A2 018
 * refs (1): 3D6B1
-ROMP_0A2_018:
-        :: PTR Do1st/2nd+: xDUP OBJ_6B48E ;      * 3D89E
+* The left-shift ENTER key
+KeyLS_ENTER:
+        :: PTR Do1st/2nd+: xDUP EqwNew ;         * 3D89E
 
 * ROMPTR 0A2 019
 * refs (2): 3D6B1 6BB3B
-ROMP_0A2_019:
+* The left-shift +/- key
+KeyLS_NEG:
         :: TakeOver EditExstCase                 * 3D8B7
 
 * refs (2): 3B4AA 8F616
-OBJ_3D8C6:
-          :: EditMenu DoMenuKey ; OBJ_3ADBB ;    * 3D8C6
+* Opens the EDIT menu
+ShowEditMenu:
+          :: EditMenu DoMenuKey ; EditOrVisit ;  * 3D8C6
 
 * ROMPTR 0A2 01A
 * refs (1): 3D6B1
-ROMP_0A2_01A:
-        :: TakeOver PTR Do1st/2nd+: ROMPTR 002 157 CK1NOLASTWD CK&DISPATCH1 * 3D8E4  PURGE
-          BINT6 OBJ_40F5E                        * 3D908  name
+* The left-shift EEX key: PURGE
+KeyLS_EEX:
+        :: TakeOver PTR Do1st/2nd+: XLIB xPURGE CK1NOLASTWD CK&DISPATCH1 * 3D8E4  PURGE
+          BINT6 KeyLS_EEX~name                   * 3D908  name
           BINT0                                  * 3D912  any
-          ROMPTR 002 157                         * 3D917  PURGE
+          XLIB xPURGE                            * 3D917  PURGE
         ;                                        * 3D922
 
 * ROMPTR 0A2 01B
 * refs (2): 3D6B1 6BB59
-ROMP_0A2_01B:
-        ROMPTR 002 11A                           * 3D927  CLEAR
+* The left-shift DEL key: CLEAR
+KeyLS_DEL:
+        XLIB xCLEAR                              * 3D927  CLEAR
 
 * ROMPTR 0A2 01C
 * refs (1): 3D6B1
-ROMP_0A2_01C:
-        ROMPTR 002 110                           * 3D932  DROP
+* The left-shift backspace key: DROP
+KeyLS_BKSP:
+        XLIB xDROP                               * 3D932  DROP
 
 * ROMPTR 0A2 01D
 * refs (1): 3D6B1
-ROMP_0A2_01D:
+* The left-shift α key: flag -61: [USR][USR] locks / [USR] locks User
+KeyLS_ALPHA:
         :: Modifier SetDA23NoCh BINT61 TestSysFlag case InvUserMo * 3D93D  flag -61: [USR][USR] locks / [USR] locks User
           UserKeys? NOTcase SetUserMo            * 3D960
-          1USR? case OBJ_3FFCA                   * 3D96F
+          1USR? case Clr1USR                     * 3D96F
           BINT62 ClrSysFlag ;                    * 3D97E  flag -62: User keys off / User keys on
 
 * ROMPTR 0A2 01E
 * refs (1): 3D6B1
-ROMP_0A2_01E:
-        :: MenuMaker ROMPTR 0A9 04A DoMenuKey ;  * 3D98D
+* The left-shift 7 key: opens the menu ROMPTR 0A9 04A
+KeyLS_7:
+        :: MenuMaker XLIB MnuSOLVE DoMenuKey ;   * 3D98D
 
 * ROMPTR 0A2 01F
 * refs (1): 3D6B1
-ROMP_0A2_01F:
-        :: MenuMaker ROMPTR 0A9 051 DoMenuKey ;  * 3D9AC
+* The left-shift 8 key: opens the menu ROMPTR 0A9 051
+KeyLS_8:
+        :: MenuMaker XLIB MnuPLOT DoMenuKey ;    * 3D9AC
 
 * ROMPTR 0A2 020
 * refs (1): 3D6B1
-ROMP_0A2_020:
-        :: MenuMaker ROMPTR 0A9 05D DoMenuKey ;  * 3D9CB
+* The left-shift 9 key: opens the menu ROMPTR 0A9 05D
+KeyLS_9:
+        :: MenuMaker XLIB MnuSYMBOLIC DoMenuKey ; * 3D9CB
 
 * ROMPTR 0A2 021
 * refs (2): 3D6B1 6BCF4
@@ -559,18 +591,21 @@ ROMP_0A2_020:
 
 * ROMPTR 0A2 023
 * refs (1): 3D6B1
-ROMP_0A2_023:
-        :: MenuMaker ROMPTR 0A9 05E DoMenuKey ;  * 3DA1C
+* The left-shift 4 key: opens the menu ROMPTR 0A9 05E
+KeyLS_4:
+        :: MenuMaker XLIB MnuTIME DoMenuKey ;    * 3DA1C
 
 * ROMPTR 0A2 024
 * refs (1): 3D6B1
-ROMP_0A2_024:
-        :: MenuMaker ROMPTR 0A9 060 DoMenuKey ;  * 3DA3B
+* The left-shift 5 key: opens the menu ROMPTR 0A9 060
+KeyLS_5:
+        :: MenuMaker XLIB MnuSTAT DoMenuKey ;    * 3DA3B
 
 * ROMPTR 0A2 025
 * refs (1): 3D6B1
-ROMP_0A2_025:
-        :: MenuMaker ROMPTR 0A9 03B DoMenuKey ;  * 3DA5A
+* The left-shift 6 key: opens the menu ROMPTR 0A9 03B
+KeyLS_6:
+        :: MenuMaker XLIB MnuUNITScmds DoMenuKey ; * 3DA5A
 
 * ROMPTR 0A2 026
 * refs (1): 3D6B1
@@ -584,18 +619,21 @@ ROMP_0A2_025:
 
 * ROMPTR 0A2 028
 * refs (1): 3D6B1
-ROMP_0A2_028:
-        :: MenuMaker ROMPTR 0A9 068 DoMenuKey ;  * 3DAAB
+* The left-shift 1 key: opens the menu ROMPTR 0A9 068
+KeyLS_1:
+        :: MenuMaker XLIB MnuIO DoMenuKey ;      * 3DAAB
 
 * ROMPTR 0A2 029
 * refs (1): 3D6B1
-ROMP_0A2_029:
-        :: MenuMaker ROMPTR 0A9 06E DoMenuKey ;  * 3DACA
+* The left-shift 2 key: opens the menu ROMPTR 0A9 06E
+KeyLS_2:
+        :: MenuMaker XLIB MnuLIBRARY DoMenuKey ; * 3DACA
 
 * ROMPTR 0A2 02A
 * refs (1): 3D6B1
-ROMP_0A2_02A:
-        :: MenuMaker ROMPTR 0A9 071 DoMenuKey ;  * 3DAE9
+* The left-shift 3 key: opens the menu ROMPTR 0A9 071
+KeyLS_3:
+        :: MenuMaker XLIB MnuEQLIB DoMenuKey ;   * 3DAE9
 
 * ROMPTR 0A2 02B
 * refs (1): 3D6B1
@@ -604,23 +642,27 @@ ROMP_0A2_02A:
 
 * ROMPTR 0A2 02C
 * refs (1): 3D6B1
-ROMP_0A2_02C:
-        ROMPTR 002 03A                           * 3DB21  CONT
+* The left-shift ON key: CONT
+KeyLS_ON:
+        XLIB xCONT                               * 3DB21  CONT
 
 * ROMPTR 0A2 02D
 * refs (1): 3D6B1
-ROMP_0A2_02D:
-        ROMPTR 002 03B                           * 3DB2C  =
+* The left-shift 0 key: =
+KeyLS_0:
+        XLIB x=                                  * 3DB2C  =
 
 * ROMPTR 0A2 02E
 * refs (2): 3D6B1 6BCCC
-ROMP_0A2_02E:
+* The left-shift . key: flag -51: Fraction mark: . / Fraction mark: ,
+KeyLS_DOT:
         :: TakeOver BINT51 SysITE CHR_; CHR_, EchoChrKey ; * 3DB37  flag -51: Fraction mark: . / Fraction mark: ,
 
 * ROMPTR 0A2 02F
 * refs (1): 3D6B1
-ROMP_0A2_02F:
-        ROMPTR 002 03F                           * 3DB5F  π
+* The left-shift SPC key: π
+KeyLS_SPC:
+        XLIB xPI                                 * 3DB5F  π
 
 * ROMPTR 0A2 030
 * refs (2): 3D6B1 6BA47
@@ -660,54 +702,55 @@ LIB0A2.link:
         REL(5)  LeftShift4                       * 3DC00  003 
         REL(5)  LeftShift5                       * 3DC05  004 
         REL(5)  LeftShift6                       * 3DC0A  005 
-        REL(5)  ROMP_0A2_006                     * 3DC0F  006 
-        REL(5)  ROMP_0A2_007                     * 3DC14  007 
-        REL(5)  ROMP_0A2_008                     * 3DC19  008 
-        REL(5)  ROMP_0A2_009                     * 3DC1E  009 
-        REL(5)  ROMP_0A2_00A                     * 3DC23  00A 
-        REL(5)  ROMP_0A2_00B                     * 3DC28  00B 
-        REL(5)  ROMP_0A2_00C                     * 3DC2D  00C 
-        REL(5)  ROMP_0A2_00D                     * 3DC32  00D 
-        REL(5)  ROMP_0A2_00E                     * 3DC37  00E 
-        REL(5)  ROMP_0A2_00F                     * 3DC3C  00F 
+        REL(5)  KeyLS_MTH                        * 3DC0F  006 
+        REL(5)  KeyLS_PRG                        * 3DC14  007 
+        REL(5)  KeyLS_CST                        * 3DC19  008 
+        REL(5)  KeyLS_VAR                        * 3DC1E  009 
+        REL(5)  KeyLS_UP                         * 3DC23  00A 
+        REL(5)  KeyLS_NXT                        * 3DC28  00B 
+        REL(5)  KeyLS_QUOTE                      * 3DC2D  00C 
+        REL(5)  KeyLS_STO                        * 3DC32  00D 
+        REL(5)  KeyLS_EVAL                       * 3DC37  00E 
+        REL(5)  KeyLS_LEFT                       * 3DC3C  00F 
         REL(5)  ~NoEdit?case;ViewLevel1;DoBadKey * 3DC41  010 
-        REL(5)  ROMP_0A2_011                     * 3DC46  011 
+        REL(5)  KeyLS_RIGHT                      * 3DC46  011 
         REL(5)  ASIN                             * 3DC4B  012 
-        REL(5)  ROMP_0A2_013                     * 3DC50  013 
-        REL(5)  ROMP_0A2_014                     * 3DC55  014 
-        REL(5)  ROMP_0A2_015                     * 3DC5A  015 
-        REL(5)  ROMP_0A2_016                     * 3DC5F  016 
-        REL(5)  ROMP_0A2_017                     * 3DC64  017 
-        REL(5)  ROMP_0A2_018                     * 3DC69  018 
-        REL(5)  ROMP_0A2_019                     * 3DC6E  019 
-        REL(5)  ROMP_0A2_01A                     * 3DC73  01A 
-        REL(5)  ROMP_0A2_01B                     * 3DC78  01B 
-        REL(5)  ROMP_0A2_01C                     * 3DC7D  01C 
-        REL(5)  ROMP_0A2_01D                     * 3DC82  01D 
-        REL(5)  ROMP_0A2_01E                     * 3DC87  01E 
-        REL(5)  ROMP_0A2_01F                     * 3DC8C  01F 
-        REL(5)  ROMP_0A2_020                     * 3DC91  020 
+        REL(5)  KeyLS_COS                        * 3DC50  013 
+        REL(5)  KeyLS_TAN                        * 3DC55  014 
+        REL(5)  KeyLS_SQRT                       * 3DC5A  015 
+        REL(5)  KeyLS_POW                        * 3DC5F  016 
+        REL(5)  KeyLS_INV                        * 3DC64  017 
+        REL(5)  KeyLS_ENTER                      * 3DC69  018 
+        REL(5)  KeyLS_NEG                        * 3DC6E  019 
+        REL(5)  KeyLS_EEX                        * 3DC73  01A 
+        REL(5)  KeyLS_DEL                        * 3DC78  01B 
+        REL(5)  KeyLS_BKSP                       * 3DC7D  01C 
+        REL(5)  KeyLS_ALPHA                      * 3DC82  01D 
+        REL(5)  KeyLS_7                          * 3DC87  01E 
+        REL(5)  KeyLS_8                          * 3DC8C  01F 
+        REL(5)  KeyLS_9                          * 3DC91  020 
         REL(5)  ~DoDelims;$_LRParens;SetDA1NoCh  * 3DC96  021 
         REL(5)  ~Modifier;SetKeysNS;SetDA123NoCh * 3DC9B  022 
-        REL(5)  ROMP_0A2_023                     * 3DCA0  023 
-        REL(5)  ROMP_0A2_024                     * 3DCA5  024 
-        REL(5)  ROMP_0A2_025                     * 3DCAA  025 
+        REL(5)  KeyLS_4                          * 3DCA0  023 
+        REL(5)  KeyLS_5                          * 3DCA5  024 
+        REL(5)  KeyLS_6                          * 3DCAA  025 
         REL(5)  ~DoDelims;$_[];?ClrAlg           * 3DCAF  026 
         REL(5)  ~Modifier;LShiftOnly;SetDA123NoCh_2 * 3DCB4  027 
-        REL(5)  ROMP_0A2_028                     * 3DCB9  028 
-        REL(5)  ROMP_0A2_029                     * 3DCBE  029 
-        REL(5)  ROMP_0A2_02A                     * 3DCC3  02A 
+        REL(5)  KeyLS_1                          * 3DCB9  028 
+        REL(5)  KeyLS_2                          * 3DCBE  029 
+        REL(5)  KeyLS_3                          * 3DCC3  02A 
         REL(5)  ~Echo2Macros;x>>;x<<             * 3DCC8  02B 
-        REL(5)  ROMP_0A2_02C                     * 3DCCD  02C 
-        REL(5)  ROMP_0A2_02D                     * 3DCD2  02D 
-        REL(5)  ROMP_0A2_02E                     * 3DCD7  02E 
-        REL(5)  ROMP_0A2_02F                     * 3DCDC  02F 
+        REL(5)  KeyLS_ON                         * 3DCCD  02C 
+        REL(5)  KeyLS_0                          * 3DCD2  02D 
+        REL(5)  KeyLS_DOT                        * 3DCD7  02E 
+        REL(5)  KeyLS_SPC                        * 3DCDC  02F 
         REL(5)  ~DoDelims;$_{};?ClrAlgSetPr      * 3DCE1  030 
         ENDLENGTH                                * 3DCE6
 
         LENGTH                                   * 3DCE6  library object without its prolog (its place is the end of the link table before): length, to #3E2CA
         CON(2)  0                                * 3DCEB  no title
 
+* Library 0A3: Key actions, right-shift plane. Command n is the action of key n+1
 LIB0A3:
         CON(3)  #0A3                             * 3DCED  library number
         REL(5)  LIB0A3.hash                      * 3DCF0  hash table
@@ -718,133 +761,152 @@ LIB0A3:
 * ROMPTR 0A3 000
 * refs (1): 3DCED
 RightShift1:
-        :: MenuKey BINT1 OBJ_41974 ;             * 3DD04
+        :: MenuKey BINT1 DoMenuKeyRS ;           * 3DD04
 
 * ROMPTR 0A3 001
 * refs (1): 3DCED
 RightShift2:
-        :: MenuKey BINT2 OBJ_41974 ;             * 3DD1D
+        :: MenuKey BINT2 DoMenuKeyRS ;           * 3DD1D
 
 * ROMPTR 0A3 002
 * refs (1): 3DCED
-ROMP_0A3_002:
-        :: MenuKey BINT3 OBJ_41974 ;             * 3DD36
+* The right-shift C key
+KeyRS_C:
+        :: MenuKey BINT3 DoMenuKeyRS ;           * 3DD36
 
 * ROMPTR 0A3 003
 * refs (1): 3DCED
 RightShift4:
-        :: MenuKey BINT4 OBJ_41974 ;             * 3DD4F
+        :: MenuKey BINT4 DoMenuKeyRS ;           * 3DD4F
 
 * ROMPTR 0A3 004
 * refs (1): 3DCED
 RightShift5:
-        :: MenuKey BINT5 OBJ_41974 ;             * 3DD68
+        :: MenuKey BINT5 DoMenuKeyRS ;           * 3DD68
 
 * ROMPTR 0A3 005
 * refs (1): 3DCED
 RightShift6:
-        :: MenuKey BINT6 OBJ_41974 ;             * 3DD81
+        :: MenuKey BINT6 DoMenuKeyRS ;           * 3DD81
 
 * ROMPTR 0A3 006
 * refs (2): 3DCED B1E14
-ROMP_0A3_006:
-        :: OBJ_3ED84 BINT16 ;                    * 3DD9A
+* The right-shift MTH key
+KeyRS_MTH:
+        :: KeyTogFlag BINT16 ;                   * 3DD9A
 
 * ROMPTR 0A3 007
 * refs (2): 3DCED 6BCB8
-ROMP_0A3_007:
-        ROMPTR 0B2 001                           * 3DDAE
+* The right-shift PRG key: runs ROMPTR 0B2 001
+KeyRS_PRG:
+        XLIB DoCHARS                             * 3DDAE
 
 * ROMPTR 0A3 008
 * refs (1): 3DCED
-ROMP_0A3_008:
-        ROMPTR 0B4 1C1                           * 3DDB9
+* The right-shift CST key: runs ROMPTR 0B4 1C1
+KeyRS_CST:
+        XLIB ModesApp                            * 3DDB9
 
 * ROMPTR 0A3 009
 * refs (1): 3DCED
-ROMP_0A3_009:
-        ROMPTR 0B4 1D7                           * 3DDC4
+* The right-shift VAR key: runs ROMPTR 0B4 1D7
+KeyRS_VAR:
+        XLIB MemApp                              * 3DDC4
 
 * ROMPTR 0A3 00A
 * refs (1): 3DCED
-ROMP_0A3_00A:
-        :: NoEdit?case OBJ_4365D                 * 3DDCF
+* The right-shift up key
+KeyRS_UP:
+        :: NoEdit?case IStack                    * 3DDCF
           TopERow? caseDoBadKey Cursor&Disp      * 3DDDE
           ToTheFirstRow SetDA123NoCh ;           * 3DDED
 
 * ROMPTR 0A3 00B
 * refs (1): 3DCED
-ROMP_0A3_00B:
-        :: MenuMaker ROMPTR 0A9 000 DoMenuKey ;  * 3DDFC
+* The right-shift NXT key: opens the menu ROMPTR 0A9 000
+KeyRS_NXT:
+        :: MenuMaker XLIB MnuLast DoMenuKey ;    * 3DDFC
 
 * ROMPTR 0A3 00C
 * refs (1): 3DCED
-ROMP_0A3_00C:
-        ROMPTR 002 022                           * 3DE1B  HOME
+* The right-shift ' key: HOME
+KeyRS_QUOTE:
+        XLIB xHOME                               * 3DE1B  HOME
 
 * ROMPTR 0A3 00D
 * refs (2): 3DCED 6BB4F
-ROMP_0A3_00D:
-        ROMPTR 002 154                           * 3DE26  RCL
+* The right-shift STO key: RCL
+KeyRS_STO:
+        XLIB xRCL                                * 3DE26  RCL
 
 * ROMPTR 0A3 00E
 * refs (1): 3DCED
-ROMP_0A3_00E:
+* The right-shift EVAL key
+KeyRS_EVAL:
         :: TakeOver UNDO_ON? case                * 3DE31
           :: SuspendOK? NOTcase DoBadKey         * 3DE45
-            OBJ_61F8F SetDA13NoCh SetDA2bNoCh ;  * 3DE59
+            KeyRS_EVAL~1 SetDA13NoCh SetDA2bNoCh ; * 3DE59
           NoEditLine? case LASTSTKERR            * 3DE6D
           Err#NoLstStk JstGetTHEMESG DoWarning ; * 3DE7C
 
 * ROMPTR 0A3 00F
 * refs (1): 3DCED
-ROMP_0A3_00F:
+* The right-shift left key
+KeyRS_LEFT:
         :: NoComLine?:(bip;q) OnTheFirstCol? caseDoBadKey Cursor&Disp * 3DE90
           ToTheStartOfRow SetDA123NoCh ;         * 3DEA9
 
 * ROMPTR 0A3 010
 * refs (2): 3DCED 6BB27
-ROMP_0A3_010:
+* The right-shift down key
+KeyRS_DOWN:
         :: NoEdit?case LocalReview               * 3DEB8
           LastERow? caseDoBadKey Cursor&Disp     * 3DEC7
           ToTheLastRow SetDA123NoCh ;            * 3DED6
 
 * ROMPTR 0A3 011
 * refs (2): 3DCED 6BB31
-ROMP_0A3_011:
+* The right-shift right key
+KeyRS_RIGHT:
         :: NoEdit?case xSERVER                   * 3DEE5
           CURSOR_END? caseDoBadKey Cursor&Disp   * 3DEF4
           ToTheEndOfRow SetDA123NoCh ;           * 3DF03
 
 * ROMPTR 0A3 012
 * refs (1): 3DCED
-ROMP_0A3_012:
-        ROMPTR 002 0F7                           * 3DF12  ∂
+* The right-shift SIN key: ∂
+KeyRS_SIN:
+        XLIB DERIV                               * 3DF12  ∂
 
 * ROMPTR 0A3 013
 * refs (1): 3DCED
-ROMP_0A3_013:
-        ROMPTR 002 0FC                           * 3DF1D  ∫
+* The right-shift COS key: ∫
+KeyRS_COS:
+        XLIB INTEG                               * 3DF1D  ∫
 
 * ROMPTR 0A3 014
 * refs (1): 3DCED
-ROMP_0A3_014:
-        ROMPTR 002 0FE                           * 3DF28  Σ
+* The right-shift TAN key: Σ
+KeyRS_TAN:
+        XLIB ä                                   * 3DF28  Σ
 
 * ROMPTR 0A3 015
 * refs (1): 3DCED
-ROMP_0A3_015:
-        ROMPTR 002 04A                           * 3DF33  XROOT
+* The right-shift √ key: XROOT
+KeyRS_SQRT:
+        XLIB rpnXROOT                            * 3DF33  XROOT
 
 * ROMPTR 0A3 016
 * refs (1): 3DCED
-ROMP_0A3_016:
-        ROMPTR 002 05F                           * 3DF3E  LOG
+* The right-shift y^x key: LOG
+KeyRS_POW:
+        XLIB xLOG                                * 3DF3E  LOG
 
 * ROMPTR 0A3 017
 * refs (1): 3DCED
-ROMP_0A3_017:
-        ROMPTR 002 05E                           * 3DF49  LN
+* The right-shift 1/x key: LN
+KeyRS_INV:
+        XLIB xLN                                 * 3DF49  LN
 
 * ROMPTR 0A3 018
 * refs (1): 3DCED
@@ -853,29 +915,34 @@ ROMP_0A3_017:
 
 * ROMPTR 0A3 019
 * refs (1): 3DCED
-ROMP_0A3_019:
-        ROMPTR 0B2 000                           * 3DF6D
+* The right-shift +/- key: runs ROMPTR 0B2 000
+KeyRS_NEG:
+        XLIB DoCMD                               * 3DF6D
 
 * ROMPTR 0A3 01A
 * refs (1): 3DCED
-ROMP_0A3_01A:
-        ROMPTR 002 036                           * 3DF78  LASTARG
+* The right-shift EEX key: LASTARG
+KeyRS_EEX:
+        XLIB xLAST                               * 3DF78  LASTARG
 
 * ROMPTR 0A3 01B
 * refs (1): 3DCED
-ROMP_0A3_01B:
-        :: NoComLine?:(bip;q) OBJ_3E54A ;        * 3DF83
+* The right-shift DEL key
+KeyRS_DEL:
+        :: NoComLine?:(bip;q) EdDelToEnd ;       * 3DF83
 
 * ROMPTR 0A3 01C
 * refs (1): 3DCED
-ROMP_0A3_01C:
-        :: NoComLine?:(bip;q) OBJ_3E47F ;        * 3DF97
+* The right-shift backspace key
+KeyRS_BKSP:
+        :: NoComLine?:(bip;q) EdDelToStart ;     * 3DF97
 
 * ROMPTR 0A3 01D
 * refs (1): 3DCED
-ROMP_0A3_01D:
+* The right-shift α key
+KeyRS_ALPHA:
         :: TakeOver EditLExists? NOTcase         * 3DFAB
-          :: NULL$ OBJ_42CE2 SetPrgmEntry ;      * 3DFBF
+          :: NULL$ AddInComLine! SetPrgmEntry ;  * 3DFBF
           SetDA23NoCh PrgmEntry? NOTcase SetPrgmEntry * 3DFD8
           AlgEntry? case ClrAlgEntry             * 3DFEC
           SetAlgEntry ;                          * 3DFFB

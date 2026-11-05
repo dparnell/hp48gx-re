@@ -1,45 +1,56 @@
-* HP 48GX ROM revision R, #80000-#82006: Self-test code (runs with RAM unconfigured)
+* HP 48GX ROM revision R, #80000-#82006: Self-test (ON+D): a menu of hardware tests with their messages, run before RAM is set up; the screens of memory recovery
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: KeyTestDiag KeyTestAll
+* Most referenced: ShowError TestPause ShowOK SetBaud SetAnnun MsgToBuffer BeepStart ShowMsg TestIntrOn ProbeRead D1=IRAMHigh TestTitle
 
         ORG     #80000
-VersionStrings.L1:
+
+* refs (1): 80CBA
+* Self-test entry (ON+D). R1 collects a bit for each failure: 1 IROM, 2 IRAM, 3 KBD, 4 ESD, 5 U_LB, 6 UART, 7 RAM1, 8 RAM2, 9 IRLB, 10 IRIO. TestSummary shows it at the end
+SelfTest:
         C=0     A                                * 80000
         R1=C                                     * 80002
         GOSBVL  ClrScrMn                         * 80005
-        GOSUBL  SUB_8150C                        * 8000C
+        GOSUBL  DrawGrid                         * 8000C
         GOSBVL  D0->Sft1.L1                      * 80012
-        GOTO    VersionStrings.L3                * 80019
-VersionStrings.loop2:
+        GOTO    SelfTestWait                     * 80019
+
+* refs (4): 80060 80282 80287 815C0
+* Back to the menu after a test: annunciators off and the grid redrawn
+SelfTestMenu:
         C=0     A                                * 8001D
-        GOSUBL  SUB_804B6                        * 8001F
-        GOSUBL  SUB_814C5                        * 80025
-VersionStrings.L3:
-        GOSUBL  SUB_80215.L2                     * 8002B
-        GOSBVL  SUB_00D3B                        * 80031
+        GOSUBL  SetAnnun                         * 8001F
+        GOSUBL  DrawGridMid                      * 80025
+
+* refs (2): 80019 80118
+* Beeps, then waits for a key: ST6 set means continuous mode, which goes to SelfTestAll instead
+SelfTestWait:
+        GOSUBL  BeepMenu                         * 8002B
+        GOSBVL  ClrKeyState                      * 80031
         GOSUBL  Flush~jump                       * 80038
         ?ST=1   6                                * 8003E
-        GOYES   SUB_80081.L1                     * 80041
+        GOYES   SelfTestAll                      * 80041
         RSI                                      * 80043
-VersionStrings.loop4:
+* Waits for a key. Key numbers 1 to #1C pick an entry of TestTable, anything else redraws the menu
+SelfTestWait.loop1:
         GOSBVL  POPKEY                           * 80048
-        GOC     VersionStrings.loop4             * 8004F
+        GOC     SelfTestWait.loop1               * 8004F
         B=C     A                                * 80052
         GOSUBL  ClrScrMn~jump                    * 80054
         C=0     A                                * 8005A
         LC(2)   #1C                              * 8005C
         ?B>C    A                                * 80060
-        GOYES   VersionStrings.loop2             * 80063
+        GOYES   SelfTestMenu                     * 80063
         B=B-1   A                                * 80065
         A=B     A                                * 80067
-        LC(5)   SUB_80215.L1                     * 80069
-        GOSUB   SUB_80081                        * 80070
-        LC(5)   VersionStrings.loop2             * 80074
+        LC(5)   TestTable                        * 80069
+        GOSUB   Index5                           * 80070
+        LC(5)   SelfTestMenu                     * 80074
         RSTK=C                                   * 8007B
         PC=(A)                                   * 8007D
 
 * refs (1): 80070
-SUB_80081:
+* A.A = n C.A = base -> A.A = base+5*n
+Index5:
         RSTK=C                                   * 80081
         C=A     A                                * 80083
         A=A+A   A                                * 80085
@@ -48,94 +59,125 @@ SUB_80081:
         C=RSTK                                   * 8008B
         A=A+C   A                                * 8008D
         RTN                                      * 8008F
-SUB_80081.L1:
+
+* refs (1): 8003E
+* Runs the tests in turn: speed, display, ROM, RAM, then the serial and card tests that ST7, ST8 and ST10 pick, then the summary
+SelfTestAll:
         GOSUBL  ClrScrMn~jump                    * 80091
-        GOSUBL  SUB_80329                        * 80097
-        GOSUBL  SUB_8155D                        * 8009D
-        GOSUBL  SUB_80389                        * 800A3
-        GOSUBL  SUB_8155D                        * 800A9
-        GOSUBL  SUB_804C0                        * 800AF
-        GOSUBL  SUB_8155D                        * 800B5
-        GOSUBL  SUB_8066D                        * 800BB
-        GOSUBL  SUB_8155D                        * 800C1
+        GOSUBL  TestSpeed                        * 80097
+        GOSUBL  TestPause                        * 8009D
+        GOSUBL  TestDisplay                      * 800A3
+        GOSUBL  TestPause                        * 800A9
+        GOSUBL  TestIROM                         * 800AF
+        GOSUBL  TestPause                        * 800B5
+        GOSUBL  TestIRAM                         * 800BB
+        GOSUBL  TestPause                        * 800C1
         ?ST=0   10                               * 800C7
-        GOYES   SUB_80081.L3                     * 800CA
+        GOYES   SelfTestAll.L2                   * 800CA
         ?ST=0   7                                * 800CC
-        GOYES   SUB_80081.L2                     * 800CF
-        GOSUBL  SUB_80D8B                        * 800D1
-        GOSUBL  SUB_8155D                        * 800D7
-        GOTO    SUB_80081.L3                     * 800DD
-SUB_80081.L2:
-        GOSUBL  SUB_80D39                        * 800E1
-        GOSUBL  SUB_8155D                        * 800E7
-SUB_80081.L3:
+        GOYES   SelfTestAll.L1                   * 800CF
+        GOSUBL  TestIRLB                         * 800D1
+        GOSUBL  TestPause                        * 800D7
+        GOTO    SelfTestAll.L2                   * 800DD
+SelfTestAll.L1:
+        GOSUBL  TestULB                          * 800E1
+        GOSUBL  TestPause                        * 800E7
+SelfTestAll.L2:
         ?ST=0   8                                * 800ED
-        GOYES   SUB_80081.L4                     * 800F0
-        GOSUBL  SUB_810E6                        * 800F2
-        GOSUBL  SUB_8155D                        * 800F8
-SUB_80081.L4:
-        GOSUB   SUB_802C8                        * 800FE
-        GOSUB   SUB_802DF                        * 80102
-        GOSUBL  SUB_8155D                        * 80106
-        GOSUBL  SUB_815D3                        * 8010C
+        GOYES   SelfTestAll.L3                   * 800F0
+        GOSUBL  TestRAM                          * 800F2
+        GOSUBL  TestPause                        * 800F8
+SelfTestAll.L3:
+        GOSUB   BeepDone                         * 800FE
+        GOSUB   TestSummary                      * 80102
+        GOSUBL  TestPause                        * 80106
+        GOSUBL  DelayLong                        * 8010C
         GOSUBL  ClrScrMn~jump                    * 80112
-        GOTO    VersionStrings.L3                * 80118
-SUB_80081.L5:
+        GOTO    SelfTestWait                     * 80118
+
+* refs (1): 802AF
+* Picks no extra tests for SelfTestAll: ST8 and ST10 clear
+TestSetNone:
         ST=0    8                                * 8011C
         ST=0    10                               * 8011F
-        GOTO    SUB_80081.L11                    * 80122
-SUB_80081.L6:
+        GOTO    TestSetEnd                       * 80122
+
+* refs (1): 8029B
+* Picks the UART loop-back test
+TestSetULB:
         ST=0    8                                * 80126
         ST=1    10                               * 80129
         ST=0    7                                * 8012C
-        GOTO    SUB_80081.L11                    * 8012F
-SUB_80081.L7:
+        GOTO    TestSetEnd                       * 8012F
+
+* refs (1): 802A5
+* Picks the IR loop-back test
+TestSetIRLB:
         ST=0    8                                * 80133
         ST=1    10                               * 80136
         ST=1    7                                * 80139
-        GOTO    SUB_80081.L11                    * 8013C
-SUB_80081.L8:
+        GOTO    TestSetEnd                       * 8013C
+
+* refs (1): 80296
+* Picks the card RAM test
+TestSetRAM:
         ST=1    8                                * 80140
         ST=0    10                               * 80143
-        GOTO    SUB_80081.L11                    * 80146
-SUB_80081.L9:
+        GOTO    TestSetEnd                       * 80146
+
+* refs (1): 802A0
+* Picks the UART loop-back test and the card RAM test
+TestSetULBRAM:
         ST=1    8                                * 8014A
         ST=1    10                               * 8014D
         ST=0    7                                * 80150
-        GOTO    SUB_80081.L11                    * 80153
-SUB_80081.L10:
+        GOTO    TestSetEnd                       * 80153
+
+* refs (1): 802B4
+* Picks the IR loop-back test and the card RAM test
+TestSetIRLBRAM:
         ST=1    8                                * 80157
         ST=1    10                               * 8015A
         ST=1    7                                * 8015D
-SUB_80081.L11:
-        GOVLNG  CINRTN.L2                        * 80160
+
+* refs (5): 80122 8012F 8013C 80146 80153
+* Ends a TestSet entry: back through CINRTN.L2
+TestSetEnd:
+        GOVLNG  TestSetEnd~1                     * 80160
 
 * refs (2): 802AA 80CB1
-SUB_80167:
-        GOSBVL  SUB_012F9                        * 80167
-        GONC    SUB_80167.L1                     * 8016E
+* Keeps the time now at IRAM #78 as the start time, sets the fail time at #85 to all ones, and shows "Time Init"
+TestTimeInit:
+        GOSBVL  GetTimeNoInt                     * 80167
+        GONC    TestTimeInit.L1                  * 8016E
         C=0     W                                * 80171
-SUB_80167.L1:
-        GOSUBL  SUB_80EBC                        * 80174
+TestTimeInit.L1:
+        GOSUBL  D1=IRAMHigh                      * 80174
         D1=(4)  #0078                            * 8017A
         DAT1=C  13                               * 80180
         C=0     W                                * 80184
         C=-C-1  W                                * 80187
         D1=(4)  #0085                            * 8018A
         DAT1=C  13                               * 80190
-        D0=(5)  SUB_817E9.L19                    * 80194
-        GOSUBL  SUB_815FE                        * 8019B
-        GOTO    SUB_80167.L6                     * 801A1
-SUB_80167.L2:
-        D0=(5)  SUB_817E9.L20                    * 801A5
-        GOSUBL  SUB_8165A                        * 801AC
+        D0=(5)  MsgTimeInit                      * 80194
+        GOSUBL  ShowMsg                          * 8019B
+        GOTO    TestShowFail.L3                  * 801A1
+
+* refs (1): 8028C
+* Shows "Start:" with the time kept at IRAM #78
+TestShowStart:
+        D0=(5)  MsgStart                         * 801A5
+        GOSUBL  MsgToBuffer                      * 801AC
         D1=(4)  #0084                            * 801B2
-        GOTO    SUB_80167.L4                     * 801B8
-SUB_80167.L3:
-        D0=(5)  SUB_817E9.L21                    * 801BC
-        GOSUBL  SUB_8165A                        * 801C3
+        GOTO    TestShowFail.L1                  * 801B8
+
+* refs (1): 80291
+* Shows "Fail :" with the time kept at IRAM #85
+TestShowFail:
+        D0=(5)  MsgFail                          * 801BC
+        GOSUBL  MsgToBuffer                      * 801C3
         D1=(4)  #0091                            * 801C9
-SUB_80167.L4:
+TestShowFail.L1:
         CD1EX                                    * 801CF
         D1=C                                     * 801D2
         D0=C                                     * 801D5
@@ -143,22 +185,23 @@ SUB_80167.L4:
         P=      15                               * 801DE
         LC(1)   #C                               * 801E0
         P=      0                                * 801E3
-SUB_80167.loop5:
+TestShowFail.loop2:
         C=DAT1  1                                * 801E5
-        GOSUB   SUB_80215                        * 801E9
+        GOSUB   Nib>ASCII                        * 801E9
         DAT0=C  B                                * 801ED
         D0=D0+  2                                * 801F0
         D1=D1-  1                                * 801F3
         C=C-1   S                                * 801F6
-        GONC    SUB_80167.loop5                  * 801F9
-        GOSUBL  SUB_815FE.L1                     * 801FC
-SUB_80167.L6:
-        GOSUBL  SUB_81769                        * 80202
-        GOSUBL  SUB_8155D                        * 80208
+        GONC    TestShowFail.loop2               * 801F9
+        GOSUBL  ShowBuffer                       * 801FC
+TestShowFail.L3:
+        GOSUBL  PrintLine                        * 80202
+        GOSUBL  TestPause                        * 80208
         GOVLNG  ClrScrMn                         * 8020E
 
 * refs (1): 801E9
-SUB_80215:
+* C.P = nibble -> C.B = its hex digit in ASCII
+Nib>ASCII:
         A=0     B                                * 80215
         A=C     P                                * 80218
         LC(2)   #39                              * 8021B
@@ -170,192 +213,207 @@ SUB_80215:
         C=C+A   B                                * 8022D
         RTN                                      * 80230
 
+* Addresses of the tests, by key number: SPD DISP IROM IRAM KBD1 KBD2 ESD U_LB UART PORT RAM, a delay, SEND RECV IRLB IRIO, two blanks, the time and test-set entries and TestSummary
 * Self-test commands by key code - 1 (dispatched by PC=(A) at #8007D)
-SUB_80215.L1:
-        CON(5)  SUB_80329                        * 80232  entry 0
-        CON(5)  SUB_80389                        * 80237  entry 1
-        CON(5)  SUB_804C0                        * 8023C  entry 2
-        CON(5)  SUB_8066D                        * 80241  entry 3
-        CON(5)  SUB_8081A.L2                     * 80246  entry 4
-        CON(5)  SUB_8081A.L1                     * 8024B  entry 5
-        CON(5)  KeyTestDiag.L1                   * 80250  entry 6
-        CON(5)  SUB_80D39                        * 80255  entry 7
-        CON(5)  SUB_80EBC.L1                     * 8025A  entry 8
-        CON(5)  POPUART~jump.L1                  * 8025F  entry 9
-        CON(5)  SUB_810E6                        * 80264  entry 10
-        CON(5)  SUB_80ABA.L7                     * 80269  entry 11
-        CON(5)  SUB_80ABA.L8                     * 8026E  entry 12
-        CON(5)  SUB_80C13.L1                     * 80273  entry 13
-        CON(5)  SUB_80D8B                        * 80278  entry 14
-        CON(5)  SUB_80EF3.L7                     * 8027D  entry 15
-        CON(5)  VersionStrings.loop2             * 80282  entry 16
-        CON(5)  VersionStrings.loop2             * 80287  entry 17
-        CON(5)  SUB_80167.L2                     * 8028C  entry 18
-        CON(5)  SUB_80167.L3                     * 80291  entry 19
-        CON(5)  SUB_80081.L8                     * 80296  entry 20
-        CON(5)  SUB_80081.L6                     * 8029B  entry 21
-        CON(5)  SUB_80081.L9                     * 802A0  entry 22
-        CON(5)  SUB_80081.L7                     * 802A5  entry 23
-        CON(5)  SUB_80167                        * 802AA  entry 24
-        CON(5)  SUB_80081.L5                     * 802AF  entry 25
-        CON(5)  SUB_80081.L10                    * 802B4  entry 26
-        CON(5)  SUB_802DF                        * 802B9  entry 27
-SUB_80215.L2:
+TestTable:
+        CON(5)  TestSpeed                        * 80232  entry 0
+        CON(5)  TestDisplay                      * 80237  entry 1
+        CON(5)  TestIROM                         * 8023C  entry 2
+        CON(5)  TestIRAM                         * 80241  entry 3
+        CON(5)  TestKbd1                         * 80246  entry 4
+        CON(5)  TestKbd2                         * 8024B  entry 5
+        CON(5)  TestESD                          * 80250  entry 6
+        CON(5)  TestULB                          * 80255  entry 7
+        CON(5)  TestUART                         * 8025A  entry 8
+        CON(5)  TestPort                         * 8025F  entry 9
+        CON(5)  TestRAM                          * 80264  entry 10
+        CON(5)  TestDelay                        * 80269  entry 11
+        CON(5)  TestSend                         * 8026E  entry 12
+        CON(5)  TestRecv                         * 80273  entry 13
+        CON(5)  TestIRLB                         * 80278  entry 14
+        CON(5)  TestIRIO                         * 8027D  entry 15
+        CON(5)  SelfTestMenu                     * 80282  entry 16
+        CON(5)  SelfTestMenu                     * 80287  entry 17
+        CON(5)  TestShowStart                    * 8028C  entry 18
+        CON(5)  TestShowFail                     * 80291  entry 19
+        CON(5)  TestSetRAM                       * 80296  entry 20
+        CON(5)  TestSetULB                       * 8029B  entry 21
+        CON(5)  TestSetULBRAM                    * 802A0  entry 22
+        CON(5)  TestSetIRLB                      * 802A5  entry 23
+        CON(5)  TestTimeInit                     * 802AA  entry 24
+        CON(5)  TestSetNone                      * 802AF  entry 25
+        CON(5)  TestSetIRLBRAM                   * 802B4  entry 26
+        CON(5)  TestSummary                      * 802B9  entry 27
+
+* refs (2): 8002B 81E45
+* Short beep, tone #E4
+BeepMenu:
         P=      0                                * 802BE
         LC(2)   #E4                              * 802C0
-        GOTO    SUB_802D2.L1                     * 802C4
+        GOTO    BeepStart.L1                     * 802C4
 
 * refs (2): 800FE 809F0
-SUB_802C8:
+* Short beep, tone #DA
+BeepDone:
         P=      0                                * 802C8
         LC(2)   #DA                              * 802CA
-        GOTO    SUB_802D2.L1                     * 802CE
+        GOTO    BeepStart.L1                     * 802CE
 
 * refs (10): 80329 80389 804C0 8066D 80832 80B2D ...
-SUB_802D2:
+* Short beep, tone #F4. .L1 beeps the tone in C.B
+BeepStart:
         P=      0                                * 802D2
         LC(2)   #F4                              * 802D4
-SUB_802D2.L1:
+BeepStart.L1:
         GOVLNG  RCKBp                            * 802D8
 
 * refs (2): 80102 802B9
-SUB_802DF:
+* Shows "OK-48 " with no failures, or "FAIL" with R1 in hex and the annunciators lit
+TestSummary:
         GOSUBL  ClrScrMn~jump                    * 802DF
         C=R1                                     * 802E5
         ?C#0    A                                * 802E8
-        GOYES   SUB_802DF.L1                     * 802EB
-        D0=(5)  SUB_817E9.L14                    * 802ED
-        GOSUBL  SUB_8165A                        * 802F4
+        GOYES   TestSummary.L1                   * 802EB
+        D0=(5)  MsgOK48                          * 802ED
+        GOSUBL  MsgToBuffer                      * 802F4
         C=0     A                                * 802FA
-        GOTO    SUB_802DF.L2                     * 802FC
-SUB_802DF.L1:
-        D0=(5)  SUB_817E9.L15                    * 80300
-        GOSUBL  SUB_8165A                        * 80307
+        GOTO    TestSummary.L2                   * 802FC
+TestSummary.L1:
+        D0=(5)  MsgFAIL                          * 80300
+        GOSUBL  MsgToBuffer                      * 80307
         C=R1                                     * 8030D
         D0=C                                     * 80310
-        GOSUBL  SUB_816AD                        * 80313
+        GOSUBL  PutHex                           * 80313
         LC(2)   #FA                              * 80319
-SUB_802DF.L2:
-        GOSUBL  SUB_804B6                        * 8031D
-        GOLONG  SUB_81736.L2                     * 80323
+TestSummary.L2:
+        GOSUBL  SetAnnun                         * 8031D
+        GOLONG  ShowLine                         * 80323
 
 * refs (2): 80097 80232
-SUB_80329:
-        GOSUBL  SUB_802D2                        * 80329
-        D0=(5)  SUB_817E9.L4                     * 8032F
-        GOSUBL  SUB_815FE                        * 80336
-        GOSUB   SUB_80360                        * 8033C
+* SPD: measures the CPU clock and shows it
+TestSpeed:
+        GOSUBL  BeepStart                        * 80329
+        D0=(5)  MsgSPD                           * 8032F
+        GOSUBL  ShowMsg                          * 80336
+        GOSUB   ClockMeasure                     * 8033C
         ASL     W                                * 80340
         GOSBVL  SUB_657B9                        * 80343
-        GOSUBL  SUB_80EBC                        * 8034A
+        GOSUBL  D1=IRAMHigh                      * 8034A
         D1=(4)  #009A                            * 80350
         DAT1=C  14                               * 80356
-        GOLONG  SUB_81736.L2                     * 8035A
+        GOLONG  ShowLine                         * 8035A
 
 * refs (1): 8033C
-SUB_80360:
+* -> A = CPU speed, from the clock and the display off, interrupts off
+ClockMeasure:
         GOSBVL  DisableIntr                      * 80360
         GOSBVL  DispOff                          * 80367
         GOSBVL  clkspd                           * 8036E
         GOSBVL  SUB_7017C                        * 80375
         GOSBVL  DispOn                           * 8037C
-        GOLONG  SUB_80ABA.L6                     * 80383
+        GOLONG  TestIntrOn                       * 80383
 
 * refs (2): 800A3 80237
-SUB_80389:
-        GOSUBL  SUB_802D2                        * 80389
+* DISP: shows bar patterns and annunciators in turn
+TestDisplay:
+        GOSUBL  BeepStart                        * 80389
         C=0     A                                * 8038F
-        GOSUB   SUB_804B6                        * 80391
+        GOSUB   SetAnnun                         * 80391
         GOSUB   ClrScrMn~jump                    * 80395
-        D0=(5)  SUB_817E9.L5                     * 80399
-        GOSUBL  SUB_815FE                        * 803A0
-        GOSUBL  SUB_8155D                        * 803A6
+        D0=(5)  MsgDISP                          * 80399
+        GOSUBL  ShowMsg                          * 803A0
+        GOSUBL  TestPause                        * 803A6
         LC(16)  #9249249249249249                * 803AC
         B=C     W                                * 803BE
         LC(2)   #12                              * 803C1
-        GOSUB   SUB_804B6                        * 803C5
-        GOSUB   SUB_80414                        * 803C9
+        GOSUB   SetAnnun                         * 803C5
+        GOSUB   DisplayPatB                      * 803C9
         LC(2)   #A0                              * 803CD
-        GOSUB   SUB_804B6                        * 803D1
-        GOSUB   SUB_80414                        * 803D5
+        GOSUB   SetAnnun                         * 803D1
+        GOSUB   DisplayPatB                      * 803D5
         LC(2)   #40                              * 803D9
-        GOSUB   SUB_804B6                        * 803DD
-        GOSUB   SUB_80414                        * 803E1
+        GOSUB   SetAnnun                         * 803DD
+        GOSUB   DisplayPatB                      * 803E1
         LC(2)   #08                              * 803E5
-        GOSUB   SUB_804B6                        * 803E9
+        GOSUB   SetAnnun                         * 803E9
         P=      8                                * 803ED
-        GOSUB   SUB_8044F                        * 803EF
+        GOSUB   DisplayBars                      * 803EF
         LC(2)   #FA                              * 803F3
-        GOSUB   SUB_804B6                        * 803F7
+        GOSUB   SetAnnun                         * 803F7
         P=      4                                * 803FB
-        GOSUB   SUB_8044F                        * 803FD
+        GOSUB   DisplayBars                      * 803FD
         C=0     A                                * 80401
-        GOSUB   SUB_804B6                        * 80403
+        GOSUB   SetAnnun                         * 80403
         P=      2                                * 80407
-        GOSUB   SUB_8044F                        * 80409
+        GOSUB   DisplayBars                      * 80409
 
 * refs (14): 80054 80091 80112 802DF 80395 80673 ...
 ClrScrMn~jump:
         GOVLNG  ClrScrMn                         * 8040D
 
 * refs (3): 803C9 803D5 803E1
-SUB_80414:
+* B = pattern -> : fills the display rows and the menu with it, then waits
+DisplayPatB:
         GOSBVL  D0->Row1                         * 80414
         C=0     A                                * 8041B
         LC(2)   #37                              * 8041D
-        GOSUB   SUB_8043F                        * 80421
+        GOSUB   FillRows                         * 80421
         GOSBVL  D0->Sft1                         * 80425
         C=0     A                                * 8042C
         LC(1)   #7                               * 8042E
-        GOSUB   SUB_8043F                        * 80431
+        GOSUB   FillRows                         * 80431
         BSRB                                     * 80435
         BSRB                                     * 80438
-        GOTO    SUB_8044F.L1                     * 8043B
+        GOTO    DisplayBars.L1                   * 8043B
 
 * refs (2): 80421 80431
-SUB_8043F:
+* C.A = rows-1 B.W = pattern, D0 = first row -> : fills rows
+FillRows:
         D=C     A                                * 8043F
         C=B     W                                * 80441
-SUB_8043F.loop1:
-        GOSUB   SUB_8049F                        * 80444
+FillRows.loop1:
+        GOSUB   FillRow                          * 80444
         D=D-1   A                                * 80448
-        GONC    SUB_8043F.loop1                  * 8044A
+        GONC    FillRows.loop1                   * 8044A
         RTN                                      * 8044D
 
 * refs (3): 803EF 803FD 80409
-SUB_8044F:
+* A.S = first level -> : fills the display with alternating full and empty rows, then waits
+DisplayBars:
         C=P     15                               * 8044F
         A=C     S                                * 80453
         GOSBVL  D0->Row1                         * 80456
         C=0     A                                * 8045D
         LC(2)   #37                              * 8045F
-        GOSUB   SUB_8047D                        * 80463
+        GOSUB   BarRows                          * 80463
         GOSBVL  D0->Sft1                         * 80467
         C=0     A                                * 8046E
         LC(1)   #7                               * 80470
-        GOSUB   SUB_8047D                        * 80473
-SUB_8044F.L1:
-        GOLONG  SUB_8155D                        * 80477
+        GOSUB   BarRows                          * 80473
+DisplayBars.L1:
+        GOLONG  TestPause                        * 80477
 
 * refs (2): 80463 80473
-SUB_8047D:
+* C.A = rows-1 A.S = phase, D0 = first row -> : fills rows with full or empty bits by the phase
+BarRows:
         D=C     A                                * 8047D
-SUB_8047D.loop1:
+BarRows.loop1:
         C=0     W                                * 8047F
         A=A+A   S                                * 80482
-        GONC    SUB_8047D.L2                     * 80485
+        GONC    BarRows.L2                       * 80485
         A=0     S                                * 80488
         A=A+1   S                                * 8048B
         A=A+1   S                                * 8048E
         C=-C-1  W                                * 80491
-SUB_8047D.L2:
-        GOSUB   SUB_8049F                        * 80494
+BarRows.L2:
+        GOSUB   FillRow                          * 80494
         D=D-1   A                                * 80498
-        GONC    SUB_8047D.loop1                  * 8049A
+        GONC    BarRows.loop1                    * 8049A
         RTN                                      * 8049D
 
 * refs (2): 80444 80494
-SUB_8049F:
+* C = pattern, D0 = row -> D0 next row: writes the 34 nibbles of a row; carry clear
+FillRow:
         DAT0=C  15                               * 8049F
         D0=D0+  15                               * 804A3
         DAT0=C  15                               * 804A6
@@ -365,15 +423,17 @@ SUB_8049F:
         RTNCC                                    * 804B4
 
 * refs (10): 8001F 8031D 80391 803C5 803D1 803DD ...
-SUB_804B6:
+* C.B = bits -> : turns the annunciators on or off by the bits
+SetAnnun:
         A=C     B                                * 804B6
-        GOVLNG  SUB_01EFD                        * 804B9
+        GOVLNG  AnnByte>HW                       * 804B9
 
 * refs (2): 800AF 8023C
-SUB_804C0:
-        GOSUBL  SUB_802D2                        * 804C0
-        D0=(5)  SUB_817E9.L6                     * 804C6
-        GOSUBL  SUB_815FE                        * 804CD
+* IROM: checks the CRC of both halves of the ROM. Sets bit 1 of R1 on a failure
+TestIROM:
+        GOSUBL  BeepStart                        * 804C0
+        D0=(5)  MsgIROM                          * 804C6
+        GOSUBL  ShowMsg                          * 804CD
         D0=(5)  #00000                           * 804D3
         LC(5)   #03FFF                           * 804DA
         B=C     A                                * 804E1
@@ -381,38 +441,39 @@ SUB_804C0:
         D=C     A                                * 804EA
         LC(5)   #40000                           * 804EC
         AD0EX                                    * 804F3
-        GOSUB   SUB_8054D                        * 804F6
-        GONC    SUB_804C0.L2                     * 804FA
-        D0=(5)  VersionStrings.L1                * 804FD
+        GOSUB   ROMHalfCRC                       * 804F6
+        GONC    TestIROM.L2                      * 804FA
+        D0=(5)  SelfTest                         * 804FD
         LC(5)   #03FFF                           * 80504
         B=C     A                                * 8050B
         LC(5)   #00000                           * 8050D
         D=C     A                                * 80514
         LC(5)   #40000                           * 80516
         AD0EX                                    * 8051D
-        GOSUB   SUB_8054D                        * 80520
-        GONC    SUB_804C0.L1                     * 80524
-        GOLONG  SUB_816E5.L2                     * 80527
-SUB_804C0.L1:
+        GOSUB   ROMHalfCRC                       * 80520
+        GONC    TestIROM.L1                      * 80524
+        GOLONG  ShowOK                           * 80527
+TestIROM.L1:
         P=      15                               * 8052D
         CPEX    4                                * 8052F
-SUB_804C0.L2:
+TestIROM.L2:
         CD0EX                                    * 80533
         C=R1.F  A                                * 80536
         CBIT=1  1                                * 8053C
         R1=C.F  A                                * 80541
-        GOLONG  SUB_81736                        * 80547
+        GOLONG  ShowError                        * 80547
 
 * refs (2): 804F6 80520
-SUB_8054D:
+* A.A = base (0 or #80000) -> carry set if the CRC of that half comes to #FFFF: reads it in four interleaved quarters, as sasm.crc_fix expects
+ROMHalfCRC:
         ST=0    15                               * 8054D
         RSTK=C                                   * 80550
         C=0     A                                * 80552
         D1=(5)  #00104                           * 80554
         DAT1=C  4                                * 8055B
-        GOSUB   SUB_805B7                        * 8055F
+        GOSUB   ROMMapIn                         * 8055F
         C=RSTK                                   * 80563
-SUB_8054D.loop1:
+ROMHalfCRC.loop1:
         D0=A                                     * 80565
         RSTK=C                                   * 80568
         CAEX    A                                * 8056A
@@ -420,21 +481,21 @@ SUB_8054D.loop1:
         C=C+A   A                                * 8056E
         D1=C                                     * 80570
         C=B     A                                * 80573
-SUB_8054D.loop2:
+ROMHalfCRC.loop2:
         A=DAT0  W                                * 80575
         D0=D0+  16                               * 80579
         A=DAT1  W                                * 8057C
         D1=D1+  16                               * 80580
         C=C-1   A                                * 80583
-        GONC    SUB_8054D.loop2                  * 80585
+        GONC    ROMHalfCRC.loop2                 * 80585
         C=RSTK                                   * 80588
         A=C     A                                * 8058A
         C=RSTK                                   * 8058C
         A=A+C   A                                * 8058E
         A=A+C   A                                * 80590
         D=D-1   A                                * 80592
-        GONC    SUB_8054D.loop1                  * 80594
-        GOSUB   SUB_805FE                        * 80597
+        GONC    ROMHalfCRC.loop1                 * 80594
+        GOSUB   ROMMapOut                        * 80597
         D0=(5)  #00104                           * 8059B
         C=0     A                                * 805A2
         C=DAT0  4                                * 805A4
@@ -443,19 +504,20 @@ SUB_8054D.loop2:
         A=A-1   P                                * 805AC
         A=A+1   A                                * 805AF
         P=      0                                * 805B1
-        GOTO    SUB_80ABA.L6                     * 805B3
+        GOTO    TestIntrOn                       * 805B3
 
 * refs (1): 8055F
-SUB_805B7:
+* A.A = base -> : changes the configuration so that this half of the ROM can be read: for the upper half takes out all other modules
+ROMMapIn:
         P=      0                                * 805B7
         ?A#0    A                                * 805B9
-        GOYES   SUB_805B7.L1                     * 805BC
+        GOYES   ROMMapIn.L1                      * 805BC
         LC(5)   #00100                           * 805BE
         UNCNFG                                   * 805C5
         LC(5)   #B0000                           * 805C8
         CONFIG                                   * 805CF
         RTN                                      * 805D2
-SUB_805B7.L1:
+ROMMapIn.L1:
         LC(5)   #C0000                           * 805D4
         UNCNFG                                   * 805DB
         LC(5)   #A0000                           * 805DE
@@ -467,16 +529,17 @@ SUB_805B7.L1:
         RTN                                      * 805FC
 
 * refs (1): 80597
-SUB_805FE:
+* A.A = base -> : restores the configuration changed by ROMMapIn
+ROMMapOut:
         P=      0                                * 805FE
         ?A=0    A                                * 80600
-        GOYES   SUB_805FE.L1                     * 80603
+        GOYES   ROMMapOut.L1                     * 80603
         LC(5)   #B0000                           * 80605
         UNCNFG                                   * 8060C
         LC(5)   #00100                           * 8060F
         CONFIG                                   * 80616
         RTN                                      * 80619
-SUB_805FE.L1:
+ROMMapOut.L1:
         LC(5)   #F0000                           * 8061B
         CONFIG                                   * 80622
         LC(5)   #C0000                           * 80625
@@ -496,34 +559,36 @@ SUB_805FE.L1:
         RTN                                      * 8066B
 
 * refs (2): 800BB 80241
-SUB_8066D:
-        GOSUBL  SUB_802D2                        * 8066D
+* IRAM: tests the built-in RAM, saving and restoring its contents. Sets bit 2 of R1 on a failure
+TestIRAM:
+        GOSUBL  BeepStart                        * 8066D
         GOSUB   ClrScrMn~jump                    * 80673
-        D0=(5)  SUB_817E9.L7                     * 80677
-        GOSUBL  SUB_8165A                        * 8067E
+        D0=(5)  MsgIRAM                          * 80677
+        GOSUBL  MsgToBuffer                      * 8067E
         ST=0    15                               * 80684
-        GOSUBL  SUB_81349                        * 80687
+        GOSUBL  CfgChip                          * 80687
         B=C     A                                * 8068D
-        GOSBVL  SUB_01DA1                        * 8068F
-        GONC    SUB_8066D.L1                     * 80696
+        GOSBVL  RamSizeTest                      * 8068F
+        GONC    TestIRAM.L1                      * 80696
         D0=(5)  #00001                           * 80699
-        GOTO    SUB_8066D.L2                     * 806A0
-SUB_8066D.L1:
-        GOSUBL  SUB_8148B                        * 806A4
-        GOSUBL  SUB_81211                        * 806AA
-        GOC     SUB_8066D.L2                     * 806B0
-        GOSUBL  SUB_8120A                        * 806B3
-        GOLONG  SUB_816E5.L2                     * 806B9
-SUB_8066D.L2:
-        GOSUBL  SUB_8120A                        * 806BF
-        GOSUBL  SUB_81736                        * 806C5
+        GOTO    TestIRAM.L2                      * 806A0
+TestIRAM.L1:
+        GOSUBL  ShowTail4                        * 806A4
+        GOSUBL  CardTest                         * 806AA
+        GOC     TestIRAM.L2                      * 806B0
+        GOSUBL  ReconfigAll                      * 806B3
+        GOLONG  ShowOK                           * 806B9
+TestIRAM.L2:
+        GOSUBL  ReconfigAll                      * 806BF
+        GOSUBL  ShowError                        * 806C5
         C=R1.F  A                                * 806CB
         CBIT=1  2                                * 806D1
         R1=C.F  A                                * 806D6
         RTN                                      * 806DC
 
 * refs (1): 81254
-SUB_806DE:
+* D = address -> carry set on failure: saves 64 nibbles in R1 to R4, writes and reads back patterns in it, and restores them
+RamTestBlock:
         C=D     A                                * 806DE
         D0=C                                     * 806E0
         C=DAT0  W                                * 806E3
@@ -541,7 +606,7 @@ SUB_806DE:
         LA(16)  #2942942942942942                * 8070A
         B=A     S                                * 8071F
         C=D     A                                * 80722
-SUB_806DE.loop1:
+RamTestBlock.loop1:
         D0=C                                     * 80724
         DAT0=A  15                               * 80727
         D0=D0+  15                               * 8072B
@@ -556,24 +621,24 @@ SUB_806DE.loop1:
         P=      14                               * 8074A
         C=DAT0  15                               * 8074C
         ?C#A    WP                               * 80750
-        GOYES   SUB_806DE.L2                     * 80753
+        GOYES   RamTestBlock.L2                  * 80753
         D0=D0+  15                               * 80755
         C=DAT0  15                               * 80758
         ?C#A    WP                               * 8075C
-        GOYES   SUB_806DE.L2                     * 8075F
+        GOYES   RamTestBlock.L2                  * 8075F
         D0=D0+  15                               * 80761
         C=DAT0  15                               * 80764
         ?C#A    WP                               * 80768
-        GOYES   SUB_806DE.L2                     * 8076B
+        GOYES   RamTestBlock.L2                  * 8076B
         D0=D0+  15                               * 8076D
         C=DAT0  15                               * 80770
         ?C#A    WP                               * 80774
-        GOYES   SUB_806DE.L2                     * 80777
+        GOYES   RamTestBlock.L2                  * 80777
         D0=D0+  15                               * 80779
         P=      3                                * 8077C
         C=DAT0  4                                * 8077E
         ?C#A    WP                               * 80782
-        GOYES   SUB_806DE.L2                     * 80785
+        GOYES   RamTestBlock.L2                  * 80785
         ASL     W                                * 80787
         C=A     S                                * 8078A
         P=C     15                               * 8078D
@@ -582,17 +647,17 @@ SUB_806DE.loop1:
         A=C     P                                * 80797
         C=D     A                                * 8079A
         B=B-1   S                                * 8079C
-        GOC     SUB_806DE.L3                     * 8079F
-        GOTO    SUB_806DE.loop1                  * 807A2
-SUB_806DE.L2:
+        GOC     RamTestBlock.L3                  * 8079F
+        GOTO    RamTestBlock.loop1               * 807A2
+RamTestBlock.L2:
         C=RSTK                                   * 807A6
         DCEX    A                                * 807A8
         BUSCC                                    * 807AA
         P=      0                                * 807AD
-        GOSUB   SUB_806DE.L3                     * 807AF
+        GOSUB   RamTestBlock.L3                  * 807AF
         RSTK=C                                   * 807B3
         RTNSC                                    * 807B5
-SUB_806DE.L3:
+RamTestBlock.L3:
         CD0EX                                    * 807B7
         A=R1                                     * 807BA
         DAT0=A  W                                * 807BD
@@ -611,14 +676,15 @@ SUB_806DE.L3:
         RTNCC                                    * 807E7
 
 * refs (2): 809D4 80A39
-SUB_807E9:
+* -> C = CRC of the built-in RAM, as a check on the test's own damage
+IRAMCRC:
         P=      0                                * 807E9
         LC(5)   #0F000                           * 807EB
         B=C     A                                * 807F2
         GOSUB   D0=IRAM~jump_3                   * 807F4
         LC(4)   #1000                            * 807F8
         B=B+C   A                                * 807FE
-        GOTO    SUB_8081A                        * 80800
+        GOTO    MemCRC                           * 80800
         P=      0                                * 80804
         LC(5)   #10000                           * 80806
         B=C     A                                * 8080D
@@ -628,61 +694,71 @@ SUB_807E9:
         B=B+C   A                                * 80818
 
 * refs (3): 80800 81225 81273
-SUB_8081A:
-        GOVLNG  SUB_044D4                        * 8081A
-SUB_8081A.L1:
+* D0 = address B.A = nibbles -> C = CRC
+MemCRC:
+        GOVLNG  CRCRange                         * 8081A
+
+* refs (1): 8024B
+* KBD2: a shorter key test, of the keys on the diagonal of the keyboard
+TestKbd2:
         ST=1    11                               * 80821
-        GOTO    SUB_8081A.L3                     * 80824
-SUB_8081A.L2:
+        GOTO    TestKbd                          * 80824
+
+* refs (1): 80246
+* KBD1: tests all the keys, one at a time, in order
+TestKbd1:
         ST=0    11                               * 80828
-SUB_8081A.L3:
+
+* refs (1): 80824
+* ST11 picks the list of keys: KeyTestDiag or KeyTestAll. A wrong key is reported and the test goes on; a zero byte ends it. Sets bit 3 of R1 on a failure
+TestKbd:
         ST=0    9                                * 8082B
-        GOSUB   SUB_80916                        * 8082E
-        GOSUBL  SUB_802D2                        * 80832
-        GOSBVL  SUB_00E0B                        * 80838
+        GOSUB   KbdTitle                         * 8082E
+        GOSUBL  BeepStart                        * 80832
+        GOSBVL  KbdOutAll                        * 80838
         INTON                                    * 8083F
         GOSUBL  Flush~jump                       * 80843
         D0=(5)  KeyTestAll                       * 80849
         ?ST=0   11                               * 80850
-        GOYES   SUB_8081A.loop4                  * 80853
+        GOYES   TestKbd.loop1                    * 80853
         D0=(5)  KeyTestDiag                      * 80855
-SUB_8081A.loop4:
+TestKbd.loop1:
         C=DAT0  B                                * 8085C
         D=C     A                                * 8085F
         D0=D0+  2                                * 80861
         ?C#0    B                                * 80864
-        GOYES   SUB_8081A.L6                     * 80867
+        GOYES   TestKbd.L3                       * 80867
         ?ST=0   9                                * 80869
-        GOYES   SUB_8081A.L5                     * 8086C
+        GOYES   TestKbd.L2                       * 8086C
         C=R1.F  A                                * 8086E
         CBIT=1  3                                * 80874
         R1=C.F  A                                * 80879
-        GOSUB   SUB_80916                        * 8087F
-        GOLONG  SUB_816E5.L3                     * 80883
-SUB_8081A.L5:
-        GOLONG  SUB_816E5.L2                     * 80889
-SUB_8081A.L6:
-        GOSUB   SUB_80EBC                        * 8088F
+        GOSUB   KbdTitle                         * 8087F
+        GOLONG  ShowFAIL                         * 80883
+TestKbd.L2:
+        GOLONG  ShowOK                           * 80889
+TestKbd.L3:
+        GOSUB   D1=IRAMHigh                      * 8088F
         D1=(4)  #07F7                            * 80893
         A=0     A                                * 80899
         DAT1=A  A                                * 8089B
-SUB_8081A.loop7:
+TestKbd.loop4:
         RSI                                      * 8089E
         D1=(4)  #07F7                            * 808A3
         C=DAT1  A                                * 808A9
         ?C=0    A                                * 808AC
-        GOYES   SUB_8081A.L8                     * 808AF
+        GOYES   TestKbd.L5                       * 808AF
         C=0     A                                * 808B1
         LC(2)   #2D                              * 808B3
-        GONC    SUB_8081A.L9                     * 808B7
-SUB_8081A.L8:
+        GONC    TestKbd.L6                       * 808B7
+TestKbd.L5:
         GOSBVL  POPKEY                           * 808BA
-        GONC    SUB_8081A.L9                     * 808C1
+        GONC    TestKbd.L6                       * 808C1
         SHUTDN                                   * 808C4
-        GOTO    SUB_8081A.loop7                  * 808C7
-SUB_8081A.L9:
+        GOTO    TestKbd.loop4                    * 808C7
+TestKbd.L6:
         ?D=C    B                                * 808CB
-        GOYES   SUB_8081A.L10                    * 808CE
+        GOYES   TestKbd.L7                       * 808CE
         ST=1    9                                * 808D0
         AD0EX                                    * 808D3
         R4=A.F  A                                * 808D6
@@ -691,34 +767,36 @@ SUB_8081A.L9:
         C=D     B                                * 808E0
         RSTK=C                                   * 808E3
         LC(2)   #F4                              * 808E5
-        GOSUBL  SUB_802D2.L1                     * 808E9
+        GOSUBL  BeepStart.L1                     * 808E9
         C=RSTK                                   * 808EF
         D0=C                                     * 808F1
-        GOSUBL  SUB_81736                        * 808F4
+        GOSUBL  ShowError                        * 808F4
         A=R4                                     * 808FA
         D0=A                                     * 808FD
-        GOTO    SUB_8081A.loop4                  * 80900
-SUB_8081A.L10:
+        GOTO    TestKbd.loop1                    * 80900
+TestKbd.L7:
         LC(2)   #94                              * 80904
-        GOSUBL  SUB_802D2.L1                     * 80908
-        GOSUB   SUB_80916                        * 8090E
-        GOTO    SUB_8081A.loop4                  * 80912
+        GOSUBL  BeepStart.L1                     * 80908
+        GOSUB   KbdTitle                         * 8090E
+        GOTO    TestKbd.loop1                    * 80912
 
 * refs (3): 8082E 8087F 8090E
-SUB_80916:
+* Shows "KBD1" or "KBD2" by ST11, keeping D0
+KbdTitle:
         AD0EX                                    * 80916
         R4=A.F  A                                * 80919
         GOSUBL  ClrScrMn~jump                    * 8091F
-        D0=(5)  SUB_817E9.L8                     * 80925
+        D0=(5)  MsgKBD1                          * 80925
         ?ST=0   11                               * 8092C
-        GOYES   SUB_80916.L1                     * 8092F
-        D0=(5)  SUB_817E9.L9                     * 80931
-SUB_80916.L1:
-        GOSUBL  SUB_815FE                        * 80938
+        GOYES   KbdTitle.L1                      * 8092F
+        D0=(5)  MsgKBD2                          * 80931
+KbdTitle.L1:
+        GOSUBL  ShowMsg                          * 80938
         A=R4                                     * 8093E
         D0=A                                     * 80941
         RTNCC                                    * 80944
 
+* Key numbers in the order the test expects them
 * Self-test: keycodes to press for the full keyboard test, in order (read at #8085C)
 KeyTestAll:
         CON(2)  #01                              * 80946  entry 0
@@ -772,6 +850,7 @@ KeyTestAll:
         CON(2)  #31                              * 809A6  entry 48
         CON(2)  0                                * 809A8  end of table
 
+* Key numbers of the short test
 * Self-test: keycodes for the short (diagonal) keyboard test, read at #8085C when ST11 is set
 KeyTestDiag:
         CON(2)  #02                              * 809AA  entry 0
@@ -784,12 +863,15 @@ KeyTestDiag:
         CON(2)  #2A                              * 809B8  entry 7
         CON(2)  #30                              * 809BA  entry 8
         CON(2)  0                                * 809BC  end of table
-KeyTestDiag.L1:
+
+* refs (1): 80250
+* ESD: shows "ESD 210V  210V" and a running count, and compares the RAM's CRC after each pass. A change fails the test and sets bit 4 of R1
+TestESD:
         GOSUBL  ClrScrMn~jump                    * 809BE
-        D0=(5)  SUB_817E9.L11                    * 809C4
-        GOSUBL  SUB_815FE                        * 809CB
+        D0=(5)  MsgESD210                        * 809C4
+        GOSUBL  ShowMsg                          * 809CB
         ST=0    15                               * 809D1
-        GOSUB   SUB_807E9                        * 809D4
+        GOSUB   IRAMCRC                          * 809D4
         R2=C                                     * 809D8
         D0=(5)  DA1BadMASK                       * 809DB
         P=      0                                * 809E2
@@ -797,8 +879,8 @@ KeyTestDiag.L1:
         DAT0=C  1                                * 809E7
         C=0     A                                * 809EB
         R3=C                                     * 809ED
-KeyTestDiag.loop2:
-        GOSUBL  SUB_802C8                        * 809F0
+TestESD.loop1:
+        GOSUBL  BeepDone                         * 809F0
         D0=(5)  DA1NoChMASK                      * 809F6
         A=DAT0  1                                * 809FD
         C=R3                                     * 80A01
@@ -812,71 +894,72 @@ KeyTestDiag.loop2:
         C=C+A   A                                * 80A21
         D0=C                                     * 80A23
         C=R3                                     * 80A26
-        GOSUB   SUB_80ABA                        * 80A29
+        GOSUB   ESDDigit                         * 80A29
         D0=D0+  9                                * 80A2D
         C=R3                                     * 80A30
         CSR     A                                * 80A33
-        GOSUB   SUB_80ABA                        * 80A35
-        GOSUB   SUB_807E9                        * 80A39
+        GOSUB   ESDDigit                         * 80A35
+        GOSUB   IRAMCRC                          * 80A39
         A=R2                                     * 80A3D
         ?C#A    A                                * 80A40
-        GOYES   KeyTestDiag.L4                   * 80A43
-        GOSBVL  SUB_00E0B                        * 80A45
-        GONC    KeyTestDiag.loop2                * 80A4C
-        GOSUB   SUB_80ABA.L6                     * 80A4F
+        GOYES   TestESD.L3                       * 80A43
+        GOSBVL  KbdOutAll                        * 80A45
+        GONC    TestESD.loop1                    * 80A4C
+        GOSUB   TestIntrOn                       * 80A4F
         D1=(5)  DA1BadMASK                       * 80A53
         LC(1)   #4                               * 80A5A
         DAT1=C  1                                * 80A5D
         GOSUBL  ClrScrMn~jump                    * 80A61
-KeyTestDiag.loop3:
-        GOSBVL  SUB_00E0B                        * 80A67
-        GOC     KeyTestDiag.loop3                * 80A6E
+TestESD.loop2:
+        GOSBVL  KbdOutAll                        * 80A67
+        GOC     TestESD.loop2                    * 80A6E
         RTN                                      * 80A71
-KeyTestDiag.L4:
+TestESD.L3:
         RSTK=C                                   * 80A73
-        GOSUB   SUB_80ABA.L6                     * 80A75
+        GOSUB   TestIntrOn                       * 80A75
         D1=(5)  DA1BadMASK                       * 80A79
         LC(1)   #4                               * 80A80
         DAT1=C  1                                * 80A83
         GOSUBL  ClrScrMn~jump                    * 80A87
-        D0=(5)  SUB_817E9.L12                    * 80A8D
-        GOSUBL  SUB_815FE                        * 80A94
+        D0=(5)  MsgESD                           * 80A8D
+        GOSUBL  ShowMsg                          * 80A94
         C=RSTK                                   * 80A9A
         D0=C                                     * 80A9C
         C=R1.F  A                                * 80A9F
         CBIT=1  4                                * 80AA5
         R1=C.F  A                                * 80AAA
-        GOSUB   KeyTestDiag.loop3                * 80AB0
-        GOLONG  SUB_81736                        * 80AB4
+        GOSUB   TestESD.loop2                    * 80AB0
+        GOLONG  ShowError                        * 80AB4
 
 * refs (2): 80A29 80A35
-SUB_80ABA:
+* C.A = hex digit, D0 = position -> : draws a digit as four big blocks, one for each bit
+ESDDigit:
         A=C     A                                * 80ABA
         LC(6)   #30C30C                          * 80ABC
         ?ABIT=1 3                                * 80AC4
-        GOYES   SUB_80ABA.L1                     * 80AC9
+        GOYES   ESDDigit.L1                      * 80AC9
         C=0     P                                * 80ACB
-SUB_80ABA.L1:
+ESDDigit.L1:
         P=      2                                * 80ACE
         ?ABIT=1 2                                * 80AD0
-        GOYES   SUB_80ABA.L2                     * 80AD5
+        GOYES   ESDDigit.L2                      * 80AD5
         C=0     P                                * 80AD7
-SUB_80ABA.L2:
+ESDDigit.L2:
         P=      3                                * 80ADA
         ?ABIT=1 1                                * 80ADC
-        GOYES   SUB_80ABA.L3                     * 80AE1
+        GOYES   ESDDigit.L3                      * 80AE1
         C=0     P                                * 80AE3
-SUB_80ABA.L3:
+ESDDigit.L3:
         P=      5                                * 80AE6
         ?ABIT=1 0                                * 80AE8
-        GOYES   SUB_80ABA.L4                     * 80AED
+        GOYES   ESDDigit.L4                      * 80AED
         C=0     P                                * 80AEF
-SUB_80ABA.L4:
+ESDDigit.L4:
         P=      15                               * 80AF2
         LC(1)   #7                               * 80AF4
         B=C     W                                * 80AF7
         P=      0                                * 80AFA
-SUB_80ABA.loop5:
+ESDDigit.loop5:
         C=B     W                                * 80AFC
         DAT0=C  6                                * 80AFF
         AD0EX                                    * 80B03
@@ -884,77 +967,88 @@ SUB_80ABA.loop5:
         A=A+C   A                                * 80B0D
         D0=A                                     * 80B0F
         B=B-1   S                                * 80B12
-        GONC    SUB_80ABA.loop5                  * 80B15
+        GONC    ESDDigit.loop5                   * 80B15
         LC(5)   #00110                           * 80B18
         A=A-C   A                                * 80B1F
         D0=A                                     * 80B21
         RTNCC                                    * 80B24
-SUB_80ABA.L6:
+
+* refs (8): 80383 805B3 80A4F 80A75 80C78 80CAA ...
+* Interrupts back on
+TestIntrOn:
         GOVLNG  AllowIntr                        * 80B26
-SUB_80ABA.L7:
-        GOSUBL  SUB_802D2                        * 80B2D
+
+* refs (1): 80269
+* Beeps, clears the display and waits for a long delay
+TestDelay:
+        GOSUBL  BeepStart                        * 80B2D
         GOSUBL  ClrScrMn~jump                    * 80B33
-        GOSUBL  SUB_815D3                        * 80B39
-        GOTO    KeyTestDiag.loop3                * 80B3F
-SUB_80ABA.L8:
-        D0=(5)  SUB_817E9.L27                    * 80B43
-        GOSUB   SUB_80D29                        * 80B4A
-        GOSUB   SUB_80CF0                        * 80B4E
+        GOSUBL  DelayLong                        * 80B39
+        GOTO    TestESD.loop2                    * 80B3F
+
+* refs (1): 8026E
+* SEND: sends the clock's time over the serial port as hex digits and waits for an ACK, for setting up test equipment
+TestSend:
+        D0=(5)  MsgSEND                          * 80B43
+        GOSUB   TestTitle                        * 80B4A
+        GOSUB   IRLoopRateOn                     * 80B4E
         GOSBVL  GetTime++                        * 80B52
         A=C     W                                * 80B59
-        GOSUB   SUB_80BCB                        * 80B5C
+        GOSUB   ClockRead                        * 80B5C
         RSTK=C                                   * 80B60
         P=      12                               * 80B62
-        GOSUB   SUB_80BE7                        * 80B64
+        GOSUB   SendHex                          * 80B64
         C=RSTK                                   * 80B68
-        GOC     SUB_80ABA.L11                    * 80B6A
+        GOC     TestSend.L3                      * 80B6A
         A=C     A                                * 80B6D
         P=      3                                * 80B6F
-        GOSUB   SUB_80BE7                        * 80B71
-        GOC     SUB_80ABA.L11                    * 80B75
-        GOSUB   SUB_80C13                        * 80B78
-        GOSUB   SUB_80CE3                        * 80B7C
-        GOSUBL  SUB_815C6                        * 80B80
+        GOSUB   SendHex                          * 80B71
+        GOC     TestSend.L3                      * 80B75
+        GOSUB   DelayMid                         * 80B78
+        GOSUB   IRLoopRate                       * 80B7C
+        GOSUBL  DelayShort                       * 80B80
         GOSUB   POPUART~jump                     * 80B86
         C=0     A                                * 80B8A
-        GOC     SUB_80ABA.L9                     * 80B8C
+        GOC     TestSend.L1                      * 80B8C
         LC(2)   #06                              * 80B8F
         ?C#A    B                                * 80B93
-        GOYES   SUB_80ABA.L10                    * 80B96
+        GOYES   TestSend.L2                      * 80B96
         LC(2)   #94                              * 80B98
-        GOSUBL  SUB_802D2.L1                     * 80B9C
-        GOLONG  SUB_816E5.L2                     * 80BA2
-SUB_80ABA.L9:
+        GOSUBL  BeepStart.L1                     * 80B9C
+        GOLONG  ShowOK                           * 80BA2
+TestSend.L1:
         C=C+1   A                                * 80BA8
-        GOTO    SUB_80ABA.L12                    * 80BAA
-SUB_80ABA.L10:
+        GOTO    TestSend.L4                      * 80BAA
+TestSend.L2:
         LC(1)   #2                               * 80BAE
-        GOTO    SUB_80ABA.L12                    * 80BB1
-SUB_80ABA.L11:
+        GOTO    TestSend.L4                      * 80BB1
+TestSend.L3:
         C=A     A                                * 80BB5
-SUB_80ABA.L12:
+TestSend.L4:
         RSTK=C                                   * 80BB7
         LC(1)   #6                               * 80BB9
-        GOSUB   SUB_80DED                        * 80BBC
+        GOSUB   SetBaud                          * 80BBC
         C=RSTK                                   * 80BC0
         D0=C                                     * 80BC2
-        GOLONG  SUB_81736                        * 80BC5
+        GOLONG  ShowError                        * 80BC5
 
 * refs (2): 80B5C 80C38
-SUB_80BCB:
+* A = time -> C.A: keeps the time at IRAM #69 through SetClockOffsD1 and gives the four-nibble word after it
+ClockRead:
         GOSUB   D1=IRAM~jump_5                   * 80BCB
         D1=(4)  #0069                            * 80BCF
-        GOSBVL  SUB_01702                        * 80BD5
+        GOSBVL  SetClockOffsD1                   * 80BD5
         D1=D1+  13                               * 80BDC
         C=0     A                                * 80BDF
         C=DAT1  4                                * 80BE1
         RTN                                      * 80BE5
 
 * refs (2): 80B64 80B71
-SUB_80BE7:
+* A = value P = digits-1 -> : sends the digits over the serial port. Carry set on failure
+SendHex:
         C=0     A                                * 80BE7
         CPEX    0                                * 80BE9
-SUB_80BE7.loop1:
+SendHex.loop1:
         RSTK=C                                   * 80BED
         LC(2)   #30                              * 80BEF
         C=A     P                                * 80BF3
@@ -967,88 +1061,96 @@ SUB_80BE7.loop1:
         RTNC                                     * 80C06
         A=R1                                     * 80C09
         C=C-1   A                                * 80C0C
-        GONC    SUB_80BE7.loop1                  * 80C0E
+        GONC    SendHex.loop1                    * 80C0E
         RTNCC                                    * 80C11
 
 * refs (2): 80B78 80C7C
-SUB_80C13:
+* Delay: #ABD turns
+DelayMid:
         LC(5)   #00ABD                           * 80C13
-        GOLONG  SUB_815D3.loop1                  * 80C1A
-SUB_80C13.L1:
-        D0=(5)  SUB_817E9.L28                    * 80C20
-        GOSUB   SUB_80D29                        * 80C27
-        GOSUB   SUB_80CE3                        * 80C2B
+        GOLONG  DelayC                           * 80C1A
+
+* refs (1): 80273
+* RECV: reads the time from the serial port, checks it and sets the clock
+TestRecv:
+        D0=(5)  MsgRECV                          * 80C20
+        GOSUB   TestTitle                        * 80C27
+        GOSUB   IRLoopRate                       * 80C2B
         P=      3                                * 80C2F
-        GOSUB   SUB_80CC0                        * 80C31
+        GOSUB   RecvHex                          * 80C31
         R3=A                                     * 80C35
-        GOSUB   SUB_80BCB                        * 80C38
+        GOSUB   ClockRead                        * 80C38
         P=      12                               * 80C3C
-        GOSUB   SUB_80CC0                        * 80C3E
+        GOSUB   RecvHex                          * 80C3E
         GOSBVL  ASRW5                            * 80C42
         GOSBVL  AsrW4                            * 80C49
         ?C=A    A                                * 80C50
-        GOYES   SUB_80C13.L2                     * 80C53
-        GOTO    SUB_80ABA.L11                    * 80C55
-SUB_80C13.L2:
+        GOYES   TestRecv.L1                      * 80C53
+        GOTO    TestSend.L3                      * 80C55
+TestRecv.L1:
         C=0     W                                * 80C59
         P=      0                                * 80C5C
         LC(8)   #7E900000                        * 80C5E
         A=R3                                     * 80C68
         A=A+C   W                                * 80C6B
         ST=0    15                               * 80C6E
-        GOSBVL  SUB_01A33.L2                     * 80C71
-        GOSUB   SUB_80ABA.L6                     * 80C78
-        GOSUB   SUB_80C13                        * 80C7C
-        GOSUB   SUB_80CF0                        * 80C80
+        GOSBVL  InitClock.L2                     * 80C71
+        GOSUB   TestIntrOn                       * 80C78
+        GOSUB   DelayMid                         * 80C7C
+        GOSUB   IRLoopRateOn                     * 80C80
         LC(2)   #06                              * 80C84
         A=C     A                                * 80C88
         GOSUB   OUTUART~jump                     * 80C8A
-        GONC    SUB_80C13.L3                     * 80C8E
+        GONC    TestRecv.L2                      * 80C8E
         A=C     A                                * 80C91
-        GOTO    SUB_80ABA.L11                    * 80C93
-SUB_80C13.L3:
+        GOTO    TestSend.L3                      * 80C93
+TestRecv.L2:
         ST=0    15                               * 80C97
-        GOSBVL  SUB_010A9                        * 80C9A
+        GOSBVL  ClrWSLog                         * 80C9A
         P=      0                                * 80CA1
-        GOSBVL  SUB_02708                        * 80CA3
-        GOSUB   SUB_80ABA.L6                     * 80CAA
+        GOSBVL  LogWarmstart                     * 80CA3
+        GOSUB   TestIntrOn                       * 80CAA
         ST=1    6                                * 80CAE
-        GOSUBL  SUB_80167                        * 80CB1
+        GOSUBL  TestTimeInit                     * 80CB1
         ST=0    6                                * 80CB7
-        GOLONG  VersionStrings.L1                * 80CBA
+        GOLONG  SelfTest                         * 80CBA
 
 * refs (2): 80C31 80C3E
-SUB_80CC0:
+* P = digits-1 -> A = value: receives hex digits from the serial port
+RecvHex:
         B=0     W                                * 80CC0
-SUB_80CC0.loop1:
+RecvHex.loop1:
         GOSUB   POPUART~jump                     * 80CC3
-        GOC     SUB_80CC0.loop1                  * 80CC7
+        GOC     RecvHex.loop1                    * 80CC7
         ASRC                                     * 80CCA
         B=A     S                                * 80CCD
         BSR     W                                * 80CD0
         P=P+1                                    * 80CD3
-        GONC    SUB_80CC0.loop1                  * 80CD5
+        GONC    RecvHex.loop1                    * 80CD5
         BSR     W                                * 80CD8
         BSR     W                                * 80CDB
         A=B     W                                * 80CDE
         RTN                                      * 80CE1
 
 * refs (2): 80B7C 80C2B
-SUB_80CE3:
+* Sets 2400 baud (rate 2) and turns on the IR LED loop
+IRLoopRate:
         P=      0                                * 80CE3
         LC(1)   #2                               * 80CE5
-        GOSUB   SUB_80DED                        * 80CE8
-        GOTO    SUB_80CFD                        * 80CEC
+        GOSUB   SetBaud                          * 80CE8
+        GOTO    IRLoopOn                         * 80CEC
 
 * refs (2): 80B4E 80C80
-SUB_80CF0:
+* As IRLoopRate, also enabling the UART
+IRLoopRateOn:
         P=      0                                * 80CF0
         LC(1)   #2                               * 80CF2
-        GOSUB   SUB_80DED                        * 80CF5
-        GOSUB   SUB_81051                        * 80CF9
+        GOSUB   SetBaud                          * 80CF5
+        GOSUB   UARTOn                           * 80CF9
 
 * refs (4): 80CEC 80DA7 80DC3 80FB2
-SUB_80CFD:
+* Sets bit 2 of the IRC register: IR transmit on
+IRLoopOn:
         D1=(5)  IRC                              * 80CFD
         A=DAT1  1                                * 80D04
         ABIT=1  2                                * 80D08
@@ -1056,7 +1158,8 @@ SUB_80CFD:
         RTN                                      * 80D11
 
 * refs (3): 80DCE 80DD8 80F88
-SUB_80D13:
+* Clears bit 2 of the IRC register
+IRLoopOff:
         D1=(5)  IRC                              * 80D13
         A=DAT1  1                                * 80D1A
         ABIT=0  2                                * 80D1E
@@ -1064,72 +1167,77 @@ SUB_80D13:
         RTN                                      * 80D27
 
 * refs (6): 80B4A 80C27 80D40 80D92 80ECA 80F80
-SUB_80D29:
+* D0 = message -> : flushes keys, beeps and shows the title
+TestTitle:
         GOSUB   FlushAttn~jump                   * 80D29
-        GOSUBL  SUB_802D2                        * 80D2D
-        GOLONG  SUB_815FE                        * 80D33
+        GOSUBL  BeepStart                        * 80D2D
+        GOLONG  ShowMsg                          * 80D33
 
 * refs (2): 800E1 80255
-SUB_80D39:
-        D0=(5)  SUB_817E9.L16                    * 80D39
-        GOSUB   SUB_80D29                        * 80D40
+* U_LB: UART loop-back, at two rates. Sets bit 5 of R1 on a failure
+TestULB:
+        D0=(5)  MsgU_LB                          * 80D39
+        GOSUB   TestTitle                        * 80D40
         LC(5)   #00E52                           * 80D44
         R2=C                                     * 80D4B
         LC(1)   #0                               * 80D4E
-        GOSUB   SUB_80DED                        * 80D51
-        GOSUB   SUB_80DF4                        * 80D55
-        GONC    SUB_80D39.L1                     * 80D59
+        GOSUB   SetBaud                          * 80D51
+        GOSUB   LoopSend                         * 80D55
+        GONC    TestULB.L1                       * 80D59
         LC(5)   #00225                           * 80D5C
         R2=C                                     * 80D63
         LC(1)   #6                               * 80D66
-        GOSUB   SUB_80DED                        * 80D69
-        GOSUB   SUB_80DF4                        * 80D6D
-        GONC    SUB_80D39.L1                     * 80D71
-        GOLONG  SUB_816E5.L2                     * 80D74
-SUB_80D39.L1:
+        GOSUB   SetBaud                          * 80D69
+        GOSUB   LoopSend                         * 80D6D
+        GONC    TestULB.L1                       * 80D71
+        GOLONG  ShowOK                           * 80D74
+TestULB.L1:
         A=R1                                     * 80D7A
         ABIT=1  5                                * 80D7D
         R1=A                                     * 80D82
-        GOLONG  SUB_81736                        * 80D85
+        GOLONG  ShowError                        * 80D85
 
 * refs (2): 800D1 80278
-SUB_80D8B:
-        D0=(5)  SUB_817E9.L25                    * 80D8B
-        GOSUB   SUB_80D29                        * 80D92
+* IRLB: IR loop-back, at two rates. Sets bit 9 of R1 on a failure
+TestIRLB:
+        D0=(5)  MsgIRLB                          * 80D8B
+        GOSUB   TestTitle                        * 80D92
         LC(5)   #00E52                           * 80D96
         R2=C                                     * 80D9D
         LC(1)   #0                               * 80DA0
-        GOSUB   SUB_80DED                        * 80DA3
-        GOSUB   SUB_80CFD                        * 80DA7
-        GOSUB   SUB_80DF4                        * 80DAB
-        GONC    SUB_80D8B.L1                     * 80DAF
+        GOSUB   SetBaud                          * 80DA3
+        GOSUB   IRLoopOn                         * 80DA7
+        GOSUB   LoopSend                         * 80DAB
+        GONC    TestIRLB.L1                      * 80DAF
         LC(5)   #00729                           * 80DB2
         R2=C                                     * 80DB9
         LC(1)   #2                               * 80DBC
-        GOSUB   SUB_80DED                        * 80DBF
-        GOSUB   SUB_80CFD                        * 80DC3
-        GOSUB   SUB_80DF4                        * 80DC7
-        GONC    SUB_80D8B.L1                     * 80DCB
-        GOSUB   SUB_80D13                        * 80DCE
-        GOLONG  SUB_816E5.L2                     * 80DD2
-SUB_80D8B.L1:
-        GOSUB   SUB_80D13                        * 80DD8
+        GOSUB   SetBaud                          * 80DBF
+        GOSUB   IRLoopOn                         * 80DC3
+        GOSUB   LoopSend                         * 80DC7
+        GONC    TestIRLB.L1                      * 80DCB
+        GOSUB   IRLoopOff                        * 80DCE
+        GOLONG  ShowOK                           * 80DD2
+TestIRLB.L1:
+        GOSUB   IRLoopOff                        * 80DD8
         A=R1                                     * 80DDC
         ABIT=1  9                                * 80DDF
         R1=A                                     * 80DE4
-        GOLONG  SUB_81736                        * 80DE7
+        GOLONG  ShowError                        * 80DE7
 
 * refs (10): 80BBC 80CE8 80CF5 80D51 80D69 80DA3 ...
-SUB_80DED:
-        GOVLNG  SUB_30E82.L1                     * 80DED
+* C.P = rate -> : sets the UART rate
+SetBaud:
+        GOVLNG  SetBaud~1                        * 80DED
 
 * refs (4): 80D55 80D6D 80DAB 80DC7
-SUB_80DF4:
+* R2 = delay -> carry clear with an error code in D0 on a failure: sends "U_LB XMIT" and the EOT, byte by byte, and checks each comes back from the UART's own buffer
+LoopSend:
         C=0     A                                * 80DF4
-        D0=(5)  SUB_817E9.L18                    * 80DF6
+        D0=(5)  MsgXMIT                          * 80DF6
         C=DAT0  B                                * 80DFD
         D0=D0+  2                                * 80E00
-SUB_80DF4.loop1:
+LoopSend.loop1:
         C=C-1   A                                * 80E03
         RTNC                                     * 80E05
         RSTK=C                                   * 80E08
@@ -1140,11 +1248,11 @@ SUB_80DF4.loop1:
         A=C     A                                * 80E16
         C=RSTK                                   * 80E18
         D0=C                                     * 80E1A
-        GOC     SUB_80DF4.L3                     * 80E1D
+        GOC     LoopSend.L3                      * 80E1D
         C=R2                                     * 80E20
-SUB_80DF4.loop2:
+LoopSend.loop2:
         C=C-1   A                                * 80E23
-        GONC    SUB_80DF4.loop2                  * 80E25
+        GONC    LoopSend.loop2                   * 80E25
         A=0     A                                * 80E28
         A=DAT0  B                                * 80E2A
         B=A     A                                * 80E2D
@@ -1152,10 +1260,10 @@ SUB_80DF4.loop2:
         D1=(4)  #0519                            * 80E33
         A=DAT1  B                                * 80E39
         ?A=0    B                                * 80E3C
-        GOYES   SUB_80DF4.L5                     * 80E3F
+        GOYES   LoopSend.L5                      * 80E3F
         LC(2)   #01                              * 80E41
         ?C#A    B                                * 80E45
-        GOYES   SUB_80DF4.L6                     * 80E48
+        GOYES   LoopSend.L6                      * 80E48
         D1=D1+  3                                * 80E4A
         A=DAT1  B                                * 80E4D
         A=A+A   A                                * 80E50
@@ -1166,19 +1274,19 @@ SUB_80DF4.loop2:
         A=0     A                                * 80E60
         A=DAT1  B                                * 80E62
         ?A#B    B                                * 80E65
-        GOYES   SUB_80DF4.L4                     * 80E68
+        GOYES   LoopSend.L4                      * 80E68
         D1=(4)  #0519                            * 80E6A
         C=0     A                                * 80E70
         DAT1=C  B                                * 80E72
         D0=D0+  2                                * 80E75
         C=RSTK                                   * 80E78
-        GOTO    SUB_80DF4.loop1                  * 80E7A
-SUB_80DF4.L3:
+        GOTO    LoopSend.loop1                   * 80E7A
+LoopSend.L3:
         C=RSTK                                   * 80E7E
         C=A     A                                * 80E80
         D0=C                                     * 80E82
         RTNCC                                    * 80E85
-SUB_80DF4.L4:
+LoopSend.L4:
         C=RSTK                                   * 80E87
         A=A+1   XS                               * 80E89
         ASL     A                                * 80E8C
@@ -1186,13 +1294,13 @@ SUB_80DF4.L4:
         A=B     B                                * 80E90
         D0=A                                     * 80E93
         RTNCC                                    * 80E96
-SUB_80DF4.L5:
+LoopSend.L5:
         C=RSTK                                   * 80E98
-        D0=(5)  xYCOL.L1+1                       * 80E9A
+        D0=(5)  #20000                           * 80E9A  an error code, not an address
         RTNCC                                    * 80EA1
-SUB_80DF4.L6:
+LoopSend.L6:
         C=RSTK                                   * 80EA3
-        D0=(5)  SUB_2FFD0.L2                     * 80EA5
+        D0=(5)  #30000                           * 80EA5  an error code, not an address
         RTNCC                                    * 80EAC
 
 * refs (2): 807F4 8080F
@@ -1204,138 +1312,148 @@ D1=IRAM~jump_5:
         GOVLNG  D1=IRAM                          * 80EB5
 
 * refs (7): 80174 8034A 8088F 80FD2 810D2 81747 ...
-SUB_80EBC:
-        GOVLNG  SUB_0C1B6                        * 80EBC
-SUB_80EBC.L1:
-        D0=(5)  SUB_817E9.L17                    * 80EC3
-        GOSUB   SUB_80D29                        * 80ECA
+* -> D1 = the base of the built-in RAM, from the pointer at =IR_16Hz_Clock; the caller sets the low four nibbles
+D1=IRAMHigh:
+        GOVLNG  AD1=IRAM                         * 80EBC
+
+* refs (1): 8025A
+* UART: echoes what the serial port receives, until an EOT. Sets bit 6 of R1 on a failure
+TestUART:
+        D0=(5)  MsgUART                          * 80EC3
+        GOSUB   TestTitle                        * 80ECA
         LC(1)   #6                               * 80ECE
-        GOSUB   SUB_80DED                        * 80ED1
-        GOSUB   SUB_80EF3                        * 80ED5
-        GOC     SUB_80EBC.L2                     * 80ED9
-        GOLONG  SUB_816E5.L2                     * 80EDC
-SUB_80EBC.L2:
+        GOSUB   SetBaud                          * 80ED1
+        GOSUB   UARTEcho                         * 80ED5
+        GOC     TestUART.L1                      * 80ED9
+        GOLONG  ShowOK                           * 80EDC
+TestUART.L1:
         A=R1                                     * 80EE2
         ABIT=1  6                                * 80EE5
         R1=A                                     * 80EEA
-        GOLONG  SUB_81736                        * 80EED
+        GOLONG  ShowError                        * 80EED
 
 * refs (1): 80ED5
-SUB_80EF3:
+* -> carry set with an error code in D0: echoes bytes until EOT (#04). Code 1 means a key was pressed, 2 a time-out
+UARTEcho:
         ST=0    15                               * 80EF3
         GOSUB   Flush~jump                       * 80EF6
-        GOSBVL  SUB_00D3B                        * 80EFA
+        GOSBVL  ClrKeyState                      * 80EFA
         GOSUB   FlushAttn~jump                   * 80F01
-        GOSUB   SUB_80ABA.L6                     * 80F05
-SUB_80EF3.loop1:
+        GOSUB   TestIntrOn                       * 80F05
+UARTEcho.loop1:
         P=      0                                * 80F09
         LC(5)   #0AA68                           * 80F0B
         R3=C                                     * 80F12
-SUB_80EF3.loop2:
+UARTEcho.loop2:
         P=      0                                * 80F15
-        GOSUB   SUB_81051                        * 80F17
+        GOSUB   UARTOn                           * 80F17
         GOSUB   POPUART~jump                     * 80F1B
         LC(1)   #A                               * 80F1F
         DAT0=C  1                                * 80F22
-        GONC    SUB_80EF3.L5                     * 80F26
+        GONC    UARTEcho.L5                      * 80F26
         GOSUB   D1=IRAM~jump_5                   * 80F29
         D1=(4)  #07F7                            * 80F2D
         C=DAT1  A                                * 80F33
         ?C#0    A                                * 80F36
-        GOYES   SUB_80EF3.L3                     * 80F39
+        GOYES   UARTEcho.L3                      * 80F39
         GOSBVL  POPKEY                           * 80F3B
-        GOC     SUB_80EF3.L4                     * 80F42
-SUB_80EF3.L3:
+        GOC     UARTEcho.L4                      * 80F42
+UARTEcho.L3:
         D0=(5)  #00001                           * 80F45
         RTNSC                                    * 80F4C
-SUB_80EF3.L4:
+UARTEcho.L4:
         A=R3                                     * 80F4E
         A=A-1   A                                * 80F51
         R3=A                                     * 80F53
-        GONC    SUB_80EF3.loop2                  * 80F56
+        GONC    UARTEcho.loop2                   * 80F56
         D0=(5)  #00002                           * 80F59
         RTNSC                                    * 80F60
-SUB_80EF3.L5:
+UARTEcho.L5:
         LC(2)   #04                              * 80F62
         ?C#A    B                                * 80F66
-        GOYES   SUB_80EF3.L6                     * 80F69
+        GOYES   UARTEcho.L6                      * 80F69
         RTNCC                                    * 80F6B
-SUB_80EF3.L6:
+UARTEcho.L6:
         GOSUB   OUTUART~jump                     * 80F6D
-        GONC    SUB_80EF3.loop1                  * 80F71
+        GONC    UARTEcho.loop1                   * 80F71
         D0=C                                     * 80F74
         RTNSC                                    * 80F77
-SUB_80EF3.L7:
-        D0=(5)  SUB_817E9.L26                    * 80F79
-        GOSUB   SUB_80D29                        * 80F80
-        GOSUB   SUB_80FA6                        * 80F84
-        GOSUB   SUB_80D13                        * 80F88
-        GOC     SUB_80EF3.L8                     * 80F8C
-        GOLONG  SUB_816E5.L2                     * 80F8F
-SUB_80EF3.L8:
+
+* refs (1): 8027D
+* IRIO: echoes what the IR port receives. Sets bit 10 of R1 on a failure
+TestIRIO:
+        D0=(5)  MsgIRIO                          * 80F79
+        GOSUB   TestTitle                        * 80F80
+        GOSUB   IREcho                           * 80F84
+        GOSUB   IRLoopOff                        * 80F88
+        GOC     TestIRIO.L1                      * 80F8C
+        GOLONG  ShowOK                           * 80F8F
+TestIRIO.L1:
         A=R1                                     * 80F95
         ABIT=1  10                               * 80F98
         R1=A                                     * 80F9D
-        GOLONG  SUB_81736                        * 80FA0
+        GOLONG  ShowError                        * 80FA0
 
 * refs (2): 80F84 8103A
-SUB_80FA6:
+* -> carry set with an error code in D0: waits for steady IR input, then echoes bytes
+IREcho:
         ST=0    15                               * 80FA6
         P=      0                                * 80FA9
         LC(1)   #2                               * 80FAB
-        GOSUB   SUB_80DED                        * 80FAE
-        GOSUB   SUB_80CFD                        * 80FB2
+        GOSUB   SetBaud                          * 80FAE
+        GOSUB   IRLoopOn                         * 80FB2
         GOSUB   Flush~jump                       * 80FB6
-        GOSBVL  SUB_00D3B                        * 80FBA
+        GOSBVL  ClrKeyState                      * 80FBA
         GOSUB   FlushAttn~jump                   * 80FC1
-        GOSUB   SUB_80ABA.L6                     * 80FC5
+        GOSUB   TestIntrOn                       * 80FC5
         P=      0                                * 80FC9
         LC(5)   #85225                           * 80FCB
-        GOSUB   SUB_80EBC                        * 80FD2
+        GOSUB   D1=IRAMHigh                      * 80FD2
         D1=(4)  #0519                            * 80FD6
         A=0     A                                * 80FDC
-SUB_80FA6.loop1:
+IREcho.loop1:
         A=DAT1  B                                * 80FDE
         ?A#0    B                                * 80FE1
-        GOYES   SUB_80FA6.loop2                  * 80FE4
+        GOYES   IREcho.loop2                     * 80FE4
         C=C-1   A                                * 80FE6
-        GONC    SUB_80FA6.loop1                  * 80FE8
+        GONC    IREcho.loop1                     * 80FE8
         D0=(5)  #00002                           * 80FEB
         RTNSC                                    * 80FF2
-SUB_80FA6.loop2:
+IREcho.loop2:
         B=A     A                                * 80FF4
         LC(5)   #00656                           * 80FF6
-SUB_80FA6.loop3:
+IREcho.loop3:
         A=DAT1  B                                * 80FFD
         ?A#B    B                                * 81000
-        GOYES   SUB_80FA6.loop2                  * 81003
+        GOYES   IREcho.loop2                     * 81003
         C=C-1   A                                * 81005
-        GONC    SUB_80FA6.loop3                  * 81007
-        GOSUB   SUB_81051                        * 8100A
-SUB_80FA6.loop4:
+        GONC    IREcho.loop3                     * 81007
+        GOSUB   UARTOn                           * 8100A
+IREcho.loop4:
         GOSUB   D1=IRAM~jump_5                   * 8100E
         D1=(4)  #07F7                            * 81012
         C=DAT1  A                                * 81018
         ?C#0    A                                * 8101B
-        GOYES   SUB_80FA6.L5                     * 8101E
+        GOYES   IREcho.L5                        * 8101E
         GOSBVL  POPKEY                           * 81020
-        GOC     SUB_80FA6.L6                     * 81027
-SUB_80FA6.L5:
+        GOC     IREcho.L6                        * 81027
+IREcho.L5:
         D0=(5)  #00001                           * 8102A
         RTNSC                                    * 81031
-SUB_80FA6.L6:
+IREcho.L6:
         GOSUB   POPUART~jump                     * 81033
-        GONC    SUB_80FA6.L7                     * 81037
-        GOTO    SUB_80FA6                        * 8103A
-SUB_80FA6.L7:
+        GONC    IREcho.L7                        * 81037
+        GOTO    IREcho                           * 8103A
+IREcho.L7:
         GOSUB   OUTUART~jump                     * 8103E
-        GONC    SUB_80FA6.loop4                  * 81042
+        GONC    IREcho.loop4                     * 81042
         D0=C                                     * 81045
         RTNSC                                    * 81048
         BSS     7                                * 8104A  zeros
 
 * refs (3): 80CF9 80F17 8100A
-SUB_81051:
+* Writes 8 to the IOC register: enables the UART
+UARTOn:
         LC(1)   #8                               * 81051
         D0=(5)  IOC                              * 81054
         DAT0=C  1                                * 8105B
@@ -1356,87 +1474,93 @@ Flush~jump:
 * refs (4): 80B86 80CC3 80F1B 81033
 POPUART~jump:
         GOVLNG  POPUART                          * 81076
-POPUART~jump.L1:
-        GOSUBL  SUB_802D2                        * 8107D
+
+* refs (1): 8025F
+* PORT: reads the card-detect bits through WaitCardStat, exercises the card, and shows the state as four ASCII digits
+TestPort:
+        GOSUBL  BeepStart                        * 8107D
         GOSUBL  ClrScrMn~jump                    * 81083
-        D0=(5)  SUB_817E9.L22                    * 81089
-        GOSUBL  SUB_8165A                        * 81090
+        D0=(5)  MsgPORT                          * 81089
+        GOSUBL  MsgToBuffer                      * 81090
         ST=0    15                               * 81096
-        GOSBVL  SUB_00735                        * 81099
+        GOSBVL  WaitCardStat                     * 81099
         GOSUBL  SUB_81374                        * 810A0
-        GOSBVL  SUB_00735                        * 810A6
+        GOSBVL  WaitCardStat                     * 810A6
         B=C     A                                * 810AD
         LC(8)   #30303030                        * 810AF
         P=      14                               * 810B9
-POPUART~jump.loop2:
+TestPort.loop1:
         ?B=0    XS                               * 810BB
-        GOYES   POPUART~jump.L3                  * 810BE
+        GOYES   TestPort.L2                      * 810BE
         P=P+1                                    * 810C0
         P=P+1                                    * 810C2
         B=B+B   XS                               * 810C4
-        GONC    POPUART~jump.loop2               * 810C7
+        GONC    TestPort.loop1                   * 810C7
         C=C+1   P                                * 810CA
-        GONC    POPUART~jump.loop2               * 810CD
-POPUART~jump.L3:
+        GONC    TestPort.loop1                   * 810CD
+TestPort.L2:
         P=      0                                * 810D0
-        GOSUB   SUB_80EBC                        * 810D2
+        GOSUB   D1=IRAMHigh                      * 810D2
         D1=(4)  #009C                            * 810D6
         DAT1=C  8                                * 810DC
-        GOLONG  SUB_81736.L2                     * 810E0
+        GOLONG  ShowLine                         * 810E0
 
 * refs (2): 800F2 80264
-SUB_810E6:
-        GOSUBL  SUB_802D2                        * 810E6
+* RAM: "RAM1" tests the card in port 1 from ROM, "RAM2" tests the card in port 2 from a copy of the test in IRAM, since a card at #C0000 covers ROM. Sets bits 7 and 8 of R1 on a failure
+* Each test: a read-only card or no card gives code 2, too little memory code 1
+TestRAM:
+        GOSUBL  BeepStart                        * 810E6
         GOSUBL  ClrScrMn~jump                    * 810EC
-        D0=(5)  SUB_817E9.L23                    * 810F2
-        GOSUBL  SUB_8165A                        * 810F9
+        D0=(5)  MsgRAM1                          * 810F2
+        GOSUBL  MsgToBuffer                      * 810F9
         ST=0    15                               * 810FF
-        GOSBVL  SUB_00735                        * 81102
+        GOSBVL  WaitCardStat                     * 81102
         A=C     A                                * 81109
         LC(3)   #A00                             * 8110B
         A=A&C   XS                               * 81110
         ?C=A    XS                               * 81114
-        GOYES   SUB_810E6.L1                     * 81117
+        GOYES   TestRAM.L1                       * 81117
         D0=(5)  #00002                           * 81119
-        GOTO    SUB_810E6.L3                     * 81120
-SUB_810E6.L1:
-        GOSUB   SUB_812AB                        * 81124
+        GOTO    TestRAM.L3                       * 81120
+TestRAM.L1:
+        GOSUB   CfgCard1                         * 81124
         B=C     A                                * 81128
-        GOSBVL  SUB_01DA1                        * 8112A
-        GONC    SUB_810E6.L2                     * 81131
+        GOSBVL  RamSizeTest                      * 8112A
+        GONC    TestRAM.L2                       * 81131
         D0=(5)  #00001                           * 81134
-        GOTO    SUB_810E6.L3                     * 8113B
-SUB_810E6.L2:
-        GOSUB   SUB_8148B                        * 8113F
-        GOSUB   SUB_81211                        * 81143
-        GOC     SUB_810E6.L3                     * 81147
-        GOSUB   SUB_8120A                        * 8114A
-        GOSUBL  SUB_816E5.L2                     * 8114E
-        GOTO    SUB_810E6.L4                     * 81154
-SUB_810E6.L3:
-        GOSUB   SUB_8120A                        * 81158
-        GOSUBL  SUB_81736                        * 8115C
+        GOTO    TestRAM.L3                       * 8113B
+TestRAM.L2:
+        GOSUB   ShowTail4                        * 8113F
+        GOSUB   CardTest                         * 81143
+        GOC     TestRAM.L3                       * 81147
+        GOSUB   ReconfigAll                      * 8114A
+        GOSUBL  ShowOK                           * 8114E
+        GOTO    TestRAM.L4                       * 81154
+TestRAM.L3:
+        GOSUB   ReconfigAll                      * 81158
+        GOSUBL  ShowError                        * 8115C
         C=R1.F  A                                * 81162
         CBIT=1  7                                * 81168
         R1=C.F  A                                * 8116D
-SUB_810E6.L4:
-        D0=(5)  SUB_817E9.L24                    * 81173
-        GOSUBL  SUB_8165A                        * 8117A
+TestRAM.L4:
+        D0=(5)  MsgRAM2                          * 81173
+        GOSUBL  MsgToBuffer                      * 8117A
         ST=0    15                               * 81180
-        GOSBVL  SUB_00735                        * 81183
+        GOSBVL  WaitCardStat                     * 81183
         A=C     A                                * 8118A
         LC(3)   #500                             * 8118C
         A=A&C   XS                               * 81191
         ?C=A    XS                               * 81195
-        GOYES   SUB_810E6.L5                     * 81198
+        GOYES   TestRAM.L5                       * 81198
         D0=(5)  #00002                           * 8119A
-        GOTO    SUB_810E6.L7                     * 811A1
-SUB_810E6.L5:
-        GOSUB   SUB_812FA                        * 811A5
-        LC(5)   SUB_81BA2.L4                     * 811A9
+        GOTO    TestRAM2Fail                     * 811A1
+* Copies the rest of the test to IRAM at #409A3 and enters it after its header
+TestRAM.L5:
+        GOSUB   CfgCard2                         * 811A5
+        LC(5)   ReplaceRAMScreen                 * 811A9
         D0=C                                     * 811B0
         A=C     A                                * 811B3
-        LC(5)   SUB_817E9.L29                    * 811B5
+        LC(5)   Ram2Test                         * 811B5
         A=A-C   A                                * 811BC
         LC(5)   #40000                           * 811BE
         LC(4)   #09A3                            * 811C5
@@ -1448,34 +1572,42 @@ SUB_810E6.L5:
         CD1EX                                    * 811DC
         RSTK=C                                   * 811DF
         RTN                                      * 811E1
-SUB_810E6.L6:
-        GOSUB   SUB_8120A                        * 811E3
-        GOLONG  SUB_816E5.L2                     * 811E7
-SUB_810E6.L7:
-        GOSUB   SUB_8120A                        * 811ED
-        GOSUBL  SUB_81736                        * 811F1
+
+* refs (1): 819D0
+* End of RAM2 for the IRAM copy: shows OK
+TestRAM2OK:
+        GOSUB   ReconfigAll                      * 811E3
+        GOLONG  ShowOK                           * 811E7
+
+* refs (2): 811A1 819DB
+* End of RAM2 for the IRAM copy: reports the failure and sets bit 8 of R1
+TestRAM2Fail:
+        GOSUB   ReconfigAll                      * 811ED
+        GOSUBL  ShowError                        * 811F1
         C=R1.F  A                                * 811F7
         CBIT=1  8                                * 811FD
         R1=C.F  A                                * 81202
         RTN                                      * 81208
 
 * refs (6): 806B3 806BF 8114A 81158 811E3 811ED
-SUB_8120A:
-        GOVLNG  SUB_011AC                        * 8120A
+* Resets the configuration and sets it up as at boot
+ReconfigAll:
+        GOVLNG  ResetConfig                      * 8120A
 
 * refs (2): 806AA 81143
-SUB_81211:
+* -> carry set on failure: finds the size, then tests each 64 nibbles of the card and compares its CRC before and after
+CardTest:
         CD0EX                                    * 81211
         CR0EX.F A                                * 81214
         RSTK=C                                   * 8121A
         C=R0                                     * 8121C
         B=C     A                                * 8121F
-        GOSUB   SUB_8136B                        * 81221
-        GOSUBL  SUB_8081A                        * 81225
+        GOSUB   LCC0000                          * 81221
+        GOSUBL  MemCRC                           * 81225
         RSTK=C                                   * 8122B
-        GOSUB   SUB_813CC                        * 8122D
-        GOC     SUB_81211.L4                     * 81231
-        GOSUB   SUB_8136B                        * 81234
+        GOSUB   CardSize                         * 8122D
+        GOC     CardTest.L4                      * 81231
+        GOSUB   LCC0000                          * 81234
         D=C     A                                * 81238
         C=R1                                     * 8123A
         RSTK=C                                   * 8123D
@@ -1486,39 +1618,40 @@ SUB_81211:
         CSRB.F  A                                * 8124B
         C=C-1   A                                * 81250
         B=C     A                                * 81252
-SUB_81211.loop1:
-        GOSUBL  SUB_806DE                        * 81254
-        GOC     SUB_81211.L3                     * 8125A
+CardTest.loop1:
+        GOSUBL  RamTestBlock                     * 81254
+        GOC     CardTest.L3                      * 8125A
         B=B-1   A                                * 8125D
-        GONC    SUB_81211.loop1                  * 8125F
+        GONC    CardTest.loop1                   * 8125F
         C=RSTK                                   * 81262
         R1=C.F  A                                * 81264
         C=R0                                     * 8126A
         B=C     A                                * 8126D
-        GOSUB   SUB_8136B                        * 8126F
-        GOSUBL  SUB_8081A                        * 81273
+        GOSUB   LCC0000                          * 8126F
+        GOSUBL  MemCRC                           * 81273
         A=C     A                                * 81279
         C=RSTK                                   * 8127B
         B=C     A                                * 8127D
         C=RSTK                                   * 8127F
         R0=C.F  A                                * 81281
         ?A#B    A                                * 81287
-        GOYES   SUB_81211.L2                     * 8128A
+        GOYES   CardTest.L2                      * 8128A
         RTNCC                                    * 8128C
-SUB_81211.L2:
+CardTest.L2:
         D0=(5)  #00000                           * 8128E
         RTNSC                                    * 81295
-SUB_81211.L3:
+CardTest.L3:
         C=RSTK                                   * 81297
         R1=C.F  A                                * 81299
-SUB_81211.L4:
+CardTest.L4:
         C=RSTK                                   * 8129F
         C=RSTK                                   * 812A1
         R0=C.F  A                                * 812A3
         RTNSC                                    * 812A9
 
 * refs (1): 81124
-SUB_812AB:
+* Configures: IRAM at #40000, the card in port 1 at #C0000
+CfgCard1:
         P=      0                                * 812AB
         LC(5)   #C0000                           * 812AD
         UNCNFG                                   * 812B4
@@ -1539,7 +1672,8 @@ SUB_812AB:
         RTNCC                                    * 812F8
 
 * refs (1): 811A5
-SUB_812FA:
+* Configures: IRAM at #40000, the card in port 2 at #C0000
+CfgCard2:
         P=      0                                * 812FA
         LC(5)   #C0000                           * 812FC
         UNCNFG                                   * 81303
@@ -1560,7 +1694,8 @@ SUB_812FA:
         RTNCC                                    * 81347
 
 * refs (1): 80687
-SUB_81349:
+* Configures the module at #C0000
+CfgChip:
         P=      0                                * 81349
         LC(5)   #C0000                           * 8134B
         UNCNFG                                   * 81352
@@ -1571,47 +1706,51 @@ SUB_81349:
         RTNCC                                    * 81369
 
 * refs (3): 81221 81234 8126F
-SUB_8136B:
+* -> C.A = #C0000
+LCC0000:
         LC(5)   #C0000                           * 8136B
         RTN                                      * 81372
 
 * refs (1): 810A0
+* Probably: reads a card at addresses with one line set each, to exercise the address lines
 SUB_81374:
         ?CBIT=1 8                                * 81374
         RTNYES                                   * 81379
         D0=(5)  #90002                           * 8137B
-        GOSUB   SUB_813BE                        * 81382
+        GOSUB   ProbeRead                        * 81382
         D0=D0+  2                                * 81386
-        GOSUB   SUB_813BE                        * 81389
+        GOSUB   ProbeRead                        * 81389
         C=DAT0  1                                * 8138D
-        GOSUB   SUB_813BE                        * 81391
+        GOSUB   ProbeRead                        * 81391
         D0=D0+  4                                * 81395
         C=DAT0  1                                * 81398
-        GOSUB   SUB_813BE                        * 8139C
+        GOSUB   ProbeRead                        * 8139C
         D0=D0+  8                                * 813A0
-        GOSUB   SUB_813BE                        * 813A3
+        GOSUB   ProbeRead                        * 813A3
         D0=D0+  16                               * 813A7
-        GOSUB   SUB_813BE                        * 813AA
+        GOSUB   ProbeRead                        * 813AA
         D0=D0+  16                               * 813AE
         D0=D0+  16                               * 813B1
-        GOSUB   SUB_813BE                        * 813B4
+        GOSUB   ProbeRead                        * 813B4
         D0=(4)  #0000                            * 813B8
 
 * refs (7): 81382 81389 81391 8139C 813A3 813AA ...
-SUB_813BE:
+* Reads one nibble at D0, waits for key up and beeps
+ProbeRead:
         C=DAT0  1                                * 813BE
-        GOSUB   SUB_8155D.loop1                  * 813C2
-        GOLONG  SUB_802D2                        * 813C6
+        GOSUB   TestPause.loop1                  * 813C2
+        GOLONG  BeepStart                        * 813C6
 
 * refs (1): 8122D
-SUB_813CC:
+* -> R0 = last address: writes marks at #C0000 and at powers of two above it to find where memory mirrors; carry set with D0 = address if a write does not stick
+CardSize:
         P=      0                                * 813CC
         LC(5)   #C0000                           * 813CE
         R3=C                                     * 813D5
         C=0     W                                * 813D8
         C=C+1   A                                * 813DB
         R2=C                                     * 813DD
-SUB_813CC.loop1:
+CardSize.loop1:
         C=R3                                     * 813E0
         D1=C                                     * 813E3
         A=DAT1  1                                * 813E6
@@ -1636,7 +1775,7 @@ SUB_813CC.loop1:
         A=DAT1  1                                * 81420
         LC(1)   #1                               * 81424
         ?C#A    P                                * 81427
-        GOYES   SUB_813CC.L3                     * 8142A
+        GOYES   CardSize.L3                      * 8142A
         C=R3                                     * 8142C
         A=R2                                     * 8142F
         A=A+C   A                                * 81432
@@ -1644,7 +1783,7 @@ SUB_813CC.loop1:
         A=DAT1  1                                * 81437
         LC(1)   #2                               * 8143B
         ?C#A    P                                * 8143E
-        GOYES   SUB_813CC.L3                     * 81441
+        GOYES   CardSize.L3                      * 81441
         C=R3                                     * 81443
         D1=C                                     * 81446
         C=B     A                                * 81449
@@ -1659,23 +1798,24 @@ SUB_813CC.loop1:
         A=R2                                     * 81462
         A=A+A   A                                * 81465
         R2=A                                     * 81467
-        GOC     SUB_813CC.L2                     * 8146A
+        GOC     CardSize.L2                      * 8146A
         C=R3                                     * 8146D
         A=A+C   A                                * 81470
-        GOC     SUB_813CC.L2                     * 81472
+        GOC     CardSize.L2                      * 81472
         C=R0                                     * 81475
         ?C<=A   A                                * 81478
-        GOYES   SUB_813CC.L2                     * 8147B
-        GOTO    SUB_813CC.loop1                  * 8147D
-SUB_813CC.L2:
+        GOYES   CardSize.L2                      * 8147B
+        GOTO    CardSize.loop1                   * 8147D
+CardSize.L2:
         RTNCC                                    * 81481
-SUB_813CC.L3:
+CardSize.L3:
         AD1EX                                    * 81483
         D0=A                                     * 81486
         RTNSC                                    * 81489
 
 * refs (3): 806A4 8113F 819BA
-SUB_8148B:
+* C = four ASCII characters -> : puts them at the end of the text buffer and shows it, keeping D0
+ShowTail4:
         B=C     W                                * 8148B
         GOSUB   D1=IRAM~jump_5                   * 8148E
         LC(4)   #00B6                            * 81492
@@ -1684,34 +1824,36 @@ SUB_8148B:
         DAT1=C  8                                * 8149E
         CD0EX                                    * 814A2
         RSTK=C                                   * 814A5
-        GOSUB   SUB_815FE.L1                     * 814A7
+        GOSUB   ShowBuffer                       * 814A7
         C=RSTK                                   * 814AB
         D0=C                                     * 814AD
         RTN                                      * 814B0
         GOSBVL  KeyInBuff?                       * 814B2
-        GONC    SUB_8148B.L1                     * 814B9
+        GONC    ShowTail4.L1                     * 814B9
         RTNCC                                    * 814BC
-SUB_8148B.L1:
-        GOVLNG  SUB_00C8D                        * 814BE
+ShowTail4.L1:
+        GOVLNG  KeyDown?                         * 814BE
 
 * refs (1): 80025
-SUB_814C5:
+* Draws a grid line down the middle of the display
+DrawGridMid:
         GOSBVL  D0->Row1                         * 814C5
         D0=D0+  16                               * 814CC
         C=0     A                                * 814CF
         LC(2)   #37                              * 814D1
-        GOSUB   SUB_814E8                        * 814D5
+        GOSUB   GridColumn                       * 814D5
         GOSBVL  D0->Sft1                         * 814D9
         D0=D0+  16                               * 814E0
         C=0     A                                * 814E3
         LC(1)   #7                               * 814E5
 
 * refs (1): 814D5
-SUB_814E8:
+* C.A = rows-1, D0 = position -> : sets one bit in each row
+GridColumn:
         D=C     A                                * 814E8
         LC(2)   #22                              * 814EA
         B=C     A                                * 814EE
-SUB_814E8.loop1:
+GridColumn.loop1:
         C=DAT0  1                                * 814F0
         CBIT=1  1                                * 814F4
         DAT0=C  1                                * 814F9
@@ -1719,26 +1861,28 @@ SUB_814E8.loop1:
         A=A+B   A                                * 81500
         D0=A                                     * 81502
         D=D-1   A                                * 81505
-        GONC    SUB_814E8.loop1                  * 81507
+        GONC    GridColumn.loop1                 * 81507
         RTNCC                                    * 8150A
 
 * refs (1): 8000C
-SUB_8150C:
+* Draws the self-test's three vertical lines on all rows
+DrawGrid:
         GOSBVL  D0->Row1                         * 8150C
         C=0     A                                * 81513
         LC(2)   #37                              * 81515
-        GOSUB   SUB_81529                        * 81519
+        GOSUB   GridRows                         * 81519
         GOSBVL  D0->Sft1                         * 8151D
         C=0     A                                * 81524
         LC(1)   #7                               * 81526
 
 * refs (1): 81519
-SUB_81529:
+* C.A = rows-1, D0 = first row -> : sets the three lines in each row
+GridRows:
         D=C     A                                * 81529
         LC(2)   #22                              * 8152B
         B=C     A                                * 8152F
         CD0EX                                    * 81531
-SUB_81529.loop1:
+GridRows.loop1:
         D0=C                                     * 81534
         A=0     A                                * 81537
         A=A+1   A                                * 81539
@@ -1752,66 +1896,79 @@ SUB_81529.loop1:
         D0=D0+  1                                * 81551
         C=C+B   A                                * 81554
         D=D-1   A                                * 81556
-        GONC    SUB_81529.loop1                  * 81558
+        GONC    GridRows.loop1                   * 81558
         RTNCC                                    * 8155B
 
 * refs (11): 8009D 800A9 800B5 800C1 800D7 800E7 ...
-SUB_8155D:
+* Waits for key up and a delay. In continuous mode a key press ends the run with a "KBD" fail report
+TestPause:
         ?ST=1   6                                * 8155D
-        GOYES   SUB_8155D.L3                     * 81560
-SUB_8155D.loop1:
-        GOSBVL  SUB_00E0B                        * 81562
-        GONC    SUB_8155D.loop1                  * 81569
-SUB_8155D.loop2:
-        LC(5)   dup2;idem(nm,bk)?.L10            * 8156C
-        GOTO    SUB_815D3.loop1                  * 81573
-SUB_8155D.L3:
+        GOYES   TestPause~1                      * 81560
+TestPause.loop1:
+        GOSBVL  KbdOutAll                        * 81562
+        GONC    TestPause.loop1                  * 81569
+TestPause.L2:
+        LC(5)   #08F34                           * 8156C  delay count
+        GOTO    DelayC                           * 81573
+TestPause~1:
         GOSBVL  POPKEY                           * 81577
-        GOC     SUB_8155D.loop2                  * 8157E
+        GOC     TestPause.L2                     * 8157E
         RSTK=C                                   * 81581
         GOSUB   Flush~jump                       * 81583
         C=R1                                     * 81587
         CBIT=1  3                                * 8158A
         R1=C.F  A                                * 8158F
         LC(2)   #F4                              * 81595
-        GOSUBL  SUB_802D2.L1                     * 81599
+        GOSUBL  BeepStart.L1                     * 81599
         GOSUBL  ClrScrMn~jump                    * 8159F
-        D0=(5)  SUB_817E9.L10                    * 815A5
-        GOSUBL  SUB_815FE                        * 815AC
+        D0=(5)  MsgKBD                           * 815A5
+        GOSUBL  ShowMsg                          * 815AC
         C=RSTK                                   * 815B2
         D0=C                                     * 815B4
         ST=0    6                                * 815B7
-        GOSUBL  SUB_81736                        * 815BA
-        GOLONG  VersionStrings.loop2             * 815C0
+        GOSUBL  ShowError                        * 815BA
+        GOLONG  SelfTestMenu                     * 815C0
 
 * refs (1): 80B80
-SUB_815C6:
+* Delay: #0479A turns
+DelayShort:
         P=      0                                * 815C6
         LC(5)   #0479A                           * 815C8
-        GOTO    SUB_815D3.loop1                  * 815CF
+        GOTO    DelayC                           * 815CF
 
 * refs (3): 8010C 80B39 81D16
-SUB_815D3:
+* Delay: #59808 turns
+DelayLong:
         P=      0                                * 815D3
         LC(5)   #59808                           * 815D5
-SUB_815D3.loop1:
+
+* refs (4): 80C1A 81573 815CF 815DE
+* C.A = turns -> : carry clear after counting down
+DelayC:
         C=C-1   A                                * 815DC
-        GONC    SUB_815D3.loop1                  * 815DE
+        GONC    DelayC                           * 815DE
         RTNCC                                    * 815E1
-        GOSUB   SUB_8165A                        * 815E3
-SUB_815D3.L2:
+        GOSUB   MsgToBuffer                      * 815E3
+
+* refs (1): 81E12
+* Shows the buffer in the second text row
+ShowRow2:
         GOSBVL  D0->Row1                         * 815E7
         LC(5)   #00110                           * 815EE
         A=A+C   A                                * 815F5
         D0=A                                     * 815F7
-        GOTO    SUB_815FE.L2                     * 815FA
+        GOTO    ShowBuffer.L1                    * 815FA
 
 * refs (9): 8019B 80336 803A0 804CD 80938 809CB ...
-SUB_815FE:
-        GOSUB   SUB_8165A                        * 815FE
-SUB_815FE.L1:
+* D0 = counted string -> : shows it in the first text row
+ShowMsg:
+        GOSUB   MsgToBuffer                      * 815FE
+
+* refs (4): 801FC 814A7 81765 81DF9
+* Draws the 22-character text buffer at IRAM #0092, saving the return stack in registers because $5x7 uses it
+ShowBuffer:
         GOSBVL  D0->Row1                         * 81602
-SUB_815FE.L2:
+ShowBuffer.L1:
         C=RSTK                                   * 81609
         GOSBVL  CSLW5                            * 8160B
         C=RSTK                                   * 81612
@@ -1835,13 +1992,15 @@ SUB_815FE.L2:
         PC=C                                     * 81656
 
 * refs (10): 801AC 801C3 802F4 80307 8067E 81090 ...
-SUB_8165A:
+* D0 = counted string -> : copies it to the text buffer
+MsgToBuffer:
         A=0     A                                * 8165A
         A=DAT0  B                                * 8165C
         D0=D0+  2                                * 8165F
 
 * refs (2): 81DF2 81E0B
-SUB_81662:
+* A.A = length, D0 = text -> : copies it to the text buffer and pads it with spaces
+BufferFill:
         P=      0                                * 81662
         C=0     A                                * 81664
         LC(2)   #16                              * 81666
@@ -1852,27 +2011,28 @@ SUB_81662:
         C=DAT1  A                                * 81677
         D1=C                                     * 8167A
         D1=(4)  #0092                            * 8167D
-        GOTO    SUB_81662.L2                     * 81683
-SUB_81662.loop1:
+        GOTO    BufferFill.L2                    * 81683
+BufferFill.loop1:
         C=DAT0  B                                * 81687
         DAT1=C  B                                * 8168A
         D0=D0+  2                                * 8168D
         D1=D1+  2                                * 81690
-SUB_81662.L2:
+BufferFill.L2:
         A=A-1   A                                * 81693
-        GONC    SUB_81662.loop1                  * 81695
+        GONC    BufferFill.loop1                 * 81695
         LC(2)   #20                              * 81698
-        GOTO    SUB_81662.L4                     * 8169C
-SUB_81662.loop3:
+        GOTO    BufferFill.L4                    * 8169C
+BufferFill.loop3:
         DAT1=C  B                                * 816A0
         D1=D1+  2                                * 816A3
-SUB_81662.L4:
+BufferFill.L4:
         B=B-1   A                                * 816A6
-        GONC    SUB_81662.loop3                  * 816A8
+        GONC    BufferFill.loop3                 * 816A8
         RTNCC                                    * 816AB
 
 * refs (2): 80313 81736
-SUB_816AD:
+* D0 = value -> : writes a value as four hex digits at the end of the text buffer
+PutHex:
         GOSUBL  D1=IRAM~jump_5                   * 816AD
         D1=(4)  #009C                            * 816B3
         AD0EX                                    * 816B9
@@ -1885,29 +2045,36 @@ SUB_816AD:
         C=0     A                                * 816CE
         LC(1)   #7                               * 816D0
         A=C     A                                * 816D3
-        GOSUB   SUB_816E5                        * 816D5
-        GOSUB   SUB_816E5                        * 816D9
-        GOSUB   SUB_816E5                        * 816DD
-        GOSUB   SUB_816E5                        * 816E1
+        GOSUB   PutHexDigit                      * 816D5
+        GOSUB   PutHexDigit                      * 816D9
+        GOSUB   PutHexDigit                      * 816DD
+        GOSUB   PutHexDigit                      * 816E1
 
 * refs (4): 816D5 816D9 816DD 816E1
-SUB_816E5:
+* Writes the next hex digit of B into the buffer at D1
+PutHexDigit:
         BSLC                                     * 816E5
         LC(2)   #39                              * 816E8
         BCEX    P                                * 816EC
         ?B>=C   P                                * 816EF
-        GOYES   SUB_816E5.L1                     * 816F2
+        GOYES   PutHexDigit.L1                   * 816F2
         C=C+A   A                                * 816F4
-SUB_816E5.L1:
+PutHexDigit.L1:
         DAT1=C  B                                * 816F6
         D1=D1+  2                                * 816F9
         RTN                                      * 816FC
-SUB_816E5.L2:
-        D0=(5)  SUB_817E9.L13                    * 816FE
-        GOTO    SUB_816E5.L4                     * 81705
-SUB_816E5.L3:
-        D0=(5)  SUB_817E9.L15                    * 81709
-SUB_816E5.L4:
+
+* refs (10): 80527 806B9 80889 80BA2 80D74 80DD2 ...
+* Adds "OK" to the line and shows it
+ShowOK:
+        D0=(5)  MsgOK                            * 816FE
+        GOTO    ShowFAIL.L1                      * 81705
+
+* refs (1): 80883
+* Adds "FAIL" to the line and shows it
+ShowFAIL:
+        D0=(5)  MsgFAIL                          * 81709
+ShowFAIL.L1:
         C=DAT0  B                                * 81710
         D0=D0+  2                                * 81713
         C=C+C   A                                * 81716
@@ -1917,49 +2084,53 @@ SUB_816E5.L4:
         D1=(4)  #009C                            * 81724
         C=DAT0  WP                               * 8172A
         DAT1=C  WP                               * 8172E
-        GOTO    SUB_81736.L2                     * 81732
+        GOTO    ShowLine                         * 81732
 
 * refs (12): 80547 806C5 808F4 80AB4 80BC5 80D85 ...
-* Probably: self-test: report a failure (message at D0, the hex value at RAM #0091) on the display and the serial port
-SUB_81736:
-        GOSUB   SUB_816AD                        * 81736
-        GOSBVL  SUB_012F9                        * 8173A
-        GONC    SUB_81736.L1                     * 81741
+* D0 = error value -> : adds it in hex to the line, shows it, and keeps the time of the first failure at IRAM #85
+ShowError:
+        GOSUB   PutHex                           * 81736
+        GOSBVL  GetTimeNoInt                     * 8173A
+        GONC    ShowError.L1                     * 81741
         C=0     W                                * 81744
-SUB_81736.L1:
-        GOSUBL  SUB_80EBC                        * 81747
+ShowError.L1:
+        GOSUBL  D1=IRAMHigh                      * 81747
         D1=(4)  #0085                            * 8174D
         A=DAT1  13                               * 81753
         P=      12                               * 81757
         A=A+1   WP                               * 81759
         P=      0                                * 8175C
-        GONC    SUB_81736.L2                     * 8175E
+        GONC    ShowLine                         * 8175E
         DAT1=C  13                               * 81761
-SUB_81736.L2:
-        GOSUB   SUB_815FE.L1                     * 81765
+
+* refs (5): 80323 8035A 810E0 81732 8175E
+* Shows the buffer and prints it
+ShowLine:
+        GOSUB   ShowBuffer                       * 81765
 
 * refs (1): 80202
-SUB_81769:
+* Sends the buffer to the IR printer and over the serial port at rate 6, with CR LF
+PrintLine:
         P=      0                                * 81769
         C=0     A                                * 8176B
         LC(2)   #16                              * 8176D
-        GOSUBL  SUB_80EBC                        * 81771
+        GOSUBL  D1=IRAMHigh                      * 81771
         D1=(4)  #0092                            * 81777
-        GOSUB   SUB_817E9                        * 8177D
-        D1=(5)  SUB_81769.L2                     * 81781
+        GOSUB   IRSend                           * 8177D
+        D1=(5)  LineFeedByte                     * 81781
         C=0     A                                * 81788
         C=C+1   A                                * 8178A
-        GOSUB   SUB_817E9                        * 8178C
+        GOSUB   IRSend                           * 8178C
         P=      0                                * 81790
         SETHEX                                   * 81792
         LC(1)   #6                               * 81794
-        GOSUBL  SUB_80DED                        * 81797
+        GOSUBL  SetBaud                          * 81797
         GOSUBL  D1=IRAM~jump_5                   * 8179D
         LC(4)   #0092                            * 817A3
         R3=C                                     * 817A9
         C=0     A                                * 817AC
         LC(2)   #15                              * 817AE
-SUB_81769.loop1:
+PrintLine.loop1:
         RSTK=C                                   * 817B2
         C=R3                                     * 817B4
         D1=C                                     * 817B7
@@ -1970,21 +2141,24 @@ SUB_81769.loop1:
         GOSUB   OUTUART~jump                     * 817C4
         C=RSTK                                   * 817C8
         C=C-1   A                                * 817CA
-        GONC    SUB_81769.loop1                  * 817CC
+        GONC    PrintLine.loop1                  * 817CC
         LC(2)   #0D                              * 817CF
         A=C     A                                * 817D3
         GOSUB   OUTUART~jump                     * 817D5
         LC(2)   #0A                              * 817D9
         A=C     A                                * 817DD
         GOSUB   OUTUART~jump                     * 817DF
-        GOTO    SUB_817E9.L3                     * 817E3
-SUB_81769.L2:
+        GOTO    IRSend~1.L1                      * 817E3
+
+* The line-feed byte for the printer
+LineFeedByte:
         NIBHEX  A0                               * 817E7  .
 
 * refs (2): 8177D 8178C
-SUB_817E9:
-        GOTO    SUB_817E9.L2                     * 817E9
-SUB_817E9.loop1:
+* C.A = bytes, D1 = text -> : sends them to the IR printer
+IRSend:
+        GOTO    IRSend~1                         * 817E9
+IRSend.L1:
         RSTK=C                                   * 817ED
         A=DAT1  B                                * 817EF
         D1=D1+  2                                * 817F2
@@ -1992,10 +2166,10 @@ SUB_817E9.loop1:
         GOSBVL  SUB_65863.L2                     * 817F8
         GOSBVL  AllowIntr                        * 817FF
         C=RSTK                                   * 81806
-SUB_817E9.L2:
+IRSend~1:
         C=C-1   A                                * 81808
-        GONC    SUB_817E9.loop1                  * 8180A
-SUB_817E9.L3:
+        GONC    IRSend.L1                        * 8180A
+IRSend~1.L1:
         D0=(5)  ANNCTRL                          * 8180D
         C=DAT0  B                                * 81814
         CBIT=0  5                                * 81817
@@ -2003,122 +2177,174 @@ SUB_817E9.L3:
         P=      0                                * 8181F
         RTNCC                                    * 81821
 
-* Self-test messages: counted strings (used as SUB_817E9.L4+n)
-SUB_817E9.L4:
+* Counted string, shown by the self-test
+* Self-test messages: counted strings (used as MsgSPD+n)
+MsgSPD:
         CON(2)  4                                * 81823  entry 0
         NIBASC  "SPD "                           * 81825
-SUB_817E9.L5:
+
+* Counted string, shown by the self-test
+MsgDISP:
         CON(2)  4                                * 8182D  entry 1
         NIBASC  "DISP"                           * 8182F
-SUB_817E9.L6:
+
+* Counted string, shown by the self-test
+MsgIROM:
         CON(2)  4                                * 81837  entry 2
         NIBASC  "IROM"                           * 81839
-SUB_817E9.L7:
+
+* Counted string, shown by the self-test
+MsgIRAM:
         CON(2)  4                                * 81841  entry 3
         NIBASC  "IRAM"                           * 81843
-SUB_817E9.L8:
+
+* Counted string, shown by the self-test
+MsgKBD1:
         CON(2)  4                                * 8184B  entry 4
         NIBASC  "KBD1"                           * 8184D
-SUB_817E9.L9:
+
+* Counted string, shown by the self-test
+MsgKBD2:
         CON(2)  4                                * 81855  entry 5
         NIBASC  "KBD2"                           * 81857
-SUB_817E9.L10:
+
+* Counted string, shown by the self-test
+MsgKBD:
         CON(2)  3                                * 8185F  entry 6
         NIBASC  "KBD"                            * 81861
-SUB_817E9.L11:
+
+* Counted string, shown by the self-test
+MsgESD210:
         CON(2)  14                               * 81867  entry 7
         NIBASC  "ESD 210V  210V"                 * 81869
-SUB_817E9.L12:
+
+* Counted string, shown by the self-test
+MsgESD:
         CON(2)  3                                * 81885  entry 8
         NIBASC  "ESD"                            * 81887
-SUB_817E9.L13:
+
+* Counted string, shown by the self-test
+MsgOK:
         CON(2)  2                                * 8188D  entry 9
         NIBASC  "OK"                             * 8188F
-SUB_817E9.L14:
+
+* Counted string, shown by the self-test
+MsgOK48:
         CON(2)  6                                * 81893  entry 10
         NIBASC  "OK-48 "                         * 81895
-SUB_817E9.L15:
+
+* Counted string, shown by the self-test
+MsgFAIL:
         CON(2)  4                                * 818A1  entry 11
         NIBASC  "FAIL"                           * 818A3
-SUB_817E9.L16:
+
+* Counted string, shown by the self-test
+MsgU_LB:
         CON(2)  4                                * 818AB  entry 12
         NIBASC  "U_LB"                           * 818AD
-SUB_817E9.L17:
+
+* Counted string, shown by the self-test
+MsgUART:
         CON(2)  4                                * 818B5  entry 13
         NIBASC  "UART"                           * 818B7
-SUB_817E9.L18:
+
+* The text sent in loop-back tests, with the EOT at its end
+MsgXMIT:
         CON(2)  10                               * 818BF  entry 14
         NIBASC  "U_LB XMIT\04"                   * 818C1
-SUB_817E9.L19:
+
+* Counted string, shown by the self-test
+MsgTimeInit:
         CON(2)  9                                * 818D5  entry 15
         NIBASC  "Time Init"                      * 818D7
-SUB_817E9.L20:
+
+* Counted string, shown by the self-test
+MsgStart:
         CON(2)  6                                * 818E9  entry 16
         NIBASC  "Start:"                         * 818EB
-SUB_817E9.L21:
+
+* Counted string, shown by the self-test
+MsgFail:
         CON(2)  6                                * 818F7  entry 17
         NIBASC  "Fail :"                         * 818F9
-SUB_817E9.L22:
+
+* Counted string, shown by the self-test
+MsgPORT:
         CON(2)  4                                * 81905  entry 18
         NIBASC  "PORT"                           * 81907
-SUB_817E9.L23:
+
+* Counted string, shown by the self-test
+MsgRAM1:
         CON(2)  4                                * 8190F  entry 19
         NIBASC  "RAM1"                           * 81911
-SUB_817E9.L24:
+
+* Counted string, shown by the self-test
+MsgRAM2:
         CON(2)  4                                * 81919  entry 20
         NIBASC  "RAM2"                           * 8191B
-SUB_817E9.L25:
+
+* Counted string, shown by the self-test
+MsgIRLB:
         CON(2)  4                                * 81923  entry 21
         NIBASC  "IRLB"                           * 81925
-SUB_817E9.L26:
+
+* Counted string, shown by the self-test
+MsgIRIO:
         CON(2)  4                                * 8192D  entry 22
         NIBASC  "IRIO"                           * 8192F
-SUB_817E9.L27:
+
+* Counted string, shown by the self-test
+MsgSEND:
         CON(2)  4                                * 81937  entry 23
         NIBASC  "SEND"                           * 81939
-SUB_817E9.L28:
+
+* Counted string, shown by the self-test
+MsgRECV:
         CON(2)  4                                * 81941  entry 24
         NIBASC  "RECV"                           * 81943
         CON(2)  14                               * 8194B  entry 25
         NIBASC  "Version HP48-R"                 * 8194D
         CON(2)  17                               * 81969  entry 26
         NIBASC  "Copyright HP 1989"              * 8196B
-SUB_817E9.L29:
+
+* Copied to IRAM by TestRAM and run there: the RAM2 test
+Ram2Test:
         BSS     3                                * 8198D  zeros
         GOSUB   SUB_81B6B                        * 81990
         LC(5)   #C0000                           * 81994
         B=C     A                                * 8199B
-        GOSBVL  SUB_01DA1                        * 8199D
-        GONC    SUB_817E9.L30                    * 819A4
+        GOSBVL  RamSizeTest                      * 8199D
+        GONC    Ram2Test.L1                      * 819A4
         D0=(5)  #00001                           * 819A7
-        GOTO    SUB_817E9.L31                    * 819AE
-SUB_817E9.L30:
+        GOTO    Ram2Test.L2                      * 819AE
+Ram2Test.L1:
         B=C     A                                * 819B2
         GOSUB   SUB_81B3D                        * 819B4
         C=B     A                                * 819B8
-        GOSBVL  SUB_8148B                        * 819BA
+        GOSBVL  ShowTail4                        * 819BA
         GOSUB   SUB_81B6B                        * 819C1
-        GOSUB   SUB_819E2                        * 819C5
-        GOC     SUB_817E9.L31                    * 819C9
+        GOSUB   Ram2CardTest                     * 819C5
+        GOC     Ram2Test.L2                      * 819C9
         GOSUB   SUB_81B3D                        * 819CC
-        GOVLNG  SUB_810E6.L6                     * 819D0
-SUB_817E9.L31:
+        GOVLNG  TestRAM2OK                       * 819D0
+Ram2Test.L2:
         GOSUB   SUB_81B3D                        * 819D7
-        GOVLNG  SUB_810E6.L7                     * 819DB
+        GOVLNG  TestRAM2Fail                     * 819DB
 
 * refs (1): 819C5
-SUB_819E2:
+* Copy of CardTest for the IRAM copy
+Ram2CardTest:
         CD0EX                                    * 819E2
         CR0EX.F A                                * 819E5
         RSTK=C                                   * 819EB
         C=R0                                     * 819ED
         B=C     A                                * 819F0
-        GOSUB   SUB_81B99                        * 819F2
-        GOSBVL  SUB_044D4                        * 819F6
+        GOSUB   Ram2Base                         * 819F2
+        GOSBVL  CRCRange                         * 819F6
         RSTK=C                                   * 819FD
-        GOSUB   SUB_81A7E                        * 819FF
-        GOC     SUB_819E2.L4                     * 81A03
-        GOSUB   SUB_81B99                        * 81A06
+        GOSUB   Ram2CardSize                     * 819FF
+        GOC     Ram2CardTest.L4                  * 81A03
+        GOSUB   Ram2Base                         * 81A06
         D=C     A                                * 81A0A
         C=R1                                     * 81A0C
         RSTK=C                                   * 81A0F
@@ -2129,46 +2355,47 @@ SUB_819E2:
         CSRB.F  A                                * 81A1D
         C=C-1   A                                * 81A22
         B=C     A                                * 81A24
-SUB_819E2.loop1:
-        GOSUBL  SUB_81BA2                        * 81A26
-        GOC     SUB_819E2.L3                     * 81A2C
+Ram2CardTest.loop1:
+        GOSUBL  Ram2Block                        * 81A26
+        GOC     Ram2CardTest.L3                  * 81A2C
         B=B-1   A                                * 81A2F
-        GONC    SUB_819E2.loop1                  * 81A31
+        GONC    Ram2CardTest.loop1               * 81A31
         C=RSTK                                   * 81A34
         R1=C.F  A                                * 81A36
         C=R0                                     * 81A3C
         B=C     A                                * 81A3F
-        GOSUB   SUB_81B99                        * 81A41
-        GOSBVL  SUB_044D4                        * 81A45
+        GOSUB   Ram2Base                         * 81A41
+        GOSBVL  CRCRange                         * 81A45
         A=C     A                                * 81A4C
         C=RSTK                                   * 81A4E
         B=C     A                                * 81A50
         C=RSTK                                   * 81A52
         R0=C.F  A                                * 81A54
         ?A#B    A                                * 81A5A
-        GOYES   SUB_819E2.L2                     * 81A5D
+        GOYES   Ram2CardTest.L2                  * 81A5D
         RTNCC                                    * 81A5F
-SUB_819E2.L2:
+Ram2CardTest.L2:
         D0=(5)  #00000                           * 81A61
         RTNSC                                    * 81A68
-SUB_819E2.L3:
+Ram2CardTest.L3:
         C=RSTK                                   * 81A6A
         R1=C.F  A                                * 81A6C
-SUB_819E2.L4:
+Ram2CardTest.L4:
         C=RSTK                                   * 81A72
         C=RSTK                                   * 81A74
         R0=C.F  A                                * 81A76
         RTNSC                                    * 81A7C
 
 * refs (1): 819FF
-SUB_81A7E:
+* Copy of CardSize for the IRAM copy
+Ram2CardSize:
         P=      0                                * 81A7E
         LC(5)   #C0000                           * 81A80
         R3=C                                     * 81A87
         C=0     W                                * 81A8A
         C=C+1   A                                * 81A8D
         R2=C                                     * 81A8F
-SUB_81A7E.loop1:
+Ram2CardSize.loop1:
         C=R3                                     * 81A92
         D1=C                                     * 81A95
         A=DAT1  1                                * 81A98
@@ -2193,7 +2420,7 @@ SUB_81A7E.loop1:
         A=DAT1  1                                * 81AD2
         LC(1)   #1                               * 81AD6
         ?C#A    P                                * 81AD9
-        GOYES   SUB_81A7E.L3                     * 81ADC
+        GOYES   Ram2CardSize.L3                  * 81ADC
         C=R3                                     * 81ADE
         A=R2                                     * 81AE1
         A=A+C   A                                * 81AE4
@@ -2201,7 +2428,7 @@ SUB_81A7E.loop1:
         A=DAT1  1                                * 81AE9
         LC(1)   #2                               * 81AED
         ?C#A    P                                * 81AF0
-        GOYES   SUB_81A7E.L3                     * 81AF3
+        GOYES   Ram2CardSize.L3                  * 81AF3
         C=R3                                     * 81AF5
         D1=C                                     * 81AF8
         C=B     A                                * 81AFB
@@ -2216,26 +2443,27 @@ SUB_81A7E.loop1:
         A=R2                                     * 81B14
         A=A+A   A                                * 81B17
         R2=A                                     * 81B19
-        GOC     SUB_81A7E.L2                     * 81B1C
+        GOC     Ram2CardSize.L2                  * 81B1C
         C=R3                                     * 81B1F
         A=A+C   A                                * 81B22
-        GOC     SUB_81A7E.L2                     * 81B24
+        GOC     Ram2CardSize.L2                  * 81B24
         C=R0                                     * 81B27
         ?C<=A   A                                * 81B2A
-        GOYES   SUB_81A7E.L2                     * 81B2D
-        GOTO    SUB_81A7E.loop1                  * 81B2F
-SUB_81A7E.L2:
+        GOYES   Ram2CardSize.L2                  * 81B2D
+        GOTO    Ram2CardSize.loop1               * 81B2F
+Ram2CardSize.L2:
         RTNCC                                    * 81B33
-SUB_81A7E.L3:
+Ram2CardSize.L3:
         AD1EX                                    * 81B35
         D0=A                                     * 81B38
         RTNSC                                    * 81B3B
 
 * refs (3): 819B4 819CC 819D7
+* Probably: ends the bank switching changes of Ram2Test: reads #90000 and sets bit 7 of the line count registers
 SUB_81B3D:
         D1=(5)  #90000                           * 81B3D
         C=DAT1  B                                * 81B44
-        D1=(5)  OBJ_3FFCA.L1+37                  * 81B47
+        D1=(5)  #40000                           * 81B47  not an address
         D1=(4)  #069A                            * 81B4E
         C=DAT1  B                                * 81B54
         CBIT=1  7                                * 81B57
@@ -2245,8 +2473,9 @@ SUB_81B3D:
         RTN                                      * 81B69
 
 * refs (2): 81990 819C1
+* Probably: sets the bank switching for Ram2Test: clears bit 7 of the line count registers and reads #90040
 SUB_81B6B:
-        D1=(5)  OBJ_3FFCA.L1+37                  * 81B6B
+        D1=(5)  Clr1USR.L1+37                    * 81B6B
         D1=(4)  #069A                            * 81B72
         C=DAT1  B                                * 81B78
         CBIT=0  7                                * 81B7B
@@ -2258,12 +2487,14 @@ SUB_81B6B:
         RTN                                      * 81B97
 
 * refs (3): 819F2 81A06 81A41
-SUB_81B99:
+* -> C.A = #C0000
+Ram2Base:
         LC(5)   #C0000                           * 81B99
         RTN                                      * 81BA0
 
 * refs (1): 81A26
-SUB_81BA2:
+* Copy of RamTestBlock for the IRAM copy
+Ram2Block:
         C=D     A                                * 81BA2
         D0=C                                     * 81BA4
         C=DAT0  W                                * 81BA7
@@ -2281,7 +2512,7 @@ SUB_81BA2:
         LA(16)  #2942942942942942                * 81BCE
         B=A     S                                * 81BE3
         C=D     A                                * 81BE6
-SUB_81BA2.loop1:
+Ram2Block.loop1:
         D0=C                                     * 81BE8
         DAT0=A  15                               * 81BEB
         D0=D0+  15                               * 81BEF
@@ -2296,24 +2527,24 @@ SUB_81BA2.loop1:
         P=      14                               * 81C0E
         C=DAT0  15                               * 81C10
         ?C#A    WP                               * 81C14
-        GOYES   SUB_81BA2.L2                     * 81C17
+        GOYES   Ram2Block.L2                     * 81C17
         D0=D0+  15                               * 81C19
         C=DAT0  15                               * 81C1C
         ?C#A    WP                               * 81C20
-        GOYES   SUB_81BA2.L2                     * 81C23
+        GOYES   Ram2Block.L2                     * 81C23
         D0=D0+  15                               * 81C25
         C=DAT0  15                               * 81C28
         ?C#A    WP                               * 81C2C
-        GOYES   SUB_81BA2.L2                     * 81C2F
+        GOYES   Ram2Block.L2                     * 81C2F
         D0=D0+  15                               * 81C31
         C=DAT0  15                               * 81C34
         ?C#A    WP                               * 81C38
-        GOYES   SUB_81BA2.L2                     * 81C3B
+        GOYES   Ram2Block.L2                     * 81C3B
         D0=D0+  15                               * 81C3D
         P=      3                                * 81C40
         C=DAT0  4                                * 81C42
         ?C#A    WP                               * 81C46
-        GOYES   SUB_81BA2.L2                     * 81C49
+        GOYES   Ram2Block.L2                     * 81C49
         ASL     W                                * 81C4B
         C=A     S                                * 81C4E
         P=C     15                               * 81C51
@@ -2322,17 +2553,17 @@ SUB_81BA2.loop1:
         A=C     P                                * 81C5B
         C=D     A                                * 81C5E
         B=B-1   S                                * 81C60
-        GOC     SUB_81BA2.L3                     * 81C63
-        GOTO    SUB_81BA2.loop1                  * 81C66
-SUB_81BA2.L2:
+        GOC     Ram2Block.L3                     * 81C63
+        GOTO    Ram2Block.loop1                  * 81C66
+Ram2Block.L2:
         C=RSTK                                   * 81C6A
         DCEX    A                                * 81C6C
         BUSCC                                    * 81C6E
         P=      0                                * 81C71
-        GOSUB   SUB_81BA2.L3                     * 81C73
+        GOSUB   Ram2Block.L3                     * 81C73
         RSTK=C                                   * 81C77
         RTNSC                                    * 81C79
-SUB_81BA2.L3:
+Ram2Block.L3:
         CD0EX                                    * 81C7B
         A=R1                                     * 81C7E
         DAT0=A  W                                * 81C81
@@ -2349,48 +2580,63 @@ SUB_81BA2.L3:
         CD0EX                                    * 81CA6
         DCEX    A                                * 81CA9
         RTNCC                                    * 81CAB
-SUB_81BA2.L4:
-        GOSUB   SUB_81E27                        * 81CAD
+
+* Shows "Replace RAM, Press ON"
+ReplaceRAMScreen:
+        GOSUB   BootScreen                       * 81CAD
         LC(5)   #0000F                           * 81CB1
-        GOTO    SUB_81DE7                        * 81CB8
-SUB_81BA2.L5:
+        GOTO    BootMsg                          * 81CB8
+
+* Shows "Recovering Memory", with the busy annunciator
+RecoveringScreen:
         GOSBVL  ClrScrMn                         * 81CBC
         LC(5)   #0000D                           * 81CC3
-        GOSUB   SUB_81DE7                        * 81CCA
+        GOSUB   BootMsg                          * 81CCA
         D1=(5)  ANNCTRL                          * 81CCE
         C=DAT1  B                                * 81CD5
         CBIT=1  4                                * 81CD8
         DAT1=C  B                                * 81CDD
         RTN                                      * 81CE0
-SUB_81BA2.L6:
-        GOSUB   SUB_81E27                        * 81CE2
+
+* Shows "Warning:" and "No Mem To Config All", for a moment
+NoMemScreen:
+        GOSUB   BootScreen                       * 81CE2
         LC(5)   #00007                           * 81CE6
-        GOSUB   SUB_81DE7                        * 81CED
+        GOSUB   BootMsg                          * 81CED
         LC(5)   #00010                           * 81CF1
-        GOTO    SUB_81BA2.L8                     * 81CF8
-SUB_81BA2.L7:
-        GOSUB   SUB_81E27                        * 81CFC
+        GOTO    Warn2Row                         * 81CF8
+
+* Shows "Warning:" and "Invalid Card Data", for a moment
+BadCardScreen:
+        GOSUB   BootScreen                       * 81CFC
         LC(5)   #00007                           * 81D00
-        GOSUB   SUB_81DE7                        * 81D07
+        GOSUB   BootMsg                          * 81D07
         LC(5)   #00008                           * 81D0B
-SUB_81BA2.L8:
-        GOSUB   SUB_81E00                        * 81D12
-        GOSBVL  SUB_815D3                        * 81D16
+
+* refs (1): 81CF8
+* C.A = message -> : shows it in the second row and waits, then clears
+Warn2Row:
+        GOSUB   BootMsg2                         * 81D12
+        GOSBVL  DelayLong                        * 81D16
         GOVLNG  ClrScrMn                         * 81D1D
-SUB_81BA2.L9:
-        GOSUB   SUB_81E19                        * 81D24
+
+* Shows "Try To Recover Memory?" with YES and NO on the menu keys
+TryRecoverScreen:
+        GOSUB   BootKeysOff                      * 81D24
         LC(5)   #0000E                           * 81D28
-        GOSUB   SUB_81DE7                        * 81D2F
-SUB_81BA2.L10:
+        GOSUB   BootMsg                          * 81D2F
+
+* Draws the YES label over key A and the NO label over key F
+YesNoLabels:
         P=      0                                * 81D33
         SETHEX                                   * 81D35
         GOSBVL  ClrMenu                          * 81D37
-        D1=(5)  SUB_81D6E.L2                     * 81D3E
+        D1=(5)  LabelYES                         * 81D3E
         GOSBVL  D0->Sft1                         * 81D45
         AD0EX                                    * 81D4C
         C=0     A                                * 81D4F
-        GOSUB   SUB_81D6E                        * 81D51
-        D1=(5)  SUB_81D6E.L3                     * 81D55
+        GOSUB   DrawLabel                        * 81D51
+        D1=(5)  LabelNO                          * 81D55
         GOSBVL  D0->Sft1                         * 81D5C
         AD0EX                                    * 81D63
         C=0     A                                * 81D66
@@ -2398,12 +2644,13 @@ SUB_81BA2.L10:
         A=A+C   A                                * 81D6C
 
 * refs (1): 81D51
-SUB_81D6E:
+* D1 = rows, A = menu row -> : copies a seven-row, 24-pixel label to the menu (P counts 9 to 15)
+DrawLabel:
         LC(2)   #22                              * 81D6E
         A=A+C   A                                * 81D72
         D0=A                                     * 81D74
         P=      9                                * 81D77
-SUB_81D6E.loop1:
+DrawLabel.loop1:
         A=DAT1  6                                * 81D79
         DAT0=A  6                                * 81D7D
         AD0EX                                    * 81D81
@@ -2411,96 +2658,79 @@ SUB_81D6E.loop1:
         D0=A                                     * 81D86
         D1=D1+  6                                * 81D89
         P=P+1                                    * 81D8C
-        GONC    SUB_81D6E.loop1                  * 81D8E
+        GONC    DrawLabel.loop1                  * 81D8E
         RTN                                      * 81D91
 
-SUB_81D6E.L2:
-        CON(5)  ROMP_0E2_069.L1+3                * 81D93  address (the code jumps or points through it)
-        NIBHEX  1                                * 81D98
+* Picture of the YES label: seven rows of 6 nibbles
+* Self-test YES label: rows of 24 pixels (copied by DrawLabel)
+LabelYES:
+        CON(6)  #1FFFFF                          * 81D93  entry 0
+        CON(6)  #1F315F                          * 81D99  entry 1
+        CON(6)  #1FDD5F                          * 81D9F  entry 2
+        CON(6)  #1FB1BF                          * 81DA5  entry 3
+        CON(6)  #1F7DBF                          * 81DAB  entry 4
+        CON(6)  #1F91BF                          * 81DB1  entry 5
+        CON(6)  #1FFFFF                          * 81DB7  entry 6
 
-        CON(5)  ROMP_0E2_022.L1+81               * 81D99  address (the code jumps or points through it)
-        NIBHEX  1                                * 81D9E
-
-        CON(5)  ROMP_0E2_061.L1+36               * 81D9F  address (the code jumps or points through it)
-        NIBHEX  1                                * 81DA4
-
-        CON(5)  ROMP_0E2_050.L1+209              * 81DA5  address (the code jumps or points through it)
-        NIBHEX  1                                * 81DAA
-
-        CON(5)  ROMP_0E2_03C.L1+366              * 81DAB  address (the code jumps or points through it)
-        NIBHEX  1                                * 81DB0
-
-        CON(5)  ROMP_0E2_046.L1+29               * 81DB1  address (the code jumps or points through it)
-        NIBHEX  1                                * 81DB6
-
-        CON(5)  ROMP_0E2_069.L1+3                * 81DB7  address (the code jumps or points through it)
-        NIBHEX  1                                * 81DBC
-
-SUB_81D6E.L3:
-        CON(5)  ROMP_0E2_069.L1                  * 81DBD  address (the code jumps or points through it)
-        NIBHEX  3                                * 81DC2
-
-        CON(5)  ROMP_0B9_000.L1+17               * 81DC3  address (the code jumps or points through it)
-        NIBHEX  3                                * 81DC8
-
-        CON(5)  ROMP_0E2_013.L3+2                * 81DC9  address (the code jumps or points through it)
-        NIBHEX  3                                * 81DCE
-
-        CON(5)  ROMP_0E2_013.L1+9                * 81DCF  address (the code jumps or points through it)
-        NIBHEX  3                                * 81DD4
-
-        CON(5)  ROMP_0E2_013.L2+9                * 81DD5  address (the code jumps or points through it)
-        NIBHEX  3                                * 81DDA
-
-        CON(5)  ROMP_0B9_000.L1+17               * 81DDB  address (the code jumps or points through it)
-        NIBHEX  3                                * 81DE0
-
-        CON(5)  ROMP_0E2_069.L1                  * 81DE1  address (the code jumps or points through it)
-        NIBHEX  3                                * 81DE6
+* Picture of the NO label: seven rows of 6 nibbles
+* Self-test NO label: rows of 24 pixels (copied by DrawLabel)
+LabelNO:
+        CON(6)  #3FFFFC                          * 81DBD  entry 0
+        CON(6)  #3E2DFC                          * 81DC3  entry 1
+        CON(6)  #3EA9FC                          * 81DC9  entry 2
+        CON(6)  #3EA1FC                          * 81DCF  entry 3
+        CON(6)  #3EA5FC                          * 81DD5  entry 4
+        CON(6)  #3E2DFC                          * 81DDB  entry 5
+        CON(6)  #3FFFFC                          * 81DE1  entry 6
 
 * refs (5): 81CB8 81CCA 81CED 81D07 81D2F
-SUB_81DE7:
+* C.A = n -> : shows message n of MsgTab(0) in the first row
+BootMsg:
         D0=(5)  MsgTab(0).L1                     * 81DE7
-        GOSUB   SUB_81E4C                        * 81DEE
-        GOSBVL  SUB_81662                        * 81DF2
-        GOVLNG  SUB_815FE.L1                     * 81DF9
+        GOSUB   MsgFind                          * 81DEE
+        GOSBVL  BufferFill                       * 81DF2
+        GOVLNG  ShowBuffer                       * 81DF9
 
 * refs (1): 81D12
-SUB_81E00:
+* C.A = n -> : shows message n of MsgTab(0) in the second row
+BootMsg2:
         D0=(5)  MsgTab(0).L1                     * 81E00
-        GOSUB   SUB_81E4C                        * 81E07
-        GOSBVL  SUB_81662                        * 81E0B
-        GOVLNG  SUB_815D3.L2                     * 81E12
+        GOSUB   MsgFind                          * 81E07
+        GOSBVL  BufferFill                       * 81E0B
+        GOVLNG  ShowRow2                         * 81E12
 
 * refs (1): 81D24
-SUB_81E19:
+* Flushes keys, before TryRecoverScreen
+BootKeysOff:
         GOSBVL  Flush                            * 81E19
-        GOSBVL  SUB_00735.L2                     * 81E20
+        GOSBVL  WaitCardStat.L2                  * 81E20
 
 * refs (3): 81CAD 81CE2 81CFC
-SUB_81E27:
+* Clears the display, annunciators off, turns it on, and beeps
+BootScreen:
         GOSBVL  ClrScrMn                         * 81E27
         C=0     A                                * 81E2E
-        GOSBVL  SUB_804B6                        * 81E30
+        GOSBVL  SetAnnun                         * 81E30
         GOSBVL  ScrOn+                           * 81E37
-        GOSBVL  SUB_00E0B                        * 81E3E
-        GOVLNG  SUB_80215.L2                     * 81E45
+        GOSBVL  KbdOutAll                        * 81E3E
+        GOVLNG  BeepMenu                         * 81E45
 
 * refs (2): 81DEE 81E07
-SUB_81E4C:
+* C.A = n, D0 = strings -> A.A = length, D0 = text of string n
+MsgFind:
         SETHEX                                   * 81E4C
         C=C-1   A                                * 81E4E
-SUB_81E4C.loop1:
+MsgFind.loop1:
         A=DAT0  A                                * 81E50
         A=A-CON A,5                              * 81E53
         D0=D0+  5                                * 81E59
         C=C-1   A                                * 81E5C
-        GOC     SUB_81E4C.L2                     * 81E5E
+        GOC     MsgFind.L2                       * 81E5E
         CD0EX                                    * 81E61
         C=C+A   A                                * 81E64
         CD0EX                                    * 81E66
-        GOTO    SUB_81E4C.loop1                  * 81E69
-SUB_81E4C.L2:
+        GOTO    MsgFind.loop1                    * 81E69
+MsgFind.L2:
         ASRB.F  A                                * 81E6D
         RTN                                      * 81E72
         P=      0                                * 81E74
@@ -2516,11 +2746,11 @@ SUB_81E4C.L2:
         LC(5)   #A0000                           * 81EA0
         CONFIG                                   * 81EA7
         GOVLNG  AllowIntr                        * 81EAA
-        GOSBVL  SUB_011AC                        * 81EB1
+        GOSBVL  ResetConfig                      * 81EB1
         GOSBVL  AllowIntr                        * 81EB8
         C=RSTK                                   * 81EBF
         GOSBVL  ClrScrMn                         * 81EC1
-        GOVLNG  KeyTestDiag.loop3                * 81EC8
+        GOVLNG  TestESD.loop2                    * 81EC8
         FILLTO  #82000                           * 81ECF  305 zero nibbles: the next entry stays at #82000
 
         LENGTH                                   * 82000  library object without its prolog (its place is the end of the link table before): length, to #86FDD

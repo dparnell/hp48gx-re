@@ -1,4 +1,4 @@
-* HP 48GX ROM revision R, #740E1-#760C8: Message tables
+* HP 48GX ROM revision R, #740E1-#760C8: Message tables of the ROM libraries (MsgTab), then the start of the units table (#75675)
 * Addresses in the right-hand comments are those of the original ROM.
 * Most referenced: MsgTab(6) MsgTab(5) MsgTab(3) MsgTab(2) MsgTab(13) MsgTab(12) MsgTab(11) MsgTab(10) MsgTab(1)
 * Follows on from the previous file (at #740E1 in the original ROM).
@@ -338,7 +338,7 @@ U.F:
 U.r:
         NIBASC  "r"                              * 75767
         CON(1)  0                                * 75769  pointer follows
-        CON(5)  UMSIN~3                          * 7576A  dimensions
+        CON(5)  UDimAngle                        * 7576A  dimensions
         UFACT   5.72957795130823E1               * 7576F
         CON(2)  U.°-(*)                          * 75781  next name of this length
 U.a:
@@ -349,7 +349,7 @@ U.a:
 U.°:
         NIBASC  "°"                              * 7578E
         CON(1)  0                                * 75790  pointer follows
-        CON(5)  UMSIN~3                          * 75791  dimensions
+        CON(5)  UDimAngle                        * 75791  dimensions
         CON(1)  0                                * 75796  pointer follows
         CON(5)  %%1                              * 75797  factor
         CON(2)  U.R-(*)                          * 7579C  next name of this length
@@ -421,7 +421,7 @@ U.Ω:
 U.K:
         NIBASC  "K"                              * 7584D
         CON(1)  0                                * 7584F  pointer follows
-        CON(5)  puretemp?~1                      * 75850  dimensions
+        CON(5)  UDimTemp                         * 75850  dimensions
         CON(1)  0                                * 75855  pointer follows
         CON(5)  %%1                              * 75856  factor
         CON(2)  0                                * 7585B  last of this length
@@ -562,21 +562,21 @@ U.pt:
 U.°C:
         NIBASC  "°C"                             * 75A2E
         CON(1)  0                                * 75A32  pointer follows
-        CON(5)  puretemp?~1                      * 75A33  dimensions
+        CON(5)  UDimTemp                         * 75A33  dimensions
         CON(1)  0                                * 75A38  pointer follows
         CON(5)  cfC                              * 75A39  factor
         CON(2)  U.°R-(*)                         * 75A3E  next name of this length
 U.°F:
         NIBASC  "°F"                             * 75A40
         CON(1)  0                                * 75A44  pointer follows
-        CON(5)  puretemp?~1                      * 75A45  dimensions
+        CON(5)  UDimTemp                         * 75A45  dimensions
         CON(1)  0                                * 75A4A  pointer follows
         CON(5)  cfF                              * 75A4B  factor
         CON(2)  U.lm-(*)                         * 75A50  next name of this length
 U.°R:
         NIBASC  "°R"                             * 75A52
         CON(1)  0                                * 75A56  pointer follows
-        CON(5)  puretemp?~1                      * 75A57  dimensions
+        CON(5)  UDimTemp                         * 75A57  dimensions
         UFACT   5.55555555555556E-1              * 75A5C
         CON(2)  U.sb-(*)                         * 75A6E  next name of this length
 U.lm:
@@ -821,7 +821,7 @@ U.torr:
 U.grad:
         NIBASC  "grad"                           * 75ECE
         CON(1)  0                                * 75ED6  pointer follows
-        CON(5)  UMSIN~3                          * 75ED7  dimensions
+        CON(5)  UDimAngle                        * 75ED7  dimensions
         UFACT   9E-1                             * 75EDC
         CON(2)  U.miUS-(*)                       * 75EE0  next name of this length
 U.ftUS:
@@ -862,7 +862,7 @@ U.slug:
 U.arcs:
         NIBASC  "arcs"                           * 75FB9
         CON(1)  0                                * 75FC1  pointer follows
-        CON(5)  UMSIN~3                          * 75FC2  dimensions
+        CON(5)  UDimAngle                        * 75FC2  dimensions
         UFACT   2.77777777777778E-4              * 75FC7
         CON(2)  0                                * 75FD9  last of this length
 U.galC:
@@ -908,5 +908,5 @@ U.grain:
 U.arcmin:
         NIBASC  "arcmin"                         * 760A5
         CON(1)  0                                * 760B1  pointer follows
-        CON(5)  UMSIN~3                          * 760B2  dimensions
+        CON(5)  UDimAngle                        * 760B2  dimensions
         UFACT   1.66666666666667E-2              * 760B7

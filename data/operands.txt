@@ -83,5 +83,10 @@ C07EE	addr	the version object, read by VERSION
 17F24	addr	code in the self-test area
 40F17	num	delay count
 31215	num	I/O error number #C05, returned in D1
-31239	num	I/O error number #C03, returned in D1
-31246	num	I/O error number #C04, returned in D1
+31239	num	I/O error number #C04, returned in D1
+31246	num	I/O error number #C03, returned in D1
+80E9A	num	an error code, not an address
+80EA5	num	an error code, not an address
+8156C	num	delay count
+81B47	num	not an address
+1843A	num	the number 10, not message #00A

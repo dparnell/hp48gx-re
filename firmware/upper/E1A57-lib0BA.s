@@ -1,5 +1,6 @@
-* HP 48GX ROM revision R, #E1A57-#E228A: Library part 0BA
+* HP 48GX ROM revision R, #E1A57-#E228A: Message table of the I/O applications
 * Addresses in the right-hand comments are those of the original ROM.
+* Most referenced: BAMessages
 * Follows on from the previous file (at #E1A57 in the original ROM).
         ENDLENGTH                                * E1A57
 
@@ -7,16 +8,18 @@
         LENGTH                                   * E1A5C  length, to #E228B
         CON(2)  0                                * E1A61  title length
 
+* Library 0BA: Messages of the I/O applications: Transfer, Print, Kermit and the server.
 LIB0BA:
         CON(3)  #0BA                             * E1A63  library number
         REL(5)  LIB0BA.hash                      * E1A66  hash table
-        REL(5)  ROMP_0BA_000                     * E1A6B  message table
+        REL(5)  BAMessages                       * E1A6B  message table
         REL(5)  LIB0BA.link                      * E1A70  link table
         CON(5)  0                                * E1A75  config
 
 * ROMPTR 0BA 000
 * refs (1): E1A63
-ROMP_0BA_000:
+* Message table: numbers BA01 onwards.
+BAMessages:
         CON(5)  DOARRY                           * E1A7A  array 67
         LENGTH                                   * E1A7F  length, to #E2214
         CON(5)  DOCSTR                           * E1A84  element type
@@ -118,6 +121,6 @@ LIB0BA.hash.L1:
 LIB0BA.link:
         CON(5)  DOHSTR                           * E2278  link table of library 0BA
         LENGTH                                   * E227D  length, to #E2287
-        REL(5)  ROMP_0BA_000                     * E2282  000 
+        REL(5)  BAMessages                       * E2282  000 
         ENDLENGTH                                * E2287
         BSS     4                                * E2287  zeros

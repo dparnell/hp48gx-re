@@ -1,81 +1,95 @@
-* HP 48GX ROM revision R, #24028-#27028: Parser and compiler
+* HP 48GX ROM revision R, #24028-#27028: The compiler: compile routines of program structures, literal objects by their first token, the tokenizer (GetNextToken) with its character class tables, and access to command header flags and trailer slots
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: nultrior 'Rapndit GetNextToken 4psh 6rolld;1+(s5) GETPTRFALSE ?OKINALG _END__253D6 DaDGNTc drop2;6rolld;1+(s5) ngsizecase delimcase
+* Most referenced: nultrior 'Rapndit GetNextToken 4psh FnInfo ParseReal 6rolld;1+(s5) GETPTRFALSE ?OKINALG _END__253D6 DaDGNTc drop2;6rolld;1+(s5)
 * Follows on from the previous file (at #24028 in the original ROM).
         RPL
 
 * refs (2): 23FFB 2400A
-OBJ_24028:
-        :: OBJ_252CD 'Rapndit xWHILEEND TrueTrue ; * 24028
+* END of WHILE..REPEAT: closes the clause
+ParseWHILEEND:
+        :: CloseClause 'Rapndit xWHILEEND TrueTrue ; * 24028
 
 * refs (1): 2342F
-OBJ_24046:
-        :: 'Rapndit xIFERR ~BINT0;5UNROLL COLA OBJ_24069 * 24046
+* IFERR: compile routine
+ParseIFERR:
+        :: 'Rapndit xIFERR ~BINT0;5UNROLL COLA ParseIFERRBody * 24046
         ;                                        * 24064
 
 * refs (2): 2405F 24096
-OBJ_24069:
-        :: nultrior failed _THEN_ tok8trior OBJ_240A0 OBJ_23A2E !*triand * 24069
-          COLA OBJ_24069                         * 24091
+* Words of IFERR's clause, up to THEN
+ParseIFERRBody:
+        :: nultrior failed _THEN_ tok8trior ParseERRTHEN ParseProgOb * 24069
+          !*triand COLA ParseIFERRBody           * 2408C
         ;                                        * 2409B
 
 * refs (1): 24082
-OBJ_240A0:
-        :: OBJ_2525A 4psh DROP drop2;6rolld;1+(s5) 'Rapndit xERRTHEN * 240A0
-          ~BINT0;5UNROLL COLA OBJ_240D7          * 240C3
+* THEN of IFERR
+ParseERRTHEN:
+        :: CloseClause1 4psh DROP drop2;6rolld;1+(s5) 'Rapndit xERRTHEN * 240A0
+          ~BINT0;5UNROLL COLA ParseERRTHENBody   * 240C3
         ;                                        * 240D2
 
 * refs (2): 240CD 24113
-OBJ_240D7:
-        :: nultrior OBJ_2417C _END__253D6 tok8trior OBJ_2417C _ELSE_ * 240D7
-          tok8trior OBJ_2411D OBJ_23A2E !*triand COLA OBJ_240D7 * 240FA
+* Words of THEN's clause, up to ELSE or END
+ParseERRTHENBody:
+        :: nultrior ParseERREND _END__253D6 tok8trior ParseERREND _ELSE_ * 240D7
+          tok8trior ParseERRELSE ParseProgOb !*triand COLA ParseERRTHENBody * 240FA
         ;                                        * 24118
 
 * refs (1): 240FF
-OBJ_2411D:
-        :: OBJ_252CD 'Rapndit xELSE ~BINT0;5UNROLL COLA OBJ_24145 * 2411D
+* ELSE of IFERR
+ParseERRELSE:
+        :: CloseClause 'Rapndit xELSE ~BINT0;5UNROLL COLA ParseERRELSEBody * 2411D
         ;                                        * 24140
 
 * refs (2): 2413B 24172
-OBJ_24145:
-        :: nultrior OBJ_2417C _END__253D6 tok8trior OBJ_2417C OBJ_23A2E * 24145
-          !*triand COLA OBJ_24145                * 24168
+* Words of ELSE's clause, up to END
+ParseERRELSEBody:
+        :: nultrior ParseERREND _END__253D6 tok8trior ParseERREND * 24145
+          ParseProgOb !*triand COLA ParseERRELSEBody * 24163
         ;                                        * 24177
 
 * refs (4): 240E1 240F0 2414F 2415E
-OBJ_2417C:
-        :: OBJ_252CD 'Rapndit xIFEND TrueTrue ;  * 2417C
+* END of IFERR
+ParseERREND:
+        :: CloseClause 'Rapndit xIFEND TrueTrue ; * 2417C
 
 * refs (2): 23022 234F8
-OBJ_2419A:
-        :: ~BINT0;5UNROLL OBJ_23E52 !*triand COLA OBJ_241BD * 2419A
+* →: compile routine. Reads the names, then the body.
+Parse->:
+        :: ~BINT0;5UNROLL ParseLamName !*triand COLA Parse->Names * 2419A
         ;                                        * 241B8
 
 * refs (2): 241B3 241F9
-OBJ_241BD:
-        :: nultrior failed tok' tok8cktrior OBJ_24203 tok<< tok8trior * 241BD
-          OBJ_24280 OBJ_23E52 !*triand COLA OBJ_241BD * 241E5
+* Names after →, until the ' or « that starts the body
+Parse->Names:
+        :: nultrior failed tok' tok8cktrior Parse->Alg tok<< tok8trior * 241BD
+          Parse->Prog ParseLamName !*triand COLA Parse->Names * 241E5
         ;                                        * 241FE
 
 * refs (1): 241D6
-OBJ_24203:
+* → with an algebraic body
+Parse->Alg:
         ::                                       * 24203
 
 * refs (1): 24285
-OBJ_24208:
+* Bind the names of → so that the body compiles them as local
+Parse->Bind:
           :: 4psh P{}N DUPDUP INNERCOMP #1+ROLL BIND INNERCOMP ; SWAPUnDROP * 24208
-          OBJ_2472B ABND !*triand BINT4 ' xALG-> psh1& unrot SWAP symcomp * 2423A
-          SWAP top& swapB;drop;2true ;           * 2426C
+          ParseAlgTicks ABND !*triand BINT4 ' xALG-> psh1& unrot SWAP * 2423A
+          symcomp SWAP top& swapB;drop;2true ;   * 24267
 
 * refs (1): 241E5
-OBJ_24280:
-        :: OBJ_24208 ' x<< SWAP#1+ SWAPUnDROP OBJ_242D0 ABND !*triand BINT4 * 24280
-          ' xRPN-> psh1& roll2top& swapB;drop;2true ; * 242B2
+* → with a program body
+Parse->Prog:
+        :: Parse->Bind ' x<< SWAP#1+ SWAPUnDROP Parse->Body ABND !*triand * 24280
+          BINT4 ' xRPN-> psh1& roll2top& swapB;drop;2true ; * 242AD
 
 * refs (2): 2429E 242FD
-OBJ_242D0:
+* Words of the body up to »; the block ends with ABND
+Parse->Body:
         :: nultrior ~'Rapndit;x>>ABND;TrueTrue tok>> tok8trior * 242D0
-          ~'Rapndit;x>>ABND;TrueTrue OBJ_23A2E !*triand COLA OBJ_242D0 * 242E9
+          ~'Rapndit;x>>ABND;TrueTrue ParseProgOb !*triand COLA Parse->Body * 242E9
         ;                                        * 24302
 
 * refs (2): 242DA 242E9
@@ -91,82 +105,94 @@ OBJ_242D0:
         :: 'Rapndit xPROMPT TrueTrue ;           * 24339
 
 * refs (3): 2452D 24C5D 24E1F
-OBJ_24352:
-        :: OBJ_24384 !*trior TrueTrue OBJ_24537 !*trior TrueTrue COLA * 24352
-          OBJ_2469F                              * 2437A
+* One object of a list: a literal, a command or a name
+ParseListOb:
+        :: ParseLiteral !*trior TrueTrue ParseCmd1 !*trior TrueTrue COLA * 24352
+          ParseName                              * 2437A
         ;                                        * 2437F
 
 * refs (2): 23A42 24357
-OBJ_24384:
-        :: ?ATTNQUIT nultrior FALSE OBJ_25D03 !*trior OBJ_24447 tok' * 24384
-          tok8cktrior OBJ_2472B toklparen tok8trior OBJ_2478A tok[ tok8trior * 243AC
-          OBJ_24816 tok{ tok8trior List toksharp tok8cktrior OBJ_24C9E * 243CF
-          tokquote tok8cktrior ~getmatchtok;DaDGNTc _:__253B8 tok8cktrior * 243F2
-          OBJ_244A1 _DIR tok8trior OBJ_24D20 tokCTSTR tok8trior OBJ_24FE6 * 2440B
-          tokCTGROB tok8trior OBJ_25B3D FALSE ;  * 2442E
+* Literal object, by its first token: number, ', (, [, {, #, ", :tag:, DIR, C$, GROB
+ParseLiteral:
+        :: ?ATTNQUIT nultrior FALSE ParseReal !*trior ParseUnit? tok' * 24384
+          tok8cktrior ParseAlgTicks toklparen tok8trior ParseCmp tok[ * 243AC
+          tok8trior ParseArray tok{ tok8trior List toksharp tok8cktrior * 243CA
+          ParseBinInt tokquote tok8cktrior ~getmatchtok;DaDGNTc _:__253B8 * 243ED
+          tok8cktrior ParseTagged _DIR tok8trior ParseDIR tokCTSTR tok8trior * 24406
+          ParseC$ tokCTGROB tok8trior ParseGROB FALSE ; * 24429
 
 * refs (1): 243A2
-OBJ_24447:
-        :: tokuscore tok8cktrior OBJ_24465 TrueTrue ; * 24447
+* After a number: a _ starts a unit
+ParseUnit?:
+        :: tokuscore tok8cktrior ParseUnit TrueTrue ; * 24447
 
 * refs (1): 24456
-OBJ_24465:
-        :: OBJ_26058 OBJ_25AB6 OBJ_28706 !*triand OBJ_28972 x* !*triand * 24465
-          OBJ_25D3A OBJ_25AD4 TrueTrue ;         * 2448D
+* Unit part of a unit object: tokens by the unit class table, then back to the normal one
+ParseUnit:
+        :: ClassTblUnit SetClassTbl UnitExpr !*triand UnitApply x* !*triand * 24465
+          ClassTblRPL SetClassTblAt TrueTrue ;   * 2448D
 
 * refs (1): 2440B
-OBJ_244A1:
+* :tag: ob
+ParseTagged:
         :: getmatchtok DUPLEN$ BINT253 #>case failed * 244A1
-          DaDGNTc 2DROP OBJ_244F6 !*triand 4psh #1- SWAPROT >TAG SWAP * 244BF
+          DaDGNTc 2DROP ParseTagOb !*triand 4psh #1- SWAPROT >TAG SWAP * 244BF
           swapB;drop;2true ;                     * 244EC
 
 * refs (1): 244C9
-OBJ_244F6:
+* The object after a tag: a program, or a list item
+ParseTagOb:
         :: tok<< tok8trior                       * 244F6
-          :: ~BINT0;5UNROLL 'Rapndit x<< COLA OBJ_23DFD * 24505
+          :: ~BINT0;5UNROLL 'Rapndit x<< COLA ParseProgBody * 24505
           ;                                      * 24523
-          COLA OBJ_24352                         * 24528
+          COLA ParseListOb                       * 24528
         ;                                        * 24532
 
 * refs (1): 24366
-OBJ_24537:
+* A command in a list, without its structure's compile routine
+ParseCmd1:
         :: ~;eval;q                              * 24537
 
 * refs (1): 245E6
-OBJ_24541:
+* One word: a compiled ROM word. Library 700 words that can't start a structure fail here.
+ParseWord:
           :: ngsizecase FALSE                    * 24541
-            OBJ_24609 !*trior TrueTrue DROP COMPILEID NOTcsdrpfls DUP * 24550
-            OBJ_2699F NOTcase OBJ_24681          * 24573
-            OBJ_26917 NOTcase failed             * 24582
+            Tok>Name !*trior TrueTrue DROP COMPILEID NOTcsdrpfls DUP Lib700? * 24550
+            NOTcase PutTok                       * 24578
+            Cmd<2? NOTcase failed                * 24582
             RDROP ;                              * 24591
           BINT5 pshzer                           * 2459B
 
 * refs (1): 245F0
-OBJ_245A5:
+* Run the word's compile routine, then close it into a secondary
+ParseWordRun:
           :: UNROLL DROP GetNextToken 5ROLL ; EVAL !*triand * 245A5
           ~4psh;P::N;drop2;6rolld;1+(s5) TrueTrue ; * 245CD
 
 * refs (1): 23A51
-OBJ_245DC:
-        :: ~;eval;q OBJ_24541 BINT5 OBJ_245A5 EVAL !*triand TrueTrue ; * 245DC
+* A word in a program, with its compile routine if it has one
+ParseCmd:
+        :: ~;eval;q ParseWord BINT5 ParseWordRun EVAL !*triand TrueTrue ; * 245DC
 
 * refs (3): 24550 2745E 687D3
-OBJ_24609:
+* $ -> ob flag flag: a token as a name: local if bound in the compile environment
+Tok>Name:
         :: delimcase                             * 24609
           :: DUP$>ID FalseFalse ;                * 24613
-          DUP$>ID OBJ_72DC5 DUP@ casedrop OBJ_24681 * 24627
-          OBJ_2464F TrueFalse ;                  * 24640
+          DUP$>ID Tok>Name~1 DUP@ casedrop PutTok * 24627
+          !IdProlog TrueFalse ;                  * 24640
 
 * refs (1): 24640
-OBJ_2464F:
+* ob -> ob: change a name object's prolog to DOIDNT in place (at #2465F the same for DOLAM)
+!IdProlog:
         CON(5)  (*)+5                            * 2464F  primitive code object
         ASSEMBLE
         LC(5)   DOIDNT                           * 24654
-        GOTO    OBJ_2464F.L1                     * 2465B
+        GOTO    !IdProlog.L1                     * 2465B
 
         CON(5)  (*)+5                            * 2465F  primitive code object
         LC(5)   DOLAM                            * 24664
-OBJ_2464F.L1:
+!IdProlog.L1:
         A=DAT1  A                                * 2466B
         AD1EX                                    * 2466E
         DAT1=C  A                                * 24671
@@ -177,18 +203,21 @@ OBJ_2464F.L1:
         RPL
 
 * refs (5): 2457D 2463B 27675 68837 72E01
-OBJ_24681:
+* ob -> : add ob to the object being built and read the next token
+PutTok:
         :: 6rolld;1+(s5) DROP GetNextToken TrueTrue ; * 24681
 
 * refs (2): 23A65 2437A
-OBJ_2469F:
-        :: OBJ_246BD !*trior DaDGNTc failed ;    * 2469F
+* Next token must be a name
+ParseName:
+        :: ParseId !*trior DaDGNTc failed ;      * 2469F
 
 * refs (2): 23E61 246A4
-OBJ_246BD:
-        :: ~;eval;q OBJ_27EE0 OBJ_25F4E SWAPONE OBJ_25A93 delimcase * 246BD
+* A plain identifier, read with the algebraic class table
+ParseId:
+        :: ~;eval;q AlgTok>Id ClassTblAlg SWAPONE NextTok delimcase * 246BD
           4dropn;false;true                      * 246E0
-          DROP OBJ_25A93 nultrior                * 246E5
+          DROP NextTok nultrior                  * 246E5
           :: 4DROP $>ID TrueTrue ; 4dropn;false;true ; * 246F4
 
 * refs (2): 246E0 2470D
@@ -196,69 +225,80 @@ OBJ_246BD:
         :: 4DROP failed ;                        * 24717
 
 * refs (3): 23A74 2423A 243B1
-OBJ_2472B:
-        :: OBJ_25F4E OBJ_25AB6 nultrior OBJ_24771 tok' tok8cktrior OBJ_24771 * 2472B
-          OBJ_2729B !*triand OBJ_25D3A OBJ_25AB6 TrueTrue ; * 24753
+* 'algebraic': switch to the algebraic class table, parse, switch back
+ParseAlgTicks:
+        :: ClassTblAlg SetClassTbl nultrior ParseAlgFail tok' tok8cktrior * 2472B
+          ParseAlgFail AlgParse !*triand ClassTblRPL SetClassTbl TrueTrue ; * 2474E
 
 * refs (2): 2473F 2474E
-OBJ_24771:
-        :: OBJ_25D3A OBJ_25AB6 FALSE ;           * 24771
+* Back to the normal class table, not an algebraic
+ParseAlgFail:
+        :: ClassTblRPL SetClassTbl FALSE ;       * 24771
 
 * refs (2): 243C0 24997
-OBJ_2478A:
-        :: ~BINT0;5UNROLL OBJ_25D03 !*triand     * 2478A
-          :: tokanglesign tok8trior FALSE TRUE ; 6rolld;1+(s5) OBJ_25D03 * 2479E
+* ( x , y ) or ( r , ∡ θ ) as a complex number
+ParseCmp:
+        :: ~BINT0;5UNROLL ParseReal !*triand     * 2478A
+          :: tokanglesign tok8trior FALSE TRUE ; 6rolld;1+(s5) ParseReal * 2479E
           !*triand                               * 247C6
-          :: nultrior TrueTrue tokrparen OBJ_0BC15 ; !*triand 4psh DROPSWAP * 247CB
+          :: nultrior TrueTrue tokrparen tok=next ; !*triand 4psh DROPSWAP * 247CB
           ?SKIP %POL>%REC                        * 247F8
           %>C% drop2;6rolld;1+(s5) TrueTrue ;    * 24802
 
 * refs (1): 243CF
-OBJ_24816:
-        :: nultrior failed tok[ tok8trior OBJ_249C9 tok] tok8trior failed * 24816
-          ~BINT0;5UNROLL OBJ_2489D !*triand 4psh UNCOERCE ONE{}N XEQ>ARRAY * 24843
+* [ ... ]: vectors and matrices
+ParseArray:
+        :: nultrior failed tok[ tok8trior ParseRow1 tok] tok8trior failed * 24816
+          ~BINT0;5UNROLL ParseCmpVec !*triand 4psh UNCOERCE ONE{}N XEQ>ARRAY * 24843
           drop2;6rolld;1+(s5) TrueTrue ;         * 24866
 
         :: nultrior TrueTrue tok] tok8trior TrueTrue FALSE ; * 24875
 
 * refs (1): 24848
-OBJ_2489D:
-        :: toklparen tok8trior OBJ_24992 OBJ_25D03 !*triand tokanglesign * 2489D
-          tok8trior OBJ_248D9 COLA OBJ_24956     * 248C0
+* [ ( ...: first element complex; or a polar vector
+ParseCmpVec:
+        :: toklparen tok8trior ParseVecCmp ParseReal !*triand tokanglesign * 2489D
+          tok8trior ParseVecPolar COLA ParseVecRest * 248C0
         ;                                        * 248D4
 
 * refs (1): 248C5
-OBJ_248D9:
-        :: OBJ_25D03 !*triand tokanglesign tok8trior OBJ_2491F 4psh 3UNROLL * 248D9
-          %POL>%REC ROT SWAPUnDROP COLA OBJ_24956 * 24901
+* Vector elements after an ∡: 2D polar or, with another ∡, 3D
+ParseVecPolar:
+        :: ParseReal !*triand tokanglesign tok8trior ParseVecSph 4psh * 248D9
+          3UNROLL %POL>%REC ROT SWAPUnDROP COLA ParseVecRest * 248FC
         ;                                        * 2491A
 
 * refs (1): 248F2
-OBJ_2491F:
-        :: OBJ_25D03 !*triand 4psh DROP %SPH>%REC BINT3 SWAPUnDROP COLA * 2491F
-          OBJ_24956                              * 2494C
+* Third element of a spherical vector
+ParseVecSph:
+        :: ParseReal !*triand 4psh DROP %SPH>%REC BINT3 SWAPUnDROP COLA * 2491F
+          ParseVecRest                           * 2494C
         ;                                        * 24951
 
 * refs (8): 248CF 24915 2494C 249A6 249BF 249FB ...
-OBJ_24956:
+* Rest of the elements, up to ]
+ParseVecRest:
         :: ?ATTNQUIT tok] tok8trior TrueTrue tok[ tok8cktrior TrueTrue * 24956
           nultrior TrueTrue toklparen tok8trior  * 2497E
 
 * refs (1): 248AC
-OBJ_24992:
-          :: OBJ_2478A !*triand COLA OBJ_24956   * 24992
+* Elements of a complex vector
+ParseVecCmp:
+          :: ParseCmp !*triand COLA ParseVecRest * 24992
           ;                                      * 249AB
-          OBJ_25D03 !*triand COLA OBJ_24956      * 249B0
+          ParseReal !*triand COLA ParseVecRest   * 249B0
         ;                                        * 249C4
 
 * refs (1): 2482F
-OBJ_249C9:
+* First row of a matrix
+ParseRow1:
         :: tok] tok8trior failed tok[ tok8trior failed nultrior failed * 249C9
-          ~BINT0;5UNROLL OBJ_24956 !*triand COLA OBJ_24A14 * 249F6
+          ~BINT0;5UNROLL ParseVecRest !*triand COLA ParseRowLen * 249F6
         ;                                        * 24A0F
 
 * refs (1): 24A0A
-OBJ_24A14:
+* Remember the first row's length: all rows must match
+ParseRowLen:
         :: 4psh DUP ONESWAP                      * 24A14
           {                                      * 24A28
 
@@ -267,25 +307,27 @@ OBJ_24A14:
 
 Πj:
             LAM j }                              * 24A36
-          BIND SWAPUnDROP OBJ_24AC9              * 24A44
+          BIND SWAPUnDROP ParseRows              * 24A44
           :: !*triand                            * 24A53
 
 Πi_24A5D:
             LAM i 6rolld;1+(s5)                  * 24A5D
 
 Πj_24A6B:
-            LAM j 6rolld;1+(s5) ABND RDROPCOLA OBJ_24A97 ; * 24A6B
+            LAM j 6rolld;1+(s5) ABND RDROPCOLA ParseMatEnd ; * 24A6B
           ABND ;                                 * 24A8D
 
 * refs (1): 24A83
-OBJ_24A97:
+* Make the array from the parsed elements
+ParseMatEnd:
         :: 4psh DROP UNCOERCE2 BINT2 P{}N XEQ>ARRAY drop2;6rolld;1+(s5) * 24A97
           TrueTrue ;                             * 24ABF
 
 * refs (2): 24A4E 24BF4
-OBJ_24AC9:
-        :: tok] tok8trior TrueTrue nultrior TrueTrue tok[ tok8trior * 24AC9
-          OBJ_24B70 ~BINT0;5UNROLL OBJ_24956 !*triand 5PICK * 24AF1
+* Later rows of a matrix
+ParseRows:
+        :: tok] tok8trior TrueTrue nultrior TrueTrue tok[ tok8trior ParseRow * 24AC9
+          ~BINT0;5UNROLL ParseVecRest !*triand 5PICK * 24AF6
 
 Πj_24B0A:
           LAM j #/ DUPUNROT                      * 24B0A
@@ -298,9 +340,10 @@ OBJ_24AC9:
           BINT4 over& DROP TrueTrue ;            * 24B57
 
 * refs (1): 24AF1
-OBJ_24B70:
+* One later row
+ParseRow:
         :: nultrior failed tok] tok8trior failed tok[ tok8trior failed * 24B70
-          ~BINT0;5UNROLL OBJ_24956 !*triand 4psh DUP * 24B9D
+          ~BINT0;5UNROLL ParseVecRest !*triand 4psh DUP * 24B9D
 
 Πj_24BB6:
           LAM j #=case                           * 24BB6
@@ -310,63 +353,72 @@ OBJ_24B70:
             LAM i #1+'                           * 24BD3
 
 Πi_24BE1:
-            LAM i STO COLA OBJ_24AC9             * 24BE1
+            LAM i STO COLA ParseRows             * 24BE1
           ;                                      * 24BF9
           #1+NDROP failed ;                      * 24BFE
 
 * refs (1): 243DE
 List:
-        :: ~BINT0;5UNROLL OBJ_24C30 !*triand ~4psh;P{}N;drop2;6rolld;1+(s5) * 24C0D
-          TrueTrue ;                             * 24C26
+        :: ~BINT0;5UNROLL ParseListBody !*triand * 24C0D
+          ~4psh;P{}N;drop2;6rolld;1+(s5) TrueTrue ; * 24C21
 
 * refs (3): 24C17 24C67 24C94
-OBJ_24C30:
+* Elements of a list up to }
+ParseListBody:
         :: nultrior TrueTrue tok} tok8trior TrueTrue tok<< tok8trior * 24C30
-          OBJ_24C71 OBJ_24352 !*triand OBJ_24C30 ; * 24C58
+          ParseListProg ParseListOb !*triand ParseListBody ; * 24C58
 
 * refs (1): 24C58
-OBJ_24C71:
-        :: ~BINT0;5UNROLL 'Rapndit x<< OBJ_23DFD !*triand COLA OBJ_24C30 * 24C71
+* A program inside a list
+ParseListProg:
+        :: ~BINT0;5UNROLL 'Rapndit x<< ParseProgBody !*triand COLA * 24C71
+          ParseListBody                          * 24C94
         ;                                        * 24C99
 
 * refs (1): 243ED
-OBJ_24C9E:
-        :: DROP OBJ_254F7 newBASE BINT64 Null# OVER #1- BINT4 #/ SWAPDROP * 24C9E
+* # digits, in the base of its suffix or the current base, to a hex string of up to 64 bits
+ParseBinInt:
+        :: DROP NextRawTok newBASE BINT64 Null# OVER #1- BINT4 #/ SWAPDROP * 24C9E
           #1+ EXPAND SWAPROT convertbase OVER ?SKIP * 24CD5
           :: ROTDROP 3GETLAM 3UNROLL ;           * 24CF3
           ABND !*triand DaDGNTc ;                * 24D0C
 
 * refs (1): 2441A
-OBJ_24D20:
-        :: ~BINT0;5UNROLL NULLHXS BINT3 EXPAND 6rolld;1+(s5) OBJ_24D75 * 24D20
+* DIR ... END directory object
+ParseDIR:
+        :: ~BINT0;5UNROLL NULLHXS BINT3 EXPAND 6rolld;1+(s5) ParseDirVars * 24D20
           !*triand 4psh #1-SWAP pshm1 top& P{}N {}>DIR drop2;6rolld;1+(s5) * 24D43
           TrueTrue ;                             * 24D6B
 
 * refs (2): 24D3E 24DFC
-OBJ_24D75:
-        :: nultrior TrueTrue _END__253D6 tok8trior TrueTrue OBJ_24E47 * 24D75
-          !*triand OBJ_24E06 !*triand 4psh SWAP NOTINHARDROM? ?SKIP * 24D98
+* name object pairs, up to END
+ParseDirVars:
+        :: nultrior TrueTrue _END__253D6 tok8trior TrueTrue ParseDirName * 24D75
+          !*triand ParseDirOb !*triand 4psh SWAP NOTINHARDROM? ?SKIP * 24D98
           :: DUPROM-WORD? ITE PTR>ROMPTR TOTEMPOB * 24DBB
           ;                                      * 24DD4
-          SWAP #1-SWAP pshm1 pullpsh1& top& psh drop;dq OBJ_24D75 ; * 24DD9
+          SWAP #1-SWAP pshm1 pullpsh1& top& psh drop;dq ParseDirVars ; * 24DD9
 
 * refs (1): 24D9D
-OBJ_24E06:
-        :: tok<< tok8trior OBJ_24E29 COLA OBJ_24352 * 24E06
+* The object of a variable
+ParseDirOb:
+        :: tok<< tok8trior ParseDirProg COLA ParseListOb * 24E06
         ;                                        * 24E24
 
 * refs (1): 24E15
-OBJ_24E29:
-        :: ~BINT0;5UNROLL 'Rapndit x<< OBJ_23DFD ; * 24E29
+* Program as a variable's value
+ParseDirProg:
+        :: ~BINT0;5UNROLL 'Rapndit x<< ParseProgBody ; * 24E29
 
 * refs (1): 24D93
-OBJ_24E47:
-        :: ~;eval;q OBJ_27EE0 $>ID COMPILEID NOTcase OBJ_24E83 * 24E47
-          idntcase OBJ_24E83                     * 24E6A
+* The name of a variable
+ParseDirName:
+        :: ~;eval;q AlgTok>Id $>ID COMPILEID NOTcase ParseDirName~1 * 24E47
+          idntcase ParseDirName~1                * 24E6A
           DROP failed ;                          * 24E74
 
 * refs (2): 24E65 24E6F
-OBJ_24E83:
+ParseDirName~1:
         :: DROP toklparen &$ $>ID DaDGNTc ;      * 24E83
 
 * refs (1): 24D61
@@ -457,36 +509,42 @@ OBJ_24E83:
         :: getmatchtok DaDGNTc ;                 * 24FD2
 
 * refs (1): 24429
-OBJ_24FE6:
-        :: tok$ tok=casedrop OBJ_250D1           * 24FE6
+* C$ n text: or C$ $ for the rest of the input
+ParseC$:
+        :: tok$ tok=casedrop ParseC$All          * 24FE6
           tokexponent DPRADIX? tok. tok, RPITE realPAcode !*triand * 24FFA
           COERCE DUP#0= casedrop                 * 2501D
           :: NULL$ DaDGNTc ;                     * 2502C
-          #1- SWAP#1+ SWAPCOLA OBJ_25059 ;       * 25040
+          #1- SWAP#1+ SWAPCOLA ParseC$Chars ;    * 25040
 
 * refs (3): 2504F 250C7 250E5
-OBJ_25059:
-        :: 2DUP5ROLL UNROTOVER #+OVF TRUE OBJ_261AD OBJ_250B8 DROP 4ROLLDROP * 25059
+* Take the next n characters as a string
+ParseC$Chars:
+        :: 2DUP5ROLL UNROTOVER #+OVF TRUE TokScan ParseC$More DROP 4ROLLDROP * 25059
           BINT3 NDUP SUB$ SWAPDROPDUP 6rolld;1+(s5) LEN$ #+ GetNextToken * 25086
           TrueTrue ;                             * 250AE
 
 * refs (1): 25077
-OBJ_250B8:
-        :: ROT COLA OBJ_25059                    * 250B8
+* End of buffer in a C$: read on
+ParseC$More:
+        :: ROT COLA ParseC$Chars                 * 250B8
         ;                                        * 250CC
 
 * refs (1): 24FF5
-OBJ_250D1:
-        :: #1+ MINUSONE COLA OBJ_25059           * 250D1
+* C$ $: the rest of the input
+ParseC$All:
+        :: #1+ MINUSONE COLA ParseC$Chars        * 250D1
         ;                                        * 250EA
 
 * refs (2): 69833 6B632
-OBJ_250EF:
-        :: DPRADIX? COLA OBJ_25108               * 250EF
+* $ -> ...: delimcase with the current fraction mark
+?NumTok:
+        :: DPRADIX? COLA ?NumTok#                * 250EF
         ;                                        * 25103
 
 * refs (1): 250FE
-OBJ_25108:
+* $ flag -> ...: delimcase with the fraction mark given as a flag (TRUE for period)
+?NumTok#:
         CON(5)  (*)+5                            * 25108  primitive code object
         ASSEMBLE
         ST=1    0                                * 2510D
@@ -595,13 +653,15 @@ swapB;drop;2true:
         :: SWAPUnDROP TrueTrue ;                 * 25246
 
 * refs (2): 239F7 240A5
-OBJ_2525A:
-        :: 4psh DUP#1= ITE OBJ_25282 ~P::N;BINT1 * 2525A
+* Close a clause at the head of a test: a single object stays as it is unless it's a structure word, and any other number of objects becomes a secondary
+CloseClause1:
+        :: 4psh DUP#1= ITE ?Wrap1 ~P::N;BINT1    * 2525A
           SWAPUnDROP ;                           * 25278
 
 * refs (1): 2526E
-OBJ_25282:
-        :: OVER OBJ_2699F case ~P::N;BINT1       * 25282
+* ob -> ob: a structure word alone needs :: ;
+?Wrap1:
+        :: OVER Lib700? case ~P::N;BINT1         * 25282
         ;                                        * 2529B
 
 * refs (2): 25273 25296
@@ -613,7 +673,8 @@ OBJ_25282:
         :: 4psh P::N drop2;6rolld;1+(s5) ;       * 252B4
 
 * refs (7): 23B00 23B7D 23C95 23CF4 2402D 24122 ...
-OBJ_252CD:
+* Close the clause just compiled: more than one object becomes a secondary, one stays as it is
+CloseClause:
         :: 4psh DUP#1= ITE DROP P::N             * 252CD
           drop2;6rolld;1+(s5) ;                  * 252EB
 
@@ -710,7 +771,7 @@ getmatchtok:
 
 * refs (1): 25466
 getmatchtok~1:
-        :: FALSE OBJ_2622F ~ROT;COLA;getmatchtok DROP ROTDROP OVERDUP LEN$ * 2549D
+        :: FALSE ReadMore ~ROT;COLA;getmatchtok DROP ROTDROP OVERDUP LEN$ * 2549D
           ROTSWAP #1+DUP 4UNROLL SUB$ ;          * 254C5
 
 * refs (1): 254AC
@@ -719,8 +780,9 @@ getmatchtok~1:
         ;                                        * 254F2
 
 * refs (1): 24CA8
-OBJ_254F7:
-        :: OBJ_25E44                             * 254F7
+* Read the next token with the plain class table
+NextRawTok:
+        :: ClassTblRaw                           * 254F7
           :: 3UNROLL GetNextToken 4ROLLDROP ; ;  * 25501
 
 * refs (1): 25461
@@ -818,7 +880,7 @@ need'case.L1:
 
 * refs (1): 24CAD
 newBASE:
-        :: DUPLEN$ DUP OBJ_56FD1 BIND 3GETLAM 2GETLAM BINT2 #<case BASE * 25632
+        :: DUPLEN$ DUP {'dv,'op,'nm} BIND 3GETLAM 2GETLAM BINT2 #<case BASE * 25632
           DUP 2GETLAM DUP SUB$                   * 25664
 
 _bodh_:
@@ -1006,18 +1068,20 @@ Null#:
         RPL
 
 * refs (1): 2F5C4
-OBJ_258DA:
+* $ -> ob TRUE | ...: palparse for text coming in over I/O: the text may stop in mid-object, and the error #CFF asks for more
+ParseIO:
         :: TRUE {'ioinprogress} BIND             * 258DA
 
 * refs (1): 259E3
 {}_258EE:
-          { } SWAP ERRSET OBJ_238B8 ERRTRAP OBJ_259C0 ABND case OBJ_25934 * 258EE
+          { } SWAP ERRSET ParseFrame ERRTRAP ParseIOError ABND case Parsed1 * 258EE
           4ROLLDROP FALSE TRUE ;                 * 25920
 
 * refs (1): 2591B
-OBJ_25934:
+* Unwrap the parsed program. A program of one silent-quoted object gives the object.
+Parsed1:
         :: SWAPDROP DUPTYPECOL? NOTcase 3true    * 25934
-          DUPLENCOMP BINT2 #=casedrop OBJ_25984  * 2594D
+          DUPLENCOMP BINT2 #=casedrop Parsed2    * 2594D
           DROP                                   * 25961
 
 * refs (3): 25948 259A7 259B6
@@ -1025,17 +1089,20 @@ OBJ_25934:
           :: TRUE TRUE TRUE ; ;                  * 25966
 
 * refs (1): 2595C
-OBJ_25984:
+* Unwrap a two-object parsed program
+Parsed2:
         :: DUP CARCOMP ' xSILENT' EQ NOTcase 3true * 25984
           BINT2 NTHCOMPDROP 3true ;              * 259AC
 
 * refs (1): 2590C
-OBJ_259C0:
-        :: ERROR@ OBJ_26289 #<>case              * 259C0
+* Parse error handling for ParseIO: #CFF (needs more input) comes back as a result
+ParseIOError:
+        :: ERROR@ #NeedMore #<>case              * 259C0
           ::                                     * 259D4
 
 * refs (1): 25A36
-OBJ_259D9:
+* Drop everything down to the marker and pass the error on
+ParseIODrop:
             :: BEGIN {}_258EE EQ UNTIL ; ERRJMP ; * 259D9
           ERRORCLR                               * 25A01
           {                                      * 25A06
@@ -1048,7 +1115,7 @@ OBJ_259D9:
 
 Π'3:
             LAM '3 }                             * 25A21
-          BIND OBJ_259D9                         * 25A31
+          BIND ParseIODrop                       * 25A31
 
 Π'1_25A3B:
           LAM '1                                 * 25A3B
@@ -1064,15 +1131,18 @@ drop2;2true:
           ABND RDROP ABND ;                      * 25A7F
 
 * refs (4): 0F191 0F19B 246D6 246EA
-OBJ_25A93:
+* Read a token, with I/O continuation off
+NextTok:
         :: FALSE {'ioinprogress} BIND GetNextToken ABND ; * 25A93
 
 * refs (5): 2446F 24735 24762 2477B 25BEC
-OBJ_25AB6:
+* mask $ #pos tok mask' -> mask' $ #pos' tok': use another class table and read the next token
+SetClassTbl:
         :: 4UNROLL 5ROLL 2DROP GetNextToken ;    * 25AB6
 
 * refs (2): 24492 25B5B
-OBJ_25AD4:
+* As SetClassTbl, moving back to the start of the token
+SetClassTblAt:
         :: 4UNROLL 5ROLLDROP LEN$ 2DUP#> 3UNROLL #- BINT1 RPITE GetNextToken ; * 25AD4
 
 * # #' -> #+#'
@@ -1093,27 +1163,30 @@ OBJ_25AD4:
         RPL
 
 * refs (1): 24438
-OBJ_25B3D:
-        :: OBJ_25D03 !*triand OBJ_25D03 !*triand OBJ_25E44 OBJ_25AD4 5ROLL * 25B3D
-          #2- 5UNROLL 7ROLL 7ROLL COERCESWAP COERCE MAKEGROB DUP BINT15 #- * 25B65
-          3PICK LEN$ #<case                      * 25B97
+* GROB w h hex
+ParseGROB:
+        :: ParseReal !*triand ParseReal !*triand ClassTblRaw SetClassTblAt * 25B3D
+          5ROLL #2- 5UNROLL 7ROLL 7ROLL COERCESWAP COERCE MAKEGROB DUP * 25B60
+          BINT15 #- 3PICK LEN$ #<case            * 25B8D
           :: DROP failed ;                       * 25BA6
           BINT20                                 * 25BBA
 * The Very Big List names this address 3dropn;false;true, but it is a pointer inside an object; the name is not used
-          OBJ_25C37 Extobcode NOTcase            * 25BBF
+          #DOGROB Extobcode NOTcase              * 25BBF
           :: DROP failed ;                       * 25BCE
-          6rolld;1+(s5) OBJ_25D3A OBJ_25AB6 TrueTrue ; * 25BE2
+          6rolld;1+(s5) ClassTblRPL SetClassTbl TrueTrue ; * 25BE2
 
 * refs (1): 6F43C
-OBJ_25BFB:
+* A 6 x 10 picture used by the EquationWriter
+EqwDeriv~4:
         GROB    "images/25BFB.png"               * 25BFB  6 x 10
 
 * refs (4): 69BFB 6AC5D 6B11F 6F60D
-OBJ_25C23:
-        :: 'LB OBJ_6FACC ;                       * 25C23
+~'LB;EqwSelectBox:
+        :: 'LB EqwSelectBox ;                    * 25C23
 
 * refs (1): 25BBF
-OBJ_25C37:
+* # DOGROB: the prolog that Extobcode writes on a GROB
+#DOGROB:
         # DOGROB                                 * 25C37  address
 
 * refs (1): 25BC4
@@ -1178,19 +1251,21 @@ GETPTRTRUE:
         RPL
 
 * refs (2): 172C5 177BB
-OBJ_25CF5:
+* $ " ": an object compared by address, as a marker on the stack (the decompiler's walk and tokens)
+Mark$:
         $ "  "                                   * 25CF5
 
 * refs (13): 24398 24794 247C1 248B1 248DE 24924 ...
-* Probably: parser: read the current token as a real number
-OBJ_25D03:
+* Read the current token as a real number
+ParseReal:
         :: tokexponent DPRADIX? tok. tok, RPITE realPAcode !*trior * 25D03
           DaDGNTc FALSE ;                        * 25D2B
 
 * refs (5): 238D1 2448D 2475D 24776 25BE7
+* Character classes of normal RPL text
 * Parser character classes, table 1
 * Classes: 0 separator, 1 name character, 2 digit, 3 opener ' ( [ { <<, 4 closer, 5 one-character token, 6 ESC, 8/10 '.', 9/11 ',', 12 '=', 13 '@' (comment), 14 newline, 15 'E' (exponent)
-OBJ_25D3A:
+ClassTblRPL:
         CON(5)  DOHSTR                           * 25D3A
         LENGTH                                   * 25D3F  length, to #25E44
           NIBHEX  0000000000E00000               * 25D44  #00-#0F ................
@@ -1212,9 +1287,10 @@ OBJ_25D3A:
         ENDLENGTH                                * 25E44
 
 * refs (2): 254FC 25B56
+* Character classes of raw tokens: hex digits after # and GROB
 * Parser character classes, table 2: digits and E are name characters
 * Classes: 0 separator, 1 name character, 2 digit, 3 opener ' ( [ { <<, 4 closer, 5 one-character token, 6 ESC, 8/10 '.', 9/11 ',', 12 '=', 13 '@' (comment), 14 newline, 15 'E' (exponent)
-OBJ_25E44:
+ClassTblRaw:
         CON(5)  DOHSTR                           * 25E44
         LENGTH                                   * 25E49  length, to #25F4E
           NIBHEX  0000000000E00000               * 25E4E  #00-#0F ................
@@ -1236,12 +1312,13 @@ OBJ_25E44:
         ENDLENGTH                                * 25F4E
 
 * refs (7): 0F173 246CC 24730 3EF91 56F95 6AAFA ...
+* Character classes of algebraics
 * Parser character classes, table 3
 * Classes: 0 separator, 1 name character, 2 digit, 3 opener ' ( [ { <<, 4 closer, 5 one-character token, 6 ESC, 8/10 '.', 9/11 ',', 12 '=', 13 '@' (comment), 14 newline, 15 'E' (exponent)
-OBJ_25F4E:
+ClassTblAlg:
         CON(5)  DOHSTR                           * 25F4E
         LENGTH                                   * 25F53  length, to #26058
-OBJ_25F4E.L1:
+ClassTblAlg.L1:
           NIBHEX  0000000000E00000               * 25F58  #00-#0F ................
           NIBHEX  0000000555060000               * 25F68  #10-#1F ................
           NIBHEX  055511153455B5A5               * 25F78  #20-#2F  !"#$%&'()*+,-./
@@ -1261,9 +1338,10 @@ OBJ_25F4E.L1:
         ENDLENGTH                                * 26058
 
 * refs (1): 2446A
+* Character classes of unit expressions
 * Parser character classes, table 4 (used at #2446A): CR, LF and space are tokens
 * Classes: 0 separator, 1 name character, 2 digit, 3 opener ' ( [ { <<, 4 closer, 5 one-character token, 6 ESC, 8/10 '.', 9/11 ',', 12 '=', 13 '@' (comment), 14 newline, 15 'E' (exponent)
-OBJ_26058:
+ClassTblUnit:
         CON(5)  DOHSTR                           * 26058
         LENGTH                                   * 2605D  length, to #26162
           NIBHEX  0000000000500500               * 26062  #00-#0F ................
@@ -1287,18 +1365,19 @@ OBJ_26058:
 * hxs-mask $ #start -> hxs-mask $ #next $token
 * refs (23): 0BC2E 0BE00 238DB 245B4 24690 250A9 ...
 GetNextToken:
-        :: DUP4UNROLL DPRADIX? GetNextToken~1 OBJ_261AD GetNextToken NOTcase * 26162
+        :: DUP4UNROLL DPRADIX? GetNextToken~1 TokScan GetNextToken NOTcase * 26162
           NULL$                                  * 26185
           ROT2DUP SWAP#1+ 5UNROLL 5UNROLL 3UNROLL SUB$ ; * 2618A
 
 * refs (2): 25072 26176
-OBJ_261AD:
+* mask $ #pos ... -> ... flag: the machine-code body of GetNextToken: find the next token's limits
+TokScan:
         CON(5)  (*)+5                            * 261AD  primitive code object
         ASSEMBLE
         A=DAT1  A                                * 261B2
         LC(5)   FALSE                            * 261B5
         ?C=A    A                                * 261BC
-        GOYES   OBJ_261AD.L3                     * 261BF
+        GOYES   TokScan.L3                       * 261BF
         D1=D1+  5                                * 261C1
         C=DAT1  A                                * 261C4
         CD1EX                                    * 261C7
@@ -1317,7 +1396,7 @@ OBJ_261AD:
         CD1EX                                    * 261EC
         A=A+A   A                                * 261EF
         ?C<=A   A                                * 261F1
-        GOYES   OBJ_261AD.L2                     * 261F4
+        GOYES   TokScan.L2                       * 261F4
         A=DAT1  10                               * 261F6
         D1=D1+  5                                * 261FA
         DAT1=A  10                               * 261FD
@@ -1328,40 +1407,45 @@ OBJ_261AD:
         DAT1=A  15                               * 2620E
         D=D+1   A                                * 26212
         LC(5)   SKIP                             * 26214
-OBJ_261AD.loop1:
+TokScan.loop1:
         A=C     A                                * 2621B
         PC=(A)                                   * 2621D
-OBJ_261AD.L2:
+TokScan.L2:
         D1=D1-  15                               * 26221
-OBJ_261AD.L3:
-        LC(5)   OBJ_2622F                        * 26224
-        GOTO    OBJ_261AD.loop1                  * 2622B
+TokScan.L3:
+        LC(5)   ReadMore                         * 26224
+        GOTO    TokScan.loop1                    * 2622B
         RPL
 
 * refs (2): 254A7 26224
-OBJ_2622F:
-        :: ' Π'ioinprogress undo NOTcase OBJ_26293 * 2622F
-          NOTcase OBJ_26293                      * 2624D
-          OBJ_2FB64 case OBJ_262BB               * 26257
-          FALSE FALSE' Π'ioinprogress STOLAM OBJ_26289 ERROROUT ; * 26266
+* Token runs off the end of the buffer: in I/O mode, ask for more input through the #CFF error, otherwise end the text there
+ReadMore:
+        :: ' Π'ioinprogress undo NOTcase NoMore  * 2622F
+          NOTcase NoMore                         * 2624D
+          KermParseChunk case MoreAvail          * 26257
+          FALSE FALSE' Π'ioinprogress STOLAM #NeedMore ERROROUT ; * 26266
 
 * refs (4): 2399D 259CA 2627A 262F2
-OBJ_26289:
+* # CFF: internal error meaning that the text ended within an object and more input is needed
+#NeedMore:
         # CFF                                    * 26289  3327
 
 * refs (3): 26248 26252 262DE
-OBJ_26293:
+* Stop reading more: end the current token
+NoMore:
         :: DUP BINT6 BINT5 RPITE ROLLDROP COLASKIP * 26293
         ;                                        * 262B6
 
 * refs (1): 26261
-OBJ_262BB:
-        :: case OBJ_26301                        * 262BB
-          FALSE' Π'ioinprogress STOLAM case OBJ_26293 * 262CA
-          FALSE FALSE TRUE OBJ_26289 ERROROUT ;  * 262E3
+* An I/O buffer can continue the token
+MoreAvail:
+        :: case AppendMore                       * 262BB
+          FALSE' Π'ioinprogress STOLAM case NoMore * 262CA
+          FALSE FALSE TRUE #NeedMore ERROROUT ;  * 262E3
 
 * refs (1): 262C5
-OBJ_26301:
+* Join the new text to what was left over and start again
+AppendMore:
         :: SWAP ITE ROTROT2DROP SWAPDROP         * 26301
           SWAP 4ROLL OVERLEN$ SUB$ SWAP&$ BINT1 COLACOLA ; * 2631A
         ASSEMBLE
@@ -1915,27 +1999,30 @@ LIB700.config:
 
 * refs (1): 62AED
 MACRODCMP~1:
-        :: NOTROMPcase OBJ_26912                 * 268D6
+        :: NOTROMPcase CmdIndent                 * 268D6
           COLA MACRODCMP~2                       * 268E5
         ;                                        * 268EF
 
 * refs (1): 268EA
 MACRODCMP~2:
         :: RPTRACC NOTcase BINT2                 * 268F4
-          OBJ_26912 ;                            * 26908
+          CmdIndent ;                            * 26908
 
 * refs (2): 268E0 26908
-OBJ_26912:
-        CON(5)  OBJ_71DFF.L1                     * 26912  code object: the address of its machine code
+* Code object: command -> #: bits 0-1 of its header nibble, which is the indentation class that the decompiler uses
+CmdIndent:
+        CON(5)  CmdIndent~1                      * 26912  code object: the address of its machine code
 
 * refs (1): 24582
-OBJ_26917:
+* ob -> ob flag: the low two bits of the header nibble are less than 2
+Cmd<2?:
         :: NOTROMPcase OBJ_26953                 * 26917
-          COLA OBJ_26935                         * 26926
+          COLA RompCmd<2?                        * 26926
         ;                                        * 26930
 
 * refs (1): 2692B
-OBJ_26935:
+* As Cmd<2?, for a ROMPTR already fetched
+RompCmd<2?:
         :: RPTRACC case OBJ_26953                * 26935
           FALSE ;                                * 26949
 
@@ -1966,43 +2053,47 @@ OBJ_26953.L2:
         RPL
 
 * refs (7): 24573 2528C 271CF 40549 62AC5 72EB9 ...
-OBJ_2699F:
-        :: NOTROMPcase OBJ_269BD                 * 2699F
-          COLA OBJ_269E7                         * 269AE
+* ob -> flag: ob is a ROM word or ROMPTR of library 700 or above: program structure words
+Lib700?:
+        :: NOTROMPcase RomWdLib700?              * 2699F
+          COLA RompLib700?                       * 269AE
         ;                                        * 269B8
 
 * refs (1): 269A9
-OBJ_269BD:
-        :: DUPROM-WORD? case OBJ_269DB           * 269BD
+* As Lib700? for a ROM word
+RomWdLib700?:
+        :: DUPROM-WORD? case WdHdrLib700?        * 269BD
           DROPFALSE ;                            * 269D1
 
 * refs (2): 269CC 26A96
-OBJ_269DB:
+* As Lib700? with the header in front of a word (ST5 set)
+WdHdrLib700?:
         CON(5)  (*)+5                            * 269DB  primitive code object
         ASSEMBLE
         ST=1    5                                * 269E0
-        GOTO    OBJ_269E7.L1                     * 269E3
+        GOTO    RompLib700?.L1                   * 269E3
 
 * refs (2): 269B3 26AC3
-OBJ_269E7:
+* As Lib700? for a ROMPTR's body
+RompLib700?:
         CON(5)  (*)+5                            * 269E7  primitive code object
         ST=0    5                                * 269EC
-OBJ_269E7.L1:
+RompLib700?.L1:
         C=DAT1  A                                * 269EF
         CD1EX                                    * 269F2
         D1=D1+  5                                * 269F5
         ?ST=0   5                                * 269F8
-        GOYES   OBJ_269E7.L2                     * 269FB
+        GOYES   RompLib700?.L2                   * 269FB
         D1=D1-  11                               * 269FD
-OBJ_269E7.L2:
+RompLib700?.L2:
         A=DAT1  X                                * 26A00
         D1=C                                     * 26A04
         LC(3)   #700                             * 26A07
         A=A-C   X                                * 26A0C
         LC(5)   TRUE                             * 26A0F
-        GONC    OBJ_269E7.L3                     * 26A16
+        GONC    RompLib700?.L3                   * 26A16
         LC(5)   FALSE                            * 26A19
-OBJ_269E7.L3:
+RompLib700?.L3:
         DAT1=C  A                                * 26A20
         A=DAT0  A                                * 26A23
         D0=D0+  5                                * 26A26
@@ -2013,7 +2104,7 @@ OBJ_269E7.L3:
 * refs (11): 1CDE8 1F87A 27490 2923E 40576 405E9 ...
 ?OKINALG:
         :: CK&DISPATCH0                          * 26A2D
-          BINT8 OBJ_26A82                        * 26A37  program
+          BINT8 OKINALGWord?                     * 26A37  program
           BINT15 ?OKINALG~romptr                 * 26A41  romptr
           BINT1 TRUE                             * 26A4B  real
           BINT2 TRUE                             * 26A55  complex
@@ -2023,39 +2114,43 @@ OBJ_269E7.L3:
         ;                                        * 26A7D
 
 * refs (2): 26A3C 6E04D
-OBJ_26A82:
+* ob -> flag: a ROM word is allowed in an algebraic (header bit 3 clear, and the function's other header conditions)
+OKINALGWord?:
         :: DUPROM-WORD? NOTcaseFALSE DUP         * 26A82
-          OBJ_269DB caseFALSE OBJ_26B04          * 26A96
+          WdHdrLib700? caseFALSE HdrFn?          * 26A96
           NOTcase OBJ_26B2E                      * 26AA5
           TRUE ;                                 * 26AAF
 
 * refs (1): 26A46
 ?OKINALG~romptr:
-        :: DUP OBJ_269E7 caseFALSE OBJ_71DFF     * 26AB9
+        :: DUP RompLib700? caseFALSE OBJ_71DFF   * 26AB9
           FALSE ?OKINALG~romptr~1 ;              * 26AD2
 
 * refs (1): 71F51
-OBJ_26AE1:
-        :: OBJ_26B04 casedrptru OBJ_26B2E        * 26AE1
+* As OKINALGWord? for the ROMPTR path of library code
+OKINALGRomp?:
+        :: HdrFn? casedrptru OBJ_26B2E           * 26AE1
           NOTcsdrpfls SWAPDROPTRUE ;             * 26AF5
 
 * refs (2): 26AA0 26AE6
-OBJ_26B04:
-        CON(5)  SUB_71E57.L2                     * 26B04  code object: the address of its machine code
+* Code object: ob -> flag: bit 3 of the word's header nibble is clear
+HdrFn?:
+        CON(5)  HdrFn?~1                         * 26B04  code object: the address of its machine code
         ASSEMBLE
-OBJ_26B04.L1:
+HdrFn?.L1:
         D1=D1-  1                                * 26B09
         A=DAT1  1                                * 26B0C
         D1=C                                     * 26B10
         LC(5)   TRUE                             * 26B13
         ?ABIT=0 3                                * 26B1A
-        GOYES   OBJ_26B04.L2                     * 26B1F
+        GOYES   HdrFn?.L2                        * 26B1F
         LC(5)   FALSE                            * 26B21
-OBJ_26B04.L2:
+HdrFn?.L2:
         A=C     A                                * 26B28
         PC=(A)                                   * 26B2A
 
 * refs (2): 26AAA 26AF0
+* Probably: code object: ob -> ...: reads bits 1 and 2 of the word's header nibble to get its argument count
 OBJ_26B2E:
         CON(5)  ?OKINALG~romptr~1.L6             * 26B2E  code object: the address of its machine code
 OBJ_26B2E.L1:
@@ -2081,61 +2176,65 @@ OBJ_26B2E.L3:
         RPL
 
 * refs (15): 0C218 1F889 2749F 40643 5E9E6 68828 ...
-* Probably: ob -> ob' x #n TRUE | ob FALSE: the argument count of a program or ROMPTR that starts with CKn&Dispatch or -> locals
-OBJ_26BED:
+* ob -> ob code #n TRUE | FALSE: a function's operator descriptor (see x/AlgCode) and argument count, -1 for any
+FnInfo:
         :: CK&DISPATCH0                          * 26BED
-          BINT15 OBJ_26C1A                       * 26BF7  romptr
-          BINT8 OBJ_26C72                        * 26C01  program
+          BINT15 FnInfoRomp                      * 26BF7  romptr
+          BINT8 FnInfoWd                         * 26C01  program
           BINT0 FALSE                            * 26C0B  any
         ;                                        * 26C15
 
 * refs (2): 26BFC 29270
-OBJ_26C1A:
-        :: OBJ_71DFF FALSE OBJ_720D4 OBJ_26C72 NOTcsdrpfls ROTDROP TRUE ; * 26C1A
+* ROMPTR case of FnInfo
+FnInfoRomp:
+        :: OBJ_71DFF FALSE FnInfoRomp~1 FnInfoWd NOTcsdrpfls ROTDROP TRUE ; * 26C1A
 
 * refs (1): 26C7C
-OBJ_26C47:
+* flag: on FALSE ends the caller; on anything else goes on with the next object
+?ContOrSEMI:
         CON(5)  (*)+5                            * 26C47  primitive code object
         ASSEMBLE
         A=DAT1  A                                * 26C4C
         LC(5)   FALSE                            * 26C4F
         ?C=A    A                                * 26C56
-        GOYES   OBJ_26C47.L1                     * 26C59
+        GOYES   ?ContOrSEMI.L1                   * 26C59
         A=DAT0  A                                * 26C5B
         D0=D0+  5                                * 26C5E
         PC=(A)                                   * 26C61
-OBJ_26C47.L1:
+?ContOrSEMI.L1:
         LC(5)   SEMI                             * 26C65
         A=C     A                                * 26C6C
         PC=(A)                                   * 26C6E
         RPL
 
 * refs (3): 26C06 26C2E 28C22
-OBJ_26C72:
-        :: OBJ_26C8B OBJ_26C47 OBJ_721A6 ;       * 26C72
+* ROM word case of FnInfo
+FnInfoWd:
+        :: FnInfoCode ?ContOrSEMI FnInfoWd~1 ;   * 26C72
 
 * refs (1): 26C77
-OBJ_26C8B:
-        CON(5)  SUB_72107.L1                     * 26C8B  code object: the address of its machine code
+* Code part of FnInfoWd, with a table of the words handled specially
+FnInfoCode:
+        CON(5)  FnInfoCode~2                     * 26C8B  code object: the address of its machine code
         ASSEMBLE
-OBJ_26C8B.L1:
+FnInfoCode.L1:
         ?C=A    A                                * 26C90
-        GOYES   OBJ_26C8B.L4                     * 26C93
-        D1=(5)  OBJ_26C8B.L13                    * 26C95
+        GOYES   FnInfoCode~1                     * 26C93
+        D1=(5)  FnInfoCode~1.L9                  * 26C95
         B=0     A                                * 26C9C
         B=B+CON A,5                              * 26C9E
-OBJ_26C8B.loop2:
+FnInfoCode.loop2:
         C=DAT1  A                                * 26CA4
         ?C=A    A                                * 26CA7
-        GOYES   OBJ_26C8B.L3                     * 26CAA
+        GOYES   FnInfoCode.L3                    * 26CAA
         D1=D1+  5                                * 26CAC
         B=B-1   A                                * 26CAF
-        GONC    OBJ_26C8B.loop2                  * 26CB1
-OBJ_26C8B.L3:
+        GONC    FnInfoCode.loop2                 * 26CB1
+FnInfoCode.L3:
         ?B#0    A                                * 26CB4
-        GOYES   OBJ_26C8B.L7                     * 26CB7
-        GOVLNG  SUB_72107.L4                     * 26CB9
-OBJ_26C8B.L4:
+        GOYES   FnInfoCode~1.L3                  * 26CB7
+        GOVLNG  FnInfoCode~2.L3                  * 26CB9
+FnInfoCode~1:
         CD0EX                                    * 26CC0
         RSTK=C                                   * 26CC3
         D0=C                                     * 26CC5
@@ -2144,25 +2243,25 @@ OBJ_26C8B.L4:
         B=B+CON A,5                              * 26CCD
         LC(5)   DOLAM                            * 26CD3
         D=C     A                                * 26CDA
-OBJ_26C8B.loop5:
+FnInfoCode~1.loop1:
         B=B-1   A                                * 26CDC
-        GOC     OBJ_26C8B.L6                     * 26CDE
+        GOC     FnInfoCode~1.L2                  * 26CDE
         GOSBVL  SKIPOB                           * 26CE1
         C=DAT0  A                                * 26CE8
         ?D=C    A                                * 26CEB
-        GOYES   OBJ_26C8B.loop5                  * 26CEE
+        GOYES   FnInfoCode~1.loop1               * 26CEE
         CD0EX                                    * 26CF0
         A=C     A                                * 26CF3
         C=DAT0  A                                * 26CF5
         D0=A                                     * 26CF8
         ?D=C    A                                * 26CFB
-        GOYES   OBJ_26C8B.loop5                  * 26CFE
+        GOYES   FnInfoCode~1.loop1               * 26CFE
         B=B-CON A,5                              * 26D00
         B=-B    A                                * 26D06
-OBJ_26C8B.L6:
+FnInfoCode~1.L2:
         C=RSTK                                   * 26D08
         D0=C                                     * 26D0A
-OBJ_26C8B.L7:
+FnInfoCode~1.L3:
         D0=D0-  5                                * 26D0D
         CD0EX                                    * 26D10
         D0=C                                     * 26D13
@@ -2171,15 +2270,15 @@ OBJ_26C8B.L7:
         D0=C                                     * 26D1D
         ST=0    1                                * 26D20
         ?ABIT=0 0                                * 26D23
-        GOYES   OBJ_26C8B.L9                     * 26D28
+        GOYES   FnInfoCode~1.L5                  * 26D28
         C=0     S                                * 26D2A
         ?ABIT=0 2                                * 26D2D
-        GOYES   OBJ_26C8B.loop8                  * 26D32
+        GOYES   FnInfoCode~1.loop4               * 26D32
         C=C+1   S                                * 26D34
-OBJ_26C8B.loop8:
+FnInfoCode~1.loop4:
         GOSBVL  SKIPOB                           * 26D37
         C=C-1   S                                * 26D3E
-        GONC    OBJ_26C8B.loop8                  * 26D41
+        GONC    FnInfoCode~1.loop4               * 26D41
         A=DAT0  A                                * 26D44
         AD0EX                                    * 26D47
         R1=A.F  A                                * 26D4A
@@ -2187,32 +2286,32 @@ OBJ_26C8B.loop8:
         LC(5)   PRLG                             * 26D53
         ST=1    1                                * 26D5A
         ?C=A    A                                * 26D5D
-        GOYES   OBJ_26C8B.L12                    * 26D60
+        GOYES   FnInfoCode~1.L8                  * 26D60
         ST=0    1                                * 26D62
         AD0EX                                    * 26D65
-        GOTO    OBJ_26C8B.L11                    * 26D68
-OBJ_26C8B.L9:
+        GOTO    FnInfoCode~1.L7                  * 26D68
+FnInfoCode~1.L5:
         A=B     A                                * 26D6C
         A=A+1   A                                * 26D6E
-        GOC     OBJ_26C8B.L10                    * 26D70
+        GOC     FnInfoCode~1.L6                  * 26D70
         A=A-1   A                                * 26D73
-OBJ_26C8B.L10:
+FnInfoCode~1.L6:
         C=A     A                                * 26D75
         A=A+A   A                                * 26D77
         A=A+A   A                                * 26D79
         A=A+C   A                                * 26D7B
-        LC(5)   OBJ_26C8B.L14                    * 26D7D
+        LC(5)   FnInfoCode~1.L10                 * 26D7D
         A=A+C   A                                * 26D84
         D0=A                                     * 26D86
         A=DAT0  A                                * 26D89
-OBJ_26C8B.L11:
+FnInfoCode~1.L7:
         R1=A.F  A                                * 26D8C
-OBJ_26C8B.L12:
+FnInfoCode~1.L8:
         A=B     A                                * 26D92
         R0=A.F  A                                * 26D94
-        GOVLNG  OBJ_721A6.L1                     * 26D9A
+        GOVLNG  FnInfoWd~1.L1                    * 26D9A
 
-OBJ_26C8B.L13:
+FnInfoCode~1.L9:
         CON(5)  CK5&Dispatch                     * 26DA1  address (the code jumps or points through it)
 
         CON(5)  CK4&Dispatch                     * 26DA6  address (the code jumps or points through it)
@@ -2225,7 +2324,7 @@ OBJ_26C8B.L13:
 
         CON(5)  CK0                              * 26DBA  address (the code jumps or points through it)
 
-OBJ_26C8B.L14:
+FnInfoCode~1.L10:
         CON(5)  #0590410h                        * 26DBF  address (the code jumps or points through it)
 
         CON(5)  #050410h                         * 26DC4  address (the code jumps or points through it)
@@ -2268,6 +2367,7 @@ OBJ_26C8B.L14:
         HXS 00700                                * 26E52
 
 * refs (8): 27B2F 28C72 28E52 40666 68D14 6E2FD ...
+* Probably: code -> #a #b flag flag: decodes an operator descriptor (see x/AlgCode) into its priorities and form
 OBJ_26E61:
         CON(5)  (*)+5                            * 26E61  primitive code object
         ASSEMBLE
@@ -2322,61 +2422,67 @@ OBJ_26E61.L2:
         PC=(A)                                   * 26F14
 
 * refs (2): 54B37 56D3D
-OBJ_26F18:
+* ob -> ob' TRUE | FALSE: field 4 of a command's trailer, as CmdFieldB
+CmdField4:
         CON(5)  (*)+5                            * 26F18  primitive code object
         P=      15                               * 26F1D
         LC(1)   #4                               * 26F1F
-        GOTO    OBJ_26F7A.L1                     * 26F22
+        GOTO    CmdFieldB.L1                     * 26F22
 
 * refs (2): 57383 573BF
-OBJ_26F26:
+* Field 5 of a command's trailer, as CmdFieldB
+CmdField5:
         CON(5)  (*)+5                            * 26F26  primitive code object
         P=      15                               * 26F2B
         LC(1)   #5                               * 26F2D
-        GOTO    OBJ_26F7A.L1                     * 26F30
+        GOTO    CmdFieldB.L1                     * 26F30
 
 * refs (2): 58D48 85E8F
-OBJ_26F34:
+* Field 6 of a command's trailer, as CmdFieldB
+CmdField6:
         CON(5)  (*)+5                            * 26F34  primitive code object
         P=      15                               * 26F39
         LC(1)   #6                               * 26F3B
-        GOTO    OBJ_26F7A.L1                     * 26F3E
+        GOTO    CmdFieldB.L1                     * 26F3E
 
 * refs (1): 57B1F
 ?expanapp~2:
         CON(5)  (*)+5                            * 26F42  primitive code object
         P=      15                               * 26F47
         LC(1)   #7                               * 26F49
-        GOTO    OBJ_26F7A.L1                     * 26F4C
+        GOTO    CmdFieldB.L1                     * 26F4C
 
 * refs (1): 3F1E8
-OBJ_26F50:
+* Field 8 of a command's trailer, as CmdFieldB
+CmdField8:
         CON(5)  (*)+5                            * 26F50  primitive code object
         P=      15                               * 26F55
         LC(1)   #8                               * 26F57
-        GOTO    OBJ_26F7A.L1                     * 26F5A
+        GOTO    CmdFieldB.L1                     * 26F5A
 
 * refs (1): 5B1D6
 intg1~2:
         CON(5)  (*)+5                            * 26F5E  primitive code object
         P=      15                               * 26F63
         LC(1)   #9                               * 26F65
-        GOTO    OBJ_26F7A.L1                     * 26F68
+        GOTO    CmdFieldB.L1                     * 26F68
 
 * refs (2): 54891 84EC2
-OBJ_26F6C:
+* Field 10 of a command's trailer, as CmdFieldB
+CmdFieldA:
         CON(5)  (*)+5                            * 26F6C  primitive code object
         P=      15                               * 26F71
         LC(1)   #A                               * 26F73
-        GOTO    OBJ_26F7A.L1                     * 26F76
+        GOTO    CmdFieldB.L1                     * 26F76
 
 * refs (7): 28B19 58DFF 5F34D 5F433 5F5DA 5F6A7 ...
-OBJ_26F7A:
+* ob -> ob' TRUE | FALSE: field 11 of the trailer of a ROM word or ROMPTR. The field number goes in R4.S; the entries above differ only in that. A word 10 nibbles before the code is a mask of the fields present, and SlotOffset turns the number into a position.
+CmdFieldB:
         CON(5)  (*)+5                            * 26F7A  primitive code object
         P=      15                               * 26F7F
         LC(1)   #B                               * 26F81
         NOP4                                     * 26F84
-OBJ_26F7A.L1:
+CmdFieldB.L1:
         P=      0                                * 26F88
         R4=C.F  S                                * 26F8A
         GOSBVL  SAVPTR                           * 26F90
@@ -2384,7 +2490,7 @@ OBJ_26F7A.L1:
         CD1EX                                    * 26F9A
         A=DAT1  A                                * 26F9D
         LC(5)   DOROMP                           * 26FA0
-        GOVLNG  ?OKINALG~romptr~1.L10            * 26FA7
+        GOVLNG  SstHandlerCode~1.L1              * 26FA7
 
 * <REF>GETPTR , Do FALSE
 * refs (11): 0425C 0B3A4 0BB4A 0E3D1 0E9AB 25CB5 ...
@@ -2400,7 +2506,7 @@ GETPTRFALSE.L1:
         A=R0.F  A                                * 26FCB
         D0=A                                     * 26FD1
         C=R4.F  S                                * 26FD4
-        GOSUB   SUB_2702F                        * 26FDA
+        GOSUB   SlotOffset                       * 26FDA
         GONC    GETPTRFALSE                      * 26FDE
 GETPTRFALSE.L2:
         GOSBVL  SUB_7204C                        * 26FE1
@@ -2419,4 +2525,4 @@ GETPTRFALSE.L3:
         GOSBVL  SUB_72080                        * 27012
         A=R0.F  A                                * 27019
         DAT1=A  A                                * 2701F
-        LC(5)   OBJ_2705C                        * 27022
+        LC(5)   SlotResolve                      * 27022

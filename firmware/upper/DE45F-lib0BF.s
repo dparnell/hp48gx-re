@@ -1,5 +1,6 @@
-* HP 48GX ROM revision R, #DE45F-#DF08B: Library part 0BF
+* HP 48GX ROM revision R, #DE45F-#DF08B: Message table of the SOLVE applications
 * Addresses in the right-hand comments are those of the original ROM.
+* Most referenced: BFMessages
 * Follows on from the previous file (at #DE45F in the original ROM).
         ENDLENGTH                                * DE45F
         ENDLENGTH                                * DE45F
@@ -8,16 +9,18 @@
         LENGTH                                   * DE464  length, to #DF08C
         CON(2)  0                                * DE469  title length
 
+* Library 0BF: Messages of the SOLVE applications: equation, differential equation, polynomial, linear system and finance.
 LIB0BF:
         CON(3)  #0BF                             * DE46B  library number
         REL(5)  LIB0BF.hash                      * DE46E  hash table
-        REL(5)  ROMP_0BF_000                     * DE473  message table
+        REL(5)  BFMessages                       * DE473  message table
         REL(5)  LIB0BF.link                      * DE478  link table
         CON(5)  0                                * DE47D  config
 
 * ROMPTR 0BF 000
 * refs (1): DE46B
-ROMP_0BF_000:
+* Message table: numbers BF01 onwards.
+BFMessages:
         CON(5)  DOARRY                           * DE482  array 86
         LENGTH                                   * DE487  length, to #DF015
         CON(5)  DOCSTR                           * DE48C  element type
@@ -138,6 +141,6 @@ LIB0BF.hash.L1:
 LIB0BF.link:
         CON(5)  DOHSTR                           * DF079  link table of library 0BF
         LENGTH                                   * DF07E  length, to #DF088
-        REL(5)  ROMP_0BF_000                     * DF083  000 
+        REL(5)  BFMessages                       * DF083  000 
         ENDLENGTH                                * DF088
         BSS     4                                * DF088  zeros

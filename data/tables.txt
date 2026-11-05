@@ -55,3 +55,5 @@
 09667	a3	1	HomeInBkp(nm): a directory with no libraries (DORRP, #7FF), copied after the name
 5792B	a2t3	1	ISOL's fresh-name template: ID "n0" and a spare byte for a second digit (SUB_57956 counts it up: n1, n2, ...)
 57949	a2t3	1	ISOL's fresh-name template: ID "s0" and a spare byte for a second digit
+81D93	(6)	7	Self-test YES label: rows of 24 pixels (copied by DrawLabel)
+81DBD	(6)	7	Self-test NO label: rows of 24 pixels (copied by DrawLabel)

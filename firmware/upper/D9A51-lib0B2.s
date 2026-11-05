@@ -1,7 +1,9 @@
-* HP 48GX ROM revision R, #D9A51-#DCA81: Library part 0B2
+* HP 48GX ROM revision R, #D9A51-#DCA81: CMD, the CHARS form with its keys and menu, pictures of the character pages and the table of key sequences
 * Addresses in the right-hand comments are those of the original ROM.
+* Most referenced: CharCursor DoCMD DoCHARS CharUpKey CharUp CharTop CharRowStart CharRowEnd CharRightKey CharRight CharPgUp CharPgLast
 * Follows on from the previous file (at #D9A51 in the original ROM).
 
+* Library 0B2: The CHARS application, a map of the 256 characters with the key for each, built as an input form, and the CMD list of recent command lines.
 LIB0B2:
         CON(3)  #0B2                             * D9A51  library number
         REL(5)  LIB0B2.hash                      * D9A54  hash table
@@ -12,25 +14,28 @@ LIB0B2:
 
 * ROMPTR 0B2 000
 * refs (1): D9A51
-ROMP_0B2_000:
-        :: TakeOver ' DROPFALSE NULL$ BINT1 OBJ_40CC3 BINT4 ZERO_DO * D9A68
+* CMD key: offers the last four command lines in a choose box and puts the one chosen in the editor.
+DoCMD:
+        :: TakeOver ' DROPFALSE NULL$ BINT1 ClrHistLevel BINT4 ZERO_DO * D9A68
           GetLastEdit ?SKIP NULL$                * D9A95
-          LOOP BINT4 {}N BINT1 ROMPTR 0B3 000 NOTcase SetDA123NoCh * D9AA4  ~Choose
+          LOOP BINT4 {}N BINT1 XLIB ~Choose NOTcase SetDA123NoCh * D9AA4
           InitEdLine EditString SetDA13NoCh ;    * D9ACD
 
 * ROMPTR 0B2 001
 * refs (1): D9A51
-ROMP_0B2_001:
-        :: TakeOver ROMPTR 0B2 002 DUPNULL$? caseDROP Echo$NoChr00 * D9AE1
+* CHARS key: runs the character map and types the characters echoed from it into the command line.
+DoCHARS:
+        :: TakeOver XLIB CharMap DUPNULL$? caseDROP Echo$NoChr00 * D9AE1
         ;                                        * D9B05
 
 * ROMPTR 0B2 002
 * refs (1): D9A51
-ROMP_0B2_002:
+* -> $: runs the character map, saving the state of the editor and its modes and restoring them afterwards. Returns the characters echoed. Locals: 1C the first character of the page, CF the offset of the cursor in the page, EC the characters echoed.
+CharMap:
         :: BINT128 BINT0 NULL$                   * D9B0A
           { LAM '1C LAM 'CF LAM 'EC } BIND EditLExists? EDITLINE$ CURSOR@ * D9B1E
-          INSERT? PrgmEntry? AlgEntry? MinusMo BINT7 ROMPTR 0B0 0DB * D9B63  ~nNullBind
-          InitEd&Modes ROMPTR 0B2 003 DoInputForm IT DROP * D9B87
+          INSERT? PrgmEntry? AlgEntry? MinusMo BINT7 XLIB ~nNullBind * D9B63
+          InitEd&Modes XLIB CharMapForm DoInputForm IT DROP * D9B87
           8GETLAM IT                             * D9BA6
           :: 7GETLAM EditString 6GETLAM #1+ SetCursPos(s) ; * D9BB0
           5GETLAM ?SKIP REPLACE_MODE             * D9BD3
@@ -41,91 +46,100 @@ ROMP_0B2_002:
 
 * ROMPTR 0B2 003
 * refs (1): D9A51
-ROMP_0B2_003:
-        :: 'RROMPTR@ ROMPTR 0B2 006 BINT0 BINT0 BINT7 BINT9 BINT0 MINUSONE * D9C2B
+* The arguments of DoInputForm for the character map: no fields, with the title "Characters".
+CharMapForm:
+        :: 'RROMPTR@ XLIB CharMapKeys BINT0 BINT0 BINT7 BINT9 BINT0 MINUSONE * D9C2B
           MINUSONE NULL$ MINUSONE MINUSONE MINUSONE DUP BINT0 BINT1 * D9C5E
-          'RROMPTR@ ROMPTR 0B2 004 # B998 ;      * D9C86  "Characters "
+          'RROMPTR@ XLIB CharMapMsg # B998 ;     * D9C86  "Characters "
 
 * ROMPTR 0B2 004
 * refs (1): D9A51
-ROMP_0B2_004:
+* The form's message handler. Message 5 makes the blank work grob, 15 gives the menu, and 2 the title.
+CharMapMsg:
         ::                                       * D9CA5
           { BINT5                                * D9CAA
             :: BINT39 BINT131 MAKEGROB TRUE ; BINT15 * D9CB4
-            :: ' ROMPTR 0B2 01A ; BINT2 ROMPTR 0B2 005 } * D9CD7
+            :: ' XLIB CharMapMenu ; BINT2 XLIB CharMapTitle } * D9CD7
           EQLookup case                          * D9D06
           :: EVAL TRUE ;                         * D9D10
           DROPFALSE ;                            * D9D24
 
 * ROMPTR 0B2 005
 * refs (1): D9A51
-ROMP_0B2_005:
-        :: ROMPTR 0B0 0AE LAM '1C DUP #>$ CHR_- >T$ SWAP BINT63 #+ #>$ &$ &$ * D9D2E
-          ROMPTR 0B0 0A5 ;                       * D9D7D
+* -> grob: the title with the page's range, such as "Characters 0-63".
+CharMapTitle:
+        :: XLIB IFTitle@ LAM '1C DUP #>$ CHR_- >T$ SWAP BINT63 #+ #>$ &$ &$ * D9D2E
+          XLIB TitleBar$>Grob ;                  * D9D7D
 
 * ROMPTR 0B2 006
 * refs (1): D9A51
-ROMP_0B2_006:
+* Message handler for the display: 8 handles a key, 7 draws the page, and 11 shows the cursor's character.
+CharMapKeys:
         ::                                       * D9D8D
           { BINT8                                * D9D92
-            :: 2DUP ROMPTR 0B2 00A ITE           * D9D9C
+            :: 2DUP XLIB CharMapKeyTbl ITE       * D9D9C
               :: 3UNROLL 2DROP TrueTrue ; FALSE  * D9DB6
             ;                                    * D9DD4
           }                                      * D9DD9
           EQLookup case EVAL                     * D9DDE
-          { BINT7 ROMPTR 0B2 007 BINT11          * D9DED
-            :: DROP ROMPTR 0B2 008 ; }           * D9E07
+          { BINT7 XLIB CharMapPage BINT11        * D9DED
+            :: DROP XLIB CharMapInfo ; }         * D9E07
           EQLookup case                          * D9E26
           :: EVAL TRUE ;                         * D9E30
           DROPFALSE ;                            * D9E44
 
 * ROMPTR 0B2 007
 * refs (1): D9A51
-ROMP_0B2_007:
+* Draws the current page of 64 characters and the cursor.
+CharMapPage:
         ::                                       * D9E4E
-          { ROMPTR 0B2 02B ROMPTR 0B2 02C ROMPTR 0B2 02D ROMPTR 0B2 02E } * D9E53
+          { XLIB CharPage0 XLIB CharPage1 XLIB CharPage2 XLIB CharPage3 } * D9E53
           LAM '1C BINT64 #/ SWAPDROP #1+ NTHCOMPROM@ HARDBUFF BINT9 BINT8 * D9E89
-          BINT46 BINT2 BLANKIT GROB! SetDA2aValid BINT1 ROMPTR 0B0 0A1 * D9EBE
+          BINT46 BINT2 BLANKIT GROB! SetDA2aValid BINT1 XLIB IFMarkDone * D9EBE
           LAM 'CF ROMPTR 0B2 020 ;               * D9EE7
 
 * ROMPTR 0B2 008
 * refs (1): D9A51
-ROMP_0B2_008:
-        :: LAM '1C LAM 'CF #+ DUP #>$ $>grob SWAP #1+ ROMPTR 0B2 02F * D9F04
-          GETATELN DROP ROMPTR 0B2 009 # B99A JstGetTHEMESG $>grob # B999 * D9F4C  "Num:"  "Key:"
+* Shows the bottom line: the character, "Num:" and its code, "Key:" and how to type it.
+CharMapInfo:
+        :: LAM '1C LAM 'CF #+ DUP #>$ $>grob SWAP #1+ XLIB CharKeyTbl * D9F04
+          GETATELN DROP XLIB CharKey>Grob # B99A JstGetTHEMESG $>grob # B999 * D9F4C  "Num:"  "Key:"
           JstGetTHEMESG $>grob BINT48 BINT8 BLANKIT HARDBUFF BINT1 BINT50 * D9F7F
           GROB! HARDBUFF # 63 BINT50 GROB! HARDBUFF BINT19 BINT50 GROB! * D9FA7
           HARDBUFF # 77 BINT50 GROB! ;           * D9FD9
 
 * ROMPTR 0B2 009
 * refs (1): D9A51
-ROMP_0B2_009:
+* $ -> grob: draws a key sequence from the table. Character codes 1 to 9 stand for the small pictures of shift, alpha and other keys.
+CharKey>Grob:
         :: DUPNULL$? casedrop                    * D9FF7
           :: # B99B JstGetTHEMESG $>grob ;       * DA006  "(none)"
           BINT6 BINT40 MAKEGROB BINT0 ROT DUPLEN$ #1+_ONE_DO DUP INDEX@ DUP * DA024
           SUB$ DUP CAR$ CHR># DUP BINT9 #> ITE   * DA056
           :: DROP $>grob ;                       * DA07E
           :: SWAPDROP                            * DA092
-            { ROMPTR 0B2 022 ROMPTR 0B2 023 ROMPTR 0B2 024 ROMPTR 0B2 025 * DA09C
-              ROMPTR 0B2 026 ROMPTR 0B2 027 ROMPTR 0B2 028 ROMPTR 0B2 029 * DA0CD
-              ROMPTR 0B2 02A }                   * DA0F9
+            { XLIB CharIcons XLIB CharKey>Grob~1 XLIB CharKey>Grob~2 * DA09C
+              XLIB CharKey>Grob~3 XLIB CharKey>Grob~4 XLIB CharKey>Grob~5 * DA0C2
+              XLIB CharKey>Grob~6 XLIB CharKey>Grob~7 XLIB CharKey>Grob~8 } * DA0E3
             SWAP NTHCOMPROM@ ;                   * DA109
           DUP 5PICK 5PICK BINT0 GROB! GROBDIMw ROT #+ SWAP LOOP 2DROP ; * DA118
 
 * ROMPTR 0B2 00A
 * refs (1): D9A51
-ROMP_0B2_00A:
-        :: BINT1 #=casedrop ROMPTR 0B2 00B       * DA154
-          BINT2 #=casedrop ROMPTR 0B2 00C        * DA16E
-          BINT3 #=casedrop ROMPTR 0B2 00D        * DA183
+* #key #plane -> ... : sends a key to the table for its shift plane.
+CharMapKeyTbl:
+        :: BINT1 #=casedrop XLIB CharMapPlain    * DA154
+          BINT2 #=casedrop XLIB CharMapLS        * DA16E
+          BINT3 #=casedrop XLIB CharMapRS        * DA183
           2DROP 'DoBadKeyT ;                     * DA198
 
 * ROMPTR 0B2 00B
 * refs (1): D9A51
-ROMP_0B2_00B:
+* Unshifted keys: the arrows move the cursor, menu keys pass through, and ENTER, ON, NXT and the shifts have their normal effect. Others are bad keys.
+CharMapPlain:
         ::                                       * DA1A7
-          { BINT17 ROMPTR 0B2 00E BINT11 ROMPTR 0B2 011 BINT16 * DA1AC
-            ROMPTR 0B2 017 BINT18 ROMPTR 0B2 014 } * DA1D6
+          { BINT17 XLIB CharDownKey BINT11 XLIB CharUpKey BINT16 * DA1AC
+            XLIB CharLeftKey BINT18 XLIB CharRightKey } * DA1D6
           #=Lookup caseTRUE DUP#<7               * DA1F6
           casedrop FALSE                         * DA205
           { BINT25 BINT45 BINT12 BINT35 BINT40 } SWAP #=POSCOMP #0<> * DA20F
@@ -134,17 +148,19 @@ ROMP_0B2_00B:
 
 * ROMPTR 0B2 00C
 * refs (1): D9A51
-ROMP_0B2_00C:
+* Left-shifted keys: only the menu keys and shifts work.
+CharMapLS:
         :: DUP#<7 casedrop FALSE                 * DA250
           { BINT12 BINT35 BINT40 } SWAP #=POSCOMP #0<> caseFALSE 'DoBadKeyT * DA264
         ;                                        * DA296
 
 * ROMPTR 0B2 00D
 * refs (1): D9A51
-ROMP_0B2_00D:
+* Right-shifted keys: the arrows go to the edge of the page.
+CharMapRS:
         ::                                       * DA29B
-          { BINT17 ROMPTR 0B2 010 BINT11 ROMPTR 0B2 013 BINT16 * DA2A0
-            ROMPTR 0B2 019 BINT18 ROMPTR 0B2 016 } * DA2CA
+          { BINT17 XLIB CharBottom BINT11 XLIB CharTop BINT16 * DA2A0
+            XLIB CharRowStart BINT18 XLIB CharRowEnd } * DA2CA
           #=Lookup caseTRUE DUP#<7               * DA2EA
           casedrop FALSE                         * DA2F9
           { BINT45 BINT35 BINT40 } SWAP #=POSCOMP #0<> caseFALSE 'DoBadKeyT * DA303
@@ -152,139 +168,158 @@ ROMP_0B2_00D:
 
 * ROMPTR 0B2 00E
 * refs (1): D9A51
-ROMP_0B2_00E:
-        :: TakeOver REPEATERCH BINT17 ROMPTR 0B2 00F * DA33A
+* Down arrow, with key repeat.
+CharDownKey:
+        :: TakeOver REPEATERCH BINT17 XLIB CharDown * DA33A
           :: SetDA1NoCh SetDA2aNoCh SetDA3NoCh ; ; * DA359
 
 * ROMPTR 0B2 00F
 * refs (1): D9A51
-ROMP_0B2_00F:
+* Moves down a row, wrapping to the top.
+CharDown:
         :: LAM 'CF DUP BINT16 #/ #1+ DUP BINT3 #> IT * DA377
           :: DROP BINT0 ;                        * DA3B1
-          BINT16 #* #+ DUP ' LAM 'CF STOLAM SWAP ROMPTR 0B2 021 * DA3C5
+          BINT16 #* #+ DUP ' LAM 'CF STOLAM SWAP XLIB CharCursor * DA3C5
           ROMPTR 0B2 020 ;                       * DA400
 
 * ROMPTR 0B2 010
 * refs (1): D9A51
-ROMP_0B2_010:
+* Right-shifted down arrow: goes to the bottom row.
+CharBottom:
         :: TakeOver LAM 'CF DUP BINT16 #/ BINT3 #= case2drop SetDA123NoCh * DA410
-          BINT48 #+ DUP ' LAM 'CF STOLAM SWAP ROMPTR 0B2 021 ROMPTR 0B2 020 * DA44A
+          BINT48 #+ DUP ' LAM 'CF STOLAM SWAP XLIB CharCursor ROMPTR 0B2 020 * DA44A
           :: SetDA1NoCh SetDA2aNoCh SetDA3NoCh ; ; * DA48B
 
 * ROMPTR 0B2 011
 * refs (1): D9A51
-ROMP_0B2_011:
-        :: TakeOver REPEATERCH BINT11 ROMPTR 0B2 012 * DA4A9
+* Up arrow, with key repeat.
+CharUpKey:
+        :: TakeOver REPEATERCH BINT11 XLIB CharUp * DA4A9
           :: SetDA1NoCh SetDA2aNoCh SetDA3NoCh ; ; * DA4C8
 
 * ROMPTR 0B2 012
 * refs (1): D9A51
-ROMP_0B2_012:
+* Moves up a row, wrapping to the bottom.
+CharUp:
         :: LAM 'CF DUP BINT16 #/ DUP#0= IT       * DA4E6
           :: DROP BINT4 ;                        * DA511
-          #1- BINT16 #* #+ DUP ' LAM 'CF STOLAM SWAP ROMPTR 0B2 021 * DA525
+          #1- BINT16 #* #+ DUP ' LAM 'CF STOLAM SWAP XLIB CharCursor * DA525
           ROMPTR 0B2 020 ;                       * DA565
 
 * ROMPTR 0B2 013
 * refs (1): D9A51
-ROMP_0B2_013:
+* Right-shifted up arrow: goes to the top row.
+CharTop:
         :: TakeOver LAM 'CF DUP BINT16 #/ #0= case2drop SetDA123NoCh * DA575
-          DUP ' LAM 'CF STOLAM SWAP ROMPTR 0B2 021 ROMPTR 0B2 020 * DA5AA
+          DUP ' LAM 'CF STOLAM SWAP XLIB CharCursor ROMPTR 0B2 020 * DA5AA
           :: SetDA1NoCh SetDA2aNoCh SetDA3NoCh ; ; * DA5E1
 
 * ROMPTR 0B2 014
 * refs (1): D9A51
-ROMP_0B2_014:
-        :: TakeOver REPEATERCH BINT18 ROMPTR 0B2 015 * DA5FF
+* Right arrow, with key repeat.
+CharRightKey:
+        :: TakeOver REPEATERCH BINT18 XLIB CharRight * DA5FF
           :: SetDA1NoCh SetDA2aNoCh SetDA3NoCh ; ; * DA61E
 
 * ROMPTR 0B2 015
 * refs (1): D9A51
-ROMP_0B2_015:
+* Moves right, wrapping to the first character of the page.
+CharRight:
         :: LAM 'CF DUP #1+ DUP BINT63 #> IT DROPZERO * DA63C
-          DUP ' LAM 'CF STOLAM SWAP ROMPTR 0B2 021 ROMPTR 0B2 020 ; * DA671
+          DUP ' LAM 'CF STOLAM SWAP XLIB CharCursor ROMPTR 0B2 020 ; * DA671
 
 * ROMPTR 0B2 016
 * refs (1): D9A51
-ROMP_0B2_016:
+* Right-shifted right arrow: goes to the end of the row.
+CharRowEnd:
         :: TakeOver LAM 'CF DUP BINT16 #/ SWAP BINT15 #= case2drop * DA6AD
           SetDA123NoCh                           * DA6E7
-          BINT16 #* BINT15 #+ DUP ' LAM 'CF STOLAM SWAP ROMPTR 0B2 021 * DA6EC
+          BINT16 #* BINT15 #+ DUP ' LAM 'CF STOLAM SWAP XLIB CharCursor * DA6EC
           ROMPTR 0B2 020                         * DA72C
           :: SetDA1NoCh SetDA2aNoCh SetDA3NoCh ; ; * DA737
 
 * ROMPTR 0B2 017
 * refs (1): D9A51
-ROMP_0B2_017:
-        :: TakeOver REPEATERCH BINT16 ROMPTR 0B2 018 * DA755
+* Left arrow, with key repeat.
+CharLeftKey:
+        :: TakeOver REPEATERCH BINT16 XLIB CharLeft * DA755
           :: SetDA1NoCh SetDA2aNoCh SetDA3NoCh ; ; * DA774
 
 * ROMPTR 0B2 018
 * refs (1): D9A51
-ROMP_0B2_018:
+* Moves left, wrapping to the last character of the page.
+CharLeft:
         :: LAM 'CF DUP DUP#0= IT                 * DA792
           :: DROP BINT64 ;                       * DA7B3
-          #1- DUP ' LAM 'CF STOLAM SWAP ROMPTR 0B2 021 ROMPTR 0B2 020 ; * DA7C7
+          #1- DUP ' LAM 'CF STOLAM SWAP XLIB CharCursor ROMPTR 0B2 020 ; * DA7C7
 
 * ROMPTR 0B2 019
 * refs (1): D9A51
-ROMP_0B2_019:
+* Right-shifted left arrow: goes to the start of the row.
+CharRowStart:
         :: TakeOver LAM 'CF DUP BINT16 #/ SWAP #0= case2drop SetDA123NoCh * DA808
-          BINT16 #* DUP ' LAM 'CF STOLAM SWAP ROMPTR 0B2 021 ROMPTR 0B2 020 * DA842
+          BINT16 #* DUP ' LAM 'CF STOLAM SWAP XLIB CharCursor ROMPTR 0B2 020 * DA842
           :: SetDA1NoCh SetDA2aNoCh SetDA3NoCh ; ; * DA883
 
 * ROMPTR 0B2 01A
 * refs (1): D9A51
-ROMP_0B2_01A:
+* The menu: -64, +64, ECHO, CANCEL and OK.
+CharMapMenu:
         :: NoExitAction                          * DA8A1
           { NullMenuKey NullMenuKey NullMenuKey  * DA8AB
             { $ "-64"                            * DA8BF
-              { ROMPTR 0B2 01B DoBadKey ROMPTR 0B2 01C } } * DA8D4
+              { XLIB CharPgDown DoBadKey XLIB CharPgFirst } } * DA8D4
             { $ "+64"                            * DA8FE
-              { ROMPTR 0B2 01D DoBadKey ROMPTR 0B2 01E } } * DA913
-            { $ "ECHO" ROMPTR 0B2 01F } NullMenuKey NullMenuKey NullMenuKey * DA93D
+              { XLIB CharPgUp DoBadKey XLIB CharPgLast } } * DA913
+            { $ "ECHO" XLIB CharEcho } NullMenuKey NullMenuKey NullMenuKey * DA93D
             NullMenuKey                          * DA973
-            { $ "(AN(L" ROMPTR 0B0 059 }         * DA978  DoKeyCancel
-            { $ "OK" ROMPTR 0B0 05A } }          * DA9A1  DoKeyOK
+            { $ "(AN(L" XLIB DoKeyCancel }       * DA978
+            { $ "OK" XLIB DoKeyOK } }            * DA9A1
         ;                                        * DA9C9
 
 * ROMPTR 0B2 01B
 * refs (1): D9A51
-ROMP_0B2_01B:
+* -64: previous page, wrapping to the last.
+CharPgDown:
         :: TakeOver LAM '1C DUP#0= IT            * DA9CE
           :: DROP REALOBOB ;                     * DA9EF
           BINT64 #- ' LAM '1C STOLAM SetDA3NoCh ; * DAA03
 
 * ROMPTR 0B2 01C
 * refs (1): D9A51
-ROMP_0B2_01C:
+* Left-shifted -64: the first page.
+CharPgFirst:
         :: TakeOver LAM '1C #0=case SetDA123NoCh * DAA2E
           BINT0 ' LAM '1C STOLAM SetDA3NoCh ;    * DAA4F
 
 * ROMPTR 0B2 01D
 * refs (1): D9A51
-ROMP_0B2_01D:
+* +64: next page, wrapping to the first.
+CharPgUp:
         :: TakeOver LAM '1C BINT64 #+ DUP REALOBOB #= IT DROPZERO * DAA75
           ' LAM '1C STOLAM SetDA3NoCh ;          * DAAAF
 
 * ROMPTR 0B2 01E
 * refs (1): D9A51
-ROMP_0B2_01E:
+* Left-shifted +64: the last page.
+CharPgLast:
         :: TakeOver LAM '1C BINTC0h #=case SetDA123NoCh * DAAD0
           BINTC0h ' LAM '1C STOLAM SetDA3NoCh ;  * DAAF6
 
 * ROMPTR 0B2 01F
 * refs (1): D9A51
-ROMP_0B2_01F:
-        :: TakeOver SetDA123NoCh LAM 'CF DUP ROMPTR 0B2 021 LAM 'EC OVER * DAB1C
+* ECHO: adds the character at the cursor to the string. Character 0 can't be echoed, and gives an alert.
+CharEcho:
+        :: TakeOver SetDA123NoCh LAM 'CF DUP XLIB CharCursor LAM 'EC OVER * DAB1C
           LAM '1C #+ DUP#0= ITE                  * DAB5A
-          :: 2DROP #_102 ROMPTR 0B0 091 ;        * DAB76  DoAlert
+          :: 2DROP #_102 XLIB DoAlert ;          * DAB76
           :: #>CHR >T$ ' LAM 'EC STOLAM ;        * DAB95
           ROMPTR 0B2 020 ;                       * DABC0
 
 * ROMPTR 0B2 021
 * refs (2): D9A51 D9A51
-ROMP_0B2_021:
+* #offset -> : inverts one cell of the page, at the character's position in the grid of 16 by 4.
+CharCursor:
         :: DA2aBad? caseDROP BINT16              * DABD0
           #/ SWAP BINT7 #* BINT10 #+ #1- SWAP BINT10 #* BINT8 #+ 2DUP 2DUP * DABE4
           SWAP BINT7 #+ SWAP BINT10 #+ HARDBUFF 5UNROLL SUBGROB INVGROB * DAC2A
@@ -292,72 +327,78 @@ ROMP_0B2_021:
 
 * ROMPTR 0B2 022
 * refs (1): D9A51
-ROMP_0B2_022:
-        GROB    "images/DAC75.png"               * DAC75  7 x 6
+* The nine small key pictures that CharKey>Grob uses start here.
+CharIcons:
+        GROB    "images/DAC75-CharIcons.png"     * DAC75  7 x 6
 
 * ROMPTR 0B2 023
 * refs (1): D9A51
-ROMP_0B2_023:
+CharKey>Grob~1:
         GROB    "images/DAC95.png"               * DAC95  7 x 6
 
 * ROMPTR 0B2 024
 * refs (1): D9A51
-ROMP_0B2_024:
+CharKey>Grob~2:
         GROB    "images/DACB5.png"               * DACB5  8 x 5
 
 * ROMPTR 0B2 025
 * refs (1): D9A51
-ROMP_0B2_025:
+CharKey>Grob~3:
         GROB    "images/DACD3.png"               * DACD3  7 x 5
 
 * ROMPTR 0B2 026
 * refs (1): D9A51
-ROMP_0B2_026:
+CharKey>Grob~4:
         GROB    "images/DACF1.png"               * DACF1  8 x 5
 
 * ROMPTR 0B2 027
 * refs (1): D9A51
-ROMP_0B2_027:
+CharKey>Grob~5:
         GROB    "images/DAD0F.png"               * DAD0F  6 x 5
 
 * ROMPTR 0B2 028
 * refs (1): D9A51
-ROMP_0B2_028:
+CharKey>Grob~6:
         GROB    "images/DAD2D.png"               * DAD2D  6 x 5
 
 * ROMPTR 0B2 029
 * refs (1): D9A51
-ROMP_0B2_029:
+CharKey>Grob~7:
         GROB    "images/DAD4B.png"               * DAD4B  6 x 5
 
 * ROMPTR 0B2 02A
 * refs (1): D9A51
-ROMP_0B2_02A:
+CharKey>Grob~8:
         GROB    "images/DAD69.png"               * DAD69  6 x 5
 
 * ROMPTR 0B2 02B
 * refs (1): D9A51
-ROMP_0B2_02B:
-        GROB    "images/DAD87.png"               * DAD87  112 x 40
+* Picture of characters 0 to 63.
+CharPage0:
+        GROB    "images/DAD87-CharPage0.png"     * DAD87  112 x 40
 
 * ROMPTR 0B2 02C
 * refs (1): D9A51
-ROMP_0B2_02C:
-        GROB    "images/DB1FB.png"               * DB1FB  112 x 40
+* Picture of characters 64 to 127.
+CharPage1:
+        GROB    "images/DB1FB-CharPage1.png"     * DB1FB  112 x 40
 
 * ROMPTR 0B2 02D
 * refs (1): D9A51
-ROMP_0B2_02D:
-        GROB    "images/DB66F.png"               * DB66F  112 x 40
+* Picture of characters 128 to 191.
+CharPage2:
+        GROB    "images/DB66F-CharPage2.png"     * DB66F  112 x 40
 
 * ROMPTR 0B2 02E
 * refs (1): D9A51
-ROMP_0B2_02E:
-        GROB    "images/DBAE3.png"               * DBAE3  112 x 40
+* Picture of characters 192 to 255.
+CharPage3:
+        GROB    "images/DBAE3-CharPage3.png"     * DBAE3  112 x 40
 
 * ROMPTR 0B2 02F
 * refs (1): D9A51
-ROMP_0B2_02F:
+* Array of 256 strings: the keys that type each character, using codes 1 to 9 for key pictures. Characters with no key have an empty string.
+CharKeyTbl:
         CON(5)  DOARRY                           * DBF57  array 256
         LENGTH                                   * DBF5C  length, to #DCA1E
         CON(5)  DOCSTR                           * DBF61  element type

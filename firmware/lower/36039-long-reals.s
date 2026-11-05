@@ -1,6 +1,6 @@
-* HP 48GX ROM revision R, #36039-#37FFF: Extended real arithmetic
+* HP 48GX ROM revision R, #36039-#37FFF: Array and matrix operations with long reals: inverse, LU, products, determinant and system solving
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: PULL%%EL PUT%%EL L%* L%/ L%+ %%+* CKREF [%%]AXPY doerr501 L%- NcaseDIMERR L%CONJ
+* Most referenced: PULL%%EL PUT%%EL L%* L%/ L%+ %%+* CKREF [%%]AXPY doerr501 L%- KeepVarUnit NcaseDIMERR
 * Follows on from the previous file (at #36039 in the original ROM).
         RPL
 
@@ -26,7 +26,7 @@ MAT+:
 
 * refs (1): 362A0
 MAT-~1:
-          :: 2SWAP idsize(2ar)? OBJ_35AEE MAT+~1 MAT+~2 MAT+~3 MAT+~1 ; ; * 36129
+          :: 2SWAP idsize(2ar)? 2ArryTypeCase MAT+~1 MAT+~2 MAT+~3 MAT+~1 ; ; * 36129
 
 * refs (2): 3613D 3614C
 MAT+~1:
@@ -49,7 +49,8 @@ MAT+~3:
 
 * refs (2): 362B9 362D2
 OBJ_361D8:
-          :: 3UNROLL idsize(2ar)? OBJ_35AEE OBJ_361FB 1@+(2ar)~1 OBJ_3620A * 361D8
+          :: 3UNROLL idsize(2ar)? 2ArryTypeCase OBJ_361FB 1@+(2ar)~1 * 361D8
+            OBJ_3620A                            * 361F6
 
 * refs (1): 361EC
 OBJ_361FB:
@@ -167,6 +168,7 @@ dup2;*(2ar):
           MAKEARRY OBJ_36525 ROTSWAP ;           * 36511
 
 * refs (2): 36516 36679
+* Probably: loops over the rows and columns of the result, evaluating the object after the call for each element
 OBJ_36525:
         :: BINT1 7ROLL 7ROLL 7ROLL 7PICK #* #1+_ONE_DO 5PICK #1+_ONE_DO * 36525
           JINDEX@ INDEX@ 8PICK OBJ_3582F 5ROLL 5ROLL DUP#1+ 6UNROLL 3@REVAL * 36557
@@ -191,7 +193,7 @@ MATRSD:
 
 * refs (1): 3666F
 MATRSD~1:
-        :: OBJ_35AEE rot;NewobIfNotFree MATRSD~2 MATRSD~2 MATRSD~2 ; * 366AB
+        :: 2ArryTypeCase rot;NewobIfNotFree MATRSD~2 MATRSD~2 MATRSD~2 ; * 366AB
 
 * refs (5): 366B5 4F99E 4F9F8 CBBFF CBC78
 rot;NewobIfNotFree:
@@ -238,7 +240,7 @@ MATDET~4:
 
 * refs (2): 364A8 367A0
 0ChkType(2ar):
-        :: OBJ_35AEE %0_2A2B4 C%0 C%0 C%0 ;      * 36877
+        :: 2ArryTypeCase %0_2A2B4 C%0 C%0 C%0 ;  * 36877
 
 * refs (2): 36796 3679B
 MATCROSS~1:
@@ -250,7 +252,7 @@ MATCROSS~1:
 
 * refs (1): 1BFAD
 MATRNRM:
-        :: OBJ_36930 NOP %%>% ;                  * 368F4
+        :: ArryNorm%% NOP %%>% ;                 * 368F4
 
 * [F%] -> F%
 * refs (1): 1BFCD
@@ -258,11 +260,13 @@ MATCNRM:
         ::                                       * 3690D
 
 * refs (4): 97981 C7CB2 C9484 CA45F
-OBJ_36912:
-          :: OBJ_36930 2SWAP ; %%>% ;            * 36912
+* [] -> %: largest sum of absolute values, for RNRM and CNRM
+ArryNorm%:
+          :: ArryNorm%% 2SWAP ; %%>% ;           * 36912
 
 * refs (2): 368F9 36917
-OBJ_36930:
+* [] ... -> %%: the same in extended precision: for each row or column, by the stride on the stack, sums |element| and keeps the largest
+ArryNorm%%:
         :: BINT1 OVER MDIMS ?SKIP BINT1          * 36930
           SWAPDROPDUP 4PICK ARSIZE 'REVAL 5ROLL %%0 ROT #1+_ONE_DO %%0 ROT * 3694E
           INDEX@ DUP 7PICK #+SWAP DO INDEX@ PULLLONGEL B%ABS ROT %%+ SWAP * 36980
@@ -278,7 +282,7 @@ MATABS:
 * [F%] -> F%
 * refs (1): 1BFED
 MATDET:
-        ROMPTR 0C2 051                           * 36A48
+        XLIB MATDET~1                            * 36A48
 
 * refs (1): 97ED9
 MATDET~2:
@@ -288,16 +292,16 @@ MATDET~2:
 * [F%] -> [F%]'
 * refs (1): 1B29B
 MATINV:
-        ROMPTR 0C2 055                           * 36A99
+        XLIB MATINV~1                            * 36A99
 
 * refs (1): 20337
 @inv(ar):
-        :: sqmat(ar)? ~SWAP;FreeRefs ROMPTR 0C2 056 ; * 36AA4
+        :: sqmat(ar)? ~SWAP;FreeRefs XLIB LUInverse ; * 36AA4
 
 * [F%] [F%]' -> [F%]''
 * refs (1): 1AF6E
 MAT/:
-        ROMPTR 0C2 053                           * 36AC3
+        XLIB MatDiv                              * 36AC3
 
 * refs (1): 2071A
 1@/(2ar):
@@ -312,21 +316,21 @@ OBJ_36AD3:
 
 * refs (2): 937E2 97FC3
 OBJ_36B14:
-          :: OBJ_35AEE CKREF r->c(ar) CKREF CKREF ; OVER 5UNROLL * 36B14
-          ROMPTR 0C2 054 SWAP REPLACE ;          * 36B41
+          :: 2ArryTypeCase CKREF r->c(ar) CKREF CKREF ; OVER 5UNROLL * 36B14
+          XLIB LUSolve%% SWAP REPLACE ;          * 36B41
 
 * refs (1): 2073D
 2@/(2ar):
-        :: OBJ_36AD3 CKREF SWAP OBJ_35AEE 2@/(2ar)~1 2@/(2ar)~2 2@/(2ar)~1 * 36B5B
-          2@/(2ar)~1 ;                           * 36B83
+        :: OBJ_36AD3 CKREF SWAP 2ArryTypeCase 2@/(2ar)~1 2@/(2ar)~2 * 36B5B
+          2@/(2ar)~1 2@/(2ar)~1 ;                * 36B7E
 
 * refs (3): 36B74 36B7E 36B83
 2@/(2ar)~1:
-        :: FreeRefs ROMPTR 0C2 054 ;             * 36B8D
+        :: FreeRefs XLIB LUSolve%% ;             * 36B8D
 
 * refs (1): 36B79
 2@/(2ar)~2:
-        :: FreeRefs DUP r->c(ar) SWAP REPLACE ROMPTR 0C2 054 ; * 36BA7
+        :: FreeRefs DUP r->c(ar) SWAP REPLACE XLIB LUSolve%% ; * 36BA7
 
 * refs (3): 92ED0 9662D 96637
 ~%%0>=;?SEMI;%%CHS:
@@ -339,17 +343,20 @@ OBJ_36B14:
           %%CHS ;                                * 36BFD
 
 * refs (5): 9062E 93EF2 9442F 95919 95AFE
-OBJ_36C07:
+* a x y %%t -> a x y: when %%t is negative nothing changes; otherwise changes the sign of a
+%%>=0?ROTCHS:
         :: %%0< ?SEMI                            * 36C07
           ROT %%CHS 3UNROLL ;                    * 36C16
 
 * refs (9): 965A6 965B0 965BF 965DD 965E7 965F1 ...
-OBJ_36C2A:
+* a b %%t -> a b: when %%t is negative, changes the sign of both
+%%<0?2CHS:
         :: %%0>= ?SEMI                           * 36C2A
           %%CHS SWAP %%CHS SWAP ;                * 36C39
 
 * refs (2): 94A40 953B9
-OBJ_36C52:
+* -> %%: 0 when flag -54 is set, else 1E-14. What the array code treats as nothing
+TinyElt%%:
         :: BINT54 TestSysFlag ITE %%0 %%1E-14    * 36C52  flag -54: Tiny element → 0 / Use tiny element
         ;                                        * 36C70
 
@@ -378,37 +385,44 @@ OBJ_36C52:
         %% 3E-13                                 * 36D0C
 
 * refs (2): C9239 CA947
-OBJ_36D26:
-        :: DUPUNROT OBJ_36DDF                    * 36D26
+* % id ->: adds a real to a real variable, keeping its units
+VarAdd%:
+        :: DUPUNROT @%_HERE                      * 36D26
 
 * refs (1): 36D76
-OBJ_36D35:
-          :: %>%% %%+ %%>% SWAP OBJ_36EBB ; ;    * 36D35
+* %v id %d -> : adds, then stores with the units of the old value
+VarAdd%%:
+          :: %>%% %%+ %%>% SWAP KeepVarUnit ; ;  * 36D35
 
 * refs (2): C9229 CA937
-OBJ_36D5D:
-        :: DUPUNROT OBJ_36E5C DUPTYPEREAL? case OBJ_36D35 * 36D5D
-          TOTEMPOB SWAP OBJ_7D6D2 SWAP STO_HERE ; * 36D7B
+* ob id ->: adds a real or array to the variable's value in place, keeping units
+VarAdd:
+        :: DUPUNROT @[%]_HERE DUPTYPEREAL? case VarAdd%% * 36D5D
+          TOTEMPOB SWAP VarAdd~1 SWAP STO_HERE ; * 36D7B
 
 * refs (3): 36DBC 36E25 36E4D
-OBJ_36D99:
+* ob -> ob': CRUNCH, with ON honoured and no last-arguments record
+CRUNCH?ATTN:
         :: CRUNCH 0LASTOWDOB! ?ATTNQUIT CK1NOLASTWD ; * 36D99
 
 * refs (15): 36DD5 C7C94 C8187 C82A6 C8360 C843E ...
 * ob -> %: evaluate to a number (honouring ATTN), strip units; anything else is Bad Argument Type
 CRUNCH>%:
-        :: OBJ_36D99 OBJ_36DF8 ;                 * 36DB7
+        :: CRUNCH?ATTN Ob>% ;                    * 36DB7
 
 * refs (6): C7BDE C8139 C9092 C93E7 C9744 CA62C
-OBJ_36DCB:
-        :: OBJ_36E93 CRUNCH>% ;                  * 36DCB
+* id -> %: value of a variable as a real, creating it with 0 when it does not exist
+RclOr0>%:
+        :: RclOr0 CRUNCH>% ;                     * 36DCB
 
 * refs (5): 36D30 C7A6A C7F7C C935E CAAB8
-OBJ_36DDF:
-        :: SAFE@_HERE DROP OBJ_36DF8 ;           * 36DDF
+* id -> %: value of a variable in the current directory as a real, without its units
+@%_HERE:
+        :: SAFE@_HERE DROP Ob>% ;                * 36DDF
 
 * refs (3): 36DC1 36DEE 36E89
-OBJ_36DF8:
+* ob -> %: a real stays; a unit object loses its unit; anything else is "Bad Argument Type"
+Ob>%:
         :: DUPTYPEREAL? ?SEMI                    * 36DF8
           DUPTYPEEXT? NOTcase SETTYPEERR         * 36E07
           U>nbr ;                                * 36E16
@@ -416,31 +430,34 @@ OBJ_36DF8:
 * refs (14): C7CAD C880A C8942 C8A15 C8B0C C8C21 ...
 * ob -> [%]: evaluate (honouring ATTN) and require a real array
 CRUNCH>RARRY:
-        :: OBJ_36D99 DUP TYPERARRY? NOTcase SETTYPEERR * 36E20
+        :: CRUNCH?ATTN DUP TYPERARRY? NOTcase SETTYPEERR * 36E20
         ;                                        * 36E3E
 
 * refs (12): B5DDF B5EA9 C7C07 C814E C8FBB C90A7 ...
 * id -> % or [%]: recall (creating the variable as 0 if needed), evaluate, and require a number or a real array
 RCLCRUNCH>%ARRY:
-        :: OBJ_36E93 OBJ_36D99 OBJ_36E75 ;       * 36E43
+        :: RclOr0 CRUNCH?ATTN Ob>[%] ;           * 36E43
 
 * refs (3): 36D67 C7A7F C7F91
-OBJ_36E5C:
-        :: SAFE@_HERE DROP OBJ_36E75 ;           * 36E5C
+* id -> [%] / %: value of a variable, which must be a real array, a real or a unit object
+@[%]_HERE:
+        :: SAFE@_HERE DROP Ob>[%] ;              * 36E5C
 
 * refs (2): 36E52 36E6B
-OBJ_36E75:
+* ob -> [%] / %: as Ob>%, also accepting a real array
+Ob>[%]:
         :: DUP TYPERARRY? ?SEMI                  * 36E75
-          OBJ_36DF8 ;                            * 36E89
+          Ob>% ;                                 * 36E89
 
 * refs (2): 36DD0 36E48
-OBJ_36E93:
+* id -> ob: value of a variable; a missing one is created with value 0
+RclOr0:
         :: dup;RclInVars(gn)? case SWAPDROP      * 36E93
           %0_2A2B4 DUPROT STO_HERE ;             * 36EA7
 
 * refs (28): 36D4E C8253 C8296 C82E9 C8350 C83A3 ...
-* Probably: ob id -> : store ob in id, keeping the units of a unit object already stored there
-OBJ_36EBB:
+* ob id -> ob' id: gives the number the units of the value already in the variable
+KeepVarUnit:
         :: dup;RclInVars(gn)? IT                 * 36EBB
           :: ROT Unbr>U SWAP ;                   * 36ECA
 
@@ -450,23 +467,27 @@ STO_HERE:
           :: PTR DoHere: STO ; ;                 * 36EE3
 
 * refs (3): C7A8E C7D77 C7FA0
-OBJ_36EFC:
-        :: 4UNROLL OBJ_36F24 3UNROLL 4ROLL OBJ_36F24 ROTROT2DROP ; * 36EFC
+* Takes element #i of two arguments, as ArrEltOr%
+2ArrEltOr%:
+        :: 4UNROLL ArrEltOr% 3UNROLL 4ROLL ArrEltOr% ROTROT2DROP ; * 36EFC
 
 * refs (2): 36F06 36F15
-OBJ_36F24:
+* ob #i -> ob x: element i of an array. A real stands for itself, and index 0 means the object itself
+ArrEltOr%:
         :: DUP#0= casedrop OVER                  * 36F24
           OVER TYPEREAL? casedrop DUP            * 36F38
           PULLEL ;                               * 36F4C
 
 * refs (4): C90C0 CA655 CA6F2 CA7A9
-OBJ_36F56:
+* L% -> %%: absolute value of an extended real or complex
+L%ABS:
         :: DUPTYPEEREL? case %%ABS               * 36F56
-          OBJ_7D7A9 ;                            * 36F6A
+          ArryMaxAbs ;                           * 36F6A
 
 * refs (5): CC059 CC0D3 CC202 CC295 CC569
-OBJ_36F74:
-        :: OBJ_35AEE NOP r->c(ar) ~SWAP;r->c(ar);SWAP NOP ; * 36F74
+* [a] [b] -> [a] [b]: makes a real array complex when the other is complex
+2ArrySameType:
+        :: 2ArryTypeCase NOP r->c(ar) ~SWAP;r->c(ar);SWAP NOP ; * 36F74
 
 * refs (1): 36F88
 ~SWAP;r->c(ar);SWAP:
@@ -496,7 +517,8 @@ OBJ_36F74:
         BSS     6                                * 36FD5  zeros
 
 * refs (9): 7D0E9 90280 933E6 93445 936A7 93960 ...
-OBJ_36FDB:
+* #n hxs -> #: reads entry n of a table of 3-nibble numbers held in a hex string, such as the LU row permutation
+HXS3@:
         CON(5)  (*)+5                            * 36FDB  primitive code object
         A=DAT1  A                                * 36FE0
         D1=D1+  5                                * 36FE3
@@ -515,10 +537,11 @@ OBJ_36FDB:
         A=0     A                                * 37006
         A=DAT0  X                                * 37008
         R0=A                                     * 3700C
-        GOTO    OBJ_376C1.L6                     * 3700F
+        GOTO    PivotRow.L6                      * 3700F
 
 * refs (7): 7CF1D 93233 9334B 934B3 936CA 93C9B ...
-OBJ_37013:
+* #n #v hxs -> #n #v: writes #v as entry n of such a table
+HXS3!:
         CON(5)  (*)+5                            * 37013  primitive code object
         CD0EX                                    * 37018
         RSTK=C                                   * 3701B
@@ -553,7 +576,8 @@ OBJ_37013:
         PC=(A)                                   * 3706A
 
 * refs (10): C8814 C894C C8A1F C8B16 C8C2B C8D4A ...
-OBJ_3706E:
+* [v] [M] -> [v]: "Invalid Dimension" unless v is a vector as long as M has rows
+ChkVecMatDim:
         CON(5)  (*)+5                            * 3706E  primitive code object
         A=DAT1  A                                * 37073
         D1=D1+  5                                * 37076
@@ -566,20 +590,21 @@ OBJ_3706E:
         A=DAT1  A                                * 3708B
         A=A-1   A                                * 3708E
         ?A#0    A                                * 37090
-        GOYES   OBJ_3706E.L1                     * 37093
+        GOYES   ChkVecMatDim.L1                  * 37093
         D1=D1+  5                                * 37095
         A=DAT1  A                                * 37098
         D0=D0+  15                               * 3709B
         D0=D0+  5                                * 3709E
         C=DAT0  A                                * 370A1
         ?C#A    A                                * 370A4
-        GOYES   OBJ_3706E.L1                     * 370A7
+        GOYES   ChkVecMatDim.L1                  * 370A7
         GOTO    SWAPROWS.L6                      * 370A9
-OBJ_3706E.L1:
+ChkVecMatDim.L1:
         GOSBVL  GETPTR                           * 370AD
 
 * refs (1): CAEBE
-SUB_370B4:
+* Raises "Invalid Dimension" from machine code
+ErrBadDim:
         LC(5)   doerr501                         * 370B4
         A=C     A                                * 370BB
         PC=(A)                                   * 370BD
@@ -712,20 +737,21 @@ L%ARRY*%%.L3:
         GOTO    SWAPROWS.L6                      * 3721F
 
 * refs (4): C845C C8B34 C98EB C9E28
-OBJ_37223:
+* %%a %%b -> %: the sum, rounded to a real
+%%+>%:
         CON(5)  (*)+5                            * 37223  primitive code object
-        GOSBVL  SUB_2A0B1                        * 37228
+        GOSBVL  POP2%%                           * 37228
         HST=0   3                                * 3722F
-OBJ_37223.L1:
+%%+>%.L1:
         GOSBVL  RADDF                            * 37232
-        GOSBVL  SUB_29F76                        * 37239
+        GOSBVL  PACKq                            * 37239
         GOVLNG  PUSH%LOOP                        * 37240
 
 * refs (17): C8243 C8286 C82D9 C8340 C8393 C841E ...
 * % %%2 %%1 -> %: %+%%2*%%1, rounded to a real
 %+%%*:
         CON(5)  (*)+5                            * 37247  primitive code object
-        GOSBVL  SUB_2A0B1                        * 3724C
+        GOSBVL  POP2%%                           * 3724C
         HST=0   3                                * 37253
         GOSUB   MULTF~jump_2                     * 37256
         GOSBVL  STAB0                            * 3725A
@@ -734,13 +760,13 @@ OBJ_37223.L1:
         GOSBVL  GETPTR                           * 37265
         GOSBVL  POP1%SPLITA                      * 3726C
         GOSBVL  RCCD0                            * 37273
-        GOTO    OBJ_37223.L1                     * 3727A
+        GOTO    %%+>%.L1                         * 3727A
 
 * refs (39): 911E4 9133D 9134C 9136F 9138D 913B0 ...
 * %%3 %%2 %%1 -> %%3+%%2*%%1: extended-real multiply-add
 %%+*:
         CON(5)  (*)+5                            * 3727E  primitive code object
-        GOSBVL  SUB_2A0B1                        * 37283
+        GOSBVL  POP2%%                           * 37283
         HST=0   3                                * 3728A
 %%+*.L1:
         GOSUB   MULTF~jump_2                     * 3728D
@@ -758,7 +784,7 @@ B%ABS1~1:
 * %%3 %%2 %%1 -> %%3-%%2*%%1: extended-real multiply-subtract
 %%-*:
         CON(5)  (*)+5                            * 372BC  primitive code object
-        GOSBVL  SUB_2A0B1                        * 372C1
+        GOSBVL  POP2%%                           * 372C1
         HST=0   3                                * 372C8
         A=-A-1  S                                * 372CB
         GOTO    %%+*.L1                          * 372CE
@@ -769,7 +795,7 @@ MULTF~jump_2:
 MULTF~jump_2.L1:
         GOSBVL  MOVEDOWN                         * 372D9
         GOTO    SWAPROWS.L6                      * 372E0
-MULTF~jump_2.L2:
+ArOpenRow~1:
         GOSBVL  MOVEUP                           * 372E4
         GOTO    SWAPROWS.L6                      * 372EB
 
@@ -800,7 +826,7 @@ PULL%%EL.L1:
         GOYES   PULL%%EL.L2                      * 37332
         D1=D1+  5                                * 37334
 PULL%%EL.L2:
-        GOSUB   SUB_3768C                        * 37337
+        GOSUB   A*21                             * 37337
         CD1EX                                    * 3733B
         C=C+A   A                                * 3733E
         D1=C                                     * 37340
@@ -853,12 +879,12 @@ PUT%%EL.L2:
         GOYES   PUT%%EL.L3                       * 373CC
         D1=D1+  5                                * 373CE
 PUT%%EL.L3:
-        GOSUB   SUB_3768C                        * 373D1
+        GOSUB   A*21                             * 373D1
         CD1EX                                    * 373D5
         C=C+A   A                                * 373D8
         D1=C                                     * 373DA
         D0=D0+  5                                * 373DD
-        GOSBVL  SUB_7D89B                        * 373E0
+        GOSBVL  %%>%Chk                          * 373E0
         GOSBVL  PutAB%1                          * 373E7
         ?ST=0   0                                * 373EE
         GOYES   PUT%%EL.L5                       * 373F1
@@ -866,7 +892,7 @@ PUT%%EL.L3:
         B=0     W                                * 373F6
         ?ST=0   1                                * 373F9
         GOYES   PUT%%EL.L4                       * 373FC
-        GOSBVL  SUB_7D89B                        * 373FE
+        GOSBVL  %%>%Chk                          * 373FE
 PUT%%EL.L4:
         GOSBVL  PutAB%1                          * 37405
 PUT%%EL.L5:
@@ -874,7 +900,8 @@ PUT%%EL.L5:
         GOTO    SWAPROWS.L6                      * 3740E
 
 * refs (2): 37450 54248
-SUB_37412:
+* C.A = size plus 5, D0 = object -> writes the prolog DOHSTR and the length field
+SetHXSHdr:
         C=C-CON A,5                              * 37412
         D0=D0+  5                                * 37418
         DAT0=C  A                                * 3741B
@@ -896,7 +923,7 @@ SUB_37412:
         LC(1)   #A                               * 37444
         C=C+A   A                                * 37447
         GOSBVL  GETTEMP                          * 37449
-        GOSUB   SUB_37412                        * 37450
+        GOSUB   SetHXSHdr                        * 37450
         AD0EX                                    * 37454
         GOVLNG  GPOverWrALp                      * 37457
 
@@ -1001,7 +1028,7 @@ SWAPCOLUMNS.L2:
         C=A     A                                * 37551
         D=D-1   A                                * 37553
         GOSUB   SUB_376B3                        * 37555
-        GOSUB   SUB_3767E                        * 37559
+        GOSUB   B*21                             * 37559
         ?ST=0   0                                * 3755D
         GOYES   SWAPCOLUMNS.L3                   * 37560
         B=B+B   A                                * 37562
@@ -1015,7 +1042,7 @@ SWAPCOLUMNS.L3:
         D=C     A                                * 37573
         C=A     A                                * 37575
         GOSUB   SUB_376B3                        * 37577
-        GOSUB   SUB_3767E                        * 3757B
+        GOSUB   B*21                             * 3757B
         ?ST=0   0                                * 3757F
         GOYES   SWAPCOLUMNS.L4                   * 37582
         B=B+B   A                                * 37584
@@ -1027,7 +1054,7 @@ SWAPCOLUMNS.L4:
         B=A     A                                * 37590
         B=B-1   A                                * 37592
 SWAPCOLUMNS.loop5:
-        GOSUB   SUB_3765A                        * 37594
+        GOSUB   SwapEltL%                        * 37594
         D0=D0+  16                               * 37598
         D1=D1+  16                               * 3759B
         B=B-1   A                                * 3759E
@@ -1035,7 +1062,8 @@ SWAPCOLUMNS.loop5:
         GOTO    SWAPROWS.L6                      * 375A3
 
 * refs (5): 9324C 93364 93DF8 977F9 983A3
-OBJ_375A7:
+* [%%] #i #j -> [%%]: exchanges two columns of an extended array in place, real or complex
+SWAPCOLS:
         CON(5)  (*)+5                            * 375A7  primitive code object
         GOSUB   SAVPTR~jump_17                   * 375AC
         GOSUB   POP2#~jump                       * 375B0
@@ -1048,9 +1076,9 @@ OBJ_375A7:
         ST=0    0                                * 375C4
         LC(5)   DOEREL                           * 375C7
         ?D=C    A                                * 375CE
-        GOYES   OBJ_375A7.L1                     * 375D1
+        GOYES   SWAPCOLS.L1                      * 375D1
         ST=1    0                                * 375D3
-OBJ_375A7.L1:
+SWAPCOLS.L1:
         D1=D1+  10                               * 375D6
         C=DAT1  A                                * 375D9
         R0=C                                     * 375DC
@@ -1060,15 +1088,15 @@ OBJ_375A7.L1:
         D1=D1+  5                                * 375E7
         B=B-1   A                                * 375EA
         A=A-1   A                                * 375EC
-        GOSUB   SUB_3767E                        * 375EE
-        GOSUB   SUB_3768C                        * 375F2
-        GOSUB   SUB_3769E                        * 375F6
+        GOSUB   B*21                             * 375EE
+        GOSUB   A*21                             * 375F2
+        GOSUB   D*21                             * 375F6
         ?ST=0   0                                * 375FA
-        GOYES   OBJ_375A7.L2                     * 375FD
+        GOYES   SWAPCOLS.L2                      * 375FD
         A=A+A   A                                * 375FF
         B=B+B   A                                * 37601
         D=D+D   A                                * 37603
-OBJ_375A7.L2:
+SWAPCOLS.L2:
         C=R0                                     * 37605
         BCEX    A                                * 37608
         AD1EX                                    * 3760A
@@ -1078,18 +1106,18 @@ OBJ_375A7.L2:
         C=C+A   A                                * 37615
         D1=C                                     * 37617
         B=B-1   A                                * 3761A
-OBJ_375A7.loop3:
-        GOSUB   SUB_3765A                        * 3761C
+SWAPCOLS.loop3:
+        GOSUB   SwapEltL%                        * 3761C
         ?ST=0   0                                * 37620
-        GOYES   OBJ_375A7.L4                     * 37623
+        GOYES   SWAPCOLS.L4                      * 37623
         D0=D0+  16                               * 37625
         D1=D1+  16                               * 37628
-        GOSUB   SUB_3765A                        * 3762B
+        GOSUB   SwapEltL%                        * 3762B
         D0=D0-  5                                * 3762F
         D1=D1-  5                                * 37632
         D0=D0-  16                               * 37635
         D1=D1-  16                               * 37638
-OBJ_375A7.L4:
+SWAPCOLS.L4:
         D0=D0-  5                                * 3763B
         D1=D1-  5                                * 3763E
         CD1EX                                    * 37641
@@ -1099,11 +1127,12 @@ OBJ_375A7.L4:
         C=C+D   A                                * 3764C
         D0=C                                     * 3764E
         B=B-1   A                                * 37651
-        GONC    OBJ_375A7.loop3                  * 37653
+        GONC    SWAPCOLS.loop3                   * 37653
         GOTO    SWAPROWS.L6                      * 37656
 
 * refs (3): 37594 3761C 3762B
-SUB_3765A:
+* D0, D1 = two %% or %% pair elements: exchanges 21 nibbles
+SwapEltL%:
         A=DAT0  A                                * 3765A
         C=DAT1  A                                * 3765D
         DAT0=C  A                                * 37660
@@ -1117,7 +1146,8 @@ SUB_3765A:
         RTN                                      * 3767C
 
 * refs (7): 37559 3757B 375EE 3772C 7CC78 7D436 ...
-SUB_3767E:
+* B.A = B.A * 21: the size of an extended real element
+B*21:
         C=B     A                                * 3767E
         BSL     A                                * 37680
         B=B+C   A                                * 37682
@@ -1127,7 +1157,8 @@ SUB_3767E:
         RTN                                      * 3768A
 
 * refs (7): 37337 373D1 375F2 37730 7CC71 7D2D4 ...
-SUB_3768C:
+* A.A = A.A * 21: the size of an extended real element
+A*21:
         C=A     A                                * 3768C
         ASL     A                                * 3768E
         A=A+C   A                                * 37690
@@ -1137,15 +1168,18 @@ SUB_3768C:
         RTN                                      * 37698
 
 * refs (5): 87A31 87DDD 87E20 CAFA1 CB002
-SUB_3769A:
+* D.A = C.A * 42: the size of an extended complex element
+C*42>D:
         C=C+C   A                                * 3769A
 
 * refs (3): 8903F 89412 89455
-SUB_3769C:
+* D.A = C.A * 21: the size of an extended real element
+C*21>D:
         D=C     A                                * 3769C
 
 * refs (1): 375F6
-SUB_3769E:
+* D.A = D.A * 21
+D*21:
         C=D     A                                * 3769E
         DSL     A                                * 376A0
         D=D+C   A                                * 376A2
@@ -1167,7 +1201,8 @@ POP2#~jump:
         GOVLNG  POP2#                            * 376BA
 
 * refs (2): 7CF13 987C1
-OBJ_376C1:
+* [%%] #r #c -> #: from row r down, the row with the largest element in column c: the pivot
+PivotRow:
         CON(5)  (*)+5                            * 376C1  primitive code object
         GOSBVL  POP#                             * 376C6
         R1=A                                     * 376CD
@@ -1185,9 +1220,9 @@ OBJ_376C1:
         ST=0    0                                * 376F2
         LC(5)   DOEREL                           * 376F5
         ?C=A    A                                * 376FC
-        GOYES   OBJ_376C1.L1                     * 376FF
+        GOYES   PivotRow.L1                      * 376FF
         ST=1    0                                * 37701
-OBJ_376C1.L1:
+PivotRow.L1:
         D1=D1+  10                               * 37704
         C=DAT1  A                                * 37707
         R4=C                                     * 3770A
@@ -1203,13 +1238,13 @@ OBJ_376C1.L1:
         C=R1                                     * 37725
         B=B+C   A                                * 37728
         B=B-1   A                                * 3772A
-        GOSUB   SUB_3767E                        * 3772C
-        GOSUB   SUB_3768C                        * 37730
+        GOSUB   B*21                             * 3772C
+        GOSUB   A*21                             * 37730
         ?ST=0   0                                * 37734
-        GOYES   OBJ_376C1.L2                     * 37737
+        GOYES   PivotRow.L2                      * 37737
         B=B+B   A                                * 37739
         A=A+A   A                                * 3773B
-OBJ_376C1.L2:
+PivotRow.L2:
         CD1EX                                    * 3773D
         C=C+B   A                                * 37740
         D1=C                                     * 37742
@@ -1218,7 +1253,7 @@ OBJ_376C1.L2:
         R2=A                                     * 3774B
         R3=A                                     * 3774E
         ST=0    1                                * 37751
-OBJ_376C1.loop3:
+PivotRow.loop3:
         SETDEC                                   * 37754
         D1=D1+  5                                * 37756
         A=DAT1  W                                * 37759
@@ -1227,7 +1262,7 @@ OBJ_376C1.loop3:
         D1=D1-  5                                * 37763
         A=DAT1  A                                * 37766
         ?ST=0   0                                * 37769
-        GOYES   OBJ_376C1.L4                     * 3776C
+        GOYES   PivotRow.L4                      * 3776C
         D1=D1+  16                               * 3776E
         D1=D1+  10                               * 37771
         C=DAT1  W                                * 37774
@@ -1238,17 +1273,17 @@ OBJ_376C1.loop3:
         D1=D1-  5                                * 37784
         D1=D1-  16                               * 37787
         GOSBVL  RADDF                            * 3778A
-OBJ_376C1.L4:
-        GOSBVL  SUB_2BF81                        * 37791
+PivotRow.L4:
+        GOSBVL  Rnd12                            * 37791
         GOSBVL  RCAB2                            * 37798
         P=      6                                * 3779F
         GOSBVL  TST15                            * 377A1
-        GOC     OBJ_376C1.L5                     * 377A8
+        GOC     PivotRow.L5                      * 377A8
         GOSBVL  STCD2                            * 377AB
         C=RSTK                                   * 377B2
         RSTK=C                                   * 377B4
         R0=C                                     * 377B6
-OBJ_376C1.L5:
+PivotRow.L5:
         SETHEX                                   * 377B9
         P=      0                                * 377BB
         A=R1                                     * 377BD
@@ -1260,12 +1295,12 @@ OBJ_376C1.L5:
         RSTK=C                                   * 377CC
         A=R4                                     * 377CE
         ?C<=A   A                                * 377D1
-        GOYES   OBJ_376C1.loop3                  * 377D4
-OBJ_376C1.L6:
+        GOYES   PivotRow.loop3                   * 377D4
+PivotRow.L6:
         GOVLNG  PUSH#LOOP                        * 377D6
 
 * refs (1): 7CF8B
-OBJ_377DD:
+LUFactor~1:
         CON(5)  (*)+5                            * 377DD  primitive code object
         GOSBVL  POP#                             * 377E2
         R4=A                                     * 377E9
@@ -1275,51 +1310,51 @@ OBJ_377DD:
         D1=(5)  DOEREL                           * 377F5
         CD1EX                                    * 377FC
         ?C#A    A                                * 377FF
-        GOYES   OBJ_377DD.L1                     * 37802
+        GOYES   LUFactor~1.L1                    * 37802
         ST=0    0                                * 37804
         GOSBVL  POP1%%                           * 37807
-        GOTO    OBJ_377DD.L2                     * 3780E
-OBJ_377DD.L1:
+        GOTO    LUFactor~1.L2                    * 3780E
+LUFactor~1.L1:
         ST=1    0                                * 37812
         GOSBVL  POPC%%                           * 37815
         GOSBVL  STCD2                            * 3781C
-OBJ_377DD.L2:
+LUFactor~1.L2:
         SETHEX                                   * 37823
         LC(5)   #50000                           * 37825
         ?C<=A   A                                * 3782C
-        GOYES   OBJ_377DD.L6                     * 3782F
+        GOYES   LUFactor~1.L6                    * 3782F
         LC(5)   #10000                           * 37831
         ?C<A    A                                * 37838
-        GOYES   OBJ_377DD.L7                     * 3783B
-OBJ_377DD.loop3:
+        GOYES   LUFactor~1.L7                    * 3783B
+LUFactor~1.loop3:
         ?ST=0   0                                * 3783D
-        GOYES   OBJ_377DD.L5                     * 37840
+        GOYES   LUFactor~1.L5                    * 37840
         GOSBVL  RCCD2                            * 37842
         GOSBVL  PUSHC%%                          * 37849
-OBJ_377DD.loop4:
+LUFactor~1.loop4:
         A=R4                                     * 37850
         R0=A                                     * 37853
         GOSUB   SAVPTR~jump_17                   * 37856
-        GOTO    OBJ_376C1.L6                     * 3785A
-OBJ_377DD.L5:
-        GOSBVL  SUB_2A24B                        * 3785E
-        GOTO    OBJ_377DD.loop4                  * 37865
-OBJ_377DD.L6:
+        GOTO    PivotRow.L6                      * 3785A
+LUFactor~1.L5:
+        GOSBVL  PUSH%%                           * 3785E
+        GOTO    LUFactor~1.loop4                 * 37865
+LUFactor~1.L6:
         LC(5)   HARDRAMEND                       * 37869
         ?C<=A   A                                * 37870
-        GOYES   OBJ_377DD.loop3                  * 37873
+        GOYES   LUFactor~1.loop3                 * 37873
         LC(5)   #10000                           * 37875
         A=A+C   A                                * 3787C
         C=R4                                     * 3787E
         C=C-1   A                                * 37881
         R4=C                                     * 37883
-        GOTO    OBJ_377DD.loop3                  * 37886
-OBJ_377DD.L7:
+        GOTO    LUFactor~1.loop3                 * 37886
+LUFactor~1.L7:
         A=A-C   A                                * 3788A
         C=R4                                     * 3788C
         C=C+1   A                                * 3788F
         R4=C                                     * 37891
-        GOTO    OBJ_377DD.loop3                  * 37894
+        GOTO    LUFactor~1.loop3                 * 37894
 
 * refs (1): 97F26
 OBJ_37898:
@@ -1366,7 +1401,7 @@ OBJ_37898.L5:
         ?ST=1   0                                * 37910
         GOYES   OBJ_37898.L8                     * 37913
 OBJ_37898.L6:
-        GOSBVL  SUB_2A24B                        * 37915
+        GOSBVL  PUSH%%                           * 37915
 OBJ_37898.L7:
         A=DAT0  A                                * 3791C
         D0=D0+  5                                * 3791F
@@ -1381,7 +1416,7 @@ OBJ_37898.L9:
         RPL
 
 * refs (1): 7CF81
-OBJ_37941:
+LUFactor~2:
         :: DUPTYPEEREL? case %%*                 * 37941
           SWAP2C%%>%% 2DUP %%ANGLEDEG 3UNROLL %%SQR %%SQRT 4ROLL %%*UNROT * 37955
           %%+ %%>C%% ;                           * 3797D
@@ -1397,12 +1432,14 @@ r->c(ar):
           :: DROP %%0 %%>C% ; 3UNROLL DOARRYPRG2 ; * 379C8
 
 * refs (10): 93A3F 93A9C 97DB2 CBE77 CBF8E CC139 ...
-OBJ_379F0:
+* [] -> % / C%: 0 of the element type
+ArryZero:
         :: TYPERARRY? case %0_2A2B4              * 379F0
           C%0 ;                                  * 37A04
 
 * refs (3): 938FB 93A4E 97B02
-OBJ_37A0E:
+* [] -> %% / C%%: 0 of the extended element type
+ArryLZero:
         :: prefix(ar) TYPEEREL #=case %%0        * 37A0E
           ((0,0)) ;                              * 37A27
 
@@ -1412,18 +1449,20 @@ LU~2:
           C%1 ;                                  * 37A45
 
 * refs (5): 7CEE1 97A84 97B0C 97C21 98132
-OBJ_37A4F:
+* [] -> %% / C%%: 1 of the extended element type
+ArryLOne:
         :: prefix(ar) TYPEEREL #=case %%1        * 37A4F
           C%%1 ;                                 * 37A68
 
 * refs (1): 983DF
 COND~4:
-        :: DUPTYPEEREL? case OBJ_37AC2           * 37A72
+        :: DUPTYPEEREL? case %%SGN1              * 37A72
           DUP C%%0= case %%1                     * 37A86
           C%%>%% 2DUP%%R ROTOVER %%/ 3UNROLL %%/ %%>C%% ; * 37A9A
 
 * refs (9): 37A81 91CFC 91D06 91D9C 91F8B 91F95 ...
-OBJ_37AC2:
+* %% -> %%: 1 for 0 or more, otherwise -1
+%%SGN1:
         :: %%0>= case %%1                        * 37AC2
           %%-1 ;                                 * 37AD6
 
@@ -1533,7 +1572,8 @@ L%ABSSQ:
           C%%>%% %%SQR ;                         * 37D5A
 
 * refs (9): 905D9 915D6 93E7F 9402D 94091 943BC ...
-OBJ_37D69:
+* L% -> %%: the real part
+L%RE:
         :: DUPTYPEEREL? ?SEMI                    * 37D69
           C%%>%% DROP ;                          * 37D78
 
@@ -1594,7 +1634,7 @@ MATREDIM~1:
 @rdm(ar,ls)~1.L1:
         ?ST=0   8                                * 37E8B
         GOYES   @rdm(ar,ls)~1.loop2              * 37E8E
-        GOSUB   SUB_38327                        * 37E90
+        GOSUB   ResetINITEN                      * 37E90
 @rdm(ar,ls)~1.loop2:
         GOSBVL  GETPTR                           * 37E94
 @rdm(ar,ls)~1.loop3:

@@ -1,171 +1,194 @@
-* HP 48GX ROM revision R, #B1606-#B4B31: Library part 0B4
+* HP 48GX ROM revision R, #B1606-#B4B31: Library 0B4: end of Transfer, Calculator Modes, the system flag browser, the Memory variable browser, and the library's hash and link tables
 * Addresses in the right-hand comments are those of the original ROM.
+* Most referenced: FlagBrowseGrob SolveVarMH SolveDiffStore PlotKeyAngle ModesVals ModesStore ModesStd? ModesMenu ModesMH ModesKey ModesFmtMH ModesFmtDisp
 * Follows on from the previous file (at #B1606 in the original ROM).
         RPL
 
 * ROMPTR 0B4 1BC
 * refs (1): A2437
-ROMP_0B4_1BC:
+* #msg -> ... flag: its Name field: 40 the directories, 43 editor keys
+IOXferCDMH:
         ::                                       * B1606
           { BINT40                               * B160B
-            :: LAM 'RF ROMPTR 0B5 112 DUPNULLCOMP? ITE BINT0 BINT1 * B1615
+            :: LAM 'RF XLIB SrvDirs DUPNULLCOMP? ITE BINT0 BINT1 * B1615
             ;                                    * B1646
             BINT43                               * B164B
-            :: ROMPTR 0B4 1BD TRUE ; }           * B1650
+            :: XLIB IOXferCDKeys TRUE ; }        * B1650
           EQLookup case                          * B166F
           :: EVAL TRUE ;                         * B1679
           DROPFALSE ;                            * B168D
 
 * ROMPTR 0B4 1BD
 * refs (1): A2437
-ROMP_0B4_1BD:
+* Editor keys with a backslash
+IOXferCDKeys:
         { $ "\\" NullMenuKey NullMenuKey NullMenuKey } * B1697
 
 * ROMPTR 0B4 1BE
 * refs (1): A2437
-ROMP_0B4_1BE:
+* #msg -> ... flag: a field used with Kermit on the wire only
+IOXferParityMH:
         :: BINT7 #=casedrop                      * B16BC
-          :: ROMPTR 0B4 1A7 ROMPTR 0B4 1C0 NOT OR ; * B16CB
+          :: XLIB IOPortIR? XLIB IOXferKermit? NOT OR ; * B16CB
           BINT55 #<>case FALSE                   * B16F5
-          ROMPTR 0B4 1A7 NOT ROMPTR 0B4 1C0 AND TRUE ; * B1704
+          XLIB IOPortIR? NOT XLIB IOXferKermit? AND TRUE ; * B1704
 
 * ROMPTR 0B4 1BF
 * refs (1): A2437
-ROMP_0B4_1BF:
+* #msg -> ... flag: a field used with Kermit only
+IOXferKermitMH:
         :: BINT7 #=casedrop                      * B172E
-          :: ROMPTR 0B4 1C0 NOT ;                * B173D
+          :: XLIB IOXferKermit? NOT ;            * B173D
           BINT55 #<>case FALSE                   * B1757
-          ROMPTR 0B4 1C0 TRUE ;                  * B1766
+          XLIB IOXferKermit? TRUE ;              * B1766
 
 * ROMPTR 0B4 1C0
 * refs (1): A2437
-ROMP_0B4_1C0:
-        :: BINT2 ROMPTR 0B0 0C5 ROMPTR 0B0 099 ; * B177B  ~gFldVal
+* -> flag: is Type on Kermit?
+IOXferKermit?:
+        :: BINT2 XLIB ~gFldVal XLIB ~BINT2;NTHCOMPROM@ ; * B177B
 
 * ROMPTR 0B4 1C1
 * refs (1): A2437
-ROMP_0B4_1C1:
-        :: ROMPTR 0B0 0AB # B917 BINT1 BINT10 # B918 BINT1 BINT19 # B919 * B17A0  "Number Format:"  "Angle Measure:"  "Coord System:"
+* -> : the MODES key: "Calculator Modes": number format, angle measure, coordinate system, beep, clock and fraction mark
+ModesApp:
+        :: XLIB IFNotInForm # B917 BINT1 BINT10 # B918 BINT1 BINT19 # B919 * B17A0  "Number Format:"  "Angle Measure:"  "Coord System:"
           BINT1 BINT28 # B91A BINT8 BINT37 # B91B BINT50 BINT37 # B91C # 5C * B17E2  "Beep"  "Clock"  "FM,"
-          BINT37 'RROMPTR@ ROMPTR 0B4 1C7 BINT61 BINT8 BINT19 BINT9 BINT12 * B1828
-          MINUSONE BINT33 # B91D ROMPTR 0B5 143 BINT17 ROMPTR 0B5 144 * B1856  "Choose number display format"
-          MINUSONE 'RROMPTR@ ROMPTR 0B4 1C9 BINT85 BINT8 BINT13 BINT9 BINT13 * B1885
-          { BINT0 } BINT4 # B91E ROMPTR 0B5 148 BINT4 %0_2A2B4 MINUSONE * B18B3  "Enter decimal places to display"
-          'RROMPTR@ ROMPTR 0B4 1CA BINT61 BINT17 BINT43 BINT9 BINT12 * B18EB
-          MINUSONE BINT17 # B91F ROMPTR 0B5 149 BINT17 ROMPTR 0B5 14A * B1914  "Choose angle measure"
-          MINUSONE 'RROMPTR@ ROMPTR 0B4 1CA BINT61 BINT26 BINT67 BINT9 * B1943
-          BINT12 MINUSONE BINT17 # B920 ROMPTR 0B5 14D BINT17 ROMPTR 0B5 14E * B196C  "Choose coordinate system"
-          MINUSONE 'RROMPTR@ ROMPTR 0B4 1CA BINT1 BINT35 BINT6 BINT9 BINT32 * B19A0
-          MINUSONE MINUSONE # B921 MINUSONE MINUSONE TRUE MINUSONE 'RROMPTR@ * B19CE  "Enable standard beep?"
-          ROMPTR 0B4 1CA BINT43 BINT35 BINT6 BINT9 BINT32 MINUSONE MINUSONE * B19FB
-          # B922 MINUSONE MINUSONE FALSE MINUSONE 'RROMPTR@ ROMPTR 0B4 1CA * B1A29  "Display ticking clock?"
-          BINT85 BINT35 BINT6 BINT9 BINT32 MINUSONE MINUSONE # B923 MINUSONE * B1A57  "Use comma as fraction mark?"
-          MINUSONE FALSE MINUSONE BINT6 BINT7 'RROMPTR@ ROMPTR 0B4 1C4 * B1A89
-          # B916 ROMPTR 0B4 1C2 BINT7 ROMPTR 0B0 0AA DoInputForm NOT?SEMI * B1AB2  "Calculator Modes"
-          ROMPTR 0B4 1C3 ;                       * B1AE1
+          BINT37 'RROMPTR@ XLIB ModesFmtMH BINT61 BINT8 BINT19 BINT9 BINT12 * B1828
+          MINUSONE BINT33 # B91D XLIB ModeFmtItems BINT17 XLIB ModeItemStd * B1856  "Choose number display format"
+          MINUSONE 'RROMPTR@ XLIB ModesDigitsMH BINT85 BINT8 BINT13 BINT9 * B1885
+          BINT13                                 * B18AE
+          { BINT0 } BINT4 # B91E XLIB ModeDigitItems BINT4 %0_2A2B4 MINUSONE * B18B3  "Enter decimal places to display"
+          'RROMPTR@ XLIB ModesFieldMH BINT61 BINT17 BINT43 BINT9 BINT12 * B18EB
+          MINUSONE BINT17 # B91F XLIB ModeAngleItems BINT17 XLIB ModeItemDeg * B1914  "Choose angle measure"
+          MINUSONE 'RROMPTR@ XLIB ModesFieldMH BINT61 BINT26 BINT67 BINT9 * B1943
+          BINT12 MINUSONE BINT17 # B920 XLIB ModeCoordItems BINT17 * B196C  "Choose coordinate system"
+          XLIB ModeItemRect MINUSONE 'RROMPTR@ XLIB ModesFieldMH BINT1 * B1995
+          BINT35 BINT6 BINT9 BINT32 MINUSONE MINUSONE # B921 MINUSONE * B19BA  "Enable standard beep?"
+          MINUSONE TRUE MINUSONE 'RROMPTR@ XLIB ModesFieldMH BINT43 BINT35 * B19E7
+          BINT6 BINT9 BINT32 MINUSONE MINUSONE # B922 MINUSONE MINUSONE * B1A10  "Display ticking clock?"
+          FALSE MINUSONE 'RROMPTR@ XLIB ModesFieldMH BINT85 BINT35 BINT6 * B1A3D
+          BINT9 BINT32 MINUSONE MINUSONE # B923 MINUSONE MINUSONE FALSE * B1A66  "Use comma as fraction mark?"
+          MINUSONE BINT6 BINT7 'RROMPTR@ XLIB ModesMH # B916 XLIB ModesVals * B1A93  "Calculator Modes"
+          BINT7 XLIB IFSetHelps DoInputForm NOT?SEMI * B1AC7
+          XLIB ModesStore ;                      * B1AE1
 
 * ROMPTR 0B4 1C2
 * refs (1): A2437
-ROMP_0B4_1C2:
-        :: ROMPTR 0B5 138 ROMPTR 0B5 13A ROMPTR 0B5 13B ROMPTR 0B5 13C * B1AF1
-          ROMPTR 0B5 13E ROMPTR 0B5 140 ;        * B1B22
+* -> field values: from the flags
+ModesVals:
+        :: XLIB ModeNumFmt XLIB ModeAngle XLIB ModeCoord XLIB ModeBeep? * B1AF1
+          XLIB ModeClock? XLIB ModeFM,? ;        * B1B22
 
 * ROMPTR 0B4 1C3
 * refs (1): A2437
-ROMP_0B4_1C3:
-        :: ROMPTR 0B5 141 ROMPTR 0B5 13F ROMPTR 0B5 13D ROMPTR 0B0 09C * B1B3D
-          ROMPTR 0B0 09D COERCE SWAP ROMPTR 0B0 09D ; * B1B6E
+* field values -> : sets the flags
+ModesStore:
+        :: XLIB ModeFM,! XLIB ModeClock! XLIB ModeBeep! XLIB NTHEval2 * B1B3D
+          XLIB NTHEval3 COERCE SWAP XLIB NTHEval3 ; * B1B6E
 
 * ROMPTR 0B4 1C4
 * refs (1): A2437
-ROMP_0B4_1C4:
+* #msg -> ... flag: form message handler: 16 the menu
+ModesMH:
         :: BINT16 #<>case FALSE                  * B1B93
-          ROMPTR 0B4 1C5 TrueTrue ;              * B1BA7
+          XLIB ModesMenu TrueTrue ;              * B1BA7
 
 * ROMPTR 0B4 1C5
 * refs (1): A2437
-ROMP_0B4_1C5:
+* Menu keys: FLAG, CANCL and OK
+ModesMenu:
         {                                        * B1BBC
           {                                      * B1BC1
-            :: PTR DirLabel: $ "FLAG" ; ROMPTR 0B4 1C6 } * B1BC6
-          { $ "(AN(L" ROMPTR 0B0 059 }           * B1BF7  DoKeyCancel
-          { $ "OK" ROMPTR 0B0 05A } }            * B1C20  DoKeyOK
+            :: PTR DirLabel: $ "FLAG" ; XLIB ModesFlagKey } * B1BC6
+          { $ "(AN(L" XLIB DoKeyCancel }         * B1BF7
+          { $ "OK" XLIB DoKeyOK } }              * B1C20
 
 * ROMPTR 0B4 1C6
 * refs (1): A2437
-ROMP_0B4_1C6:
-        :: TakeOver ROMPTR 0B0 0C8 ROMPTR 0B4 1C3 ROMPTR 0B4 1CF NOTcase * B1C48  GetFieldVals
-          SetDA123NoCh                           * B1C78
-          ROMPTR 0B4 1C2 ROMPTR 0B0 0D8          * B1C7D
+* -> : FLAG key: stores the fields, runs the flag browser and reads the fields again
+ModesFlagKey:
+        :: TakeOver XLIB GetFieldVals XLIB ModesStore XLIB FlagBrowse * B1C48
+          NOTcase SetDA123NoCh                   * B1C73
+          XLIB ModesVals XLIB SetFieldVals       * B1C7D
           :: SetDA1NoCh SetDA2bNoCh SetDA3NoCh ; ; * B1C93
 
 * ROMPTR 0B4 1C7
 * refs (1): A2437
-ROMP_0B4_1C7:
-        :: BINT47 OVER #<>case ROMPTR 0B4 1CA    * B1CB1
-          DROP ROMPTR 0B4 1C8 TRUE ;             * B1CD0
+* #msg -> ... flag: Number Format field: 47 shows or hides the digits
+ModesFmtMH:
+        :: BINT47 OVER #<>case XLIB ModesFieldMH * B1CB1
+          DROP XLIB ModesFmtDisp TRUE ;          * B1CD0
 
 * ROMPTR 0B4 1C8
 * refs (1): A2437
-ROMP_0B4_1C8:
-        :: ROMPTR 0B4 1CE case                   * B1CEA
+* -> : blanks the digits field or redraws it
+ModesFmtDisp:
+        :: XLIB ModesStd? case                   * B1CEA
           :: HARDBUFF BINT85 BINT8 BINT97 BINT17 GROB!ZERO DROP ; * B1CFF
-          HARDBUFF BINT2 ROMPTR 0B0 012 DROP BINT2 ROMPTR 0B0 0A2 ; * B1D2C
+          HARDBUFF BINT2 XLIB IFDispLabel DROP BINT2 XLIB IFMarkPending ; * B1D2C
 
 * ROMPTR 0B4 1C9
 * refs (1): A2437
-ROMP_0B4_1C9:
-        :: BINT7 #=casedrop ROMPTR 0B4 1CE       * B1D5B
-          BINT55 OVER #<>case ROMPTR 0B4 1CA     * B1D75
-          DROP ROMPTR 0B4 1CE NOT TRUE ;         * B1D8F
+* #msg -> ... flag: digits field: hidden in Standard format
+ModesDigitsMH:
+        :: BINT7 #=casedrop XLIB ModesStd?       * B1D5B
+          BINT55 OVER #<>case XLIB ModesFieldMH  * B1D75
+          DROP XLIB ModesStd? NOT TRUE ;         * B1D8F
 
 * ROMPTR 0B4 1CA
 * refs (1): A2437
-ROMP_0B4_1CA:
+* #msg -> ... flag: default for the form's fields: 8 keys
+ModesFieldMH:
         :: BINT8 #<>case FALSE                   * B1DAE
-          ROMPTR 0B4 1CB ;                       * B1DC2
+          XLIB ModesKey ;                        * B1DC2
 
 * ROMPTR 0B4 1CB
 * refs (1): A2437
-ROMP_0B4_1CB:
+* #key #plane -> ...: keys in the form: RAD and POLAR change the angle measure and the coordinate system, as they do outside it
+ModesKey:
         :: EditExstCase FALSE 2DUP Key>U/SKeyOb  * B1DD2
-          { ROMP_0A2_006                         * B1DEB
-            :: TakeOver BINT3 ROMPTR 0B4 1CC ; ROMP_0A3_006 * B1DF5
-            :: TakeOver BINT4 ROMPTR 0B4 1CD ; } * B1E19
+          { KeyLS_MTH                            * B1DEB
+            :: TakeOver BINT3 XLIB ModesCycleAngle ; KeyRS_MTH * B1DF5
+            :: TakeOver BINT4 XLIB ModesCycleCoord ; } * B1E19
           ' EQUAL SWAP Lookup NOTcase DROPFALSE  * B1E3D
           ROTROT2DROP TrueTrue ;                 * B1E5B
 
 * ROMPTR 0B4 1CC
 * refs (1): A2437
-ROMP_0B4_1CC:
-        :: DUP ROMPTR 0B0 0C5 ?ROMPTR@ ' ROMPTR 0B5 14B ?ROMPTR@ EQUAL ITE * B1E6A  ~gFldVal
+* #field -> : RAD key: Radians, or back from Radians to Degrees or Grads as flag -18 says
+ModesCycleAngle:
+        :: DUP XLIB ~gFldVal ?ROMPTR@ ' XLIB ModeItemRad ?ROMPTR@ EQUAL ITE * B1E6A
           :: BINT18 SysITE                       * B1EA3  flag -18: angle mode
-            :: ' ROMPTR 0B5 14C ;                * B1EB2
-            :: ' ROMPTR 0B5 14A ; ;              * B1ECC
-          :: ' ROMPTR 0B5 14B ;                  * B1EEB
-          OVER ROMPTR 0B0 0D5 ROMPTR 0B0 0A2 SetDA123NoCh ; * B1F05  ~sFldVal
+            :: ' XLIB ModeItemGrad ;             * B1EB2
+            :: ' XLIB ModeItemDeg ; ;            * B1ECC
+          :: ' XLIB ModeItemRad ;                * B1EEB
+          OVER XLIB ~sFldVal XLIB IFMarkPending SetDA123NoCh ; * B1F05
 
 * ROMPTR 0B4 1CD
 * refs (1): A2437
-ROMP_0B4_1CD:
-        :: DUP ROMPTR 0B0 0C5 ?ROMPTR@ ' ROMPTR 0B5 14E ?ROMPTR@ EQUAL ITE * B1F2A  ~gFldVal
+* #field -> : POLAR key: Rectangular, or back from it to Polar or Spherical as flag -15 says
+ModesCycleCoord:
+        :: DUP XLIB ~gFldVal ?ROMPTR@ ' XLIB ModeItemRect ?ROMPTR@ EQUAL ITE * B1F2A
           :: BINT15 SysITE                       * B1F63  flag -15: coordinate system
-            :: ' ROMPTR 0B5 150 ;                * B1F72
-            :: ' ROMPTR 0B5 14F ; ;              * B1F8C
-          :: ' ROMPTR 0B5 14E ;                  * B1FAB
-          OVER ROMPTR 0B0 0D5 ROMPTR 0B0 0A2 SetDA123NoCh ; * B1FC5  ~sFldVal
+            :: ' XLIB ModeItemSph ;              * B1F72
+            :: ' XLIB ModeItemCyl ; ;            * B1F8C
+          :: ' XLIB ModeItemRect ;               * B1FAB
+          OVER XLIB ~sFldVal XLIB IFMarkPending SetDA123NoCh ; * B1FC5
 
 * ROMPTR 0B4 1CE
 * refs (1): A2437
-ROMP_0B4_1CE:
-        :: BINT1 ROMPTR 0B0 0C5 ?ROMPTR@ ROMPTR 0B5 144 ?ROMPTR@ EQUAL ; * B1FEA  ~gFldVal
+* -> flag: is the number format Standard?
+ModesStd?:
+        :: BINT1 XLIB ~gFldVal ?ROMPTR@ XLIB ModeItemStd ?ROMPTR@ EQUAL ; * B1FEA
 
 * ROMPTR 0B4 1CF
 * refs (1): A2437
-ROMP_0B4_1CF:
+* -> flag: "System Flags": a Choose box of the flags, and sets the changed ones on OK. LAM F holds the flags changed so far: pairs of number and value. FALSE if cancelled or nothing changed
+FlagBrowse:
         :: TakeOver NULL{}                       * B201E
-          { LAM 'F } BIND 'RROMPTR@ ROMPTR 0B4 1D0 # B935 'RROMPTR@ * B202D  "System Flags"
-          ROMPTR 0B5 157 NULL{} BINT1 ROMPTR 0B3 000 NOTcase * B2066  ~Choose
+          { LAM 'F } BIND 'RROMPTR@ XLIB FlagBrowseMH # B935 'RROMPTR@ * B202D  "System Flags"
+          XLIB FlagBrwText NULL{} BINT1 XLIB ~Choose NOTcase * B2066
           :: ABND FALSE ;                        * B208B
           DROP LAM 'F ABND DUPLENCOMP #0= casedrop FALSE * B209F
           INNERCOMP #2/ ZERO_DO ISTOP-INDEX #2* ROLL ISTOP-INDEX #2* ROLL * B20C8
@@ -174,70 +197,78 @@ ROMP_0B4_1CF:
 
 * ROMPTR 0B4 1D0
 * refs (1): A2437
-ROMP_0B4_1D0:
+* #msg -> ... flag: Choose message handler: full screen, element count and access, how each line looks, the menu
+FlagBrowseMH:
         ::                                       * B2113
-          { BINT60 TRUE BINT62 ROMPTR 0B5 155 BINT80 ROMPTR 0B5 156 BINT81 * B2118
-            ROMPTR 0B4 1D2 BINT83                * B214C
-            :: ' ROMPTR 0B4 1D3 ; }              * B215C
+          { BINT60 TRUE BINT62 XLIB FlagBrwCount BINT80 XLIB FlagBrw# BINT81 * B2118
+            XLIB FlagBrowseGrob BINT83           * B214C
+            :: ' XLIB FlagBrowseMenu ; }         * B215C
           EQLookup case                          * B217B
           :: EVAL TRUE ;                         * B2185
           DROPFALSE ;                            * B2199
 
 * ROMPTR 0B4 1D2
 * refs (2): A2437 A2437
-ROMP_0B4_1D2:
-        :: ROMPTR 0B5 156 DUP ROMPTR 0B4 1D5 SWAP KEYINBUFFER? ITE * B21A3
+* # -> grob: draws one flag line: mark, number and text. Commands 1D1 and 1D2 are this object
+FlagBrowseGrob:
+        :: XLIB FlagBrw# DUP XLIB FlagState SWAP KEYINBUFFER? ITE * B21A3
           :: DROPNULL$ _chr(31)_ SetDA2bBad ;    * B21D2
-          :: ROMPTR 0B5 157 DUP BINT1 BINT2 SUB$ SWAP BINT4 OVERLEN$ SUB$ ; * B21EB
+          :: XLIB FlagBrwText DUP BINT1 BINT2 SUB$ SWAP BINT4 OVERLEN$ SUB$ ; * B21EB
           $>GROB SWAP $>grob 7GETLAM 8GETLAM MAKEGROB 4ROLL IT * B2228
-          :: ROMPTR 0B0 07E OVER ZEROZERO GROB! ; * B2250
+          :: XLIB IFCheckGrob1 OVER ZEROZERO GROB! ; * B2250
           DUPUNROT BINT7 BINT2 GROB! DUPUNROT BINT20 BINT1 GROB! ; * B2274
 
 * ROMPTR 0B4 1D3
 * refs (1): A2437
-ROMP_0B4_1D3:
+* -> menu: check, CANCL and OK
+FlagBrowseMenu:
         :: NoExitAction                          * B22A1
           { NullMenuKey NullMenuKey              * B22AB
             {                                    * B22BA
-              :: TakeOver ROMPTR 0B0 086 ; ROMPTR 0B4 1D4 } * B22BF  ~grobCheckKey
+              :: TakeOver XLIB ~grobCheckKey ; XLIB FlagBrowseChk } * B22BF
             NullMenuKey                          * B22E9
-            { $ "(AN(L" ROMPTR 0B3 02D }         * B22EE  DoCKeyCancel
-            { $ "OK" ROMPTR 0B3 02E } }          * B2317  DoCKeyOK
+            { $ "(AN(L" XLIB DoCKeyCancel }      * B22EE
+            { $ "OK" XLIB DoCKeyOK } }           * B2317
         ;                                        * B233F
 
 * ROMPTR 0B4 1D4
 * refs (1): A2437
-ROMP_0B4_1D4:
-        :: TakeOver 18GETLAM ROMPTR 0B3 03F DUP ROMPTR 0B4 1D5 NOT SWAP * B2344  ~BBGetN
-          ROMPTR 0B4 1D6 18GETLAM 6GETLAM ROMPTR 0B3 036 SetDA123NoCh ; * B2378  LEDispItem
+* -> : check key: toggles the highlighted flag and redraws its line
+FlagBrowseChk:
+        :: TakeOver 18GETLAM XLIB ~BBGetN DUP XLIB FlagState NOT SWAP * B2344
+          XLIB FlagChange 18GETLAM 6GETLAM XLIB LEDispItem SetDA123NoCh ; * B2378
 
 * ROMPTR 0B4 1D5
 * refs (1): A2437
-ROMP_0B4_1D5:
+* #flag -> flag: state of a flag, as changed in LAM F if it is, otherwise as set
+FlagState:
         :: LAM 'F #=Lookup ?SEMI                 * B23A2
           TestSysFlag ;                          * B23BC
 
 * ROMPTR 0B4 1D6
 * refs (1): A2437
-ROMP_0B4_1D6:
+* flag #flag -> : records a new state in LAM F
+FlagChange:
         :: LAM 'F OVER ' #= POSCOMP DUP#0= casedrop * B23C6
           :: SWAP TWO{}N LAM 'F SWAP &COMP ' LAM 'F STO ; * B23F4
           SWAPDROP #1+ LAM 'F PUTLIST ' LAM 'F STO ; * B2432
 
 * ROMPTR 0B4 1D7
 * refs (1): A2437
-ROMP_0B4_1D7:
-        :: ROMPTR 0B0 0AB TRUE # B982 TRUE MINUSONE TRUE ROMPTR 0B4 1D8 * B2466  "Objects in"
+* -> : the MEMORY key: the variable browser, full screen with its full menu
+MemApp:
+        :: XLIB IFNotInForm TRUE # B982 TRUE MINUSONE TRUE XLIB BrowseMem * B2466  "Objects in"
           caseDROP ;                             * B249F
 
 * ROMPTR 0B4 1D8
 * refs (1): A2437
-ROMP_0B4_1D8:
+* flag-full $title flag-checks flag-recall {types} (the last two swapped on the stack) -> ob TRUE or FALSE: browses the variables of the given types (-1 = all) in a Choose box, for the MEMORY key and for an input form's CHOOS. LAMs: V full screen, P title, p check marks, R return contents rather than names, O types, B and E first and last of the elements cached in the Choose list
+BrowseMem:
         :: SWAP DUPTYPELIST? ?SKIP ONE{}N        * B24A9
           ZEROZERO                               * B24C2
           { LAM 'V LAM 'P LAM 'p LAM 'R LAM 'O LAM 'B LAM 'E } BIND * B24C7
-          'RROMPTR@ ROMPTR 0B4 1D9 SPACE$ 'RROMPTR@ ROMPTR 0B5 15D NULL{} * B2523
-          BINT1 ROMPTR 0B3 000 NOTcase           * B254D  ~Choose
+          'RROMPTR@ XLIB BrowseMH SPACE$ 'RROMPTR@ XLIB VarBrwLine NULL{} * B2523
+          BINT1 XLIB ~Choose NOTcase             * B254D
           :: ABND FALSE ;                        * B2562
           LAM 'R ABND NOTcase                    * B2576
           :: DUPTYPELIST? NOTcaseTRUE DUPLENCOMP * B258B
@@ -250,13 +281,14 @@ ROMP_0B4_1D8:
 
 * ROMPTR 0B4 1D9
 * refs (1): A2437
-ROMP_0B4_1D9:
+* #msg -> ... flag: Choose message handler: element access, title, element count, full screen, check marks, menu, page size
+BrowseMH:
         ::                                       * B2612
-          { BINT80 ROMPTR 0B4 1E4 BINT70 ROMPTR 0B4 1DA BINT62 * B2617
-            :: LAM 'O ROMPTR 0B5 159 ; BINT60 LAM 'V BINT61 LAM 'p BINT83 * B2641
+          { BINT80 XLIB BrowseGetN BINT70 XLIB BrowseTitle BINT62 * B2617
+            :: LAM 'O XLIB VarBrwCount ; BINT60 LAM 'V BINT61 LAM 'p BINT83 * B2641
             :: 14GETLAM ITE                      * B2686
-              :: ' ROMPTR 0B4 1DD ;              * B2695
-              :: ' ROMPTR 0B4 1DC ;              * B26AF
+              :: ' XLIB BrowseMenuFull ;         * B2695
+              :: ' XLIB BrowseMenuChoose ;       * B26AF
             ;                                    * B26C9
             BINT57                               * B26CE
             :: 14GETLAM ITE BINT6 BINT5          * B26D3
@@ -268,16 +300,18 @@ ROMP_0B4_1D9:
 
 * ROMPTR 0B4 1DA
 * refs (1): A2437
-ROMP_0B4_1DA:
+* -> $: title: the current path, shortened to fit
+BrowseTitle:
         :: LAM 'P ~DUPTYPEBINT?;case;JstGetTHEMESG PATHDIR * B2723
-          ROMPTR 0B0 075 8GETLAM ROMPTR 0B3 046 3PICK ROMPTR 0B0 071 #- * B273D
-          BINT12 #- 14GETLAM ITE BINT8 BINT0     * B276D
-          #- ROMPTR 0B0 070 ITE SPACE$ $ " { "   * B278B
+          XLIB Decomp1Std 8GETLAM XLIB BBAddArrows 3PICK * B273D
+          XLIB ~$>grob;GROBDIMw #- BINT12 #- 14GETLAM ITE BINT8 BINT0 * B275D
+          #- XLIB $FitRight ITE SPACE$ $ " { "   * B278B
           SWAP&$ &$ ;                            * B27B5
 
 * ROMPTR 0B4 1DB
 * refs (1): A2437
-ROMP_0B4_1DB:
+* #first #last ::filter -> elements: walks the current directory and collects the variables first to last that pass the filter
+BrowseGetVars:
         :: 2SWAP SWAP ZEROZERO 6UNROLL 3UNROLL BINT6 CONTEXT@ LastNonNull * B27C4
           NOTcase                                * B27F1
           :: 7DROP BINT0 ;                       * B27F6
@@ -292,236 +326,249 @@ ROMP_0B4_1DB:
 
 * ROMPTR 0B4 1DC
 * refs (1): A2437
-ROMP_0B4_1DC:
+* -> menu: for an input form: CHOOS, check, NEW, CANCL and OK
+BrowseMenuChoose:
         :: NoExitAction                          * B28AF
           { NullMenuKey                          * B28B9
-            { $ "CHOOS" ROMPTR 0B4 1E0 }         * B28C3
+            { $ "CHOOS" XLIB BrowseCDKey }       * B28C3
             {                                    * B28EC
-              :: TakeOver ROMPTR 0B3 05B 16GETLAM NOT OR ITE NULL$ * B28F1  ~BBEmpty?
-                ROMPTR 0B0 086                   * B291F  ~grobCheckKey
+              :: TakeOver XLIB ~BBEmpty? 16GETLAM NOT OR ITE NULL$ * B28F1
+                XLIB ~grobCheckKey               * B291F
               ;                                  * B292A
-              { ROMPTR 0B3 02A                   * B292F  DoCKeyCheck
-                ROMPTR 0B3 02B                   * B293F  DoCKeyChAll
-                ROMPTR 0B3 02C }                 * B294A  DoCKeyUnChAll
-            }                                    * B295A
+              { XLIB DoCKeyCheck XLIB DoCKeyChAll XLIB DoCKeyUnChAll } } * B292F
             {                                    * B295F
-              :: PTR DirLabel: $ "NEW" ; ROMPTR 0B4 1E5 } * B2964
-            { $ "(AN(L" ROMPTR 0B3 02D }         * B2993  DoCKeyCancel
-            { $ "OK" ROMPTR 0B3 02E } }          * B29BC  DoCKeyOK
+              :: PTR DirLabel: $ "NEW" ; XLIB BrowseNewKey } * B2964
+            { $ "(AN(L" XLIB DoCKeyCancel }      * B2993
+            { $ "OK" XLIB DoCKeyOK } }           * B29BC
         ;                                        * B29E4
 
 * ROMPTR 0B4 1DD
 * refs (1): A2437
-ROMP_0B4_1DD:
+* -> menu: for the MEMORY key: EDIT, CHOOS, check, NEW, COPY, MOVE, RCL, PURG, SIZE, CANCL and OK
+BrowseMenuFull:
         :: NoExitAction                          * B29E9
           {                                      * B29F3
             {                                    * B29F8
-              :: TakeOver ROMPTR 0B3 05B ITE NULL$ * B29FD  ~BBEmpty?
+              :: TakeOver XLIB ~BBEmpty? ITE NULL$ * B29FD
                 :: PTR DirLabel: $ "EDIT" ;      * B2A1C
               ;                                  * B2A3D
-              ROMPTR 0B4 1DE }                   * B2A42
-            { $ "CHOOS" ROMPTR 0B4 1E0 }         * B2A52
+              XLIB BrowseEditKey }               * B2A42
+            { $ "CHOOS" XLIB BrowseCDKey }       * B2A52
             {                                    * B2A7B
-              :: TakeOver ROMPTR 0B3 05B 16GETLAM NOT OR ITE NULL$ * B2A80  ~BBEmpty?
-                ROMPTR 0B0 086                   * B2AAE  ~grobCheckKey
+              :: TakeOver XLIB ~BBEmpty? 16GETLAM NOT OR ITE NULL$ * B2A80
+                XLIB ~grobCheckKey               * B2AAE
               ;                                  * B2AB9
-              { ROMPTR 0B3 02A                   * B2ABE  DoCKeyCheck
-                ROMPTR 0B3 02B                   * B2ACE  DoCKeyChAll
-                ROMPTR 0B3 02C }                 * B2AD9  DoCKeyUnChAll
-            }                                    * B2AE9
+              { XLIB DoCKeyCheck XLIB DoCKeyChAll XLIB DoCKeyUnChAll } } * B2ABE
             {                                    * B2AEE
-              :: PTR DirLabel: $ "NEW" ; ROMPTR 0B4 1E5 } * B2AF3
+              :: PTR DirLabel: $ "NEW" ; XLIB BrowseNewKey } * B2AF3
             {                                    * B2B22
-              :: TakeOver ROMPTR 0B3 05B ITE NULL$ * B2B27  ~BBEmpty?
+              :: TakeOver XLIB ~BBEmpty? ITE NULL$ * B2B27
                 :: PTR DirLabel: $ "COPY" ;      * B2B46
               ;                                  * B2B67
-              ROMPTR 0B4 1EE }                   * B2B6C
+              XLIB BrowseCopyKey }               * B2B6C
             {                                    * B2B7C
-              :: TakeOver ROMPTR 0B3 05B ITE NULL$ * B2B81  ~BBEmpty?
+              :: TakeOver XLIB ~BBEmpty? ITE NULL$ * B2B81
                 :: PTR DirLabel: $ "MOVE" ;      * B2BA0
               ;                                  * B2BC1
-              ROMPTR 0B4 1F3 }                   * B2BC6
+              XLIB BrowseMoveKey }               * B2BC6
             {                                    * B2BD6
-              :: TakeOver ROMPTR 0B3 05B ITE NULL$ $ "RCL" * B2BDB  ~BBEmpty?
+              :: TakeOver XLIB ~BBEmpty? ITE NULL$ $ "RCL" * B2BDB
               ;                                  * B2C0A
-              ROMPTR 0B4 1ED }                   * B2C0F
+              XLIB BrowseRclKey }                * B2C0F
             {                                    * B2C1F
-              :: TakeOver ROMPTR 0B3 05B ITE NULL$ $ "PURG" * B2C24  ~BBEmpty?
+              :: TakeOver XLIB ~BBEmpty? ITE NULL$ $ "PURG" * B2C24
               ;                                  * B2C55
-              ROMPTR 0B4 1F6 }                   * B2C5A
-            { $ "SIZE" ROMPTR 0B4 1F7 } NullMenuKey * B2C6A
-            { $ "(AN(L" ROMPTR 0B3 02D }         * B2C96  DoCKeyCancel
-            { $ "OK" ROMPTR 0B3 02E } }          * B2CBF  DoCKeyOK
+              XLIB BrowsePurgeKey }              * B2C5A
+            { $ "SIZE" XLIB BrowseSizeKey } NullMenuKey * B2C6A
+            { $ "(AN(L" XLIB DoCKeyCancel }      * B2C96
+            { $ "OK" XLIB DoCKeyOK } }           * B2CBF
         ;                                        * B2CE7
 
 * ROMPTR 0B4 1DE
 * refs (1): A2437
-ROMP_0B4_1DE:
-        :: TakeOver ROMPTR 0B3 05B case DoBadKey * B2CEC  ~BBEmpty?
-          18GETLAM ROMPTR 0B3 03F ROMPTR 0B4 1DF DROP ; * B2D0B  ~BBGetN
+* -> : EDIT key: runs BrowseEditForm on the highlighted variable
+BrowseEditKey:
+        :: TakeOver XLIB ~BBEmpty? case DoBadKey * B2CEC
+          18GETLAM XLIB ~BBGetN XLIB BrowseEditForm DROP ; * B2D0B
 
 * ROMPTR 0B4 1DF
 * refs (1): A2437
-ROMP_0B4_1DF:
+* id -> flag: "Edit Variable": stores the new object
+BrowseEditForm:
         :: 1LAMBIND # B984 BINT1 BINT19 'DROPFALSE BINT31 BINT17 BINT97 * B2D30  "Object:"
           BINT9 BINT21 MINUSONE BINT4 # B985 # B986 MINUSONE 1GETLAM XEQRCL * B2D62  "Enter new object"  "Obs in"
           DUP ONEONE 'DROPFALSE # B983 DoInputForm NOTcase * B2D99  "Edit Variable"
           :: ABND FALSE ;                        * B2DBC
-          1GETABND ROMPTR 0B5 15C TRUE ;         * B2DD0
+          1GETABND XLIB VarStoFld TRUE ;         * B2DD0
 
 * ROMPTR 0B4 1E0
 * refs (1): A2437
-ROMP_0B4_1E0:
-        :: TakeOver ROMPTR 0B4 1E1 NOT?SEMI      * B2DEA
+* -> : CHOOS key: changes to the directory chosen with BrowseCDChoose
+BrowseCDKey:
+        :: TakeOver XLIB BrowseCDChoose NOT?SEMI * B2DEA
           COMPEVAL 0LASTOWDOB! ZEROZERO ' LAM 'B STOLAM ' LAM 'E STOLAM * B2E04
-          ROMPTR 0B3 03E                         * B2E3D  ~BBReReadNElems
-          ROMPTR 0B3 026 BINT1 12GETLAM #MIN 18PUTLAM FALSE * B2E48  ~BBReReadWidth
-          ROMPTR 0B3 019 NULL{} 15PUTLAM OBJ_1A03E ; * B2E6C  ~BBRecalOff&Disp
+          XLIB ~BBReReadNElems XLIB ~BBReReadWidth BINT1 12GETLAM #MIN * B2E3D
+          18PUTLAM FALSE XLIB ~BBRecalOff&Disp NULL{} 15PUTLAM IFRedrawAll ; * B2E62
 
 * ROMPTR 0B4 1E1
 * refs (1): A2437
-ROMP_0B4_1E1:
-        :: 'RROMPTR@ ROMPTR 0B4 1E2 # B987 'RROMPTR@ ROMPTR 0B5 163 NULL{} * B2E8B  "Directories:"
-          ROMPTR 0B5 15E OVER 4UNROLL            * B2EBF
-          { LAM 'TD LAM 'TN LAM 'DC } BIND ROMPTR 0B3 000 ABND SetDA123NoCh * B2ED4  ~Choose
+* -> {path} TRUE or FALSE: a Choose box of the directory tree. LAMs: TD current element, TN its number, DC count
+BrowseCDChoose:
+        :: 'RROMPTR@ XLIB BrowseCDMH # B987 'RROMPTR@ XLIB DirBrwLine NULL{} * B2E8B  "Directories:"
+          XLIB DirBrwPos OVER 4UNROLL            * B2EBF
+          { LAM 'TD LAM 'TN LAM 'DC } BIND XLIB ~Choose ABND SetDA123NoCh * B2ED4
           NOTcaseFALSE NULL{}                    * B2F1F
           SWAP                                   * B2F29
-          :: GOTO PATHDIR.L1 ; TRUE ;            * B2F2E
+          :: GOTO BrowseCDChoose~1 ; TRUE ;      * B2F2E
 
 * ROMPTR 0B4 1E2
 * refs (1): A2437
-ROMP_0B4_1E2:
+* #msg -> ... flag: Choose message handler of the tree
+BrowseCDMH:
         ::                                       * B2F4C
-          { BINT80 ROMPTR 0B4 1E3 BINT62 LAM 'DC } EQLookup case * B2F51
+          { BINT80 XLIB BrowseCDElem BINT62 LAM 'DC } EQLookup case * B2F51
           :: EVAL TRUE ;                         * B2F87
           DROPFALSE ;                            * B2F9B
 
 * ROMPTR 0B4 1E3
 * refs (1): A2437
-ROMP_0B4_1E3:
+* # -> ob: element #, walking the tree from the last element asked for
+BrowseCDElem:
         :: LAM 'TN #=casedrop                    * B2FA5
           :: ' LAM 'TD undo DROP ;               * B2FBC
           DUP#1= case                            * B2FE2
-          :: ' LAM 'TN STOLAM BINT0 ROMPTR 0B5 161 DUP ' LAM 'TD STOLAM ; * B2FEC
+          :: ' LAM 'TN STOLAM BINT0 XLIB DirBrwNext DUP ' LAM 'TD STOLAM ; * B2FEC
           ' LAM 'TD undo DROP SWAP LAM 'TN OVER ' LAM 'TN STOLAM 2DUP #> ITE * B3039
-          :: #- ROMPTR 0B5 15F ;                 * B3092
-          :: SWAP#- ROMPTR 0B5 161 ;             * B30AC
+          :: #- XLIB DirBrwPrev ;                * B3092
+          :: SWAP#- XLIB DirBrwNext ;            * B30AC
           DUP ' LAM 'TD STOLAM ;                 * B30C6
 
 * ROMPTR 0B4 1E4
 * refs (1): A2437
-ROMP_0B4_1E4:
+* # -> ob: element # of the variable list, reading the next page into the cache if it is outside LAM B to E
+BrowseGetN:
         :: DUP LAM 'B #< OVER LAM 'E #> OR IT    * B30E7
           :: DUPDUP 11GETLAM #+ #1- 12GETLAM #MIN 2DUP ' LAM 'E STOLAM ' * B3120
-            LAM 'B STOLAM LAM 'O ' ROMPTR 0B5 15A 4ROLL 4ROLL ROMPTR 0B4 1DB * B3162
-            {}N 19PUTLAM ;                       * B31A2
+            LAM 'B STOLAM LAM 'O ' XLIB VarBrwType? 4ROLL 4ROLL * B3162
+            XLIB BrowseGetVars {}N 19PUTLAM ;    * B3197
           LAM 'B #- #1+ 19GETLAM SWAP NTHCOMPROM@ * B31B1
           ~DUPTYPEBINT?;case;JstGetTHEMESG ;     * B31D5
 
 * ROMPTR 0B4 1E5
 * refs (1): A2437
-ROMP_0B4_1E5:
-        :: TakeOver ROMPTR 0B4 1E6 NOT?SEMI      * B31DF
-          ZEROZERO ' LAM 'B STOLAM ' LAM 'E STOLAM ROMPTR 0B3 03E * B31F9  ~BBReReadNElems
-          ROMPTR 0B3 026 BINT1 18PUTLAM FALSE    * B3233  ~BBReReadWidth
-          ROMPTR 0B3 019 NULL{} 15PUTLAM ;       * B324D  ~BBRecalOff&Disp
+* -> : NEW key: runs BrowseNewForm and rereads the list
+BrowseNewKey:
+        :: TakeOver XLIB BrowseNewForm NOT?SEMI  * B31DF
+          ZEROZERO ' LAM 'B STOLAM ' LAM 'E STOLAM XLIB ~BBReReadNElems * B31F9
+          XLIB ~BBReReadWidth BINT1 18PUTLAM FALSE XLIB ~BBRecalOff&Disp * B3233
+          NULL{} 15PUTLAM ;                      * B3258
 
 * ROMPTR 0B4 1E6
 * refs (1): A2437
-ROMP_0B4_1E6:
+* -> flag: "New Variable": object, name and a check to create a directory instead
+BrowseNewForm:
         :: # B984 BINT1 BINT10 # B989 BINT1 BINT19 # B98A BINT8 BINT28 * B3267  "Object:"  "Name:"  "Directory"
-          'RROMPTR@ ROMPTR 0B4 1E9 BINT31 BINT8 BINT97 BINT9 BINT21 MINUSONE * B32A8
-          BINT4 # B985 # B986 MINUSONE MINUSONE MINUSONE 'DROPFALSE BINT31 * B32D6  "Enter new object"  "Obs in"
-          BINT17 BINT49 BINT9 BINT1              * B3308
+          'RROMPTR@ XLIB BrowseNewObjMH BINT31 BINT8 BINT97 BINT9 BINT21 * B32A8
+          MINUSONE BINT4 # B985 # B986 MINUSONE MINUSONE MINUSONE 'DROPFALSE * B32D1  "Enter new object"  "Obs in"
+          BINT31 BINT17 BINT49 BINT9 BINT1       * B3303
           { BINT6 } BINT4 # B98B MINUSONE MINUSONE MINUSONE MINUSONE * B331C  "Enter variable name"
-          'RROMPTR@ ROMPTR 0B4 1EA BINT1 BINT26 BINT6 BINT9 BINT32 MINUSONE * B334E
-          MINUSONE # B98C MINUSONE MINUSONE FALSE FALSE BINT3 DUP 'RROMPTR@ * B337C  "Create a new directory?"
-          ROMPTR 0B4 1E7 # B988 14GETLAM ?SKIP   * B33AE  "New Variable"
+          'RROMPTR@ XLIB BrowseNewDirMH BINT1 BINT26 BINT6 BINT9 BINT32 * B334E
+          MINUSONE MINUSONE # B98C MINUSONE MINUSONE FALSE FALSE BINT3 DUP * B3377  "Create a new directory?"
+          'RROMPTR@ XLIB BrowseNewMH # B988 14GETLAM ?SKIP * B33A9  "New Variable"
           :: HARDBUFF TOTEMPOB 1LAMBIND ;        * B33CD
           DoInputForm 14GETLAM ?SKIP             * B33E6
           :: 1GETABND HARDBUFF ZEROZERO GROB! ;  * B33F5
           NOTcaseFALSE case                      * B3413
-          :: SWAPDROP ROMPTR 0B5 162 TRUE ;      * B341D
-          ROMPTR 0B5 15C TRUE ;                  * B343C
+          :: SWAPDROP XLIB VarCrDir TRUE ;       * B341D
+          XLIB VarStoFld TRUE ;                  * B343C
 
 * ROMPTR 0B4 1E7
 * refs (1): A2437
-ROMP_0B4_1E7:
+* #msg -> ... flag: form message handler: 5 the labels
+BrowseNewMH:
         :: BINT5 #<>case FALSE                   * B3451
-          ROMPTR 0B4 1E8 TRUE ;                  * B3465
+          XLIB BrowseNewLabels TRUE ;            * B3465
 
 * ROMPTR 0B4 1E8
 * refs (1): A2437
-ROMP_0B4_1E8:
-        :: BINT39 BINT131 MAKEGROB ROMPTR 0B4 1EC ?SKIP * B347A
-          :: BINT1 ROMPTR 0B0 012 ;              * B349E
-          BINT2 ROMPTR 0B0 012 BINT1 ROMPTR 0B0 079 IT * B34B8
-          :: BINT3 ROMPTR 0B0 012 ;              * B34DD
+* -> grob FALSE: message 5: the Object label only without Directory, the Directory label only without an object
+BrowseNewLabels:
+        :: BINT39 BINT131 MAKEGROB XLIB BrowseNewDir? ?SKIP * B347A
+          :: BINT1 XLIB IFDispLabel ;            * B349E
+          BINT2 XLIB IFDispLabel BINT1 XLIB IFNoVal? IT * B34B8
+          :: BINT3 XLIB IFDispLabel ;            * B34DD
           FALSE ;                                * B34F7
 
 * ROMPTR 0B4 1E9
 * refs (1): A2437
-ROMP_0B4_1E9:
-        :: BINT7 #=casedrop ROMPTR 0B4 1EC       * B3501
+* #msg -> ... flag: Object field: hidden with Directory on
+BrowseNewObjMH:
+        :: BINT7 #=casedrop XLIB BrowseNewDir?   * B3501
           { BINT55                               * B351B
-            :: ROMPTR 0B4 1EC NOT ; BINT47 ROMPTR 0B4 1EB } * B3525
+            :: XLIB BrowseNewDir? NOT ; BINT47 XLIB BrowseNewDisp } * B3525
           EQLookup case                          * B3554
           :: EVAL TRUE ;                         * B355E
           DROPFALSE ;                            * B3572
 
 * ROMPTR 0B4 1EA
 * refs (1): A2437
-ROMP_0B4_1EA:
+* #msg -> ... flag: Directory field: hidden once the Object field has a value
+BrowseNewDirMH:
         :: BINT7 #=casedrop                      * B357C
-          :: BINT1 ROMPTR 0B0 079 NOT ;          * B358B
+          :: BINT1 XLIB IFNoVal? NOT ;           * B358B
           { BINT55                               * B35AA
-            :: BINT1 ROMPTR 0B0 079 ; BINT47 ROMPTR 0B4 1EB } * B35B4
+            :: BINT1 XLIB IFNoVal? ; BINT47 XLIB BrowseNewDisp } * B35B4
           EQLookup case                          * B35E3
           :: EVAL TRUE ;                         * B35ED
           DROPFALSE ;                            * B3601
 
 * ROMPTR 0B4 1EB
 * refs (1): A2437
-ROMP_0B4_1EB:
-        :: ROMPTR 0B4 1EC case                   * B360B
+* -> : after a change: blanks the row that no longer applies or redraws both
+BrowseNewDisp:
+        :: XLIB BrowseNewDir? case               * B360B
           :: BINT8 BINT9 BLANKIT ;               * B3620
-          BINT1 ROMPTR 0B0 079 NOTcase           * B3639
+          BINT1 XLIB IFNoVal? NOTcase            * B3639
           :: BINT26 BINT9 BLANKIT ;              * B364E
-          HARDBUFF BINT1 ROMPTR 0B0 012 DROP BINT1 ROMPTR 0B0 0A2 HARDBUFF * B3667
-          BINT3 ROMPTR 0B0 012 DROP BINT3 ROMPTR 0B0 0A2 ; * B3696
+          HARDBUFF BINT1 XLIB IFDispLabel DROP BINT1 XLIB IFMarkPending * B3667
+          HARDBUFF BINT3 XLIB IFDispLabel DROP BINT3 XLIB IFMarkPending ; * B3691
 
 * ROMPTR 0B4 1EC
 * refs (1): A2437
-ROMP_0B4_1EC:
-        :: BINT3 ROMPTR 0B0 0C5 ;                * B36C0  ~gFldVal
+* -> flag: value of the Directory field
+BrowseNewDir?:
+        :: BINT3 XLIB ~gFldVal ;                 * B36C0
 
 * ROMPTR 0B4 1ED
 * refs (1): A2437
-ROMP_0B4_1ED:
-        :: TakeOver ROMPTR 0B3 05B case DoBadKey * B36DA  ~BBEmpty?
+* -> : RCL key: recalls the checked variables, or the highlighted one
+BrowseRclKey:
+        :: TakeOver XLIB ~BBEmpty? case DoBadKey * B36DA
           15GETLAM DUPNULLCOMP? IT               * B36F9
           :: DROP 18GETLAM ONE{}N ;              * B3708
-          INNERCOMP ZERO_DO ISTOP@ ROLL ROMPTR 0B3 03F XEQRCL LOOP * B3721  ~BBGetN
+          INNERCOMP ZERO_DO ISTOP@ ROLL XLIB ~BBGetN XEQRCL LOOP * B3721
           SetDA123NoCh ;                         * B374A
 
 * ROMPTR 0B4 1EE
 * refs (1): A2437
-ROMP_0B4_1EE:
-        :: TakeOver ROMPTR 0B3 05B case DoBadKey * B3754  ~BBEmpty?
+* -> : COPY key: runs BrowseCopyForm on the checked variables, or the highlighted one
+BrowseCopyKey:
+        :: TakeOver XLIB ~BBEmpty? case DoBadKey * B3754
           15GETLAM DUPNULLCOMP? IT               * B3773
           :: DROP 18GETLAM ONE{}N ;              * B3782
           DUPLENCOMP #1= ITE                     * B379B
-          :: INCOMPDROP ROMPTR 0B3 03F ;         * B37AA  ~BBGetN
-          :: INNERCOMP ZERO_DO ISTOP@ ROLL ROMPTR 0B3 03F LOOP 15GETLAM * B37C4  ~BBGetN
+          :: INCOMPDROP XLIB ~BBGetN ;           * B37AA
+          :: INNERCOMP ZERO_DO ISTOP@ ROLL XLIB ~BBGetN LOOP 15GETLAM * B37C4
             LENCOMP {}N ;                        * B37F2
-          ROMPTR 0B4 1EF NOT?SEMI                * B3801
-          ZEROZERO ' LAM 'B STOLAM ' LAM 'E STOLAM ROMPTR 0B3 03E * B3811  ~BBReReadNElems
-          ROMPTR 0B3 026 BINT1 18PUTLAM FALSE    * B384B  ~BBReReadWidth
-          ROMPTR 0B3 019 NULL{} 15PUTLAM ;       * B3865  ~BBRecalOff&Disp
+          XLIB BrowseCopyForm NOT?SEMI           * B3801
+          ZEROZERO ' LAM 'B STOLAM ' LAM 'E STOLAM XLIB ~BBReReadNElems * B3811
+          XLIB ~BBReReadWidth BINT1 18PUTLAM FALSE XLIB ~BBRecalOff&Disp * B384B
+          NULL{} 15PUTLAM ;                      * B3870
 
 * ROMPTR 0B4 1EF
 * refs (1): A2437
-ROMP_0B4_1EF:
+* names -> flag: "Copy Variable(s)"
+BrowseCopyForm:
         :: # B989 BINT1 BINT19 # B98E BINT1 BINT28 'DROPFALSE BINT37 BINT17 * B387F  "Name:"  "Copy To:"
           BINT91 BINT9 BINT1                     * B38BB
           { BINT6 BINT5 } BINT4 # B98D MINUSONE MINUSONE MINUSONE BINT19 * B38CA  "Enter names of vars to copy"
@@ -529,26 +576,29 @@ ROMP_0B4_1EF:
 
 * ROMPTR 0B4 1F0
 * refs (1): A2437
-ROMP_0B4_1F0:
-          :: 'RROMPTR@ ROMPTR 0B4 1F2 BINT37 BINT26 BINT91 BINT9 BINT5 * B3906
+* Field: where to copy or move to
+BrowseFldDest:
+          :: 'RROMPTR@ XLIB BrowseDestMH BINT37 BINT26 BINT91 BINT9 BINT5 * B3906
             { BINT6 BINT5 } BINT4 MINUSONE MINUSONE MINUSONE MINUSONE * B3934
             MINUSONE ;                           * B3961
-          BINT2 DUP 'RROMPTR@ ROMPTR 0B4 1F1 # B98F DoInputForm NOTcaseFALSE * B396B  "Copy Variable(s)"
-          ROMPTR 0B5 164                         * B3999
+          BINT2 DUP 'RROMPTR@ XLIB BrowseCopyMH # B98F DoInputForm * B396B  "Copy Variable(s)"
+          NOTcaseFALSE XLIB CopyVars             * B3994
           TRUE ;                                 * B39A4
 
 * ROMPTR 0B4 1F1
 * refs (1): A2437
-ROMP_0B4_1F1:
+* #msg -> ... flag: form message handler: 14 first field is 2
+BrowseCopyMH:
         :: BINT14 #<>case FALSE                  * B39AE
           BINT2 TRUE ;                           * B39C2
 
 * ROMPTR 0B4 1F2
 * refs (1): A2437
-ROMP_0B4_1F2:
+* #msg -> ... flag: destination field: 37 picks a directory, 13 the help line for one or several variables
+BrowseDestMH:
         ::                                       * B39D1
-          { BINT37 ROMPTR 0B4 1E1 BINT13         * B39D6
-            :: BINT1 ROMPTR 0B0 0C5 TYPELIST? ITE # B990 # B991 * B39F0  ~gFldVal  "Enter directory path"  "Enter var name or directory path"
+          { BINT37 XLIB BrowseCDChoose BINT13    * B39D6
+            :: BINT1 XLIB ~gFldVal TYPELIST? ITE # B990 # B991 * B39F0  "Enter directory path"  "Enter var name or directory path"
               ~DUPTYPEBINT?;case;JstGetTHEMESG ; * B3A23
           }                                      * B3A2D
           EQLookup case                          * B3A32
@@ -557,92 +607,99 @@ ROMP_0B4_1F2:
 
 * ROMPTR 0B4 1F3
 * refs (1): A2437
-ROMP_0B4_1F3:
-        :: TakeOver ROMPTR 0B3 05B case DoBadKey * B3A5A  ~BBEmpty?
+* -> : MOVE key: runs BrowseMoveForm on the checked variables, or the highlighted one
+BrowseMoveKey:
+        :: TakeOver XLIB ~BBEmpty? case DoBadKey * B3A5A
           15GETLAM DUPNULLCOMP? IT               * B3A79
           :: DROP 18GETLAM ONE{}N ;              * B3A88
           DUPLENCOMP #1= ITE                     * B3AA1
-          :: INCOMPDROP ROMPTR 0B3 03F ;         * B3AB0  ~BBGetN
-          :: INNERCOMP ZERO_DO ISTOP@ ROLL ROMPTR 0B3 03F LOOP 15GETLAM * B3ACA  ~BBGetN
+          :: INCOMPDROP XLIB ~BBGetN ;           * B3AB0
+          :: INNERCOMP ZERO_DO ISTOP@ ROLL XLIB ~BBGetN LOOP 15GETLAM * B3ACA
             LENCOMP {}N ;                        * B3AF8
-          ROMPTR 0B4 1F4 NOT?SEMI                * B3B07
-          ZEROZERO ' LAM 'B STOLAM ' LAM 'E STOLAM ROMPTR 0B3 03E * B3B17  ~BBReReadNElems
-          ROMPTR 0B3 026 BINT1 18PUTLAM FALSE    * B3B51  ~BBReReadWidth
-          ROMPTR 0B3 019 NULL{} 15PUTLAM ;       * B3B6B  ~BBRecalOff&Disp
+          XLIB BrowseMoveForm NOT?SEMI           * B3B07
+          ZEROZERO ' LAM 'B STOLAM ' LAM 'E STOLAM XLIB ~BBReReadNElems * B3B17
+          XLIB ~BBReReadWidth BINT1 18PUTLAM FALSE XLIB ~BBRecalOff&Disp * B3B51
+          NULL{} 15PUTLAM ;                      * B3B76
 
 * ROMPTR 0B4 1F4
 * refs (1): A2437
-ROMP_0B4_1F4:
+* names -> flag: "Move Variable(s)"
+BrowseMoveForm:
         :: # B989 BINT1 BINT19 # B992 BINT1 BINT28 'DROPFALSE BINT37 BINT17 * B3B85  "Name:"  "Move To:"
           BINT91 BINT9 BINT1                     * B3BC1
           { BINT6 BINT5 } BINT4 # B993 MINUSONE MINUSONE MINUSONE BINT19 * B3BD0  "Enter names of vars to move"
-          ROLL ROMPTR 0B4 1F0 BINT2 DUP 'RROMPTR@ ROMPTR 0B4 1F5 # B994 * B3C07  "Move Variable(s)"
-          DoInputForm NOTcaseFALSE ROMPTR 0B5 167 * B3C3B
+          ROLL XLIB BrowseFldDest BINT2 DUP 'RROMPTR@ XLIB BrowseMoveMH * B3C07
+          # B994 DoInputForm NOTcaseFALSE XLIB MoveVars * B3C31  "Move Variable(s)"
           TRUE ;                                 * B3C50
 
 * ROMPTR 0B4 1F5
 * refs (1): A2437
-ROMP_0B4_1F5:
+* #msg -> ... flag: form message handler: 14 first field is 2
+BrowseMoveMH:
         :: BINT14 #<>case FALSE                  * B3C5A
           BINT2 TRUE ;                           * B3C6E
 
 * ROMPTR 0B4 1F6
 * refs (1): A2437
-ROMP_0B4_1F6:
-        :: TakeOver ROMPTR 0B3 05B case DoBadKey * B3C7D  ~BBEmpty?
+* -> : PURG key: purges the checked variables, or the highlighted one
+BrowsePurgeKey:
+        :: TakeOver XLIB ~BBEmpty? case DoBadKey * B3C7D
           15GETLAM DUPNULLCOMP? IT               * B3C9C
           :: DROP 18GETLAM ONE{}N ;              * B3CAB
           DUPLENCOMP #1= ITE                     * B3CC4
-          :: INCOMPDROP ROMPTR 0B3 03F ;         * B3CD3  ~BBGetN
-          :: INNERCOMP ZERO_DO ISTOP@ ROLL ROMPTR 0B3 03F LOOP 15GETLAM * B3CED  ~BBGetN
+          :: INCOMPDROP XLIB ~BBGetN ;           * B3CD3
+          :: INNERCOMP ZERO_DO ISTOP@ ROLL XLIB ~BBGetN LOOP 15GETLAM * B3CED
             LENCOMP {}N ;                        * B3D1B
-          ROMPTR 0B5 168 ZEROZERO ' LAM 'B STOLAM ' LAM 'E STOLAM * B3D2A
-          ROMPTR 0B3 03E                         * B3D64  ~BBReReadNElems
-          ROMPTR 0B3 026 18GETLAM 12GETLAM #MIN 18PUTLAM FALSE * B3D6F  ~BBReReadWidth
-          ROMPTR 0B3 019 NULL{} 15PUTLAM ;       * B3D93  ~BBRecalOff&Disp
+          XLIB VarPurge ZEROZERO ' LAM 'B STOLAM ' LAM 'E STOLAM * B3D2A
+          XLIB ~BBReReadNElems XLIB ~BBReReadWidth 18GETLAM 12GETLAM #MIN * B3D64
+          18PUTLAM FALSE XLIB ~BBRecalOff&Disp NULL{} 15PUTLAM ; * B3D89
 
 * ROMPTR 0B4 1F7
 * refs (1): A2437
-ROMP_0B4_1F7:
-        :: TakeOver ROMPTR 0B3 05B ITE NULL$     * B3DAD  ~BBEmpty?
+* -> : SIZE key: a message box with the size of the chosen variables and the memory available
+BrowseSizeKey:
+        :: TakeOver XLIB ~BBEmpty? ITE NULL$     * B3DAD
           :: 15GETLAM DUPNULLCOMP? IT            * B3DCC
             :: DROP 18GETLAM ONE{}N ;            * B3DE0
             DUPLENCOMP #1= ITE                   * B3DF9
-            :: INCOMPDROP ROMPTR 0B3 03F ;       * B3E08  ~BBGetN
-            :: INNERCOMP ZERO_DO ISTOP@ ROLL ROMPTR 0B3 03F LOOP 15GETLAM * B3E22  ~BBGetN
+            :: INCOMPDROP XLIB ~BBGetN ;         * B3E08
+            :: INNERCOMP ZERO_DO ISTOP@ ROLL XLIB ~BBGetN LOOP 15GETLAM * B3E22
               LENCOMP {}N ;                      * B3E50
             DUPTYPELIST? ITE                     * B3E5F
             :: DUPLENCOMP #>$ # B995 JstGetTHEMESG &$ ; * B3E69  " Vars:"
             :: DUP ID>$ PTR CHR_: >T$ ;          * B3E91
-            $ "\0A  " &$ SWAP ROMPTR 0B5 169 #>$ &$ # B997 JstGetTHEMESG &$ * B3EAF  " bytes"
+            $ "\0A  " &$ SWAP XLIB VarBytes #>$ &$ # B997 JstGetTHEMESG &$ * B3EAF  " bytes"
             CHR_Newline >T$ ;                    * B3EF2
-          # B996 JstGetTHEMESG &$ $ "\0A  " &$ ROMPTR 0B5 16A #>$ &$ # B997 * B3F01  "Mem Available:"  " bytes"
-          JstGetTHEMESG &$ BINT15 BINT15 MINUSONE ' ROMPTR 0B1 002 * B3F49  ~MsgBoxMenu
-          ROMPTR 0B1 000 DROP SetDA123NoCh ;     * B3F72  ~DoMsgBox
+          # B996 JstGetTHEMESG &$ $ "\0A  " &$ XLIB FreeMem# #>$ &$ # B997 * B3F01  "Mem Available:"  " bytes"
+          JstGetTHEMESG &$ BINT15 BINT15 MINUSONE ' XLIB ~MsgBoxMenu * B3F49
+          XLIB ~DoMsgBox DROP SetDA123NoCh ;     * B3F72
 
 * ROMPTR 0B4 1F8
 * refs (1): A2437
-ROMP_0B4_1F8:
-        :: 9rolld DROP ROMPTR 0B5 069 DROP ROMPTR 0B5 065 ROMPTR 0B5 039 * B3F8C
-          ROMPTR 0B5 035 ROMPTR 0B5 02F ITE      * B3FC1
-          :: ROMPTR 0B5 02D DROP ;               * B3FDC
-          :: 3DROP ROMPTR 0B5 029 ;              * B3FF6
+* field values -> : stores the differential equation as the plot's: EQ, the variables and ranges, as PlotDiffStore
+SolveDiffStore:
+        :: 9rolld DROP XLIB DeqPutTol DROP XLIB DeqPutInit XLIB PltPutDepend * B3F8C
+          XLIB PltPutIndepRng XLIB PltPutIndep ITE * B3FC1
+          :: XLIB PutDeq3 DROP ;                 * B3FDC
+          :: 3DROP XLIB PutEQ ;                  * B3FF6
         ;                                        * B4010
 
 * ROMPTR 0B4 1F9
 * refs (1): A2437
-ROMP_0B4_1F9:
-        :: BINT25 OVER #<>case ROMPTR 0B4 008    * B4015
-          DROP 4GETLAM ROMPTR 0B0 0C5 DUPTYPEEXT? 3PICK TYPEREAL? ANDNOTcase * B4034  ~gFldVal
+* #msg -> ... flag: a variable field of Solve Equation: 25 (new value entered) gives a plain real the old value's units
+SolveVarMH:
+        :: BINT25 OVER #<>case XLIB SolveEqKeyMH * B4015
+          DROP 4GETLAM XLIB ~gFldVal DUPTYPEEXT? 3PICK TYPEREAL? ANDNOTcase * B4034
           DROPTRUE                               * B405D
           UM>U TRUE ;                            * B4062
 
 * ROMPTR 0B4 1FA
 * refs (1): A2437
-ROMP_0B4_1FA:
-        :: TakeOver ROMPTR 0B5 149 BINT2 ROMPTR 0B0 0C5 ' * B4071  ~gFldVal
+* -> : RAD key in the plot form: changes the angle field, if the plot type has one
+PlotKeyAngle:
+        :: TakeOver XLIB ModeAngleItems BINT2 XLIB ~gFldVal ' * B4071
           :: ?ROMPTR@ SWAP ?ROMPTR@ EQUAL ; POSCOMP #0=case DoBadKey * B409B
-          BINT2 ROMPTR 0B4 1CC ;                 * B40C8
+          BINT2 XLIB ModesCycleAngle ;           * B40C8
 
 LIB0B4.hash:
         CON(5)  DOHSTR                           * B40DD  hash table of library 0B4
@@ -671,510 +728,510 @@ LIB0B4.hash.L1:
 LIB0B4.link:
         CON(5)  DOHSTR                           * B4141  link table of library 0B4
         LENGTH                                   * B4146  length, to #B4B32
-        REL(5)  ROMP_0B4_000                     * B414B  000 
-        REL(5)  ROMP_0B4_001                     * B4150  001 
-        REL(5)  ROMP_0B4_002                     * B4155  002 
-        REL(5)  ROMP_0B4_003                     * B415A  003 
-        REL(5)  ROMP_0B4_004                     * B415F  004 
-        REL(5)  ROMP_0B4_005                     * B4164  005 
-        REL(5)  ROMP_0B4_006                     * B4169  006 
-        REL(5)  ROMP_0B4_007                     * B416E  007 
-        REL(5)  ROMP_0B4_008                     * B4173  008 
-        REL(5)  ROMP_0B4_009                     * B4178  009 
-        REL(5)  ROMP_0B4_00A                     * B417D  00A 
-        REL(5)  ROMP_0B4_00B                     * B4182  00B 
-        REL(5)  ROMP_0B4_00C                     * B4187  00C 
-        REL(5)  ROMP_0B4_00D                     * B418C  00D 
-        REL(5)  ROMP_0B4_00E                     * B4191  00E 
-        REL(5)  ROMP_0B4_00F                     * B4196  00F 
-        REL(5)  ROMP_0B4_010                     * B419B  010 
-        REL(5)  ROMP_0B4_011                     * B41A0  011 
-        REL(5)  ROMP_0B4_012                     * B41A5  012 
-        REL(5)  ROMP_0B4_013                     * B41AA  013 
-        REL(5)  ROMP_0B4_014                     * B41AF  014 
-        REL(5)  ROMP_0B4_015                     * B41B4  015 
-        REL(5)  ROMP_0B4_016                     * B41B9  016 
-        REL(5)  ROMP_0B4_017                     * B41BE  017 
-        REL(5)  ROMP_0B4_018                     * B41C3  018 
-        REL(5)  ROMP_0B4_019                     * B41C8  019 
-        REL(5)  ROMP_0B4_01A                     * B41CD  01A 
-        REL(5)  ROMP_0B4_01B                     * B41D2  01B 
-        REL(5)  ROMP_0B4_01C                     * B41D7  01C 
-        REL(5)  ROMP_0B4_01D                     * B41DC  01D 
-        REL(5)  ROMP_0B4_01E                     * B41E1  01E 
-        REL(5)  ROMP_0B4_01F                     * B41E6  01F 
-        REL(5)  ROMP_0B4_020                     * B41EB  020 
-        REL(5)  ROMP_0B4_021                     * B41F0  021 
-        REL(5)  ROMP_0B4_022                     * B41F5  022 
-        REL(5)  ROMP_0B4_023                     * B41FA  023 
-        REL(5)  ROMP_0B4_024                     * B41FF  024 
-        REL(5)  ROMP_0B4_025                     * B4204  025 
-        REL(5)  ROMP_0B4_026                     * B4209  026 
-        REL(5)  ROMP_0B4_027                     * B420E  027 
-        REL(5)  ROMP_0B4_028                     * B4213  028 
-        REL(5)  ROMP_0B4_029                     * B4218  029 
-        REL(5)  ROMP_0B4_02A                     * B421D  02A 
-        REL(5)  ROMP_0B4_02B                     * B4222  02B 
-        REL(5)  ROMP_0B4_02C                     * B4227  02C 
-        REL(5)  ROMP_0B4_02D                     * B422C  02D 
-        REL(5)  ROMP_0B4_02E                     * B4231  02E 
-        REL(5)  ROMP_0B4_02F                     * B4236  02F 
-        REL(5)  ROMP_0B4_030                     * B423B  030 
-        REL(5)  ROMP_0B4_031                     * B4240  031 
-        REL(5)  ROMP_0B4_032                     * B4245  032 
-        REL(5)  ROMP_0B4_033                     * B424A  033 
-        REL(5)  ROMP_0B4_034                     * B424F  034 
-        REL(5)  ROMP_0B4_035                     * B4254  035 
-        REL(5)  ROMP_0B4_036                     * B4259  036 
-        REL(5)  ROMP_0B4_037                     * B425E  037 
-        REL(5)  ROMP_0B4_038                     * B4263  038 
-        REL(5)  ROMP_0B4_039                     * B4268  039 
-        REL(5)  ROMP_0B4_03A                     * B426D  03A 
-        REL(5)  ROMP_0B4_03B                     * B4272  03B 
-        REL(5)  ROMP_0B4_03C                     * B4277  03C 
-        REL(5)  ROMP_0B4_03D                     * B427C  03D 
-        REL(5)  ROMP_0B4_03E                     * B4281  03E 
-        REL(5)  ROMP_0B4_03F                     * B4286  03F 
-        REL(5)  ROMP_0B4_040                     * B428B  040 
-        REL(5)  ROMP_0B4_041                     * B4290  041 
-        REL(5)  ROMP_0B4_042                     * B4295  042 
-        REL(5)  ROMP_0B4_043                     * B429A  043 
-        REL(5)  ROMP_0B4_044                     * B429F  044 
-        REL(5)  ROMP_0B4_045                     * B42A4  045 
-        REL(5)  ROMP_0B4_046                     * B42A9  046 
-        REL(5)  ROMP_0B4_047                     * B42AE  047 
-        REL(5)  ROMP_0B4_048                     * B42B3  048 
-        REL(5)  ROMP_0B4_049                     * B42B8  049 
-        REL(5)  ROMP_0B4_04A                     * B42BD  04A 
-        REL(5)  ROMP_0B4_04B                     * B42C2  04B 
-        REL(5)  ROMP_0B4_04C                     * B42C7  04C 
-        REL(5)  ROMP_0B4_04D                     * B42CC  04D 
-        REL(5)  ROMP_0B4_04E                     * B42D1  04E 
-        REL(5)  ROMP_0B4_04F                     * B42D6  04F 
-        REL(5)  ROMP_0B4_050                     * B42DB  050 
-        REL(5)  ROMP_0B4_051                     * B42E0  051 
-        REL(5)  ROMP_0B4_052                     * B42E5  052 
-        REL(5)  ROMP_0B4_053                     * B42EA  053 
-        REL(5)  ROMP_0B4_054                     * B42EF  054 
-        REL(5)  ROMP_0B4_055                     * B42F4  055 
-        REL(5)  ROMP_0B4_056                     * B42F9  056 
-        REL(5)  ROMP_0B4_057                     * B42FE  057 
-        REL(5)  ROMP_0B4_058                     * B4303  058 
-        REL(5)  ROMP_0B4_059                     * B4308  059 
-        REL(5)  ROMP_0B4_05A                     * B430D  05A 
-        REL(5)  ROMP_0B4_05B                     * B4312  05B 
-        REL(5)  ROMP_0B4_05C                     * B4317  05C 
-        REL(5)  ROMP_0B4_05D                     * B431C  05D 
-        REL(5)  ROMP_0B4_05E                     * B4321  05E 
-        REL(5)  ROMP_0B4_05F                     * B4326  05F 
-        REL(5)  ROMP_0B4_060                     * B432B  060 
-        REL(5)  ROMP_0B4_061                     * B4330  061 
-        REL(5)  ROMP_0B4_062                     * B4335  062 
-        REL(5)  ROMP_0B4_063                     * B433A  063 
-        REL(5)  ROMP_0B4_064                     * B433F  064 
-        REL(5)  ROMP_0B4_065                     * B4344  065 
-        REL(5)  ROMP_0B4_066                     * B4349  066 
-        REL(5)  ROMP_0B4_067                     * B434E  067 
-        REL(5)  ROMP_0B4_068                     * B4353  068 
-        REL(5)  ROMP_0B4_069                     * B4358  069 
-        REL(5)  ROMP_0B4_06A                     * B435D  06A 
-        REL(5)  ROMP_0B4_06B                     * B4362  06B 
-        REL(5)  ROMP_0B4_06C                     * B4367  06C 
-        REL(5)  ROMP_0B4_06D                     * B436C  06D 
-        REL(5)  ROMP_0B4_06F                     * B4371  06E 
-        REL(5)  ROMP_0B4_06F                     * B4376  06F 
-        REL(5)  ROMP_0B4_070                     * B437B  070 
-        REL(5)  ROMP_0B4_071                     * B4380  071 
-        REL(5)  ROMP_0B4_072                     * B4385  072 
-        REL(5)  ROMP_0B4_073                     * B438A  073 
-        REL(5)  ROMP_0B4_074                     * B438F  074 
-        REL(5)  ROMP_0B4_075                     * B4394  075 
-        REL(5)  ROMP_0B4_076                     * B4399  076 
-        REL(5)  ROMP_0B4_077                     * B439E  077 
-        REL(5)  ROMP_0B4_078                     * B43A3  078 
-        REL(5)  ROMP_0B4_079                     * B43A8  079 
-        REL(5)  ROMP_0B4_07A                     * B43AD  07A 
-        REL(5)  ROMP_0B4_07B                     * B43B2  07B 
-        REL(5)  ROMP_0B4_07C                     * B43B7  07C 
-        REL(5)  ROMP_0B4_07D                     * B43BC  07D 
-        REL(5)  ROMP_0B4_07E                     * B43C1  07E 
-        REL(5)  ROMP_0B4_07F                     * B43C6  07F 
-        REL(5)  ROMP_0B4_080                     * B43CB  080 
-        REL(5)  ROMP_0B4_081                     * B43D0  081 
-        REL(5)  ROMP_0B4_082                     * B43D5  082 
-        REL(5)  ROMP_0B4_083                     * B43DA  083 
-        REL(5)  ROMP_0B4_084                     * B43DF  084 
-        REL(5)  ROMP_0B4_085                     * B43E4  085 
-        REL(5)  ROMP_0B4_086                     * B43E9  086 
-        REL(5)  ROMP_0B4_087                     * B43EE  087 
-        REL(5)  ROMP_0B4_088                     * B43F3  088 
-        REL(5)  ROMP_0B4_089                     * B43F8  089 
-        REL(5)  ROMP_0B4_08A                     * B43FD  08A 
-        REL(5)  ROMP_0B4_08B                     * B4402  08B 
-        REL(5)  ROMP_0B4_08C                     * B4407  08C 
-        REL(5)  ROMP_0B4_08D                     * B440C  08D 
-        REL(5)  ROMP_0B4_08E                     * B4411  08E 
-        REL(5)  ROMP_0B4_08F                     * B4416  08F 
-        REL(5)  ROMP_0B4_090                     * B441B  090 
-        REL(5)  ROMP_0B4_091                     * B4420  091 
-        REL(5)  ROMP_0B4_092                     * B4425  092 
-        REL(5)  ROMP_0B4_093                     * B442A  093 
-        REL(5)  ROMP_0B4_094                     * B442F  094 
-        REL(5)  ROMP_0B4_095                     * B4434  095 
-        REL(5)  ROMP_0B4_096                     * B4439  096 
-        REL(5)  ROMP_0B4_097                     * B443E  097 
-        REL(5)  ROMP_0B4_098                     * B4443  098 
-        REL(5)  ROMP_0B4_099                     * B4448  099 
-        REL(5)  ROMP_0B4_09A                     * B444D  09A 
-        REL(5)  ROMP_0B4_09B                     * B4452  09B 
-        REL(5)  ROMP_0B4_09C                     * B4457  09C 
-        REL(5)  ROMP_0B4_09D                     * B445C  09D 
-        REL(5)  ROMP_0B4_09E                     * B4461  09E 
-        REL(5)  ROMP_0B4_09F                     * B4466  09F 
-        REL(5)  ROMP_0B4_0A0                     * B446B  0A0 
-        REL(5)  ROMP_0B4_0A1                     * B4470  0A1 
-        REL(5)  ROMP_0B4_0A2                     * B4475  0A2 
-        REL(5)  ROMP_0B4_0A3                     * B447A  0A3 
-        REL(5)  ROMP_0B4_0A4                     * B447F  0A4 
-        REL(5)  ROMP_0B4_0A5                     * B4484  0A5 
-        REL(5)  ROMP_0B4_0A6                     * B4489  0A6 
-        REL(5)  ROMP_0B4_0A7                     * B448E  0A7 
-        REL(5)  ROMP_0B4_0A8                     * B4493  0A8 
-        REL(5)  ROMP_0B4_0A9                     * B4498  0A9 
-        REL(5)  ROMP_0B4_0AA                     * B449D  0AA 
-        REL(5)  ROMP_0B4_0AB                     * B44A2  0AB 
-        REL(5)  ROMP_0B4_0AC                     * B44A7  0AC 
-        REL(5)  ROMP_0B4_0AD                     * B44AC  0AD 
-        REL(5)  ROMP_0B4_0AE                     * B44B1  0AE 
-        REL(5)  ROMP_0B4_0AF                     * B44B6  0AF 
-        REL(5)  ROMP_0B4_0B0                     * B44BB  0B0 
-        REL(5)  ROMP_0B4_0B1                     * B44C0  0B1 
-        REL(5)  ROMP_0B4_0B2                     * B44C5  0B2 
-        REL(5)  ROMP_0B4_0B3                     * B44CA  0B3 
-        REL(5)  ROMP_0B4_0B4                     * B44CF  0B4 
-        REL(5)  ROMP_0B4_0B5                     * B44D4  0B5 
-        REL(5)  ROMP_0B4_0B6                     * B44D9  0B6 
-        REL(5)  ROMP_0B4_0B7                     * B44DE  0B7 
-        REL(5)  ROMP_0B4_0B8                     * B44E3  0B8 
-        REL(5)  ROMP_0B4_0B9                     * B44E8  0B9 
-        REL(5)  ROMP_0B4_0BA                     * B44ED  0BA 
-        REL(5)  ROMP_0B4_0BB                     * B44F2  0BB 
-        REL(5)  ROMP_0B4_0BC                     * B44F7  0BC 
-        REL(5)  ROMP_0B4_0BD                     * B44FC  0BD 
-        REL(5)  ROMP_0B4_0BE                     * B4501  0BE 
-        REL(5)  ROMP_0B4_0BF                     * B4506  0BF 
-        REL(5)  ROMP_0B4_0C0                     * B450B  0C0 
-        REL(5)  ROMP_0B4_0C1                     * B4510  0C1 
-        REL(5)  ROMP_0B4_0C2                     * B4515  0C2 
-        REL(5)  ROMP_0B4_0C3                     * B451A  0C3 
-        REL(5)  ROMP_0B4_0C4                     * B451F  0C4 
-        REL(5)  ROMP_0B4_0C5                     * B4524  0C5 
-        REL(5)  ROMP_0B4_0C6                     * B4529  0C6 
-        REL(5)  ROMP_0B4_0C7                     * B452E  0C7 
-        REL(5)  ROMP_0B4_0C8                     * B4533  0C8 
-        REL(5)  ROMP_0B4_0C9                     * B4538  0C9 
-        REL(5)  ROMP_0B4_0CA                     * B453D  0CA 
-        REL(5)  ROMP_0B4_0CB                     * B4542  0CB 
-        REL(5)  ROMP_0B4_0CC                     * B4547  0CC 
-        REL(5)  ROMP_0B4_0CD                     * B454C  0CD 
-        REL(5)  ROMP_0B4_0CE                     * B4551  0CE 
-        REL(5)  ROMP_0B4_0CF                     * B4556  0CF 
-        REL(5)  ROMP_0B4_0D0                     * B455B  0D0 
-        REL(5)  ROMP_0B4_0D1                     * B4560  0D1 
-        REL(5)  ROMP_0B4_0D2                     * B4565  0D2 
-        REL(5)  ROMP_0B4_0D3                     * B456A  0D3 
-        REL(5)  ROMP_0B4_0D4                     * B456F  0D4 
-        REL(5)  ROMP_0B4_0D5                     * B4574  0D5 
-        REL(5)  ROMP_0B4_0D6                     * B4579  0D6 
-        REL(5)  ROMP_0B4_0D7                     * B457E  0D7 
-        REL(5)  ROMP_0B4_0D8                     * B4583  0D8 
-        REL(5)  ROMP_0B4_0D9                     * B4588  0D9 
-        REL(5)  ROMP_0B4_0DA                     * B458D  0DA 
-        REL(5)  ROMP_0B4_0DB                     * B4592  0DB 
-        REL(5)  ROMP_0B4_0DC                     * B4597  0DC 
-        REL(5)  ROMP_0B4_0DD                     * B459C  0DD 
-        REL(5)  ROMP_0B4_0DE                     * B45A1  0DE 
-        REL(5)  ROMP_0B4_0DF                     * B45A6  0DF 
-        REL(5)  ROMP_0B4_0E0                     * B45AB  0E0 
-        REL(5)  ROMP_0B4_0E1                     * B45B0  0E1 
-        REL(5)  ROMP_0B4_0E2                     * B45B5  0E2 
-        REL(5)  ROMP_0B4_0E3                     * B45BA  0E3 
-        REL(5)  ROMP_0B4_0E4                     * B45BF  0E4 
-        REL(5)  ROMP_0B4_0E5                     * B45C4  0E5 
-        REL(5)  ROMP_0B4_0E6                     * B45C9  0E6 
-        REL(5)  ROMP_0B4_0E7                     * B45CE  0E7 
-        REL(5)  ROMP_0B4_0E8                     * B45D3  0E8 
-        REL(5)  ROMP_0B4_0E9                     * B45D8  0E9 
-        REL(5)  ROMP_0B4_0EA                     * B45DD  0EA 
-        REL(5)  ROMP_0B4_0EB                     * B45E2  0EB 
-        REL(5)  ROMP_0B4_0EC                     * B45E7  0EC 
-        REL(5)  ROMP_0B4_0ED                     * B45EC  0ED 
-        REL(5)  ROMP_0B4_0EE                     * B45F1  0EE 
-        REL(5)  ROMP_0B4_0EF                     * B45F6  0EF 
-        REL(5)  ROMP_0B4_0F0                     * B45FB  0F0 
-        REL(5)  ROMP_0B4_0F1                     * B4600  0F1 
-        REL(5)  ROMP_0B4_0F2                     * B4605  0F2 
-        REL(5)  ROMP_0B4_0F3                     * B460A  0F3 
-        REL(5)  ROMP_0B4_0F4                     * B460F  0F4 
-        REL(5)  ROMP_0B4_0F5                     * B4614  0F5 
-        REL(5)  ROMP_0B4_0F6                     * B4619  0F6 
-        REL(5)  ROMP_0B4_0F7                     * B461E  0F7 
-        REL(5)  ROMP_0B4_0F8                     * B4623  0F8 
-        REL(5)  ROMP_0B4_0F9                     * B4628  0F9 
-        REL(5)  ROMP_0B4_0FA                     * B462D  0FA 
-        REL(5)  ROMP_0B4_0FB                     * B4632  0FB 
-        REL(5)  ROMP_0B4_0FC                     * B4637  0FC 
-        REL(5)  ROMP_0B4_0FD                     * B463C  0FD 
-        REL(5)  ROMP_0B4_0FE                     * B4641  0FE 
-        REL(5)  ROMP_0B4_0FF                     * B4646  0FF 
-        REL(5)  ROMP_0B4_100                     * B464B  100 
-        REL(5)  ROMP_0B4_101                     * B4650  101 
-        REL(5)  ROMP_0B4_102                     * B4655  102 
-        REL(5)  ROMP_0B4_103                     * B465A  103 
-        REL(5)  ROMP_0B4_104                     * B465F  104 
-        REL(5)  ROMP_0B4_105                     * B4664  105 
-        REL(5)  ROMP_0B4_106                     * B4669  106 
-        REL(5)  ROMP_0B4_107                     * B466E  107 
-        REL(5)  ROMP_0B4_108                     * B4673  108 
-        REL(5)  ROMP_0B4_109                     * B4678  109 
-        REL(5)  ROMP_0B4_10A                     * B467D  10A 
-        REL(5)  ROMP_0B4_10B                     * B4682  10B 
-        REL(5)  ROMP_0B4_10C                     * B4687  10C 
-        REL(5)  ROMP_0B4_10D                     * B468C  10D 
-        REL(5)  ROMP_0B4_10E                     * B4691  10E 
-        REL(5)  ROMP_0B4_10F                     * B4696  10F 
-        REL(5)  ROMP_0B4_110                     * B469B  110 
-        REL(5)  ROMP_0B4_111                     * B46A0  111 
-        REL(5)  ROMP_0B4_112                     * B46A5  112 
-        REL(5)  ROMP_0B4_113                     * B46AA  113 
-        REL(5)  ROMP_0B4_114                     * B46AF  114 
-        REL(5)  ROMP_0B4_115                     * B46B4  115 
-        REL(5)  ROMP_0B4_116                     * B46B9  116 
-        REL(5)  ROMP_0B4_117                     * B46BE  117 
-        REL(5)  ROMP_0B4_118                     * B46C3  118 
-        REL(5)  ROMP_0B4_119                     * B46C8  119 
-        REL(5)  ROMP_0B4_11A                     * B46CD  11A 
-        REL(5)  ROMP_0B4_11B                     * B46D2  11B 
-        REL(5)  ROMP_0B4_11C                     * B46D7  11C 
-        REL(5)  ROMP_0B4_11D                     * B46DC  11D 
-        REL(5)  ROMP_0B4_11E                     * B46E1  11E 
-        REL(5)  ROMP_0B4_11F                     * B46E6  11F 
-        REL(5)  ROMP_0B4_120                     * B46EB  120 
-        REL(5)  ROMP_0B4_121                     * B46F0  121 
-        REL(5)  ROMP_0B4_122                     * B46F5  122 
-        REL(5)  ROMP_0B4_123                     * B46FA  123 
-        REL(5)  ROMP_0B4_124                     * B46FF  124 
-        REL(5)  ROMP_0B4_125                     * B4704  125 
-        REL(5)  ROMP_0B4_126                     * B4709  126 
-        REL(5)  ROMP_0B4_127                     * B470E  127 
-        REL(5)  ROMP_0B4_128                     * B4713  128 
-        REL(5)  ROMP_0B4_129                     * B4718  129 
-        REL(5)  ROMP_0B4_12A                     * B471D  12A 
-        REL(5)  ROMP_0B4_12B                     * B4722  12B 
-        REL(5)  ROMP_0B4_12C                     * B4727  12C 
-        REL(5)  ROMP_0B4_12D                     * B472C  12D 
-        REL(5)  ROMP_0B4_12E                     * B4731  12E 
-        REL(5)  ROMP_0B4_12F                     * B4736  12F 
-        REL(5)  ROMP_0B4_130                     * B473B  130 
-        REL(5)  ROMP_0B4_131                     * B4740  131 
-        REL(5)  ROMP_0B4_132                     * B4745  132 
-        REL(5)  ROMP_0B4_133                     * B474A  133 
-        REL(5)  ROMP_0B4_134                     * B474F  134 
-        REL(5)  ROMP_0B4_135                     * B4754  135 
-        REL(5)  ROMP_0B4_136                     * B4759  136 
-        REL(5)  ROMP_0B4_137                     * B475E  137 
-        REL(5)  ROMP_0B4_138                     * B4763  138 
-        REL(5)  ROMP_0B4_139                     * B4768  139 
-        REL(5)  ROMP_0B4_13A                     * B476D  13A 
-        REL(5)  ROMP_0B4_13B                     * B4772  13B 
-        REL(5)  ROMP_0B4_13C                     * B4777  13C 
-        REL(5)  ROMP_0B4_13D                     * B477C  13D 
-        REL(5)  ROMP_0B4_13E                     * B4781  13E 
-        REL(5)  ROMP_0B4_13F                     * B4786  13F 
-        REL(5)  ROMP_0B4_140                     * B478B  140 
-        REL(5)  ROMP_0B4_141                     * B4790  141 
-        REL(5)  ROMP_0B4_142                     * B4795  142 
-        REL(5)  ROMP_0B4_143                     * B479A  143 
-        REL(5)  ROMP_0B4_144                     * B479F  144 
-        REL(5)  ROMP_0B4_145                     * B47A4  145 
-        REL(5)  ROMP_0B4_146                     * B47A9  146 
-        REL(5)  ROMP_0B4_147                     * B47AE  147 
-        REL(5)  ROMP_0B4_148                     * B47B3  148 
-        REL(5)  ROMP_0B4_149                     * B47B8  149 
-        REL(5)  ROMP_0B4_14A                     * B47BD  14A 
-        REL(5)  ROMP_0B4_14B                     * B47C2  14B 
-        REL(5)  ROMP_0B4_14C                     * B47C7  14C 
-        REL(5)  ROMP_0B4_14D                     * B47CC  14D 
-        REL(5)  ROMP_0B4_14E                     * B47D1  14E 
-        REL(5)  ROMP_0B4_14F                     * B47D6  14F 
-        REL(5)  ROMP_0B4_151                     * B47DB  150 
-        REL(5)  ROMP_0B4_151                     * B47E0  151 
-        REL(5)  ROMP_0B4_152                     * B47E5  152 
-        REL(5)  ROMP_0B4_153                     * B47EA  153 
-        REL(5)  ROMP_0B4_154                     * B47EF  154 
-        REL(5)  ROMP_0B4_155                     * B47F4  155 
-        REL(5)  ROMP_0B4_156                     * B47F9  156 
-        REL(5)  ROMP_0B4_157                     * B47FE  157 
-        REL(5)  ROMP_0B4_158                     * B4803  158 
-        REL(5)  ROMP_0B4_159                     * B4808  159 
-        REL(5)  ROMP_0B4_15A                     * B480D  15A 
-        REL(5)  ROMP_0B4_15B                     * B4812  15B 
-        REL(5)  ROMP_0B4_15C                     * B4817  15C 
-        REL(5)  ROMP_0B4_15D                     * B481C  15D 
-        REL(5)  ROMP_0B4_15E                     * B4821  15E 
-        REL(5)  ROMP_0B4_15F                     * B4826  15F 
-        REL(5)  ROMP_0B4_160                     * B482B  160 
-        REL(5)  ROMP_0B4_161                     * B4830  161 
-        REL(5)  ROMP_0B4_162                     * B4835  162 
-        REL(5)  ROMP_0B4_163                     * B483A  163 
-        REL(5)  ROMP_0B4_164                     * B483F  164 
-        REL(5)  ~BINT42;TestSysFlag              * B4844  165 
-        REL(5)  ROMP_0B4_166                     * B4849  166 
-        REL(5)  ROMP_0B4_168                     * B484E  167 
-        REL(5)  ROMP_0B4_168                     * B4853  168 
-        REL(5)  ROMP_0B4_16B                     * B4858  169 
-        REL(5)  ROMP_0B4_16B                     * B485D  16A 
-        REL(5)  ROMP_0B4_16B                     * B4862  16B 
-        REL(5)  ROMP_0B4_16C                     * B4867  16C 
-        REL(5)  ROMP_0B4_16D                     * B486C  16D 
-        REL(5)  ROMP_0B4_16E                     * B4871  16E 
-        REL(5)  ROMP_0B4_16F                     * B4876  16F 
-        REL(5)  ROMP_0B4_170                     * B487B  170 
-        REL(5)  ROMP_0B4_171                     * B4880  171 
-        REL(5)  ROMP_0B4_172                     * B4885  172 
-        REL(5)  ROMP_0B4_173                     * B488A  173 
-        REL(5)  ROMP_0B4_174                     * B488F  174 
-        REL(5)  ROMP_0B4_175                     * B4894  175 
-        REL(5)  ROMP_0B4_176                     * B4899  176 
-        REL(5)  ROMP_0B4_177                     * B489E  177 
-        REL(5)  ROMP_0B4_178                     * B48A3  178 
-        REL(5)  ROMP_0B4_179                     * B48A8  179 
-        REL(5)  ROMP_0B4_17A                     * B48AD  17A 
-        REL(5)  ROMP_0B4_17B                     * B48B2  17B 
-        REL(5)  ROMP_0B4_17C                     * B48B7  17C 
-        REL(5)  ROMP_0B4_17D                     * B48BC  17D 
-        REL(5)  ROMP_0B4_17E                     * B48C1  17E 
-        REL(5)  ROMP_0B4_17F                     * B48C6  17F 
-        REL(5)  ROMP_0B4_180                     * B48CB  180 
-        REL(5)  ROMP_0B4_181                     * B48D0  181 
-        REL(5)  ROMP_0B4_182                     * B48D5  182 
-        REL(5)  ROMP_0B4_183                     * B48DA  183 
-        REL(5)  ROMP_0B4_184                     * B48DF  184 
-        REL(5)  ROMP_0B4_185                     * B48E4  185 
-        REL(5)  ROMP_0B4_186                     * B48E9  186 
-        REL(5)  ROMP_0B4_187                     * B48EE  187 
-        REL(5)  ROMP_0B4_188                     * B48F3  188 
-        REL(5)  ROMP_0B4_189                     * B48F8  189 
-        REL(5)  ROMP_0B4_18A                     * B48FD  18A 
-        REL(5)  ROMP_0B4_18B                     * B4902  18B 
-        REL(5)  ROMP_0B4_18C                     * B4907  18C 
-        REL(5)  ROMP_0B4_18D                     * B490C  18D 
-        REL(5)  ROMP_0B4_18E                     * B4911  18E 
-        REL(5)  ROMP_0B4_18F                     * B4916  18F 
-        REL(5)  ROMP_0B4_190                     * B491B  190 
-        REL(5)  ROMP_0B4_191                     * B4920  191 
-        REL(5)  ROMP_0B4_192                     * B4925  192 
-        REL(5)  ROMP_0B4_193                     * B492A  193 
-        REL(5)  ROMP_0B4_194                     * B492F  194 
-        REL(5)  ROMP_0B4_195                     * B4934  195 
-        REL(5)  ROMP_0B4_196                     * B4939  196 
-        REL(5)  ROMP_0B4_197                     * B493E  197 
-        REL(5)  ROMP_0B4_198                     * B4943  198 
-        REL(5)  ROMP_0B4_199                     * B4948  199 
-        REL(5)  ROMP_0B4_19A                     * B494D  19A 
-        REL(5)  ROMP_0B4_19B                     * B4952  19B 
-        REL(5)  ROMP_0B4_19C                     * B4957  19C 
-        REL(5)  ROMP_0B4_19D                     * B495C  19D 
-        REL(5)  ROMP_0B4_19E                     * B4961  19E 
-        REL(5)  ROMP_0B4_19F                     * B4966  19F 
-        REL(5)  ROMP_0B4_1A0                     * B496B  1A0 
-        REL(5)  ROMP_0B4_1A1                     * B4970  1A1 
-        REL(5)  ROMP_0B4_1A2                     * B4975  1A2 
-        REL(5)  ROMP_0B4_1A3                     * B497A  1A3 
-        REL(5)  ROMP_0B4_1A4                     * B497F  1A4 
-        REL(5)  ROMP_0B4_1A5                     * B4984  1A5 
-        REL(5)  ROMP_0B4_1A6                     * B4989  1A6 
-        REL(5)  ROMP_0B4_1A7                     * B498E  1A7 
-        REL(5)  ROMP_0B4_1A8                     * B4993  1A8 
-        REL(5)  ROMP_0B4_1A9                     * B4998  1A9 
-        REL(5)  ROMP_0B4_1AA                     * B499D  1AA 
-        REL(5)  ROMP_0B4_1AB                     * B49A2  1AB 
-        REL(5)  ROMP_0B4_1AC                     * B49A7  1AC 
-        REL(5)  ROMP_0B4_1AD                     * B49AC  1AD 
-        REL(5)  ROMP_0B4_1AE                     * B49B1  1AE 
-        REL(5)  ROMP_0B4_1AF                     * B49B6  1AF 
-        REL(5)  ROMP_0B4_1B0                     * B49BB  1B0 
-        REL(5)  ROMP_0B4_1B1                     * B49C0  1B1 
-        REL(5)  ROMP_0B4_1B2                     * B49C5  1B2 
-        REL(5)  ROMP_0B4_1B3                     * B49CA  1B3 
-        REL(5)  ROMP_0B4_1B4                     * B49CF  1B4 
-        REL(5)  ROMP_0B4_1B5                     * B49D4  1B5 
-        REL(5)  ROMP_0B4_1B6                     * B49D9  1B6 
-        REL(5)  ROMP_0B4_1B7                     * B49DE  1B7 
-        REL(5)  ROMP_0B4_1B8                     * B49E3  1B8 
-        REL(5)  ROMP_0B4_1B9                     * B49E8  1B9 
-        REL(5)  ROMP_0B4_1BA                     * B49ED  1BA 
-        REL(5)  ROMP_0B4_1BB                     * B49F2  1BB 
-        REL(5)  ROMP_0B4_1BC                     * B49F7  1BC 
-        REL(5)  ROMP_0B4_1BD                     * B49FC  1BD 
-        REL(5)  ROMP_0B4_1BE                     * B4A01  1BE 
-        REL(5)  ROMP_0B4_1BF                     * B4A06  1BF 
-        REL(5)  ROMP_0B4_1C0                     * B4A0B  1C0 
-        REL(5)  ROMP_0B4_1C1                     * B4A10  1C1 
-        REL(5)  ROMP_0B4_1C2                     * B4A15  1C2 
-        REL(5)  ROMP_0B4_1C3                     * B4A1A  1C3 
-        REL(5)  ROMP_0B4_1C4                     * B4A1F  1C4 
-        REL(5)  ROMP_0B4_1C5                     * B4A24  1C5 
-        REL(5)  ROMP_0B4_1C6                     * B4A29  1C6 
-        REL(5)  ROMP_0B4_1C7                     * B4A2E  1C7 
-        REL(5)  ROMP_0B4_1C8                     * B4A33  1C8 
-        REL(5)  ROMP_0B4_1C9                     * B4A38  1C9 
-        REL(5)  ROMP_0B4_1CA                     * B4A3D  1CA 
-        REL(5)  ROMP_0B4_1CB                     * B4A42  1CB 
-        REL(5)  ROMP_0B4_1CC                     * B4A47  1CC 
-        REL(5)  ROMP_0B4_1CD                     * B4A4C  1CD 
-        REL(5)  ROMP_0B4_1CE                     * B4A51  1CE 
-        REL(5)  ROMP_0B4_1CF                     * B4A56  1CF 
-        REL(5)  ROMP_0B4_1D0                     * B4A5B  1D0 
-        REL(5)  ROMP_0B4_1D2                     * B4A60  1D1 
-        REL(5)  ROMP_0B4_1D2                     * B4A65  1D2 
-        REL(5)  ROMP_0B4_1D3                     * B4A6A  1D3 
-        REL(5)  ROMP_0B4_1D4                     * B4A6F  1D4 
-        REL(5)  ROMP_0B4_1D5                     * B4A74  1D5 
-        REL(5)  ROMP_0B4_1D6                     * B4A79  1D6 
-        REL(5)  ROMP_0B4_1D7                     * B4A7E  1D7 
-        REL(5)  ROMP_0B4_1D8                     * B4A83  1D8 
-        REL(5)  ROMP_0B4_1D9                     * B4A88  1D9 
-        REL(5)  ROMP_0B4_1DA                     * B4A8D  1DA 
-        REL(5)  ROMP_0B4_1DB                     * B4A92  1DB 
-        REL(5)  ROMP_0B4_1DC                     * B4A97  1DC 
-        REL(5)  ROMP_0B4_1DD                     * B4A9C  1DD 
-        REL(5)  ROMP_0B4_1DE                     * B4AA1  1DE 
-        REL(5)  ROMP_0B4_1DF                     * B4AA6  1DF 
-        REL(5)  ROMP_0B4_1E0                     * B4AAB  1E0 
-        REL(5)  ROMP_0B4_1E1                     * B4AB0  1E1 
-        REL(5)  ROMP_0B4_1E2                     * B4AB5  1E2 
-        REL(5)  ROMP_0B4_1E3                     * B4ABA  1E3 
-        REL(5)  ROMP_0B4_1E4                     * B4ABF  1E4 
-        REL(5)  ROMP_0B4_1E5                     * B4AC4  1E5 
-        REL(5)  ROMP_0B4_1E6                     * B4AC9  1E6 
-        REL(5)  ROMP_0B4_1E7                     * B4ACE  1E7 
-        REL(5)  ROMP_0B4_1E8                     * B4AD3  1E8 
-        REL(5)  ROMP_0B4_1E9                     * B4AD8  1E9 
-        REL(5)  ROMP_0B4_1EA                     * B4ADD  1EA 
-        REL(5)  ROMP_0B4_1EB                     * B4AE2  1EB 
-        REL(5)  ROMP_0B4_1EC                     * B4AE7  1EC 
-        REL(5)  ROMP_0B4_1ED                     * B4AEC  1ED 
-        REL(5)  ROMP_0B4_1EE                     * B4AF1  1EE 
-        REL(5)  ROMP_0B4_1EF                     * B4AF6  1EF 
-        REL(5)  ROMP_0B4_1F0                     * B4AFB  1F0 
-        REL(5)  ROMP_0B4_1F1                     * B4B00  1F1 
-        REL(5)  ROMP_0B4_1F2                     * B4B05  1F2 
-        REL(5)  ROMP_0B4_1F3                     * B4B0A  1F3 
-        REL(5)  ROMP_0B4_1F4                     * B4B0F  1F4 
-        REL(5)  ROMP_0B4_1F5                     * B4B14  1F5 
-        REL(5)  ROMP_0B4_1F6                     * B4B19  1F6 
-        REL(5)  ROMP_0B4_1F7                     * B4B1E  1F7 
-        REL(5)  ROMP_0B4_1F8                     * B4B23  1F8 
-        REL(5)  ROMP_0B4_1F9                     * B4B28  1F9 
-        REL(5)  ROMP_0B4_1FA                     * B4B2D  1FA 
+        REL(5)  SolveApp                         * B414B  000 
+        REL(5)  SolveEqApp                       * B4150  001 
+        REL(5)  SolveEqFields                    * B4155  002 
+        REL(5)  SolveEqLabel                     * B415A  003 
+        REL(5)  SolveEqField                     * B415F  004 
+        REL(5)  SolveEqMH                        * B4164  005 
+        REL(5)  SolveEqMenu                      * B4169  006 
+        REL(5)  SolveEqFieldMH                   * B416E  007 
+        REL(5)  SolveEqKeyMH                     * B4173  008 
+        REL(5)  SolveEqKey                       * B4178  009 
+        REL(5)  SolveEqToPlot                    * B417D  00A 
+        REL(5)  SolveEqVarsKey                   * B4182  00B 
+        REL(5)  SolveEqOrderForm                 * B4187  00C 
+        REL(5)  SolveEqOrderMH                   * B418C  00D 
+        REL(5)  SolveEqNextPage                  * B4191  00E 
+        REL(5)  SolveEqInfo                      * B4196  00F 
+        REL(5)  SolveEqSolve                     * B419B  010 
+        REL(5)  SolveEqRebuild                   * B41A0  011 
+        REL(5)  SolveVarLabels                   * B41A5  012 
+        REL(5)  SolveEqPaged?                    * B41AA  013 
+        REL(5)  SolveEqPage                      * B41AF  014 
+        REL(5)  SolveEqSave                      * B41B4  015 
+        REL(5)  SolveEqStore                     * B41B9  016 
+        REL(5)  SolveDiffForm                    * B41BE  017 
+        REL(5)  SolveDiffMH                      * B41C3  018 
+        REL(5)  SolveDiffMenu                    * B41C8  019 
+        REL(5)  SolveDiffKeyMH                   * B41CD  01A 
+        REL(5)  SolveDiffKey                     * B41D2  01B 
+        REL(5)  SolveDiffToPlot                  * B41D7  01C 
+        REL(5)  SolveDiffInit+                   * B41DC  01D 
+        REL(5)  SolveDiffSolve                   * B41E1  01E 
+        REL(5)  SolveDiffLabels                  * B41E6  01F 
+        REL(5)  SolveDiffF1MH                    * B41EB  020 
+        REL(5)  SolveDiffF2MH                    * B41F0  021 
+        REL(5)  SolveDiffEditMH                  * B41F5  022 
+        REL(5)  SolveDiffEditKeys                * B41FA  023 
+        REL(5)  SolveDiffResMH                   * B41FF  024 
+        REL(5)  IFEditDrop                       * B4204  025 
+        REL(5)  SolveDiffStepMH                  * B4209  026 
+        REL(5)  SolveDiffStiffMH                 * B420E  027 
+        REL(5)  SolveDiffMoveF                   * B4213  028 
+        REL(5)  SolveDiffStiffDisp               * B4218  029 
+        REL(5)  SolveDiffStiff?                  * B421D  02A 
+        REL(5)  IFEditDflt0                      * B4222  02B 
+        REL(5)  SolvePolyForm                    * B4227  02C 
+        REL(5)  SolvePolyMH                      * B422C  02D 
+        REL(5)  SolvePolyMenu                    * B4231  02E 
+        REL(5)  SolvePolySymb                    * B4236  02F 
+        REL(5)  SolvePolySolve                   * B423B  030 
+        REL(5)  IFArrayMH                        * B4240  031 
+        REL(5)  IFEditArray                      * B4245  032 
+        REL(5)  SolveLinForm                     * B424A  033 
+        REL(5)  SolveLinMH                       * B424F  034 
+        REL(5)  SolveLinMenu                     * B4254  035 
+        REL(5)  SolveLinSolve                    * B4259  036 
+        REL(5)  SolveLinFieldMH                  * B425E  037 
+        REL(5)  TVMForm                          * B4263  038 
+        REL(5)  TVMGetVals                       * B4268  039 
+        REL(5)  TVMSetVals                       * B426D  03A 
+        REL(5)  TVMMH                            * B4272  03B 
+        REL(5)  TVMMenu                          * B4277  03C 
+        REL(5)  TVMSolveKey_A4E71                * B427C  03D 
+        REL(5)  TVMFieldMH                       * B4281  03E 
+        REL(5)  AmortForm                        * B4286  03F 
+        REL(5)  AmortMH                          * B428B  040 
+        REL(5)  AmortMenu                        * B4290  041 
+        REL(5)  AmortB>PV                        * B4295  042 
+        REL(5)  AmortCalc                        * B429A  043 
+        REL(5)  AmortResMH                       * B429F  044 
+        REL(5)  PlotApp                          * B42A4  045 
+        REL(5)  PlotFormFor                      * B42A9  046 
+        REL(5)  PlotFormVals                     * B42AE  047 
+        REL(5)  PlotFormStore                    * B42B3  048 
+        REL(5)  PlotFuncForm                     * B42B8  049 
+        REL(5)  PlotLblType                      * B42BD  04A 
+        REL(5)  PlotLblAngle                     * B42C2  04B 
+        REL(5)  PlotLblEq                        * B42C7  04C 
+        REL(5)  PlotLblIndep                     * B42CC  04D 
+        REL(5)  PlotLblHView                     * B42D1  04E 
+        REL(5)  PlotLblAuto                      * B42D6  04F 
+        REL(5)  PlotLblVView                     * B42DB  050 
+        REL(5)  PlotFldType                      * B42E0  051 
+        REL(5)  PlotFldAngle                     * B42E5  052 
+        REL(5)  PlotFldEq                        * B42EA  053 
+        REL(5)  PlotFldIndep                     * B42EF  054 
+        REL(5)  PlotFldHLo                       * B42F4  055 
+        REL(5)  PlotFldHHi                       * B42F9  056 
+        REL(5)  PlotFldAuto                      * B42FE  057 
+        REL(5)  PlotFldVLo                       * B4303  058 
+        REL(5)  PlotFldVHi                       * B4308  059 
+        REL(5)  PlotFuncVals                     * B430D  05A 
+        REL(5)  PlotFuncStore                    * B4312  05B 
+        REL(5)  PlotFormMH                       * B4317  05C 
+        REL(5)  PlotMenu                         * B431C  05D 
+        REL(5)  PlotAutoMH                       * B4321  05E 
+        REL(5)  PlotOptsKey                      * B4326  05F 
+        REL(5)  PlotOptsFor                      * B432B  060 
+        REL(5)  PlotOptsVals                     * B4330  061 
+        REL(5)  PlotOptsStore                    * B4335  062 
+        REL(5)  PlotEraseKey                     * B433A  063 
+        REL(5)  PlotDrawKey                      * B433F  064 
+        REL(5)  PlotTypeMH                       * B4344  065 
+        REL(5)  PlotEqMH                         * B4349  066 
+        REL(5)  PlotFieldMH                      * B434E  067 
+        REL(5)  PlotConicForm                    * B4353  068 
+        REL(5)  PlotFldConicEq                   * B4358  069 
+        REL(5)  PlotConicVals                    * B435D  06A 
+        REL(5)  PlotConicEqMH                    * B4362  06B 
+        REL(5)  PlotConicStore                   * B4367  06C 
+        REL(5)  PlotTruthForm                    * B436C  06D 
+        REL(5)  PlotTruthStore                   * B4371  06E 
+        REL(5)  PlotTruthStore                   * B4376  06F 
+        REL(5)  PlotParamForm                    * B437B  070 
+        REL(5)  PlotDiffForm                     * B4380  071 
+        REL(5)  PlotDiffVals                     * B4385  072 
+        REL(5)  PlotDiffStore                    * B438A  073 
+        REL(5)  PlotDiffMH                       * B438F  074 
+        REL(5)  PlotDiffLabels                   * B4394  075 
+        REL(5)  PlotDiffF1MH                     * B4399  076 
+        REL(5)  PlotDiffF2MH                     * B439E  077 
+        REL(5)  PlotDiffEditMH                   * B43A3  078 
+        REL(5)  PlotDiffStiffMH                  * B43A8  079 
+        REL(5)  PlotDiffMoveF                    * B43AD  07A 
+        REL(5)  PlotDiffStiffDisp                * B43B2  07B 
+        REL(5)  PlotDiffStiff?                   * B43B7  07C 
+        REL(5)  PlotHistoForm                    * B43BC  07D 
+        REL(5)  PlotLblsStat                     * B43C1  07E 
+        REL(5)  PlotLblDat                       * B43C6  07F 
+        REL(5)  PlotFldDat                       * B43CB  080 
+        REL(5)  PlotFldCol                       * B43D0  081 
+        REL(5)  PlotStatVals                     * B43D5  082 
+        REL(5)  PlotStatStore                    * B43DA  083 
+        REL(5)  PlotStatMH                       * B43DF  084 
+        REL(5)  PlotDatMH                        * B43E4  085 
+        REL(5)  PlotHistoWidMH                   * B43E9  086 
+        REL(5)  PlotHistoDfltWid                 * B43EE  087 
+        REL(5)  PlotBarForm                      * B43F3  088 
+        REL(5)  PlotBarWidMH                     * B43F8  089 
+        REL(5)  PlotBarDfltWid                   * B43FD  08A 
+        REL(5)  PlotScatForm                     * B4402  08B 
+        REL(5)  PlotScatVals                     * B4407  08C 
+        REL(5)  PlotScatStore                    * B440C  08D 
+        REL(5)  PlotOptFuncForm                  * B4411  08E 
+        REL(5)  PlotOptLbls                      * B4416  08F 
+        REL(5)  PlotOptLblIndep                  * B441B  090 
+        REL(5)  PlotOptLblLo                     * B4420  091 
+        REL(5)  PlotOptLblHi                     * B4425  092 
+        REL(5)  PlotOptLblAxes                   * B442A  093 
+        REL(5)  PlotOptLblSimult                 * B442F  094 
+        REL(5)  PlotOptLblConnect                * B4434  095 
+        REL(5)  PlotOptLblStep                   * B4439  096 
+        REL(5)  PlotOptLblPixels                 * B443E  097 
+        REL(5)  PlotOptLblHTick                  * B4443  098 
+        REL(5)  PlotOptLblVTick                  * B4448  099 
+        REL(5)  PlotOptLblPixels2                * B444D  09A 
+        REL(5)  PlotOptFldIndep                  * B4452  09B 
+        REL(5)  PlotOptFldLo                     * B4457  09C 
+        REL(5)  PlotOptFldHi                     * B445C  09D 
+        REL(5)  PlotOptFldAxes                   * B4461  09E 
+        REL(5)  PlotOptFldConnect                * B4466  09F 
+        REL(5)  PlotOptFldSimult                 * B446B  0A0 
+        REL(5)  PlotOptFldStep                   * B4470  0A1 
+        REL(5)  PlotOptFldStepPix                * B4475  0A2 
+        REL(5)  PlotOptFldHTick                  * B447A  0A3 
+        REL(5)  PlotOptFldVTick                  * B447F  0A4 
+        REL(5)  PlotOptFldTickPix                * B4484  0A5 
+        REL(5)  PlotOptFuncVals                  * B4489  0A6 
+        REL(5)  PlotOptFuncStore                 * B448E  0A7 
+        REL(5)  PlotOptLoMH                      * B4493  0A8 
+        REL(5)  PlotOptDfltLo                    * B4498  0A9 
+        REL(5)  PlotOptLoChg                     * B449D  0AA 
+        REL(5)  PlotOptHiMH                      * B44A2  0AB 
+        REL(5)  PlotOptDfltHi                    * B44A7  0AC 
+        REL(5)  PlotOptHiChg                     * B44AC  0AD 
+        REL(5)  PlotOptStepMH                    * B44B1  0AE 
+        REL(5)  PlotOptDfltStep                  * B44B6  0AF 
+        REL(5)  PlotOptFieldMH                   * B44BB  0B0 
+        REL(5)  PlotOptPolarForm                 * B44C0  0B1 
+        REL(5)  PlotOptPolarVals                 * B44C5  0B2 
+        REL(5)  PlotOptPolarStore                * B44CA  0B3 
+        REL(5)  PlotOptPolarHiMH                 * B44CF  0B4 
+        REL(5)  PlotOptPolarStepMH               * B44D4  0B5 
+        REL(5)  PlotOptPolarDfltStep             * B44D9  0B6 
+        REL(5)  PlotOptParamForm                 * B44DE  0B7 
+        REL(5)  PlotOptParamStepMH               * B44E3  0B8 
+        REL(5)  PlotOptParamDfltStep             * B44E8  0B9 
+        REL(5)  PlotOptConicForm                 * B44ED  0BA 
+        REL(5)  PlotOptConicVals                 * B44F2  0BB 
+        REL(5)  PlotOptConicStore                * B44F7  0BC 
+        REL(5)  PlotOptTruthForm                 * B44FC  0BD 
+        REL(5)  PlotOptTruthVals                 * B4501  0BE 
+        REL(5)  PlotOptTruthStore                * B4506  0BF 
+        REL(5)  PlotOptDepLoMH                   * B450B  0C0 
+        REL(5)  PlotOptDfltDepLo                 * B4510  0C1 
+        REL(5)  PlotOptDepLoChg                  * B4515  0C2 
+        REL(5)  PlotOptDepHiMH                   * B451A  0C3 
+        REL(5)  PlotOptDfltDepHi                 * B451F  0C4 
+        REL(5)  PlotOptDepHiChg                  * B4524  0C5 
+        REL(5)  PlotOptDiffForm                  * B4529  0C6 
+        REL(5)  PlotOptDiffVals                  * B452E  0C7 
+        REL(5)  PlotOptDiffStore                 * B4533  0C8 
+        REL(5)  PlotOptDiffStepMH                * B4538  0C9 
+        REL(5)  PlotOptDfltDiffStep              * B453D  0CA 
+        REL(5)  PlotOptDiffVarMH                 * B4542  0CB 
+        REL(5)  PlotOptDiffVarList               * B4547  0CC 
+        REL(5)  PlotOptDiffVar$                  * B454C  0CD 
+        REL(5)  PlotOptStatForm                  * B4551  0CE 
+        REL(5)  PlotOptStatVals                  * B4556  0CF 
+        REL(5)  PlotOptStatStore                 * B455B  0D0 
+        REL(5)  PlotZoomForm                     * B4560  0D1 
+        REL(5)  PlotTypeChoose                   * B4565  0D2 
+        REL(5)  PlotTypeNext                     * B456A  0D3 
+        REL(5)  PlotTypeSeek                     * B456F  0D4 
+        REL(5)  PlotTypeReset                    * B4574  0D5 
+        REL(5)  PlotVViewDisp                    * B4579  0D6 
+        REL(5)  PlotKey                          * B457E  0D7 
+        REL(5)  PlotPictKey                      * B4583  0D8 
+        REL(5)  PlotSolveKey                     * B4588  0D9 
+        REL(5)  PlotToSolveEq                    * B458D  0DA 
+        REL(5)  PlotToSolveDiff                  * B4592  0DB 
+        REL(5)  PlotResetMenu                    * B4597  0DC 
+        REL(5)  PlotResetAll                     * B459C  0DD 
+        REL(5)  PlotOptResetMenu                 * B45A1  0DE 
+        REL(5)  PlotOptResetAll                  * B45A6  0DF 
+        REL(5)  IFDflt$                          * B45AB  0E0 
+        REL(5)  PlotVLo$                         * B45B0  0E1 
+        REL(5)  PlotVHi$                         * B45B5  0E2 
+        REL(5)  PlotEditKeys                     * B45BA  0E3 
+        REL(5)  PlotConicEditKeys                * B45BF  0E4 
+        REL(5)  PlotFirstField                   * B45C4  0E5 
+        REL(5)  Plot3DForm                       * B45C9  0E6 
+        REL(5)  Plot3DVals                       * B45CE  0E7 
+        REL(5)  Plot3DStore                      * B45D3  0E8 
+        REL(5)  Plot3DMH                         * B45D8  0E9 
+        REL(5)  Plot3DEqMH                       * B45DD  0EA 
+        REL(5)  PlotEditKeys2                    * B45E2  0EB 
+        REL(5)  PlotOptViewForm                  * B45E7  0EC 
+        REL(5)  PlotOptLblXLeft                  * B45EC  0ED 
+        REL(5)  PlotOptLblXRight                 * B45F1  0EE 
+        REL(5)  PlotOptLblYNear                  * B45F6  0EF 
+        REL(5)  PlotOptLblYFar                   * B45FB  0F0 
+        REL(5)  PlotOptFldXLeft                  * B4600  0F1 
+        REL(5)  PlotOptFldXRight                 * B4605  0F2 
+        REL(5)  PlotOptFldYNear                  * B460A  0F3 
+        REL(5)  PlotOptFldYFar                   * B460F  0F4 
+        REL(5)  PlotOptViewVals                  * B4614  0F5 
+        REL(5)  PlotOptViewStore                 * B4619  0F6 
+        REL(5)  PlotOptWireForm                  * B461E  0F7 
+        REL(5)  PlotOptLblsWire                  * B4623  0F8 
+        REL(5)  PlotOptLblZLow                   * B4628  0F9 
+        REL(5)  PlotOptLblZHigh                  * B462D  0FA 
+        REL(5)  PlotOptLblXE                     * B4632  0FB 
+        REL(5)  PlotOptLblYE                     * B4637  0FC 
+        REL(5)  PlotOptLblZE                     * B463C  0FD 
+        REL(5)  PlotOptFldsWire                  * B4641  0FE 
+        REL(5)  PlotOptFldZLow                   * B4646  0FF 
+        REL(5)  PlotOptFldZHigh                  * B464B  100 
+        REL(5)  PlotOptFldXE                     * B4650  101 
+        REL(5)  PlotOptFldYE                     * B4655  102 
+        REL(5)  PlotOptFldZE                     * B465A  103 
+        REL(5)  PlotOptWireVals                  * B465F  104 
+        REL(5)  PlotOptWireStore                 * B4664  105 
+        REL(5)  PlotOptSliceForm                 * B4669  106 
+        REL(5)  PlotOptSliceVals                 * B466E  107 
+        REL(5)  PlotOptSliceStore                * B4673  108 
+        REL(5)  PlotOptGridForm                  * B4678  109 
+        REL(5)  PlotOptGridVals                  * B467D  10A 
+        REL(5)  PlotOptGridStore                 * B4682  10B 
+        REL(5)  PlotOptPSurfForm                 * B4687  10C 
+        REL(5)  PlotOptPSurfMH                   * B468C  10D 
+        REL(5)  PlotOptPSurfMenu                 * B4691  10E 
+        REL(5)  PlotOptXXYYKey                   * B4696  10F 
+        REL(5)  PlotOptXXYYForm                  * B469B  110 
+        REL(5)  PlotOptXXYYVals                  * B46A0  111 
+        REL(5)  PlotOptXXYYStore                 * B46A5  112 
+        REL(5)  SymbApp                          * B46AA  113 
+        REL(5)  SymbIntegForm                    * B46AF  114 
+        REL(5)  SymbLblExpr                      * B46B4  115 
+        REL(5)  SymbLblVar                       * B46B9  116 
+        REL(5)  SymbLblResult                    * B46BE  117 
+        REL(5)  SymbFldExpr                      * B46C3  118 
+        REL(5)  SymbFldVar                       * B46C8  119 
+        REL(5)  SymbIntegMH                      * B46CD  11A 
+        REL(5)  SymbIntegLabels                  * B46D2  11B 
+        REL(5)  SymbResultMH                     * B46D7  11C 
+        REL(5)  SymbFormatMH                     * B46DC  11D 
+        REL(5)  SymbDigitsMH                     * B46E1  11E 
+        REL(5)  SymbIntegDisp                    * B46E6  11F 
+        REL(5)  SymbIntegNum?                    * B46EB  120 
+        REL(5)  SymbIntegStd?                    * B46F0  121 
+        REL(5)  SymbDiffForm                     * B46F5  122 
+        REL(5)  SymbDiffMH                       * B46FA  123 
+        REL(5)  SymbDiffMenu                     * B46FF  124 
+        REL(5)  SymbDiffStep                     * B4704  125 
+        REL(5)  SymbDiffLabels                   * B4709  126 
+        REL(5)  SymbDiffResMH                    * B470E  127 
+        REL(5)  SymbDiffDisp                     * B4713  128 
+        REL(5)  SymbDiffValMH                    * B4718  129 
+        REL(5)  SymbDiffNum?                     * B471D  12A 
+        REL(5)  SymbTaylorForm                   * B4722  12B 
+        REL(5)  SymbFldResult                    * B4727  12C 
+        REL(5)  SymbIsolateForm                  * B472C  12D 
+        REL(5)  SymbLblPrincipal                 * B4731  12E 
+        REL(5)  SymbFldPrincipal                 * B4736  12F 
+        REL(5)  SymbQuadForm                     * B473B  130 
+        REL(5)  SymbManipForm                    * B4740  131 
+        REL(5)  SymbManipMH                      * B4745  132 
+        REL(5)  SymbManipMenu                    * B474A  133 
+        REL(5)  SymbColctKey                     * B474F  134 
+        REL(5)  SymbExpndKey                     * B4754  135 
+        REL(5)  SymbMatchForm                    * B4759  136 
+        REL(5)  TimeApp                          * B475E  137 
+        REL(5)  AlarmSet                         * B4763  138 
+        REL(5)  AlarmForm                        * B4768  139 
+        REL(5)  TimeLblTime                      * B476D  13A 
+        REL(5)  TimeLblColon1                    * B4772  13B 
+        REL(5)  TimeLblColon2                    * B4777  13C 
+        REL(5)  TimeLblDate                      * B477C  13D 
+        REL(5)  TimeLblRepeat                    * B4781  13E 
+        REL(5)  TimeLblSlash1                    * B4786  13F 
+        REL(5)  TimeLblSlash2                    * B478B  140 
+        REL(5)  TimeLblDot1                      * B4790  141 
+        REL(5)  TimeLblDot2                      * B4795  142 
+        REL(5)  TimeFldHour                      * B479A  143 
+        REL(5)  TimeFldMin                       * B479F  144 
+        REL(5)  TimeFldSec                       * B47A4  145 
+        REL(5)  TimeFldAMPM                      * B47A9  146 
+        REL(5)  TimeFldMonthMD                   * B47AE  147 
+        REL(5)  TimeFldDayMD                     * B47B3  148 
+        REL(5)  TimeFldDayDM                     * B47B8  149 
+        REL(5)  TimeFldMonthDM                   * B47BD  14A 
+        REL(5)  TimeFldYear                      * B47C2  14B 
+        REL(5)  AlarmDfltFields                  * B47C7  14C 
+        REL(5)  AlarmFromFields                  * B47CC  14D 
+        REL(5)  AlarmMH                          * B47D1  14E 
+        REL(5)  AlarmLabels                      * B47D6  14F 
+        REL(5)  TimeMinMH                        * B47DB  150 
+        REL(5)  TimeMinMH                        * B47E0  151 
+        REL(5)  TimeMonthMDMH                    * B47E5  152 
+        REL(5)  TimeMonthDMMH                    * B47EA  153 
+        REL(5)  TimeMonthMH                      * B47EF  154 
+        REL(5)  TimeDayMDMH                      * B47F4  155 
+        REL(5)  TimeDayDMMH                      * B47F9  156 
+        REL(5)  TimeDayMH                        * B47FE  157 
+        REL(5)  TimeYearMH                       * B4803  158 
+        REL(5)  AlarmRepeatMH                    * B4808  159 
+        REL(5)  AlarmUnitMH                      * B480D  15A 
+        REL(5)  TimeSetForm                      * B4812  15B 
+        REL(5)  TimeGetFields                    * B4817  15C 
+        REL(5)  TimeSetFields                    * B481C  15D 
+        REL(5)  TimeSetMH                        * B4821  15E 
+        REL(5)  TimeSetLabels                    * B4826  15F 
+        REL(5)  TimeFormatMH                     * B482B  160 
+        REL(5)  TimeFormatChg                    * B4830  161 
+        REL(5)  TimeChooseFld                    * B4835  162 
+        REL(5)  TimeNextMonth                    * B483A  163 
+        REL(5)  TimeNextDay                      * B483F  164 
+        REL(5)  TimeDMY?                         * B4844  165 
+        REL(5)  AlarmRepeats?                    * B4849  166 
+        REL(5)  Time2Digits                      * B484E  167 
+        REL(5)  Time2Digits                      * B4853  168 
+        REL(5)  Time2Chars                       * B4858  169 
+        REL(5)  Time2Chars                       * B485D  16A 
+        REL(5)  Time2Chars                       * B4862  16B 
+        REL(5)  AlarmRepeat$                     * B4867  16C 
+        REL(5)  AlarmUnit$                       * B486C  16D 
+        REL(5)  AlarmBrowse                      * B4871  16E 
+        REL(5)  AlarmBrowseMH                    * B4876  16F 
+        REL(5)  AlarmBrowseGrob                  * B487B  170 
+        REL(5)  AlarmBrowseMenu                  * B4880  171 
+        REL(5)  AlarmBrowseEdit                  * B4885  172 
+        REL(5)  AlarmBrowseNew                   * B488A  173 
+        REL(5)  AlarmBrowsePurge                 * B488F  174 
+        REL(5)  StatApp                          * B4894  175 
+        REL(5)  StatSingleForm                   * B4899  176 
+        REL(5)  StatLblDat                       * B489E  177 
+        REL(5)  StatLblCol                       * B48A3  178 
+        REL(5)  StatFldDat                       * B48A8  179 
+        REL(5)  StatFldCol                       * B48AD  17A 
+        REL(5)  StatSingleArgs                   * B48B2  17B 
+        REL(5)  StatSingleCalc                   * B48B7  17C 
+        REL(5)  StatFreqForm                     * B48BC  17D 
+        REL(5)  StatFreqArgs                     * B48C1  17E 
+        REL(5)  StatFitForm                      * B48C6  17F 
+        REL(5)  StatLblXCol                      * B48CB  180 
+        REL(5)  StatLblYCol                      * B48D0  181 
+        REL(5)  StatLblModel                     * B48D5  182 
+        REL(5)  StatFldDat2                      * B48DA  183 
+        REL(5)  StatFldXYCol                     * B48DF  184 
+        REL(5)  StatFldModel                     * B48E4  185 
+        REL(5)  StatFitArgs                      * B48E9  186 
+        REL(5)  StatFitMH                        * B48EE  187 
+        REL(5)  StatFitMenu                      * B48F3  188 
+        REL(5)  StatPredKey                      * B48F8  189 
+        REL(5)  StatFitVals                      * B48FD  18A 
+        REL(5)  StatPredForm                     * B4902  18B 
+        REL(5)  StatPredMH                       * B4907  18C 
+        REL(5)  StatPredMenu                     * B490C  18D 
+        REL(5)  StatPredCalc                     * B4911  18E 
+        REL(5)  StatSumForm                      * B4916  18F 
+        REL(5)  StatSumArgs                      * B491B  190 
+        REL(5)  StatSumCalc                      * B4920  191 
+        REL(5)  IOApp                            * B4925  192 
+        REL(5)  IOSendForm                       * B492A  193 
+        REL(5)  IOSendMH                         * B492F  194 
+        REL(5)  IOSendMenu                       * B4934  195 
+        REL(5)  IOSendKey                        * B4939  196 
+        REL(5)  IOPrintForm                      * B493E  197 
+        REL(5)  IOLblPort                        * B4943  198 
+        REL(5)  IOLblXlat                        * B4948  199 
+        REL(5)  IOLblBaud                        * B494D  19A 
+        REL(5)  IOLblParity                      * B4952  19B 
+        REL(5)  IOFldBaud                        * B4957  19C 
+        REL(5)  IOPrintVals                      * B495C  19D 
+        REL(5)  IOPrintStore                     * B4961  19E 
+        REL(5)  IOPrintMH                        * B4966  19F 
+        REL(5)  IOPrintMenu                      * B496B  1A0 
+        REL(5)  IOPrintKey                       * B4970  1A1 
+        REL(5)  IOPrintLabels                    * B4975  1A2 
+        REL(5)  IOPrintPortMH                    * B497A  1A3 
+        REL(5)  IOPrintPortDisp                  * B497F  1A4 
+        REL(5)  IOPrintIRMH                      * B4984  1A5 
+        REL(5)  IOPrintWireMH                    * B4989  1A6 
+        REL(5)  IOPortIR?                        * B498E  1A7 
+        REL(5)  IOXferForm                       * B4993  1A8 
+        REL(5)  IOXferVals                       * B4998  1A9 
+        REL(5)  IOXferStore                      * B499D  1AA 
+        REL(5)  IOXferMH                         * B49A2  1AB 
+        REL(5)  IOXferMenu                       * B49A7  1AC 
+        REL(5)  IOXferRecvKey                    * B49AC  1AD 
+        REL(5)  IOXferGetKey                     * B49B1  1AE 
+        REL(5)  IOXferSendKey                    * B49B6  1AF 
+        REL(5)  IOXferLabels                     * B49BB  1B0 
+        REL(5)  IOXferPortMH                     * B49C0  1B1 
+        REL(5)  IOXferTypeMH                     * B49C5  1B2 
+        REL(5)  IOXferDisp                       * B49CA  1B3 
+        REL(5)  IOXferNameMH                     * B49CF  1B4 
+        REL(5)  IOXferChoose                     * B49D4  1B5 
+        REL(5)  IOXferLocal                      * B49D9  1B6 
+        REL(5)  IOXferRemote                     * B49DE  1B7 
+        REL(5)  IOXferRemoteMH                   * B49E3  1B8 
+        REL(5)  IOXferRemoteTitle                * B49E8  1B9 
+        REL(5)  IOXferRemoteMenu                 * B49ED  1BA 
+        REL(5)  IOXferRemoteCD                   * B49F2  1BB 
+        REL(5)  IOXferCDMH                       * B49F7  1BC 
+        REL(5)  IOXferCDKeys                     * B49FC  1BD 
+        REL(5)  IOXferParityMH                   * B4A01  1BE 
+        REL(5)  IOXferKermitMH                   * B4A06  1BF 
+        REL(5)  IOXferKermit?                    * B4A0B  1C0 
+        REL(5)  ModesApp                         * B4A10  1C1 
+        REL(5)  ModesVals                        * B4A15  1C2 
+        REL(5)  ModesStore                       * B4A1A  1C3 
+        REL(5)  ModesMH                          * B4A1F  1C4 
+        REL(5)  ModesMenu                        * B4A24  1C5 
+        REL(5)  ModesFlagKey                     * B4A29  1C6 
+        REL(5)  ModesFmtMH                       * B4A2E  1C7 
+        REL(5)  ModesFmtDisp                     * B4A33  1C8 
+        REL(5)  ModesDigitsMH                    * B4A38  1C9 
+        REL(5)  ModesFieldMH                     * B4A3D  1CA 
+        REL(5)  ModesKey                         * B4A42  1CB 
+        REL(5)  ModesCycleAngle                  * B4A47  1CC 
+        REL(5)  ModesCycleCoord                  * B4A4C  1CD 
+        REL(5)  ModesStd?                        * B4A51  1CE 
+        REL(5)  FlagBrowse                       * B4A56  1CF 
+        REL(5)  FlagBrowseMH                     * B4A5B  1D0 
+        REL(5)  FlagBrowseGrob                   * B4A60  1D1 
+        REL(5)  FlagBrowseGrob                   * B4A65  1D2 
+        REL(5)  FlagBrowseMenu                   * B4A6A  1D3 
+        REL(5)  FlagBrowseChk                    * B4A6F  1D4 
+        REL(5)  FlagState                        * B4A74  1D5 
+        REL(5)  FlagChange                       * B4A79  1D6 
+        REL(5)  MemApp                           * B4A7E  1D7 
+        REL(5)  BrowseMem                        * B4A83  1D8 
+        REL(5)  BrowseMH                         * B4A88  1D9 
+        REL(5)  BrowseTitle                      * B4A8D  1DA 
+        REL(5)  BrowseGetVars                    * B4A92  1DB 
+        REL(5)  BrowseMenuChoose                 * B4A97  1DC 
+        REL(5)  BrowseMenuFull                   * B4A9C  1DD 
+        REL(5)  BrowseEditKey                    * B4AA1  1DE 
+        REL(5)  BrowseEditForm                   * B4AA6  1DF 
+        REL(5)  BrowseCDKey                      * B4AAB  1E0 
+        REL(5)  BrowseCDChoose                   * B4AB0  1E1 
+        REL(5)  BrowseCDMH                       * B4AB5  1E2 
+        REL(5)  BrowseCDElem                     * B4ABA  1E3 
+        REL(5)  BrowseGetN                       * B4ABF  1E4 
+        REL(5)  BrowseNewKey                     * B4AC4  1E5 
+        REL(5)  BrowseNewForm                    * B4AC9  1E6 
+        REL(5)  BrowseNewMH                      * B4ACE  1E7 
+        REL(5)  BrowseNewLabels                  * B4AD3  1E8 
+        REL(5)  BrowseNewObjMH                   * B4AD8  1E9 
+        REL(5)  BrowseNewDirMH                   * B4ADD  1EA 
+        REL(5)  BrowseNewDisp                    * B4AE2  1EB 
+        REL(5)  BrowseNewDir?                    * B4AE7  1EC 
+        REL(5)  BrowseRclKey                     * B4AEC  1ED 
+        REL(5)  BrowseCopyKey                    * B4AF1  1EE 
+        REL(5)  BrowseCopyForm                   * B4AF6  1EF 
+        REL(5)  BrowseFldDest                    * B4AFB  1F0 
+        REL(5)  BrowseCopyMH                     * B4B00  1F1 
+        REL(5)  BrowseDestMH                     * B4B05  1F2 
+        REL(5)  BrowseMoveKey                    * B4B0A  1F3 
+        REL(5)  BrowseMoveForm                   * B4B0F  1F4 
+        REL(5)  BrowseMoveMH                     * B4B14  1F5 
+        REL(5)  BrowsePurgeKey                   * B4B19  1F6 
+        REL(5)  BrowseSizeKey                    * B4B1E  1F7 
+        REL(5)  SolveDiffStore                   * B4B23  1F8 
+        REL(5)  SolveVarMH                       * B4B28  1F9 
+        REL(5)  PlotKeyAngle                     * B4B2D  1FA 

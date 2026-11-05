@@ -1,23 +1,24 @@
-* HP 48GX ROM revision R, #27029-#2A001: Parser and compiler
+* HP 48GX ROM revision R, #27029-#2A001: The algebraic parser (an operator-precedence parser), the parser of unit expressions, the decompiler of algebraics to text, and the rounding and packing of long reals
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: PACK tok=casedrop GetGNTData PutGNTData POP1% NOTROMPcase drop;dq true;1Lput #1-UNROT COLAskipcola 3SKIP NoDecSep
+* Most referenced: PACK AlgFail tok=casedrop GetGNTData PutGNTData POP1% NOTROMPcase drop;dq AlgLoop CmdField AlgApply true;1Lput
 * Follows on from the previous file (at #27029 in the original ROM).
         A=C     A                                * 27029
         PC=(A)                                   * 2702B
 
 * refs (1): 26FDA
-SUB_2702F:
+* C.A = mask of trailer fields, C.S = field number -> carry set if the field is present, and its position in the trailer: counts the mask bits below it
+SlotOffset:
         P=      4                                * 2702F
         A=0     P                                * 27031
         C=C-1   S                                * 27034
-        GOC     SUB_2702F.L2                     * 27037
-SUB_2702F.loop1:
+        GOC     SlotOffset.L2                    * 27037
+SlotOffset.loop1:
         C=0     P                                * 2703A
         C=C+C   A                                * 2703D
         A=A+C   P                                * 2703F
         C=C-1   S                                * 27042
-        GONC    SUB_2702F.loop1                  * 27045
-SUB_2702F.L2:
+        GONC    SlotOffset.loop1                 * 27045
+SlotOffset.L2:
         C=A     P                                * 27048
         P=C     4                                * 2704B
         CPEX    15                               * 2704F
@@ -28,68 +29,74 @@ SUB_2702F.L2:
         RPL
 
 * refs (1): 27022
-OBJ_2705C:
+* Finish a field read: an access pointer or ROMPTR in the field is resolved to its object
+SlotResolve:
         :: ?ACCPTR> NOTROMPcase TRUE             * 2705C
-          OBJ_29202 FALSE SWAPDROP ?ACCPTR> TRUE ; * 27070
+          RompNoAcc FALSE SWAPDROP ?ACCPTR> TRUE ; * 27070
 
 * refs (10): 4ABE4 6850F 6852D 68DFA 68ECC 6DEAF ...
-OBJ_2708E:
+* ob -> ob' TRUE | FALSE: the trailer field that header bit 2 says is present. For words of library 700 it comes after the compile routine and the SST handler, when they are there.
+CmdField:
         :: CK&DISPATCH0                          * 2708E
-          BINT8 OBJ_270BB                        * 27098  program
-          BINT15 OBJ_270D9                       * 270A2  romptr
+          BINT8 CmdFieldWd                       * 27098  program
+          BINT15 CmdFieldRomp                    * 270A2  romptr
           BINT0 FALSE                            * 270AC  any
         ;                                        * 270B6
 
 * refs (1): 2709D
-OBJ_270BB:
-        :: DUPROM-WORD? case OBJ_2710B           * 270BB
+* ROM word case of CmdField
+CmdFieldWd:
+        :: DUPROM-WORD? case CmdFieldCode        * 270BB
           FALSE ;                                * 270CF
 
 * refs (1): 270A7
-OBJ_270D9:
-        :: OBJ_71DFF FALSE OBJ_7221F ;           * 270D9
+* ROMPTR case of CmdField
+CmdFieldRomp:
+        :: OBJ_71DFF FALSE CmdFieldRomp~1 ;      * 270D9
 
 * refs (1): 7222C
-OBJ_270F2:
-        :: OBJ_2710B NOTcsdrpfls SWAPDROPTRUE ;  * 270F2
+* ROMPTR case as called from library code
+CmdFieldRomp2:
+        :: CmdFieldCode NOTcsdrpfls SWAPDROPTRUE ; * 270F2
 
 * refs (2): 270CA 270F7
-OBJ_2710B:
-        CON(5)  ?OKINALG~romptr~1.L8             * 2710B  code object: the address of its machine code
+* Code object of CmdField. ST6 set for library #700 and above, where header bit 3 means an SST handler and bit 1 clear a compile routine, each taking a field before this one.
+CmdFieldCode:
+        CON(5)  CmdFieldCode~1                   * 2710B  code object: the address of its machine code
         ASSEMBLE
-OBJ_2710B.L1:
+CmdFieldCode.L1:
         A=DAT1  X                                * 27110
         CD1EX                                    * 27114
         RSTK=C                                   * 27117
         LC(3)   #700                             * 27119
         ST=0    6                                * 2711E
         ?C>A    X                                * 27121
-        GOYES   OBJ_2710B.L2                     * 27124
+        GOYES   CmdFieldCode.L2                  * 27124
         ST=1    6                                * 27126
-OBJ_2710B.L2:
+CmdFieldCode.L2:
         C=RSTK                                   * 27129
         CD1EX                                    * 2712B
         D1=D1-  1                                * 2712E
         A=DAT1  1                                * 27131
         D1=C                                     * 27135
         ?ABIT=1 2                                * 27138
-        GOYES   OBJ_2710B.L4                     * 2713D
-OBJ_2710B.L3:
+        GOYES   CmdFieldCode.L4                  * 2713D
+CmdFieldCode.L3:
         LC(5)   FALSE                            * 2713F
         A=C     A                                * 27146
         PC=(A)                                   * 27148
-OBJ_2710B.L4:
+CmdFieldCode.L4:
         C=0     S                                * 2714C
         ?ST=0   6                                * 2714F
-        GOYES   OBJ_2710B.L6                     * 27152
+        GOYES   CmdFieldCode.L6                  * 27152
         ?ABIT=0 3                                * 27154
-        GOYES   OBJ_2710B.L5                     * 27159
+        GOYES   CmdFieldCode.L5                  * 27159
         C=C+1   S                                * 2715B
-OBJ_2710B.L5:
+CmdFieldCode.L5:
         ?ABIT=1 1                                * 2715E
-        GOYES   OBJ_2710B.L6                     * 27163
+        GOYES   CmdFieldCode.L6                  * 27163
         C=C+1   S                                * 27165
-OBJ_2710B.L6:
+CmdFieldCode.L6:
         GOSBVL  SAVPTR                           * 27168
         A=R0.F  A                                * 2716F
         D0=A                                     * 27175
@@ -98,24 +105,26 @@ OBJ_2710B.L6:
         RPL
 
 * refs (1): 1476C
-OBJ_271C5:
-        :: DUP OBJ_2699F NOTcaseFALSE DUPTYPECOL? * 271C5
-          case OBJ_27206                         * 271DE
-          OBJ_71DFF FALSE OBJ_27206 NOTcsdrpfls SWAPDROPTRUE ; * 271E8
+* ob -> ob' TRUE | FALSE: the SST handler of a word of library 700
+SstHandler:
+        :: DUP Lib700? NOTcaseFALSE DUPTYPECOL?  * 271C5
+          case SstHandlerCode                    * 271DE
+          OBJ_71DFF FALSE SstHandlerCode NOTcsdrpfls SWAPDROPTRUE ; * 271E8
 
 * refs (2): 271E3 271F2
-OBJ_27206:
-        CON(5)  ?OKINALG~romptr~1.L9             * 27206  code object: the address of its machine code
+* Code object of SstHandler: the handler is present when header bit 3 is set; it is field 0, or field 1 after a compile routine
+SstHandlerCode:
+        CON(5)  SstHandlerCode~1                 * 27206  code object: the address of its machine code
         ASSEMBLE
-OBJ_27206.L1:
+SstHandlerCode.L1:
         A=DAT1  1                                * 2720B
         D1=C                                     * 2720F
         ?ABIT=1 3                                * 27212
-        GOYES   OBJ_27206.L2                     * 27217
-        GOTO    OBJ_2710B.L3                     * 27219
-OBJ_27206.L2:
+        GOYES   SstHandlerCode.L2                * 27217
+        GOTO    CmdFieldCode.L3                  * 27219
+SstHandlerCode.L2:
         C=0     S                                * 2721D
-        GOTO    OBJ_2710B.L5                     * 27220
+        GOTO    CmdFieldCode.L5                  * 27220
 
 * bak -> :: bak <ob2> <rest> ; ob -> :: ob <ob1> ;
 * refs (4): 0902A 215E3 853AF 8550F
@@ -167,8 +176,9 @@ NOTROMPcase.L3:
         RPL
 
 * refs (1): 24753
-OBJ_2729B:
-        :: BINT4 OBJ_285C6 DUP#1+ SWAPUnDROP BINT0 BINT7 NDUPN DROP * 2729B
+* Parse an algebraic, tokens already started. Lams hold the state: 1 = 0 when an operand is expected, 2 = priority, 3..7 the current operator, 8.. the saved tokenizer data. Operators wait on the stack as frames with their priorities.
+AlgParse:
+        :: BINT4 AlgStartFrame DUP#1+ SWAPUnDROP BINT0 BINT7 NDUPN DROP * 2729B
           {                                      * 272C8
 
 Π'ttt:
@@ -203,28 +213,29 @@ OBJ_2729B:
 
 Π'unbound:
             LAM 'unbound }                       * 27375
-          BIND pshzer OBJ_273AA ABND ;           * 27391
+          BIND pshzer AlgLoop ABND ;             * 27391
 
 * refs (12): 2739B 276B1 27814 2792C 27A3A 27ABC ...
-* Probably: the algebraic parser's main loop
-OBJ_273AA:
-        :: check_pdata OBJ_27ED1 OBJ_2768E OBJ_27CCE 8GETLAM nultrior * 273AA
-          :: drop;dq OBJ_27530 ; tok' tok=casedrop OBJ_27530 * 273CD
-          toklparen tok=casedrop OBJ_27A03       * 273F0
-          tokrparen tok=casedrop OBJ_278D7       * 273FF
-          NoDecSep tok=casedrop OBJ_276D4        * 2740E
-          tok; tok=casedrop OBJ_276D4            * 2741D
-          tok= tok=casedrop OBJ_2781E            * 2742C
-          DROP GetGNTData OBJ_25D03 !*trior OBJ_27AC6 ngsizecase failed * 2743B
-          OBJ_24609 !*trior OBJ_27AC6 SWAP COMPILEID ROT ORNOT casedrop * 2745E
+* Main loop: dispatch on the next token
+AlgLoop:
+        :: check_pdata AlgTok AlgLoop~1 AlgLoop~2 8GETLAM nultrior * 273AA
+          :: drop;dq AlgEnd ; tok' tok=casedrop AlgEnd * 273CD
+          toklparen tok=casedrop AlgLParen       * 273F0
+          tokrparen tok=casedrop AlgRParen       * 273FF
+          NoDecSep tok=casedrop AlgComma         * 2740E
+          tok; tok=casedrop AlgComma             * 2741D
+          tok= tok=casedrop AlgEqual             * 2742C
+          DROP GetGNTData ParseReal !*trior AlgOperand ngsizecase failed * 2743B
+          Tok>Name !*trior AlgOperand SWAP COMPILEID ROT ORNOT casedrop * 2745E
           failed                                 * 27486
-          OBJ_274D1 ?OKINALG NOTcasedrop failed  * 2748B
-          OBJ_26BED NOTcase OBJ_27670            * 2749F
-          7UNROLL 7UNROLL 7UNROLL 4DROP COLA OBJ_27B0C * 274AE
+          ?AlgUnary ?OKINALG NOTcasedrop failed  * 2748B
+          FnInfo NOTcase AlgNotFn                * 2749F
+          7UNROLL 7UNROLL 7UNROLL 4DROP COLA AlgOperator * 274AE
         ;                                        * 274CC
 
 * refs (3): 2748B 68814 68AA3
-OBJ_274D1:
+* ob -> ob': at the start of an operand - becomes NEG and + becomes the unary plus
+?AlgUnary:
         :: 1GETLAM #0<> ?SEMI                    * 274D1
           DUP M1st-case                          * 274E5
           :: 2DROP ' xNEG ;                      * 274EF
@@ -233,73 +244,80 @@ OBJ_274D1:
           DROP ;                                 * 27526
 
 * refs (2): 273D7 273EB
-OBJ_27530:
-        :: 1GETLAM #0=case OBJ_27797             * 27530
-          COLA OBJ_27553                         * 27544
+* Closing tick: an operand must have come; reduce everything that's left
+AlgEnd:
+        :: 1GETLAM #0=case AlgFail               * 27530
+          COLA AlgEndReduce                      * 27544
         ;                                        * 2754E
 
 * refs (3): 27549 2757B 275A3
-OBJ_27553:
-        :: DUP#0=case OBJ_2763E                  * 27553
-          OBJ_282D7 NOTcase                      * 27562
-          :: OBJ_27FC1 COLA OBJ_27553            * 2756C
+* Apply the waiting operators until none are left; a parenthesis left open is allowed when the input ended there
+AlgEndReduce:
+        :: DUP#0=case AlgDone                    * 27553
+          AlgEndReduce~1 NOTcase                 * 27562
+          :: AlgApply COLA AlgEndReduce          * 2756C
           ;                                      * 27580
-          OBJ_28616 IT OBJ_275AD                 * 27585
-          OBJ_284C3 OBJ_27FC1 COLA OBJ_27553     * 27594
+          OBJ_28616 IT AlgEndParens              * 27585
+          OBJ_284C3 AlgApply COLA AlgEndReduce   * 27594
         ;                                        * 275A8
 
 * refs (1): 2758F
-OBJ_275AD:
+* Close the parentheses left open at the end
+AlgEndParens:
         :: DUP BINT5 #=case                      * 275AD
-          :: NDROP BINT0 RDROPCOLA OBJ_2763E ;   * 275C1
+          :: NDROP BINT0 RDROPCOLA AlgDone ;     * 275C1
           BEGIN ROT#1+UNROT OBJ_282FA DROP SWAPDUP BINT5 #= SWAP BINT7 #> OR * 275DF
           NOTcase                                * 27616
-          :: 2RDROP DROP OBJ_27797 ;             * 2761B
+          :: 2RDROP DROP AlgFail ;               * 2761B
           NOT_UNTIL ;                            * 27634
 
 * refs (2): 2755D 275D5
-OBJ_2763E:
+* Build the symbolic object from the finished stack
+AlgDone:
         :: DROPONE OVER#= ITE CKSYMBN PSYMBN     * 2763E
           SWAP#1+ GetGNTData TrueTrue ;          * 2765C
 
 * refs (1): 274A9
-OBJ_27670:
-        :: OBJ_24681 2DROP COLA OBJ_27AC6        * 27670
+* A word that isn't a function: treat it as an operand
+AlgNotFn:
+        :: PutTok 2DROP COLA AlgOperand          * 27670
         ;                                        * 27689
 
 * refs (1): 273B9
-OBJ_2768E:
+AlgLoop~1:
         :: GetGNTData 5ROLL tok8trior            * 2768E
 
 * refs (1): 276CA
 OBJ_276A2:
-          :: PutGNTData COLA OBJ_273AA           * 276A2
+          :: PutGNTData COLA AlgLoop             * 276A2
           ;                                      * 276B6
-          tok; OBJ_0BC15 !*triand OBJ_276A2 ;    * 276BB
+          tok; tok=next !*triand OBJ_276A2 ;     * 276BB
 
 * refs (2): 27418 27427
-OBJ_276D4:
-        :: 1GETLAM #0=case OBJ_27797             * 276D4
-          COLA OBJ_276F7                         * 276E8
+* Argument separator: reduce down to the enclosing call
+AlgComma:
+        :: 1GETLAM #0=case AlgFail               * 276D4
+          COLA AlgCommaReduce                    * 276E8
         ;                                        * 276F2
 
 * refs (3): 276ED 2772E 27756
-OBJ_276F7:
-        :: DUP#0=case OBJ_27797                  * 276F7
-          3PICK #0=case OBJ_2842D                * 27706
+* Apply operators down to the frame of the enclosing function or parenthesis
+AlgCommaReduce:
+        :: DUP#0=case AlgFail                    * 276F7
+          3PICK #0=case AlgCmpSep                * 27706
           OBJ_282FA NOTcase                      * 27715
-          :: OBJ_27FC1 COLA OBJ_276F7            * 2771F
+          :: AlgApply COLA AlgCommaReduce        * 2771F
           ;                                      * 27733
           OBJ_28616 NOTcase                      * 27738
-          :: OBJ_284C3 OBJ_27FC1 COLA OBJ_276F7  * 27742
+          :: OBJ_284C3 AlgApply COLA AlgCommaReduce * 27742
           ;                                      * 2775B
           ROT#1+UNROT OBJ_282FA 2DROP BINT6 EQcasedrop OBJ_277B0 * 27760
           DUP BINT7 #>case OBJ_277C9             * 2777E
           DROP                                   * 27792
 
 * refs (22): 2753F 2762A 276E3 27701 2782D 2784B ...
-* Probably: parser failure exit: restore the saved token and parser state (lams 11..8), FALSE TRUE
-OBJ_27797:
+* Parser failure exit: restore the saved token and parser state, then FALSE TRUE
+AlgFail:
           :: GetGNTData failed ; ;               * 27797
 
 * refs (4): 27779 278C3 279A9 279F4
@@ -312,112 +330,123 @@ OBJ_277C9:
         :: BINT8 #- 4ROLL SWAP#- 3UNROLL OBJ_284C3 * 277C9
 
 * refs (5): 27922 27A30 27AB2 27C65 27EB8
-OBJ_277EC:
+* Read the next token, set lam 1 to 0 and go on: an operand comes next
+AlgNextOperand:
           :: GetGNTData DROP GetNextToken PutGNTData ; ~BINT0;1PUTLAM COLA * 277EC
-          OBJ_273AA                              * 27814
+          AlgLoop                                * 27814
         ;                                        * 27819
 
 * refs (1): 27436
-OBJ_2781E:
-        :: 1GETLAM #0=case OBJ_27797             * 2781E
-          COLA OBJ_27841                         * 27832
+* =: reduce, then treat as an operator
+AlgEqual:
+        :: 1GETLAM #0=case AlgFail               * 2781E
+          COLA AlgEqualReduce                    * 27832
         ;                                        * 2783C
 
 * refs (3): 27837 27878 278A0
-OBJ_27841:
-        :: DUP#0=case OBJ_27797                  * 27841
-          3PICK #0=case OBJ_27797                * 27850
+* Apply operators down to the = frame
+AlgEqualReduce:
+        :: DUP#0=case AlgFail                    * 27841
+          3PICK #0=case AlgFail                  * 27850
           OBJ_282FA NOTcase                      * 2785F
-          :: OBJ_27FC1 COLA OBJ_27841            * 27869
+          :: AlgApply COLA AlgEqualReduce        * 27869
           ;                                      * 2787D
           OBJ_28616 NOTcase                      * 27882
-          :: OBJ_284C3 OBJ_27FC1 COLA OBJ_27841  * 2788C
+          :: OBJ_284C3 AlgApply COLA AlgEqualReduce * 2788C
           ;                                      * 278A5
           ROT#1+UNROT OBJ_282FA 2DROP BINT7 #=casedrop OBJ_277B0 * 278AA
-          DROP OBJ_27797 ;                       * 278C8
+          DROP AlgFail ;                         * 278C8
 
 * refs (1): 27409
-OBJ_278D7:
-        :: 1GETLAM #0=case OBJ_27797             * 278D7
-          COLA OBJ_278FA                         * 278EB
+* ): reduce down to the matching (
+AlgRParen:
+        :: 1GETLAM #0=case AlgFail               * 278D7
+          COLA AlgRParenReduce                   * 278EB
         ;                                        * 278F5
 
 * refs (3): 278F0 2794F 27977
-OBJ_278FA:
-        :: DUP#0=case OBJ_27797                  * 278FA
+* Apply operators until the ( frame or the function's frame, which then closes
+AlgRParenReduce:
+        :: DUP#0=case AlgFail                    * 278FA
           3PICK #0=case                          * 27909
-          :: metatail NDROP OBJ_277EC COLA OBJ_273AA * 27913
+          :: metatail NDROP AlgNextOperand COLA AlgLoop * 27913
           ;                                      * 27931
           OBJ_282FA NOTcase                      * 27936
-          :: OBJ_27FC1 COLA OBJ_278FA            * 27940
+          :: AlgApply COLA AlgRParenReduce       * 27940
           ;                                      * 27954
           OBJ_28616 NOTcase                      * 27959
-          :: OBJ_284C3 OBJ_27FC1 COLA OBJ_278FA  * 27963
+          :: OBJ_284C3 AlgApply COLA AlgRParenReduce * 27963
           ;                                      * 2797C
           ROT#1+UNROT OBJ_282FA DROPOVER BINT5 #=case * 27981
           :: 2DROP COLA OBJ_277B0                * 2799A
           ;                                      * 279AE
-          SWAP BINT9 #< casedrop OBJ_27797       * 279B3
-          NOTcase OBJ_27797                      * 279CC
+          SWAP BINT9 #< casedrop AlgFail         * 279B3
+          NOTcase AlgFail                        * 279CC
           ROT#1+UNROT OBJ_282FA 2DROP BINT5 #= case OBJ_277B0 * 279D6
-          OBJ_27797 ;                            * 279F9
+          AlgFail ;                              * 279F9
 
 * refs (1): 273FA
-OBJ_27A03:
+* (: starts a group in operand position; after a name it is a function call, built with xFCNAPPLY
+AlgLParen:
         :: 1GETLAM #0=case                       * 27A03
-          :: NULLHXS ZEROZERO BINT3 5ROLL #4+ OBJ_277EC COLA OBJ_273AA * 27A12
+          :: NULLHXS ZEROZERO BINT3 5ROLL #4+ AlgNextOperand COLA AlgLoop * 27A12
           ;                                      * 27A3F
-          psh OVERDUP TYPEIDNT? SWAP TYPELAM? OR NOTcase OBJ_27797 * 27A44
+          psh OVERDUP TYPEIDNT? SWAP TYPELAM? OR NOTcase AlgFail * 27A44
           #1-SWAP symcomp BINT0 ' xFCNAPPLY #0590410h BINT0 BINT3 BINT6 * 27A6C
-          BINT7 psh over& psh ~BINT0;1PUTLAM OBJ_277EC COLA OBJ_273AA * 27A99
+          BINT7 psh over& psh ~BINT0;1PUTLAM AlgNextOperand COLA AlgLoop * 27A99
         ;                                        * 27AC1
 
 * refs (3): 2744F 27468 27684
-OBJ_27AC6:
+* ob -> : an operand must be expected here. Keep it and expect an operator.
+AlgOperand:
         :: 1GETLAM ~BINT1;1PUTLAM #0= NOTcase    * 27AC6
-          :: 4DROP OBJ_27797 ;                   * 27ADF
-          PutGNTData pullrev1& COLA OBJ_273AA    * 27AF3
+          :: 4DROP AlgFail ;                     * 27ADF
+          PutGNTData pullrev1& COLA AlgLoop      * 27AF3
         ;                                        * 27B07
 
 * refs (1): 274C7
-OBJ_27B0C:
+* An operator or function: unpack its descriptor into the lams, reduce by priority, and push it
+AlgOperator:
         :: #1+ #0= 6PUTLAM SWAP 5PUTLAM DUP4PUTLAM OBJ_26E61 DROP 7PUTLAM * 27B0C
-          2PUTLAM NOTcase OBJ_27BA2              * 27B3E
-          1GETLAM #0=case OBJ_27797              * 27B4D
-          OBJ_27C74 BINT3 3PUTLAM 4GETLAM OBJ_28599 BINT2 #<> ?SKIP * 27B5C
+          2PUTLAM NOTcase AlgPrefix              * 27B3E
+          1GETLAM #0=case AlgFail                * 27B4D
+          AlgReduce BINT3 3PUTLAM 4GETLAM AlgOperator~1 BINT2 #<> ?SKIP * 27B5C
           OBJ_282B4                              * 27B84
-          OBJ_27BD9 OBJ_284C3 COLA OBJ_273AA     * 27B89
+          AlgPushOp OBJ_284C3 COLA AlgLoop       * 27B89
         ;                                        * 27B9D
 
 * refs (1): 27B48
-OBJ_27BA2:
-        :: 1GETLAM #0= NOTcase OBJ_27797         * 27BA2
-          BINT2 3PUTLAM OBJ_27BD9 COLA OBJ_273AA * 27BBB
+* A prefix function in operand position
+AlgPrefix:
+        :: 1GETLAM #0= NOTcase AlgFail           * 27BA2
+          BINT2 3PUTLAM AlgPushOp COLA AlgLoop   * 27BBB
         ;                                        * 27BD4
 
 * refs (2): 27B89 27BC5
-OBJ_27BD9:
+* Push a frame for the operator in the lams, using xFCNAPPLY for a user function
+AlgPushOp:
         :: 5GETLAM DUP TYPEROMP? ITE             * 27BD9
           :: symcomp BINT0 ' xFCNAPPLY BINT3 ;   * 27BF2
           :: 6GETLAM ITE                         * 27C15
             :: ZEROSWAP BINT2 ; BINT1            * 27C24
           ;                                      * 27C3D
-          4GETLAM 7GETLAM 3GETLAM BINT3 top& DUP#1+ top& OBJ_277EC * 27C42
+          4GETLAM 7GETLAM 3GETLAM BINT3 top& DUP#1+ top& AlgNextOperand * 27C42
           ~BINT0;1PUTLAM ;                       * 27C6A
 
 * refs (2): 27B5C 27CC4
-OBJ_27C74:
+* Apply waiting operators of higher or equal priority
+AlgReduce:
         :: DUP#0= ?SEMI                          * 27C74
           4PICK 2GETLAM #< ?SEMI                 * 27C83
           OBJ_282FA IT                           * 27C97
           :: OBJ_28616 DROP ;                    * 27CA1
-          OBJ_284C3 OBJ_27FC1 COLA OBJ_27C74     * 27CB5
+          OBJ_284C3 AlgApply COLA AlgReduce      * 27CB5
         ;                                        * 27CC9
 
 * refs (1): 273BE
-OBJ_27CCE:
-        :: 1GETLAM #0= NOTcase OBJ_27797         * 27CCE
-          ~BINT1;1PUTLAM OBJ_27FC1 COLA OBJ_273AA * 27CE7
+AlgLoop~2:
+        :: 1GETLAM #0= NOTcase AlgFail           * 27CCE
+          ~BINT1;1PUTLAM AlgApply COLA AlgLoop   * 27CE7
         ;                                        * 27CFB
 
 * refs (2): 273AF 27EC7
@@ -428,6 +457,7 @@ check_pdata:
           DROP                                   * 27D2D
 
 * refs (1): 69A59
+* Probably: #kind -> : dispatch for the next objects of the stream; kinds 0, 2 and 3 are the frames that hold operators
 OBJ_27D32:
           CODE                                   * 27D32  69 nibbles
             GOSBVL  POP#                         * 27D3C
@@ -456,6 +486,7 @@ OBJ_27D32.L1:
           #1+ 4UNROLL                            * 27D90
 
 * refs (1): 69A68
+* Probably: #kind -> : as the routine before, for kinds 4..7, the grouping frames (parentheses, comma, equals)
 OBJ_27D9A:
           CODE                                   * 27D9A  106 nibbles
             GOSBVL  POP#                         * 27DA4
@@ -500,39 +531,44 @@ OBJ_27D9A.L2:
           :: tok= COLAskipcola ; 3SKIP 8GETLAM   * 27E4A
 
 * refs (1): 69AC7
-OBJ_27E68:
+* $tok -> flag: the token is , or ;
+AlgSep?:
           :: NoDecSep tok=casedrop TRUE          * 27E68
             tok; tok=casedrop TRUE               * 27E7C
             2DROPFALSE ;                         * 27E8B
           IT                                     * 27E95
-          :: BINT7 #- 4ROLL SWAP#- 3UNROLL OBJ_277EC ; * 27E9A
+          :: BINT7 #- 4ROLL SWAP#- 3UNROLL AlgNextOperand ; * 27E9A
           COLA check_pdata                       * 27EC2
         ;                                        * 27ECC
 
 * refs (1): 273B4
-OBJ_27ED1:
+* Fetch the parser's token data and run the next word on it
+AlgTok:
         :: GetGNTData ~;eval;q                   * 27ED1
 
 * refs (2): 246C7 24E51
-OBJ_27EE0:
+* A token that isn't a delimiter or too long becomes a name
+AlgTok>Id:
           :: ngsizecase failed                   * 27EE0
             delimcase failed                     * 27EEF
             DUP RDROP ;                          * 27EF9
           $>ID DUP undo ITE                      * 27F08
 
 * refs (1): 69801
-OBJ_27F1C:
+* id -> lam TRUE: for the EquationWriter
+Id>Lam:
           :: DROP ID>LAM TRUE ;                  * 27F1C
 
 * refs (1): 69806
-OBJ_27F35:
+* $ -> ...: the EquationWriter's check for a name that compiles to a global
+CompileId?:
           :: DUP COMPILEID DROP TYPEIDNT? ;      * 27F35
           NOTcase                                * 27F53
 
 drop;false;true:
           :: DROP failed ;                       * 27F58
           symcomp 6rolld;1+(s5) DROP GetNextToken PutGNTData pullrev1& * 27F6C
-          OBJ_284C3 ROT#1+UNROT COLA OBJ_273AA   * 27F8A
+          OBJ_284C3 ROT#1+UNROT COLA AlgLoop     * 27F8A
         ;                                        * 27F9E
 
 * refs (6): 2740E 27E3B 27E6D 68B4D 69616 69A9A
@@ -540,38 +576,43 @@ NoDecSep:
         :: DPRADIX? tok, tok. RPITE ;            * 27FA3
 
 * refs (10): 27571 27599 27724 2774C 2786E 27896 ...
-OBJ_27FC1:
-        :: metatail #3- 4UNROLL3DROP rotswap top& OBJ_27FEE psh ; * 27FC1
+* Apply the top operator to its operands, in the symbolic being built
+AlgApply:
+        :: metatail #3- 4UNROLL3DROP rotswap top& AlgFold psh ; * 27FC1
 
 * refs (2): 27FDF 6B018
-OBJ_27FEE:
-        :: M1stNEGcase OBJ_2813D                 * 27FEE
+* Applying an operator: fold number literals. -5 becomes a negative real, (x,y) a complex, a number and unit a unit object, and the pseudo-commands of the parser turn into real ones.
+AlgFold:
+        :: M1stNEGcase AlgFoldNeg                * 27FEE
           AEQ1stcase xNEGNEG                     * 27FFD
           SWAPDROP#1- AEQ1stcase ~CK2&Dispatch   * 28007
-          OBJ_2818D AEQ1stcase ~CK2&Dispatch_2   * 28016
-          OBJ_281F6 AEQ1stcase xFORMUNIT         * 28025
-          OBJ_2806B AEQ1stcase xPREDIV           * 28034
-          OBJ_2804D ;                            * 28043
+          AlgFoldCmp AEQ1stcase ~CK2&Dispatch_2  * 28016
+          AlgFoldPolar AEQ1stcase xFORMUNIT      * 28025
+          AlgFoldUnit AEQ1stcase xPREDIV         * 28034
+          PreDiv>/ ;                             * 28043
 
 * refs (2): 28043 6AFB9
-OBJ_2804D:
+* -> : the parser's early divide becomes /
+PreDiv>/:
         :: SWAPDROP ' x/ SWAP ;                  * 2804D
 
 * refs (1): 28034
-OBJ_2806B:
+* Number and unit expression: folds to a unit object
+AlgFoldUnit:
         :: larg dup                              * 2806B
 
 * refs (1): 28115
 {}_2807A:
           { } OVER#2+UNROL SWAPDROP#1- larg CKSYMBN EXPLODE IMPLODE pshm1 * 2807A
           CKSYMBN EXPLODE IMPLODE SWAPDROPSWAP ERRSET * 280A7
-          :: ' OBJ_28A65 parameval ChkEvalNext? x* NOTcase doerrB01 * 280C0
+          :: ' Fmt>UnitOb parameval ChkEvalNext? x* NOTcase doerrB01 * 280C0
             SWAPDROP pshm1 NDROP DROP ;          * 280E8
           ERRTRAP                                * 28101
           :: ERRORCLR BEGIN {}_2807A EQ UNTIL IMPLODE ; SINNER top& ; * 28106
 
 * refs (1): 27FF8
-OBJ_2813D:
+* ob -> : negate a real, complex or unit literal at once; other things stay symbolic
+AlgFoldNeg:
         :: CK&DISPATCH0                          * 2813D
           REALOBOB ~#1-UNROT;EvalNoCK;SWAP       * 28147  real any any
           CMPOBOB ~#1-UNROT;EvalNoCK;SWAP        * 28151  complex any any
@@ -584,14 +625,15 @@ OBJ_2813D:
         :: #1-UNROT EvalNoCK SWAP ;              * 28174
 
 * refs (2): 28016 5F594
-OBJ_2818D:
+* (x,y): reals fold to a complex; others become x+i*y
+AlgFoldCmp:
         :: SWAPDROP#1- CK&DISPATCH0              * 2818D
-          REALREALOB ~#1-UNROT;%>C%;SWAP         * 2819C  real real any
+          REALREALOB AlgFoldCmp~real,real,any    * 2819C  real real any
           BINT0 Addi*+[_]                        * 281A6  any
         ;                                        * 281B0
 
 * refs (1): 281A1
-~#1-UNROT;%>C%;SWAP:
+AlgFoldCmp~real,real,any:
         :: #1-UNROT %>C% SWAP ;                  * 281B5
 
 * refs (2): 281AB 28282
@@ -600,18 +642,21 @@ Addi*+[_]:
           { xi x* x+ } INNERtop& ;               * 281D3
 
 * refs (2): 28025 5F599
-OBJ_281F6:
+* (r,∡t): reals fold to a complex; others become the formula of AlgPolarSym
+AlgFoldPolar:
         :: SWAPDROP#1- CK&DISPATCH0              * 281F6
-          REALREALOB OBJ_2821E                   * 28205  real real any
-          BINT0 OBJ_2823C                        * 2820F  any
+          REALREALOB AlgFoldPolar%               * 28205  real real any
+          BINT0 AlgPolarSym                      * 2820F  any
         ;                                        * 28219
 
 * refs (1): 2820A
-OBJ_2821E:
+* % % -> C%
+AlgFoldPolar%:
         :: #1-UNROT %POL>%REC %>C% SWAP ;        * 2821E
 
 * refs (1): 28214
-OBJ_2823C:
+* Symbolic polar complex: r*COS(t) + i*r*SIN(t)
+AlgPolarSym:
         :: pshzerpsharg parg& psh dup PTR addt2: xCOS x* psh PTR addt2: xSIN * 2823C
           x* top& top& Addi*+[_] ;               * 28273
         CON(5)  NOP                              * 2828C  address
@@ -629,7 +674,7 @@ OBJ_282B4:
         :: psh larg PSYMBN SWAP#1+ psh ;         * 282B4
 
 * refs (1): 27562
-OBJ_282D7:
+AlgEndReduce~1:
         :: 3PICK #0=case FALSE                   * 282D7
           COLA OBJ_282FA                         * 282EB
         ;                                        * 282F5
@@ -726,19 +771,22 @@ PutGNTData:
         :: 8PUTLAM 9PUTLAM 10PUTLAM 11PUTLAM ;   * 2840F
 
 * refs (1): 27710
-OBJ_2842D:
+* The , in (x,y): next token ∡ selects polar form
+AlgCmpSep:
         :: metatail NDROP GetGNTData DROP GetNextToken * 2842D
           :: tokanglesign tok8trior              * 2844B
 
 * refs (3): 699F0 6F1B7 6F8C4
-OBJ_2845A:
+* -> ob: the parser's pseudo-command for a polar complex
+'CmpPolarOp:
             :: ' ~CK2&Dispatch_2 ;               * 2845A
 
 * refs (5): 69468 699D7 6F144 6F1F8 6F8B5
-OBJ_2846E:
+* -> ob: the parser's pseudo-command for a rectangular complex
+'CmpRectOp:
             :: ' ~CK2&Dispatch ; ;               * 2846E
           5UNROLL PutGNTData #05060410h BINT0 BINT5 BINT4 BINT5 top& * 28487
-          ~BINT0;1PUTLAM COLA OBJ_273AA          * 284AF
+          ~BINT0;1PUTLAM COLA AlgLoop            * 284AF
         ;                                        * 284BE
 
 * refs (8): 27594 27747 277E7 27891 27968 27B8E ...
@@ -801,11 +849,12 @@ drop;dq:
         :: DROP COLACOLA ;                       * 28585
 
 * refs (1): 27B70
-OBJ_28599:
+AlgOperator~1:
         :: BINT1 DUPDUP DUP OBJ_282FA 2DROP 6UNROLL 5DROP ; * 28599
 
 * refs (2): 272A5 6C823
-OBJ_285C6:
+* -> ' x= code #0 #1 #4: the frame that starts an algebraic, as an = of lowest priority
+AlgStartFrame:
         :: ' x= #00700h BINT0 BINT1 BINT4 ;      * 285C6
 
 * refs (7): 27AD0 27CE7 688CD 68936 68AC6 68E54 ...
@@ -844,78 +893,93 @@ ChkEval?:
         :: SETNUM RDROP FALSE ;                  * 286ED
 
 * refs (3): 24474 28747 3EFA5
-OBJ_28706:
-        :: OBJ_28724 !*triand COLA OBJ_287C4     * 28706
+* Parse a unit expression: a product of factors with optional ^ powers
+UnitExpr:
+        :: UnitTerm !*triand COLA UnitRest       * 28706
         ;                                        * 2871F
 
 * refs (2): 2870B 28828
-OBJ_28724:
-        :: toklparen tok8trior OBJ_28742 OBJ_28774 ; * 28724
+* A factor: a group in parentheses, or UnitAtom
+UnitTerm:
+        :: toklparen tok8trior UnitGroup UnitAtom ; * 28724
 
 * refs (1): 28733
-OBJ_28742:
-        :: OBJ_28706 !*triand nultrior TrueTrue tokrparen tok8trior TrueTrue * 28742
+* ( expression )
+UnitGroup:
+        :: UnitExpr !*triand nultrior TrueTrue tokrparen tok8trior TrueTrue * 28742
           failed ;                               * 2876A
 
 * refs (1): 28738
-OBJ_28774:
-        :: OBJ_25D03 !*trior TrueTrue _SQRT_ tok8trior OBJ_288FA _SQ_ * 28774
-          tok8trior OBJ_28918 _INV_ tok8trior OBJ_28945 COLA OBJ_289E0 * 2879C
+* A number, SQRT(...), SQ(...), INV(...) or a unit name
+UnitAtom:
+        :: ParseReal !*trior TrueTrue _SQRT_ tok8trior UnitSQRT _SQ_ * 28774
+          tok8trior UnitSQ _INV_ tok8trior UnitINV COLA UnitName * 2879C
         ;                                        * 287BF
 
 * refs (2): 2871A 28814
-OBJ_287C4:
+* Any number of * / ^ and their right-hand factors
+UnitRest:
         :: nultrior TrueTrue                     * 287C4
-          :: tok* tok8trior OBJ_28878 tok/ tok8trior OBJ_28896 tok^ * 287D3
-            tok8trior OBJ_288B4 FALSE ;          * 287FB
-          !*trior OBJ_287C4 TrueTrue ;           * 2880F
+          :: tok* tok8trior UnitMul tok/ tok8trior UnitDiv tok^ tok8trior * 287D3
+            UnitPow FALSE ;                      * 28800
+          !*trior UnitRest TrueTrue ;            * 2880F
 
 * refs (5): 2887D 2889B 288FF 2892C 28959
-OBJ_28823:
-        :: OBJ_28724 !*triand COLA OBJ_28841     * 28823
+* A factor with its powers
+UnitPowTerm:
+        :: UnitTerm !*triand COLA UnitPows       * 28823
         ;                                        * 2883C
 
 * refs (2): 28837 28864
-OBJ_28841:
+* Any number of ^ after a factor
+UnitPows:
         :: tok^ tok8trior                        * 28841
-          :: OBJ_288B4 !*triand COLA OBJ_28841   * 28850
+          :: UnitPow !*triand COLA UnitPows      * 28850
           ;                                      * 28869
           TrueTrue ;                             * 2886E
 
 * refs (1): 287E2
-OBJ_28878:
-        :: OBJ_28823 !*triand OBJ_28972 x* ;     * 28878
+* * and its right-hand side
+UnitMul:
+        :: UnitPowTerm !*triand UnitApply x* ;   * 28878
 
 * refs (1): 287F1
-OBJ_28896:
-        :: OBJ_28823 !*triand OBJ_28972 x/ ;     * 28896
+* / and its right-hand side
+UnitDiv:
+        :: UnitPowTerm !*triand UnitApply x/ ;   * 28896
 
 * refs (3): 28800 28855 288C8
-OBJ_288B4:
+* ^ and its exponent: a number, or a negative number giving INV
+UnitPow:
         :: tok- tok8trior                        * 288B4
-          :: OBJ_288B4 !*triand OBJ_28972 xINV ; OBJ_25D03 !*triand * 288C3
-          OBJ_28972 x^ ;                         * 288EB
+          :: UnitPow !*triand UnitApply xINV ; ParseReal !*triand UnitApply * 288C3
+          x^ ;                                   * 288F0
 
 * refs (1): 28792
-OBJ_288FA:
-        :: OBJ_28823 !*triand OBJ_28972 xSQRT ;  * 288FA
+* SQRT(factor)
+UnitSQRT:
+        :: UnitPowTerm !*triand UnitApply xSQRT ; * 288FA
 
 * refs (1): 287A1
-OBJ_28918:
-        :: toklparen OBJ_0BC47 !*triand OBJ_28823 !*triand OBJ_28972 xSQ ; * 28918
+* SQ(factor)
+UnitSQ:
+        :: toklparen tok=? !*triand UnitPowTerm !*triand UnitApply xSQ ; * 28918
 
 * refs (1): 287B0
-OBJ_28945:
-        :: toklparen OBJ_0BC47 !*triand OBJ_28823 !*triand OBJ_28972 xINV ; * 28945
+* INV(factor)
+UnitINV:
+        :: toklparen tok=? !*triand UnitPowTerm !*triand UnitApply xINV ; * 28945
 
 * refs (8): 2447E 28887 288A5 288D2 288EB 28909 ...
-OBJ_28972:
+* Apply the next stream object to the parsed operands under ChkEval?; a failure drops back to the marker and fails
+UnitApply:
         :: {}_23989 BINT5 psh 'R SWAP#1+ larg rotswap DROP ChkEval? case * 28972
           :: ROTROT2DROP 6rolld;1+(s5) TrueTrue ; * 289A9
           BEGIN {}_23989 EQ UNTIL failed ;       * 289C2
 
 * refs (1): 287BA
-OBJ_289E0:
+* $ -> : the token must be a unit's name
+UnitName:
         :: DUP st=>uo? NOTcase failed            * 289E0
           SWAPDROP DaDGNTc ;                     * 289F9
 
@@ -933,21 +997,23 @@ _INV_:
 
 * refs (1): 1FB0E
 xFORMUNIT~name|local|algebraic:
-        :: BINT2 nmetasyms ' OBJ_28A65 parameval COLA x* * 28A38
+        :: BINT2 nmetasyms ' Fmt>UnitOb parameval COLA x* * 28A38
         ;                                        * 28A60
 
 * refs (2): 280CA 28A4C
-OBJ_28A65:
+* ob -> ob' flag: each element of an expression for →UNIT: names and functions to unit operators
+Fmt>UnitOb:
         :: CK&DISPATCH0                          * 28A65
           BINT6 nm=>uo?                          * 28A6F  name
           BINT7 nm=>uo?                          * 28A79  local
-          BINT8 OBJ_28B05                        * 28A83  program
-          BINT15 OBJ_28AA6                       * 28A8D  romptr
+          BINT8 Fmt>UnitWd                       * 28A83  program
+          BINT15 Fmt>UnitRomp                    * 28A8D  romptr
           BINT0 TRUE                             * 28A97  any
         ;                                        * 28AA1
 
 * refs (1): 28A92
-OBJ_28AA6:
+* ROMPTR case: the name of a unit
+Fmt>UnitRomp:
         :: ROMPTRDECOMP ?SKIP doerrB01           * 28AA6
           COLA nm=>uo?                           * 28ABA
         ;                                        * 28AC4
@@ -961,194 +1027,217 @@ doerrB01:
           :: # B01 ERRORSTO ERRJMP ; ;           * 28AE2  "Invalid Unit"
 
 * refs (1): 28A88
-OBJ_28B05:
+* Word case: xFCNAPPLY and words with field 11 are error #B01; others must pass ChkEval?
+Fmt>UnitWd:
         :: REQcasedrop xFCNAPPLY                 * 28B05
-          doerrB01 OBJ_26F7A case doerrB01       * 28B14
+          doerrB01 CmdFieldB case doerrB01       * 28B14
           ChkEval? ?SKIP ERRJMP                  * 28B28
           TRUE ;                                 * 28B37
 
 * refs (2): 34E85 68990
-OBJ_28B41:
-        :: FALSE OBJ_29A51 ZEROFALSE ' NULLLAM BINT4 NDUPN DOBIND * 28B41
-          DUPTYPESYMB? ITE OBJ_73010 OBJ_28BFF   * 28B6E
-          2GETLAM #1<> 1GETLAM OR ITE OBJ_290E6 OBJ_290BE * 28B82
+* symb -> ob1..obn #n: the pieces of an algebraic's text in order: tokens, names, numbers and operators. Lams: 4 flag, 3 limit, 2 pieces count (see 2Lam#+1), 1 failure flag. If it fails the result is 'Invalid Expression'.
+Symb>Pieces:
+        :: FALSE Symb>Pieces~1 ZEROFALSE ' NULLLAM BINT4 NDUPN DOBIND * 28B41
+          DUPTYPESYMB? ITE Symb>Pieces~2 SdcNode * 28B6E
+          2GETLAM #1<> 1GETLAM OR ITE SdcBad SdcDone * 28B82
           ABND ;                                 * 28BA5
 
 * refs (1): 73024
-OBJ_28BAF:
+Symb>Pieces~5:
         ::                                       * 28BAF
 
 {{}}:
           { {}_600F3 } >R >R BEGIN nextsym'R DUP {}_600F3 EQ NOT_WHILE * 28BB4
-          OBJ_28BFF REPEAT DROP ;                * 28BEB
+          SdcNode REPEAT DROP ;                  * 28BEB
 
 * refs (3): 28B7D 28BEB 73074
-OBJ_28BFF:
-        :: subpdcdptch OBJ_291B7 OBJ_28D99 OBJ_28DCB OBJ_28DB7 * 28BFF
-          drop;true;1Lput OBJ_26C72 NOTcase OBJ_28DB7 * 28C1D
-          MINUSONE #=casedrop OBJ_293A4          * 28C31
-          OBJ_28C4A ;                            * 28C40
+* Next node: an operator, a function, a unit, or an atom
+SdcNode:
+        :: subpdcdptch SdcFcn SdcNode~1 SdcUnit SdcCount1 drop;true;1Lput * 28BFF
+          FnInfoWd NOTcase SdcCount1             * 28C22
+          MINUSONE #=casedrop SdcVarArgs         * 28C31
+          SdcOp ;                                * 28C40
 
 * refs (5): 28C40 2922A 292A7 292BB 2940D
-OBJ_28C4A:
-        :: 2GETLAM 2DUP #>case OBJ_28D7B         * 28C4A
-          OBJ_2957A OBJ_28D7B OBJ_29CC7 OBJ_26E61 DROP 5ROLL #2+ 6UNROLL * 28C63
-          5ROLL SWAP BINT1 BINT6 BINT7 7ROLL ITE OBJ_29692 OBJ_2965B * 28C8B
+* An operator node: priorities and form from its descriptor, then its operands in order, with parentheses where needed
+SdcOp:
+        :: 2GETLAM 2DUP #>case SdcAtom           * 28C4A
+          SdcOp~2 SdcAtom SdcOp~3 OBJ_26E61 DROP 5ROLL #2+ 6UNROLL 5ROLL * 28C63
+          SWAP BINT1 BINT6 BINT7 7ROLL ITE SdcPrefix SdcInfix * 28C90
           BEGIN OBJ_282FA WHILE                  * 28CB8
-          :: SWAP OBJ_28D08 OBJ_29417 OBJ_29494 OBJ_294CB OBJ_294DF * 28CC7
-            OBJ_294F3 OBJ_29525 ;                * 28CEA
-          REPEAT OBJ_29D5F ;                     * 28CF9
+          :: SWAP SdcOp~1 SdcArg Sdc( Sdc) Sdc= SdcSep SdcComma ; REPEAT * 28CC7
+          SdcOp~4 ;                              * 28CFE
 
 * refs (1): 28CD1
-OBJ_28D08:
+* Probably: #kind -> : selects which of the following stream objects handles this piece of the operator's form
+SdcOp~1:
         CON(5)  (*)+5                            * 28D08  primitive code object
         ASSEMBLE
         GOSBVL  POP#                             * 28D0D
         LC(5)   #00000                           * 28D14
         ?C=A    A                                * 28D1B
-        GOYES   OBJ_28D08.L1                     * 28D1E
+        GOYES   SdcOp~1.L1                       * 28D1E
         LC(1)   #2                               * 28D20
         ?C=A    A                                * 28D23
-        GOYES   OBJ_28D08.L1                     * 28D26
+        GOYES   SdcOp~1.L1                       * 28D26
         LC(1)   #3                               * 28D28
         ?C=A    A                                * 28D2B
-        GOYES   OBJ_28D08.L1                     * 28D2E
+        GOYES   SdcOp~1.L1                       * 28D2E
         D0=D0+  5                                * 28D30
         LC(1)   #4                               * 28D33
         ?C=A    A                                * 28D36
-        GOYES   OBJ_28D08.L1                     * 28D39
+        GOYES   SdcOp~1.L1                       * 28D39
         D0=D0+  5                                * 28D3B
         LC(1)   #5                               * 28D3E
         ?C=A    A                                * 28D41
-        GOYES   OBJ_28D08.L1                     * 28D44
+        GOYES   SdcOp~1.L1                       * 28D44
         D0=D0+  5                                * 28D46
         LC(1)   #7                               * 28D49
         ?C=A    A                                * 28D4C
-        GOYES   OBJ_28D08.L1                     * 28D4F
+        GOYES   SdcOp~1.L1                       * 28D4F
         D0=D0+  5                                * 28D51
         LC(1)   #6                               * 28D54
         ?C#A    A                                * 28D57
-        GOYES   OBJ_28D08.L2                     * 28D5A
-OBJ_28D08.L1:
+        GOYES   SdcOp~1.L2                       * 28D5A
+SdcOp~1.L1:
         LC(5)   COLA                             * 28D5C
         A=C     A                                * 28D63
         PC=(A)                                   * 28D65
-OBJ_28D08.L2:
+SdcOp~1.L2:
         D0=D0+  5                                * 28D69
         D1=D1-  5                                * 28D6C
         D=D-1   A                                * 28D6F
-OBJ_28D08.L3:
+SdcOp~1.L3:
         A=DAT0  A                                * 28D71
         D0=D0+  5                                * 28D74
         PC=(A)                                   * 28D77
         RPL
 
 * refs (2): 28C5E 28C68
-OBJ_28D7B:
-        :: 3DROP true;1Lput COLA OBJ_28DB7       * 28D7B
+* Show ob as it stands
+SdcAtom:
+        :: 3DROP true;1Lput COLA SdcCount1       * 28D7B
         ;                                        * 28D94
 
 * refs (1): 28C0E
-OBJ_28D99:
-        :: BINT0 3GETLAM BINT3 OBJ_29140 ;       * 28D99
+SdcNode~1:
+        :: BINT0 3GETLAM BINT3 2Lam#+1 ;         * 28D99
 
 * refs (3): 28C18 28C2C 28D8F
-OBJ_28DB7:
-        :: BINT1 OBJ_29140 ;                     * 28DB7
+* #... -> : count 1 piece
+SdcCount1:
+        :: BINT1 2Lam#+1 ;                       * 28DB7
 
 * refs (1): 28C13
-OBJ_28DCB:
+* A unit object: number, _ and the unit's text
+SdcUnit:
         :: DUPLENCOMP BINT3 #<case drop;true;1Lput * 28DCB
           INNERCOMP SWAPDROP#1- pullrev tokuscore BINT2 psh AEQ1stcase um/ * 28DE4
-          OBJ_28E7A OBJ_28FB5 DUPZERO #>case     * 28E0C
+          SdcUnitDiv UnitOps>Meta DUPZERO #>case * 28E0C
 
 * refs (2): 28E8E 28EAC
-OBJ_28E20:
+* Unit operators don't parse: show the object plain
+SdcUnit!:
           :: NDROP NDROP NDROP true;1Lput ;      * 28E20
           DROP                                   * 28E3E
 
 * refs (1): 28ED4
-OBJ_28E43:
-          :: top& #72109h OBJ_26E61 DROP ROTDROP BINT2 top& OBJ_29140 ; ; * 28E43
+* Finish a unit's text
+SdcUnitEnd:
+          :: top& #72109h OBJ_26E61 DROP ROTDROP BINT2 top& 2Lam#+1 ; ; * 28E43
 
 * refs (1): 28E0C
-OBJ_28E7A:
-        :: SWAPDROP#1- OBJ_28FB5 DUP#0=case OBJ_28E20 * 28E7A
-          OBJ_28FB5 DUPZERO #>case               * 28E93
-          :: NDROP OBJ_28E20 ;                   * 28EA2
-          DROP PTR addt: x/ psh OBJ_28EDE top& OBJ_28E43 ; * 28EB6
+* A unit with a / in it
+SdcUnitDiv:
+        :: SWAPDROP#1- UnitOps>Meta DUP#0=case SdcUnit! * 28E7A
+          UnitOps>Meta DUPZERO #>case            * 28E93
+          :: NDROP SdcUnit! ;                    * 28EA2
+          DROP PTR addt: x/ psh SdcUnitParen top& SdcUnitEnd ; * 28EB6
 
 * refs (1): 28ECA
-OBJ_28EDE:
-        :: EqwImplicit()? case OBJ_28F92         * 28EDE
+* Add parentheses around a divisor product where implicit parentheses mode needs them
+SdcUnitParen:
+        :: EqwImplicit()? case ParenWrap         * 28EDE
           DUP #<3 ?SEMI                          * 28EF2
           3PICK REQcasedrop x*                   * 28F01
-          OBJ_28F92 DROPDUP #3= ?SEMI            * 28F10
+          ParenWrap DROPDUP #3= ?SEMI            * 28F10
           4PICK REQcasedrop x*                   * 28F24
-          OBJ_28F92 DROPDUP BINT4 #= ?SEMI       * 28F33
+          ParenWrap DROPDUP BINT4 #= ?SEMI       * 28F33
           5PICK REQcasedrop x*                   * 28F4C
-          OBJ_28F92 DROPDUP BINT5 #= ?SEMI       * 28F5B
+          ParenWrap DROPDUP BINT5 #= ?SEMI       * 28F5B
           6PICK REQcasedrop x*                   * 28F74
-          OBJ_28F92 DROP ;                       * 28F83
+          ParenWrap DROP ;                       * 28F83
 
 * refs (5): 28EED 28F10 28F33 28F5B 28F83
-OBJ_28F92:
+* ( and ) around the pieces on the meta
+ParenWrap:
         :: toklparen pshm1 top& tokrparen SWAP#1+ ; * 28F92
 
 * refs (3): 28E11 28E84 28E93
-OBJ_28FB5:
-        :: pshzer OBJ_28FC9 ;                    * 28FB5
+* -> meta: turn unit operators into a text meta
+UnitOps>Meta:
+        :: pshzer UnitOp>Meta ;                  * 28FB5
 
 * refs (7): 28FBF 2905A 29078 2908C 29091 290A5 ...
-OBJ_28FC9:
+* One level of UnitOps>Meta, by operator
+UnitOp>Meta:
         :: DUP#0=case true;1Lput                 * 28FC9
           AEQ1stcase um*                         * 28FD8
-          OBJ_2900F AEQ1stcase um^               * 28FE2
-          OBJ_29023 AEQ1stcase umP               * 28FF1
-          OBJ_29082 pullpsh1& ;                  * 29000
+          UnitOp* AEQ1stcase um^                 * 28FE2
+          UnitOp^ AEQ1stcase umP                 * 28FF1
+          UnitOpPrefix pullpsh1& ;               * 29000
 
 * refs (1): 28FE2
-OBJ_2900F:
-        :: OBJ_2909B x* ;                        * 2900F
+* um* as *
+UnitOp*:
+        :: UnitOpBinary x* ;                     * 2900F
 
 * refs (1): 28FF1
-OBJ_29023:
-        :: EqwImplicit()? case OBJ_29046         * 29023
-          OBJ_2909B x^ ;                         * 29037
+* um^ as ^; with implicit parentheses mode, a power is put in parentheses
+UnitOp^:
+        :: EqwImplicit()? case UnitOp^()         * 29023
+          UnitOpBinary x^ ;                      * 29037
 
 * refs (1): 29032
-OBJ_29046:
-        :: SWAPDROP#1- tokrparen psh1& OBJ_28FC9 toklparen psh1& ' x^ psh1& * 29046
-          OBJ_28FC9 ;                            * 29078
+* The parenthesised form of a unit power
+UnitOp^():
+        :: SWAPDROP#1- tokrparen psh1& UnitOp>Meta toklparen psh1& ' x^ * 29046
+          psh1& UnitOp>Meta ;                    * 29073
 
 * refs (1): 29000
-OBJ_29082:
-        :: SWAPDROP#1- OBJ_28FC9 OBJ_28FC9 ;     * 29082
+* umP: a prefix joined to its unit
+UnitOpPrefix:
+        :: SWAPDROP#1- UnitOp>Meta UnitOp>Meta ; * 29082
 
 * refs (2): 29014 29037
-OBJ_2909B:
-        :: SWAPDROP#1- OBJ_28FC9 'R psh1& OBJ_28FC9 ; * 2909B
+* A binary unit operator, the stream giving its symbol
+UnitOpBinary:
+        :: SWAPDROP#1- UnitOp>Meta 'R psh1& UnitOp>Meta ; * 2909B
 
 * refs (1): 28BA0
-OBJ_290BE:
+* Finish: drop the working meta, adding ticks when wanted
+SdcDone:
         :: DUP#1= ?SKIP 2pull2DROP               * 290BE
-          get1 IT OBJ_2911D                      * 290D2
+          get1 IT SdcTicks                       * 290D2
         ;                                        * 290E1
 
 * refs (1): 28B9B
-OBJ_290E6:
-        :: 2GETLAM ZERO_DO NDROP LOOP DROP tok' OBJ_2970A tok' BINT3 ; * 290E6
+* 'Invalid Expression' in place of what can't be decompiled
+SdcBad:
+        :: 2GETLAM ZERO_DO NDROP LOOP DROP tok' $InvalidExpr tok' BINT3 ; * 290E6
 
 * refs (1): 290DC
-OBJ_2911D:
+* ' at both ends of the output
+SdcTicks:
         :: tok' SWAP#1+ tok' pshm1 top& ;        * 2911D
 
 * refs (3): 28DAD 28DC1 28E6B
-OBJ_29140:
+* -> : add one to the # in lam 2. ST0 selects the direction, so this shares code with 2Lam#-1.
+2Lam#+1:
         CON(5)  (*)+5                            * 29140  primitive code object
         ASSEMBLE
         ST=1    0                                * 29145
-OBJ_29140.L1:
+2Lam#+1.L1:
         GOSBVL  SAVPTR                           * 29148
         D1=(5)  TEMPENV                          * 2914F
         A=DAT1  A                                * 29156
@@ -1161,12 +1250,12 @@ OBJ_29140.L1:
         D1=D1+  5                                * 29171
         A=DAT1  A                                * 29174
         ?ST=1   0                                * 29177
-        GOYES   OBJ_29140.L2                     * 2917A
+        GOYES   2Lam#+1.L2                       * 2917A
         A=A-1   A                                * 2917C
-        GONC    OBJ_29140.L3                     * 2917E
-OBJ_29140.L2:
+        GONC    2Lam#+1.L3                       * 2917E
+2Lam#+1.L2:
         A=A+1   A                                * 29181
-OBJ_29140.L3:
+2Lam#+1.L3:
         R0=A.F  A                                * 29183
         GOSBVL  PUSH#                            * 29189
         C=DAT1  A                                * 29190
@@ -1176,43 +1265,47 @@ OBJ_29140.L3:
         AD1EX                                    * 2919E
         DAT1=C  A                                * 291A1
         D1=A                                     * 291A4
-        GOTO    OBJ_28D08.L3                     * 291A7
+        GOTO    SdcOp~1.L3                       * 291A7
 
 * refs (3): 291E9 291EE 29403
-OBJ_291AB:
+* -> : subtract one from the # in lam 2
+2Lam#-1:
         CON(5)  (*)+5                            * 291AB  primitive code object
         ST=0    0                                * 291B0
-        GOTO    OBJ_29140.L1                     * 291B3
+        GOTO    2Lam#+1.L1                       * 291B3
         RPL
 
 * refs (1): 28C09
-OBJ_291B7:
+* A function call with xFCNAPPLY: name and arguments in parentheses
+SdcFcn:
         :: DROP 2GETLAM BINT3 #<case true;1Lput  * 291B7
-          OBJ_292F7 case true;1Lput              * 291D5
-          DROPSWAPDROP OBJ_291AB OBJ_291AB SWAP NOTROMPcase OBJ_29216 * 291E4
+          SdcFcn~1 case true;1Lput               * 291D5
+          DROPSWAPDROP 2Lam#-1 2Lam#-1 SWAP NOTROMPcase SdcFcn2 * 291E4
 
 * refs (1): 27070
-OBJ_29202:
+* Resolve a ROMPTR
+RompNoAcc:
           :: DUPROMPTR@ COLANOTcase ;            * 29202
 
 * refs (1): 291FD
-OBJ_29216:
-          :: #0590410h ROT COLA OBJ_28C4A        * 29216
+* Function with the standard function descriptor
+SdcFcn2:
+          :: #0590410h ROT COLA SdcOp            * 29216
           ;                                      * 2922F
           DROPSWAP OVER ?OKINALG NOTcase         * 29234
 
 3dropn;true;1Lput:
           :: 3DROP true;1Lput ;                  * 29248
           3PICK EQUALNOTcase drop2;true;1Lput    * 2925C
-          SWAP OBJ_26C1A NOTcase                 * 2926B
+          SWAP FnInfoRomp NOTcase                * 2926B
 
 * refs (5): 29266 293B3 293C7 293DB 293EF
 drop2;true;1Lput:
           :: 2DROP true;1Lput ;                  * 2927A
           MINUSONE #=casedrop                    * 2928E
-          :: ROT COLA OBJ_28C4A                  * 29298
+          :: ROT COLA SdcOp                      * 29298
           ;                                      * 292AC
-          4ROLLOVER #=casedrop OBJ_28C4A         * 292B1
+          4ROLLOVER #=casedrop SdcOp             * 292B1
           4DROP true;1Lput ;                     * 292C0
 
 * refs (9): 28D85 28E34 28FD3 291D0 291DF 29252 ...
@@ -1224,7 +1317,7 @@ drop;true;1Lput:
         :: DROP true;1Lput ;                     * 292E3
 
 * refs (1): 291D5
-OBJ_292F7:
+SdcFcn~1:
         CON(5)  (*)+5                            * 292F7  primitive code object
         ASSEMBLE
         CD1EX                                    * 292FC
@@ -1237,48 +1330,49 @@ OBJ_292F7:
         D1=C                                     * 29310
         A=A-1   A                                * 29313
         ?A=0    A                                * 29315
-        GOYES   OBJ_292F7.L3                     * 29318
-OBJ_292F7.loop1:
+        GOYES   SdcFcn~1.L3                      * 29318
+SdcFcn~1.loop1:
         LC(5)   TRUE                             * 2931A
-OBJ_292F7.loop2:
+SdcFcn~1.loop2:
         A=C     A                                * 29321
         C=RSTK                                   * 29323
         D1=C                                     * 29325
         PC=(A)                                   * 29328
-OBJ_292F7.L3:
-        GOSUB   SUB_29393                        * 2932C
+SdcFcn~1.L3:
+        GOSUB   Next#Level                       * 2932C
         ?A=0    A                                * 29330
-        GOYES   OBJ_292F7.loop1                  * 29333
+        GOYES   SdcFcn~1.loop1                   * 29333
         D1=D1-  5                                * 29335
         A=DAT1  A                                * 29338
         D1=C                                     * 2933B
         LC(5)   DOBINT                           * 2933E
         ?C#A    A                                * 29345
-        GOYES   OBJ_292F7.loop1                  * 29348
-        GOSUB   SUB_29393                        * 2934A
+        GOYES   SdcFcn~1.loop1                   * 29348
+        GOSUB   Next#Level                       * 2934A
         D1=C                                     * 2934E
         A=A-1   A                                * 29351
         ?A#0    A                                * 29353
-        GOYES   OBJ_292F7.loop1                  * 29356
+        GOYES   SdcFcn~1.loop1                   * 29356
         D1=D1+  5                                * 29358
         C=DAT1  A                                * 2935B
         CD1EX                                    * 2935E
         A=DAT1  A                                * 29361
         LC(5)   DOIDNT                           * 29364
         ?C=A    A                                * 2936B
-        GOYES   OBJ_292F7.L4                     * 2936E
+        GOYES   SdcFcn~1.L4                      * 2936E
         LC(5)   DOLAM                            * 29370
         ?C=A    A                                * 29377
-        GOYES   OBJ_292F7.L4                     * 2937A
+        GOYES   SdcFcn~1.L4                      * 2937A
         LC(5)   DOROMP                           * 2937C
         ?C#A    A                                * 29383
-        GOYES   OBJ_292F7.loop1                  * 29386
-OBJ_292F7.L4:
+        GOYES   SdcFcn~1.loop1                   * 29386
+SdcFcn~1.L4:
         LC(5)   FALSE                            * 29388
-        GOTO    OBJ_292F7.loop2                  * 2938F
+        GOTO    SdcFcn~1.loop2                   * 2938F
 
 * refs (4): 2932C 2934A 29586 2958F
-SUB_29393:
+* D1 = stack level -> D1 in the # at the next level, A.A = the # itself, C.A = the level's address
+Next#Level:
         D1=D1+  5                                * 29393
         C=DAT1  A                                * 29396
         CD1EX                                    * 29399
@@ -1288,56 +1382,65 @@ SUB_29393:
         RPL
 
 * refs (1): 28C3B
-OBJ_293A4:
+* A function with a variable number of arguments (count -1): the real count is a # in the symbolic
+SdcVarArgs:
         :: 2GETLAM #0=case drop2;true;1Lput      * 293A4
           3PICK BINT1 #<>case drop2;true;1Lput   * 293B8
           4PICK BINT0 #=casedrop drop2;true;1Lput * 293CC
           DUP TYPEBINT? NOTcasedrop drop2;true;1Lput * 293E0
-          BINT3 psh #1+NDROP OBJ_291AB COLA OBJ_28C4A * 293F4
+          BINT3 psh #1+NDROP 2Lam#-1 COLA SdcOp  * 293F4
         ;                                        * 29412
 
 * refs (1): 28CD6
-OBJ_29417:
-        :: OBJ_29C7C BINT9 ROLL DUP #1- 10UNROLL ONESWAP N+1roll get1 DROP * 29417
+* Operand of an operator, put in parentheses if its priority is below this operator's
+SdcArg:
+        :: 4Pick#+1 BINT9 ROLL DUP #1- 10UNROLL ONESWAP N+1roll get1 DROP * 29417
           get1 OVER #1= casedrop psh&            * 2944E
           SWAP #2- 4UNROLL case2drop psh&        * 29467
-          OBJ_29829 OBJ_296D8 psh& ;             * 29480
+          SdcArg~1 SdcParens psh& ;              * 29480
 
 * refs (1): 28CDB
-OBJ_29494:
-        :: OBJ_294A8 toklparen ;                 * 29494
+* Add a ( to the output
+Sdc(:
+        :: SdcTok toklparen ;                    * 29494
 
 * refs (4): 29499 294D0 294E4 294F8
-OBJ_294A8:
+* Add a token from the stream to the output
+SdcTok:
         :: DROP 'R psh1&rev ROT#1+ 3UNROLL ;     * 294A8
 
 * refs (1): 28CE0
-OBJ_294CB:
-        :: OBJ_294A8 tokrparen ;                 * 294CB
+* Add a ) to the output
+Sdc):
+        :: SdcTok tokrparen ;                    * 294CB
 
 * refs (1): 28CE5
-OBJ_294DF:
-        :: OBJ_294A8 tok= ;                      * 294DF
+* Add an = to the output
+Sdc=:
+        :: SdcTok tok= ;                         * 294DF
 
 * refs (1): 28CEA
-OBJ_294F3:
-        :: OBJ_294A8 tok; 4GETLAM NOT?SEMI       * 294F3
+* Add a separator; complex form with ∡ when lam 4 says so
+SdcSep:
+        :: SdcTok tok; 4GETLAM NOT?SEMI          * 294F3
           tokanglesign psh1&rev FALSE 4PUTLAM ;  * 2950C
 
 * refs (1): 28CEF
-OBJ_29525:
-        :: SWAPDROP OBJ_29C7C 8PICK #0=case DROP * 29525
+* A separator between function arguments
+SdcComma:
+        :: SWAPDROP 4Pick#+1 8PICK #0=case DROP  * 29525
           8ROLL #1- 8UNROLL BINT7 #- 4ROLL SWAP#- 3UNROLL tok; psh1&rev ; * 29543
 
 * refs (1): 28C63
-OBJ_2957A:
+* Probably: code that scans an operator's form descriptor backwards to find how its operands are placed
+SdcOp~2:
         CON(5)  (*)+5                            * 2957A  primitive code object
         ASSEMBLE
         GOSBVL  SAVPTR                           * 2957F
-        GOSUB   SUB_29393                        * 29586
+        GOSUB   Next#Level                       * 29586
         D1=C                                     * 2958A
         B=A     A                                * 2958D
-        GOSUB   SUB_29393                        * 2958F
+        GOSUB   Next#Level                       * 2958F
         C=A     A                                * 29593
         C=C-CON A,8                              * 29595
         D=C     A                                * 2959B
@@ -1351,58 +1454,58 @@ OBJ_2957A:
         CPEX    15                               * 295B0
         A=C     S                                * 295B4
         D=0     S                                * 295B7
-OBJ_2957A.loop1:
+SdcOp~2.loop1:
         C=DAT1  S                                * 295BA
         P=C     15                               * 295BE
         ?P=     0                                * 295C2
-        GOYES   OBJ_2957A.L5                     * 295C5
+        GOYES   SdcOp~2.L5                       * 295C5
         ?P=     2                                * 295C7
-        GOYES   OBJ_2957A.L5                     * 295CA
+        GOYES   SdcOp~2.L5                       * 295CA
         ?P=     3                                * 295CC
-        GOYES   OBJ_2957A.L5                     * 295CF
+        GOYES   SdcOp~2.L5                       * 295CF
         C=C-A   S                                * 295D1
-        GOC     OBJ_2957A.loop2                  * 295D4
+        GOC     SdcOp~2.loop2                    * 295D4
         B=C     S                                * 295D7
         B=B+1   S                                * 295DA
-OBJ_2957A.loop2:
+SdcOp~2.loop2:
         D1=D1-  1                                * 295DD
         D=D-1   A                                * 295E0
-        GOC     OBJ_2957A.L3                     * 295E2
+        GOC     SdcOp~2.L3                       * 295E2
         ?B=0    S                                * 295E5
-        GOYES   OBJ_2957A.loop1                  * 295E8
+        GOYES   SdcOp~2.loop1                    * 295E8
         B=B-1   S                                * 295EA
-        GONC    OBJ_2957A.loop1                  * 295ED
-OBJ_2957A.L3:
+        GONC    SdcOp~2.loop1                    * 295ED
+SdcOp~2.L3:
         A=0     A                                * 295F0
         ?B=0    A                                * 295F2
-        GOYES   OBJ_2957A.L7                     * 295F5
+        GOYES   SdcOp~2.L7                       * 295F5
         ?D=0    S                                * 295F7
-        GOYES   OBJ_2957A.L6                     * 295FA
+        GOYES   SdcOp~2.L6                       * 295FA
         C=D     S                                * 295FC
         C=0     A                                * 295FF
         CPEX    15                               * 29601
         CPEX    0                                * 29605
-OBJ_2957A.loop4:
+SdcOp~2.loop4:
         A=A+1   A                                * 29609
         B=B-C   A                                * 2960B
-        GOC     OBJ_2957A.L6                     * 2960D
+        GOC     SdcOp~2.L6                       * 2960D
         ?B=0    A                                * 29610
-        GOYES   OBJ_2957A.L7                     * 29613
-        GONC    OBJ_2957A.loop4                  * 29615
-OBJ_2957A.L5:
+        GOYES   SdcOp~2.L7                       * 29613
+        GONC    SdcOp~2.loop4                    * 29615
+SdcOp~2.L5:
         B=B-1   A                                * 29618
-        GOC     OBJ_2957A.L6                     * 2961A
+        GOC     SdcOp~2.L6                       * 2961A
         ?B=0    S                                * 2961D
-        GOYES   OBJ_2957A.loop2                  * 29620
+        GOYES   SdcOp~2.loop2                    * 29620
         D=D+1   S                                * 29622
-        GOTO    OBJ_2957A.loop2                  * 29625
-OBJ_2957A.L6:
+        GOTO    SdcOp~2.loop2                    * 29625
+SdcOp~2.L6:
         P=      0                                * 29629
         GOSBVL  GETPTR                           * 2962B
         LC(5)   COLA                             * 29632
         A=C     A                                * 29639
         PC=(A)                                   * 2963B
-OBJ_2957A.L7:
+SdcOp~2.L7:
         P=      0                                * 2963F
         R0=A.F  A                                * 29641
         GOSBVL  PUSH#                            * 29647
@@ -1412,25 +1515,30 @@ OBJ_2957A.L7:
         RPL
 
 * refs (1): 28CB3
-OBJ_2965B:
+* Set up for an infix operator
+SdcInfix:
         :: ROTDROP BINT2 3UNROLL DUP #3+PICK ' ~CK2&Dispatch_2 EQ 4PUTLAM ; * 2965B
 
 * refs (1): 28CAE
-OBJ_29692:
+* Set up for a prefix function
+SdcPrefix:
         :: ROTDROP BINT3 3UNROLL 8ROLL #1-DUP 9rolld N+1roll BINT1 * 29692
           #=casedrop psh1&                       * 296BF
-          #2- 3UNROLL OBJ_29738                  * 296C9
+          #2- 3UNROLL SdcPrefix~1                * 296C9
 
 * refs (1): 29485
-OBJ_296D8:
+* Parentheses around an argument
+SdcParens:
           :: tokrparen SWAP#1+ toklparen BINT1 pshtop& ; unrot over& ; * 296D8
 
 * refs (1): 29109
-OBJ_2970A:
+* $ "Invalid Expression": what the stack shows for an algebraic that can't be decompiled
+$InvalidExpr:
         $ "Invalid Expression"                   * 2970A
 
 * refs (1): 296D3
-OBJ_29738:
+* Probably: code: as the routine at #29829 for a prefix operand
+SdcPrefix~1:
         CON(5)  (*)+5                            * 29738  primitive code object
         ASSEMBLE
         D1=D1+  5                                * 2973D
@@ -1440,18 +1548,18 @@ OBJ_29738:
         GOSBVL  POP2#                            * 2974C
         R0=C.F  A                                * 29753
         R1=A.F  A                                * 29759
-        GOSUB   SUB_2980F                        * 2975F
-        GONC    OBJ_29738.L2                     * 29763
-OBJ_29738.L1:
+        GOSUB   PrecFlag?                        * 2975F
+        GONC    SdcPrefix~1.L2                   * 29763
+SdcPrefix~1.L1:
         A=R0.F  A                                * 29766
         ?A#0    A                                * 2976C
-        GOYES   OBJ_29738.L3                     * 2976F
+        GOYES   SdcPrefix~1.L3                   * 2976F
         A=R1.F  A                                * 29771
         ?A=0    A                                * 29777
-        GOYES   OBJ_29738.loop4                  * 2977A
-        GONC    OBJ_29738.L3                     * 2977C
-OBJ_29738.L2:
-        GOSUB   SUB_297EA                        * 2977F
+        GOYES   SdcPrefix~1.loop4                * 2977A
+        GONC    SdcPrefix~1.L3                   * 2977C
+SdcPrefix~1.L2:
+        GOSUB   #PickAddr                        * 2977F
         RSTK=C                                   * 29783
         D1=D1+  10                               * 29785
         C=DAT1  A                                * 29788
@@ -1461,36 +1569,37 @@ OBJ_29738.L2:
         D1=C                                     * 29794
         C=R0.F  A                                * 29797
         ?C=0    A                                * 2979D
-        GOYES   OBJ_29738.L5                     * 297A0
+        GOYES   SdcPrefix~1.L5                   * 297A0
         ?C>=A   A                                * 297A2
-        GOYES   OBJ_29738.L5                     * 297A5
+        GOYES   SdcPrefix~1.L5                   * 297A5
         C=RSTK                                   * 297A7
         D1=C                                     * 297A9
-OBJ_29738.L3:
+SdcPrefix~1.L3:
         A=DAT0  A                                * 297AC
         D0=D0+  5                                * 297AF
         PC=(A)                                   * 297B2
-OBJ_29738.loop4:
+SdcPrefix~1.loop4:
         LC(5)   SKIP                             * 297B6
         A=C     A                                * 297BD
         PC=(A)                                   * 297BF
-OBJ_29738.L5:
+SdcPrefix~1.L5:
         C=R1.F  A                                * 297C3
         ?C=0    A                                * 297C9
-        GOYES   OBJ_29738.L6                     * 297CC
+        GOYES   SdcPrefix~1.L6                   * 297CC
         ?A=0    A                                * 297CE
-        GOYES   OBJ_29738.L6                     * 297D1
+        GOYES   SdcPrefix~1.L6                   * 297D1
         ?C>=A   A                                * 297D3
-        GOYES   OBJ_29738.L6                     * 297D6
+        GOYES   SdcPrefix~1.L6                   * 297D6
         C=R2.F  A                                * 297D8
         DAT1=C  A                                * 297DE
-OBJ_29738.L6:
+SdcPrefix~1.L6:
         C=RSTK                                   * 297E1
         D1=C                                     * 297E3
-        GOTO    OBJ_29738.loop4                  * 297E6
+        GOTO    SdcPrefix~1.loop4                * 297E6
 
 * refs (2): 2977F 29855
-SUB_297EA:
+* D1 at a # n -> A.A = the address of stack level n+5 above it
+#PickAddr:
         C=DAT1  A                                * 297EA
         CD1EX                                    * 297ED
         RSTK=C                                   * 297F0
@@ -1507,7 +1616,8 @@ SUB_297EA:
         RTN                                      * 2980D
 
 * refs (2): 2975F 2984A
-SUB_2980F:
+* -> carry set when flag -53 is set (precedence shown with all parentheses)
+PrecFlag?:
         LC(5)   #80850                           * 2980F
         CD1EX                                    * 29816
         A=DAT1  1                                * 29819
@@ -1517,18 +1627,19 @@ SUB_2980F:
         RTN                                      * 29827
 
 * refs (1): 29480
-OBJ_29829:
+* Probably: code: ob #a #b -> ob flag: parentheses are needed for this operand (depends on flag -53)
+SdcArg~1:
         CON(5)  (*)+5                            * 29829  primitive code object
         C=DAT1  A                                * 2982E
         R2=C.F  A                                * 29831
         GOSBVL  POP2#                            * 29837
         R1=C.F  A                                * 2983E
         R0=A.F  A                                * 29844
-        GOSUB   SUB_2980F                        * 2984A
-        GONC    OBJ_29829.L1                     * 2984E
-        GOTO    OBJ_29738.L1                     * 29851
-OBJ_29829.L1:
-        GOSUB   SUB_297EA                        * 29855
+        GOSUB   PrecFlag?                        * 2984A
+        GONC    SdcArg~1.L1                      * 2984E
+        GOTO    SdcPrefix~1.L1                   * 29851
+SdcArg~1.L1:
+        GOSUB   #PickAddr                        * 29855
         RSTK=C                                   * 29859
         C=DAT1  A                                * 2985B
         CD1EX                                    * 2985E
@@ -1537,33 +1648,35 @@ OBJ_29829.L1:
         D1=C                                     * 29867
         C=R0.F  A                                * 2986A
         ?C=0    A                                * 29870
-        GOYES   OBJ_29829.L2                     * 29873
+        GOYES   SdcArg~1.L2                      * 29873
         ?C>A    A                                * 29875
-        GOYES   OBJ_29829.L2                     * 29878
+        GOYES   SdcArg~1.L2                      * 29878
         C=RSTK                                   * 2987A
         D1=C                                     * 2987C
-        GOTO    OBJ_29738.L3                     * 2987F
-OBJ_29829.L2:
+        GOTO    SdcPrefix~1.L3                   * 2987F
+SdcArg~1.L2:
         C=R1.F  A                                * 29883
         ?C=0    A                                * 29889
-        GOYES   OBJ_29829.L3                     * 2988C
+        GOYES   SdcArg~1.L3                      * 2988C
         ?A=0    A                                * 2988E
-        GOYES   OBJ_29829.L3                     * 29891
+        GOYES   SdcArg~1.L3                      * 29891
         ?C>=A   A                                * 29893
-        GOYES   OBJ_29829.L3                     * 29896
+        GOYES   SdcArg~1.L3                      * 29896
         C=R2.F  A                                * 29898
         DAT1=C  A                                * 2989E
-OBJ_29829.L3:
+SdcArg~1.L3:
         C=RSTK                                   * 298A1
         D1=C                                     * 298A3
-        GOTO    OBJ_29738.loop4                  * 298A6
+        GOTO    SdcPrefix~1.loop4                * 298A6
         RPL
 
 * refs (1): 34FED
+* Probably: saves a meta on the stack into a hex string of relative pointers
 OBJ_298AA:
         :: NULLHXS 3PICK BINT5 #* EXPAND SWAP OBJ_298D7 ; * 298AA
 
 * refs (1): 298CD
+* Probably: code part of the saving of a meta into a hex string
 OBJ_298D7:
         CON(5)  (*)+5                            * 298D7  primitive code object
         ASSEMBLE
@@ -1624,6 +1737,7 @@ OBJ_298D7.L4:
         GOVLNG  DOMEMERR                         * 2998C
 
 * refs (1): 34EDA
+* Probably: hxs -> ob1..obn #n: expands such a hex string of relative pointers back onto the stack, garbage-collecting once for room
 OBJ_29993:
         CON(5)  (*)+5                            * 29993  primitive code object
         GOSBVL  SAVPTR                           * 29998
@@ -1683,7 +1797,7 @@ OBJ_29993.L5:
         GOVLNG  PUSH#LOOP                        * 29A4A
 
 * refs (1): 28B4B
-OBJ_29A51:
+Symb>Pieces~1:
         CON(5)  (*)+5                            * 29A51  primitive code object
         LC(5)   #8010h+5                         * 29A56  moved into D1
         CD1EX                                    * 29A5D
@@ -1732,7 +1846,7 @@ nextsym'R.L3:
         LC(5)   DOSYMB                           * 29ACE
         ?C#A    A                                * 29AD5
         GOYES   nextsym'R.L4                     * 29AD8
-        GOSUB   SUB_29B73                        * 29ADA
+        GOSUB   TakeWord                         * 29ADA
         A=DAT0  10                               * 29ADE
         A=A+CON A,5                              * 29AE2
         D0=D0+  5                                * 29AE8
@@ -1749,7 +1863,7 @@ nextsym'R.L3:
         D0=D0+  5                                * 29B17
         GOTO    nextsym'R.loop1                  * 29B1A
 nextsym'R.L4:
-        GOSUB   SUB_29B73                        * 29B1E
+        GOSUB   TakeWord                         * 29B1E
         C=DAT0  A                                * 29B22
         R0=C.F  A                                * 29B25
         CD0EX                                    * 29B2B
@@ -1774,9 +1888,10 @@ nextsym'R.L5:
         PC=(A)                                   * 29B6F
 
 * refs (2): 29ADA 29B1E
-SUB_29B73:
+* Take a stack word (D.A - 1); when none is left, garbage-collect, keeping D0 and two return addresses across it
+TakeWord:
         ST=0    7                                * 29B73
-SUB_29B73.loop1:
+TakeWord.loop1:
         D=D-1   A                                * 29B76
         RTNNC                                    * 29B78
         C=RSTK                                   * 29B7B
@@ -1786,9 +1901,9 @@ SUB_29B73.loop1:
         CAEX    A                                * 29B84
         RSTK=C                                   * 29B86
         ?ST=0   7                                * 29B88
-        GOYES   SUB_29B73.L2                     * 29B8B
+        GOYES   TakeWord.L2                      * 29B8B
         GOVLNG  DOMEMERR                         * 29B8D
-SUB_29B73.L2:
+TakeWord.L2:
         GOSBVL  SAVPTR                           * 29B94
         GOSBVL  GARBAGECOL                       * 29B9B
         GOSBVL  GETPTR                           * 29BA2
@@ -1801,7 +1916,7 @@ SUB_29B73.L2:
         CAEX    A                                * 29BB7
         RSTK=C                                   * 29BB9
         ST=1    7                                * 29BBB
-        GOTO    SUB_29B73.loop1                  * 29BBE
+        GOTO    TakeWord.loop1                   * 29BBE
 
 * refs (1): 28C04
 subpdcdptch:
@@ -1864,7 +1979,8 @@ subpdcdptch.L3:
         PC=(A)                                   * 29C78
 
 * refs (2): 2941C 2952F
-OBJ_29C7C:
+* -> #: the # in level 4 plus one
+4Pick#+1:
         CON(5)  (*)+5                            * 29C7C  primitive code object
         GOSBVL  SAVPTR                           * 29C81
         D1=D1+  15                               * 29C88
@@ -1888,18 +2004,18 @@ OBJ_29C7C:
         PC=(A)                                   * 29CC3
 
 * refs (1): 28C6D
-OBJ_29CC7:
+SdcOp~3:
         CON(5)  (*)+5                            * 29CC7  primitive code object
         D=D-1   A                                * 29CCC
-        GONC    OBJ_29CC7.L1                     * 29CCE
+        GONC    SdcOp~3.L1                       * 29CCE
         GOSBVL  SAVPTR                           * 29CD1
         GOSBVL  GARBAGECOL                       * 29CD8
         GOSBVL  GETPTR                           * 29CDF
         D=D-1   A                                * 29CE6
-        GONC    OBJ_29CC7.L1                     * 29CE8
+        GONC    SdcOp~3.L1                       * 29CE8
         D=D+1   A                                * 29CEB
         GOVLNG  DOMEMERR                         * 29CED
-OBJ_29CC7.L1:
+SdcOp~3.L1:
         D1=D1-  5                                * 29CF4
         GOSBVL  SAVPTR                           * 29CF7
         D1=D1+  10                               * 29CFE
@@ -1932,7 +2048,7 @@ OBJ_29CC7.L1:
         PC=(A)                                   * 29D5B
 
 * refs (1): 28CFE
-OBJ_29D5F:
+SdcOp~4:
         CON(5)  (*)+5                            * 29D5F  primitive code object
         D1=D1+  15                               * 29D64
         A=DAT1  A                                * 29D67
@@ -2143,38 +2259,39 @@ PACK.L17:
         GOTO    PACK.loop12                      * 29F72
 
 * refs (6): 3443F 34C3E 37239 535A7 789F1 7D6CB
-SUB_29F76:
+* x in A:B -> A.W = x rounded to a %. Sets no flags: underflow gives 0, overflow MAXR
+PACKq:
         P=      0                                * 29F76
         ?B#0    M                                * 29F78
-        GOYES   SUB_29F76.L1                     * 29F7B
+        GOYES   PACKq.L1                         * 29F7B
         A=0     W                                * 29F7D
         RTN                                      * 29F80
-SUB_29F76.L1:
+PACKq.L1:
         B=B+B   X                                * 29F82
-        GONC    SUB_29F76.L2                     * 29F85
+        GONC    PACKq.L2                         * 29F85
         B=B+1   M                                * 29F88
-        GONC    SUB_29F76.L2                     * 29F8B
+        GONC    PACKq.L2                         * 29F8B
         P=      14                               * 29F8E
         B=B+1   P                                * 29F90
         P=      0                                * 29F93
         A=A+1   A                                * 29F95
-SUB_29F76.L2:
+PACKq.L2:
         C=A     A                                * 29F97
         C=C+C   A                                * 29F99
-        GOC     SUB_29F76.L4                     * 29F9B
+        GOC     PACKq.L4                         * 29F9B
         LC(5)   #00499                           * 29F9E
         ?C<A    A                                * 29FA5
-        GOYES   SUB_29F76.L5                     * 29FA8
-SUB_29F76.loop3:
+        GOYES   PACKq.L5                         * 29FA8
+PACKq.loop3:
         A=B     M                                * 29FAA
         RTN                                      * 29FAD
-SUB_29F76.L4:
+PACKq.L4:
         LC(5)   #99501                           * 29FAF
         ?C<=A   A                                * 29FB6
-        GOYES   SUB_29F76.loop3                  * 29FB9
+        GOYES   PACKq.loop3                      * 29FB9
         A=0     W                                * 29FBB
         RTN                                      * 29FBE
-SUB_29F76.L5:
+PACKq.L5:
         LC(3)   #499                             * 29FC0
         A=C     X                                * 29FC5
         A=0     M                                * 29FC8

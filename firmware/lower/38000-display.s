@@ -1,4 +1,4 @@
-* HP 48GX ROM revision R, #38000-#3A00C: Status area and annunciators
+* HP 48GX ROM revision R, #38000-#3A00C: Unit-dimension vectors, the system outer loop and its error trap, the parameterized outer loop, status area, stack display
 * Addresses in the right-hand comments are those of the original ROM.
 * Most referenced: 'RROMPTR@ SetDA123NoCh ClrDAsOK SetDA3NoCh SetDA1NoCh SetDA2aNoCh SetDA13NoCh POLRestoreUI POLSaveUI POLResUI&Err ClrDA1IsStat SetDA3Bad
 * Follows on from the previous file (at #38000 in the original ROM).
@@ -27,7 +27,7 @@
         DAT0=C  A                                * 3803A
         ?ST=0   8                                * 3803D
         GOYES   @rdm(ar,ls)~1.L18                * 38040
-        GOSUB   SUB_38327                        * 38042
+        GOSUB   ResetINITEN                      * 38042
 @rdm(ar,ls)~1.L18:
         GOVLNG  GETPTRLOOP                       * 38046
 
@@ -86,7 +86,7 @@ SUB_3807A.L2:
         C=R1                                     * 380D6
         RSTK=C                                   * 380D9
         C=A     A                                * 380DB
-        GOSBVL  SUB_0852C                        * 380DD
+        GOSBVL  DirLinksAdj                      * 380DD
         C=RSTK                                   * 380E4
         R1=C                                     * 380E6
         C=RSTK                                   * 380E9
@@ -111,25 +111,26 @@ SUB_3807A.L4:
 * refs (8): 1D3A1 1D3F1 8E2DD 8E300 8F39B 8F3B9 ...
 MATTRN:
         :: DUP MDIMS NOT?GOTO NcaseDIMERR.L1 2DROP * 3811F
-          CKREF OBJ_38185 ;                      * 3813D
+          CKREF TrnConj! ;                       * 3813D
 
 * refs (1): 1D3D3
 @trn(ar):
         :: DUP MDIMS NOT?GOTO NcaseDIMERR.L1 2DROP * 3814C
-          FreeRefs OBJ_38185 ;                   * 3816A
+          FreeRefs TrnConj! ;                    * 3816A
 
 * refs (11): CBC7D CBC91 CBFA2 CBFF4 CC216 CC24A ...
 @trn!(ar):
         CON(5)  (*)+5                            * 38179  primitive code object
         ASSEMBLE
         ST=0    1                                * 3817E
-        GOTO    OBJ_38185.L1                     * 38181
+        GOTO    TrnConj!.L1                      * 38181
 
 * refs (6): 38142 3816F 939B6 939E3 93A02 93A0C
-OBJ_38185:
+* [] -> []': transposes an array in place and conjugates a complex one, as TRN does. @trn!(ar) enters below without the conjugate
+TrnConj!:
         CON(5)  (*)+5                            * 38185  primitive code object
         ST=1    1                                * 3818A
-OBJ_38185.L1:
+TrnConj!.L1:
         GOSBVL  SAVPTR                           * 3818D
         A=DAT1  A                                * 38194
         D0=A                                     * 38197
@@ -138,9 +139,9 @@ OBJ_38185.L1:
         LC(5)   DOREAL                           * 381A0
         ST=0    0                                * 381A7
         ?C=A    A                                * 381AA
-        GOYES   OBJ_38185.L2                     * 381AD
+        GOYES   TrnConj!.L2                      * 381AD
         ST=1    0                                * 381AF
-OBJ_38185.L2:
+TrnConj!.L2:
         D0=D0+  10                               * 381B2
         A=DAT0  A                                * 381B5
         R1=A                                     * 381B8
@@ -291,7 +292,8 @@ SUB_3830E.L1:
         RTN                                      * 38325
 
 * refs (2): 37E90 38042
-SUB_38327:
+* Writes F to the nibble INITEN at #8065A
+ResetINITEN:
         D0=(5)  INITEN                           * 38327
         LC(1)   #F                               * 3832E
         DAT0=C  1                                * 38331
@@ -312,7 +314,8 @@ SUB_3833E:
         :: 'R ROMPTR@ DROP ;                     * 38345
 
 * refs (6): 0FDB8 0FE62 0FF34 0FFBB CAC27 CAC7C
-OBJ_3835E:
+* The dimension vector of a dimensionless unit. Its ten places are the base units, in the order the units table uses
+UDimNone:
         CON(5)  DOARRY                           * 3835E  array 10
         LENGTH                                   * 38363  length, to #38417
         CON(5)  DOREAL                           * 38368  element type
@@ -331,7 +334,8 @@ OBJ_3835E:
         ENDLENGTH                                * 38417
 
 * refs (1): 0F3EE
-puretemp?~1:
+* The dimension vector of temperature: 1 in the fifth place
+UDimTemp:
         CON(5)  DOARRY                           * 38417  array 10
         LENGTH                                   * 3841C  length, to #384D0
         CON(5)  DOREAL                           * 38421  element type
@@ -350,7 +354,8 @@ puretemp?~1:
         ENDLENGTH                                * 384D0
 
 * refs (1): CAC68
-UMSIN~3:
+* The dimension vector of a plane angle: 1 in the eighth place
+UDimAngle:
         CON(5)  DOARRY                           * 384D0  array 10
         LENGTH                                   * 384D5  length, to #38589
         CON(5)  DOREAL                           * 384DA  element type
@@ -383,8 +388,8 @@ StartupProc~1.L1:
 
 * refs (1): 385AC
 InitSysUI:
-        :: CLEARLCD InitDispModes OBJ_3FEEE BINT62 ClrSysFlag DoMenuMTH * 385E8  flag -62: User keys off / User keys on
-          InitEd&Modes InitPOLVars OBJ_6CC32 OBJ_17F40 DelLastArg * 3860B
+        :: CLEARLCD InitDispModes ResetKeyState BINT62 ClrSysFlag DoMenuMTH * 385E8  flag -62: User keys off / User keys on
+          InitEd&Modes InitPOLVars EqwImplicitOff VLMReserve DelLastArg * 3860B
           ?FlashAlert ERROR@ #5= IT              * 38624
 
 Warning005:
@@ -418,36 +423,41 @@ and(s,<E>):
 
 * refs (4): 1469F 385D9 3897B DD430
 SysErrorTrap:
-        :: OBJ_387BE ERROR@ BINT0 #=casedrop OBJ_3881D * 38728
-          Err#Cont #=casedrop OBJ_3875F          * 38746
+        :: RestartMenu ERROR@ BINT0 #=casedrop ErrResetEdit * 38728
+          Err#Cont #=casedrop SysErrBody         * 38746
           Err#Kill #=casedrop                    * 38755
 
 * refs (1): 38750
-OBJ_3875F:
-          :: Halted? caseERRJMP OBJ_3881D        * 3875F
+* Error trap of the system outer loop: a halted program takes the error on; otherwise resets the command line and modes, and shows the message. Control alarm errors go to SysErrorTrap~1
+SysErrBody:
+          :: Halted? caseERRJMP ErrResetEdit     * 3875F
           ;                                      * 38773
           #CAlarmErr #=case SysErrorTrap~1       * 38778
-          OBJ_18802 ERROR@ OBJ_3881D ERRBEEP MakeMessage(proc,s) TOADISP * 38787
+          LastRomWd> ERROR@ ErrResetEdit ERRBEEP MakeMessage(proc,s) TOADISP * 38787
           REDISPHBUFF DISPROW1 DISPROW2 SetDA1Temp ; * 387A5
 
 * refs (3): 23402 3872D D49EA
-OBJ_387BE:
-        :: OBJ_18295 OBJ_41837 NOT?SEMI          * 387BE
+* After an error in the middle of building a menu: rebuilds the last menu, falling back to MTH if that fails too
+RestartMenu:
+        :: PushLastArgs MenuBuild? NOT?SEMI      * 387BE
           LastMenuDef@ LastMenuRow@ 2DUP ERRSET  * 387D2
           :: StartMenu LastMenuRow! LastMenuDef! ; ERRTRAP * 387E6
           :: DropSysObs DoMenuMTH ; ;            * 38804
 
 * refs (8): 2340C 38741 3876E 38791 3895D 38967 ...
-OBJ_3881D:
+* Saves an open command line for CMD, then clears it and the entry modes
+ErrResetEdit:
         :: EditLExists? IT                       * 3881D
           :: UnableLastCmd EDITLINE$ SaveLastEdit ; * 3882C
-          InitEd&Modes OBJ_38854 ;               * 38845
+          InitEd&Modes ErrResetState ;           * 38845
 
 * refs (2): 17BAE 3884A
-OBJ_38854:
+* After an error: leaves an application that failed, resets keys and display modes, and clears the error state
+ErrResetState:
         :: AppError? IT                          * 38854
           :: InitPOLVars DoMenuMTH ClrAppError ; * 38863
-          OBJ_3FEEE InitDispModes 0LASTOWDOB! SAVEERRN ERRORCLR FLUSHKEYS ; * 3887C
+          ResetKeyState InitDispModes 0LASTOWDOB! SAVEERRN ERRORCLR * 3887C
+          FLUSHKEYS ;                            * 38895
 
 * refs (2): 3879B D4A21
 MakeMessage(proc,s):
@@ -468,8 +478,8 @@ FlashWarning:
 
 * refs (1): 38782
 SysErrorTrap~1:
-        :: SysErrorTrap~2 case OBJ_3881D         * 3894E
-          CtlAlarm@ OBJ_3881D ERRSET ExecAlarm(r) ERRTRAP SysErrorTrap ; * 38962
+        :: SysErrorTrap~2 case ErrResetEdit      * 3894E
+          CtlAlarm@ ErrResetEdit ERRSET ExecAlarm(r) ERRTRAP SysErrorTrap ; * 38962
 
 * Disp Keys NonAppKeys? DoStdKeys? menu #row suspendOK? ExitCond AppErr ->
 * refs (3): 4CED3 4D934 69C2D
@@ -528,7 +538,7 @@ POLKeyUI:
 * refs (1): 38B31
 POLErrorTrap:
         :: AppError? IT ERRJMP                   * 38B45
-          OBJ_41837 IT ERRJMP                    * 38B59
+          MenuBuild? IT ERRJMP                   * 38B59
           AppError@ EVAL ;                       * 38B68
 
 * ->
@@ -723,7 +733,7 @@ AppSuspOK?:
         CON(5)  (*)+5                            * 38D79  primitive code object
         LC(3)   #206                             * 38D7E
 AppSuspOK?.L1:
-        GOVLNG  OBJ_539D8.L1                     * 38D83
+        GOVLNG  ClrISF20B.L1                     * 38D83
 
 * ->
 * refs (2): 38A78 38BF4
@@ -739,7 +749,7 @@ ClrAppSuspOK:
         CON(5)  (*)+5                            * 38D9B  primitive code object
         LC(3)   #206                             * 38DA0
 ClrAppSuspOK.L1:
-        GOVLNG  OBJ_539D8.L2                     * 38DA5
+        GOVLNG  ClrISF20B.L2                     * 38DA5
         RPL
 
 * -> flag
@@ -1370,7 +1380,7 @@ NoRollDA2?:
         CON(5)  (*)+5                            * 39569  primitive code object
         LC(3)   #101                             * 3956E
 NoRollDA2?.L1:
-        GOVLNG  OBJ_539D8.L1                     * 39573
+        GOVLNG  ClrISF20B.L1                     * 39573
 
 * ->
 * refs (1): 39DB5
@@ -1386,7 +1396,7 @@ ClrNoRollDA2:
         CON(5)  (*)+5                            * 3958B  primitive code object
         LC(3)   #101                             * 39590
 ClrNoRollDA2.L1:
-        GOVLNG  OBJ_539D8.L2                     * 39595
+        GOVLNG  ClrISF20B.L2                     * 39595
         RPL
 
 * ->
@@ -1498,7 +1508,7 @@ DispDir?Time:
 * refs (1): 398A9
 DispDir?Tim1:
         :: HARDBUFF BINT63 BINT6 BINT131 BINT7 GROB!ZERO BINT63 BINT13 * 398F4
-          BINT131 BINT14 GROB!ZERODRP OBJ_39A83 HARDBUFF BINT0 BINT6 BINT63 * 39921
+          BINT131 BINT14 GROB!ZERODRP HdrClock HARDBUFF BINT0 BINT6 BINT63 * 39921
           BINT14 GROB!ZERODRP ;                  * 39949
 
 * refs (1): 398AE
@@ -1525,14 +1535,16 @@ PathStatus~1:
         :: SWAPDROP ' xHOME PTR>ROMPTR ->str(xn) ; * 39A60
 
 * refs (2): 39930 39AE7
-OBJ_39A83:
+* Draws the date and time in the status area, at column 63 of row 7
+HdrClock:
         :: DATE Date>d$ APPEND_SPACE BINT42 TestSysFlag IT APPEND_SPACE * 39A83  flag -42: mm/dd/yy format / dd.mm.yy format
           TOD TOD>t$ !append$ $>grob HARDBUFF BINT63 BINT7 GROB! ; * 39AAB
 
 * refs (2): 048C7 048EA
-OBJ_39AD8:
+* Draws the clock if the status area shows status
+?HdrClock:
         :: DA1IsStat? NOT?SEMI                   * 39AD8
-          OBJ_39A83 ;                            * 39AE7
+          HdrClock ;                             * 39AE7
 
 * -> flag
 * refs (2): 048FE 39890
@@ -1552,14 +1564,15 @@ LineGrob:
 * ->
 * refs (2): 386AB DD499
 ?DispStack:
-        :: KEYINBUFFER? NOT DA2aLess1OK? ORcase OBJ_39BAD * 39B85
+        :: KEYINBUFFER? NOT DA2aLess1OK? ORcase DispStack2a * 39B85
           SetDA2aBad ;                           * 39BA3
 
 * refs (2): 39B9E 39C75
-OBJ_39BAD:
+* Draws the stack in display area 2a. If it runs out of memory, tries again abbreviated, with a warning
+DispStack2a:
         :: TOADISP DA2aLess1OK? ClrNewEditL case ?RollUpDA2 * 39BAD
-          ClrNoRollDA2 ClrAbbrevStk ERRSET OBJ_39C1B ERRTRAP OBJ_39C61 * 39BCB
-          SetDA2aValid ;                         * 39BE9
+          ClrNoRollDA2 ClrAbbrevStk ERRSET DispStackRows ERRTRAP * 39BCB
+          DispStackErr SetDA2aValid ;            * 39BE4
 
 * refs (1): 39BC6
 ?RollUpDA2:
@@ -1567,46 +1580,53 @@ OBJ_39BAD:
           BINT3 ScreenUpN ;                      * 39C0C
 
 * refs (2): 39BDA 39C8E
-OBJ_39C1B:
+* Draws stack levels until the rows in LINESOFSTACK are full
+DispStackRows:
         :: LINESOFSTACK DUP#0=csDROP ONESWAP ZERO_DO ISTOP-INDEX OVERDUP #3+ * 39C1B
-          pick(s)? OBJ_39C9D SWAP#1+SWAP +LOOP DROP ; * 39C43
+          pick(s)? DispLevel SWAP#1+SWAP +LOOP DROP ; * 39C43
 
 * refs (1): 39BE4
-OBJ_39C61:
-        :: DropSysObs ERROR@ #0=case OBJ_39BAD   * 39C61
-          #NoRoomForSt JstGetTHEMESG DoWarning SetAbbrevStk OBJ_39C1B * 39C7A
+* Error trap of DispStack2a: warns "No Room to Show Stack" and redraws abbreviated
+DispStackErr:
+        :: DropSysObs ERROR@ #0=case DispStack2a * 39C61
+          #NoRoomForSt JstGetTHEMESG DoWarning SetAbbrevStk DispStackRows * 39C7A
           ClrAbbrevStk ;                         * 39C93
 
 * refs (1): 39C48
-OBJ_39C9D:
-        :: DUP NOTcase OBJ_39F42                 * 39C9D
-          3PICK #1<> case OBJ_39F42              * 39CB1
-          MLmode? NOTcase OBJ_39F42              * 39CC5
-          OVER OBJ_39E0F NOTcase OBJ_39F42       * 39CD4
-          AbbrevStack? case OBJ_39F42            * 39CE8
-          DROPSWAPDROP OBJ_39D06 ;               * 39CF7
+* #level ob flag -> #rows: draws a stack level, on several rows when it is level 1 of a kind that multiline display covers
+DispLevel:
+        :: DUP NOTcase DispOneRow                * 39C9D
+          3PICK #1<> case DispOneRow             * 39CB1
+          MLmode? NOTcase DispOneRow             * 39CC5
+          OVER MultiLineOb? NOTcase DispOneRow   * 39CD4
+          AbbrevStack? case DispOneRow           * 39CE8
+          DROPSWAPDROP DispLevelML ;             * 39CF7
 
 * refs (1): 39CFC
-OBJ_39D06:
-        :: OVERSWAP NULL{} SWAP3PICK ZERO_DO DUPUNROT OBJ_39E78 INDEX@ * 39D06
-          #0=ITE OBJ_39EB9 OBJ_39F23 5UNROLL DUPNULLCOMP? IT OBJ_39EE1 * 39D2E
+* Draws a level over several rows, up to four
+DispLevelML:
+        :: OVERSWAP NULL{} SWAP3PICK ZERO_DO DUPUNROT DispLevelML~1 INDEX@ * 39D06
+          #0=ITE DispLevelML~2 DispLevelML~5 5UNROLL DUPNULLCOMP? IT * 39D2E
+          DispLevelML~3                          * 39D4C
           SWAPLOOP 2DROP DUPDUP #3+ UNROLL ZERO_DO ISTOP-INDEX #1+ROLL OVER * 39D51
           ISTOP@ #- INDEX@ #+ #1+ BigDisp(st,s) LOOP DROPDUP BINT4 #= IT * 39D7E
           SetNoRollDA2                           * 39DB5
         ;                                        * 39DBA
 
 * refs (4): 39F47 43810 43AA4 43B71
-OBJ_39DBF:
-        :: ITE OBJ_39DE2 #:>$                    * 39DBF
+* #level ob flag ->: draws a level on one row. With flag FALSE, only the "n:" of an empty level
+DispLevel1Row:
+        :: ITE DispLevel1Row~1 #:>$              * 39DBF
           SWAP BigDisp(st,s) ;                   * 39DD3
 
 * refs (1): 39DC9
-OBJ_39DE2:
+DispLevel1Row~1:
         :: AbbrevStack? NOTcase DoSt:22(s,_)     * 39DE2
-          SWAP #:>$ SWAP OBJ_15CCF ;             * 39DF6
+          SWAP #:>$ SWAP $+TypeName ;            * 39DF6
 
 * refs (1): 39CD9
-OBJ_39E0F:
+* ob -> flag: TRUE for the types that multiline display spreads over several rows: array, list, program, algebraic, unit, tagged, directory, complex
+MultiLineOb?:
         :: CK&DISPATCH0                          * 39E0F
           BINT4 DROPTRUE                         * 39E19  array
           BINT5 DROPTRUE                         * 39E23  list
@@ -1620,34 +1640,35 @@ OBJ_39E0F:
         ;                                        * 39E73
 
 * refs (1): 39D24
-OBJ_39E78:
-        :: SWAP ERRSET OBJ_53914 OBJ_16A0E ERRTRAP * 39E78
-          :: OBJ_53922 ERRJMP ; OBJ_53922 SWAP ; * 39E96
+DispLevelML~1:
+        :: SWAP ERRSET SetISF805 DclLine19 ERRTRAP * 39E78
+          :: ClrISF805 ERRJMP ; ClrISF805 SWAP ; * 39E96
 
 * refs (1): 39D33
-OBJ_39EB9:
-        :: OVER NULLCOMP? NOTcase OBJ_39F04      * 39EB9
+DispLevelML~2:
+        :: OVER NULLCOMP? NOTcase DispLevelML~4  * 39EB9
           BINT1 s:str(st,s) ;                    * 39ED2
 
 * refs (1): 39D4C
-OBJ_39EE1:
+DispLevelML~3:
         :: ROTDROP INDEX@ #1+ 3UNROLL ExitAtLOOP ; * 39EE1
 
 * refs (1): 39ECD
-OBJ_39F04:
+DispLevelML~4:
         ::                                       * 39F04
 
 * refs (1): 17CC4
-VLM~6:
+VLMAsk~1:
           $ "1: " !insert$ ;                     * 39F09
 
 * refs (1): 39D38
-OBJ_39F23:
+DispLevelML~5:
         :: $ "   " !insert$ ;                    * 39F23
 
 * refs (5): 39CAC 39CC0 39CCF 39CE3 39CF2
-OBJ_39F42:
-        :: OBJ_39DBF BINT1 ;                     * 39F42
+* As DispLevel1Row, then the row count 1
+DispOneRow:
+        :: DispLevel1Row BINT1 ;                 * 39F42
 
 * refs (1): 39CC5
 MLmode?:
@@ -1667,7 +1688,7 @@ LINESOFSTACK:
 
 * refs (1): 39F7B
 SUB_39F93:
-        GOSBVL  SUB_44747                        * 39F93
+        GOSBVL  EdParts                          * 39F93
         LC(5)   #00003                           * 39F9A
         ?C<A    A                                * 39FA1
         GOYES   SUB_39F93.L1                     * 39FA4
@@ -1682,7 +1703,7 @@ SUB_39F93.L1:
 AbbrevStack?:
         CON(5)  (*)+5                            * 39FB0  primitive code object
         LC(3)   #201                             * 39FB5
-        GOVLNG  OBJ_539D8.L1                     * 39FBA
+        GOVLNG  ClrISF20B.L1                     * 39FBA
 
 * refs (1): 39C89
 SetAbbrevStk:
@@ -1694,7 +1715,7 @@ SetAbbrevStk:
 ClrAbbrevStk:
         CON(5)  (*)+5                            * 39FD2  primitive code object
         LC(3)   #201                             * 39FD7
-        GOVLNG  OBJ_539D8.L2                     * 39FDC
+        GOVLNG  ClrISF20B.L2                     * 39FDC
         RPL
 
 * refs (2): 3A04E 3A053

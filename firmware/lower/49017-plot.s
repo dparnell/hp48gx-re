@@ -1,11 +1,12 @@
-* HP 48GX ROM revision R, #49017-#4C081: Plotting
+* HP 48GX ROM revision R, #49017-#4C081: Plotting: AUTOSCALE sampling, the FCN menu (root, slope, area, extremum), REVIEW displays, the setup for drawing and the plot loops
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: PUTPTYPE GETPTYPE RESETDEPTH CHECKPVARS GETPMIN&MAX pmin(c) pmax(c) RclDepnd GetEqN rceq! depnd(gn) ICMPDRPRTDRP
+* Most referenced: PUTPTYPE GETPTYPE RESETDEPTH CHECKPVARS GETPMIN&MAX pmin(c) pmax(c) FcnEqArgs RclDepnd GetEqN rceq! depnd(gn)
 * Follows on from the previous file (at #49017 in the original ROM).
         RPL
 
 * refs (2): 48DB5 48DD3
-OBJ_49017:
+* -> ...: AUTOSCALE: bind 8 lams, with the equation and the independent range divided into 40 steps
+AutoInit:
         :: 'NOP ZEROZERO ZEROZERO rceq! ~DUP;ALGeq? IT GETRHS * 49017
           GETINDEP DUPTYPELIST? ITE              * 4903F
           :: INCOMPDROP %MAXorder SWAP ;         * 4904E
@@ -56,17 +57,19 @@ AUTOSCALE:
         :: AUTOSCALE~1 ;                         * 491D5
 
 * refs (2): 48DBA 48DE7
-OBJ_491E4:
+* -> ... : AUTOSCALE: evaluate at 41 points across the range, keeping lowest and highest
+AutoSample:
         :: BINT41 ZERO_DO 3GETLAM                * 491E4
-          :: OBJ_495D3 8GETLAM EVAL 4GETLAM 5GETLAM ROT OBJ_494EC 5PUTLAM * 491F8
+          :: AutoEval 8GETLAM EVAL 4GETLAM 5GETLAM ROT AutoMinMax 5PUTLAM * 491F8
             4PUTLAM ;                            * 49225
           2GETLAM DUP 1GETLAM 'EvalNoCK:_sup x+ U>nbr OVER TYPEEXT? ITE * 4922F
-          OBJ_4C0D4 NEWINDEP                     * 4925C
+          NEWINDEPU NEWINDEP                     * 4925C
           LOOP 6GETLAM 7GETLAM 4GETLAM 5GETLAM ABND DUP TYPEBINT? case2DROP * 49266
 
 * refs (2): 48E7D 48F40
-OBJ_49293:
-          :: OBJ_49478 OBJ_49587 ;               * 49293
+* %a %b -> : AUTOSCALE: widen the range if empty and set YRNG with a margin
+AutoSetY:
+          :: AutoWiden AutoMargin ;              * 49293
         ;                                        * 492A7
 
 * refs (1): 20A82
@@ -113,7 +116,8 @@ xRULES~8:
         BSS     10                               * 4946E  zeros
 
 * refs (4): 48DFB 48E69 48EAF 49298
-OBJ_49478:
+* %lo %hi -> %lo' %hi': give an empty range some width: -1 to 1 around 0, otherwise 10% each way
+AutoWiden:
         :: 2DUP %= IT                            * 49478
           :: DUP%0= case2drop                    * 4948C
 
@@ -128,7 +132,8 @@ OBJ_49478:
         ;                                        * 494E7
 
 * refs (2): 48FA4 4921B
-OBJ_494EC:
+* %lo %hi ob -> %lo' %hi': widen the range to include ob, unless it is not real or is an overflow
+AutoMinMax:
         :: DUPTYPEREAL? NOTcaseDROP %MAXREAL     * 494EC
           OVER %ABS %= caseDROP OVERDUP          * 49500
           TYPEBINT? case                         * 49519
@@ -144,7 +149,8 @@ MinMaxCol(ra,s):
         :: SWAP2DUP ColumnMIN 3UNROLL ColumnMAX ; * 49569
 
 * refs (2): 48EC3 4929D
-OBJ_49587:
+* %a %b -> : YRNG from the range, with 15% more at the bottom
+AutoMargin:
         :: %MAXorder SWAP 2DUP yrng(2r) OVER %-  * 49587
 
 * .15
@@ -153,7 +159,8 @@ OBJ_49587:
           % 1.5E-1 %* %- PUTYMIN ;               * 495AA
 
 * refs (1): 491FD
-OBJ_495D3:
+* ob -> ob': AUTOSCALE: evaluate; a math error skips this sample (leaves the caller)
+AutoEval:
         :: ERRSET EVALCRUNCH ERRTRAP             * 495D3
           :: ERROR@ # 100 #/ SWAPDROP BINT3 #<>case ERRJMP * 495E7
             ERRORCLR 2RDROP ;                    * 49614
@@ -163,13 +170,15 @@ OBJ_495D3:
         :: ->StkStr22! !append$ ;                * 49646
 
 * refs (1): 47FD6
-OBJ_4965A:
-        :: CHECKMENU OBJ_496A0 NOTcase DoBadKey  * 4965A
+* -> : ZOOM ZLAST: restore the PPAR saved in ZPAR and redraw
+ZoomLast:
+        :: CHECKMENU RclZPAR NOTcase DoBadKey    * 4965A
           4UNROLL3DROP PPAR>ZPAR DUPNULL{}? casedrop DoBadKey * 49673
-          'IDPAR STOAPPLDATA OBJ_4DAA3 ;         * 4968C
+          'IDPAR STOAPPLDATA ERASE&DRAW ;        * 4968C
 
 * refs (5): 47B3C 49664 4EEC4 B6295 B6326
-OBJ_496A0:
+* -> ob1 ob2 ob3 ob4 TRUE | FALSE: the four parts of ZPAR: h factor, v factor, recentre, saved PPAR
+RclZPAR:
         :: ' ID ZPAR RclPlotVar? NOTcaseFALSE DUPTYPELIST? * 496A0
           NOTcsdrpfls INNERDUP BINT4 #= NOTcase NDROPFALSE * 496C8
           DROPTRUE ;                             * 496E6
@@ -186,24 +195,24 @@ PromptIdUtil:
 
 * refs (1): 474F1
 PlotScr*en~10:
-        :: CHECKMENU OBJ_49B4B CkEQUtil PointDerivUt CRUNCHNoBlame * 4973A
+        :: CHECKMENU FcnEqArgs CkEQUtil PointDerivUt CRUNCHNoBlame * 4973A
 
 _Slope__49758:
           $ "Slope" >TAG DUP OBJ_49D3A Π'SAVEDDEPTH #1+ ' Π'SAVEDDEPTH STO ; * 49758
 
 * refs (1): 48D0F
 PlotScr*en~11:
-        :: OBJ_49B4B OBJ_48B39 FALSE             * 49799
+        :: FcnEqArgs FcnSolve FALSE              * 49799
 
 _Root_:
-          $ "Root" OBJ_49E75 Π'SAVEDDEPTH #1+ ' Π'SAVEDDEPTH STO ; * 497AD
+          $ "Root" FcnResult Π'SAVEDDEPTH #1+ ' Π'SAVEDDEPTH STO ; * 497AD
         BSS     5                                * 497E2  zeros
 
 * refs (1): 47512
 PlotScr*en~12:
-        :: CHECKMENU OBJ_49B4B CkEQUtil CURRENTMARK? NOTcase * 497E7
+        :: CHECKMENU FcnEqArgs CkEQUtil CURRENTMARK? NOTcase * 497E7
           :: 3DROP NEWMARK ;                     * 49805
-          DROP OBJ_4782B 4UNROLL 3UNROLL DUPUNROT SYMSHOW SWAP ' INTEG * 49819
+          DROP COL>%X 4UNROLL 3UNROLL DUPUNROT SYMSHOW SWAP ' INTEG * 49819
           CRUNCHNoBlame                          * 49846
 
 _Area_:
@@ -212,26 +221,26 @@ _Area_:
 
 * refs (1): 48D4B
 PlotScr*en~13:
-        :: OBJ_49B4B DORCLE EqList? ITE          * 49899
-          :: ROT ' xEVAL BINT2 GetEqN NcaseSIZEERR OBJ_49B7D * 498B2
+        :: FcnEqArgs DORCLE EqList? ITE          * 49899
+          :: ROT ' xEVAL BINT2 GetEqN NcaseSIZEERR EqRHS * 498B2
             OVER ' x- BINT5 ::N 3UNROLL ;        * 498DA
           :: rceq! dup;1stMember(_);gn? caseDROP 4ROLL * 498FD
             DROP 3UNROLL ;                       * 49916
-          OBJ_48B39 TRUE                         * 49925
+          FcnSolve TRUE                          * 49925
 
 _I-sect_:
-          $ "I-sect" OBJ_49E75 Π'SAVEDDEPTH #1+ ' Π'SAVEDDEPTH STO ; * 4992F
+          $ "I-sect" FcnResult Π'SAVEDDEPTH #1+ ' Π'SAVEDDEPTH STO ; * 4992F
 
 * refs (1): 48D78
 PlotScr*en~14:
-        :: OBJ_49B4B CkEQUtil PointDerivUt OBJ_48CBA OBJ_48B39 TRUE * 49968
+        :: FcnEqArgs CkEQUtil PointDerivUt FcnGuess FcnSolve TRUE * 49968
 
 _Extrm_:
-          $ "Extrm" OBJ_49E75 Π'SAVEDDEPTH #1+ ' Π'SAVEDDEPTH STO ; * 4998B
+          $ "Extrm" FcnResult Π'SAVEDDEPTH #1+ ' Π'SAVEDDEPTH STO ; * 4998B
 
 * refs (1): 47577
 PlotScr*en~15:
-        :: CHECKMENU OBJ_49B4B 2DROP CRUNCHNoBlame * 499C2
+        :: CHECKMENU FcnEqArgs 2DROP CRUNCHNoBlame * 499C2
 
 _F(x)_:
           $ "F(x)" >TAG DUP OBJ_49D3A Π'SAVEDDEPTH #1+ ' Π'SAVEDDEPTH STO ; * 499DB
@@ -243,19 +252,23 @@ _F(x)_:
         # 624                                    * 49A2E  1572
 
 * refs (2): 22119 4A343
-OBJ_49A38:
+* # 628: "IR/wire: "
+MSG(IRWIRE):
         # 628                                    * 49A38  1576
 
 * refs (2): 22157 4A381
-OBJ_49A42:
+* # 629: "ASCII/binary: "
+MSG(ASCIIBIN):
         # 629                                    * 49A42  1577
 
 * refs (2): 221C2 4A3CE
-OBJ_49A4C:
+* # 62A: "baud: "
+MSG(BAUD):
         # 62A                                    * 49A4C  1578
 
 * refs (2): 221D6 4A3E7
-OBJ_49A56:
+* # 62B: "parity: "
+MSG(PARITY):
         # 62B                                    * 49A56  1579
 
 * refs (1): 222B7
@@ -267,7 +280,8 @@ IOSetup~3:
         # 62D                                    * 49A6A  1581
 
 * refs (2): 4EF00 B633A
-OBJ_49A74:
+* ob1 ob2 ob3 ob4 -> : store them as ZPAR
+ZPAR!:
         :: BINT4 {}N '                           * 49A74
 
 ZPAR_49A88:
@@ -275,12 +289,12 @@ ZPAR_49A88:
 
 * refs (2): 48AA3 48AFD
 PlotScr*en~16:
-        :: DUP OBJ_66BAD IT DROPZERO             * 49AA1
+        :: DUP EqwIdxOp? IT DROPZERO             * 49AA1
         ;                                        * 49ABA
 
 * refs (1): 47594
 PlotScr*en~17:
-        :: CHECKMENU OBJ_49B4B CkEQUtil          * 49ABF
+        :: CHECKMENU FcnEqArgs CkEQUtil          * 49ABF
 
 * refs (3): 47660 4974E 49977
 PointDerivUt:
@@ -289,30 +303,32 @@ PointDerivUt:
 * refs (1): 49CCC
 NextInEQ~1:
           :: DORCLE DUP EqList? ; case           * 49AE7
-          :: SWAP>HCOMP 'EQ STOAPPLDATA OBJ_4DAA3 ; * 49B05
-          DROP 'EQ SAFE@ DROP TWO{}N DOSTOE OBJ_4DAA3 ; * 49B23
+          :: SWAP>HCOMP 'EQ STOAPPLDATA ERASE&DRAW ; * 49B05
+          DROP 'EQ SAFE@ DROP TWO{}N DOSTOE ERASE&DRAW ; * 49B23
 
 * refs (10): 47638 47656 49744 4979E 497F1 4989E ...
-OBJ_49B4B:
-        :: rceq! ~DUP;ALGeq? NOTcase OBJ_48CBA   * 49B4B
-          DUP ChkEQ(eq) case OBJ_49C95           * 49B64
+* -> symb id %x: FCN: the current equation with the variable to solve for and the guess
+FcnEqArgs:
+        :: rceq! ~DUP;ALGeq? NOTcase FcnGuess    * 49B4B
+          DUP ChkEQ(eq) case FcnBadEq            * 49B64
           2DROP                                  * 49B78
 
 * refs (5): 498D5 7389B 8AB45 B6BB7 B6BDA
-OBJ_49B7D:
+* symb -> symb': the right side of an equation, or the expression itself
+EqRHS:
           :: ~DUP;ALGeq? NOT?SEMI                * 49B7D
             1stArgRpn(ex) SYMBN ;                * 49B8C
-          OBJ_48CBA ;                            * 49B9B
+          FcnGuess ;                             * 49B9B
 
 FcnUtilEnd:
-        :: INDEPVAR ~RECORDX&YC%;C>Re% OVER OBJ_1552C OVER SWAP XEQSTOID ; * 49BA5
+        :: INDEPVAR ~RECORDX&YC%;C>Re% OVER SolvStoKeep OVER SWAP XEQSTOID ; * 49BA5
 
 RootUtil:
         :: SYMBNUMSOLVE NOTcase                  * 49BD2
           :: 2RDROP JstGetTHEMESG DISPCOORD2 ;   * 49BE1
           ATTN# OVER #= case                     * 49BFA
           :: SWAPDROP 2RDROP GETTHEMESG DISPCOORD2 ; * 49C0E
-          OBJ_33D8C OVER #= ITE DROPNULL$ GETTHEMESG * 49C2C
+          RootZero OVER #= ITE DROPNULL$ GETTHEMESG * 49C2C
           SWAP ;                                 * 49C4A
 
 * refs (5): 4765B 49749 497F6 49972 49ACE
@@ -321,8 +337,9 @@ CkEQUtil:
           TYPEEXT? OR NOTcase                    * 49C86
 
 * refs (1): 49B73
-OBJ_49C95:
-          :: CkEQUtil~1 OBJ_6BC2D 3DROP RDROP ;  * 49C95
+* -> : FCN: the equation can't be used: report it and leave the caller
+FcnBadEq:
+          :: CkEQUtil~1 EqwFlash 3DROP RDROP ;   * 49C95
         ;                                        * 49CB3
 
 * refs (1): 475E0
@@ -343,10 +360,11 @@ ROLL{}:
           Trceq                                  * 49D35
 
 * refs (3): 47731 49776 499F7
+* Probably: FCN: after a result, move the cursor to the point on the curve, with a note if it is off screen
 OBJ_49D3A:
           ::                                     * 49D3A
-            :: NULL$ SWAP OBJ_49B4B SWAPDROPSWAP OBJ_49E3E U>nbr dREALNcase * 49D3F
-              2DROP                              * 49D67
+            :: NULL$ SWAP FcnEqArgs SWAPDROPSWAP Crunch3Kept U>nbr * 49D3F
+              dREALNcase 2DROP                   * 49D62
               PointMoveCur ;                     * 49D6C
             NextInEQ~2 ;                         * 49D76
         ;                                        * 49D80
@@ -372,14 +390,16 @@ ChkEQ(eq):
         ;                                        * 49E39
 
 * refs (3): 4766F 49D58 49EA2
-OBJ_49E3E:
+* a b c ob -> a b c ob': CRUNCH ob, with the three objects under it kept in lams meanwhile
+Crunch3Kept:
         :: 4UNROLL 3NULLLAM{} BIND CRUNCHNoBlame 3GETLAM 2GETLAM 1GETLAM * 49E3E
           ABND 4ROLL ;                           * 49E66
 
 * refs (3): 497BF 49945 4999F
-OBJ_49E75:
+* ... $label flag -> ob: FCN: take the solver's x, evaluate the equation there, make the coordinates (complex when flag is TRUE) and tag it with $label
+FcnResult:
         :: 15GETLAM 4ROLL NEWINDEP rceq! DUP ALGeq? IT GETRHS * 49E75
-          OBJ_49E3E U>nbr INDEPVAR SAFE@_HERE NcaseSIZEERR SWAP * 49EA2
+          Crunch3Kept U>nbr INDEPVAR SAFE@_HERE NcaseSIZEERR SWAP * 49EA2
           4ROLL ITE                              * 49EC0
           :: 2DUPSWAP U>nbr SWAP dREALNcase DROP * 49ECA
             %>C% ;                               * 49EE8
@@ -390,12 +410,12 @@ OBJ_49E75:
 PointMoveCur:
           :: dREALNcase 2DROP                    * 49F06
             SWAP U>nbr SWAP RIGHTCOL BOTROW RclMaxStdPict px->c(2rr,2s) C%>% * 49F15
-            3PICK %> casedrop OBJ_4A02D          * 49F3D
-            3PICK %< case OBJ_4A02D              * 49F51
+            3PICK %> casedrop AddOffScreen       * 49F3D
+            3PICK %< case AddOffScreen           * 49F51
             WINDOWCORNER SWAP RclMaxStdPict px->c(2rr,2s) C%>% 3PICK %< * 49F65
-            casedrop OBJ_4A02D                   * 49F88
-            3PICK %> case OBJ_4A02D              * 49F92
-            %>C% RclMaxStdPict OBJ_4F1A1 NOT?SEMI * 49FA6
+            casedrop AddOffScreen                * 49F88
+            3PICK %> case AddOffScreen           * 49F92
+            %>C% RclMaxStdPict C%>Px? NOT?SEMI   * 49FA6
             CROSS_OFF TOTEMPSWAP TOTEMPOB 8PUTLAM 7PUTLAM CROSS_HAIRS ; * 49FBA
           DUPUNROT                               * 49FDD
 
@@ -407,8 +427,9 @@ NextInEQ~2:
         ;                                        * 4A028
 
 * refs (4): 49F4C 49F60 49F8D 49FA1
-OBJ_4A02D:
-        :: 2DROP SWAP OBJ_4794D JstGetTHEMESG !append$ SWAP ; * 4A02D
+* ... -> ...: FCN: append " (OFF SCREEN)" to the result text
+AddOffScreen:
+        :: 2DROP SWAP MSG(OFFSCREEN) JstGetTHEMESG !append$ SWAP ; * 4A02D
 
 * $ ->
 * refs (2): 49BF0 49C22
@@ -432,10 +453,10 @@ GetEqN:
 
 ___4A0D7:
             :: NULL$ FALSE ;                     * 4A0D7
-            OBJ_15389 TRUE ;                     * 4A0EB
+            EqName@ TRUE ;                       * 4A0EB
           #1=                                    * 4A0FA
           NOTcsdrpfls DUPTYPELIST? NOTcaseTRUE CARCOMP * 4A0FF
-          OBJ_15389 TRUE ;                       * 4A113
+          EqName@ TRUE ;                         * 4A113
 
 * refs (1): 20295
 xBESTFIT~2:
@@ -470,57 +491,66 @@ ChkReakäPAR~2:
           LOOP DROPSWAPDROP StoModel STATLR 2DROP ; * 4A1FE
 
 * refs (1): 4A311
-OBJ_4A21C:
-        :: OBJ_4A258 StdMenuKeyNS ;              * 4A21C
+* menu key, unshifted, on an INFO menu (the review stays on after it)
+InfoMenuKeyNS:
+        :: InfoMenuKey StdMenuKeyNS ;            * 4A21C
 
 * refs (1): 4A320
-OBJ_4A230:
-        :: OBJ_4A258 StdMenuKeyLS ;              * 4A230
+* the same, left-shifted
+InfoMenuKeyLS:
+        :: InfoMenuKey StdMenuKeyLS ;            * 4A230
 
 * refs (1): 4A32F
-OBJ_4A244:
-        :: OBJ_4A258 StdRightShift ;             * 4A244
+* the same, right-shifted
+InfoMenuKeyRS:
+        :: InfoMenuKey StdRightShift ;           * 4A244
 
 * refs (3): 4A221 4A235 4A249
-OBJ_4A258:
+* ... -> : run a menu key's object, then show the review again
+InfoMenuKey:
         :: ~';MenuMaker;CkSecoType 'R SWAP case EVAL * 4A258
-          EVAL OBJ_4A285 ;                       * 4A276
+          EVAL ShowInfo ;                        * 4A276
 
 * refs (4): 3C407 4A27B 4A2DF 4A2F8
-OBJ_4A285:
+* -> : run the local review, unless something else owns the display (the same test as NoInfo?)
+ShowInfo:
         :: EditLExists? ?SEMI                    * 4A285
           PrgmEntry? ?SEMI                       * 4A294
           AppMode? ?SEMI                         * 4A29E
-          OBJ_6DE82 ?SEMI                        * 4A2A8
+          EqwActive? ?SEMI                       * 4A2A8
           KEYINBUFFER? ?SEMI                     * 4A2B2
           BINT58 TestSysFlag ?SEMI               * 4A2BC  flag -58: Show INFO / Don't show INFO
           LocalReview ;                          * 4A2CB
 
 * refs (1): 4A302
-OBJ_4A2D5:
-        :: SetDA12NoCh OBJ_4A285 ;               * 4A2D5
+* -> : a menu with INFO: redraw after a row change
+InfoMenuRow:
+        :: SetDA12NoCh ShowInfo ;                * 4A2D5
 
 * refs (6): 3C48C 3C516 3C5A0 3C62A 3D3A1 3D3D9
-OBJ_4A2E9:
-        :: 'R ReviewKey! OBJ_4A285 ' OBJ_4A2D5 MenuRowAct! ' OBJ_4A21C * 4A2E9
-          MenuKeyNS! ' OBJ_4A230 MenuKeyLS! ' OBJ_4A244 MenuKeyRS! ; * 4A316
+* -> : takes the review program from the runstream and hooks it into the menu keys and the menu row action, so that the display shows it while the menu is up
+InfoMenuSetup:
+        :: 'R ReviewKey! ShowInfo ' InfoMenuRow MenuRowAct! ' InfoMenuKeyNS * 4A2E9
+          MenuKeyNS! ' InfoMenuKeyLS MenuKeyLS! ' InfoMenuKeyRS MenuKeyRS! ; * 4A316
 
 * refs (1): 3D3A6
-OBJ_4A33E:
-        :: OBJ_49A38 JstGetTHEMESG BINT33 SysITE * 4A33E  flag -33: Transfer via wire / Transfer via IR
+* -> : I/O menu INFO: transfer settings, on rows 3 to 7
+ReviewIO:
+        :: MSG(IRWIRE) JstGetTHEMESG BINT33 SysITE * 4A33E  flag -33: Transfer via wire / Transfer via IR
 
 _IR__4A357:
           $ "IR"                                 * 4A357
 
 _wire__4A365:
-          $ "wire" !append$ DISPROW3 OBJ_49A42 JstGetTHEMESG BINT35 SysITE * 4A365  flag -35: ASCII transfer / Binary transfer
+          $ "wire" !append$ DISPROW3 MSG(ASCIIBIN) JstGetTHEMESG BINT35 * 4A365
+          SysITE                                 * 4A390
 
 _binary__4A395:
           $ "binary"                             * 4A395
 
 _ASCII__4A3AB:
-          $ "ASCII" !append$ DISPROW4 GetIOPAR OBJ_49A4C JstGetTHEMESG 7ROLL * 4A3AB
-          DECOMP&$ DISPROW5 OBJ_49A56 JstGetTHEMESG 6ROLL * 4A3DD
+          $ "ASCII" !append$ DISPROW4 GetIOPAR MSG(BAUD) JstGetTHEMESG 7ROLL * 4A3AB
+          DECOMP&$ DISPROW5 MSG(PARITY) JstGetTHEMESG 6ROLL * 4A3DD
           :: DUPTYPEREAL? NOTcasedrop            * 4A3F6
 
 _invalid__4A405:
@@ -544,27 +574,31 @@ _mark__4A45C:
           ~SWAP;DECOMP&$ DISPROW7 2DROP SetDA2OKTemp ; * 4A4FF
 
 * refs (1): 3D3DE
-OBJ_4A518:
+* -> : PRINT menu INFO: Delay, Remap, Line length and End-of-line
+ReviewPRTPAR:
         :: ChkPRTPAR #4- NDROP $ "Delay: " 5ROLL DECOMP&$ DISPROW3 * 4A518
           $ "Remap: " 4ROLL DECOMP&$ DISPROW4 $ "Line length: " ROT DECOMP&$ * 4A553
           DISPROW5 $ "End-of-line: " ~SWAP;DECOMP&$ DISPROW6 NULL$ DISPROW7 * 4A5A8
           SetDA2OKTemp ;                         * 4A5E5
 
 * refs (1): 413C3
-OBJ_4A5EF:
+* -> : Eq and Ptype on rows 3 and 4
+ReviewEq:
         :: $ "Eq: " EQUATION IT DECOMP&$         * 4A5EF
           DISPROW3 $ "Ptype: " Chk&BreakPPAR DROP 6UNROLL 5DROP DECOMP&$ * 4A615
           DISPROW4 NULL$ DISPROW5 NULL$ DISPROW6 NULL$ DISPROW7 SetDA2OKTemp ; * 4A64B
 
 * refs (1): 4602A
-OBJ_4A678:
-        :: ROMPTR 0B5 08C $ "Xeye:  " 6ROLL DECOMP&$ DISPROW3 $ "Yeye:  " * 4A678
+* -> : 3D plot review: Xeye, Yeye, Zeye, Xstep and Ystep on rows 3 to 7
+ReviewEye:
+        :: XLIB VparVals $ "Xeye:  " 6ROLL DECOMP&$ DISPROW3 $ "Yeye:  " * 4A678
           5ROLL DECOMP&$ DISPROW4 $ "Zeye:  " 4ROLL DECOMP&$ DISPROW5 * 4A6C7
           $ "Xstep: " ROT DECOMP&$ DISPROW6 $ "Ystep: " ~SWAP;DECOMP&$ * 4A6FD
           DISPROW7 BINT10 NDROP SetDA2OKTemp ;   * 4A741
 
 * refs (2): 3C5A5 3C62F
-OBJ_4A75A:
+* -> : STAT menu INFO: Xcol, Ycol, Intercept, Slope and the model
+ReviewΣPAR:
         :: ChkReakäPAR 5ROLL $ "Xcol:  " swap;->EditStr;+(2st) DISPROW3 * 4A75A
           4ROLL $ "Ycol:  " swap;->EditStr;+(2st) DISPROW4 ROT * 4A78B
           $ "Intercept: " swap;->EditStr;+(2st) DISPROW5 SWAP $ "Slope: " * 4A7B7
@@ -574,18 +608,21 @@ _Mo:
           $ "Model: " swap;->EditStr;+(2st) DISPROW7 SetDA2OKTemp ; * 4A808
 
 * refs (7): 45FB2 45FD0 46071 46099 460C1 460E9 ...
-OBJ_4A834:
-        :: SWAP OBJ_46120 &$ SPACE$ !!append$ SWAP OBJ_46120 !!append$ ; * 4A834
+* %a %b $label -> $: review text "label a b", the numbers 8 wide
+Range$:
+        :: SWAP %>$8 &$ SPACE$ !!append$ SWAP %>$8 !!append$ ; * 4A834
         BSS     14                               * 4A866  zeros
 
 * refs (3): 4B783 4C495 70002
-OBJ_4A874:
-        :: %0_2A2B4 BINT27 NDUPN DROP OBJ_46B54 CHECKPVARS INCOMPDROP DROP * 4A874
-          11PUTLAM OBJ_4C701 ROT 5PICK 5PICK OBJ_4A8F1 %MAXorder DUP * 4A8A1
-          TOTEMPOB 15PUTLAM 17PUTLAM OBJ_51901 DEPTH #3- 18PUTLAM ; * 4A8C9
+* -> : bind the 27 lams for drawing (BindPlotEnv), fill in plot type, independent range and depth (lam 18)
+PlotBind:
+        :: %0_2A2B4 BINT27 NDUPN DROP BindPlotEnv CHECKPVARS INCOMPDROP DROP * 4A874
+          11PUTLAM PlotBind~1 ROT 5PICK 5PICK IndepRange %MAXorder DUP * 4A8A1
+          TOTEMPOB 15PUTLAM 17PUTLAM PlotLamScales DEPTH #3- 18PUTLAM ; * 4A8C9
 
 * refs (2): 47745 4A8BA
-OBJ_4A8F1:
+* id|{} %xmin %xmax -> %a %b: the range to plot: from the list when given, from 0 for POLAR, else the x range
+IndepRange:
         :: ROT dLISTcase                         * 4A8F1
           :: ROTROT2DROP ICMPDRPRTDRP ;          * 4A900
           DROP 11GETLAM 'IDPOLAR jEQcase         * 4A914
@@ -598,16 +635,17 @@ ICMPDRPRTDRP:
         :: INCOMPDROP ROTDROP ;                  * 4A95A
 
 * refs (8): 4890E 4BBA2 4BD5A 4BDFA 4EDAC 8A58E ...
-OBJ_4A96E:
+* #n -> : make the two arrays in lams 20 and 21 holding the last point of each of #n curves, all -1 (none yet)
+LastPtArrays:
         :: BINT1 OVER #1+ TWO{}N %-1 MAKEARRY TOTEMPOB DUP TOTEMPOB 20PUTLAM * 4A96E
           21PUTLAM ;                             * 4A9A5
 
 * -> {}
 * refs (18): 4A892 4B369 4B428 4FC6E 50F92 8AAB9 ...
 CHECKPVARS:
-        :: Chk&BreakPPAR ROMPTR 0F1 03D CHECKPVARS~1 DUPTYPELIST? IT * 4A9AF
-          :: INNERCOMP BINT3 EQUALcasedrop OBJ_4C6E3 * 4A9D3
-            BINT2 EQUALcasedrop OBJ_4EF0A        * 4A9EC
+        :: Chk&BreakPPAR XLIB CHECKPVARS~3 CHECKPVARS~1 DUPTYPELIST? IT * 4A9AF
+          :: INNERCOMP BINT3 EQUALcasedrop Ck2Strings * 4A9D3
+            BINT2 EQUALcasedrop CkAxTick         * 4A9EC
             CHECKPVARS~2 ;                       * 4A9FB
           TYPECMP? NOT?INVPPAR DUPTYPEREAL? SWAP TYPEHSTR? OR NOT?INVPPAR * 4AA05
           ChkIndep TYPECMP? NOT?INVPPAR TYPECMP? NOT?INVPPAR 'IDPAR * 4AA28
@@ -654,11 +692,12 @@ MakeRange(s):
 CHECKPVARS~1:
         :: ?OKINALG casedrop                     * 4ABC1
           :: 'IDFUNCTION PUTPTYPE ;              * 4ABD0
-          OBJ_2708E caseDROP DROP                * 4ABE4
+          CmdField caseDROP DROP                 * 4ABE4
           'IDFUNCTION PUTPTYPE ;                 * 4ABF3
 
 * refs (1): 6BE16
-OBJ_4AC02:
+* ob -> flag: TRUE for a symbolic, a complex number or a unit object
+Symb/C/Unit?:
         :: DUPTYPESYMB? OVER TYPECMP? OR SWAP TYPEEXT? OR ; * 4AC02
         BSS     5                                * 4AC2F  zeros
 
@@ -750,7 +789,7 @@ ax*s(c):
 
 * refs (1): 1E0D7
 ax*s(li):
-        :: OBJ_4502E ;                           * 4B04E
+        :: AXES>List ;                           * 4B04E
         BSS     5                                * 4B05D  zeros
 
 * -> name
@@ -830,7 +869,7 @@ RclPdim:
 
 * refs (1): 1E210
 pdim(2c):
-        :: OBJ_46152 SWAP2C%>% ORDERXY% %>C% 3UNROLL %>C% SWAP 2DUP * 4B206
+        :: CkNotPlotting SWAP2C%>% ORDERXY% %>C% 3UNROLL %>C% SWAP 2DUP * 4B206
           swap;-(2c);c->r DUP %%0= 3PICK %%0= ORcase SETSIZEERR * 4B233
           GETPMIN&MAX swap;-(2c);c->r ROTSWAP %%/ 3UNROLL %%/ RclMaxStdPict * 4B256
           #1- UNCOERCE%% 4ROLL %%* %%>% COERCE #1+ 3UNROLL #1- UNCOERCE%% * 4B279
@@ -848,7 +887,7 @@ pdim(2b):
 * refs (3): 45F0A 4B2BF 4B319
 MAKEPICT#:
         :: SWAP # 800 OVER #< case SETSIZEERR    * 4B323
-          OBJ_5121F KILLGDISP MAKEGROB GROB>GDISP ; * 4B34B
+          PICTMinSize KILLGDISP MAKEGROB GROB>GDISP ; * 4B34B
 
 * # -> ob
 * refs (7): 4AF6D 4AFA9 4AFE5 4B030 4B06C 4B094 ...
@@ -857,7 +896,7 @@ GETPARAM:
 
 * refs (2): 4AF95 4AFD1
 ChkPut('PPAR',li,s):
-        :: ROMPTR 0F1 03C ;                      * 4B37D
+        :: XLIB ChkPut('PPAR',li,s)~1 ;          * 4B37D
 
 * refs (1): 8D02B
 ChkPut('PPAR',li,s)~2:
@@ -884,29 +923,34 @@ sort(2r):
         :: %MAXorder SWAP ;                      * 4B45F
 
 * refs (1): 6B443
-OBJ_4B473:
-        :: TakeOver REPEATERCH BINT11 OBJ_0C758 ; * 4B473
+* -> : EquationWriter: cursor up, repeating while held
+EqwRepUp:
+        :: TakeOver REPEATERCH BINT11 EqwRepUp~1 ; * 4B473
 
 * refs (1): 6B44A
-OBJ_4B491:
-        :: TakeOver REPEATERCH BINT16 OBJ_6F810 ; * 4B491
+* -> : EquationWriter: cursor left, repeating while held
+EqwRepLeft:
+        :: TakeOver REPEATERCH BINT16 EqwSelLeft ; * 4B491
 
 * refs (1): 6B451
-OBJ_4B4AF:
-        :: TakeOver REPEATERCH BINT17 OBJ_6F85B ; * 4B4AF
+* -> : EquationWriter: cursor down, repeating while held
+EqwRepDown:
+        :: TakeOver REPEATERCH BINT17 EqwSelDown ; * 4B4AF
 
 * refs (1): 6B458
-OBJ_4B4CD:
-        :: TakeOver REPEATERCH BINT18 OBJ_4618C ; * 4B4CD
+* -> : EquationWriter: cursor right, repeating while held
+EqwRepRight:
+        :: TakeOver REPEATERCH BINT18 EqwRepRight~1 ; * 4B4CD
 
 * refs (3): 48A1C 4BB6B 4BE6D
-OBJ_4B4EB:
+* -> : after a plot loop's ERRTRAP: no error just leaves the loop; a real one unbinds, restores the depth, purges the variable and carries on
+PlotErrExit:
         :: ERROR@ #0=case ExitAtLOOP             * 4B4EB
           18GETLAM ABND ABND RESETDEPTH INDEPVAR ?PURGE_HERE ERRJMP ; * 4B4FF
 
 * refs (1): 4A9FB
 CHECKPVARS~2:
-        :: BINT4 EQUAL NOT?INVPPAR OBJ_4C6E3 OBJ_4EF0A ; * 4B527
+        :: BINT4 EQUAL NOT?INVPPAR Ck2Strings CkAxTick ; * 4B527
         BSS     9                                * 4B54A  zeros
 
 * refs (3): 1E15F 47B14 4812F
@@ -963,13 +1007,13 @@ RESETDEPTH:
 
 * refs (2): 4BBC5 4EDCF
 OBJ_4B747:
-        :: OBJ_50D02 ~DUP;ALGeq? IT GETRHS       * 4B747
+        :: EqIndexed ~DUP;ALGeq? IT GETRHS       * 4B747
         ;                                        * 4B760
 
 * refs (3): 488BE 4B6A7 8A4EB
 PLOTPREP:
         :: StatPlotMo case                       * 4B765
-          :: rclä! DROPONE OBJ_4A874 ;           * 4B774
+          :: rclä! DROPONE PlotBind ;            * 4B774
           DORCLE DUP EqList? ITE LENCOMP DROPONE * 4B78D
           OBJ_6FFFD OVER TYPEREAL? NOT?SEMI      * 4B7AB
           OVER %0< case SETINVPPAR               * 4B7BF
@@ -990,16 +1034,16 @@ GetRes:
         :: EXITFCNsto ERRJMP ;                   * 4B86E
 
 * refs (1): 6D195
-OBJ_4B882:
-        :: SKIP 2DROP OBJ_67DFC LENHXS #5= ITE BINT3 BINT4 * 4B882
-          #=case OBJ_6E00B                       * 4B8AF
+EqwPower~1:
+        :: SKIP 2DROP EqwFrm3@ LENHXS #5= ITE BINT3 BINT4 * 4B882
+          #=case EqwLarger                       * 4B8AF
         ;                                        * 4B8B9
 
 * refs (1): 6D89B
-OBJ_4B8BE:
-        :: SKIP OBJ_6F40F BINT3 #=casedrop       * 4B8BE
-          :: BINT1 OBJ_67E0C EqwBoxSecond@ OBJ_68593 EqwCurBox@ #1+ * 4B8D7
-            OBJ_67443 EqwBoxPrev@ OBJ_6D779 OBJ_44C4B EqwBoxObj! ; * 4B8FA
+EqwDeriv~1:
+        :: SKIP EqwDeriv~3 BINT3 #=casedrop      * 4B8BE
+          :: BINT1 EqwFrm5@ EqwBoxSecond@ EqwBoxSizeH! EqwCurBox@ #1+ * 4B8D7
+            EqwDupCurBox! EqwBoxPrev@ EqwFontH#2+ OBJ_44C4B EqwBoxObj! ; * 4B8FA
           BINT5 OBJ_6E113 ;                      * 4B918
 
 * refs (1): 3FE3A
@@ -1011,11 +1055,11 @@ H/WKey>KeyOb~1:
         :: DOBIND CK0NOLASTWD ;                  * 4B94A
 
 * refs (1): 6CB93
-OBJ_4B95E:
+KeyAccent~3:
         GROB    "images/4B95E.png"               * 4B95E  3 x 6
 
 * refs (1): 6D492
-OBJ_4B97E:
+EqwAddParens~1:
         GROB    "images/4B97E.png"               * 4B97E  6 x 6
         BSS     1                                * 4B99E  zeros
 
@@ -1028,110 +1072,123 @@ rcl(nm)?;drop:
         :: DRPExitAtLOOP DROP ;                  * 4B9C2
 
 * refs (3): 488F5 4BB07 5192E
-OBJ_4B9D6:
+* -> : if the independent variable holds a unit object, keep it as lam 19, the step's unit
+IndepUnit!:
         :: INDEPVAR SAFE@_HERE NOT?SEMI          * 4B9D6
           DUPTYPEEXT? NOTcaseDROP %1             * 4B9EA
           SWAP UM>U 19PUTLAM ;                   * 4B9F9
 
 * refs (1): 8CA20
-OBJ_4BA0D:
+* -> : POLAR draw: pick the point routine by flag -31 (lam 3) and run the curves
+DrawPolar:
         :: BINT31 TestSysFlag ITE                * 4BA0D  flag -31: Connect points / Plot points only
-          :: ' OBJ_4CDD9 ;                       * 4BA21
-          :: ' OBJ_4C382 ;                       * 4BA35
-          3PUTLAM COLA OBJ_4BAAD                 * 4BA49
+          :: ' PlotPolarDot ;                    * 4BA21
+          :: ' PlotPolarLine ;                   * 4BA35
+          3PUTLAM COLA PlotCurves                * 4BA49
         ;                                        * 4BA58
 
 * refs (1): 8C821
-OBJ_4BA5D:
+* -> : FUNCTION draw: pick the point routine by flag -31 (lam 3) and run the curves
+DrawFunction:
         :: BINT31 TestSysFlag ITE                * 4BA5D  flag -31: Connect points / Plot points only
-          :: ' OBJ_4CE0B ;                       * 4BA71
+          :: ' PlotFcnDot ;                      * 4BA71
           :: ' PlotFcnPt ;                       * 4BA85
-          3PUTLAM COLA OBJ_4BAAD                 * 4BA99
+          3PUTLAM COLA PlotCurves                * 4BA99
         ;                                        * 4BAA8
 
 * refs (3): 4BA53 4BAA3 4BEE5
-OBJ_4BAAD:
+* #n -> : draw the curves of EQ (a single equation can be two), one by one, or together by flag -28
+PlotCurves:
         :: DUP#1= IT                             * 4BAAD
 
 * refs (2): 4692D 4BF94
-OBJ_4BABC:
+* -> #n: the curves of a lone equation: 1 if the left side is a name, or it isn't an equation, else 2
+EqCurves:
           :: rceq! ~DUP;ALGeq? NOTcaseDROP ~1stArgb(ex);::N * 4BABC
             DUPLENCOMP #1= NOTcase2drop BINT2    * 4BAD5
             INCOMPDROP TYPEIDNT? ?SEMI           * 4BAE9
             DROP BINT2 ;                         * 4BAF8
-          OBJ_4B9D6 OBJ_4C314 ZERO_DO ERRSET     * 4BB07
-          :: 15GETLAM 17GETLAM NEWINDEP OBJ_4ED70 19GETLAM TYPEEXT? ITE * 4BB1B
-            OBJ_4BC06 OBJ_4C12A                  * 4BB43
+          IndepUnit! MakeIndep ZERO_DO ERRSET    * 4BB07
+          :: 15GETLAM 17GETLAM NEWINDEP PlotSetup1 19GETLAM TYPEEXT? ITE * 4BB1B
+            PlotLoopUnit PlotLoop                * 4BB43
             BINT28 TestSysFlag IT ExitAtLOOP     * 4BB4D  flag -28: Sequential plot / Simultaneous plot
           ;                                      * 4BB61
-          ERRTRAP OBJ_4B4EB ~ATTNFLG@;#0=?SEMI;ExitAtLOOP LOOP ATTNFLGCLR * 4BB66
+          ERRTRAP PlotErrExit ~ATTNFLG@;#0=?SEMI;ExitAtLOOP LOOP ATTNFLGCLR * 4BB66
           18GETLAM RESETDEPTH INDEPVAR ?PURGE_HERE ; * 4BB7F
 
 * refs (1): 4EDA2
-OBJ_4BB98:
-        :: ISTOP@ OBJ_4A96E ZERO_DO ' ' OBJ_4BF71 ITE OBJ_4C616 OBJ_4B747 * 4BB98
-          OBJ_4BEEF BINT6 ::N LOOP ISTOP@ #3+ ::N 2PUTLAM ; * 4BBCA
+* -> : flag -28: build the loop step that evaluates every curve at each x
+PlotSimul:
+        :: ISTOP@ LastPtArrays ZERO_DO ' ' EqTwoCurves? ITE EqSide OBJ_4B747 * 4BB98
+          PlotStepOb BINT6 ::N LOOP ISTOP@ #3+ ::N 2PUTLAM ; * 4BBCA
         BSS     15                               * 4BBF7  zeros
 
 * refs (2): 48A08 4BB43
-OBJ_4BC06:
+* -> : plot loop when the independent variable has units: step in the unit, keeping it
+PlotLoopUnit:
         :: 15GETLAM TOTEMPOB 19GETLAM INDEPVAR DUP PURGE 3UNROLL UM>U OVER * 4BC06
           CREATE rcl(nm)?;drop 19PUTLAM BEGIN 2GETLAM EVAL NEXTSTEP * 4BC38
-          OBJ_4C111 LASTPT? UNTIL PlotOneMore? NOT?SEMI * 4BC5B
+          IndepUnitStep LASTPT? UNTIL PlotOneMore? NOT?SEMI * 4BC5B
           2GETLAM EVAL ;                         * 4BC74
 
 * refs (1): 8C94B
-OBJ_4BC83:
-        :: OBJ_4C314 ZERO_DO ERRSET              * 4BC83
+* -> : CONIC draw: solve to the two branches and plot both
+DrawConic:
+        :: MakeIndep ZERO_DO ERRSET              * 4BC83
           :: uncrunch                            * 4BC97
-            :: 15GETLAM 17GETLAM NEWINDEP OBJ_50D02 DUPTYPESYMB? NOTcase * 4BCA1
+            :: 15GETLAM 17GETLAM NEWINDEP EqIndexed DUPTYPESYMB? NOTcase * 4BCA1
               doerr607                           * 4BCC4
               BINT31 TestSysFlag ITE             * 4BCC9  flag -31: Connect points / Plot points only
-              :: ' OBJ_4C7D3 ;                   * 4BCD8
-              :: ' OBJ_4C846 ;                   * 4BCEC
-              3PUTLAM ~RclDepnd;1get(li)? INDEPVAR DUP 15PUTLAM OBJ_5956F * 4BD00
-              15GETLAM STO OBJ_591E9 17GETLAM 15GETLAM XEQSTOID 15GETLAM * 4BD1E
+              :: ' PlotConicDot ;                * 4BCD8
+              :: ' PlotConicLine ;               * 4BCEC
+              3PUTLAM ~RclDepnd;1get(li)? INDEPVAR DUP 15PUTLAM Quote<<id>> * 4BD00
+              15GETLAM STO QuadCore 17GETLAM 15GETLAM XEQSTOID 15GETLAM * 4BD1E
               rcl(nm)?;drop 15PUTLAM ITE         * 4BD41
-              :: BINT2 OBJ_4A96E DROP DUP OBJ_513D7 SWAP OBJ_513FF ' * 4BD50
-                15GETLAM ' GETXPOS ' 1PUTLAM 4ROLL OBJ_4BEEF SWAPDROP * 4BD7D
-                ONESWAP 4ROLLDROP BINT1 4UNROLL BINT9 ROLL OBJ_4BEEF * 4BDA5
+              :: BINT2 LastPtArrays DROP DUP ConicBranch+ SWAP ConicBranch- * 4BD50
+                ' 15GETLAM ' GETXPOS ' 1PUTLAM 4ROLL PlotStepOb SWAPDROP * 4BD78
+                ONESWAP 4ROLLDROP BINT1 4UNROLL BINT9 ROLL PlotStepOb * 4BDA5
                 SWAPDROP BINT2 SWAP 4ROLLDROP BINT2 4UNROLL BINT13 ; * 4BDC8
-              :: BINT1 OBJ_4A96E DROP ' 15GETLAM ' GETXPOS ' 1PUTLAM 4ROLL * 4BDF0
-                OBJ_4BEEF SWAPDROP ONESWAP 4ROLLDROP BINT1 4UNROLL BINT8 ; * 4BE27
-              ::N 2PUTLAM OBJ_4C12A ;            * 4BE4F
+              :: BINT1 LastPtArrays DROP ' 15GETLAM ' GETXPOS ' 1PUTLAM * 4BDF0
+                4ROLL PlotStepOb SWAPDROP ONESWAP 4ROLLDROP BINT1 4UNROLL * 4BE22
+                BINT8 ;                          * 4BE45
+              ::N 2PUTLAM PlotLoop ;             * 4BE4F
           ;                                      * 4BE63
-          ERRTRAP OBJ_4B4EB ~ATTNFLG@;#0=?SEMI;ExitAtLOOP LOOP ATTNFLGCLR * 4BE68
+          ERRTRAP PlotErrExit ~ATTNFLG@;#0=?SEMI;ExitAtLOOP LOOP ATTNFLGCLR * 4BE68
           18GETLAM RESETDEPTH INDEPVAR ?PURGE_HERE ; * 4BE81
         BSS     5                                * 4BE9A  zeros
 
 * refs (1): 8CB64
-OBJ_4BE9F:
+* -> : PARAMETRIC draw: pick the point routine by flag -31 (lam 3) and run the curves
+DrawParametric:
         :: BINT31 TestSysFlag ITE                * 4BE9F  flag -31: Connect points / Plot points only
-          :: ' OBJ_4C3B9 ;                       * 4BEB3
-          :: ' OBJ_4C3E6 ;                       * 4BEC7
-          3PUTLAM COLA OBJ_4BAAD                 * 4BEDB
+          :: ' PlotParamDot ;                    * 4BEB3
+          :: ' PlotParamLine ;                   * 4BEC7
+          3PUTLAM COLA PlotCurves                * 4BEDB
         ;                                        * 4BEEA
 
 * refs (4): 4BBCA 4BD9B 4BDC3 4BE27
-OBJ_4BEEF:
+* ... -> ...: the objects of curve INDEX's step in PlotSimul
+PlotStepOb:
         :: INDEX@ #1+ BINT31 TestSysFlag ITE     * 4BEEF  flag -31: Connect points / Plot points only
           :: '                                   * 4BF0D
             :: DROP COLA PlotEval                * 4BF17
             ;                                    * 4BF2B
           ;                                      * 4BF30
-          :: ' OBJ_4EF73 ;                       * 4BF35
+          :: ' PlotEvalY ;                       * 4BF35
           INDEX@ #1+ 3GETLAM ;                   * 4BF49
 
 * refs (2): 4D3B7 4D6D2
-OBJ_4BF5D:
+* flag -> : if flag, take the coordinates off the display
+?ClrCoords:
         :: IT OBJ_0C7F3                          * 4BF5D
         ;                                        * 4BF6C
 
 * refs (3): 4BBB6 4EDC0 7384B
-OBJ_4BF71:
+* -> flag: TRUE if EQ is one equation that plots as two curves
+EqTwoCurves?:
         :: EQUATION NOTcase FALSE                * 4BF71
           TYPELIST? caseFALSE BINT1              * 4BF85
-          OBJ_4BABC #1=case FALSE                * 4BF94
+          EqCurves #1=case FALSE                 * 4BF94
           TRUE ;                                 * 4BFA3
         BSS     1                                * 4BFAD  zeros
 

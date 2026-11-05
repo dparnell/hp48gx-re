@@ -1,6 +1,6 @@
-* HP 48GX ROM revision R, #0A006-#0C000: not yet identified
+* HP 48GX ROM revision R, #0A006-#0C000: Library and backup CRC checks, recovery of lost memory, ROMPTAB rebuilt at warm start, ports: status, MERGE and FREE, the hidden directory, parser token tests, and moving RAM at run time
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: TrueTrue !*triand tok8trior failed !*trior tok8cktrior PORTSTATUS SAFESKIPOB NEXTLIBBAK CKLBCRC sto0!(bk) purge(bk,s)
+* Most referenced: TrueTrue !*triand tok8trior failed !*trior tok8cktrior PORTSTATUS SAFESKIPOB NEXTLIBBAK CKLBCRC NextBank BankCfgStd
 * Follows on from the previous file (at #0A006 in the original ROM).
         D=C     A                                * 0A006
         GOLONG  PORTSTATUS.L1                    * 0A008
@@ -9,11 +9,12 @@
 * refs (5): 09248 09616 0AF1F 0AF3B 2174F
 CKLBCRC:
         ST=0    15                               * 0A00E
-        GOSUB   SUB_0A01C                        * 0A011
+        GOSUB   CkObCRC                          * 0A011
         GOVLNG  AllowIntr                        * 0A015
 
 * refs (2): 0A011 0A11A
-SUB_0A01C:
+* D0 at a library or backup, past its prolog -> carry set if its length is impossible or the CRC in its last 4 nibbles is wrong. C.A = address past the object
+CkObCRC:
         P=      0                                * 0A01C
         D0=D0+  5                                * 0A01E
         C=DAT0  A                                * 0A021
@@ -36,21 +37,21 @@ SUB_0A01C:
         RSTK=C                                   * 0A054
         D0=C                                     * 0A056
         P=P-1                                    * 0A059
-        GOC     SUB_0A01C.L1                     * 0A05B
+        GOC     CkObCRC.L1                       * 0A05B
         C=DAT0  WP                               * 0A05E
         CD0EX                                    * 0A062
         C+P+1                                    * 0A065
         D0=C                                     * 0A068
-SUB_0A01C.L1:
+CkObCRC.L1:
         P=      0                                * 0A06B
         A=A-1   A                                * 0A06D
-        GOC     SUB_0A01C.L3                     * 0A06F
-SUB_0A01C.loop2:
+        GOC     CkObCRC.L3                       * 0A06F
+CkObCRC.loop2:
         C=DAT0  W                                * 0A072
         D0=D0+  16                               * 0A076
         A=A-1   A                                * 0A079
-        GONC    SUB_0A01C.loop2                  * 0A07B
-SUB_0A01C.L3:
+        GONC    CkObCRC.loop2                    * 0A07B
+CkObCRC.L3:
         A=0     A                                * 0A07E
         CD0EX                                    * 0A080
         D0=(5)  #00104                           * 0A083
@@ -63,8 +64,11 @@ SUB_0A01C.L3:
         ?A#0    A                                * 0A09B
         RTNYES                                   * 0A09E
         RTNCC                                    * 0A0A0
-SUB_0A01C.L4:
-        GOSBVL  SUB_0249F                        * 0A0A2
+
+* refs (1): 023FB
+* Try To Recover Memory, YES: scan memory backward for libraries and backups with a good CRC and rebuild port 0 from them; then find the largest valid directory for HOME. Other directories found are stored in HOME as variables named D.nn, the number kept in CONTEXT
+RecoverMem:
+        GOSBVL  InitDispGrobs                    * 0A0A2
         P=      0                                * 0A0A9
         D0=(5)  USEROB                           * 0A0AB
         C=0     A                                * 0A0B2
@@ -79,58 +83,58 @@ SUB_0A01C.L4:
         LC(5)   #0016D                           * 0A0DA
         A=A+C   A                                * 0A0E1
         B=A     A                                * 0A0E3
-SUB_0A01C.loop5:
+RecoverMem.loop1:
         LC(5)   DOLIB                            * 0A0E5
         D=C     A                                * 0A0EC
         LC(5)   DOBAK                            * 0A0EE
-SUB_0A01C.loop6:
+RecoverMem.loop2:
         D0=D0-  1                                * 0A0F5
         AD0EX                                    * 0A0F8
         ?A<=B   A                                * 0A0FB
-        GOYES   SUB_0A01C.L8                     * 0A0FE
+        GOYES   RecoverMem.L4                    * 0A0FE
         D0=A                                     * 0A100
         A=DAT0  A                                * 0A103
         ?C=A    A                                * 0A106
-        GOYES   SUB_0A01C.L7                     * 0A109
+        GOYES   RecoverMem.L3                    * 0A109
         DCEX    A                                * 0A10B
         ?C#A    A                                * 0A10D
-        GOYES   SUB_0A01C.loop6                  * 0A110
-SUB_0A01C.L7:
+        GOYES   RecoverMem.loop2                 * 0A110
+RecoverMem.L3:
         CD0EX                                    * 0A112
         D=C     A                                * 0A115
         D0=C                                     * 0A117
-        GOSUB   SUB_0A01C                        * 0A11A
+        GOSUB   CkObCRC                          * 0A11A
         C=D     A                                * 0A11E
         D0=C                                     * 0A120
-        GOC     SUB_0A01C.loop5                  * 0A123
+        GOC     RecoverMem.loop1                 * 0A123
         GOSBVL  SKIPOB                           * 0A126
         D1=(5)  ROMPARTS                         * 0A12D
         A=DAT1  A                                * 0A134
         C=D     A                                * 0A137
         CD0EX                                    * 0A139
         ?C>A    A                                * 0A13C
-        GOYES   SUB_0A01C.loop5                  * 0A13F
-        GOTO    SUB_0A01C.L20                    * 0A141
-SUB_0A01C.L8:
+        GOYES   RecoverMem.loop1                 * 0A13F
+        GOTO    RecoverMem.L16                   * 0A141
+RecoverMem.L4:
         D0=(5)  ROMPARTS                         * 0A145
         A=DAT0  A                                * 0A14C
         D1=A                                     * 0A14F
         LC(5)   #00021                           * 0A152
         A=A-C   A                                * 0A159
         D0=A                                     * 0A15B
-SUB_0A01C.loop9:
+RecoverMem.loop5:
         LC(5)   DORRP                            * 0A15E
-SUB_0A01C.loop10:
+RecoverMem.loop6:
         D0=D0-  1                                * 0A165
         AD0EX                                    * 0A168
         ?A<=B   A                                * 0A16B
-        GOYES   SUB_0A01C.L11                    * 0A16E
+        GOYES   RecoverMem.L7                    * 0A16E
         D0=A                                     * 0A170
         A=DAT0  A                                * 0A173
         ?C#A    A                                * 0A176
-        GOYES   SUB_0A01C.loop10                 * 0A179
-        GOTO    SUB_0A01C.L21                    * 0A17B
-SUB_0A01C.L11:
+        GOYES   RecoverMem.loop6                 * 0A179
+        GOTO    RecoverMem.L17                   * 0A17B
+RecoverMem.L7:
         D0=(5)  ROMPARTS                         * 0A17F
         A=DAT0  A                                * 0A186
         B=A     A                                * 0A189
@@ -144,36 +148,36 @@ SUB_0A01C.L11:
         D0=(5)  USEROB                           * 0A1AA
         DAT0=C  A                                * 0A1B1
         D0=C                                     * 0A1B4
-SUB_0A01C.loop12:
+RecoverMem.loop8:
         D1=(5)  USEROB                           * 0A1B7
         A=DAT1  A                                * 0A1BE
         LC(5)   #00011                           * 0A1C1
         A=A+C   A                                * 0A1C8
-        GONC    SUB_0A01C.L13                    * 0A1CA
-        GOTO    SUB_0A01C.L16                    * 0A1CD
-SUB_0A01C.L13:
+        GONC    RecoverMem.L9                    * 0A1CA
+        GOTO    RecoverMem.L12                   * 0A1CD
+RecoverMem.L9:
         CD0EX                                    * 0A1D1
         D0=C                                     * 0A1D4
         ?C>A    A                                * 0A1D7
-        GOYES   SUB_0A01C.L14                    * 0A1DA
+        GOYES   RecoverMem.L10                   * 0A1DA
         D0=A                                     * 0A1DC
-SUB_0A01C.L14:
+RecoverMem.L10:
         LC(5)   DORRP                            * 0A1DF
-SUB_0A01C.loop15:
+RecoverMem.loop11:
         D0=D0+  1                                * 0A1E6
         AD0EX                                    * 0A1E9
         ?A>=B   A                                * 0A1EC
-        GOYES   SUB_0A01C.L16                    * 0A1EF
+        GOYES   RecoverMem.L12                   * 0A1EF
         D0=A                                     * 0A1F1
         A=DAT0  A                                * 0A1F4
         ?C#A    A                                * 0A1F7
-        GOYES   SUB_0A01C.loop15                 * 0A1FA
-        GOTO    SUB_0A01C.L23                    * 0A1FC
-SUB_0A01C.L16:
+        GOYES   RecoverMem.loop11                * 0A1FA
+        GOTO    RecoverMem.L19                   * 0A1FC
+RecoverMem.L12:
         D0=(5)  CONTEXT                          * 0A200
         A=DAT0  A                                * 0A207
         ?A=0    A                                * 0A20A
-        GOYES   SUB_0A01C.L17                    * 0A20D
+        GOYES   RecoverMem.L13                   * 0A20D
         D1=(5)  TEMPOB                           * 0A20F
         A=DAT1  A                                * 0A216
         LC(5)   #0016D                           * 0A219
@@ -200,17 +204,17 @@ SUB_0A01C.L16:
         GOSBVL  MOVEUP                           * 0A267
         AD1EX                                    * 0A26E
         D0=A                                     * 0A271
-        GOTO    SUB_0A01C.loop18                 * 0A274
-SUB_0A01C.L17:
+        GOTO    RecoverMem.loop14                * 0A274
+RecoverMem.L13:
         D0=(5)  ROMPARTS                         * 0A278
         C=DAT0  A                                * 0A27F
         D0=C                                     * 0A282
         D0=D0-  5                                * 0A285
         A=0     A                                * 0A288
-        GONC    SUB_0A01C.L19                    * 0A28A
-SUB_0A01C.loop18:
+        GONC    RecoverMem.L15                   * 0A28A
+RecoverMem.loop14:
         A=DAT0  A                                * 0A28D
-SUB_0A01C.L19:
+RecoverMem.L15:
         DAT0=A  A                                * 0A290
         D0=D0-  3                                * 0A293
         C=0     X                                * 0A296
@@ -225,8 +229,8 @@ SUB_0A01C.L19:
         DAT1=C  A                                * 0A2BE
         D0=(5)  STOPSIGN                         * 0A2C1
         DAT0=C  A                                * 0A2C8
-        GOVLNG  SUB_02388.L4                     * 0A2CB
-SUB_0A01C.L20:
+        GOVLNG  ClrMemBoot.L3                    * 0A2CB
+RecoverMem.L16:
         D1=A                                     * 0A2D2
         AD0EX                                    * 0A2D5
         D0=C                                     * 0A2D8
@@ -235,33 +239,34 @@ SUB_0A01C.L20:
         LC(5)   ROMPARTS                         * 0A2E4
         CD1EX                                    * 0A2EB
         DAT1=C  A                                * 0A2EE
-        GOTO    SUB_0A01C.loop5                  * 0A2F1
-SUB_0A01C.L21:
+        GOTO    RecoverMem.loop1                 * 0A2F1
+RecoverMem.L17:
         CD0EX                                    * 0A2F5
         D1=C                                     * 0A2F8
         D0=C                                     * 0A2FB
         C=B     A                                * 0A2FE
         D=C     A                                * 0A300
-        GOSUB   SUB_0A491                        * 0A302
-        GOC     SUB_0A01C.L22                    * 0A306
-        GOTO    SUB_0A01C.L25                    * 0A309
-SUB_0A01C.L22:
+        GOSUB   RrpOK?                           * 0A302
+        GOC     RecoverMem.L18                   * 0A306
+        GOTO    RecoverMem.L21                   * 0A309
+RecoverMem.L18:
         C=D     A                                * 0A30D
         B=C     A                                * 0A30F
-        GOTO    SUB_0A01C.loop9                  * 0A311
-SUB_0A01C.L23:
+        GOTO    RecoverMem.loop5                 * 0A311
+RecoverMem.L19:
         CD0EX                                    * 0A315
         D0=C                                     * 0A318
         D1=C                                     * 0A31B
         C=B     A                                * 0A31E
         D=C     A                                * 0A320
-        GOSUB   SUB_0A45D                        * 0A322
+        GOSUB   RrpChainOK?                      * 0A322
         C=D     A                                * 0A326
         B=C     A                                * 0A328
-        GONC    SUB_0A01C.L24                    * 0A32A
-        GOTO    SUB_0A01C.loop12                 * 0A32D
-SUB_0A01C.L24:
-        GOSUB   SUB_0A71C                        * 0A331
+        GONC    RecoverMem.L20                   * 0A32A
+        GOTO    RecoverMem.loop8                 * 0A32D
+RecoverMem.L20:
+        GOSUB   RrpRepair                        * 0A331
+* Keep a directory that is not HOME: make a variable named D. and a two-digit count holding it
         D1=(5)  USEROB                           * 0A335
         A=DAT1  A                                * 0A33C
         D1=(5)  OSAVE                            * 0A33F
@@ -312,8 +317,8 @@ SUB_0A01C.L24:
         D1=(5)  ROMPARTS                         * 0A3E2
         A=DAT1  A                                * 0A3E9
         B=A     A                                * 0A3EC
-        GOTO    SUB_0A01C.loop12                 * 0A3EE
-SUB_0A01C.L25:
+        GOTO    RecoverMem.loop8                 * 0A3EE
+RecoverMem.L21:
         D0=D0+  5                                * 0A3F2
         C=0     A                                * 0A3F5
         C=DAT0  X                                * 0A3F7
@@ -330,7 +335,7 @@ SUB_0A01C.L25:
         D0=D0-  5                                * 0A414
         LC(5)   DORRP                            * 0A417
         DAT0=C  A                                * 0A41E
-        GOSUB   SUB_0A71C                        * 0A421
+        GOSUB   RrpRepair                        * 0A421
         CD0EX                                    * 0A425
         D0=C                                     * 0A428
         D=C     A                                * 0A42B
@@ -345,15 +350,17 @@ SUB_0A01C.L25:
         CD1EX                                    * 0A450
         D0=C                                     * 0A453
         D0=D0+  8                                * 0A456
-        GOTO    SUB_0A01C.loop18                 * 0A459
+        GOTO    RecoverMem.loop14                * 0A459
 
 * refs (2): 0A322 0AA03
-SUB_0A45D:
+* D1 at a directory's DORRP -> carry set if its name chain is bad; as RrpOK? without the attachment table
+RrpChainOK?:
         D1=D1+  8                                * 0A45D
-        GOTO    SUB_0A491.L1                     * 0A460
+        GOTO    RrpOK?.L1                        * 0A460
 
 * refs (2): 020E4 0423A
-SUB_0A464:
+* -> carry set if USEROB is above RAMEND, is not a directory, or fails RrpOK?
+HomeOK?:
         P=      0                                * 0A464
         D1=(5)  USEROB                           * 0A466
         C=DAT1  A                                * 0A46D
@@ -368,7 +375,8 @@ SUB_0A464:
         RTNYES                                   * 0A48F
 
 * refs (1): 0A302
-SUB_0A491:
+* D1 at a directory's DORRP -> carry set if its attachment table or name chain leaves RAM or does not end at the first entry
+RrpOK?:
         D1=D1+  5                                * 0A491
         C=0     A                                * 0A494
         C=DAT1  X                                * 0A496
@@ -384,10 +392,10 @@ SUB_0A491:
         A=A+C   A                                * 0A4AF
         RTNC                                     * 0A4B1
         D1=A                                     * 0A4B4
-SUB_0A491.L1:
+RrpOK?.L1:
         C=DAT1  A                                * 0A4B7
         ?C#0    A                                * 0A4BA
-        GOYES   SUB_0A491.L2                     * 0A4BD
+        GOYES   RrpOK?.L2                        * 0A4BD
         D1=D1+  5                                * 0A4BF
         LC(5)   ROMPARTS                         * 0A4C2
         CD1EX                                    * 0A4C9
@@ -395,7 +403,7 @@ SUB_0A491.L1:
         ?C#A    A                                * 0A4CF
         RTNYES                                   * 0A4D2
         RTNCC                                    * 0A4D4
-SUB_0A491.L2:
+RrpOK?.L2:
         AD1EX                                    * 0A4D6
         B=A     A                                * 0A4D9
         C=C+A   A                                * 0A4DB
@@ -405,11 +413,11 @@ SUB_0A491.L2:
         ?C>=A   A                                * 0A4EA
         RTNYES                                   * 0A4ED
         D1=C                                     * 0A4EF
-SUB_0A491.loop3:
+RrpOK?.loop3:
         D1=D1-  5                                * 0A4F2
         C=DAT1  A                                * 0A4F5
         ?C=0    A                                * 0A4F8
-        GOYES   SUB_0A491.L4                     * 0A4FB
+        GOYES   RrpOK?.L4                        * 0A4FB
         LA(5)   #00009                           * 0A4FD
         ?C<A    A                                * 0A507
         RTNYES                                   * 0A50A
@@ -418,9 +426,9 @@ SUB_0A491.loop3:
         RTNC                                     * 0A511
         D1=A                                     * 0A514
         ?A>B    A                                * 0A517
-        GOYES   SUB_0A491.loop3                  * 0A51A
+        GOYES   RrpOK?.loop3                     * 0A51A
         RTNSC                                    * 0A51C
-SUB_0A491.L4:
+RrpOK?.L4:
         D1=D1-  5                                * 0A51E
         AD1EX                                    * 0A521
         ?A#B    A                                * 0A524
@@ -608,7 +616,8 @@ SAFESKIPOB.L25:
         CON(5)  0                                * 0A717  end of table
 
 * refs (2): 0A331 0A421
-SUB_0A71C:
+* D0 at a directory -> : walk it and its subdirectories, dropping entries that fail EntryOK? and correcting the links and sizes. USEROB is borrowed for the walk and put back
+RrpRepair:
         P=      0                                * 0A71C
         D1=(5)  ROMPARTS                         * 0A71E
         A=DAT1  A                                * 0A725
@@ -629,56 +638,56 @@ SUB_0A71C:
         D0=D0+  3                                * 0A759
         C=DAT0  A                                * 0A75C
         ?C#0    A                                * 0A75F
-        GOYES   SUB_0A71C.loop1                  * 0A762
-        GOTO    SUB_0A71C.L8                     * 0A764
-SUB_0A71C.loop1:
+        GOYES   RrpRepair.loop1                  * 0A762
+        GOTO    RrpRepair.L8                     * 0A764
+RrpRepair.loop1:
         AD0EX                                    * 0A768
         A=A+C   A                                * 0A76B
-SUB_0A71C.loop2:
+RrpRepair.loop2:
         D0=A                                     * 0A76D
-        GOSUB   SUB_0A92C                        * 0A770
-        GONC    SUB_0A71C.L3                     * 0A774
-        GOTO    SUB_0A71C.L10                    * 0A777
-SUB_0A71C.L3:
+        GOSUB   EntryOK?                         * 0A770
+        GONC    RrpRepair.L3                     * 0A774
+        GOTO    RrpRepair.L10                    * 0A777
+RrpRepair.L3:
         A=DAT0  A                                * 0A77B
         D0=D0+  8                                * 0A77E
         LC(5)   DORRP                            * 0A781
         ?C#A    A                                * 0A788
-        GOYES   SUB_0A71C.L7                     * 0A78B
+        GOYES   RrpRepair.L7                     * 0A78B
         C=DAT0  A                                * 0A78D
         ?C=0    A                                * 0A790
-        GOYES   SUB_0A71C.L7                     * 0A793
+        GOYES   RrpRepair.L7                     * 0A793
         C=DAT0  A                                * 0A795
-        GONC    SUB_0A71C.loop1                  * 0A798
-SUB_0A71C.loop4:
+        GONC    RrpRepair.loop1                  * 0A798
+RrpRepair.loop4:
         ST=1    4                                * 0A79B
         D0=D0-  5                                * 0A79E
-SUB_0A71C.loop5:
+RrpRepair.loop5:
         C=DAT0  A                                * 0A7A1
         ?C#0    A                                * 0A7A4
-        GOYES   SUB_0A71C.L9                     * 0A7A7
+        GOYES   RrpRepair.L9                     * 0A7A7
         D0=D0-  5                                * 0A7A9
-SUB_0A71C.loop6:
+RrpRepair.loop6:
         LC(5)   USEROB                           * 0A7AC
         CD0EX                                    * 0A7B3
         A=DAT0  A                                * 0A7B6
         D0=C                                     * 0A7B9
         A=A+CON A,8                              * 0A7BC
         ?C=A    A                                * 0A7C2
-        GOYES   SUB_0A71C.L8                     * 0A7C5
-SUB_0A71C.L7:
+        GOYES   RrpRepair.L8                     * 0A7C5
+RrpRepair.L7:
         D0=D0-  10                               * 0A7C7
         C=0     A                                * 0A7CA
         C=DAT0  B                                * 0A7CC
         ?C=0    A                                * 0A7CF
-        GOYES   SUB_0A71C.loop4                  * 0A7D2
+        GOYES   RrpRepair.loop4                  * 0A7D2
         C=C+1   A                                * 0A7D4
         C=C+C   A                                * 0A7D6
         AD0EX                                    * 0A7D8
         A=A-C   A                                * 0A7DB
         D0=A                                     * 0A7DD
-        GOTO    SUB_0A71C.loop4                  * 0A7E0
-SUB_0A71C.L8:
+        GOTO    RrpRepair.loop4                  * 0A7E0
+RrpRepair.L8:
         D0=(5)  USEROB                           * 0A7E4
         C=DAT0  A                                * 0A7EB
         A=R4                                     * 0A7EE
@@ -687,34 +696,34 @@ SUB_0A71C.L8:
         A=DAT0  A                                * 0A7F7
         DAT0=A  7                                * 0A7FA
         RTN                                      * 0A7FE
-SUB_0A71C.L9:
+RrpRepair.L9:
         AD0EX                                    * 0A800
         D1=A                                     * 0A803
         A=A-C   A                                * 0A806
-        GOTO    SUB_0A71C.loop2                  * 0A808
-SUB_0A71C.L10:
+        GOTO    RrpRepair.loop2                  * 0A808
+RrpRepair.L10:
         ?ST=0   4                                * 0A80C
-        GOYES   SUB_0A71C.L11                    * 0A80F
-        GOTO    SUB_0A71C.L13                    * 0A811
-SUB_0A71C.L11:
+        GOYES   RrpRepair.L11                    * 0A80F
+        GOTO    RrpRepair.L13                    * 0A811
+RrpRepair.L11:
         D0=D0-  5                                * 0A815
         C=DAT0  A                                * 0A818
         ?C#0    A                                * 0A81B
-        GOYES   SUB_0A71C.L12                    * 0A81E
+        GOYES   RrpRepair.L12                    * 0A81E
         D0=D0-  5                                * 0A820
         DAT0=C  A                                * 0A823
-        GOTO    SUB_0A71C.loop6                  * 0A826
-SUB_0A71C.L12:
+        GOTO    RrpRepair.loop6                  * 0A826
+RrpRepair.L12:
         AD0EX                                    * 0A82A
         A=A-C   A                                * 0A82D
         D0=A                                     * 0A82F
-        GOSUB   SUB_0A914                        * 0A832
+        GOSUB   PrevEntry                        * 0A832
         CD0EX                                    * 0A836
         D0=C                                     * 0A839
         C=A-C   A                                * 0A83C
         DAT0=C  A                                * 0A83E
-        GOTO    SUB_0A71C.loop2                  * 0A841
-SUB_0A71C.L13:
+        GOTO    RrpRepair.loop2                  * 0A841
+RrpRepair.L13:
         AD0EX                                    * 0A845
         D0=A                                     * 0A848
         R3=A.F  A                                * 0A84B
@@ -723,7 +732,7 @@ SUB_0A71C.L13:
         D1=C                                     * 0A857
         C=C-A   A                                * 0A85A
         B=C     A                                * 0A85C
-        GOSUB   SUB_0A914                        * 0A85E
+        GOSUB   PrevEntry                        * 0A85E
         C=DAT0  A                                * 0A862
         AD0EX                                    * 0A865
         D0=A                                     * 0A868
@@ -731,16 +740,16 @@ SUB_0A71C.L13:
         CR3EX.F A                                * 0A86D
         C=0     S                                * 0A873
         ?C=A    A                                * 0A876
-        GOYES   SUB_0A71C.L16                    * 0A879
+        GOYES   RrpRepair.L16                    * 0A879
         CR3EX.F A                                * 0A87B
         C=C-B   A                                * 0A881
         DAT0=C  A                                * 0A883
-SUB_0A71C.loop14:
+RrpRepair.loop14:
         R3=C.F  S                                * 0A886
         D0=D0-  8                                * 0A88C
         ST=0    5                                * 0A88F
         C=B     A                                * 0A892
-        GOSBVL  SUB_0852C                        * 0A894
+        GOSBVL  DirLinksAdj                      * 0A894
         D0=(5)  USEROB                           * 0A89B
         A=DAT0  A                                * 0A8A2
         CD1EX                                    * 0A8A5
@@ -756,11 +765,11 @@ SUB_0A71C.loop14:
         D0=C                                     * 0A8D0
         C=R3.F  S                                * 0A8D3
         ?C=0    S                                * 0A8D9
-        GOYES   SUB_0A71C.L15                    * 0A8DC
-        GOTO    SUB_0A71C.loop5                  * 0A8DE
-SUB_0A71C.L15:
-        GOTO    SUB_0A71C.loop4                  * 0A8E2
-SUB_0A71C.L16:
+        GOYES   RrpRepair.L15                    * 0A8DC
+        GOTO    RrpRepair.loop5                  * 0A8DE
+RrpRepair.L15:
+        GOTO    RrpRepair.loop4                  * 0A8E2
+RrpRepair.L16:
         C=C-CON A,5                              * 0A8E6
         D1=D1-  5                                * 0A8EC
         CD1EX                                    * 0A8EF
@@ -768,28 +777,30 @@ SUB_0A71C.L16:
         CD1EX                                    * 0A8F5
         CR3EX.F A                                * 0A8F8
         ?A=0    A                                * 0A8FE
-        GOYES   SUB_0A71C.L17                    * 0A901
+        GOYES   RrpRepair.L17                    * 0A901
         C=C-A   A                                * 0A903
         C=C-CON A,5                              * 0A905
         A=C     A                                * 0A90B
-SUB_0A71C.L17:
+RrpRepair.L17:
         DAT0=A  A                                * 0A90D
-        GOTO    SUB_0A71C.loop14                 * 0A910
+        GOTO    RrpRepair.loop14                 * 0A910
 
 * refs (3): 0A832 0A85E 0A922
-SUB_0A914:
+* D0 past an entry's link -> D0 at the entry before, following links until the first (link 0)
+PrevEntry:
         D0=D0-  5                                * 0A914
         C=DAT0  A                                * 0A917
         AD0EX                                    * 0A91A
         A=A-C   A                                * 0A91D
         AD0EX                                    * 0A91F
         ?C#0    A                                * 0A922
-        GOYES   SUB_0A914                        * 0A925
+        GOYES   PrevEntry                        * 0A925
         D0=D0-  5                                * 0A927
         RTN                                      * 0A92A
 
 * refs (1): 0A770
-SUB_0A92C:
+* D0 at an entry's name -> carry set if it is bad; carry clear with D0 at the object. A good name has matching length bytes, a NUL in the name becomes Z, and the object must skip cleanly inside the directory
+EntryOK?:
         A=0     A                                * 0A92C
         A=DAT0  B                                * 0A92E
         ?A=0    B                                * 0A931
@@ -798,19 +809,19 @@ SUB_0A92C:
         CD0EX                                    * 0A938
         D=C     A                                * 0A93B
         C=C+A   A                                * 0A93D
-        GOC     SUB_0A92C.loop1                  * 0A93F
+        GOC     EntryOK?.loop1                   * 0A93F
         C=C+CON A,2                              * 0A942
-        GONC    SUB_0A92C.L2                     * 0A948
-SUB_0A92C.loop1:
+        GONC    EntryOK?.L2                      * 0A948
+EntryOK?.loop1:
         C=D     A                                * 0A94B
         D0=C                                     * 0A94D
         RTNSC                                    * 0A950
-SUB_0A92C.L2:
+EntryOK?.L2:
         D0=C                                     * 0A952
         C=DAT0  B                                * 0A955
         ASRB.F  A                                * 0A958
         ?C#A    B                                * 0A95D
-        GOYES   SUB_0A92C.loop1                  * 0A960
+        GOYES   EntryOK?.loop1                   * 0A960
         C=D     A                                * 0A962
         CD0EX                                    * 0A964
         AD1EX                                    * 0A967
@@ -820,42 +831,42 @@ SUB_0A92C.L2:
         RTNYES                                   * 0A976
         A=DAT0  B                                * 0A978
         A=A-1   B                                * 0A97B
-SUB_0A92C.loop3:
+EntryOK?.loop3:
         D0=D0+  2                                * 0A97E
         C=DAT0  B                                * 0A981
         ?C#0    B                                * 0A984
-        GOYES   SUB_0A92C.L4                     * 0A987
+        GOYES   EntryOK?.L4                      * 0A987
         LC(2)   #5A                              * 0A989
         DAT0=C  B                                * 0A98D
-SUB_0A92C.L4:
+EntryOK?.L4:
         A=A-1   B                                * 0A990
-        GONC    SUB_0A92C.loop3                  * 0A993
+        GONC    EntryOK?.loop3                   * 0A993
         D0=D0+  4                                * 0A996
         C=DAT0  A                                * 0A999
         LA(5)   DORRP                            * 0A99C
         ?C=A    A                                * 0A9A6
-        GOYES   SUB_0A92C.L8                     * 0A9A9
+        GOYES   EntryOK?.L8                      * 0A9A9
         CD0EX                                    * 0A9AB
         A=DAT0  A                                * 0A9AE
         D0=C                                     * 0A9B1
         LC(5)   PRLG                             * 0A9B4
         ?C#A    A                                * 0A9BB
-        GOYES   SUB_0A92C.loop5                  * 0A9BE
+        GOYES   EntryOK?.loop5                   * 0A9BE
         GOSUB   SAFESKIPOB                       * 0A9C0
-        GONC    SUB_0A92C.L6                     * 0A9C4
-SUB_0A92C.loop5:
-        GOTO    SUB_0A92C.loop1                  * 0A9C7
-SUB_0A92C.L6:
+        GONC    EntryOK?.L6                      * 0A9C4
+EntryOK?.loop5:
+        GOTO    EntryOK?.loop1                   * 0A9C7
+EntryOK?.L6:
         CD0EX                                    * 0A9CB
         AD1EX                                    * 0A9CE
         D1=A                                     * 0A9D1
         ?C>A    A                                * 0A9D4
-        GOYES   SUB_0A92C.loop5                  * 0A9D7
+        GOYES   EntryOK?.loop5                   * 0A9D7
         ?ST=0   4                                * 0A9D9
-        GOYES   SUB_0A92C.loop7                  * 0A9DC
+        GOYES   EntryOK?.loop7                   * 0A9DC
         ?C#A    A                                * 0A9DE
-        GOYES   SUB_0A92C.loop5                  * 0A9E1
-SUB_0A92C.loop7:
+        GOYES   EntryOK?.loop5                   * 0A9E1
+EntryOK?.loop7:
         C=D     A                                * 0A9E3
         D0=C                                     * 0A9E5
         A=0     A                                * 0A9E8
@@ -866,37 +877,37 @@ SUB_0A92C.loop7:
         C=C+A   A                                * 0A9F3
         D0=C                                     * 0A9F5
         RTNCC                                    * 0A9F8
-SUB_0A92C.L8:
+EntryOK?.L8:
         CD0EX                                    * 0A9FA
         CD1EX                                    * 0A9FD
         D0=C                                     * 0AA00
-        GOSUB   SUB_0A45D                        * 0AA03
+        GOSUB   RrpChainOK?                      * 0AA03
         CD0EX                                    * 0AA07
         D1=C                                     * 0AA0A
-        GOC     SUB_0A92C.loop5                  * 0AA0D
-        GONC    SUB_0A92C.loop7                  * 0AA10
+        GOC     EntryOK?.loop5                   * 0AA0D
+        GONC    EntryOK?.loop7                   * 0AA10
         AD0EX                                    * 0AA13
         D1=A                                     * 0AA16
         AD0EX                                    * 0AA19
         B=A     A                                * 0AA1C
         A=A+A   A                                * 0AA1E
         A=B     A                                * 0AA20
-        GONC    SUB_0A92C.L9                     * 0AA22
+        GONC    EntryOK?.L9                      * 0AA22
         A=-A    A                                * 0AA25
-SUB_0A92C.L9:
+EntryOK?.L9:
         C=C-1   A                                * 0AA27
         ?C#0    A                                * 0AA29
-        GOYES   SUB_0A92C.L10                    * 0AA2C
-        GOTO    SUB_0A92C.L13                    * 0AA2E
-SUB_0A92C.L10:
+        GOYES   EntryOK?.L10                     * 0AA2C
+        GOTO    EntryOK?.L13                     * 0AA2E
+EntryOK?.L10:
         ASR     A                                * 0AA32
         A=A-1   A                                * 0AA34
         R0=A.F  A                                * 0AA36
         D=C     A                                * 0AA3C
         RSTK=C                                   * 0AA3E
-SUB_0A92C.loop11:
+EntryOK?.loop11:
         A=DAT1  W                                * 0AA40
-SUB_0A92C.loop12:
+EntryOK?.loop12:
         AD0EX                                    * 0AA44
         A=A+B   A                                * 0AA47
         AD0EX                                    * 0AA49
@@ -904,7 +915,7 @@ SUB_0A92C.loop12:
         CAEX    W                                * 0AA50
         DAT0=C  W                                * 0AA53
         D=D-1   A                                * 0AA57
-        GONC    SUB_0A92C.loop12                 * 0AA59
+        GONC    EntryOK?.loop12                  * 0AA59
         C=RSTK                                   * 0AA5C
         D=C     A                                * 0AA5E
         RSTK=C                                   * 0AA60
@@ -916,17 +927,17 @@ SUB_0A92C.loop12:
         C=R0.F  A                                * 0AA72
         C=C-1   A                                * 0AA78
         R0=C.F  A                                * 0AA7A
-        GONC    SUB_0A92C.loop11                 * 0AA80
+        GONC    EntryOK?.loop11                  * 0AA80
         C=RSTK                                   * 0AA83
         RTN                                      * 0AA85
-SUB_0A92C.L13:
+EntryOK?.L13:
         AD0EX                                    * 0AA87
         A=A+B   A                                * 0AA8A
         AD0EX                                    * 0AA8C
         B=A     A                                * 0AA8F
         BSR     A                                * 0AA91
         B=B-1   A                                * 0AA93
-SUB_0A92C.loop14:
+EntryOK?.loop14:
         C=DAT1  W                                * 0AA95
         A=DAT0  W                                * 0AA99
         DAT1=A  W                                * 0AA9D
@@ -934,14 +945,14 @@ SUB_0A92C.loop14:
         D0=D0+  16                               * 0AAA5
         D1=D1+  16                               * 0AAA8
         B=B-1   A                                * 0AAAB
-        GONC    SUB_0A92C.loop14                 * 0AAAD
+        GONC    EntryOK?.loop14                  * 0AAAD
         RTN                                      * 0AAB0
         RPL
 
 * #port -> present? writeable? merged? #size #addr
 * refs (8): 08FAD 0929E 09348 0B5FC 21875 21945 ...
 PORTSTATUS:
-        :: FalseFalse FALSE PORTSTATUS~2 TOTEMPOB OBJ_7028A 6ROLL * 0AAB2
+        :: FalseFalse FALSE PORTSTATUS~2 TOTEMPOB NullAcptr 6ROLL * 0AAB2
           PORTSTATUS~1 ;                         * 0AAD5
         ASSEMBLE
 PORTSTATUS.L1:
@@ -974,7 +985,7 @@ PORTSTATUS.L3:
 * #port -> #addr
 * refs (1): 218E6
 PORTEND:
-        :: OBJ_7028A SWAP PORTEND~1 ;            * 0AB22
+        :: NullAcptr SWAP PORTEND~1 ;            * 0AB22
 
 * refs (1): 0AB31
 PORTEND~1:
@@ -1007,7 +1018,8 @@ NEXTLIBBAK:
         ASSEMBLE
 
 * refs (2): 02173 7DFDD
-SUB_0ABA0:
+* -> R1 = libraries and backups in the ports: walks port 0, port 1, the banks of port 2 and the ROM table, setting PORT0EOS and the others on the way. ST1, ST5 note errors found
+CountPortLibs:
         ST=0    1                                * 0ABA0
         ST=0    0                                * 0ABA3
         ST=0    5                                * 0ABA6
@@ -1015,22 +1027,23 @@ SUB_0ABA0:
         R1=C.F  A                                * 0ABAB
         D0=(5)  ROMPARTS                         * 0ABB1
         C=DAT0  A                                * 0ABB8
-        GOSUB   SUB_0AE6B                        * 0ABBB
+        GOSUB   CountPort                        * 0ABBB
         CD0EX                                    * 0ABBF
-        GOSUB   SUB_0B017                        * 0ABC2
-        GOSUB   SUB_0AFEE                        * 0ABC6
-        GOC     SUB_0ABE6.L1                     * 0ABCA
+        GOSUB   SetPort0EOS                      * 0ABC2
+        GOSUB   Port1Stat                        * 0ABC6
+        GOC     BankCfgStd.L1                    * 0ABCA
         ?ABIT=1 1                                * 0ABCD
-        GOYES   SUB_0ABA0.L1                     * 0ABD2
-        GOSUB   SUB_0AE71                        * 0ABD4
+        GOYES   CountPortLibs.L1                 * 0ABD2
+        GOSUB   CountMore                        * 0ABD4
         CD0EX                                    * 0ABD8
-        GOSUB   SUB_0B023                        * 0ABDB
-SUB_0ABA0.L1:
-        GOSUB   SUB_0ABE6                        * 0ABDF
-        GONC    SUB_0ABE6.L1                     * 0ABE3
+        GOSUB   SetPort1EOS                      * 0ABDB
+CountPortLibs.L1:
+        GOSUB   BankCfgStd                       * 0ABDF
+        GONC    BankCfgStd.L1                    * 0ABE3
 
 * refs (4): 0ABDF 0AC30 0AD24 0AD4B
-SUB_0ABE6:
+* -> : put the bank switcher and its memory back in their usual places (#7E000 size #FF000)
+BankCfgStd:
         LC(5)   #C0000                           * 0ABE6
         UNCNFG                                   * 0ABED
         LC(5)   #FF000                           * 0ABF0
@@ -1038,45 +1051,46 @@ SUB_0ABE6:
         LC(5)   #7E000                           * 0ABFA
         CONFIG                                   * 0AC01
         RTNCC                                    * 0AC04
-SUB_0ABE6.L1:
+BankCfgStd.L1:
         A=0     W                                * 0AC06
         R3=A                                     * 0AC09
-        GOSUB   SUB_0AFF9                        * 0AC0C
-        GOC     SUB_0ABE6.L3                     * 0AC10
-        GOSUB   SUB_0AD94                        * 0AC13
-SUB_0ABE6.loop2:
+        GOSUB   Port2Stat                        * 0AC0C
+        GOC     BankCfgStd.L3                    * 0AC10
+        GOSUB   NextBank                         * 0AC13
+BankCfgStd.loop2:
         LC(5)   #C0000                           * 0AC17
-        GOSUB   SUB_0AE71                        * 0AC1E
+        GOSUB   CountMore                        * 0AC1E
         CD0EX                                    * 0AC22
-        GOSUB   SUB_0B02F                        * 0AC25
-        GOSUB   SUB_0AD94                        * 0AC29
-        GONC    SUB_0ABE6.loop2                  * 0AC2D
-        GOSUB   SUB_0ABE6                        * 0AC30
-SUB_0ABE6.L3:
+        GOSUB   SetPort2EOS                      * 0AC25
+        GOSUB   NextBank                         * 0AC29
+        GONC    BankCfgStd.loop2                 * 0AC2D
+        GOSUB   BankCfgStd                       * 0AC30
+BankCfgStd.L3:
         LC(5)   RomLibTable                      * 0AC34
-        GOSUB   SUB_0AE62                        * 0AC3B
-        GOSUB   SUB_0AC6A.L6                     * 0AC3F
-        GOSUB   SUB_0AFDD                        * 0AC43
+        GOSUB   CountRomLibs                     * 0AC3B
+        GOSUB   BuildROMPTAB.L6                  * 0AC3F
+        GOSUB   ROMPTAB#                         * 0AC43
         LC(1)   #8                               * 0AC47
         D0=D0-  11                               * 0AC4A
-SUB_0ABE6.loop4:
+BankCfgStd.loop4:
         D0=D0+  16                               * 0AC4D
         B=B-1   A                                * 0AC50
-        GOC     SUB_0ABE6.L5                     * 0AC52
+        GOC     BankCfgStd.L5                    * 0AC52
         A=DAT0  B                                * 0AC55
         A=A+C   P                                * 0AC58
         DAT0=A  B                                * 0AC5B
-        GOC     SUB_0ABE6.loop4                  * 0AC5E
+        GOC     BankCfgStd.loop4                 * 0AC5E
         ST=1    1                                * 0AC61
-SUB_0ABE6.L5:
-        GOLONG  OBJ_0B40C.L9                     * 0AC64
+BankCfgStd.L5:
+        GOLONG  MergeCard.L9                     * 0AC64
 
 * refs (1): 0217A
 * Warm start: rebuild ROMPTAB from the ROM library table, reconfigure the bank switcher and ports
-SUB_0AC6A:
-        GOSBVL  SUB_0249F                        * 0AC6A
-        GOSBVL  SUB_02593                        * 0AC71
-        GOSBVL  SUB_0266F                        * 0AC78
+* -> : memory is intact; lay out ROMPTAB again for R1 libraries, moving the return stack and display pointers as the table changes size, and fill it sorted by library number
+BuildROMPTAB:
+        GOSBVL  InitDispGrobs                    * 0AC6A
+        GOSBVL  InitMemPtrs                      * 0AC71
+        GOSBVL  ClrIntrpPtrs                     * 0AC78
         D0=(5)  USEROB                           * 0AC7F
         A=DAT0  A                                * 0AC86
         D0=A                                     * 0AC89
@@ -1095,51 +1109,51 @@ SUB_0AC6A:
         GOSUBL  MOVEDSU                          * 0ACAB
         GOSUBL  ROOM                             * 0ACB1
         A=R1.F  A                                * 0ACB7
-SUB_0AC6A.loop1:
+BuildROMPTAB.loop1:
         B=A     A                                * 0ACBD
         ASL     A                                * 0ACBF
         ABEX    A                                * 0ACC1
         ?B<=C   A                                * 0ACC3
-        GOYES   SUB_0AC6A.L2                     * 0ACC6
+        GOYES   BuildROMPTAB.L2                  * 0ACC6
         ST=1    0                                * 0ACC8
         A=A-1   A                                * 0ACCB
         R1=A.F  A                                * 0ACCD
-        GOTO    SUB_0AC6A.loop1                  * 0ACD3
-SUB_0AC6A.L2:
+        GOTO    BuildROMPTAB.loop1               * 0ACD3
+BuildROMPTAB.L2:
         D0=(5)  ROMPTAB                          * 0ACD7
         DAT0=A  X                                * 0ACDE
         D0=D0+  3                                * 0ACE2
         C=B     A                                * 0ACE5
-        GOSBVL  SUB_02541                        * 0ACE7
+        GOSBVL  DispPtrs+                        * 0ACE7
         AD0EX                                    * 0ACEE
         GOSUBL  MOVERSU                          * 0ACF1
         B=0     A                                * 0ACF7
 * Address of the ROM library table
         LC(5)   RomLibTable                      * 0ACF9
-        GOSUB   SUB_0AE06                        * 0AD00
+        GOSUB   ROMPTABAddRom                    * 0AD00
         D1=(5)  ROMPARTS                         * 0AD04
         C=DAT1  A                                * 0AD0B
-        GOSUB   SUB_0AE0F                        * 0AD0E
-        GOSUB   SUB_0AFEE                        * 0AD12
-        GOC     SUB_0AC6A.L4                     * 0AD16
+        GOSUB   ROMPTABAddPort                   * 0AD0E
+        GOSUB   Port1Stat                        * 0AD12
+        GOC     BuildROMPTAB.L4                  * 0AD16
         ?ABIT=1 1                                * 0AD19
-        GOYES   SUB_0AC6A.L3                     * 0AD1E
-        GOSUB   SUB_0AE0F                        * 0AD20
-SUB_0AC6A.L3:
-        GOSUB   SUB_0ABE6                        * 0AD24
-SUB_0AC6A.L4:
+        GOYES   BuildROMPTAB.L3                  * 0AD1E
+        GOSUB   ROMPTABAddPort                   * 0AD20
+BuildROMPTAB.L3:
+        GOSUB   BankCfgStd                       * 0AD24
+BuildROMPTAB.L4:
         A=0     W                                * 0AD28
         R3=A                                     * 0AD2B
-        GOSUB   SUB_0AFF9                        * 0AD2E
-        GOC     SUB_0AC6A.L6                     * 0AD32
-        GOSUB   SUB_0AD94                        * 0AD35
-SUB_0AC6A.loop5:
+        GOSUB   Port2Stat                        * 0AD2E
+        GOC     BuildROMPTAB.L6                  * 0AD32
+        GOSUB   NextBank                         * 0AD35
+BuildROMPTAB.loop5:
         LC(5)   #C0000                           * 0AD39
-        GOSUB   SUB_0AE15                        * 0AD40
-        GOSUB   SUB_0AD94                        * 0AD44
-        GONC    SUB_0AC6A.loop5                  * 0AD48
-        GOSUB   SUB_0ABE6                        * 0AD4B
-SUB_0AC6A.L6:
+        GOSUB   ROMPTABAddMore                   * 0AD40
+        GOSUB   NextBank                         * 0AD44
+        GONC    BuildROMPTAB.loop5               * 0AD48
+        GOSUB   BankCfgStd                       * 0AD4B
+BuildROMPTAB.L6:
         LC(5)   #7F000                           * 0AD4F
         UNCNFG                                   * 0AD56
         LC(5)   #7E000                           * 0AD59
@@ -1151,18 +1165,19 @@ SUB_0AC6A.L6:
         CONFIG                                   * 0AD77
         LC(5)   #7E000                           * 0AD7A
         D0=(5)  #80530                           * 0AD81
-        GOSUBL  SUB_09B26                        * 0AD88
-        GOLONG  SUB_09B26                        * 0AD8E
+        GOSUBL  ConfigCard                       * 0AD88
+        GOLONG  ConfigCard                       * 0AD8E
 
 * refs (4): 0AC13 0AC29 0AD35 0AD44
-SUB_0AD94:
+* R3 holds the bank counters -> carry set after the last bank; select the next bank of port 2
+NextBank:
         C=R3                                     * 0AD94
         P=      13                               * 0AD97
         C=C+1   P                                * 0AD99
-        GONC    SUB_0AD94.L1                     * 0AD9C
+        GONC    NextBank.L1                      * 0AD9C
         P=      14                               * 0AD9F
         C=C+1   P                                * 0ADA1
-SUB_0AD94.L1:
+NextBank.L1:
         P=      0                                * 0ADA4
         RTNC                                     * 0ADA6
         R3=C                                     * 0ADA9
@@ -1192,105 +1207,112 @@ SUB_0AD94.L1:
         ASL     WP                               * 0ADF5
         R3=A.F  WP                               * 0ADF8
         P=      0                                * 0ADFE
-        GOLONG  SUB_09CE1.L1                     * 0AE00
+        GOLONG  BankSelect.L1                    * 0AE00
 
 * refs (1): 0AD00
-SUB_0AE06:
+* Add the entries of the ROM library table (C.S marks that source)
+ROMPTABAddRom:
         C=0     S                                * 0AE06
         C=C-1   S                                * 0AE09
-        GOC     SUB_0AE15.loop1                  * 0AE0C
+        GOC     ROMPTABAddMore.loop1             * 0AE0C
 
 * refs (2): 0AD0E 0AD20
-SUB_0AE0F:
+* C.A = port start -> add the port's libraries to ROMPTAB
+ROMPTABAddPort:
         A=0     W                                * 0AE0F
         R3=A                                     * 0AE12
 
 * refs (1): 0AD40
-SUB_0AE15:
+* As ROMPTABAddPort, carrying on from R3
+ROMPTABAddMore:
         C=0     S                                * 0AE15
-SUB_0AE15.loop1:
+ROMPTABAddMore.loop1:
         P=      0                                * 0AE18
         A=R1.F  A                                * 0AE1A
         ?A=B    A                                * 0AE20
         RTNYES                                   * 0AE23
-        GOSUB   SUB_0AEBE                        * 0AE25
-        GOSUB   SUB_0AF72                        * 0AE29
+        GOSUB   NextLibEnt                       * 0AE25
+        GOSUB   LibEntFix                        * 0AE29
         C=B     A                                * 0AE2D
         RSTK=C                                   * 0AE2F
         D0=(5)  #80996                           * 0AE31
-SUB_0AE15.loop2:
+ROMPTABAddMore.loop2:
         D0=D0+  16                               * 0AE38
         B=B-1   A                                * 0AE3B
-        GOC     SUB_0AE15.L3                     * 0AE3D
+        GOC     ROMPTABAddMore.L3                * 0AE3D
         C=DAT0  13                               * 0AE40
         ?C<=A   X                                * 0AE44
-        GOYES   SUB_0AE15.loop2                  * 0AE47
-SUB_0AE15.L3:
+        GOYES   ROMPTABAddMore.loop2             * 0AE47
+ROMPTABAddMore.L3:
         DAT0=A  13                               * 0AE49
         A=C     W                                * 0AE4D
-        GONC    SUB_0AE15.loop2                  * 0AE50
+        GONC    ROMPTABAddMore.loop2             * 0AE50
         C=RSTK                                   * 0AE53
         B=C     A                                * 0AE55
         B=B+1   A                                * 0AE57
         C=R3.F  A                                * 0AE59
-        GONC    SUB_0AE15.loop1                  * 0AE5F
+        GONC    ROMPTABAddMore.loop1             * 0AE5F
 
 * refs (1): 0AC3B
-SUB_0AE62:
+* Count the ROM library table's entries, flagging duplicates of an earlier entry
+CountRomLibs:
         C=0     S                                * 0AE62
         C=C-1   S                                * 0AE65
-        GOC     SUB_0AE71.L3                     * 0AE68
+        GOC     CountMore.L3                     * 0AE68
 
 * refs (1): 0ABBB
-SUB_0AE6B:
+* C.A = port start: count its libraries
+CountPort:
         A=0     W                                * 0AE6B
         R3=A                                     * 0AE6E
 
 * refs (2): 0ABD4 0AC1E
-SUB_0AE71:
+* As CountPort, carrying on from R3. A library number seen twice gets bit 11 set
+CountMore:
         C=0     S                                * 0AE71
-        GOTO    SUB_0AE71.L3                     * 0AE74
-SUB_0AE71.loop1:
+        GOTO    CountMore.L3                     * 0AE74
+CountMore.loop1:
         ST=1    1                                * 0AE78
-SUB_0AE71.loop2:
+CountMore.loop2:
         P=      0                                * 0AE7B
         C=R3.F  A                                * 0AE7D
-SUB_0AE71.L3:
-        GOSUB   SUB_0AEBE                        * 0AE83
+CountMore.L3:
+        GOSUB   NextLibEnt                       * 0AE83
         C=R1.F  A                                * 0AE87
         C=C+1   A                                * 0AE8D
         R1=C.F  A                                * 0AE8F
-        GOSUB   SUB_0AF72                        * 0AE95
-        GOSUB   SUB_0AFDD                        * 0AE99
+        GOSUB   LibEntFix                        * 0AE95
+        GOSUB   ROMPTAB#                         * 0AE99
         P=      12                               * 0AE9D
         D0=D0-  13                               * 0AE9F
-SUB_0AE71.loop4:
+CountMore.loop4:
         D0=D0+  16                               * 0AEA2
         B=B-1   A                                * 0AEA5
-        GOC     SUB_0AE71.loop1                  * 0AEA7
+        GOC     CountMore.loop1                  * 0AEA7
         C=DAT0  WP                               * 0AEAA
         ?C#A    WP                               * 0AEAE
-        GOYES   SUB_0AE71.loop4                  * 0AEB1
+        GOYES   CountMore.loop4                  * 0AEB1
         CBIT=1  11                               * 0AEB3
         DAT0=C  A                                * 0AEB8
-        GONC    SUB_0AE71.loop2                  * 0AEBB
+        GONC    CountMore.loop2                  * 0AEBB
 
 * refs (2): 0AE25 0AE83
-SUB_0AEBE:
+* C.A = position, C.S set for the ROM table -> A = next 13-nibble entry, R3 past it. A bad object sets ST5. At the end of the list it returns to its caller's caller
+NextLibEnt:
         ?C=0    S                                * 0AEBE
-        GOYES   SUB_0AEBE.loop1                  * 0AEC1
-        GOTO    SUB_0AEBE.L8                     * 0AEC3
-SUB_0AEBE.loop1:
+        GOYES   NextLibEnt.loop1                 * 0AEC1
+        GOTO    NextLibEnt.L8                    * 0AEC3
+NextLibEnt.loop1:
         D0=C                                     * 0AEC7
         A=DAT0  A                                * 0AECA
         ?A#0    A                                * 0AECD
-        GOYES   SUB_0AEBE.L4                     * 0AED0
-SUB_0AEBE.loop2:
+        GOYES   NextLibEnt.L4                    * 0AED0
+NextLibEnt.loop2:
         P=      0                                * 0AED2
         C=RSTK                                   * 0AED4
         C=0     S                                * 0AED6
         RTNCC                                    * 0AED9
-SUB_0AEBE.loop3:
+NextLibEnt.loop3:
         C=C+A   A                                * 0AEDB
         R3=C.F  A                                * 0AEDD
         D0=D0+  5                                * 0AEE3
@@ -1304,31 +1326,31 @@ SUB_0AEBE.loop3:
         A=DAT0  X                                * 0AEFE
         C=0     S                                * 0AF02
         RTN                                      * 0AF05
-SUB_0AEBE.L4:
+NextLibEnt.L4:
         LC(5)   DOBAK                            * 0AF07
         ?C=A    A                                * 0AF0E
-        GOYES   SUB_0AEBE.L7                     * 0AF11
+        GOYES   NextLibEnt.L7                    * 0AF11
         LC(5)   DOLIB                            * 0AF13
         ?C#A    A                                * 0AF1A
-        GOYES   SUB_0AEBE.L6                     * 0AF1D
+        GOYES   NextLibEnt.L6                    * 0AF1D
         GOSUBL  CKLBCRC                          * 0AF1F
         D0=C                                     * 0AF25
-        GOC     SUB_0AEBE.loop5                  * 0AF28
+        GOC     NextLibEnt.loop5                 * 0AF28
         A=DAT0  A                                * 0AF2B
-        GONC    SUB_0AEBE.loop3                  * 0AF2E
-SUB_0AEBE.loop5:
+        GONC    NextLibEnt.loop3                 * 0AF2E
+NextLibEnt.loop5:
         D0=D0-  5                                * 0AF31
-SUB_0AEBE.L6:
+NextLibEnt.L6:
         ST=1    5                                * 0AF34
-        GOTO    SUB_0AEBE.loop2                  * 0AF37
-SUB_0AEBE.L7:
+        GOTO    NextLibEnt.loop2                 * 0AF37
+NextLibEnt.L7:
         GOSUBL  CKLBCRC                          * 0AF3B
         D0=C                                     * 0AF41
-        GOC     SUB_0AEBE.loop5                  * 0AF44
+        GOC     NextLibEnt.loop5                 * 0AF44
         A=DAT0  A                                * 0AF47
         C=C+A   A                                * 0AF4A
-        GOTO    SUB_0AEBE.loop1                  * 0AF4C
-SUB_0AEBE.L8:
+        GOTO    NextLibEnt.loop1                 * 0AF4C
+NextLibEnt.L8:
         P=      0                                * 0AF50
         D0=C                                     * 0AF52
         A=DAT0  13                               * 0AF55
@@ -1336,55 +1358,57 @@ SUB_0AEBE.L8:
         CD0EX                                    * 0AF5C
         R3=C.F  A                                * 0AF5F
         A=A+1   X                                * 0AF65
-        GONC    SUB_0AEBE.L9                     * 0AF68
+        GONC    NextLibEnt.L9                    * 0AF68
         C=RSTK                                   * 0AF6B
-SUB_0AEBE.L9:
+NextLibEnt.L9:
         A=A-1   X                                * 0AF6D
         RTNCC                                    * 0AF70
 
 * refs (2): 0AE29 0AE95
-SUB_0AF72:
+* A = library entry -> : drop the access handler when the cover it needs is not in place, according to the nibble at #80535
+LibEntFix:
         P=      7                                * 0AF72
         C=A     WP                               * 0AF74
         P=      0                                * 0AF77
         D0=(5)  #80535                           * 0AF79
         C=DAT0  1                                * 0AF80
         C=C-1   P                                * 0AF84
-        GOC     SUB_0AF72.L1                     * 0AF87
+        GOC     LibEntFix.L1                     * 0AF87
         C=C+1   P                                * 0AF8A
         C=C+1   P                                * 0AF8D
-        GOC     SUB_0AF72.L3                     * 0AF90
+        GOC     LibEntFix.L3                     * 0AF90
         RTN                                      * 0AF93
-SUB_0AF72.L1:
+LibEntFix.L1:
         C=A     P                                * 0AF95
         P=      8                                * 0AF98
-        LC(5)   SUB_72350.L3                     * 0AF9A  access handler, put into the library table entries
+        LC(5)   AccessIntOff2.L3                 * 0AF9A  access handler, put into the library table entries
         P=      12                               * 0AFA1
         ?C#A    WP                               * 0AFA3
-        GOYES   SUB_0AF72.L2                     * 0AFA6
+        GOYES   LibEntFix.L2                     * 0AFA6
         P=      8                                * 0AFA8
         LC(5)   #00000                           * 0AFAA
         P=      12                               * 0AFB1
         A=C     WP                               * 0AFB3
-SUB_0AF72.L2:
+LibEntFix.L2:
         P=      0                                * 0AFB6
-SUB_0AF72.L3:
+LibEntFix.L3:
         C=A     P                                * 0AFB8
         P=      8                                * 0AFBB
-        LC(5)   SUB_7089F.L21                    * 0AFBD  access handler
+        LC(5)   AccessC0000                      * 0AFBD  access handler
         P=      12                               * 0AFC4
         ?C#A    WP                               * 0AFC6
-        GOYES   SUB_0AF72.L4                     * 0AFC9
+        GOYES   LibEntFix.L4                     * 0AFC9
         P=      8                                * 0AFCB
         LC(5)   #00000                           * 0AFCD
         P=      12                               * 0AFD4
         A=C     WP                               * 0AFD6
-SUB_0AF72.L4:
+LibEntFix.L4:
         P=      0                                * 0AFD9
         RTN                                      * 0AFDB
 
 * refs (2): 0AC43 0AE99
-SUB_0AFDD:
+* -> B.A = library count, D0 at ROMPTAB
+ROMPTAB#:
         D0=(5)  ROMPTAB                          * 0AFDD
         C=0     A                                * 0AFE4
         C=DAT0  X                                * 0AFE6
@@ -1392,14 +1416,16 @@ SUB_0AFDD:
         RTN                                      * 0AFEC
 
 * refs (2): 0ABC6 0AD12
-SUB_0AFEE:
+* -> A.P = status of port 1, D0 past it; carry set unless bit 3 (present) is on. Configures it
+Port1Stat:
         D0=(5)  #8052F                           * 0AFEE
-        GOTO    SUB_0AFF9.L1                     * 0AFF5
+        GOTO    Port2Stat.L1                     * 0AFF5
 
 * refs (2): 0AC0C 0AD2E
-SUB_0AFF9:
+* -> As Port1Stat for port 2
+Port2Stat:
         D0=(5)  #80531                           * 0AFF9
-SUB_0AFF9.L1:
+Port2Stat.L1:
         LC(5)   #C0000                           * 0B000
         A=DAT0  1                                * 0B007
         D0=D0+  1                                * 0B00B
@@ -1408,19 +1434,22 @@ SUB_0AFF9.L1:
         RTN                                      * 0B015
 
 * refs (1): 0ABC2
-SUB_0B017:
+* C.A -> PORT0EOS
+SetPort0EOS:
         D0=(5)  PORT0EOS                         * 0B017
         DAT0=C  A                                * 0B01E
         RTN                                      * 0B021
 
 * refs (1): 0ABDB
-SUB_0B023:
+* C.A -> PORT1EOS
+SetPort1EOS:
         D0=(5)  PORT1EOS                         * 0B023
         DAT0=C  A                                * 0B02A
         RTN                                      * 0B02D
 
 * refs (1): 0AC25
-SUB_0B02F:
+* C.A = end of the current bank -> stored at its slot after PORT2EOS, indexed by the bank number in R3
+SetPort2EOS:
         CR3EX                                    * 0B02F
         C=0     A                                * 0B032
         P=C     14                               * 0B034
@@ -1501,7 +1530,8 @@ purge(bk,s):
         ::                                       * 0B14D
 
 * refs (1): 0B22C
-OBJ_0B152:
+* lib -> : remove it from ROMPTAB until no entry refers to it, then purge it
+PurgeAllRefs:
           :: BEGIN DUP purge(bk,s)~1 NOT UNTIL ; Purge!(lb,s) ; * 0B152
 
 * refs (1): 0B175
@@ -1547,11 +1577,11 @@ Purge!(lb,s):
 
 * refs (1): 0944C
 PurgeBkp12(nm,s)~5:
-        :: OBJ_0B152 OBJ_0B23B ;                 * 0B227
+        :: PurgeAllRefs OBJ_0B23B ;              * 0B227
 
 * refs (1): 0B231
 OBJ_0B23B:
-        CON(5)  SUB_7127A.L7                     * 0B23B  code object: the address of its machine code
+        CON(5)  Name>Start~jump.L7               * 0B23B  code object: the address of its machine code
         ASSEMBLE
 OBJ_0B23B.L1:
         GOSUB   SUB_0B2D5                        * 0B240
@@ -1560,7 +1590,7 @@ OBJ_0B23B.L1:
         C=R0.F  A                                * 0B249
         GOSUB   SUB_0B347                        * 0B24F
         C=R0.F  A                                * 0B253
-        GOSBVL  SUB_06863                        * 0B259
+        GOSBVL  AdjRefs                          * 0B259
         ST=0    1                                * 0B260
         GONC    OBJ_0B23B.L3                     * 0B263
 OBJ_0B23B.L2:
@@ -1611,10 +1641,11 @@ SUB_0B2D1:
         GOSUB   SUB_0B2B3                        * 0B2D1
 
 * refs (2): 0B240 0B94E
+* Probably: adjusts the pointers held in ports and ROMPTAB after a block in the port moved, as AdjRefs does for RAM; the work is at #7127A
 SUB_0B2D5:
         C=0     S                                * 0B2D5
 SUB_0B2D5.L1:
-        GOVLNG  SUB_7127A.L12                    * 0B2D8
+        GOVLNG  Name>Start~jump.L12              * 0B2D8
 SUB_0B2D5.L2:
         C=A     A                                * 0B2DF
         ?C#A    WP                               * 0B2E1
@@ -1661,6 +1692,7 @@ SUB_0B343:
         GOSUB   SUB_0B2B3                        * 0B343
 
 * refs (2): 0B24F 0B956
+* Probably: as the routine at #0B2D5, for the second list of pointers, at #714EA
 SUB_0B347:
         C=0     S                                * 0B347
 SUB_0B347.L1:
@@ -1716,40 +1748,41 @@ purge(bk,s)~1.L5:
         LC(5)   #00010                           * 0B3E0
         GOSBVL  MOVERSD                          * 0B3E7
         LC(5)   #00010                           * 0B3EE
-        GOSBVL  SUB_02537                        * 0B3F5
+        GOSBVL  DispPtrs-                        * 0B3F5
         GOSBVL  disprange                        * 0B3FC
         P=      0                                * 0B403
         GOVLNG  GETPTRTRUE                       * 0B405
 
 * refs (2): 213C0 C0937
-OBJ_0B40C:
+* #port -> : MERGE: if port 1 holds a writable RAM card, make it part of main memory. Port 0 moves, RAMEND and PORT0EOS change, and pointers are adjusted. Any other port or state: Port Not Available
+MergeCard:
         CON(5)  (*)+5                            * 0B40C  primitive code object
         GOSBVL  POP#                             * 0B411
         GOSBVL  SAVPTR                           * 0B418
         A=A-1   A                                * 0B41F
         ST=1    5                                * 0B421
         ?A=0    A                                * 0B424
-        GOYES   OBJ_0B40C.L1                     * 0B427
-        GOTO    OBJ_0B40C.L3                     * 0B429
-OBJ_0B40C.L1:
+        GOYES   MergeCard.L1                     * 0B427
+        GOTO    MergeCard.L3                     * 0B429
+MergeCard.L1:
         GOSBVL  DisableIntr                      * 0B42D
         D1=(5)  #8052F                           * 0B434
         A=DAT1  B                                * 0B43B
         R0=A                                     * 0B43E
         ?ABIT=0 3                                * 0B441
-        GOYES   OBJ_0B40C.L2                     * 0B446
+        GOYES   MergeCard.L2                     * 0B446
         ?ABIT=0 2                                * 0B448
-        GOYES   OBJ_0B40C.L2                     * 0B44D
+        GOYES   MergeCard.L2                     * 0B44D
         ?ABIT=0 1                                * 0B44F
-        GOYES   OBJ_0B40C.L4                     * 0B454
-OBJ_0B40C.L2:
+        GOYES   MergeCard.L4                     * 0B454
+MergeCard.L2:
         GOSBVL  AllowIntr                        * 0B456
-OBJ_0B40C.L3:
+MergeCard.L3:
         GOSBVL  GETPTR                           * 0B45D
         LC(5)   SETPORTNOTAV                     * 0B464
         A=C     A                                * 0B46B
         PC=(A)                                   * 0B46D
-OBJ_0B40C.L4:
+MergeCard.L4:
         NOP4                                     * 0B471
         D1=(5)  #8052F                           * 0B475
         LC(1)   #E                               * 0B47C
@@ -1761,9 +1794,9 @@ OBJ_0B40C.L4:
         C=C-1   P                                * 0B491
         C=C-1   P                                * 0B494
         LC(5)   #F0000                           * 0B497
-        GOC     OBJ_0B40C.L5                     * 0B49E
+        GOC     MergeCard.L5                     * 0B49E
         LC(5)   #C0000                           * 0B4A1
-OBJ_0B40C.L5:
+MergeCard.L5:
         P=      5                                * 0B4A8
         CSR     WP                               * 0B4AA
         P=      0                                * 0B4AD
@@ -1800,26 +1833,26 @@ OBJ_0B40C.L5:
         C=-C    A                                * 0B523
         A=R3.F  A                                * 0B525
         A=A+C   A                                * 0B52B
-        GONC    OBJ_0B40C.L6                     * 0B52D
+        GONC    MergeCard.L6                     * 0B52D
         A=0     A                                * 0B530
         A=A-CON A,5                              * 0B532
-OBJ_0B40C.L6:
+MergeCard.L6:
         D1=(5)  RAMEND                           * 0B538
         DAT1=A  A                                * 0B53F
         D1=(5)  PORT1EOS                         * 0B542
         ?ST=1   5                                * 0B549
-        GOYES   OBJ_0B40C.L7                     * 0B54C
+        GOYES   MergeCard.L7                     * 0B54C
         D1=(5)  PORT2EOS                         * 0B54E
-OBJ_0B40C.L7:
+MergeCard.L7:
         C=DAT1  A                                * 0B555
         D1=(5)  PORT0EOS                         * 0B558
         DAT1=C  A                                * 0B55F
         CAEX    A                                * 0B562
         A=A+CON A,5                              * 0B564
-        GOC     OBJ_0B40C.L8                     * 0B56A
+        GOC     MergeCard.L8                     * 0B56A
         B=A     A                                * 0B56D
         C=C-A   A                                * 0B56F
-        GOC     OBJ_0B40C.L8                     * 0B571
+        GOC     MergeCard.L8                     * 0B571
         D1=(5)  ROMPARTS                         * 0B574
         A=DAT1  A                                * 0B57B
         GOSUB   SUB_0B2D1                        * 0B57E
@@ -1828,13 +1861,14 @@ OBJ_0B40C.L7:
         A=B     A                                * 0B588
         C=D     A                                * 0B58A
         GOSBVL  MOVEDSU                          * 0B58C
-OBJ_0B40C.L8:
+MergeCard.L8:
         GOSUBL  COMPCONFCRC                      * 0B593
         DAT0=C  4                                * 0B599
-        GOSUB   OBJ_0B40C.L9                     * 0B59D
+        GOSUB   MergeCard.L9                     * 0B59D
         GOSBVL  AllowIntr                        * 0B5A1
         GOVLNG  GETPTRLOOP                       * 0B5A8
-OBJ_0B40C.L9:
+* End port 0 with a zero word and make sure PORT1EOS is not below it
+MergeCard.L9:
         D0=(5)  PORT0EOS                         * 0B5AF
         A=DAT0  A                                * 0B5B6
         AD0EX                                    * 0B5B9
@@ -1844,9 +1878,9 @@ OBJ_0B40C.L9:
         D0=D0+  5                                * 0B5C4
         C=DAT0  A                                * 0B5C7
         ?C>A    A                                * 0B5CA
-        GOYES   OBJ_0B40C.L10                    * 0B5CD
+        GOYES   MergeCard.L10                    * 0B5CD
         DAT0=A  A                                * 0B5CF
-OBJ_0B40C.L10:
+MergeCard.L10:
         RTN                                      * 0B5D2
         RPL
 
@@ -2032,40 +2066,42 @@ free(li,r)~7.L1:
         D0=(5)  #8052F                           * 0B985
         LC(1)   #C                               * 0B98C
         DAT0=C  1                                * 0B98F
-        GOTO    OBJ_0B40C.L8                     * 0B993
+        GOTO    MergeCard.L8                     * 0B993
         RPL
 
 * refs (3): 0BB08 640C3 640D7
-OBJ_0B997:
-        :: FALSE OBJ_0B9AB ;                     * 0B997
+* -> rrp TRUE, or FALSE: find the hidden directory
+HiddenDir?:
+        :: FALSE HiddenDir@ ;                    * 0B997
 
 * refs (1): 0B9A1
-OBJ_0B9AB:
+* F -> rrp T, or F: the hidden directory is HOME's first entry when its name is empty and it is a directory
+HiddenDir@:
         CON(5)  (*)+5                            * 0B9AB  primitive code object
         ASSEMBLE
-        GOSUB   SUB_0BA00                        * 0B9B0
+        GOSUB   HomeFirst                        * 0B9B0
         CD1EX                                    * 0B9B4
         A=DAT1  A                                * 0B9B7
         ?A#0    A                                * 0B9BA
-        GOYES   OBJ_0B9AB.L3                     * 0B9BD
-OBJ_0B9AB.loop1:
+        GOYES   HiddenDir@.L3                    * 0B9BD
+HiddenDir@.loop1:
         D1=C                                     * 0B9BF
-OBJ_0B9AB.loop2:
+HiddenDir@.loop2:
         A=DAT0  A                                * 0B9C2
         D0=D0+  5                                * 0B9C5
         PC=(A)                                   * 0B9C8
-OBJ_0B9AB.L3:
+HiddenDir@.L3:
         D1=D1+  10                               * 0B9CC
         A=DAT1  B                                * 0B9CF
         ?A#0    B                                * 0B9D2
-        GOYES   OBJ_0B9AB.loop1                  * 0B9D5
+        GOYES   HiddenDir@.loop1                 * 0B9D5
         D1=D1+  2                                * 0B9D7
         A=DAT1  A                                * 0B9DA
         CD1EX                                    * 0B9DD
         RSTK=C                                   * 0B9E0
         LC(5)   DORRP                            * 0B9E2
         ?C#A    A                                * 0B9E9
-        GOYES   OBJ_0B9AB.loop2                  * 0B9EC
+        GOYES   HiddenDir@.loop2                 * 0B9EC
         C=RSTK                                   * 0B9EE
         DAT1=C  A                                * 0B9F0
         LC(5)   TRUE                             * 0B9F3
@@ -2073,7 +2109,8 @@ OBJ_0B9AB.L3:
         PC=(A)                                   * 0B9FC
 
 * refs (2): 0B9B0 0BA8B
-SUB_0BA00:
+* -> C.A = HOME's first entry, past the attachment table
+HomeFirst:
         LC(5)   USEROB                           * 0BA00
         CD1EX                                    * 0BA07
         A=DAT1  A                                * 0BA0A
@@ -2100,41 +2137,42 @@ SUB_0BA00:
         A=A+C   A                                * 0BA3E
 
 * refs (2): 0BB17 640D2
-OBJ_0BA40:
+* -> : make the empty, nameless directory as HOME's first entry, collecting garbage if needed. #14 nibbles
+MakeHiddenDir:
         CON(5)  (*)+5                            * 0BA40  primitive code object
         GOSBVL  SAVPTR                           * 0BA45
         GOSBVL  ROOM                             * 0BA4C
         A=C     A                                * 0BA53
         LC(5)   #00014                           * 0BA55
         A=A-C   A                                * 0BA5C
-        GONC    OBJ_0BA40.L1                     * 0BA5E
+        GONC    MakeHiddenDir.L1                 * 0BA5E
         GOSBVL  GARBAGECOL                       * 0BA61
         GOSBVL  ROOM                             * 0BA68
         A=C     A                                * 0BA6F
         LC(5)   #00014                           * 0BA71
         A=A-C   A                                * 0BA78
-        GONC    OBJ_0BA40.L1                     * 0BA7A
+        GONC    MakeHiddenDir.L1                 * 0BA7A
         GOSBVL  GETPTR                           * 0BA7D
         GOVLNG  DOMEMERR                         * 0BA84
-OBJ_0BA40.L1:
-        GOSUB   SUB_0BA00                        * 0BA8B
+MakeHiddenDir.L1:
+        GOSUB   HomeFirst                        * 0BA8B
         D1=C                                     * 0BA8F
         A=DAT1  A                                * 0BA92
         LC(5)   #00014                           * 0BA95
         B=C     A                                * 0BA9C
         ?A#0    A                                * 0BA9E
-        GOYES   OBJ_0BA40.L2                     * 0BAA1
+        GOYES   MakeHiddenDir.L2                 * 0BAA1
         LC(5)   portnotaverr                     * 0BAA3  "Port Not Available"
         DAT1=C  A                                * 0BAAA
         D1=D1+  5                                * 0BAAD
-        GONC    OBJ_0BA40.L3                     * 0BAB0
-OBJ_0BA40.L2:
+        GONC    MakeHiddenDir.L3                 * 0BAB0
+MakeHiddenDir.L2:
         A=A+C   A                                * 0BAB3
         DAT1=A  A                                * 0BAB5
         D1=D1+  5                                * 0BAB8
         LC(5)   #0000F                           * 0BABB
         DAT1=C  A                                * 0BAC2
-OBJ_0BA40.L3:
+MakeHiddenDir.L3:
         C=B     A                                * 0BAC5
         AD1EX                                    * 0BAC7
         GOSBVL  MOVEDSD                          * 0BACA
@@ -2155,7 +2193,7 @@ OBJ_0BA40.L3:
 
 * refs (1): 028E5
 LIB000.config:
-        :: OBJ_0B997 DUP ?SKIP OBJ_0BA40         * 0BB03
+        :: HiddenDir? DUP ?SKIP MakeHiddenDir    * 0BB03
           IT DROP                                * 0BB1C
         ;                                        * 0BB26
 
@@ -2214,7 +2252,7 @@ SUB_0BB58.L4:
 
 * refs (1): 09E40
 OBJ_0BBA7:
-        :: OBJ_7028A SWAP                        * 0BBA7
+        :: NullAcptr SWAP                        * 0BBA7
 
 Code:
           CODE                                   * 0BBB6  35 nibbles
@@ -2242,12 +2280,14 @@ failed:
         :: FALSE TRUE ;                          * 0BC01
 
 * refs (2): 247DF 276C0
-OBJ_0BC15:
-        :: OBJ_0BC47 !*trior                     * 0BC15
+* tok ob -> tok T T, after GetNextToken, or tok F: compare and if equal take the next token
+tok=next:
+        :: tok=? !*trior                         * 0BC15
           :: DROP GetNextToken TrueTrue ; FALSE ; * 0BC24
 
 * refs (3): 0BC1A 28922 2894F
-OBJ_0BC47:
+* tok ob -> tok T T, or tok F: tests the current token and leaves the result for a trior
+tok=?:
         :: OVER EQUAL ' TrueTrue FALSE COLARPITE ; * 0BC47
 
 * F -> <SKIP> T T -> <COLA>
@@ -2395,7 +2435,8 @@ LIB019:
         ASSEMBLE
 
 * refs (2): 0C015 0C07C
-SUB_0BE2D:
+* P = new position nibble, C = new address, ST0 -> : move the RAM to a new base with interrupts off: update the IRAM shadows, wait for the right LCD line, UNCNFG and CONFIG, and correct DISPADDR and MENUADDR (ST1, ST2) if they are in RAM
+ReconfigRAM:
         SETHEX                                   * 0BE2D
         C=0     A                                * 0BE2F
         CPEX    0                                * 0BE31
@@ -2413,20 +2454,20 @@ SUB_0BE2D:
         D1=(4)  #068D                            * 0BE56
         A=DAT1  A                                * 0BE5C
         ?C#A    P                                * 0BE5F
-        GOYES   SUB_0BE2D.L1                     * 0BE62
+        GOYES   ReconfigRAM.L1                   * 0BE62
         ?C<A    A                                * 0BE64
-        GOYES   SUB_0BE2D.L1                     * 0BE67
+        GOYES   ReconfigRAM.L1                   * 0BE67
         ST=1    1                                * 0BE69
-SUB_0BE2D.L1:
+ReconfigRAM.L1:
         ST=0    2                                * 0BE6C
         D1=(4)  #0695                            * 0BE6F
         A=DAT1  A                                * 0BE75
         ?C#A    P                                * 0BE78
-        GOYES   SUB_0BE2D.L2                     * 0BE7B
+        GOYES   ReconfigRAM.L2                   * 0BE7B
         ?C<A    A                                * 0BE7D
-        GOYES   SUB_0BE2D.L2                     * 0BE80
+        GOYES   ReconfigRAM.L2                   * 0BE80
         ST=1    2                                * 0BE82
-SUB_0BE2D.L2:
+ReconfigRAM.L2:
         A=C     A                                * 0BE85
         C=B     B                                * 0BE87
         P=C     0                                * 0BE8A
@@ -2439,7 +2480,7 @@ SUB_0BE2D.L2:
         D1=(4)  #0005                            * 0BE9E
         DAT1=A  A                                * 0BEA4
         ?ST=0   0                                * 0BEA7
-        GOYES   SUB_0BE2D.L4                     * 0BEAA
+        GOYES   ReconfigRAM.L4                   * 0BEAA
         D1=(4)  #069A                            * 0BEAC
         C=DAT1  B                                * 0BEB2
         B=C     B                                * 0BEB5
@@ -2452,28 +2493,28 @@ SUB_0BE2D.L2:
         B=B&C   B                                * 0BECD
         P=      4                                * 0BED1
         D1=(5)  LINECOUNT                        * 0BED3
-SUB_0BE2D.loop3:
+ReconfigRAM.loop3:
         C=DAT1  B                                * 0BEDA
         CBIT=0  7                                * 0BEDD
         CBIT=0  6                                * 0BEE2
         ?B#C    B                                * 0BEE7
-        GOYES   SUB_0BE2D.loop3                  * 0BEEA
+        GOYES   ReconfigRAM.loop3                * 0BEEA
         C=0     B                                * 0BEEC
-SUB_0BE2D.L4:
+ReconfigRAM.L4:
         D1=(2)  #1F                              * 0BEEF
         DAT1=C  1                                * 0BEF3
         D1=(2)  #24                              * 0BEF7
         UNCNFG                                   * 0BEFB
         BCEX    P                                * 0BEFE
         ?ST=0   1                                * 0BF01
-        GOYES   SUB_0BE2D.L5                     * 0BF04
+        GOYES   ReconfigRAM.L5                   * 0BF04
         DAT1=C  P                                * 0BF06
-SUB_0BE2D.L5:
+ReconfigRAM.L5:
         ?ST=0   2                                * 0BF0A
-        GOYES   SUB_0BE2D.L6                     * 0BF0D
+        GOYES   ReconfigRAM.L6                   * 0BF0D
         D1=(2)  #34                              * 0BF0F
         DAT1=C  P                                * 0BF13
-SUB_0BE2D.L6:
+ReconfigRAM.L6:
         CAEX    A                                * 0BF17
         CONFIG                                   * 0BF19
         CAEX    A                                * 0BF1C
@@ -2482,33 +2523,34 @@ SUB_0BE2D.L6:
         DAT1=C  P                                * 0BF25
         D1=C                                     * 0BF29
         ?ST=0   1                                * 0BF2C
-        GOYES   SUB_0BE2D.L7                     * 0BF2F
+        GOYES   ReconfigRAM.L7                   * 0BF2F
         D1=(4)  #0691                            * 0BF31
         DAT1=C  P                                * 0BF37
-SUB_0BE2D.L7:
+ReconfigRAM.L7:
         ?ST=0   2                                * 0BF3B
-        GOYES   SUB_0BE2D.L8                     * 0BF3E
+        GOYES   ReconfigRAM.L8                   * 0BF3E
         D1=(4)  #0699                            * 0BF40
         DAT1=C  P                                * 0BF46
-SUB_0BE2D.L8:
+ReconfigRAM.L8:
         P=C     4                                * 0BF4A
         C=0     A                                * 0BF4E
         ?P#     8                                * 0BF50
-        GOYES   SUB_0BE2D.L9                     * 0BF53
+        GOYES   ReconfigRAM.L9                   * 0BF53
         P=      0                                * 0BF55
         D1=(4)  #000A                            * 0BF57
         C=DAT1  A                                * 0BF5D
         ?C#A    A                                * 0BF60
-        GOYES   SUB_0BE2D.L9                     * 0BF63
+        GOYES   ReconfigRAM.L9                   * 0BF63
         C=-C-1  P                                * 0BF65
-SUB_0BE2D.L9:
+ReconfigRAM.L9:
         D1=(4)  #065A                            * 0BF68
         DAT1=C  1                                * 0BF6E
         P=      0                                * 0BF72
         RTNCC                                    * 0BF74
 
 * refs (2): 0C12D 0C615
-SUB_0BF76:
+* -> : with interrupts off, save A and ST and move RAM (size mask #FE000) out of the way so the ROM under it can be read, unless the display needs it; undone by RAMRestore
+RAMUncover:
         P=      0                                * 0BF76
         LC(5)   #FE000                           * 0BF78
         B=C     A                                * 0BF7F
@@ -2533,7 +2575,7 @@ SUB_0BF76:
         D1=(4)  #0645                            * 0BFBC
         C=DAT1  A                                * 0BFC2
         ?B#C    P                                * 0BFC5
-        GOYES   SUB_0BF76.L2                     * 0BFC8
+        GOYES   RAMUncover.L2                    * 0BFC8
         C=RSTK                                   * 0BFCA
         RSTK=C                                   * 0BFCC
         C=-C-1  A                                * 0BFCE
@@ -2541,7 +2583,7 @@ SUB_0BF76:
         D1=(4)  #064A                            * 0BFD4
         C=DAT1  A                                * 0BFDA
         ?B>=C   A                                * 0BFDD
-        GOYES   SUB_0BF76.L2                     * 0BFE0
+        GOYES   RAMUncover.L2                    * 0BFE0
         C=RSTK                                   * 0BFE2
         D1=(4)  #05DB                            * 0BFE4
         DAT1=A  A                                * 0BFEA

@@ -1,6 +1,6 @@
-* HP 48GX ROM revision R, #22005-#24027: Program structures and library 700
+* HP 48GX ROM revision R, #22005-#24027: Commands of library 002 for ports and I/O settings, then library 700: the program structures, each with its compile routine and its SST handler (the slots after the command), and the start of their compile routines
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: x<< ONE{}N x>> xIFEND CK0ATTNABORT xTHEN palparse xIF xNEXT x' swap;->EditStr;+(2st) xSTARTVAR
+* Most referenced: x<< ONE{}N x>> xIFEND ParseProgOb CK0ATTNABORT xTHEN palparse xIF xNEXT x' swap;->EditStr;+(2st)
 * Follows on from the previous file (at #22005 in the original ROM).
 
 * n ->
@@ -88,25 +88,26 @@ xPKT:
 
 * refs (2): 2231B 22339
 IOSetup:
-        :: OBJ_479D4 ?SEMI                       * 220F6
+        :: NoInfo? ?SEMI                         * 220F6
 
 IOSetup!:
-          :: IOSetup~1 JstGetTHEMESG DISPROW1 OBJ_49A38 JstGetTHEMESG BINT33 * 22105
-            SysITE                               * 22128
+          :: IOSetup~1 JstGetTHEMESG DISPROW1 MSG(IRWIRE) JstGetTHEMESG * 22105
+            BINT33 SysITE                        * 22123  flag -33: Transfer via wire / Transfer via IR
 
 _IR_:
             $ "IR"                               * 2212D
 
 _wire_:
-            $ "wire" !append$ DISPROW2 OBJ_49A42 JstGetTHEMESG BINT35 SysITE * 2213B  flag -35: ASCII transfer / Binary transfer
+            $ "wire" !append$ DISPROW2 MSG(ASCIIBIN) JstGetTHEMESG BINT35 * 2213B
+            SysITE                               * 22166
 
 _binary_:
             $ "binary"                           * 2216B
 
 _ASCII_:
             $ "ASCII" !append$ DISPROW3 SetDA12Temp GetIOPAR SWAP 6UNROLL * 22181
-            6UNROLL 2DROP SWAP OBJ_49A4C JstGetTHEMESG swap;->EditStr;+(2st) * 221B3
-            DISPROW4 OBJ_49A56 JstGetTHEMESG SWAP DUPTYPEREAL? ITE * 221D1
+            6UNROLL 2DROP SWAP MSG(BAUD) JstGetTHEMESG swap;->EditStr;+(2st) * 221B3
+            DISPROW4 MSG(PARITY) JstGetTHEMESG SWAP DUPTYPEREAL? ITE * 221D1
             ::                                   * 221EF
               {                                  * 221F4
 
@@ -712,6 +713,7 @@ LIB002.link:
         RTNSXM                                   * 22DE4
         BSS     1                                * 22DE6  zeros
 
+* Library 700: Program structure words: IF, CASE, the loops, IFERR, → and « », each followed by its compile routine and SST handler
 LIB700:
         CON(3)  #700                             * 22DE7  library number
         REL(5)  LIB700.hash                      * 22DEA  hash table
@@ -721,7 +723,7 @@ LIB700:
         RPL
 
 LIB700.hash:
-        ACPTR U.arcmin.L2 Reset                  * 22DFE
+        ACPTR D0=SITable~1.L1 Reset              * 22DFE
 
 LIB700.link:
         CON(5)  DOHSTR                           * 22E0D  link table of library 700
@@ -768,7 +770,7 @@ xIF:
         :: CK0ATTNABORT ;                        * 22EC3
 
 * slots of 700 000 (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_23BD2                        * 22ED2  slot 0
+        CON(5)  ParseIF                          * 22ED2  slot 0
 
 _IF-prompt_:
         $ "IF-prompt"                            * 22ED7  slot 1
@@ -786,15 +788,16 @@ xTHEN:
         ;                                        * 22F18
 
 * slots of 700 001 (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_14C30                        * 22F1D  slot 0
+        CON(5)  SstTHEN                          * 22F1D  slot 0
 
 * refs (1): 22F09
 then(r):
-        :: j%0=case OBJ_22F3B                    * 22F22  slot 1
+        :: j%0=case THENskip                     * 22F22  slot 1
           ?ATTNQUIT0 ;                           * 22F31
 
 * refs (3): 22F2C 237DF 5E050
-OBJ_22F3B:
+* Taken when the test of THEN fails: skip the true clause
+THENskip:
         :: RSKIP COLASKIP ;                      * 22F3B  slot 2
 
 * refs (1): 22F13
@@ -823,7 +826,7 @@ xELSE:
         :: CK0 COLASKIP ;                        * 22FB5
 
 * slots of 700 002 (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_14C71                        * 22FC9  slot 0
+        CON(5)  SstELSE                          * 22FC9  slot 0
 
 * ROMPTR 700 003 END
 * refs (24): 1487A 14CCB 22DE7 23B0A 23B87 23CFE ...
@@ -839,12 +842,12 @@ xIFEND:
         CON(3)  #700                             * 22FE5  library
         CON(3)  #004                             * 22FE8  command
 xALG->:
-        :: CK0ATTNABORT OBJ_23502 DEPTH OVER #2* #>case xALG->~1 * 22FEB
+        :: CK0ATTNABORT LamList> DEPTH OVER #2* #>case xALG->~1 * 22FEB
           NDROP SETSTACKERR ;                    * 23013
 
 * slots of 700 004 (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_2419A                        * 23022  slot 0
-        CON(5)  OBJ_14A55                        * 23027  slot 1
+        CON(5)  Parse->                          * 23022  slot 0
+        CON(5)  SstALG->                         * 23027  slot 1
 
 * ->
 * ROMPTR 700 005 WHILE
@@ -857,7 +860,7 @@ xWHILE:
         ;                                        * 23047
 
 * slots of 700 005 (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_23F79                        * 2304C  slot 0
+        CON(5)  ParseWHILE                       * 2304C  slot 0
         CON(5)  ~sstDISP;RDUP;GsstFIN            * 23051  slot 1
 
 * 1/0 ->
@@ -873,7 +876,7 @@ xREPEAT:
         ;                                        * 2307B
 
 * slots of 700 006 (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_1494C                        * 23080  slot 0
+        CON(5)  SstREPEAT                        * 23080  slot 0
 
 * refs (1): 2306C
 repeat(r):
@@ -896,7 +899,7 @@ xDO:
         ;                                        * 230D7
 
 * slots of 700 007 (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_23D0D                        * 230DC  slot 0
+        CON(5)  ParseDO                          * 230DC  slot 0
         CON(5)  ~sstDISP;RDUP;GsstFIN            * 230E1  slot 1
 
 * ->
@@ -923,12 +926,12 @@ xSTART:
         ;                                        * 23135
 
 * slots of 700 009 (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_23E7F                        * 2313A  slot 0
-        CON(5)  OBJ_14AE6                        * 2313F  slot 1
+        CON(5)  ParseSTART                       * 2313A  slot 0
+        CON(5)  SstSTART                         * 2313F  slot 1
 
 * refs (1): 23112
 start(2r):
-        :: OBJ_23754 BIND ?ATTNQUIT0 COLA BEGIN  * 23144  slot 2
+        :: {noname,stop} BIND ?ATTNQUIT0 COLA BEGIN * 23144  slot 2
         ;                                        * 23162
 
 * refs (2): 2311C 23130
@@ -956,8 +959,8 @@ xSTARTVAR:
         ;                                        * 231D2
 
 * slots of 700 00A (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_23E9D                        * 231D7  slot 0
-        CON(5)  OBJ_14B13                        * 231DC  slot 1
+        CON(5)  ParseFOR                         * 231D7  slot 0
+        CON(5)  SstFOR                           * 231DC  slot 1
 
 * refs (1): 231AF
 for(2r):
@@ -983,7 +986,7 @@ for(ex,r):
 xNEXT:
         :: CK0 COLA next_2326A                   * 2324C
         ;                                        * 23260
-        CON(5)  OBJ_14B72                        * 23265  address
+        CON(5)  SstNEXT                          * 23265  address
 
 * refs (1): 2325B
 next_2326A:
@@ -1023,7 +1026,7 @@ step(r).L1:
         P=      14                               * 232C7
         D0=D0+  5                                * 232C9
         C=DAT0  W                                * 232CC
-        GOSBVL  SUB_2BCAC                        * 232D0
+        GOSBVL  SPLITC                           * 232D0
         ST=0    0                                * 232D7
         ?A=0    S                                * 232DA
         GOYES   IFERR.L1                         * 232DD
@@ -1037,7 +1040,7 @@ IFERR.L1:
         D0=C                                     * 232EF
         D0=D0+  5                                * 232F2
         C=DAT0  W                                * 232F5
-        GOSBVL  SUB_2BCAC                        * 232F9
+        GOSBVL  SPLITC                           * 232F9
         P=      4                                * 23300
         ?ST=0   0                                * 23302
         GOYES   IFERR.L2                         * 23305
@@ -1088,7 +1091,7 @@ xSTEP:
           BINT1 xSTEP~real                       * 2338A  real
           BINT10 xSTEP~name|local|algebraic      * 23394  name|local|algebraic
         ;                                        * 2339E
-        CON(5)  OBJ_14B72                        * 233A3  address
+        CON(5)  SstNEXT                          * 233A3  address
 
 * refs (1): 23399
 xSTEP~name|local|algebraic:
@@ -1112,14 +1115,16 @@ xSTEP~real:
         RPL
 xIFERR:
         :: CK0 'R ERRSET EVAL ERRTRAP            * 233DF
-          :: OBJ_387BE Sig?ErrJmp OBJ_3881D RDROP ; RSKIP RSKIP COLASKIP ; * 233FD
+          :: RestartMenu Sig?ErrJmp ErrResetEdit RDROP ; RSKIP RSKIP * 233FD
+          COLASKIP ;                             * 23425
 
 * slots of 700 00D (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_24046                        * 2342F  slot 0
-        CON(5)  OBJ_1483E                        * 23434  slot 1
+        CON(5)  ParseIFERR                       * 2342F  slot 0
+        CON(5)  SstIFERR                         * 23434  slot 1
 
 * refs (2): 40976 4099E
-OBJ_23439:
+* ob -> ...: evaluate ob with the key object saved in lam 'est, and put the key object back afterwards
+EvalKeepKey:
         :: KeyOb@ ' Π'est BINT1 DOBIND EVAL 1GETABND KeyOb! ; * 23439  slot 2
 
 * ->
@@ -1147,7 +1152,7 @@ xSILENT':
 
 * slots of 700 00F (derivative, inverse, ...: used by the symbolic code)
         CON(5)  TrueTrue                         * 234B0  slot 0
-        CON(5)  OBJ_14E2C                        * 234B5  slot 1
+        CON(5)  SstSILENT'                       * 234B5  slot 1
 
 * ob1 .. obn ->
 * ROMPTR 700 010
@@ -1156,15 +1161,16 @@ xSILENT':
         CON(3)  #700                             * 234BB  library
         CON(3)  #010                             * 234BE  command
 xRPN->:
-        :: CK0ATTNABORT OBJ_23502 DEPTH OVER #2* #>case DOBIND * 234C1
+        :: CK0ATTNABORT LamList> DEPTH OVER #2* #>case DOBIND * 234C1
           NDROP SETSTACKERR ;                    * 234E9
 
-        CON(5)  OBJ_2419A                        * 234F8  address (the code jumps or points through it)
+        CON(5)  Parse->                          * 234F8  address (the code jumps or points through it)
 
-        CON(5)  OBJ_149BF                        * 234FD  address (the code jumps or points through it)
+        CON(5)  SstRPN->                         * 234FD  address (the code jumps or points through it)
 
 * refs (2): 22FF5 234CB
-OBJ_23502:
+* -> id1..idn #n: the names following → in the running program, as objects on the stack, moved past in the stream. Stops at the first object that isn't a local or global name.
+LamList>:
         CON(5)  (*)+5                            * 23502  primitive code object
         ASSEMBLE
         C=B     A                                * 23507
@@ -1176,9 +1182,9 @@ OBJ_23502:
         RSTK=C                                   * 23517
         C=0     A                                * 23519
         RSTK=C                                   * 2351B
-OBJ_23502.loop1:
+LamList>.loop1:
         D=D-1   A                                * 2351D
-        GONC    OBJ_23502.L3                     * 2351F
+        GONC    LamList>.L3                      * 2351F
         C=RSTK                                   * 23522
         R0=C                                     * 23524
         C=RSTK                                   * 23527
@@ -1188,10 +1194,10 @@ OBJ_23502.loop1:
         GOSBVL  GARBAGECOL                       * 23535
         GOSBVL  GETPTR                           * 2353C
         D=D-1   A                                * 23543
-        GONC    OBJ_23502.L2                     * 23545
+        GONC    LamList>.L2                      * 23545
         D=0     A                                * 23548
         GOVLNG  DOMEMERR                         * 2354A
-OBJ_23502.L2:
+LamList>.L2:
         C=B     A                                * 23551
         CD0EX                                    * 23553
         RSTK=C                                   * 23556
@@ -1201,17 +1207,17 @@ OBJ_23502.L2:
         RSTK=C                                   * 23561
         C=R0                                     * 23563
         RSTK=C                                   * 23566
-OBJ_23502.L3:
+LamList>.L3:
         A=DAT0  A                                * 23568
         LC(5)   DOLAM                            * 2356B
         ?C=A    A                                * 23572
-        GOYES   OBJ_23502.L5                     * 23575
+        GOYES   LamList>.L5                      * 23575
         AD0EX                                    * 23577
         C=DAT0  A                                * 2357A
         D0=(5)  DOLAM                            * 2357D
         AD0EX                                    * 23584
         ?C=A    A                                * 23587
-        GOYES   OBJ_23502.L4                     * 2358A
+        GOYES   LamList>.L4                      * 2358A
         C=RSTK                                   * 2358C
         R0=C                                     * 2358E
         C=RSTK                                   * 23591
@@ -1223,11 +1229,11 @@ OBJ_23502.L3:
         A=DAT0  A                                * 235A8
         D0=D0+  5                                * 235AB
         PC=(A)                                   * 235AE
-OBJ_23502.L4:
+LamList>.L4:
         C=DAT0  A                                * 235B2
         D0=D0+  5                                * 235B5
-        GONC    OBJ_23502.L6                     * 235B8
-OBJ_23502.L5:
+        GONC    LamList>.L6                      * 235B8
+LamList>.L5:
         AD0EX                                    * 235BB
         D0=A                                     * 235BE
         D0=D0+  5                                * 235C1
@@ -1238,7 +1244,7 @@ OBJ_23502.L5:
         AD0EX                                    * 235CE
         C=C+A   A                                * 235D1
         CD0EX                                    * 235D3
-OBJ_23502.L6:
+LamList>.L6:
         D1=D1-  5                                * 235D6
         DAT1=C  A                                * 235D9
         C=RSTK                                   * 235DC
@@ -1251,7 +1257,7 @@ OBJ_23502.L6:
         RSTK=C                                   * 235ED
         C=A     A                                * 235EF
         RSTK=C                                   * 235F1
-        GOTO    OBJ_23502.loop1                  * 235F3
+        GOTO    LamList>.loop1                   * 235F3
 
 * ROMPTR 700 011 »
 * refs (7): 22DE7 24311 D2FA8 D3CDE D3F55 D3F6E ...
@@ -1263,7 +1269,7 @@ x>>ABND:
         :: CK0ATTNABORT ABND ;                   * 235FE
 
 * slots of 700 011 (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_14CDF                        * 23612  slot 0
+        CON(5)  SstENDABND                       * 23612  slot 0
 
 * ROMPTR 700 012 «
 * refs (39): 150FC 22DE7 23DE9 2428F 24514 24C80 ...
@@ -1274,7 +1280,7 @@ x<<:
         :: CK0ATTNABORT ;                        * 2361E
 
 * slots of 700 012 (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_23DD0                        * 2362D  slot 0
+        CON(5)  ParseProg                        * 2362D  slot 0
 
 * ROMPTR 700 013
 * refs (25): 22DE7 23E3E 3DB12 5959C 5E016 8C23A ...
@@ -1285,7 +1291,7 @@ x>>:
         :: CK0ATTNABORT ;                        * 23639
 
 * slots of 700 013 (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_14D02                        * 23648  slot 0
+        CON(5)  Sst>>                            * 23648  slot 0
 
 * ROMPTR 700 014 '
 * refs (10): 16E3A 22DE7 23AC4 40418 59583 6B2BE ...
@@ -1296,8 +1302,8 @@ x':
         :: CK0ATTNABORT 'R ;                     * 23654
 
 * slots of 700 014 (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_23A6F                        * 23668  slot 0
-        CON(5)  OBJ_14BB3                        * 2366D  slot 1
+        CON(5)  ParseQuoted                      * 23668  slot 0
+        CON(5)  SstTick                          * 2366D  slot 1
 
 * ROMPTR 700 015
 * refs (8): 16F48 22DE7 23AD3 40427 59592 8C28F ...
@@ -1308,7 +1314,7 @@ xENDTIC:
         :: CK0ATTNABORT ;                        * 23679
 
 * slots of 700 015 (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_23A6F                        * 23688  slot 0
+        CON(5)  ParseQuoted                      * 23688  slot 0
 
 * ROMPTR 700 016
 * refs (3): 22DE7 24037 C5BF3
@@ -1320,7 +1326,7 @@ xWHILEEND:
         ;                                        * 236A8
 
 * slots of 700 016 (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_1499C                        * 236AD  slot 0
+        CON(5)  SstWHILEEND                      * 236AD  slot 0
 
 * 1/0 ->
 * ROMPTR 700 017
@@ -1335,7 +1341,7 @@ xENDDO:
         ;                                        * 236D7
 
 * slots of 700 017 (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_1490B                        * 236DC  slot 0
+        CON(5)  SstENDDO                         * 236DC  slot 0
 
 * refs (1): 236C8
 enddo(r):
@@ -1364,7 +1370,8 @@ xERRTHEN:
         LAM 'noname                              * 2373F
 
 * refs (1): 23149
-OBJ_23754:
+* { 'noname 'stop }: the names bound by a START loop
+{noname,stop}:
         { Π'noname Π'stop }                      * 23754
 
 * ->
@@ -1383,7 +1390,7 @@ xCASE:
         :: CK0ATTNABORT ;                        * 2378D
 
 * slots of 700 019 (derivative, inverse, ...: used by the symbolic code)
-        CON(5)  OBJ_23AE2                        * 2379C  slot 0
+        CON(5)  ParseCASE                        * 2379C  slot 0
 
 * ROMPTR 700 01A
 * refs (6): 14CA3 22DE7 23802 23B69 C59F1 C5A0F
@@ -1398,11 +1405,11 @@ xTHENCASE:
 
 * slots of 700 01A (derivative, inverse, ...: used by the symbolic code)
         CON(5)  failed                           * 237CB  slot 0
-        CON(5)  OBJ_14C99                        * 237D0  slot 1
+        CON(5)  SstTHENCASE                      * 237D0  slot 1
 
 * refs (1): 237B7
 thencase(r):
-        :: j%0=case OBJ_22F3B                    * 237D5  slot 2
+        :: j%0=case THENskip                     * 237D5  slot 2
           ?ATTNQUIT0 COLACOLA ;                  * 237E4
 
 * refs (1): 237C1
@@ -1457,9 +1464,10 @@ palparse:
         :: FALSE {'ioinprogress} BIND            * 238A4
 
 * refs (1): 25902
-OBJ_238B8:
+* $ -> ob TRUE | ...: parse text under an error trap with a marker list on the stack; on an error drops everything above the marker
+ParseFrame:
           :: {}_23989 SWAP ERRSET                * 238B8
-            :: OBJ_25D3A SWAPONE GetNextToken palparse~2 ; ERRTRAP * 238CC
+            :: ClassTblRPL SWAPONE GetNextToken palparse~2 ; ERRTRAP * 238CC
             palparse~1 DROP case drop(1-5,7);true * 238EF
 
 {st,ofs,tok}:
@@ -1491,7 +1499,7 @@ OBJ_238B8:
 
 * refs (1): 238EF
 palparse~1:
-        :: ERROR@ OBJ_26289 #=?SKIP              * 23993
+        :: ERROR@ #NeedMore #=?SKIP              * 23993
           :: BEGIN {}_23989 EQ UNTIL ; ERRJMP ;  * 239A7
 
 * refs (1): 238FE
@@ -1500,113 +1508,131 @@ drop(1-5,7);true:
 
 * refs (1): 238E0
 palparse~2:
-        :: ~BINT0;5UNROLL palparse~3 !*triand OBJ_2525A TrueTrue ; * 239E3
+        :: ~BINT0;5UNROLL palparse~3 !*triand CloseClause1 TrueTrue ; * 239E3
 
 * refs (2): 239ED 23A24
 palparse~3:
-        :: nultrior TrueTrue OBJ_23A2E !*triand COLA palparse~3 * 23A06
+        :: nultrior TrueTrue ParseProgOb !*triand COLA palparse~3 * 23A06
         ;                                        * 23A29
 
 * refs (16): 23A15 23B46 23BB9 23C0E 23C77 23CD6 ...
-* Probably: parser: parse one object inside a program or structure body
-OBJ_23A2E:
-        :: tok' tok8cktrior OBJ_23A6F OBJ_24384 !*trior TrueTrue OBJ_245DC * 23A2E
-          !*trior TrueTrue COLA OBJ_2469F        * 23A56
+* One object inside a program or structure body: a quoted object, a literal, a word, or a name
+ParseProgOb:
+        :: tok' tok8cktrior ParseQuoted ParseLiteral !*trior TrueTrue * 23A2E
+          ParseCmd !*trior TrueTrue COLA ParseName * 23A51
         ;                                        * 23A6A
 
 * refs (3): 23668 23688 23A3D
-OBJ_23A6F:
-        :: OBJ_2472B !*trior OBJ_23A8D TrueTrue ; * 23A6F
+* Quoted object: a name or an algebraic between ticks
+ParseQuoted:
+        :: ParseAlgTicks !*trior ?ParseEndTick TrueTrue ; * 23A6F
 
 * refs (1): 23A7E
-OBJ_23A8D:
-        :: 6PICK need'case OBJ_23AB0             * 23A8D
+* Inside a program, ticked objects keep the tick words
+?ParseEndTick:
+        :: 6PICK need'case ParseTickWords        * 23A8D
           DROP TrueTrue ;                        * 23AA1
 
 * refs (1): 23A9C
-OBJ_23AB0:
+* ob -> : wrap the parsed object in ' and the closing tick for a program
+ParseTickWords:
         :: DROP 4psh PTR addt: x' ROTSWAP PTR addt: xENDTIC swapB;drop;2true ; * 23AB0
 
 * refs (1): 2379C
-OBJ_23AE2:
-        :: 'Rapndit xCASE ~BINT0;5UNROLL OBJ_23B19 !*triand OBJ_252CD * 23AE2
+* CASE: compile routine
+ParseCASE:
+        :: 'Rapndit xCASE ~BINT0;5UNROLL ParseCASEBody !*triand CloseClause * 23AE2
           'Rapndit xIFEND TrueTrue ;             * 23B05
 
 * refs (3): 23AF6 23B55 23B91
-OBJ_23B19:
+* Clauses of CASE up to END
+ParseCASEBody:
         :: nultrior TrueTrue _END__253D6 tok8trior TrueTrue _THEN_ tok8trior * 23B19
-          OBJ_23B5F OBJ_23A2E !*triand COLA OBJ_23B19 * 23B41
+          ParseCASETHEN ParseProgOb !*triand COLA ParseCASEBody * 23B41
         ;                                        * 23B5A
 
 * refs (1): 23B41
-OBJ_23B5F:
-        :: 'Rapndit xTHENCASE ~BINT0;5UNROLL OBJ_23B9B !*triand OBJ_252CD * 23B5F
-          'Rapndit xIFEND COLA OBJ_23B19         * 23B82
+* THEN within CASE
+ParseCASETHEN:
+        :: 'Rapndit xTHENCASE ~BINT0;5UNROLL ParseCASEClause !*triand * 23B5F
+          CloseClause 'Rapndit xIFEND COLA ParseCASEBody * 23B7D
         ;                                        * 23B96
 
 * refs (2): 23B73 23BC8
-OBJ_23B9B:
-        :: nultrior TrueTrue _END__253D6 tok8trior TrueTrue OBJ_23A2E * 23B9B
-          !*triand COLA OBJ_23B9B                * 23BBE
+* Words of a CASE clause, up to its END
+ParseCASEClause:
+        :: nultrior TrueTrue _END__253D6 tok8trior TrueTrue ParseProgOb * 23B9B
+          !*triand COLA ParseCASEClause          * 23BBE
         ;                                        * 23BCD
 
 * refs (1): 22ED2
-OBJ_23BD2:
-        :: 'Rapndit xIF COLA OBJ_23BF0           * 23BD2
+* IF: compile routine
+ParseIF:
+        :: 'Rapndit xIF COLA ParseIFTest         * 23BD2
         ;                                        * 23BEB
 
 * refs (2): 23BE6 23C1D
-OBJ_23BF0:
-        :: nultrior failed _THEN_ tok8trior OBJ_23C27 OBJ_23A2E !*triand * 23BF0
-          COLA OBJ_23BF0                         * 23C18
+* Words of IF's test, up to THEN
+ParseIFTest:
+        :: nultrior failed _THEN_ tok8trior ParseTHEN ParseProgOb !*triand * 23BF0
+          COLA ParseIFTest                       * 23C18
         ;                                        * 23C22
 
 * refs (1): 23C09
-OBJ_23C27:
-        :: 'Rapndit xTHEN ~BINT0;5UNROLL COLA OBJ_23C4A * 23C27
+* THEN: compile routine
+ParseTHEN:
+        :: 'Rapndit xTHEN ~BINT0;5UNROLL COLA ParseTHENBody * 23C27
         ;                                        * 23C45
 
 * refs (2): 23C40 23C86
-OBJ_23C4A:
-        :: nultrior OBJ_23CEF _END__253D6 tok8trior OBJ_23CEF _ELSE_ * 23C4A
-          tok8trior OBJ_23C90 OBJ_23A2E !*triand COLA OBJ_23C4A * 23C6D
+* Words of THEN's clause, up to ELSE or END
+ParseTHENBody:
+        :: nultrior ParseIFEND _END__253D6 tok8trior ParseIFEND _ELSE_ * 23C4A
+          tok8trior ParseELSE ParseProgOb !*triand COLA ParseTHENBody * 23C6D
         ;                                        * 23C8B
 
 * refs (1): 23C72
-OBJ_23C90:
-        :: OBJ_252CD 'Rapndit xELSE ~BINT0;5UNROLL COLA OBJ_23CB8 * 23C90
+* ELSE: compile routine
+ParseELSE:
+        :: CloseClause 'Rapndit xELSE ~BINT0;5UNROLL COLA ParseELSEBody * 23C90
         ;                                        * 23CB3
 
 * refs (2): 23CAE 23CE5
-OBJ_23CB8:
-        :: nultrior OBJ_23CEF _END__253D6 tok8trior OBJ_23CEF OBJ_23A2E * 23CB8
-          !*triand COLA OBJ_23CB8                * 23CDB
+* Words of ELSE's clause, up to END
+ParseELSEBody:
+        :: nultrior ParseIFEND _END__253D6 tok8trior ParseIFEND ParseProgOb * 23CB8
+          !*triand COLA ParseELSEBody            * 23CDB
         ;                                        * 23CEA
 
 * refs (4): 23C54 23C63 23CC2 23CD1
-OBJ_23CEF:
-        :: OBJ_252CD 'Rapndit xIFEND TrueTrue ;  * 23CEF
+* END of IF: closes the clause and adds the word
+ParseIFEND:
+        :: CloseClause 'Rapndit xIFEND TrueTrue ; * 23CEF
 
 * refs (1): 230DC
-OBJ_23D0D:
-        :: 'Rapndit xDO COLA OBJ_23D2B           * 23D0D
+* DO: compile routine
+ParseDO:
+        :: 'Rapndit xDO COLA ParseDOBody         * 23D0D
         ;                                        * 23D26
 
 * refs (2): 23D21 23D58
-OBJ_23D2B:
-        :: nultrior failed _UNTIL_ tok8trior OBJ_23D62 OBJ_23A2E !*triand * 23D2B
-          COLA OBJ_23D2B                         * 23D53
+* Words of DO's body, up to UNTIL
+ParseDOBody:
+        :: nultrior failed _UNTIL_ tok8trior ParseUNTIL ParseProgOb !*triand * 23D2B
+          COLA ParseDOBody                       * 23D53
         ;                                        * 23D5D
 
 * refs (1): 23D44
-OBJ_23D62:
-        :: 'Rapndit xUNTIL COLA OBJ_23D80        * 23D62
+* UNTIL: compile routine
+ParseUNTIL:
+        :: 'Rapndit xUNTIL COLA ParseUNTILBody   * 23D62
         ;                                        * 23D7B
 
 * refs (2): 23D76 23DAD
-OBJ_23D80:
+* Words of the test, up to END
+ParseUNTILBody:
         :: nultrior ~'Rapndit;xENDDO;TrueTrue _END__253D6 tok8trior * 23D80
-          ~'Rapndit;xENDDO;TrueTrue OBJ_23A2E !*triand COLA OBJ_23D80 * 23D99
+          ~'Rapndit;xENDDO;TrueTrue ParseProgOb !*triand COLA ParseUNTILBody * 23D99
         ;                                        * 23DB2
 
 * refs (2): 23D8A 23D99
@@ -1614,34 +1640,40 @@ OBJ_23D80:
         :: 'Rapndit xENDDO TrueTrue ;            * 23DB7
 
 * refs (1): 2362D
-OBJ_23DD0:
-        :: 'Rapndit xSILENT' ~BINT0;5UNROLL 'Rapndit x<< COLA OBJ_23DFD * 23DD0
+* «: compile routine
+ParseProg:
+        :: 'Rapndit xSILENT' ~BINT0;5UNROLL 'Rapndit x<< COLA ParseProgBody * 23DD0
         ;                                        * 23DF8
 
 * refs (5): 23DF3 23E2A 2451E 24C85 24E3D
-OBJ_23DFD:
-        :: nultrior OBJ_23E34 tok>> tok8trior OBJ_23E34 OBJ_23A2E !*triand * 23DFD
-          COLA OBJ_23DFD                         * 23E25
+* Words of a program, up to »
+ParseProgBody:
+        :: nultrior ParseProgEnd tok>> tok8trior ParseProgEnd ParseProgOb * 23DFD
+          !*triand COLA ParseProgBody            * 23E20
         ;                                        * 23E2F
 
 * refs (2): 23E07 23E16
-OBJ_23E34:
+* »: close the program as a secondary
+ParseProgEnd:
         :: 'Rapndit x>> ~4psh;P::N;drop2;6rolld;1+(s5) TrueTrue ; * 23E34
 
 * refs (3): 23EA2 241A4 241EA
-OBJ_23E52:
-        :: nultrior failed OBJ_246BD !*triand ID>LAM COLA DaDGNTc * 23E52
+* Next token must be a name, which becomes a local name
+ParseLamName:
+        :: nultrior failed ParseId !*triand ID>LAM COLA DaDGNTc * 23E52
         ;                                        * 23E7A
 
 * refs (1): 2313A
-OBJ_23E7F:
-        :: 'Rapndit xSTART COLA OBJ_23F01        * 23E7F
+* START: compile routine
+ParseSTART:
+        :: 'Rapndit xSTART COLA ParseLoopBody    * 23E7F
         ;                                        * 23E98
 
 * refs (1): 231D7
-OBJ_23E9D:
-        :: OBJ_23E52 !*triand 4psh PTR addt: xSTARTVAR ROTSWAP OVERDUP BINT1 * 23E9D
-          DOBIND SWAPUnDROP OBJ_23F01 ABND !*triand TrueTrue ; * 23ECA
+* FOR: compile routine. The loop variable is bound while its body compiles, so its name compiles as local.
+ParseFOR:
+        :: ParseLamName !*triand 4psh PTR addt: xSTARTVAR ROTSWAP OVERDUP * 23E9D
+          BINT1 DOBIND SWAPUnDROP ParseLoopBody ABND !*triand TrueTrue ; * 23EC5
 
 * ob -> { ob }
 * refs (31): 05ECE 16C61 1745F 17798 186ED 19416 ...
@@ -1649,10 +1681,11 @@ ONE{}N:
         :: BINT1 P{}N ;                          * 23EED
 
 * refs (3): 23E93 23ED4 23F3D
-OBJ_23F01:
+* Words of a START or FOR body, up to NEXT or STEP
+ParseLoopBody:
         :: nultrior failed _NEXT_ tok8trior ~'Rapndit;xNEXT;TrueTrue _STEP_ * 23F01
-          tok8trior ~'Rapndit;xSTEP;TrueTrue OBJ_23A2E !*triand COLA * 23F24
-          OBJ_23F01                              * 23F3D
+          tok8trior ~'Rapndit;xSTEP;TrueTrue ParseProgOb !*triand COLA * 23F24
+          ParseLoopBody                          * 23F3D
         ;                                        * 23F42
 
 * refs (1): 23F1A
@@ -1664,23 +1697,27 @@ OBJ_23F01:
         :: 'Rapndit xSTEP TrueTrue ;             * 23F60
 
 * refs (1): 2304C
-OBJ_23F79:
-        :: 'Rapndit xWHILE COLA OBJ_23F97        * 23F79
+* WHILE: compile routine
+ParseWHILE:
+        :: 'Rapndit xWHILE COLA ParseWHILETest   * 23F79
         ;                                        * 23F92
 
 * refs (2): 23F8D 23FC4
-OBJ_23F97:
-        :: nultrior failed _REPEAT_ tok8trior OBJ_23FCE OBJ_23A2E !*triand * 23F97
-          COLA OBJ_23F97                         * 23FBF
+* Words of the test, up to REPEAT
+ParseWHILETest:
+        :: nultrior failed _REPEAT_ tok8trior ParseREPEAT ParseProgOb * 23F97
+          !*triand COLA ParseWHILETest           * 23FBA
         ;                                        * 23FC9
 
 * refs (1): 23FB0
-OBJ_23FCE:
-        :: 'Rapndit xREPEAT ~BINT0;5UNROLL COLA OBJ_23FF1 * 23FCE
+* REPEAT: compile routine
+ParseREPEAT:
+        :: 'Rapndit xREPEAT ~BINT0;5UNROLL COLA ParseREPEATBody * 23FCE
         ;                                        * 23FEC
 
 * refs (2): 23FE7 2401E
-OBJ_23FF1:
-        :: nultrior OBJ_24028 _END__253D6 tok8trior OBJ_24028 OBJ_23A2E * 23FF1
-          !*triand COLA OBJ_23FF1                * 24014
+* Words of the body, up to END
+ParseREPEATBody:
+        :: nultrior ParseWHILEEND _END__253D6 tok8trior ParseWHILEEND * 23FF1
+          ParseProgOb !*triand COLA ParseREPEATBody * 2400F
         ;                                        * 24023

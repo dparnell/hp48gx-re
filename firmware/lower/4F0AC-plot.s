@@ -1,4 +1,4 @@
-* HP 48GX ROM revision R, #4F0AC-#52016: Plotting
+* HP 48GX ROM revision R, #4F0AC-#52016: Plotting: pixel and coordinate conversion, LINE, BOX, GOR, GXOR, REPL, SUB, ARC, grob utilities, line drawing in machine code, plot parameters; complex division
 * Addresses in the right-hand comments are those of the original ROM.
 * Most referenced: ISTOP-INDEX SWAP#1+SWAP NOT?INVPPAR CHECKPICT INDEPVAR GROBDIM C%>%% 1get(li)? Re>C% %1- %%>C% RclMaxStdPict
 * Follows on from the previous file (at #4F0AC in the original ROM).
@@ -16,7 +16,7 @@ s=>ñr:
 
 * refs (6): 49F33 49F74 4AC57 4E7A3 4E7B7 4F0D4
 px->c(2rr,2s):
-        :: GETPMIN&MAX 2SWAP OBJ_4F2CD 5ROLL DUPTYPEBINT? IT UNCOERCE%% * 4F110
+        :: GETPMIN&MAX 2SWAP PlotScales 5ROLL DUPTYPEBINT? IT UNCOERCE%% * 4F110
           %%- SWAP%%/ %%>% 4UNROLLROT DUPTYPEBINT? IT UNCOERCE%% * 4F138
           SWAP %%- SWAP%%/ %%>% SWAP%>C% ;       * 4F15B
 
@@ -26,8 +26,9 @@ DOC>PX:
         :: C%># SWAP #>HXS SWAP #>HXS TWO{}N ;   * 4F179
 
 * refs (4): 49FB0 4F013 4F728 4FA1B
-OBJ_4F1A1:
-        :: OBJ_4F20F (rò-0.5)=>s? NOTcasedrop 2DROPFALSE * 4F1A1
+* C% #w #h -> #x #y TRUE | FALSE: complex user coordinates to the pixel of a #w x #h grob; FALSE if outside
+C%>Px?:
+        :: C%>PxRR (rò-0.5)=>s? NOTcasedrop 2DROPFALSE * 4F1A1
           4UNROLLROT r=>rr;rot;*(2rr);+(2rr);r=>r (rò-0.5)=>s? NOTcsdrpfls * 4F1BA
           SWAPTRUE ;                             * 4F1CE
 
@@ -38,12 +39,12 @@ SWAPTRUE:
 
 * refs (2): 4FBD8 4FBE7
 sub(go,2c)~1:
-        :: OBJ_4F20F COERCE 4UNROLLROT r=>rr;rot;*(2rr);+(2rr);r=>r * 4F1EC
-          COERCESWAP ;                           * 4F205
+        :: C%>PxRR COERCE 4UNROLLROT r=>rr;rot;*(2rr);+(2rr);r=>r COERCESWAP ; * 4F1EC
 
 * refs (3): 4E915 4F1A6 4F1F1
-OBJ_4F20F:
-        :: ROT C%>% GETPMIN&MAX 6ROLL 6ROLL OBJ_4F2CD 5ROLL * 4F20F
+* C% #w #h -> %%...: user coordinates to pixel as extended reals
+C%>PxRR:
+        :: ROT C%>% GETPMIN&MAX 6ROLL 6ROLL PlotScales 5ROLL * 4F20F
           r=>rr;rot;*(2rr);-(2rr);r=>r ;         * 4F237
 
 * refs (4): 4E91F 4F1BF 4F200 4FE58
@@ -64,7 +65,8 @@ r+=>s;true:
           TRUE ;                                 * 4F2C3
 
 * refs (7): 4F11F 4F22D 4F41C 4F5ED 4FE44 51915 ...
-OBJ_4F2CD:
+* #w #h C%min C%max -> %%xs %%xo %%ys %%yo: scale and offset between user coordinates and pixels of a #w x #h grob
+PlotScales:
         :: #1- UNCOERCE%% SWAP#1- UNCOERCE%% 4ROLL C%>% %>%%SWAP %>%% 5ROLL * 4F2CD
           C%>% %>%%SWAP %>%% 3PICK %%- DUP 7PICK SWAP%%/ 7UNROLL ROT %%CHS * 4F2FF
           6ROLL %%*SWAP %%/ 4UNROLL DUPROT %%- DUP 4PICKSWAP %%/ 4UNROLL * 4F336
@@ -72,7 +74,7 @@ OBJ_4F2CD:
 
 * refs (1): 20D36
 sto(go,PICT):
-        :: CKPICT OBJ_46152 DUPGROBDIM # 800 OVER#< case SETSIZEERR * 4F37C
+        :: CKPICT CkNotPlotting DUPGROBDIM # 800 OVER#< case SETSIZEERR * 4F37C
           KILLGDISP MAKEGROB GROB>GDISP CHECKPICT GBUFF ZEROZERO GROB! ; * 4F3A9
 
 * hxs hxs -> # #
@@ -87,7 +89,7 @@ pixon(c):
 * C% -> # #'
 * refs (4): 4F17E 4F3F9 4F47B 4F4AD
 C%>#:
-        :: C%>% GETPMIN&MAX RclMaxStdPict OBJ_4F2CD 5ROLL SWAPROT getypos * 4F408
+        :: C%>% GETPMIN&MAX RclMaxStdPict PlotScales 5ROLL SWAPROT getypos * 4F408
           5UNROLL 5UNROLL SWAP getxpos SgnMag># 3UNROLL SgnMag># ; * 4F430
 
 * refs (1): 1E333
@@ -150,7 +152,7 @@ line(2c,?):
 
 * refs (2): 4F5BB 4F692
 2c=>pxs:
-        :: SWAP2C%>% GETPMIN&MAX RclMaxStdPict OBJ_4F2CD 2DUP 7ROLL SWAPROT * 4F5D9
+        :: SWAP2C%>% GETPMIN&MAX RclMaxStdPict PlotScales 2DUP 7ROLL SWAPROT * 4F5D9
           getypos SgnMag># 5UNROLL 7ROLL SWAPROT getypos SgnMag># 3UNROLL * 4F601
           2DUP 8ROLL SWAPROT getxpos SgnMag># 4UNROLL 6ROLL SWAPROT getxpos * 4F629
           SgnMag># 4UNROLL ;                     * 4F656
@@ -177,18 +179,19 @@ g?or(go,li,go,?):
 
 * refs (2): 1E492 1E520
 g?or(go,c,go,?):
-        :: 4ROLL CKREF 4UNROLL 4UNROLL OBJ_4F719 ; * 4F6F6
+        :: 4ROLL CKREF 4UNROLL 4UNROLL GOR@C% ;  * 4F6F6
 
 * refs (2): 4F70F 4F77D
-OBJ_4F719:
-        :: SWAP ~3PICK;GROBDIM OBJ_4F1A1 case GROB+# * 4F719
+* grob C% grob' -> ...: GOR or GXOR at user coordinates; Bad Argument Value if the place is outside
+GOR@C%:
+        :: SWAP ~3PICK;GROBDIM C%>Px? case GROB+# * 4F719
           SETSIZEERR ;                           * 4F737
 
 * refs (4): 1E4B0 1E4CE 1E53E 1E55C
 g?or(PICT,c,go,?):
         :: 4UNROLLROT CKPICT CHECKPICT GBUFF UNROTOVER TYPELIST? case * 4F741
           :: ~SWAP;2HXSLIST?;GROB+# DROP ;       * 4F769
-          OBJ_4F719 DROP ;                       * 4F77D
+          GOR@C% DROP ;                          * 4F77D
 
 * flag grob1 grob2 #x #y -> grob'
 * refs (2): 4F6EC 4F732
@@ -213,16 +216,17 @@ drop(3);rot;false:
 * refs (1): 1AC2A
 +(2go):
         :: DUPGROBDIM 4PICK GROBDIM ROT #= 3UNROLL #= AND NcaseSIZEERR * 4F8D1
-          OBJ_4F949                              * 4F903
-          !OR$ &HXS OBJ_515CD ;                  * 4F908
+          GrobSplit                              * 4F903
+          !OR$ &HXS HXS>GROB ;                   * 4F908
 
 * refs (1): 4F7CD
 GROB+#~1:
-        :: OBJ_4F949 7ROLL ITE !OR$ !XOR$        * 4F91C
-          &HXS OBJ_515CD ;                       * 4F93A
+        :: GrobSplit 7ROLL ITE !OR$ !XOR$        * 4F91C
+          &HXS HXS>GROB ;                        * 4F93A
 
 * refs (2): 4F903 4F921
-OBJ_4F949:
+* hxsA hxsB -> hdr bodyB bodyA: two grobs as hex strings cut into the 10-nibble header and the bodies, for OR and XOR
+GrobSplit:
         :: DUP LENHXS OVER BINT1 BINT10 SUBHXS ROT BINT11 4PICK SUBHXS 4ROLL * 4F949
           BINT11 5ROLL SUBHXS ;                  * 4F985
 
@@ -244,7 +248,7 @@ repl(go,c,go):
 
 * refs (2): 4FA02 4FA6B
 repl!(go,c,go):
-        :: SWAP ~3PICK;GROBDIM OBJ_4F1A1 NOTcaseDROP ChkRepl(2go,2s) * 4FA0C
+        :: SWAP ~3PICK;GROBDIM C%>Px? NOTcaseDROP ChkRepl(2go,2s) * 4FA0C
         ;                                        * 4FA2A
 
 * refs (2): D231D D232C
@@ -297,44 +301,48 @@ neg(PICT):
 
 * refs (1): 1E5E6
 arc(c,3r):
-        :: CHECKPICT OBJ_4FDCC CHECKPVARS DROP 4UNROLL OVER %SGN 4UNROLL * 4FC5F
-          %POL>%REC %>C% OVER C%C+C RclMaxStdPict 2DUP 5ROLL C%>% OBJ_4FE30 * 4FC8C
-          4UNROLL ROT C%>% OBJ_4FE30 2DUP C%C-C C%ABS 4ROLL %* 4ROLL * 4FCB9
-          %POL>%REC %CHS %>C% OVER C%C+C arc(c,3r)~1 2SWAP arc(c,3r)~1 ROT * 4FCEB
-          arc(c,3r)~1 2SWAP OBJ_4FE6C ;          * 4FD18
+        :: CHECKPICT ArcAngles CHECKPVARS DROP 4UNROLL OVER %SGN 4UNROLL * 4FC5F
+          %POL>%REC %>C% OVER C%C+C RclMaxStdPict 2DUP 5ROLL C%>% C%>PxC * 4FC8C
+          4UNROLL ROT C%>% C%>PxC 2DUP C%C-C C%ABS 4ROLL %* 4ROLL %POL>%REC * 4FCB9
+          %CHS %>C% OVER C%C+C arc(c,3r)~1 2SWAP arc(c,3r)~1 ROT arc(c,3r)~1 * 4FCF0
+          2SWAP ArcTrace ;                       * 4FD1D
 
 * refs (1): 1E5F5
 arc(li,b,2r):
-        :: CHECKPICT OBJ_4FDCC 4ROLL 2HXSLIST? s=>ñr SWAP s=>ñr SWAP 5ROLL * 4FD2C
+        :: CHECKPICT ArcAngles 4ROLL 2HXSLIST? s=>ñr SWAP s=>ñr SWAP 5ROLL * 4FD2C
           HXS># s=>ñr DUP4UNROLL 5ROLL           * 4FD5E
 
 * refs (1): 4FDBD
+* Probably: ARC with pixel arguments: the start and end points from centre, radius and angles
 OBJ_4FD72:
           :: %CHS %POL>%REC %0_2A2B4 RNDXY 3PICK %+SWAP %0_2A2B4 RNDXY 4PICK * 4FD72
             %+SWAP 2SWAP ;                       * 4FDA4
-          5ROLL 6ROLL OBJ_4FD72 OBJ_4FE6C ;      * 4FDB3
+          5ROLL 6ROLL OBJ_4FD72 ArcTrace ;       * 4FDB3
 
 * refs (2): 4FC69 4FD36
-OBJ_4FDCC:
+* %a %b -> ...: ARC: order the angles and limit the sweep to one turn
+ArcAngles:
         :: 2DUP dist(2r) 1REV 2DUP %1- %< 7UNROLL %> IT DROPDUP * 4FDCC
         ;                                        * 4FE03
 
 * refs (1): 45218
 drax~6:
-        :: OBJ_4FE30                             * 4FE08
+        :: C%>PxC                                * 4FE08
 
 * refs (3): 4FD04 4FD0E 4FD18
 arc(c,3r)~1:
           :: %0_2A2B4 trunc(c,r) C%>% ; ;        * 4FE12
 
 * refs (3): 4FCB4 4FCC8 4FE0D
-OBJ_4FE30:
-        :: GETPMIN&MAX 6ROLL 6ROLL OBJ_4F2CD 5ROLL * 4FE30
+* C% #w #h C%min C%max ... -> : ARC: user coordinates to pixels as a complex number
+C%>PxC:
+        :: GETPMIN&MAX 6ROLL 6ROLL PlotScales 5ROLL * 4FE30
           r=>rr;rot;*(2rr);-(2rr);r=>r 4UNROLLROT * 4FE4E
           r=>rr;rot;*(2rr);+(2rr);r=>r SWAP %>C% ; * 4FE58
 
 * refs (3): 4E622 4FD22 4FDC2
-OBJ_4FE6C:
+* ... -> : ARC: walk the circle pixel by pixel from start to end, picking the closer of the two possible next pixels by squared distance from the centre, until the end point or ATTN. Lams xe ye x y xc yc r2 left up exit
+ArcTrace:
         ::                                       * 4FE6C
           {                                      * 4FE71
             :: 9GETLAM %= SWAP 6GETLAM %>= ;     * 4FE76
@@ -380,23 +388,24 @@ OBJ_4FE6C:
             LAM 'exit }                          * 50012
           BIND 8GETLAM 10GETLAM %= 7GETLAM 9GETLAM %= AND AND 8GETLAM * 50028
           6GETLAM %= 7GETLAM 5GETLAM %= AND ORcase * 5005A
-          :: OBJ_5036B ABND ;                    * 5007D
-          8GETLAM 7GETLAM OBJ_5032A DUP %3 %< IT OBJ_501DB * 50091
-          4PUTLAM 2DROP OBJ_5036B BEGIN OBJ_5028A 8GETLAM 3GETLAM ITE %1- * 500B9
+          :: ArcPixel ABND ;                     * 5007D
+          8GETLAM 7GETLAM ArcR2 DUP %3 %< IT ArcTiny * 50091
+          4PUTLAM 2DROP ArcPixel BEGIN ArcStepDir 8GETLAM 3GETLAM ITE %1- * 500B9
           %1+                                    * 500E6
-          7GETLAM OBJ_5032A ~8GETLAM;7GETLAM 2GETLAM ITE %1- %1+ * 500EB
-          OBJ_5032A 6PICK 3PICK OBJ_5032A 4GETLAM dist(2r) 4ROLL 4GETLAM * 5010E
-          dist(2r) 2DUP %> ITE 4UNROLL3DROP      * 50136
+          7GETLAM ArcR2 ~8GETLAM;7GETLAM 2GETLAM ITE %1- %1+ * 500EB
+          ArcR2 6PICK 3PICK ArcR2 4GETLAM dist(2r) 4ROLL 4GETLAM dist(2r) * 5010E
+          2DUP %> ITE 4UNROLL3DROP               * 5013B
 
 drop(1,5-6):
           :: DROP 4ROLLDROP 4ROLLDROP ;          * 5014F
           4ROLL 4GETLAM dist(2r) %> ?SKIP 2SWAP  * 50168
-          2DROP TOTEMPSWAP TOTEMPSWAP 7PUTLAM 8PUTLAM OBJ_5036B * 50186
+          2DROP TOTEMPSWAP TOTEMPSWAP 7PUTLAM 8PUTLAM ArcPixel * 50186
           ~8GETLAM;7GETLAM 1GETLAM EVAL AND ATTNFLG@ ATTNFLGCLR #0<> OR * 501A4
           UNTIL ABND ;                           * 501CC
 
 * refs (1): 500B4
-OBJ_501DB:
+* ... -> %2: ARC: a very small radius: start one pixel off and change the end test to match
+ArcTiny:
         :: DROP %2 9GETLAM 5GETLAM %- %SGN 5GETLAM %+ 9PUTLAM 10GETLAM * 501DB
           6GETLAM %- %SGN 6GETLAM %+ 10PUTLAM '  * 50212
           :: 9GETLAM %= SWAP 10GETLAM %= ; 1PUTLAM ; * 50235
@@ -412,11 +421,13 @@ OBJ_501DB:
         :: %1 %- ;                               * 50276
 
 * refs (1): 500CD
-OBJ_5028A:
+* -> : ARC: which way to step next in x and y (lams 2 and 3), from the side of the centre the pixel is on
+ArcStepDir:
         :: 8GETLAM 6GETLAM %= ITE                * 5028A
           :: 7GETLAM 5GETLAM %> ;                * 502A3
 
 * refs (1): 502EE
+* Part of ArcStepDir
 OBJ_502BC:
           :: 8GETLAM 6GETLAM %> ;                * 502BC
           2PUTLAM 7GETLAM 5GETLAM %= ITE OBJ_502BC * 502D5
@@ -428,11 +439,13 @@ OBJ_502BC:
         :: #+ #< ;                               * 50316
 
 * refs (4): 5009B 500F0 5010E 5011D
-OBJ_5032A:
+* %x %y -> %x %y %r2: the squared distance from the centre (lams 6 and 5)
+ArcR2:
         :: DUP 5GETLAM %- DUP %* 3PICK 6GETLAM %- DUP %* %+ ; * 5032A
 
 * refs (3): 50082 500C3 5019F
-OBJ_5036B:
+* -> : ARC: set the pixel at the current point, unless it is off the top or left
+ArcPixel:
         :: 8GETLAM %-.5 %< ?SEMI                 * 5036B
           7GETLAM %-.5 %< ?SEMI                  * 50384
           8GETLAM 7GETLAM COERCE2 PIXON3 ;       * 50398
@@ -556,8 +569,9 @@ getxpos.L3:
         GOVLNG  COERCE.L1                        * 50648
 
 * refs (2): 505E9 506B0
+* Probably: part of getxpos: convert with saved registers, the result into A
 SUB_5064F:
-        GOSBVL  SUB_2A0B1                        * 5064F
+        GOSBVL  POP2%%                           * 5064F
         R4=A                                     * 50656
         A=B     W                                * 50659
         R3=A                                     * 5065C
@@ -642,7 +656,7 @@ DRAWLINE#3:
 OutOfPICT(4s)?:
         CON(5)  (*)+5                            * 50785  primitive code object
         ASSEMBLE
-        GOSUB   SUB_508BF                        * 5078A
+        GOSUB   POP4#R                           * 5078A
         ST=0    2                                * 5078E
         ST=0    1                                * 50791
         A=A+A   A                                * 50794
@@ -753,7 +767,8 @@ OutOfPICT(4s)?.L13:
         GOVLNG  PushTLoop                        * 508B8
 
 * refs (2): 5078A 50B28
-SUB_508BF:
+* POP 4 #: R1 and R2 get the first pair, R3 and R4 the second; SAVPTR
+POP4#R:
         GOSBVL  POP2#                            * 508BF
         R4=C                                     * 508C6
         R3=A                                     * 508C9
@@ -839,7 +854,7 @@ LINEON.L1:
         ST=0    4                                * 50B22
 LINEON.L2:
         ST=0    5                                * 50B25
-        GOSUB   SUB_508BF                        * 50B28
+        GOSUB   POP4#R                           * 50B28
         A=R2                                     * 50B2C
         ST=0    2                                * 50B2F
         LC(5)   #7FFFF                           * 50B32
@@ -995,6 +1010,7 @@ LINEON.L27:
         GOVLNG  GETPTRLOOP                       * 50CD0
 
 * refs (1): 50BDD
+* Machine-code helper of LINEON: check against the grob's dimensions
 SUB_50CD7:
         C=DAT1  A                                * 50CD7
         D1=C                                     * 50CDA
@@ -1013,7 +1029,8 @@ SUB_50CD7:
         RPL
 
 * refs (3): 4B74C 4BCB5 4C4E5
-OBJ_50D02:
+* -> ob: the equation for the current loop INDEX
+EqIndexed:
         :: INDEX@ #1+ GetEqN NOTcase ERRJMP      * 50D02
         ;                                        * 50D20
 
@@ -1045,7 +1062,7 @@ LookForEQ/äDAT:
         :: StatPlotMo DUP ITE STATRCL EQUATION   * 50E04
           case2DROP RDROP                        * 50E22
           ITE LookForEQ/äDAT~2 LookForEQ/äDAT~1  * 50E2C
-          OBJ_6BC2D ;                            * 50E3B
+          EqwFlash ;                             * 50E3B
 
 * refs (1): 50E36
 LookForEQ/äDAT~1:
@@ -1077,6 +1094,7 @@ LookForEQ/äDAT~2:
         PC=(A)                                   * 50E90
 
 * refs (2): 50E6B 50EAA
+* Helper for !#1+IF<dim-1: get a pointer to a lam's value object
 SUB_50E94:
         C=DAT1  A                                * 50E94
         CD1EX                                    * 50E97
@@ -1101,11 +1119,12 @@ SUB_50E94:
         :: 3GETLAM #1= ;                         * 50EBB
 
 * refs (1): 3E76B
-{GRAPH\+/-}~1:
-        :: CHECKMENU OBJ_50EE3 ;                 * 50ECF
+~CHECKMENU;PictKey+/-:
+        :: CHECKMENU PictKey+/- ;                * 50ECF
 
 * refs (2): 4D8D0 50ED9
-OBJ_50EE3:
+* -> : PICTURE +/- key: toggle flag -32, the crosshair's colour
+PictKey+/-:
         :: TakeOver CROSSMARKOFF BINT32 ~BINT32;TestSysFlag ITE ClrSysFlag * 50EE3
           SetSysFlag                             * 50F06
           ~16GETLAM;#1= MENUOFF? OR ?SKIP DispMenu * 50F0B
@@ -1159,7 +1178,8 @@ StoInPPAR(7_):
         BSS     5                                * 5108A  zeros
 
 * refs (2): 4CEDD 4D961
-OBJ_5108F:
+* -> : leave PICTURE: run the exit program, unbind, and go on with what it left
+PictLeave:
         :: ClrDAsOK ExitFcn ABND COLA_EVAL ;     * 5108F
 
 * -> id
@@ -1204,10 +1224,11 @@ CHECKHEIGHT:
 
 * refs (16): 49F2E 49F6F 49FAB 4AC39 4AC6B 4ADB5 ...
 RclMaxStdPict:
-        :: GBUFFGROBDIM OBJ_5121F ;              * 5120B
+        :: GBUFFGROBDIM PICTMinSize ;            * 5120B
 
 * refs (2): 4B34B 51215
-OBJ_5121F:
+* #w #h -> #w' #h': raise the size to at least 131 x 64
+PICTMinSize:
         :: DUP BINT131 #< IT                     * 5121F
 
 drop;<83>:
@@ -1280,17 +1301,20 @@ PlotEval:
           0LASTOWDOB! CK1NOLASTWD U>nbr ;        * 513C3
 
 * refs (1): 4BD69
-OBJ_513D7:
-        :: OBJ_51427 NOT?SEMI                    * 513D7
+* symb -> symb' : CONIC: the branch with s1 = 1
+ConicBranch+:
+        :: FindS1 NOT?SEMI                       * 513D7
           %1 SWAP UNROLL ::N ;                   * 513E6
 
 * refs (1): 4BD73
-OBJ_513FF:
-        :: OBJ_51427 NOT?SEMI                    * 513FF
+* symb -> symb' : CONIC: the branch with s1 = -1
+ConicBranch-:
+        :: FindS1 NOT?SEMI                       * 513FF
           %-1 SWAP UNROLL ::N ;                  * 5140E
 
 * refs (2): 513DC 51404
-OBJ_51427:
+* symb -> symb #parts... TRUE | FALSE: find the name s1 in the expression (for substitution)
+FindS1:
         :: DUP'                                  * 51427
 
 s1:
@@ -1357,7 +1381,8 @@ BOTROW:
         :: TOPROW RclRowMenu #+ ;                * 515B4
 
 * refs (2): 4F912 4F93F
-OBJ_515CD:
+* hxs -> grob: retype the object in place
+HXS>GROB:
         CON(5)  (*)+5                            * 515CD  primitive code object
         ASSEMBLE
         GOSBVL  SAVPTR                           * 515D2
@@ -1500,9 +1525,10 @@ ORDERXY%:
         ;                                        * 518FC
 
 * refs (1): 4A8D8
-OBJ_51901:
-        :: 16PUTLAM 2SWAP RclMaxStdPict OBJ_4F2CD 5PUTLAM 9PUTLAM 6PUTLAM * 51901
-          10PUTLAM OBJ_4B9D6 ;                   * 51929
+* ... -> : store the plot's scale and offset in lams 10, 6, 9 and 5, and the units of the independent variable
+PlotLamScales:
+        :: 16PUTLAM 2SWAP RclMaxStdPict PlotScales 5PUTLAM 9PUTLAM 6PUTLAM * 51901
+          10PUTLAM IndepUnit! ;                  * 51929
         BSS     3                                * 51938  zeros
 
 * (Q%%1,%%0Q)
@@ -1552,7 +1578,7 @@ C%%>C%:
 * refs (17): 379D7 51DA1 51E5A 51EF0 520FD 52166 ...
 %%>C%:
         CON(5)  (*)+5                            * 51A07  primitive code object
-        GOSBVL  SUB_2A0B1                        * 51A0C
+        GOSBVL  POP2%%                           * 51A0C
 %%>C%.L1:
         R3=C                                     * 51A13
         GOSBVL  PACK                             * 51A16
@@ -1797,17 +1823,18 @@ axy=>(x/a,y/a):
 * % C% -> C%'
 * refs (2): 1AF1E 51F09
 C%R/C:
-        :: C%0=case C%R/C~1                      * 51E19
+        :: C%0=case ~?Undef/0;%MAXIMIZE;Re>C%    * 51E19
           C%>% 2DUP 2%>%%SQR 4UNROLL UNROTOVER _*(2r);r=>rr 3UNROLL * 51E28
           _*(2r);r=>rr %%CHS axy=>(x/a,y/a) %%>C% ; * 51E4B
 
 * C% % -> C%'
 * refs (1): 1AF28
 C%C/R:
-        :: %0=case OBJ_51FB3                     * 51E64
+        :: %0=case C%/0                          * 51E64
           SWAP C%>% UNROTOVER %/ 3UNROLL %/ %>C% ; * 51E73
 
 * refs (2): 51EDC 51F1D
+* Probably: prepare a complex division, by way of C%%R/C~1
 OBJ_51E9B:
         :: %%CHS                                 * 51E9B
 
@@ -1818,7 +1845,7 @@ C%%R/C~1:
 * C% C%' -> C%''
 * refs (1): 1AF32
 C%C/C:
-        :: C%0=case OBJ_51FB3                    * 51EC8
+        :: C%0=case C%/0                         * 51EC8
           C%>%% OBJ_51E9B C%>%% ãcplx(4rr) axy=>(x/a,y/a) %%>C% ; * 51ED7
 
 * C% -> 1/C%
@@ -1843,17 +1870,19 @@ C%%C/R:
         :: SWAP C%%>%% axy=>(x/a,y/a) %%>C%% ;   * 51F7C
 
 * refs (1): 51E23
-C%R/C~1:
-        :: OBJ_52017 %MAXIMIZE Re>C% ;           * 51F9A
+~?Undef/0;%MAXIMIZE;Re>C%:
+        :: ?Undef/0 %MAXIMIZE Re>C% ;            * 51F9A
 
 * refs (2): 51E6E 51ED2
-OBJ_51FB3:
-        :: OBJ_52017 C%>% %MAXIMIZE SWAP %MAXIMIZE SWAP%>C% ; * 51FB3
+* C% % -> C%': complex division by zero: Undefined Result for 0/0, else infinite result, ±MAXREAL for each part
+C%/0:
+        :: ?Undef/0 C%>% %MAXIMIZE SWAP %MAXIMIZE SWAP%>C% ; * 51FB3
 
 * refs (2): 521F7 522C9
-OBJ_51FDB:
-        :: OBJ_5203A DROP %-MAXREAL Re>C% ;      * 51FDB
+* C% -> C%': C%LN of 0: the infinite result -MAXREAL
+C%Ln0:
+        :: ?InfRes DROP %-MAXREAL Re>C% ;        * 51FDB
 
 * refs (1): 526DD
 C%ATAN~1:
-        :: OBJ_5203A C%>% %MAXIMIZE %>C% ;       * 51FF9
+        :: ?InfRes C%>% %MAXIMIZE %>C% ;         * 51FF9

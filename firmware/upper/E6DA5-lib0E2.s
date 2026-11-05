@@ -1,11 +1,13 @@
-* HP 48GX ROM revision R, #E6DA5-#E9E0E: Library part 0E2
+* HP 48GX ROM revision R, #E6DA5-#E9E0E: Equation Library text tables for Heat Transfer to Stress Analysis
 * Addresses in the right-hand comments are those of the original ROM.
+* Most referenced: EqTextStressAnalysis EqTextSolidStateDevices EqTextSolidGeometry EqTextPlaneGeometry EqTextOscillations EqTextOptics EqTextMotion EqTextMagnetism EqTextHeatTransfer
 * Follows on from the previous file (at #E6DA5 in the original ROM).
         ENDLENGTH                                * E6DA5
 
 * ROMPTR 0E2 009
 * refs (1): E3857
-ROMP_0E2_009:
+* Text of the subject Heat Transfer: first the titles of its equation sets, then the descriptions of its variables.
+EqTextHeatTransfer:
         CON(5)  DOARRY                           * E6DA5  array 54
         LENGTH                                   * E6DAA  length, to #E746A
         CON(5)  DOCSTR                           * E6DAF  element type
@@ -69,7 +71,8 @@ ROMP_0E2_009:
 
 * ROMPTR 0E2 00A
 * refs (1): E3857
-ROMP_0E2_00A:
+* Text of the subject Magnetism: first the titles of its equation sets, then the descriptions of its variables.
+EqTextMagnetism:
         CON(5)  DOARRY                           * E746A  array 25
         LENGTH                                   * E746F  length, to #E778E
         CON(5)  DOCSTR                           * E7474  element type
@@ -104,7 +107,8 @@ ROMP_0E2_00A:
 
 * ROMPTR 0E2 00B
 * refs (1): E3857
-ROMP_0E2_00B:
+* Text of the subject Motion: first the titles of its equation sets, then the descriptions of its variables.
+EqTextMotion:
         CON(5)  DOARRY                           * E778E  array 47
         LENGTH                                   * E7793  length, to #E7D84
         CON(5)  DOCSTR                           * E7798  element type
@@ -161,7 +165,8 @@ ROMP_0E2_00B:
 
 * ROMPTR 0E2 00C
 * refs (1): E3857
-ROMP_0E2_00C:
+* Text of the subject Optics: first the titles of its equation sets, then the descriptions of its variables.
+EqTextOptics:
         CON(5)  DOARRY                           * E7D84  array 34
         LENGTH                                   * E7D89  length, to #E8273
         CON(5)  DOCSTR                           * E7D8E  element type
@@ -205,7 +210,8 @@ ROMP_0E2_00C:
 
 * ROMPTR 0E2 00D
 * refs (1): E3857
-ROMP_0E2_00D:
+* Text of the subject Oscillations: first the titles of its equation sets, then the descriptions of its variables.
+EqTextOscillations:
         CON(5)  DOARRY                           * E8273  array 35
         LENGTH                                   * E8278  length, to #E8655
         CON(5)  DOCSTR                           * E827D  element type
@@ -250,7 +256,8 @@ ROMP_0E2_00D:
 
 * ROMPTR 0E2 00E
 * refs (1): E3857
-ROMP_0E2_00E:
+* Text of the subject Plane Geometry: first the titles of its equation sets, then the descriptions of its variables.
+EqTextPlaneGeometry:
         CON(5)  DOARRY                           * E8655  array 54
         LENGTH                                   * E865A  length, to #E8CC8
         CON(5)  DOCSTR                           * E865F  element type
@@ -314,7 +321,8 @@ ROMP_0E2_00E:
 
 * ROMPTR 0E2 00F
 * refs (1): E3857
-ROMP_0E2_00F:
+* Text of the subject Solid Geometry: first the titles of its equation sets, then the descriptions of its variables.
+EqTextSolidGeometry:
         CON(5)  DOARRY                           * E8CC8  array 29
         LENGTH                                   * E8CCD  length, to #E8FD2
         CON(5)  DOCSTR                           * E8CD2  element type
@@ -353,7 +361,8 @@ ROMP_0E2_00F:
 
 * ROMPTR 0E2 010
 * refs (1): E3857
-ROMP_0E2_010:
+* Text of the subject Solid State Devices: first the titles of its equation sets, then the descriptions of its variables.
+EqTextSolidStateDevices:
         CON(5)  DOARRY                           * E8FD2  array 75
         LENGTH                                   * E8FD7  length, to #E99DE
         CON(5)  DOCSTR                           * E8FDC  element type
@@ -438,7 +447,8 @@ ROMP_0E2_010:
 
 * ROMPTR 0E2 011
 * refs (1): E3857
-ROMP_0E2_011:
+* Text of the subject Stress Analysis: first the titles of its equation sets, then the descriptions of its variables.
+EqTextStressAnalysis:
         CON(5)  DOARRY                           * E99DE  array 36
         LENGTH                                   * E99E3  length, to #E9E0F
         CON(5)  DOCSTR                           * E99E8  element type

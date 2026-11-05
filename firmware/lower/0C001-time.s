@@ -1,28 +1,29 @@
-* HP 48GX ROM revision R, #0C001-#0E005: Clock and alarms
+* HP 48GX ROM revision R, #0C001-#0E005: Reading ROM covered by RAM, unit prefix lookup, array element fetch, some plot helpers, clock and date arithmetic, alarm handling
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: CkATTNcode CSRW5 D1=IRAM D0=IRAM CSLW5 HXDCW NewAlarm(li) DAY# rGETATELN WSLOGN ErrTime DATE
+* Most referenced: CkATTNcode CSRW5 D1=IRAM D0=IRAM CSLW5 HXDCW PutDigit NewAlarm(li) %>YMD Ticks>Midnight PopHxs13 MulAC
 * Follows on from the previous file (at #0C001 in the original ROM).
         LC(1)   #B                               * 0C001
         ?C<=A   P                                * 0C004
-        GOYES   SUB_0BF76.L1                     * 0C007
+        GOYES   RAMUncover.L1                    * 0C007
         LC(1)   #7                               * 0C009
-SUB_0BF76.L1:
+RAMUncover.L1:
         P=C     4                                * 0C00C
         P=P+1                                    * 0C010
         ST=1    0                                * 0C012
-        GOSUB   SUB_0BE2D                        * 0C015
+        GOSUB   ReconfigRAM                      * 0C015
         D1=(4)  #05DB                            * 0C019
         A=DAT1  A                                * 0C01F
         D1=D1+  5                                * 0C022
         C=DAT1  3                                * 0C025
         ST=C                                     * 0C029
         RTNCC                                    * 0C02B
-SUB_0BF76.L2:
+RAMUncover.L2:
         C=RSTK                                   * 0C02D
-        GOTO    SUB_0C033.L2                     * 0C02F
+        GOTO    RAMRestore.L2                    * 0C02F
 
 * refs (1): 0C15C
-SUB_0C033:
+* -> : undo RAMUncover: put the RAM back at its normal base from the values saved at #800E6, with the display corrected
+RAMRestore:
         D1=(5)  IRAM@                            * 0C033
         P=      4                                * 0C03A
         C=0     A                                * 0C03C
@@ -33,7 +34,7 @@ SUB_0C033:
         C=DAT1  A                                * 0C04D
         C=0     B                                * 0C050
         ?B=C    P                                * 0C053
-        GOYES   SUB_0C033.L1                     * 0C056
+        GOYES   RAMRestore.L1                    * 0C056
         P=C     4                                * 0C058
         CSL     A                                * 0C05C
         B=C     A                                * 0C05E
@@ -45,16 +46,16 @@ SUB_0C033:
         DAT1=A  A                                * 0C072
         D1=D1+  5                                * 0C075
         DAT1=C  3                                * 0C078
-        GOSUB   SUB_0BE2D                        * 0C07C
+        GOSUB   ReconfigRAM                      * 0C07C
         D1=(4)  #05DB                            * 0C080
         A=DAT1  A                                * 0C086
         D1=D1+  5                                * 0C089
         C=DAT1  3                                * 0C08C
         ST=C                                     * 0C090
         RTNCC                                    * 0C092
-SUB_0C033.L1:
+RAMRestore.L1:
         CSL     A                                * 0C094
-SUB_0C033.L2:
+RAMRestore.L2:
         B=C     A                                * 0C096
         D1=(5)  IRAM@                            * 0C098
         C=0     A                                * 0C09F
@@ -74,16 +75,16 @@ SUB_0C033.L2:
         DAT1=C  1                                * 0C0CC
         P=C     4                                * 0C0D0
         ?P#     8                                * 0C0D4
-        GOYES   SUB_0C033.L3                     * 0C0D7
+        GOYES   RAMRestore.L3                    * 0C0D7
         P=      0                                * 0C0D9
         D1=(4)  #000A                            * 0C0DB
         C=DAT1  A                                * 0C0E1
         D1=(4)  #065A                            * 0C0E4
         ?B#C    A                                * 0C0EA
-        GOYES   SUB_0C033.L3                     * 0C0ED
+        GOYES   RAMRestore.L3                    * 0C0ED
         C=C+1   A                                * 0C0EF
         DAT1=C  1                                * 0C0F1
-SUB_0C033.L3:
+RAMRestore.L3:
         P=      0                                * 0C0F5
         D1=(4)  #0005                            * 0C0F7
         C=DAT1  A                                * 0C0FD
@@ -92,35 +93,36 @@ SUB_0C033.L3:
         RTNCC                                    * 0C105
         LC(5)   #00100                           * 0C107
         A=C     A                                * 0C10E
-        GOTO    SUB_0C11B.L1                     * 0C110
+        GOTO    CoveredRead.L1                   * 0C110
         LC(5)   #00100                           * 0C114
 
 * refs (1): 0C1F8
-SUB_0C11B:
+* C.A = nibbles (at most #100), D0 = source -> : copy from ROM that RAM normally covers into IRAMBUFF: RAM is moved away, the block is copied and RAM is put back. Larger counts return at once
+CoveredRead:
         SETHEX                                   * 0C11B
         P=      0                                * 0C11D
         A=C     A                                * 0C11F
         LC(5)   #00100                           * 0C121
         ?C<A    A                                * 0C128
         RTNYES                                   * 0C12B
-        GOSUB   SUB_0BF76                        * 0C12D
-SUB_0C11B.L1:
+        GOSUB   RAMUncover                       * 0C12D
+CoveredRead.L1:
         LC(5)   IRAMBUFF                         * 0C131
         C=C+A   A                                * 0C138
         D1=C                                     * 0C13A
-        GOSUB   SUB_0C11B.L3                     * 0C13D
-        GOTO    SUB_0C11B.L2                     * 0C141
+        GOSUB   CoveredRead.L3                   * 0C13D
+        GOTO    CoveredRead.L2                   * 0C141
         NIBHEX  006410                           * 0C145  .F.
-SUB_0C11B.L2:
+CoveredRead.L2:
         CD0EX                                    * 0C14B
         C=C+A   A                                * 0C14E
         D0=C                                     * 0C150
         C=A     A                                * 0C153
         GOSBVL  MOVEUP                           * 0C155
-        GOSUB   SUB_0C033                        * 0C15C
+        GOSUB   RAMRestore                       * 0C15C
         GOSBVL  AllowIntr                        * 0C160
         RTNCC                                    * 0C167
-SUB_0C11B.L3:
+CoveredRead.L3:
         RSTK=C                                   * 0C169
         CD1EX                                    * 0C16B
         CPEX    4                                * 0C16E
@@ -152,14 +154,16 @@ D0=IRAM:
         RTN                                      * 0C1B4
 
 * refs (3): 008DF 01ABD 80EBC
-SUB_0C1B6:
+* -> A.A = D1 with the IRAM base: only its high nibble counts, D1=(4) then picks a variable. Clobbers A, not C
+AD1=IRAM:
         D1=(5)  =IR_16Hz_Clock                   * 0C1B6
         A=DAT1  A                                * 0C1BD
         D1=A                                     * 0C1C0
         RTN                                      * 0C1C3
 
 * refs (2): 01C31 01C58
-SUB_0C1C5:
+* -> A.A = D0 with the IRAM base, as AD1=IRAM
+AD0=IRAM:
         D0=(5)  =IR_16Hz_Clock                   * 0C1C5
         A=DAT0  A                                * 0C1CC
         D0=A                                     * 0C1CF
@@ -173,39 +177,40 @@ SUB_0C1C5:
         P=      0                                * 0C1F0
         C=0     A                                * 0C1F2
         LC(2)   #0C                              * 0C1F4
-        GOSUB   SUB_0C11B                        * 0C1F8
+        GOSUB   CoveredRead                      * 0C1F8
         D1=(4)  #00F5                            * 0C1FC
         RTN                                      * 0C202
         RPL
 
 * refs (1): 6E91A
-OBJ_0C204:
+EqwBackspace~8:
         :: palparse NOTcase2drop DROPFALSE       * 0C204
-          OBJ_26BED NOTcasedrop TRUE             * 0C218
+          FnInfo NOTcasedrop TRUE                * 0C218
           3DROP FALSE ;                          * 0C227
         BSS     22                               * 0C236
 
 * refs (2): 0FE9E 0FF7F
-U>NCQ~5:
+* $ # -> %%factor: the power of ten of the SI prefix in level 1, from the table inside the units table
+SIPrefix>%%:
         CON(5)  (*)+5                            * 0C24C  primitive code object
         ASSEMBLE
         D1=D1+  5                                * 0C251
         D=D+1   A                                * 0C254
         GOSUB   SAVPTR~jump_3                    * 0C256
-        GOSUB   SUB_0C2C2                        * 0C25A
+        GOSUB   D0=SITable                       * 0C25A
         D0=D0+  12                               * 0C25E
         D1=D1-  5                                * 0C261
         A=DAT1  A                                * 0C264
         D1=A                                     * 0C267
         D1=D1+  5                                * 0C26A
         A=DAT1  B                                * 0C26D
-U>NCQ~5.loop1:
+SIPrefix>%%.loop1:
         C=DAT0  B                                * 0C270
         ?C=A    B                                * 0C273
-        GOYES   U>NCQ~5.L2                       * 0C276
+        GOYES   SIPrefix>%%.L2                   * 0C276
         D0=D0+  4                                * 0C278
-        GONC    U>NCQ~5.loop1                    * 0C27B
-U>NCQ~5.L2:
+        GONC    SIPrefix>%%.loop1                * 0C27B
+SIPrefix>%%.L2:
         B=0     W                                * 0C27E
         P=      14                               * 0C281
         B=B+1   P                                * 0C283
@@ -215,12 +220,12 @@ U>NCQ~5.L2:
         SETDEC                                   * 0C28F
         A=A+A   B                                * 0C291
         A=0     A                                * 0C294
-        GONC    U>NCQ~5.L3                       * 0C296
+        GONC    SIPrefix>%%.L3                   * 0C296
         A=A-1   A                                * 0C299
-U>NCQ~5.L3:
+SIPrefix>%%.L3:
         A=C     B                                * 0C29B
         A=0     S                                * 0C29E
-        GOSBVL  SUB_2A24B                        * 0C2A1
+        GOSBVL  PUSH%%                           * 0C2A1
         A=DAT0  A                                * 0C2A8
         D0=D0+  5                                * 0C2AB
         PC=(A)                                   * 0C2AE
@@ -235,16 +240,18 @@ SAVPTR~jump_3:
         GOVLNG  SAVPTR                           * 0C2BB
 
 * refs (2): 0C25A 0C2D6
-SUB_0C2C2:
-        D0=(5)  U.arcmin.L1                      * 0C2C2
+* -> D0 at the data before the SI prefix table, hex mode
+D0=SITable:
+        D0=(5)  D0=SITable~1                     * 0C2C2
         SETHEX                                   * 0C2C9
         RTN                                      * 0C2CB
 
 * refs (2): 0F09D 0FF70
-OBJ_0C2CD:
+* $ -> $ flag: TRUE if its character is one of the SI prefixes (count at table +10)
+SIPrefix?:
         CON(5)  (*)+5                            * 0C2CD  primitive code object
         GOSUB   SAVPTR~jump_3                    * 0C2D2
-        GOSUB   SUB_0C2C2                        * 0C2D6
+        GOSUB   D0=SITable                       * 0C2D6
         D0=D0+  10                               * 0C2DA
         A=DAT0  B                                * 0C2DD
         B=A     B                                * 0C2E0
@@ -253,19 +260,19 @@ OBJ_0C2CD:
         D1=A                                     * 0C2E9
         D1=D1+  5                                * 0C2EC
         A=DAT1  B                                * 0C2EF
-OBJ_0C2CD.loop1:
+SIPrefix?.loop1:
         C=DAT0  B                                * 0C2F2
         ?C#A    B                                * 0C2F5
-        GOYES   OBJ_0C2CD.L2                     * 0C2F8
+        GOYES   SIPrefix?.L2                     * 0C2F8
         GOTO    dup;stdunit(st)?.L3              * 0C2FA
-OBJ_0C2CD.L2:
+SIPrefix?.L2:
         B=B-1   B                                * 0C2FE
-        GONC    OBJ_0C2CD.L3                     * 0C301
+        GONC    SIPrefix?.L3                     * 0C301
         GOTO    dup;stdunit(st)?.L2              * 0C304
-OBJ_0C2CD.L3:
+SIPrefix?.L3:
         D=C     A                                * 0C308
         D0=D0+  4                                * 0C30A
-        GONC    OBJ_0C2CD.loop1                  * 0C30D  always taken
+        GONC    SIPrefix?.loop1                  * 0C30D  always taken
 
 * refs (2): 0F084 0F0B6
 dup;stdunit(st)?:
@@ -316,10 +323,11 @@ dup;stdunit(st)?.L2:
         PC=(A)                                   * 0C397
 dup;stdunit(st)?.L3:
         GOSUB   SUB_0C2B2                        * 0C39B
-        GOTO    U>NCQ~6.L10                      * 0C39F
+        GOTO    Unit$>Ob.L10                     * 0C39F
 
 * refs (1): 0FEF8
-U>NCQ~6:
+* $ -> ob %% TRUE, or FALSE: look a unit name up in the built-in units table by the length of the name
+Unit$>Ob:
         CON(5)  (*)+5                            * 0C3A3  primitive code object
         GOSUB   SAVPTR~jump_3                    * 0C3A8
         D0=(5)  MsgTab(5).L1                     * 0C3AC
@@ -346,23 +354,23 @@ U>NCQ~6:
         C=0     A                                * 0C3F1
         C=DAT0  4                                * 0C3F3
         A=R2                                     * 0C3F7
-U>NCQ~6.loop1:
+Unit$>Ob.loop1:
         ?C#0    A                                * 0C3FA
-        GOYES   U>NCQ~6.L2                       * 0C3FD
+        GOYES   Unit$>Ob.L2                      * 0C3FD
         GOTO    dup;stdunit(st)?.L2              * 0C3FF
-U>NCQ~6.L2:
+Unit$>Ob.L2:
         D=C     A                                * 0C403
         CD0EX                                    * 0C405
         C=C+D   A                                * 0C408
         D0=C                                     * 0C40A
         C=DAT0  WP                               * 0C40D
         ?C=A    WP                               * 0C411
-        GOYES   U>NCQ~6.L3                       * 0C414
+        GOYES   Unit$>Ob.L3                      * 0C414
         D0=D0-  2                                * 0C416
         C=0     A                                * 0C419
         C=DAT0  B                                * 0C41B
-        GONC    U>NCQ~6.loop1                    * 0C41E
-U>NCQ~6.L3:
+        GONC    Unit$>Ob.loop1                   * 0C41E
+Unit$>Ob.L3:
         CD0EX                                    * 0C421
         C+P+1                                    * 0C424
         SETHEX                                   * 0C427
@@ -370,54 +378,54 @@ U>NCQ~6.L3:
         C=DAT1  S                                * 0C42C
         D1=D1+  1                                * 0C430
         C=C-1   S                                * 0C433
-        GOC     U>NCQ~6.L4                       * 0C436
+        GOC     Unit$>Ob.L4                      * 0C436
         P=C     15                               * 0C439
         A=0     W                                * 0C43D
         A=DAT1  WP                               * 0C440
         CD1EX                                    * 0C444
         C+P+1                                    * 0C447
         R1=C                                     * 0C44A
-        GOSBVL  SUB_10CDB                        * 0C44D
-        GONC    U>NCQ~6.L5                       * 0C454
-U>NCQ~6.L4:
+        GOSBVL  Dims>Array                       * 0C44D
+        GONC    Unit$>Ob.L5                      * 0C454
+Unit$>Ob.L4:
         A=DAT1  A                                * 0C457
         D1=D1+  5                                * 0C45A
         CD1EX                                    * 0C45D
         R1=C                                     * 0C460
         GOSUB   SUB_0C2B2                        * 0C463
-U>NCQ~6.L5:
+Unit$>Ob.L5:
         DAT1=A  A                                * 0C467
         C=R1                                     * 0C46A
         D0=C                                     * 0C46D
         C=DAT0  S                                * 0C470
         D0=D0+  1                                * 0C474
         C=C-1   S                                * 0C477
-        GOC     U>NCQ~6.L9                       * 0C47A
+        GOC     Unit$>Ob.L9                      * 0C47A
         C=DAT0  B                                * 0C47D
         B=C     B                                * 0C480
         SETDEC                                   * 0C483
         B=B+B   B                                * 0C485
         B=0     A                                * 0C488
-        GONC    U>NCQ~6.L6                       * 0C48A
+        GONC    Unit$>Ob.L6                      * 0C48A
         B=B-1   A                                * 0C48D
-U>NCQ~6.L6:
+Unit$>Ob.L6:
         B=C     B                                * 0C48F
         D0=D0+  2                                * 0C492
         P=C     15                               * 0C495
         A=DAT0  WP                               * 0C499
         P=P+1                                    * 0C49D
-U>NCQ~6.loop7:
+Unit$>Ob.loop7:
         P=P+1                                    * 0C49F
-        GOC     U>NCQ~6.L8                       * 0C4A1
+        GOC     Unit$>Ob.L8                      * 0C4A1
         ASL     W                                * 0C4A4
-        GONC    U>NCQ~6.loop7                    * 0C4A7
-U>NCQ~6.L8:
+        GONC    Unit$>Ob.loop7                   * 0C4A7
+Unit$>Ob.L8:
         B=0     S                                * 0C4AA
         A=0     S                                * 0C4AD
         ABEX    W                                * 0C4B0
-        GOSBVL  SUB_2A24B                        * 0C4B3
-        GOTO    U>NCQ~6.L10                      * 0C4BA
-U>NCQ~6.L9:
+        GOSBVL  PUSH%%                           * 0C4B3
+        GOTO    Unit$>Ob.L10                     * 0C4BA
+Unit$>Ob.L9:
         A=DAT0  A                                * 0C4BE
         R1=A                                     * 0C4C1
         A=0     A                                * 0C4C4
@@ -425,7 +433,7 @@ U>NCQ~6.L9:
         GOSBVL  PUSH#                            * 0C4C9
         A=R1                                     * 0C4D0
         DAT1=A  A                                * 0C4D3
-U>NCQ~6.L10:
+Unit$>Ob.L10:
         LC(5)   TRUE                             * 0C4D6
         A=C     A                                * 0C4DD
         PC=(A)                                   * 0C4DF
@@ -433,8 +441,8 @@ U>NCQ~6.L10:
 
 * refs (16): 69512 69DB6 69E06 69E42 6A019 6A055 ...
 * Probably: EquationWriter: -> #n, slots in use (VIEWLEVEL - EqPtr)
-OBJ_0C4E3:
-        :: OBJ_673E6 OBJ_673D6 #- ;              * 0C4E3
+~EqwStkSize@;EqwStkFree@;#-:
+        :: EqwStkSize@ EqwStkFree@ #- ;          * 0C4E3
         BSS     5                                * 0C4FC  zeros
 
 * #i [] -> ob T -> F
@@ -448,12 +456,14 @@ rGETATELN:
         ASSEMBLE
 
 * refs (2): 0C5BC 0C5E3
+* C.A = address -> : jump to it through RSTK: calls a library's access handler
 SUB_0C50B:
         RSTK=C                                   * 0C50B
         RTN                                      * 0C50D
+* Fetch one element of an array, which may lie in covered ROM (ST4): R1 = array, R0 = index; FALSE if out of range, otherwise copy the element to TEMPOB
 SUB_0C50B.L1:
         C=R1                                     * 0C50F
-        GOSBVL  SUB_037F5                        * 0C512
+        GOSBVL  ArrayType                        * 0C512
         R2=A                                     * 0C519
         C=R1                                     * 0C51C
         D1=C                                     * 0C51F
@@ -465,7 +475,7 @@ SUB_0C50B.L1:
         GOYES   SUB_0C50B.L2                     * 0C534
         A=C     A                                * 0C536
         C=R1                                     * 0C538
-        GOSBVL  SUB_038A0                        * 0C53B
+        GOSBVL  ArrayElAddr                      * 0C53B
         ?ST=0   3                                * 0C542
         GOYES   SUB_0C50B.L4                     * 0C545
         A=DAT0  A                                * 0C547
@@ -483,7 +493,7 @@ SUB_0C50B.L4:
         D0=A                                     * 0C565
         B=A     A                                * 0C568
         A=R2                                     * 0C56A
-        GOSBVL  SUB_03012                        * 0C56D
+        GOSBVL  SKIPOBA                          * 0C56D
         AD0EX                                    * 0C574
         D0=A                                     * 0C577
         A=A-B   A                                * 0C57A
@@ -532,103 +542,105 @@ SUB_0C50B.L9:
         A=DAT0  A                                * 0C60B
         D0=D0+  5                                * 0C60E
         PC=(A)                                   * 0C611
-        GOSUBL  SUB_0BF76                        * 0C615
+        GOSUBL  RAMUncover                       * 0C615
         GOVLNG  AllowIntr                        * 0C61B
         RPL
 
 * refs (1): 8CA39
 OBJ_0C622:
-        :: BINT3 EQcasedrop OBJ_7395E            * 0C622
-          BINT4 EQcasedrop OBJ_7399A             * 0C636
+        :: BINT3 EQcasedrop PictNextEq           * 0C622
+          BINT4 EQcasedrop PictPrevEq            * 0C636
           15GETLAM DUP 21GETLAM 4ROLL DUP#0=ITE 2DROP * 0C645
 
 * refs (1): 0C6FE
 OBJ_0C663:
           :: #1= ITE %+ %-                       * 0C663
           ;                                      * 0C67C
-          OBJ_46955 NOTcase OBJ_46C1B            * 0C681
-          DUPTYPEREAL? NOTcasedrop OBJ_46C1B     * 0C690
-          DUP ~BINT25;PUTLAM 15GETLAM %POL>%REC OBJ_46C43 ; * 0C69F
+          PlotEvalAt NOTcase TraceUndefPolar     * 0C681
+          DUPTYPEREAL? NOTcasedrop TraceUndefPolar * 0C690
+          DUP ~BINT25;PUTLAM 15GETLAM %POL>%REC TraceCursorTo ; * 0C69F
 
 * refs (1): 8CB7D
 OBJ_0C6BD:
-        :: BINT3 EQcasedrop OBJ_7395E            * 0C6BD
-          BINT4 EQcasedrop OBJ_7399A             * 0C6D1
-          15GETLAM DUP 21GETLAM 4ROLL DUP#0=ITE 2DROP OBJ_0C663 OBJ_46955 * 0C6E0
+        :: BINT3 EQcasedrop PictNextEq           * 0C6BD
+          BINT4 EQcasedrop PictPrevEq            * 0C6D1
+          15GETLAM DUP 21GETLAM 4ROLL DUP#0=ITE 2DROP OBJ_0C663 PlotEvalAt * 0C6E0
           ITE                                    * 0C708
-          :: DUP ~BINT25;PUTLAM ; OBJ_46C7A      * 0C70D
-          DUPTYPECMP? NOTcasedrop OBJ_46C7A      * 0C726
-          C%>% OBJ_46C43 ;                       * 0C735
+          :: DUP ~BINT25;PUTLAM ; TraceUndef     * 0C70D
+          DUPTYPECMP? NOTcasedrop TraceUndef     * 0C726
+          C%>% TraceCursorTo ;                   * 0C735
 
         :: 1GETLAM TYPEBINT? ;                   * 0C744
 
 * refs (1): 4B487
-OBJ_0C758:
-        :: OBJ_6F595 #1<> FALSE GOTO OBJ_6F85B.L1 ; * 0C758
+EqwRepUp~1:
+        :: OBJ_6F595 #1<> FALSE GOTO EqwRepUp~2 ; * 0C758
 
 * refs (1): 734E0
-OBJ_0C77B:
-        :: OBJ_0C7C6 NOTcase NULL$               * 0C77B
+PictMenu4~2:
+        :: ScatterOK? NOTcase NULL$              * 0C77B
 
 _STATL_:
           $ "STATL" ;                            * 0C78F
 
 * refs (1): 734F4
-OBJ_0C7A8:
-        :: OBJ_0C7C6 NOTcase DoBadKey            * 0C7A8
-          OBJ_48FB8 ;                            * 0C7BC
+PictMenu4~3:
+        :: ScatterOK? NOTcase DoBadKey           * 0C7A8
+          PlotStatFit ;                          * 0C7BC
 
 * refs (2): 0C780 0C7AD
-OBJ_0C7C6:
+* -> flag: TRUE if the plot type is SCATTER and ΣDAT exists
+ScatterOK?:
         :: GETPTYPE 'IDSCATTER EQUAL NOTcaseFALSE Exist@äDAT? * 0C7C6
           NOTcaseFALSE DROPTRUE                  * 0C7E4
         ;                                        * 0C7EE
 
 * refs (2): 0C81B 4BF67
 OBJ_0C7F3:
-        :: ' OBJ_47209 ' OBJ_47236 ;             * 0C7F3
+        :: ' ShowCoordX ' ShowCoordY ;           * 0C7F3
 
 * refs (2): 4D4DE 4D5CE
-OBJ_0C811:
+GraphLoop~6:
         :: NOT?SEMI                              * 0C811
           OBJ_0C7F3 SWAP ;                       * 0C81B
 
-        :: TakeOver OBJ_470E9 ~16GETLAM;#1= IT   * 0C82A
-          :: OBJ_47209 OBJ_47236 ;               * 0C843
+        :: TakeOver CursLeft ~16GETLAM;#1= IT    * 0C82A
+          :: ShowCoordX ShowCoordY ;             * 0C843
           BINT16 REPKEY? NOT?SEMI                * 0C857
           ~16GETLAM;#1= NOTcase                  * 0C866
           :: BEGIN BINT16 REPKEY? WHILE          * 0C870
-            :: OBJ_470E9 ; REPEAT ;              * 0C889
+            :: CursLeft ; REPEAT ;               * 0C889
           BEGIN BINT16 REPKEY? WHILE             * 0C8A2
           ::                                     * 0C8B6
-            :: OBJ_470E9 OBJ_47209 ; ;           * 0C8BB
+            :: CursLeft ShowCoordX ; ;           * 0C8BB
           REPEAT ;                               * 0C8D4
 
-        :: #1=case OBJ_4DDE6                     * 0C8DE
-          OBJ_4DDAF ;                            * 0C8ED
+        :: #1=case PlainCursRight                * 0C8DE
+          PlainCursLeft ;                        * 0C8ED
 
 * refs (1): 0C988
-OBJ_0C8F7:
-        :: CHECKMENU ~BINT0;3PUTLAM OBJ_48305 ' OBJ_47D93 InitMenu DispMenu ; * 0C8F7
+GraphZoomMenu~2:
+        :: CHECKMENU ~BINT0;3PUTLAM BoxToggle ' GraphZoomMenu InitMenu * 0C8F7
+          DispMenu ;                             * 0C91A
 
 * refs (1): 47DFA
-OBJ_0C924:
-        :: CHECKMENU CURRENTMARK? IT OBJ_48288   * 0C924
+GraphZoomMenu~1:
+        :: CHECKMENU CURRENTMARK? IT BoxClrMark  * 0C924
           BINT3 3PUTLAM ~8GETLAM;7GETLAM 12PUTLAM 2PUTLAM * 0C93D
-          { OBJ_456C2 OBJ_456C2 OBJ_456C2 OBJ_456C2 * 0C956
+          { {GRAPH\BLANK} {GRAPH\BLANK} {GRAPH\BLANK} {GRAPH\BLANK} * 0C956
 
 {CANCEL}:
             {                                    * 0C96F
 
 _CANCL_:
-              $ "(AN(L" OBJ_0C8F7 }              * 0C974
+              $ "(AN(L" GraphZoomMenu~2 }        * 0C974
 
 {ZOOM}:
             {                                    * 0C992
 
 _ZOOM_:
               $ "ZOOM"                           * 0C997
-              :: CHECKMENU PPAR>ZPAR 2GETLAM 12GETLAM OBJ_4E799 ; } * 0C9A9
+              :: CHECKMENU PPAR>ZPAR 2GETLAM 12GETLAM ZoomToBox ; } * 0C9A9
           }                                      * 0C9D1
           InitMenu DispMenu.1 OBJ_4EE6F CROSS_OFF ~8GETLAM;7GETLAM PIXON3 * 0C9D6
           CROSS_HAIRS ;                          * 0C9F4
@@ -648,7 +660,7 @@ _ZOOM_:
         C=DAT1  B                                * 0CA40
         DAT0=C  B                                * 0CA43
         D0=D0-  2                                * 0CA46
-        GOVLNG  SUB_099C0.L4                     * 0CA49
+        GOVLNG  ConfigIfID.L4                    * 0CA49
         BSS     16                               * 0CA50
 
 * ATTN exit check with restoreiram
@@ -697,11 +709,12 @@ LIB00D:
 
 * refs (1): 0CAC0
 LIB00D.config:
-        :: OBJ_0CAF5 IT OBJ_0CB16                * 0CAD7
+        :: Alarms? IT OBJ_0CB16                  * 0CAD7
           OBJ_0CB48 ;                            * 0CAEB
 
 * refs (1): 0CADC
-OBJ_0CAF5:
+* -> flag: TRUE if ALARMS points at a list
+Alarms?:
         CON(5)  (*)+5                            * 0CAF5  primitive code object
         ASSEMBLE
         CD0EX                                    * 0CAFA
@@ -709,8 +722,8 @@ OBJ_0CAF5:
         A=DAT0  A                                * 0CB04
         CD0EX                                    * 0CB07
         ?A=0    A                                * 0CB0A
-        GOYES   OBJ_0CAF5.L1                     * 0CB0D
-OBJ_0CAF5.L1:
+        GOYES   Alarms?.L1                       * 0CB0D
+Alarms?.L1:
         GOVLNG  PushT/FLoop                      * 0CB0F
         RPL
 
@@ -720,23 +733,24 @@ OBJ_0CB16:
 
 DelAlarms:
           :: NULL{} NewAlarm(li) ;               * 0CB25
-          OBJ_0E219 DROP ;                       * 0CB39
+          ALARMS! DROP ;                         * 0CB39
 
 * refs (1): 0CAEB
 OBJ_0CB48:
         :: RclAlarms? NOTcase TRM?               * 0CB48
           ALARMS@ EQ NOTcase TRM?                * 0CB5C
-          OBJ_0CB84 case TRM?                    * 0CB70
+          AlarmListOK? case TRM?                 * 0CB70
         ;                                        * 0CB7F
 
 * refs (1): 0CB70
-OBJ_0CB84:
+* -> flag: code object: CkAlarmList on the list at ALARMS
+AlarmListOK?:
         CON(5)  (*)+5                            * 0CB84  primitive code object
         ASSEMBLE
         GOSBVL  SAVPTR                           * 0CB89
-        GOSBVL  SUB_0E89C                        * 0CB90
+        GOSBVL  CkAlarmList                      * 0CB90
         GOSBVL  GETPTR                           * 0CB97
-        GOTO    OBJ_0CAF5.L1                     * 0CB9E
+        GOTO    Alarms?.L1                       * 0CB9E
 
 * refs (3): 0CB57 0CB6B 0CB7A
 TRM?:
@@ -781,7 +795,7 @@ TOD:
         CON(5)  (*)+5                            * 0CBFA  primitive code object
         GOSUB   SavPtrTime*~jump                 * 0CBFF
 TOD.L1:
-        GOSBVL  SUB_0DA87                        * 0CC03
+        GOSBVL  TicksOfDay>%                     * 0CC03
         GOTO    DATE.L2                          * 0CC0A
 
 * -> %date
@@ -790,7 +804,7 @@ DATE:
         CON(5)  (*)+5                            * 0CC0E  primitive code object
         GOSUB   SavPtrTime*~jump                 * 0CC13
 DATE.L1:
-        GOSBVL  SUB_0DB7B                        * 0CC17
+        GOSBVL  Ticks>Days                       * 0CC17
         GOSUB   CLKUTL1~jump                     * 0CC1E
         ?A=0    W                                * 0CC22
         GOYES   DATE.L2                          * 0CC25
@@ -807,7 +821,7 @@ DDAYS:
         B=C     A                                * 0CC45
         GOSUB   CLKUTL1~jump                     * 0CC47
         C=B     A                                * 0CC4B
-        GOSBVL  SUB_0D6FD                        * 0CC4D
+        GOSBVL  DDaysAC                          * 0CC4D
         GONC    DATE.L2                          * 0CC54
         GOTO    date+(r,n).L3                    * 0CC57
         RPL
@@ -815,7 +829,7 @@ DDAYS:
 * %date %days -> %date'
 * refs (1): 199E1
 DATE+DAYS:
-        :: # 1 OBJ_2B551 date+(r,n) ;            * 0CC5B
+        :: # 1 %RND# date+(r,n) ;                * 0CC5B
 
 * refs (1): 0CC6F
 date+(r,n):
@@ -849,7 +863,7 @@ date+(r,n).loop1:
 date+(r,n).L2:
         R1=C                                     * 0CCD2
         A=R0                                     * 0CCD5
-        GOSBVL  SUB_0D36C                        * 0CCD8
+        GOSBVL  %>YMD                            * 0CCD8
         GONC    date+(r,n).L5                    * 0CCDF
 date+(r,n).L3:
         GOVLNG  NOALARMERR.L1                    * 0CCE2
@@ -876,24 +890,24 @@ date+(r,n).L5:
 * %date ->
 * refs (2): 198AD B6FD2
 >DATE:
-        :: ->date!(r) OBJ_0E164 ;                * 0CD2B
+        :: ->date!(r) AlarmUpdate ;              * 0CD2B
 
 * %time ->
 * refs (1): 198ED
 CLKADJ:
-        :: clkadj!(r) OBJ_0E164 ;                * 0CD3F
+        :: clkadj!(r) AlarmUpdate ;              * 0CD3F
 
 * %time ->
 * refs (2): 198CD B6EEB
 >TIME:
-        :: ->time!(r) OBJ_0E164 ;                * 0CD53
+        :: ->time!(r) AlarmUpdate ;              * 0CD53
 
 * refs (1): 0CD30
 ->date!(r):
         CON(5)  (*)+5                            * 0CD67  primitive code object
         ASSEMBLE
         GOSBVL  POPDATE%                         * 0CD6C
-        GOSBVL  SUB_0DB0B                        * 0CD73
+        GOSBVL  DateRange?                       * 0CD73
         GONC    ->date!(r).L1                    * 0CD7A
         GOTO    date+(r,n).L3                    * 0CD7D
 ->date!(r).L1:
@@ -901,7 +915,7 @@ CLKADJ:
         R2=C                                     * 0CD88
         ST=0    15                               * 0CD8B
         GOSBVL  GetTimChk                        * 0CD8E
-        GOSBVL  SUB_0DB6C                        * 0CD95
+        GOSBVL  Ticks>Midnight                   * 0CD95
         C=R2                                     * 0CD9C
         C=C+B   W                                * 0CD9F
         GOTO    clkadj!(r).L4                    * 0CDA2
@@ -913,7 +927,7 @@ CLKADJ:
         GOSBVL  POPTIME%                         * 0CDAE
         R0=A                                     * 0CDB5
         GOSBVL  GetTimChk                        * 0CDB8
-        GOSBVL  SUB_0DB6C                        * 0CDBF
+        GOSBVL  Ticks>Midnight                   * 0CDBF
         C=R0                                     * 0CDC6
         C=C+A   W                                * 0CDC9
         GOTO    clkadj!(r).L4                    * 0CDCC
@@ -923,7 +937,7 @@ a/pm!:
         GOSUB   SAVPTR~jump_4                    * 0CDD5
         ST=0    15                               * 0CDD9
         GOSBVL  GetTimChk                        * 0CDDC
-        GOSBVL  SUB_0DB6C                        * 0CDE3
+        GOSBVL  Ticks>Midnight                   * 0CDE3
         C=0     W                                * 0CDEA
         LC(8)   #15180000                        * 0CDED
         ?B<C    W                                * 0CDF7
@@ -978,12 +992,12 @@ clkadj!(r).L4:
         DCEX    W                                * 0CE80
         R1=C                                     * 0CE83
         DCEX    W                                * 0CE86
-        GOSBVL  SUB_0EA58                        * 0CE89
-        GOSBVL  SUB_0D877                        * 0CE90
+        GOSBVL  MarkPastDue                      * 0CE89
+        GOSBVL  ClkOn>ST0                        * 0CE90
         C=R1                                     * 0CE97
         D=C     W                                * 0CE9A
         C=R0                                     * 0CE9D
-        GOSBVL  SUB_01496                        * 0CEA0
+        GOSBVL  SetT2WakeC                       * 0CEA0
 clkadj!(r).L5:
         GOSBVL  AllowIntr                        * 0CEA7
         P=      0                                * 0CEAE
@@ -996,28 +1010,30 @@ clkadj!(r).L5:
         A=0     A                                * 0CEC9
         C=DAT1  1                                * 0CECB
         ?CBIT=0 3                                * 0CECF
-        GOYES   OBJ_0CEEA.L1                     * 0CED4
-        GONC    OBJ_0CED9.L1                     * 0CED6
+        GOYES   ClkOff.L1                        * 0CED4
+        GONC    ClkOn.L1                         * 0CED6
 
 * refs (1): 048E5
-OBJ_0CED9:
+* -> : set ClkOnNib to F and reprogram TIMER2, so the clock in the status area ticks
+ClkOn:
         CON(5)  (*)+5                            * 0CED9  primitive code object
         GOSUB   SAVPTR~jump_4                    * 0CEDE
         A=0     A                                * 0CEE2
-OBJ_0CED9.L1:
+ClkOn.L1:
         A=A-1   A                                * 0CEE4
-        GOTO    OBJ_0CEEA.L1                     * 0CEE6
+        GOTO    ClkOff.L1                        * 0CEE6
 
 * refs (2): 048CC 0DCE5
-OBJ_0CEEA:
+* -> : clear ClkOnNib and reprogram TIMER2
+ClkOff:
         CON(5)  (*)+5                            * 0CEEA  primitive code object
         GOSUB   SAVPTR~jump_4                    * 0CEEF
         A=0     A                                * 0CEF3
-OBJ_0CEEA.L1:
+ClkOff.L1:
         D1=(5)  ClkOnNib                         * 0CEF5
         DAT1=A  1                                * 0CEFC
         ST=0    15                               * 0CF00
-        GOSBVL  SUB_01485                        * 0CF03
+        GOSBVL  SetT2WakeClk                     * 0CF03
         GOTO    clkadj!(r).L5                    * 0CF0A
 
 * refs (2): 0CF6D 0CFBD
@@ -1103,38 +1119,41 @@ Date>d$:
         LC(1)   #8                               * 0CFEA
         GOSUB   MAKE$~jump                       * 0CFED
         C=R1                                     * 0CFF1
-        GOSUB   SUB_0CFFC                        * 0CFF4
+        GOSUB   Date>$Body                       * 0CFF4
         GOTO    Ticks>wd$.L1                     * 0CFF8
 
 * refs (2): 0CFF4 0D263
-SUB_0CFFC:
+* C = date (BCD), D0, ST1 clear for MM/DD/YY, set for DD.MM.YY -> : write the 8 characters, D0 past them
+Date>$Body:
         ?ST=1   1                                * 0CFFC
-        GOYES   SUB_0CFFC.L1                     * 0CFFF
+        GOYES   Date>$Body~1                     * 0CFFF
         P=C     3                                * 0D001
         CPEX    1                                * 0D005
         C=P     3                                * 0D009
         P=C     2                                * 0D00D
         CPEX    0                                * 0D011
         C=P     2                                * 0D015
-SUB_0CFFC.L1:
+Date>$Body~1:
         B=C     W                                * 0D019
-        GOSUB   SUB_0D02C                        * 0D01C
-        GOSUB   SUB_0D055                        * 0D020
-        GOSUB   SUB_0D02C                        * 0D024
-        GOSUB   SUB_0D055                        * 0D028
+        GOSUB   Put2Digits                       * 0D01C
+        GOSUB   PutDateSep                       * 0D020
+        GOSUB   Put2Digits                       * 0D024
+        GOSUB   PutDateSep                       * 0D028
 
 * refs (2): 0D01C 0D024
-SUB_0D02C:
+* B = digits -> : write the low two digits of B at D0 and rotate them out
+Put2Digits:
         C=B     A                                * 0D02C
         P=C     0                                * 0D02E
         CPEX    1                                * 0D032
         C=P     0                                * 0D036
         B=C     B                                * 0D03A
         P=      0                                * 0D03D
-        GOSUB   SUB_0D043                        * 0D03F
+        GOSUB   PutDigit                         * 0D03F
 
 * refs (7): 0D03F 0D0F0 0D0F4 0D102 0D106 0D114 ...
-SUB_0D043:
+* B = digits -> : write its low digit as a character at D0, shift B down
+PutDigit:
         LC(2)   #30                              * 0D043
         C=B     P                                * 0D047
         BSR     W                                * 0D04A
@@ -1143,12 +1162,13 @@ SUB_0D043:
         RTN                                      * 0D053
 
 * refs (2): 0D020 0D028
-SUB_0D055:
+* D0, ST1 -> : write / or, with ST1, a dot
+PutDateSep:
         LC(2)   #2F                              * 0D055
         ?ST=0   1                                * 0D059
-        GOYES   SUB_0D055.L1                     * 0D05C
+        GOYES   PutDateSep.L1                    * 0D05C
         LC(2)   #2E                              * 0D05E
-SUB_0D055.L1:
+PutDateSep.L1:
         DAT0=C  B                                * 0D062
         D0=D0+  2                                * 0D065
         RTN                                      * 0D068
@@ -1162,7 +1182,7 @@ TOD>t$:
         GONC    TOD>t$.L1                        * 0D07D
         GOTO    WSLOGN.L5                        * 0D080
 TOD>t$.L1:
-        GOSUB   SUB_0D0A8                        * 0D084
+        GOSUB   Hour>12or24                      * 0D084
         GONC    TOD>t$.L2                        * 0D088
         GOTO    WSLOGN.L5                        * 0D08B
 TOD>t$.L2:
@@ -1172,77 +1192,80 @@ TOD>t$.L2:
         LC(1)   #9                               * 0D096
         GOSUB   MAKE$~jump                       * 0D099
         C=R1                                     * 0D09D
-        GOSUB   SUB_0D0D9                        * 0D0A0
+        GOSUB   Time>$Body                       * 0D0A0
         GOTO    Ticks>wd$.L1                     * 0D0A4
 
 * refs (2): 0D084 0D286
-SUB_0D0A8:
+* A.B = hour (BCD), ST2 set for 24-hour -> ST9 set for PM, hour adjusted for a 12-hour clock, C packed
+Hour>12or24:
         P=      0                                * 0D0A8
         LC(2)   #23                              * 0D0AA
         ?C<A    B                                * 0D0AE
         RTNYES                                   * 0D0B1
         ?ST=1   2                                * 0D0B3
-        GOYES   SUB_0D0A8.L2                     * 0D0B6
+        GOYES   Hour>12or24.L2                   * 0D0B6
         LC(2)   #12                              * 0D0B8
         ST=0    9                                * 0D0BC
         ?C>A    B                                * 0D0BF
-        GOYES   SUB_0D0A8.L1                     * 0D0C2
+        GOYES   Hour>12or24.L1                   * 0D0C2
         ST=1    9                                * 0D0C4
         A=A-C   B                                * 0D0C7
-SUB_0D0A8.L1:
+Hour>12or24.L1:
         ?A#0    B                                * 0D0CA
-        GOYES   SUB_0D0A8.L2                     * 0D0CD
+        GOYES   Hour>12or24.L2                   * 0D0CD
         A=C     B                                * 0D0CF
-SUB_0D0A8.L2:
-        GOVLNG  SUB_0D36C.L6                     * 0D0D2
+Hour>12or24.L2:
+        GOVLNG  %>YMD.L6                         * 0D0D2
 
 * refs (2): 0D0A0 0D294
-SUB_0D0D9:
+* C = time (BCD), ST2, ST9 -> write HH:MM:SS at D0, with A or P after it for a 12-hour clock
+Time>$Body:
         P=      5                                * 0D0D9
-        GOSUB   SUB_0D133                        * 0D0DB
+        GOSUB   RotCB                            * 0D0DB
         P=      0                                * 0D0DF
         LC(2)   #20                              * 0D0E1
         ?ST=0   2                                * 0D0E5
-        GOYES   SUB_0D0D9.L1                     * 0D0E8
+        GOYES   Time>$Body.L1                    * 0D0E8
         DAT0=C  B                                * 0D0EA
         D0=D0+  2                                * 0D0ED
-SUB_0D0D9.L1:
-        GOSUB   SUB_0D043                        * 0D0F0
-        GOSUB   SUB_0D043                        * 0D0F4
+Time>$Body.L1:
+        GOSUB   PutDigit                         * 0D0F0
+        GOSUB   PutDigit                         * 0D0F4
         LC(2)   #3A                              * 0D0F8
         DAT0=C  B                                * 0D0FC
         D0=D0+  2                                * 0D0FF
-        GOSUB   SUB_0D043                        * 0D102
-        GOSUB   SUB_0D043                        * 0D106
+        GOSUB   PutDigit                         * 0D102
+        GOSUB   PutDigit                         * 0D106
         LC(2)   #3A                              * 0D10A
         DAT0=C  B                                * 0D10E
         D0=D0+  2                                * 0D111
-        GOSUB   SUB_0D043                        * 0D114
-        GOSUB   SUB_0D043                        * 0D118
+        GOSUB   PutDigit                         * 0D114
+        GOSUB   PutDigit                         * 0D118
         ?ST=1   2                                * 0D11C
         RTNYES                                   * 0D11F
         LC(2)   #41                              * 0D121
         ?ST=0   9                                * 0D125
-        GOYES   SUB_0D0D9.L2                     * 0D128
+        GOYES   Time>$Body.L2                    * 0D128
         LC(2)   #50                              * 0D12A
-SUB_0D0D9.L2:
+Time>$Body.L2:
         DAT0=C  B                                * 0D12E
         RTN                                      * 0D131
 
 * refs (2): 0D0DB 0D13E
-SUB_0D133:
+* P = turns: rotate C and B together, nibble by nibble
+RotCB:
         CSRC                                     * 0D133
         B=C     S                                * 0D136
         BSLC                                     * 0D139
         P=P-1                                    * 0D13C
-        GONC    SUB_0D133                        * 0D13E
+        GONC    RotCB                            * 0D13E
         RTN                                      * 0D141
 
 * hxs -> %time
 * refs (3): 0D35D 0E1F1 B7BB4
 Ticks>TOD:
         CON(5)  (*)+5                            * 0D143  primitive code object
-        GOSBVL  SUB_0D90A                        * 0D148
+        GOSBVL  PopHxs13                         * 0D148
         C=R0                                     * 0D14F
         GOTO    TOD.L1                           * 0D152
 
@@ -1250,7 +1273,7 @@ Ticks>TOD:
 * refs (3): 0D353 0E1E7 B7BD3
 Ticks>Date:
         CON(5)  (*)+5                            * 0D156  primitive code object
-        GOSBVL  SUB_0D90A                        * 0D15B
+        GOSBVL  PopHxs13                         * 0D15B
         C=R0                                     * 0D162
         GOTO    DATE.L1                          * 0D165
 
@@ -1302,7 +1325,7 @@ WSLOGN.L1:
         CD0EX                                    * 0D1EC
         P=      13                               * 0D1EF
         ST=0    15                               * 0D1F1
-        GOSBVL  SUB_0DBBC                        * 0D1F4
+        GOSBVL  CkValCRC                         * 0D1F4
         GOSBVL  AllowIntr                        * 0D1FB
         D0=C                                     * 0D202
         P=      0                                * 0D205
@@ -1325,31 +1348,31 @@ WSLOGN.loop3:
 WSLOGN.L4:
         AD0EX                                    * 0D231
         R2=A                                     * 0D234
-        GOSBVL  SUB_0DB6C                        * 0D237
+        GOSBVL  Ticks>Midnight                   * 0D237
         A=B     W                                * 0D23E
         R1=A                                     * 0D241
         A=C     W                                * 0D244
         GOSUB   CLKUTL1~jump                     * 0D247
         GOSBVL  HXDCW                            * 0D24B
         GOSUB   Day>Date~jump                    * 0D252
-        GOSBVL  SUB_0D36C                        * 0D256
+        GOSBVL  %>YMD                            * 0D256
         A=R2                                     * 0D25D
         D0=A                                     * 0D260
-        GOSUB   SUB_0CFFC                        * 0D263
+        GOSUB   Date>$Body                       * 0D263
         LC(2)   #20                              * 0D267
         DAT0=C  B                                * 0D26B
         D0=D0+  2                                * 0D26E
         A=R1                                     * 0D271
         P=      0                                * 0D274
         SETHEX                                   * 0D276
-        GOSBVL  SUB_0DA8E                        * 0D278
+        GOSBVL  Ticks>%                          * 0D278
         GOSBVL  CKTIME                           * 0D27F
-        GOSUB   SUB_0D0A8                        * 0D286
+        GOSUB   Hour>12or24                      * 0D286
         GONC    WSLOGN.L6                        * 0D28A
 WSLOGN.L5:
         GOVLNG  ErrTime                          * 0D28D
 WSLOGN.L6:
-        GOSUB   SUB_0D0D9                        * 0D294
+        GOSUB   Time>$Body                       * 0D294
 WSLOGN.L7:
         SETHEX                                   * 0D298
         C=RSTK                                   * 0D29A
@@ -1394,7 +1417,8 @@ tstr(b):
         ASSEMBLE
 
 * refs (7): 0CCD8 0D256 0D700 0D711 0D937 0E64F ...
-SUB_0D36C:
+* A.W = %date, ST1 = date format -> A.A = year, B.A = month, D.A = day, BCD; carry set if not a valid date. A date with no year uses the current year, ST6 set then
+%>YMD:
         ST=0    6                                * 0D36C
         P=      14                               * 0D36F
         ?A=0    P                                * 0D371
@@ -1402,25 +1426,25 @@ SUB_0D36C:
         ?A#0    S                                * 0D376
         RTNYES                                   * 0D379
         ?A=0    X                                * 0D37B
-        GOYES   SUB_0D36C.L1                     * 0D37E
+        GOYES   %>YMD.L1                         * 0D37E
         A=A-1   X                                * 0D380
         ?A#0    X                                * 0D383
         RTNYES                                   * 0D386
         ASL     W                                * 0D388
-SUB_0D36C.L1:
+%>YMD.L1:
         P=      7                                * 0D38B
         ?A#0    WP                               * 0D38D
         RTNYES                                   * 0D390
         P=      11                               * 0D392
         ?A#0    WP                               * 0D394
-        GOYES   SUB_0D36C.L2                     * 0D397
+        GOYES   %>YMD.L2                         * 0D397
         R4=A                                     * 0D399
         SETHEX                                   * 0D39C
-        GOSBVL  SUB_012F9                        * 0D39E
-        GOSBVL  SUB_0DB7B                        * 0D3A5
+        GOSBVL  GetTimeNoInt                     * 0D39E
+        GOSBVL  Ticks>Days                       * 0D3A5
         GOSBVL  HXDCW                            * 0D3AC
-        GOSUB   SUB_0D665                        * 0D3B3
-        GOSUB   SUB_0D36C.L6                     * 0D3B7
+        GOSUB   Day#>YMD                         * 0D3B3
+        GOSUB   %>YMD.L6                         * 0D3B7
         CR4EX                                    * 0D3BB
         GOSUB   AslW4                            * 0D3BE
         GOSUB   AslW4                            * 0D3C2
@@ -1428,7 +1452,7 @@ SUB_0D36C.L1:
         C=A     WP                               * 0D3C8
         A=C     W                                * 0D3CB
         ST=1    6                                * 0D3CE
-SUB_0D36C.L2:
+%>YMD.L2:
         ASLC                                     * 0D3D1
         ASLC                                     * 0D3D4
         B=0     W                                * 0D3D7
@@ -1443,11 +1467,11 @@ SUB_0D36C.L2:
         ASLC                                     * 0D3F0
         ASLC                                     * 0D3F3
         ?ST=0   1                                * 0D3F6
-        GOYES   SUB_0D36C.L3                     * 0D3F9
+        GOYES   %>YMD.L3                         * 0D3F9
         DCEX    A                                * 0D3FB
         BCEX    A                                * 0D3FD
         DCEX    A                                * 0D3FF
-SUB_0D36C.L3:
+%>YMD.L3:
         ?B=0    A                                * 0D401
         RTNYES                                   * 0D404
         P=      0                                * 0D406
@@ -1457,11 +1481,11 @@ SUB_0D36C.L3:
         RTNYES                                   * 0D411
         ?D=0    A                                * 0D413
         RTNYES                                   * 0D416
-        GOSUB   SUB_0D4DA                        * 0D418
+        GOSUB   Month@                           * 0D418
         C=0     A                                * 0D41C
         C=DAT0  B                                * 0D41E
         ?D<=C   A                                * 0D421
-        GOYES   SUB_0D36C.L4                     * 0D424
+        GOYES   %>YMD.L4                         * 0D424
         C=0     A                                * 0D426
         C=C+1   A                                * 0D428
         C=C+1   A                                * 0D42A
@@ -1471,24 +1495,25 @@ SUB_0D36C.L3:
         C=C-1   P                                * 0D433
         ?D#C    A                                * 0D436
         RTNYES                                   * 0D439
-        GOSUB   SUB_0D485                        * 0D43B
-        GOC     SUB_0D36C.L4                     * 0D43F
+        GOSUB   LeapYear?                        * 0D43B
+        GOC     %>YMD.L4                         * 0D43F
         RTNSC                                    * 0D442
-SUB_0D36C.L4:
-        GOSUB   SUB_0D36C.L6                     * 0D444
+%>YMD.L4:
+        GOSUB   %>YMD.L6                         * 0D444
         CAEX    W                                * 0D448
         RSTK=C                                   * 0D44B
         P=      0                                * 0D44D
         LC(8)   #15821015                        * 0D44F
         ?C>A    W                                * 0D459
-        GOYES   SUB_0D36C.L5                     * 0D45C
-SUB_0D36C.L5:
+        GOYES   %>YMD.L5                         * 0D45C
+%>YMD.L5:
         C=0     W                                * 0D45E
         C=RSTK                                   * 0D461
         CAEX    W                                * 0D463
-        RTNC                                     * 0D466  never taken
+        RTNC                                     * 0D466
         RTNCC                                    * 0D469
-SUB_0D36C.L6:
+* Pack year, month, day from A, B, D into C as YYYYMMDD
+%>YMD.L6:
         C=0     W                                * 0D46B
         C=A     A                                * 0D46E
         CSL     A                                * 0D470
@@ -1501,15 +1526,16 @@ SUB_0D36C.L6:
         RTNCC                                    * 0D483
 
 * refs (1): 0D43B
-SUB_0D485:
+* A.A = year (BCD) -> carry set if it is a leap year; a century is tested by its hundreds
+LeapYear?:
         C=A     A                                * 0D485
         RSTK=C                                   * 0D487
         ?A#0    B                                * 0D489
-        GOYES   SUB_0D485.L1                     * 0D48C
+        GOYES   LeapYear?.L1                     * 0D48C
         ASR     A                                * 0D48E
         ASR     A                                * 0D490
         C=A     A                                * 0D492
-SUB_0D485.L1:
+LeapYear?.L1:
         SB=0                                     * 0D494
         C=C+C   A                                * 0D497
         C=C+C   A                                * 0D499
@@ -1544,18 +1570,19 @@ DAY#.L1:
         RTNCC                                    * 0D4D8
 
 * refs (1): 0D418
-SUB_0D4DA:
+* B.A = month (1-12) -> D0 at its table entry below: days in the month, days before it
+Month@:
         C=B     A                                * 0D4DA
         C=C-1   A                                * 0D4DC
-        D0=(5)  SUB_0D4DA.L2                     * 0D4DE
-SUB_0D4DA.loop1:
+        D0=(5)  Month@.L2                        * 0D4DE
+Month@.loop1:
         D0=D0+  5                                * 0D4E5
         C=C-1   A                                * 0D4E8
-SUB_0D4DA.L2:
-        GONC    SUB_0D4DA.loop1                  * 0D4EA
+Month@.L2:
+        GONC    Month@.loop1                     * 0D4EA
         RTNCC                                    * 0D4ED
 
-* Months: days in the month and days before it, both BCD (read by SUB_0D4DA)
+* Months: days in the month and days before it, both BCD (read by Month@)
         CON(2)  #31                              * 0D4EF  entry 0
         CON(3)  #000                             * 0D4F1
         CON(2)  #28                              * 0D4F4  entry 1
@@ -1582,7 +1609,8 @@ SUB_0D4DA.L2:
         CON(3)  #334                             * 0D528
 
 * refs (1): 0D665
-SUB_0D52B:
+* Estimate the year of day number C.W (BCD): the first step of Day#>YMD
+Day#>YMD~1:
         D=C     W                                * 0D52B
         A=C     W                                * 0D52E
         ASL     W                                * 0D531
@@ -1590,10 +1618,10 @@ SUB_0D52B:
         P=      0                                * 0D537
         LC(3)   #585                             * 0D539
         A=A-C   W                                * 0D53E
-        GONC    SUB_0D52B.L1                     * 0D541
+        GONC    Day#>YMD~1.L1                    * 0D541
         A=0     W                                * 0D544
         RTN                                      * 0D547
-SUB_0D52B.L1:
+Day#>YMD~1.L1:
         ASL     W                                * 0D549
         ASL     W                                * 0D54C
         ASL     W                                * 0D54F
@@ -1601,6 +1629,7 @@ SUB_0D52B.L1:
         GOVLNG  IntDivW                          * 0D55B
 
 * refs (2): 0D4D1 0D669
+* A.A = year (BCD) -> C.W = day number of March 1 of it, -#366 if A was not a plain year
 SUB_0D562:
         C=0     W                                * 0D562
         P=      3                                * 0D565
@@ -1650,6 +1679,7 @@ SUB_0D5B7:
         RTNCC                                    * 0D5D0
 
 * refs (2): 0D4C3 0D6A6
+* B.W = month -> C.A = 30.6 times it: days before a month counted from March
 SUB_0D5D2:
         C=B     W                                * 0D5D2
         C=C+C   A                                * 0D5D5
@@ -1752,21 +1782,22 @@ DCHXW.L2:
         GOTO    DCHXW.loop1                      * 0D661
 
 * refs (3): 0D3B3 0D747 0DB5E
-SUB_0D665:
-        GOSUB   SUB_0D52B                        * 0D665
-SUB_0D665.loop1:
+* C.W = day number (BCD) -> A.A = year, B.A = month, D.A = day. Counts years from March so that the leap day comes last
+Day#>YMD:
+        GOSUB   Day#>YMD~1                       * 0D665
+Day#>YMD.loop1:
         GOSUB   SUB_0D562                        * 0D669
         GOSUB   SUB_0D5B7                        * 0D66D
-        GONC    SUB_0D665.loop1                  * 0D671
+        GONC    Day#>YMD.loop1                   * 0D671
         LC(2)   #63                              * 0D674
         C=C+B   W                                * 0D678
         D=C     W                                * 0D67B
         CAEX    W                                * 0D67E
         P=      11                               * 0D681
-SUB_0D665.loop2:
+Day#>YMD.loop2:
         DSL     W                                * 0D683
         P=P+1                                    * 0D686
-        GONC    SUB_0D665.loop2                  * 0D688
+        GONC    Day#>YMD.loop2                   * 0D688
         D=C     A                                * 0D68B
         C=0     W                                * 0D68D
         LC(6)   #306001                          * 0D690
@@ -1780,10 +1811,10 @@ SUB_0D665.loop2:
         C=D     A                                * 0D6B3
         CAEX    W                                * 0D6B5
         P=      11                               * 0D6B8
-SUB_0D665.loop3:
+Day#>YMD.loop3:
         DSR     W                                * 0D6BA
         P=P+1                                    * 0D6BD
-        GONC    SUB_0D665.loop3                  * 0D6BF
+        GONC    Day#>YMD.loop3                   * 0D6BF
         D=D-C   W                                * 0D6C2
         B=B-1   B                                * 0D6C5
         LC(2)   #12                              * 0D6C8
@@ -1815,37 +1846,38 @@ FLOAT~1.L2:
         RTNCC                                    * 0D6FB
 
 * refs (1): 0CC4D
-SUB_0D6FD:
+* A = first %date, C = second %date -> A = % days from the first to the second; carry set if a date is bad
+DDaysAC:
         R0=C                                     * 0D6FD
-        GOSUB   SUB_0D36C                        * 0D700
+        GOSUB   %>YMD                            * 0D700
         RTNC                                     * 0D704
         GOSUB   DAY#                             * 0D707
         CR0EX                                    * 0D70B
         A=C     W                                * 0D70E
-        GOSUB   SUB_0D36C                        * 0D711
+        GOSUB   %>YMD                            * 0D711
         RTNC                                     * 0D715
         GOSUB   DAY#                             * 0D718
         A=C     W                                * 0D71C
         C=R0                                     * 0D71F
         ST=0    4                                * 0D722
         A=A-C   W                                * 0D725
-        GONC    SUB_0D6FD.L1                     * 0D728
+        GONC    DDaysAC.L1                       * 0D728
         ST=1    4                                * 0D72B
         A=-A    W                                * 0D72E
-SUB_0D6FD.L1:
+DDaysAC.L1:
         GOSUB   FLOAT                            * 0D731
         ?A=0    W                                * 0D735
-        GOYES   SUB_0D6FD.L2                     * 0D738
+        GOYES   DDaysAC.L2                       * 0D738
         ?ST=0   4                                * 0D73A
-        GOYES   SUB_0D6FD.L2                     * 0D73D
+        GOYES   DDaysAC.L2                       * 0D73D
         A=-A-1  S                                * 0D73F
-SUB_0D6FD.L2:
+DDaysAC.L2:
         RTNCC                                    * 0D742
 
 * refs (1): 0CF2A
 Day>Date:
         C=A     W                                * 0D744
-        GOSUB   SUB_0D665                        * 0D747
+        GOSUB   Day#>YMD                         * 0D747
         ?ST=0   1                                * 0D74B
         GOYES   Day>Date.L1                      * 0D74E
         BCEX    A                                * 0D750
@@ -1891,7 +1923,8 @@ CLKUTL1:
         RTN                                      * 0D7B9
 
 * refs (1): 0D8BB
-SUB_0D7BB:
+* -> ST2 = system flag -41 (24-hour clock), carry likewise
+Flag41>ST2:
         D1=(5)  #8084D                           * 0D7BB
         C=DAT1  1                                * 0D7C2
         ST=1    2                                * 0D7C6
@@ -1901,7 +1934,8 @@ SUB_0D7BB:
         RTN                                      * 0D7D3
 
 * refs (2): 0D8C3 0E2C1
-SUB_0D7D5:
+* -> ST3 = system flag -43 (repeat alarms not rescheduled), carry likewise
+Flag43>ST3:
         D1=(5)  #8084D                           * 0D7D5
         C=DAT1  1                                * 0D7DC
         ST=1    3                                * 0D7E0
@@ -1909,7 +1943,10 @@ SUB_0D7D5:
         RTNYES                                   * 0D7E8
         ST=0    3                                * 0D7EA
         RTN                                      * 0D7ED
-SUB_0D7D5.L1:
+
+* refs (2): 0D8CB 0E2A9
+* -> ST4 = system flag -44 (acknowledged alarms saved), carry likewise
+Flag44>ST4:
         D1=(5)  #8084D                           * 0D7EF
         C=DAT1  1                                * 0D7F6
         ST=1    4                                * 0D7FA
@@ -1936,7 +1973,8 @@ getBPOFF:
         RTN                                      * 0D83E
 
 * refs (2): 0D8C7 0ECA9
-SUB_0D840:
+* -> ST5 = system flag -57 (alarm beep off), carry likewise
+Flag57>ST5:
         D1=(5)  IRAM@                            * 0D840
         C=DAT1  1                                * 0D847
         CPEX    0                                * 0D84B
@@ -1953,7 +1991,8 @@ SUB_0D840:
         RTN                                      * 0D875
 
 * refs (5): 01485 0CE90 0D8BF 0E423 0E44F
-SUB_0D877:
+* -> ST0 set, carry set if the clock is on in the status area (ClkOnNib); C.P = the nibble
+ClkOn>ST0:
         D1=(5)  IRAM@                            * 0D877
         C=DAT1  1                                * 0D87E
         CPEX    0                                * 0D882
@@ -1976,13 +2015,14 @@ mpop1%:
         GOSBVL  POP1%                            * 0D8B0
 
 * refs (2): 0D933 B70FE
-SUB_0D8B7:
+* -> ST0-ST5: the clock display and the time and date format flags, for the time commands
+ClkFlags>ST:
         GOSUB   CLKUTL1                          * 0D8B7
-        GOSUB   SUB_0D7BB                        * 0D8BB
-        GOSUB   SUB_0D877                        * 0D8BF
-        GOSUB   SUB_0D7D5                        * 0D8C3
-        GOSUB   SUB_0D840                        * 0D8C7
-        GOTO    SUB_0D7D5.L1                     * 0D8CB
+        GOSUB   Flag41>ST2                       * 0D8BB
+        GOSUB   ClkOn>ST0                        * 0D8BF
+        GOSUB   Flag43>ST3                       * 0D8C3
+        GOSUB   Flag57>ST5                       * 0D8C7
+        GOTO    Flag44>ST4                       * 0D8CB
 
 * refs (1): 0EF87
 >ALRMLS~1:
@@ -1994,7 +2034,7 @@ SUB_0D8B7:
         C=0     W                                * 0D8DD
         C=DAT1  10                               * 0D8E0
         R1=C                                     * 0D8E4
-        GOTO    SUB_0D90A.L1                     * 0D8E7
+        GOTO    PopHxs13.L1                      * 0D8E7
 
 * refs (1): 0D16E
 Ticks>Rpt~1:
@@ -2007,10 +2047,11 @@ Ticks>Rpt~1:
         C=0     W                                * 0D8FC
         C=DAT1  10                               * 0D8FF
         R0=C                                     * 0D903
-        GOTO    SUB_0D90A.L1                     * 0D906
+        GOTO    PopHxs13.L1                      * 0D906
 
 * refs (5): 0D148 0D15B 0EC0C 0EE2B 0EF7C
-SUB_0D90A:
+* hxs -> : pop it, R0 = its first 13 nibbles, then SAVPTR
+PopHxs13:
         A=DAT1  A                                * 0D90A
         D1=D1+  5                                * 0D90D
         D=D+1   A                                * 0D910
@@ -2019,15 +2060,15 @@ SUB_0D90A:
         C=0     W                                * 0D918
         C=DAT1  13                               * 0D91B
         R0=C                                     * 0D91F
-SUB_0D90A.L1:
+PopHxs13.L1:
         D1=A                                     * 0D922
         GOVLNG  SAVPTR                           * 0D925
 
 * refs (3): 0CD6C 0CFDE 0EE69
 POPDATE%:
         GOSBVL  POP1%                            * 0D92C
-        GOSUB   SUB_0D8B7                        * 0D933
-        GOSBVL  SUB_0D36C                        * 0D937
+        GOSUB   ClkFlags>ST                      * 0D933
+        GOSBVL  %>YMD                            * 0D937
         RTNNC                                    * 0D93E
         GOVLNG  NOALARMERR.L1                    * 0D941
 
@@ -2039,21 +2080,21 @@ POPTIME%:
         GOVLNG  ErrTime                          * 0D953
 POPTIME%.L1:
         R0=C                                     * 0D95A
-        GOSUB   SUB_0DA4E                        * 0D95D
+        GOSUB   A*60                             * 0D95D
         A=A+B   W                                * 0D961
-        GOSUB   SUB_0DA4E                        * 0D964
+        GOSUB   A*60                             * 0D964
         C=D     W                                * 0D968
         C=C+A   W                                * 0D96B
         GOSUB   DCHXW~jump                       * 0D96E
-        GOSUB   SUB_0D9B4                        * 0D972
-        GOSUB   SUB_0DB9B                        * 0D976
+        GOSUB   Ticks1Sec                        * 0D972
+        GOSUB   MulAC                            * 0D976
         AR0EX                                    * 0D97A
         ?A=0    W                                * 0D97D
         GOYES   POPTIME%.L2                      * 0D980
         C=A     W                                * 0D982
         GOSUB   DCHXW~jump                       * 0D985
-        GOSUB   SUB_0D9B4                        * 0D989
-        GOSUB   SUB_0DB9B                        * 0D98D
+        GOSUB   Ticks1Sec                        * 0D989
+        GOSUB   MulAC                            * 0D98D
         GOSUB   HXDCW                            * 0D991
         GOSBVL  CSRW5                            * 0D995
         CSR     W                                * 0D99C
@@ -2067,7 +2108,8 @@ POPTIME%.L2:
         RTN                                      * 0D9B2
 
 * refs (3): 0D972 0D989 0DA8E
-SUB_0D9B4:
+* -> C.W = #2000: ticks in one second
+Ticks1Sec:
         C=0     W                                * 0D9B4
         LC(4)   #2000                            * 0D9B7
         RTN                                      * 0D9BD
@@ -2129,7 +2171,8 @@ CKTIME.L2:
         GOVLNG  CsrW4                            * 0DA47
 
 * refs (2): 0D95D 0D964
-SUB_0DA4E:
+* A.W -> A.W times 60 in decimal mode
+A*60:
         A=A+A   W                                * 0DA4E
         C=A     W                                * 0DA51
         A=A+A   W                                * 0DA54
@@ -2138,18 +2181,20 @@ SUB_0DA4E:
         RTN                                      * 0DA5D
 
 * refs (1): 0DABE
-SUB_0DA5F:
+* A.W = seconds -> A.W = minutes, B.W = seconds left, then the same for hours: decimal
+Secs>MinSec:
         GOSUB   HXDCW                            * 0DA5F
-        GOSUB   SUB_0DA77                        * 0DA63
+        GOSUB   /60                              * 0DA63
         C=B     W                                * 0DA67
         D=C     W                                * 0DA6A
-        GOSUB   SUB_0DA77                        * 0DA6D
+        GOSUB   /60                              * 0DA6D
         SETHEX                                   * 0DA71
         P=      0                                * 0DA73
         RTNCC                                    * 0DA75
 
 * refs (2): 0DA63 0DA6D
-SUB_0DA77:
+* A.W, B.W -> divide by 60 with IntDivW
+/60:
         P=      0                                * 0DA77
         C=0     W                                * 0DA79
         LC(2)   #60                              * 0DA7C
@@ -2159,13 +2204,15 @@ IntDivW~jump:
         GOVLNG  IntDivW                          * 0DA80
 
 * refs (1): 0CC03
-SUB_0DA87:
-        GOSUB   SUB_0DB6C                        * 0DA87
+* C.W = time in ticks -> A = %time (HH.MMSSs) of that time of day
+TicksOfDay>%:
+        GOSUB   Ticks>Midnight                   * 0DA87
         A=B     W                                * 0DA8B
 
 * refs (1): 0D278
-SUB_0DA8E:
-        GOSUB   SUB_0D9B4                        * 0DA8E
+* A.W = ticks since midnight -> A = %time (HH.MMSSs)
+Ticks>%:
+        GOSUB   Ticks1Sec                        * 0DA8E
         GOSUB   IntDivW~jump                     * 0DA92
         R0=A                                     * 0DA96
         A=B     W                                * 0DA99
@@ -2176,7 +2223,7 @@ SUB_0DA8E:
         LC(4)   #8192                            * 0DAB1
         GOSUB   IntDivW~jump                     * 0DAB7
         AR0EX                                    * 0DABB
-        GOSUB   SUB_0DA5F                        * 0DABE
+        GOSUB   Secs>MinSec                      * 0DABE
         SETDEC                                   * 0DAC2
         C=D     W                                * 0DAC4
         CAEX    W                                * 0DAC7
@@ -2195,28 +2242,29 @@ SUB_0DA8E:
         A=A+C   W                                * 0DAEA
         A=0     X                                * 0DAED
         ?A=0    S                                * 0DAF0
-        GOYES   SUB_0DA8E.L1                     * 0DAF3
+        GOYES   Ticks>%.L1                       * 0DAF3
         ASR     W                                * 0DAF5
         A=0     X                                * 0DAF8
         A=A+1   X                                * 0DAFB
-SUB_0DA8E.L1:
+Ticks>%.L1:
         GOSBVL  SPLITA                           * 0DAFE
         A=B     M                                * 0DB05
         RTNCC                                    * 0DB08
         BSS     1                                * 0DB0A  zeros
 
 * refs (2): 0CD73 0E659
-SUB_0DB0B:
+* A.W = date as YYYYMMDD -> carry set unless it lies in 1991-2090, the range of the clock
+DateRange?:
         CAEX    W                                * 0DB0B
         RSTK=C                                   * 0DB0E
         P=      0                                * 0DB10
         LC(8)   #19910101                        * 0DB12
         ?C>A    W                                * 0DB1C
-        GOYES   SUB_0DB0B.L1                     * 0DB1F
+        GOYES   DateRange?.L1                    * 0DB1F
         LC(8)   #20901231                        * 0DB21
         ?C<A    W                                * 0DB2B
-        GOYES   SUB_0DB0B.L1                     * 0DB2E
-SUB_0DB0B.L1:
+        GOYES   DateRange?.L1                    * 0DB2E
+DateRange?.L1:
         C=0     W                                * 0DB30
         C=RSTK                                   * 0DB33
         CAEX    W                                * 0DB35
@@ -2229,27 +2277,29 @@ YMD>Ticks:
         P=      5                                * 0DB44
         LC(3)   #2A3                             * 0DB46
         P=      0                                * 0DB4B
-        GOTO    SUB_0DB9B                        * 0DB4D
+        GOTO    MulAC                            * 0DB4D
 
 * refs (2): 0CF8A B71B9
 dowutil:
-        GOSUB   SUB_0DB7B                        * 0DB51
+        GOSUB   Ticks>Days                       * 0DB51
         ?A=0    W                                * 0DB55
         RTNYES                                   * 0DB58
         GOSUB   HXDCW                            * 0DB5A
-        GOSBVL  SUB_0D665                        * 0DB5E
+        GOSBVL  Day#>YMD                         * 0DB5E
         GOVLNG  Day>Date.L2                      * 0DB65
 
 * refs (5): 0CD95 0CDBF 0CDE3 0D237 0DA87
-SUB_0DB6C:
+* C.W = time -> A.W = ticks at the midnight before it, B.W = ticks since then
+Ticks>Midnight:
         R1=C                                     * 0DB6C
-        GOSUB   SUB_0DB7B                        * 0DB6F
+        GOSUB   Ticks>Days                       * 0DB6F
         A=R1                                     * 0DB73
         A=A-B   W                                * 0DB76
         RTN                                      * 0DB79
 
 * refs (4): 0CC17 0D3A5 0DB51 0DB6F
-SUB_0DB7B:
+* C.W = ticks -> A.W = days, B.W = ticks left (86400*8192 ticks a day)
+Ticks>Days:
         SETHEX                                   * 0DB7B
         A=C     W                                * 0DB7D
         C=0     W                                * 0DB80
@@ -2266,24 +2316,26 @@ HXDCW:
         SETDEC                                   * 0DB99
 
 * refs (5): 0D976 0D98D 0DB4D 12DCA 13430
-SUB_0DB9B:
+* A.W, C.W -> A.W = C.W = product, by shifting and adding; B.W clobbered
+MulAC:
         B=0     W                                * 0DB9B
-SUB_0DB9B.loop1:
+MulAC.loop1:
         SB=0                                     * 0DB9E
         CSRB                                     * 0DBA1
         ?SB=0                                    * 0DBA4
-        GOYES   SUB_0DB9B.L2                     * 0DBA7
+        GOYES   MulAC.L2                         * 0DBA7
         B=B+A   W                                * 0DBA9
-SUB_0DB9B.L2:
+MulAC.L2:
         A=A+A   W                                * 0DBAC
         ?C#0    W                                * 0DBAF
-        GOYES   SUB_0DB9B.loop1                  * 0DBB2
+        GOYES   MulAC.loop1                      * 0DBB2
         A=B     W                                * 0DBB4
         C=A     W                                * 0DBB7
         RTNCC                                    * 0DBBA
 
 * refs (1): 0D1F4
-SUB_0DBBC:
+* D1 at a value of P+1 nibbles followed by its 4-nibble CRC -> A.W = value; carry set if the CRC circuit disagrees
+CkValCRC:
         D0=(5)  #00104                           * 0DBBC
         A=0     A                                * 0DBC3
         DAT0=A  4                                * 0DBC5
@@ -2298,10 +2350,10 @@ SUB_0DBBC:
         A=DAT1  4                                * 0DBE1
         CD0EX                                    * 0DBE5
         ?C=A    A                                * 0DBE8
-        GOYES   SUB_0DBBC.L1                     * 0DBEB
-        GOSUB   SUB_0DBBC.L1                     * 0DBED
+        GOYES   CkValCRC.L1                      * 0DBEB
+        GOSUB   CkValCRC.L1                      * 0DBED
         RTNSC                                    * 0DBF1
-SUB_0DBBC.L1:
+CkValCRC.L1:
         C=0     A                                * 0DBF3
         C=P     0                                * 0DBF5
         C=-C-1  A                                * 0DBF9
@@ -2315,15 +2367,15 @@ SUB_0DBBC.L1:
 
         CON(5)  (*)+5                            * 0DC0F  primitive code object
         BUSCB                                    * 0DC14
-        GOTO    SUB_0DBBC.L2                     * 0DC18
+        GOTO    CkValCRC.L2                      * 0DC18
 
         CON(5)  (*)+5                            * 0DC1C  primitive code object
         BUSCC                                    * 0DC21
-        GOTO    SUB_0DBBC.L2                     * 0DC24
+        GOTO    CkValCRC.L2                      * 0DC24
 
         CON(5)  (*)+5                            * 0DC28  primitive code object
         BUSCD                                    * 0DC2D
-SUB_0DBBC.L2:
+CkValCRC.L2:
         A=DAT0  A                                * 0DC31
         D0=D0+  5                                * 0DC34
         PC=(A)                                   * 0DC37
@@ -2338,19 +2390,20 @@ ALARMxcp~1:
 
 * refs (1): 0DC72
 ALARMxcp~2:
-        :: OBJ_0E802 OBJ_0E7F7 OBJ_0E820 OBJ_0DFD9 ITE OBJ_0DE61 DROP * 0DC90
-          NewAlarm(li) OBJ_0E26D UNCOERCE OBJ_0172B OBJ_0E164 OBJ_47445 ; * 0DCB8
+        :: AlmSet2 AlmSet4 AlmClr1 AlmResched? ITE AlmReschedule DROP * 0DC90
+          NewAlarm(li) ALARM#@ UNCOERCE SetT2WakeOb AlarmUpdate OBJ_47445 ; * 0DCB8
 
 * refs (1): 0DC81
 ALARMxcp~3:
-        :: ALARMxcp~5 OBJ_0CEEA Save16 Clr16 SWAP DUP INCOMPDROP SWAP * 0DCDB
-          DispTstr(b) DISPROW1*! OBJ_0E802 OBJ_0E820 ALARMxcp~7 IT * 0DD08
-          :: OBJ_0E7F7 OBJ_0E836 ;               * 0DD26
-          SWAP Restore16 OBJ_0DF84 ITE           * 0DD3A
-          :: DROP OBJ_0E26D REMOVEN{} ;          * 0DD4E
-          :: OBJ_0DFD9 ITE OBJ_0DE61 DROP        * 0DD67
+        :: ALARMxcp~5 ClkOff Save16 Clr16 SWAP DUP INCOMPDROP SWAP * 0DCDB
+          DispTstr(b) DISPROW1*! AlmSet2 AlmClr1 AlarmBeep IT * 0DD08
+          :: AlmSet4 AlmClr2 ;                   * 0DD26
+          SWAP Restore16 AlmPurge? ITE           * 0DD3A
+          :: DROP ALARM#@ REMOVEN{} ;            * 0DD4E
+          :: AlmResched? ITE AlmReschedule DROP  * 0DD67
           ;                                      * 0DD80
-          NewAlarm(li) ALARMxcp~6 OBJ_0172B OBJ_0E164 OBJ_47445 FLUSHKEYS ; * 0DD85
+          NewAlarm(li) ALARMxcp~6 SetT2WakeOb AlarmUpdate OBJ_47445 * 0DD85
+          FLUSHKEYS ;                            * 0DD9E
 
 * ->
 * refs (1): 1986D
@@ -2361,17 +2414,18 @@ ACKALLALMS:
 * refs (2): 0DDB2 19888
 ACKALM:
         :: ALARMS@ TOTEMPOB DUP OldestPastDue(li)? NOTcase DROPTRUE * 0DDC1
-          IndexPastDue(li) OBJ_0E248 DROP OBJ_0E7F7 OBJ_0E836 OBJ_0E820 * 0DDE4
-          OBJ_0DF84 ITE                          * 0DE02
-          :: DROP OBJ_0E26D REMOVEN{} ;          * 0DE0C
-          :: OBJ_0DFD9 ITE OBJ_0DE61 DROP        * 0DE25
+          IndexPastDue(li) ALARM#! DROP AlmSet4 AlmClr2 AlmClr1 AlmPurge? * 0DDE4
+          ITE                                    * 0DE07
+          :: DROP ALARM#@ REMOVEN{} ;            * 0DE0C
+          :: AlmResched? ITE AlmReschedule DROP  * 0DE25
           ;                                      * 0DE3E
-          NewAlarm(li) OBJ_0172B OBJ_0E164 OBJ_47445 FALSE ; * 0DE43
+          NewAlarm(li) SetT2WakeOb AlarmUpdate OBJ_47445 FALSE ; * 0DE43
 
 * refs (3): 0DCAE 0DD76 0DE34
-OBJ_0DE61:
-        :: OBJ_0DFB1 TOTEMPSWAP OBJ_0E26D REMOVEN{} SWAP OBJ_0E836 OBJ_0E82B * 0DE61
-          OBJ_0E820 OBJ_0E302 InsAlarm(2li) SWAP OBJ_0E248 DROP ; * 0DE89
+* alarm -> : take the current alarm out of the list, advance its time, and insert it again
+AlmReschedule:
+        :: AlmDoused TOTEMPSWAP ALARM#@ REMOVEN{} SWAP AlmClr2 AlmClr4 * 0DE61
+          AlmClr1 AlmNextTime InsAlarm(2li) SWAP ALARM#! DROP ; * 0DE89
 
 * refs (2): 0DE93 0E70B
 InsAlarm(2li):
@@ -2379,7 +2433,7 @@ InsAlarm(2li):
 
 * refs (7): 0CB2F 0DCB8 0DD85 0DE43 0E710 0E783 ...
 NewAlarm(li):
-        :: NewAlarm(li)~1 StoAlarms(_) RclAlarms? DROP OBJ_0E219 DROP ; * 0DECF
+        :: NewAlarm(li)~1 StoAlarms(_) RclAlarms? DROP ALARMS! DROP ; * 0DECF
 
 * refs (1): 0DED9
 StoAlarms(_):
@@ -2415,18 +2469,21 @@ ALARMxcp~4:
         :: BINT2 NTHCOMPDROP TYPECSTR? NOT ;     * 0DF66
 
 * refs (2): 0DD44 0DE02
-OBJ_0DF84:
-        :: OBJ_0E7BB SWAP OBJ_0E2D1 NOT ROTAND OBJ_0E2A1 NOTAND ; * 0DF84
+* alarm -> alarm flag: TRUE if it was acknowledged, does not repeat and flag -44 is clear
+AlmPurge?:
+        :: Alm4? SWAP AlmRepeats? NOT ROTAND Flag44? NOTAND ; * 0DF84
 
 * refs (1): 0DE66
-OBJ_0DFB1:
-        :: OBJ_0ED95 IT                          * 0DFB1
-          :: OBJ_0E80D ClrDouseAlm ;             * 0DFC0
+* -> : if the alarm beep was stopped with the douse keys, mark the alarm (bit 8) and clear the request
+AlmDoused:
+        :: Doused? IT                            * 0DFB1
+          :: AlmSet8 ClrDouseAlm ;               * 0DFC0
         ;                                        * 0DFD4
 
 * refs (3): 0DCA4 0DD6C 0DE2A
-OBJ_0DFD9:
-        :: OBJ_0E2D1 NOTcaseFALSE OBJ_0E7BB      * 0DFD9
-          caseTRUE OBJ_0E2B9                     * 0DFED
+* alarm -> alarm flag: TRUE if it repeats, and was acknowledged or flag -43 is clear
+AlmResched?:
+        :: AlmRepeats? NOTcaseFALSE Alm4?        * 0DFD9
+          caseTRUE Flag43?                       * 0DFED
           caseFALSE TRUE                         * 0DFF7
         ;                                        * 0E001

@@ -81,6 +81,8 @@ The format is described at the top of `tools/sasm.py`. In short:
 
 ## Names
 
+Most routines and objects now have names and a comment, written from reading the code. They live in `data/annotations.txt`. A comment that starts `Probably:` is a guess. What is left as `SUB_xxxxx` or `OBJ_xxxxx` hasn't been worked out yet. Branch targets take their routine's name (`SKIPOB.L2`, or `SKIPOB.loop3` for the target of a branch back). A library command is called by name (`XLIB VparPut`), with its numbers in `equates.s`. Right-hand comments give the text of message numbers and the meaning of system flags, from the ROM's own tables.
+
 Labels come, in order of preference, from our notes (`data/annotations.txt`),
 the published entry-point lists (`data/entries48g.txt`, `data/vbl48gx-r.txt`)
 and the libraries' own command names. Where none of those names a piece of

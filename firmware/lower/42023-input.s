@@ -1,6 +1,6 @@
-* HP 48GX ROM revision R, #42023-#4400B: Key input and the cursor
+* HP 48GX ROM revision R, #42023-#4400B: GETKEY, busy annunciator, cursor and edit-line echo, INPUT, the interactive stack
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: ?ATTNQUIT KEYINBUFFER? ?ATTNQUIT0 Cursor&Disp DelCursChr OnTheFirstCol? NoAttn?Semi LCursor ATTN? ToTheEndOfRow UCursor ->OnTheRow
+* Most referenced: ?ATTNQUIT KEYINBUFFER? ?ATTNQUIT0 Cursor&Disp DelCursChr OnTheFirstCol? NoAttn?Semi LCursor ATTN? ToTheEndOfRow IStack UCursor
 * Follows on from the previous file (at #42023 in the original ROM).
         RPL
 
@@ -33,11 +33,11 @@ GETKEY*:
 
 * refs (1): 420BE
 ATTNxcp:
-        :: ATTNFLGCLR FLUSHKEYS BINT45 OBJ_421D6 ; * 420F5
+        :: ATTNFLGCLR FLUSHKEYS BINT45 GetKeyDone ; * 420F5
 
 * refs (2): 2DB1C 420CD
 ALARMxcp:
-        :: OBJ_42396 FLUSHKEYS ALARMxcp~1 FALSE ; * 42113
+        :: ClrTimeout FLUSHKEYS ALARMxcp~1 FALSE ; * 42113
 
 * refs (1): 420DC
 SLEEPxcp:
@@ -50,27 +50,28 @@ UARTxcp:
 * -> #kc flag
 * refs (3): 17FC0 2D9CD 420AA
 GETKEY:
-        :: ATTN? case GETKEY~13                  * 42159
-          GETTOUCH case OBJ_421D6                * 4216D
-          GETKEY~6 OBJ_13E22 GETKEY~1 BEGIN GETKEY~5 IT * 4217C
-          :: 2RDROP GETKEY~13 ;                  * 4219A
-          GETKEY~3 ?SKIP GETKEY~1                * 421AE
-          GETKEY~10 GETTOUCH UNTIL OBJ_421D6 ;   * 421BD
+        :: ATTN? case ~BusyOn;FALSE              * 42159
+          GETTOUCH case GetKeyDone               * 4216D
+          GETKEY~3 CursorStateOn GETKEY~1 BEGIN GETKEY~2 IT * 4217C
+          :: 2RDROP ~BusyOn;FALSE ;              * 4219A
+          T1Count? ?SKIP GETKEY~1                * 421AE
+          IdleSleep GETTOUCH UNTIL GetKeyDone ;  * 421BD
 
 * refs (3): 42109 42177 421CC
-OBJ_421D6:
-        :: OBJ_4231A OBJ_42396 ClrDouseAlm TRUE ; * 421D6
+* Busy back on and the timeout cleared. TRUE: a key has come
+GetKeyDone:
+        :: BusyOn ClrTimeout ClrDouseAlm TRUE ;  * 421D6
 
 * refs (2): 42168 421A4
-GETKEY~13:
-        :: OBJ_4231A FALSE ;                     * 421F4
+~BusyOn;FALSE:
+        :: BusyOn FALSE ;                        * 421F4
 
 * refs (1): 42190
-GETKEY~5:
+GETKEY~2:
         :: ATTN? caseTRUE KEYINBUFFER?           * 42208
           caseFALSE UART?                        * 4221C
           caseTRUE TIMEOUT?                      * 42226
-          caseTRUE GETKEY~7                      * 42230
+          caseTRUE GETKEY~4                      * 42230
           caseFALSE ALARM?                       * 4223A
         ;                                        * 42244
 
@@ -113,12 +114,13 @@ adrTIMEOUTCLK.L1:
 ALARM?:
         CON(5)  (*)+5                            * 422A1  primitive code object
         CD0EX                                    * 422A6
-        GOSUB   SUB_422B4                        * 422A9
+        GOSUB   AlarmsDue?                       * 422A9
         CD0EX                                    * 422AD
         GOTO    adrTIMEOUTCLK.L1                 * 422B0
 
 * refs (1): 422A9
-SUB_422B4:
+* -> carry set when the nibble ALARMSDUE is not zero
+AlarmsDue?:
         D0=(5)  ALARMSDUE                        * 422B4
         C=DAT0  S                                * 422BB
         ?C#0    S                                * 422BF
@@ -129,12 +131,13 @@ SUB_422B4:
 ?FlashAlert~1:
         CON(5)  (*)+5                            * 422C6  primitive code object
         CD0EX                                    * 422CB
-        GOSUB   SUB_422D9                        * 422CE
+        GOSUB   PastDue?                         * 422CE
         CD0EX                                    * 422D2
         GOTO    adrTIMEOUTCLK.L1                 * 422D5
 
 * refs (1): 422CE
-SUB_422D9:
+* -> carry set when the nibble PASTDUE is not zero
+PastDue?:
         D0=(5)  PASTDUE                          * 422D9
         C=DAT0  S                                * 422E0
         ?C#0    S                                * 422E4
@@ -156,18 +159,19 @@ UART?~1:
 OBJ_42309:
         CON(5)  (*)+5                            * 42309  primitive code object
         LC(3)   #202                             * 4230E
-        GOVLNG  OBJ_539D8.L1                     * 42313
+        GOVLNG  ClrISF20B.L1                     * 42313
 
 * refs (4): 041AC 041D9 421DB 421F9
-OBJ_4231A:
+* Turns on the busy annunciator
+BusyOn:
         CON(5)  (*)+5                            * 4231A  primitive code object
         AD1EX                                    * 4231F
-        GOSUB   OBJ_4231A.L1                     * 42322
+        GOSUB   BusyOn.L1                        * 42322
         AD1EX                                    * 42326
         A=DAT0  A                                * 42329
         D0=D0+  5                                * 4232C
         PC=(A)                                   * 4232F
-OBJ_4231A.L1:
+BusyOn.L1:
         D1=(5)  ANNUNCIATORS                     * 42333
         C=DAT1  B                                * 4233A
         CBIT=1  7                                * 4233D
@@ -179,7 +183,8 @@ OBJ_4231A.L1:
         RTN                                      * 42357
 
 * refs (1): 0495D
-SUB_42359:
+* Turns off the busy annunciator
+BusyOff:
         D1=(5)  ANNUNCIATORS                     * 42359
         C=DAT1  B                                * 42360
         CBIT=0  7                                * 42363
@@ -191,20 +196,22 @@ SUB_42359:
         RTN                                      * 4237D
 
 * refs (1): 423F8
-GETKEY~9:
+* Starts the auto-off timeout, in RPL
+SetTimeout:
         CON(5)  (*)+5                            * 4237F  primitive code object
         GOSBVL  SAVPTR                           * 42384
         ST=0    15                               * 4238B
         GOSUB   settimeout                       * 4238E
-        GOTO    OBJ_42396.L1                     * 42392
+        GOTO    ClrTimeout.L1                    * 42392
 
 * refs (3): 1800B 42118 421E0
-OBJ_42396:
+* Stops the auto-off timeout, in RPL
+ClrTimeout:
         CON(5)  (*)+5                            * 42396  primitive code object
         GOSBVL  SAVPTR                           * 4239B
         ST=0    15                               * 423A2
         GOSUB   clrtimeout                       * 423A5
-OBJ_42396.L1:
+ClrTimeout.L1:
         GOSBVL  AllowIntr                        * 423A9
         P=      0                                * 423B0
         SETHEX                                   * 423B2
@@ -214,7 +221,7 @@ OBJ_42396.L1:
 settimeout:
         GOSBVL  GetTimChk                        * 423BB
         A=C     W                                * 423C2
-        GOSBVL  SUB_01797                        * 423C5
+        GOSBVL  Ticks10Min                       * 423C5
         A=A+C   W                                * 423CC
         GOTO    clrtimeout.L1                    * 423CF
 
@@ -222,14 +229,14 @@ settimeout:
 clrtimeout:
         A=0     W                                * 423D3
 clrtimeout.L1:
-        GOSBVL  SUB_01A96                        * 423D6
-        GOVLNG  SUB_01485                        * 423DD
+        GOSBVL  SetNextAlarm                     * 423D6
+        GOVLNG  SetT2WakeClk                     * 423DD
         RPL
 
 * refs (1): 4217C
-GETKEY~6:
-        :: NoEditLine? ?SKIP GETKEY~8            * 423E4
-          GETKEY~9 ;                             * 423F8
+GETKEY~3:
+        :: NoEditLine? ?SKIP ArmKeyPollOb        * 423E4
+          SetTimeout ;                           * 423F8
 
 * -> flag
 * refs (23): 19B2B 19CBD 395A1 39B8A 3A1CF 42217 ...
@@ -277,7 +284,7 @@ SysErrorTrap~2:
         GOVLNG  CONTEXT!.L4                      * 424C0
 
 * refs (1): 3FF02
-OBJ_424C7:
+ResetKeyState~1:
         CON(5)  (*)+5                            * 424C7  primitive code object
         LC(5)   CtlAlarm                         * 424CC
         GOVLNG  CONTEXT!.L3                      * 424D3
@@ -286,25 +293,25 @@ OBJ_424C7:
 * refs (2): 3B4D2 432B4
 DCursor:
         :: LastERow? ?SEMI                       * 424DA
-          OBJ_4285E CURSOR@ OBJ_4482D DROP #- #+ #1+ OBJ_13F69 OBJ_4482D * 424E9
+          OBJ_4285E CURSOR@ OBJ_4482D DROP #- #+ #1+ CURSORPART+1 OBJ_4482D * 424E9
           OBJ_428F9 OBJ_426C4 ;                  * 42516
 
 * refs (3): 3DED6 43291 4331D
 ToTheLastRow:
-        :: ToTheLastRow~1 SizeOfComLine OBJ_4482D OBJ_42804 SETCURSOR * 42525
+        :: CURSORPART=Last SizeOfComLine OBJ_4482D OBJ_42804 SETCURSOR * 42525
           EDITPARTS BINT3 2DUP#> NOTcase2DROP #- * 42543
-          OBJ_113E2 OBJ_426C4 ;                  * 4255C
+          TOPLINE! OBJ_426C4 ;                   * 4255C
 
 * refs (8): 3B482 3B654 3E4A2 3E67F 40724 40E15 ...
 LCursor:
         :: OnTheFirstCol? ?SEMI                  * 4256B
-          LCursor~2 CURSOR_OFF BINT2 OVER#> FIRSTC@ #0<> AND casedrop * 4257A
-          LCursor~1                              * 425A2
-          #1- OBJ_13E9E ;                        * 425A7
+          CURSOR-1 CURSOR_OFF BINT2 OVER#> FIRSTC@ #0<> AND casedrop * 4257A
+          FIRSTCHAR-1                            * 425A2
+          #1- CURSOROFFSET! ;                    * 425A7
 
 * refs (1): 3DEA9
 ToTheStartOfRow:
-        :: OBJ_42741 SETCURSOR CURSOR_OFF0 SETFIRSTC_0 ; * 425B6
+        :: EdRowStart# SETCURSOR CURSOR_OFF0 SETFIRSTC_0 ; * 425B6
 
 * refs (6): 3B527 3B64F 3E6CA 40765 432F5 4337C
 ->OnTheRow:
@@ -317,25 +324,24 @@ ToTheEndOfRow:
 
 * refs (2): 425E3 42606
 OBJ_42615:
-        :: CURSOR+ OBJ_4426D CURSOR_OFF #- DUP#0=csedrp FIRSTC+ BINT1 #>case * 42615
-          CURSOR_OFF+                            * 42642
+        :: CURSOR+ #EdLastCol CURSOR_OFF #- DUP#0=csedrp FIRSTC+ BINT1 * 42615
+          #>case CURSOR_OFF+                     * 4263D
           CURSOR_END? case CURSOR_OFF+           * 42647
           FIRSTC+ ;                              * 42656
 
 * refs (6): 3B3A5 3EE83 3EEB5 3EEBA 3EEE2 428B3
 UCursor:
         :: TopERow? ?SEMI                        * 42660
-          OBJ_42886 OBJ_42741 #1- UCursor~1 OBJ_4482D OBJ_42804 SETCURSOR * 4266F
-          OBJ_426C4 ;                            * 42692
+          OBJ_42886 EdRowStart# #1- CURSORPART-1 OBJ_4482D OBJ_42804 * 4266F
+          SETCURSOR OBJ_426C4 ;                  * 4268D
 
 * refs (1): 3DDED
 ToTheFirstRow:
-        :: ToTheFirstRow~2 ToTheFirstRow~1 BINT0 OBJ_4482D OBJ_428F9 * 4269C
-          OBJ_426C4 ;                            * 426BA
+        :: ~BINT1;TOPLINE! CURSORPART=1 BINT0 OBJ_4482D OBJ_428F9 OBJ_426C4 ; * 4269C
 
 * refs (4): 4251B 42561 42692 426BA
 OBJ_426C4:
-        :: CURSOR_OFF OBJ_4426D #<> ?SEMI        * 426C4
+        :: CURSOR_OFF #EdLastCol #<> ?SEMI       * 426C4
           CURSOR_END? ?SEMI                      * 426DD
           LCursor ;                              * 426E7
 
@@ -352,7 +358,8 @@ TopERow?:
         :: CurrentRow #1= ;                      * 4272D
 
 * refs (2): 425BB 42674
-OBJ_42741:
+* -> #: the cursor position, less the first column and offset on the row: where the row starts
+EdRowStart#:
         :: CURSOR@ FIRSTC@ CURSOR_OFF #+ #- ;    * 42741
 
 * refs (4): 3B441 3B6DB 3E300 3E407
@@ -367,8 +374,8 @@ EndComLine?:(bip;q):
 
 * refs (12): 3B3A0 3B45A 3B47D 3B4CD 3B522 3DDE8 ...
 Cursor&Disp:
-        :: OBJ_113F2 FIRSTC@ 'R EVAL FIRSTC@ #= SWAP OBJ_113F2 #= * 427AF
-          cursorblink- AND ?SKIP DispEditLine    * 427E1
+        :: TOPLINE@ FIRSTC@ 'R EVAL FIRSTC@ #= SWAP TOPLINE@ #= cursorblink- * 427AF
+          AND ?SKIP DispEditLine                 * 427E6
           OBJ_42831 cursorblink+ ;               * 427F5
 
 * refs (2): 42539 42688
@@ -377,21 +384,21 @@ OBJ_42804:
 
 3rolld;-(2s);+(2s):
           :: #- #- ;                             * 4280E
-          DROP OBJ_13E9E ;                       * 42822
+          DROP CURSOROFFSET! ;                   * 42822
 
 * refs (4): 3A0DA 427F5 42994 429BC
 OBJ_42831:
-        :: LINESOFSTACK #1+ CurrentRow OBJ_113F2 #- #+ OBJ_13B9C ; * 42831
+        :: LINESOFSTACK #1+ CurrentRow TOPLINE@ #- #+ CursorShow ; * 42831
 
 * refs (3): 424E9 428C7 42B7A
 OBJ_4285E:
-        :: OBJ_113F2 #3+ CurrentRow #<> ?SEMI    * 4285E
-          OBJ_11402 ;                            * 4287C
+        :: TOPLINE@ #3+ CurrentRow #<> ?SEMI     * 4285E
+          TOPLINE+1 ;                            * 4287C
 
 * refs (2): 4266F 428AE
 OBJ_42886:
-        :: OBJ_113F2 CurrentRow #<> ?SEMI        * 42886
-          OBJ_11412 ;                            * 4289F
+        :: TOPLINE@ CurrentRow #<> ?SEMI         * 42886
+          TOPLINE-1 ;                            * 4289F
 
 * refs (3): 3B45F 3B6EF 3E67A
 PrevLineIfStart:
@@ -399,20 +406,21 @@ PrevLineIfStart:
 
 * refs (3): 3E158 3E6C5 43377
 ToNextRowIfEnd:
-        :: OBJ_4285E CURSOR+ OBJ_13F69 SETFIRSTC_0 CURSOR_OFF0 ; * 428C2
+        :: OBJ_4285E CURSOR+ CURSORPART+1 SETFIRSTC_0 CURSOR_OFF0 ; * 428C2
 
 * refs (1): 426A1
-ToTheFirstRow~2:
-        :: BINT1 OBJ_113E2 ;                     * 428E5
+~BINT1;TOPLINE!:
+        :: BINT1 TOPLINE! ;                      * 428E5
 
 * refs (2): 42516 426B5
 OBJ_428F9:
         :: ITE SWAPDROP                          * 428F9
-          :: DROPDUP OBJ_13E9E ;                 * 42908
+          :: DROPDUP CURSOROFFSET! ;             * 42908
           FIRSTC@ #+ #+ SETCURSOR ;              * 4291C
 
 * refs (1): 3B712
-OBJ_42935:
+* Backspace in the edit line: deletes before the cursor and redraws
+EdBackspace:
         :: OnTheFirstCol? ?SEMI                  * 42935
           cursorblink- CURSOR_END? CURSOR_OFF #>1 AND DUP IT * 42944
           :: CHR_Space ROWNUM DISPCHAR+PC ;      * 42967
@@ -420,7 +428,8 @@ OBJ_42935:
           OBJ_42831 cursorblink+ ;               * 42994
 
 * refs (1): 3B6BD
-OBJ_429A3:
+* DEL in the edit line: deletes at the cursor and redraws
+EdDelete:
         :: CURSOR_END? ?SEMI                     * 429A3
           DelCursChr DispEditLine OBJ_42831 cursorblink+ ; * 429B2
 
@@ -428,16 +437,16 @@ OBJ_429A3:
 * -> : delete the character at the edit-line cursor and redisplay (DEL)
 DelCursChr:
         :: DelCursChr~1 NOT?SEMI                 * 429CB
-          OBJ_113F2 DUP#1= caseDROP #3+          * 429DA
+          TOPLINE@ DUP#1= caseDROP #3+           * 429DA
           EDITPARTS #> NOT?SEMI                  * 429EE
-          OBJ_11412 ;                            * 429FD
+          TOPLINE-1 ;                            * 429FD
 
 * refs (1): 429D0
 DelCursChr~1:
         CON(5)  (*)+5                            * 42A07  primitive code object
         ASSEMBLE
         GOSBVL  SAVPTR                           * 42A0C
-        GOSUB   SUB_42AC4                        * 42A13
+        GOSUB   CursorAddr                       * 42A13
         D0=C                                     * 42A17
         A=DAT0  B                                * 42A1A
         ?A#0    B                                * 42A1D
@@ -487,7 +496,7 @@ DelCursChr~1.L3:
         DAT1=C  A                                * 42AA3
         GONC    DelCursChr~1.L5                  * 42AA6
 DelCursChr~1.L4:
-        GOSBVL  SUB_44772                        * 42AA9
+        GOSBVL  EdFirstByte                      * 42AA9
         ?A#0    B                                * 42AB0
         GOYES   DelCursChr~1.L5                  * 42AB3
         ST=1    3                                * 42AB5
@@ -498,7 +507,8 @@ DelCursChr~1.L6:
         GOVLNG  GPPushT/FLp                      * 42ABD
 
 * refs (2): 13BBE 42A13
-SUB_42AC4:
+* -> C.A = address of the character at the cursor, B.A = TEMPENV. The edit line ends just below the temporary environments
+CursorAddr:
         D0=(5)  CURSOR                           * 42AC4
         A=0     A                                * 42ACB
         A=DAT0  A                                * 42ACD
@@ -514,19 +524,22 @@ SUB_42AC4:
 * $/chr ->
 * refs (4): 3B80F 3DB55 3F2BF 40477
 EchoChrKey:
-        :: SetDA13NoCh ?SetEditRoll ?TogU/LCase OBJ_42B02 ; * 42AE4
+        :: SetDA13NoCh ?SetEditRoll ?TogU/LCase Echo1Char ; * 42AE4
 
 * refs (2): 40DED 42AF8
-OBJ_42B02:
+* $/chr ->: adds a character, drawing it directly when it goes at the end of the row
+Echo1Char:
         :: NoEditLine? OVER Char>Edit caseDROP CURSOR_OFF * 42B02
           BINT20 #< NOTcaseDROP INSERT?          * 42B20
           CURSOR_END? NOTAND caseDROP cursorblink- * 42B34
           ROWNUM DISPCHAR+PC cursorblink+ SetDA2bNoCh ; * 42B48
 
 * refs (3): 3E11F 3EEFB 42CB5
-OBJ_42B61:
+* Adds a newline to the command line
+EchoNewline:
         :: EDITPARTS BINT4 #< ?SKIP OBJ_4285E    * 42B61
-          CHR_Newline InsertEcho CURSOR_OFF0 OBJ_13F69 SETFIRSTC_0 OBJ_11422 ; * 42B7F
+          CHR_Newline InsertEcho CURSOR_OFF0 CURSORPART+1 SETFIRSTC_0 * 42B7F
+          CR_COUNT+1 ;                           * 42B98
 
 * refs (1): 443D0
 ~ChkNoChr0!(st);Echo$NoChr00:
@@ -536,13 +549,13 @@ OBJ_42B61:
 * refs (3): 42BAC 43ED1 D9B00
 Echo$NoChr00:
         :: dup;BeforeRC(st)? case2drop AddInComLine(st) * 42BB6
-          OBJ_42C92 ;                            * 42BCA
+          EchoLines ;                            * 42BCA
 
 * $/chr ->
 * refs (2): 404C2 4062A
 Echo$Key:
-        :: Echo$Key~1 dup;BeforeRC(st)? case2drop OBJ_42CE2 * 42BD4
-          SetDA3NoCh OBJ_42C92 ;                 * 42BED
+        :: Echo$Key~1 dup;BeforeRC(st)? case2drop AddInComLine! * 42BD4
+          SetDA3NoCh EchoLines ;                 * 42BED
 
 * refs (1): 42BD9
 Echo$Key~1:
@@ -568,12 +581,14 @@ dup2;spos(st,RC):
         :: 2DUP CHR_Newline SWAP POS$ ;          * 42C74
 
 * refs (2): 42BCA 42BF2
-OBJ_42C92:
-        :: BEGIN BINT3 NDUP #1- SUB$ AddInComLine(st) OBJ_42B61 SWAPDROP #1+ * 42C92
-          dup2;spos(st,RC) #0=UNTIL DROP LAST$ AddInComLine(st) ; * 42CC4
+* $ ...: adds a string row by row
+EchoLines:
+        :: BEGIN BINT3 NDUP #1- SUB$ AddInComLine(st) EchoNewline SWAPDROP * 42C92
+          #1+ dup2;spos(st,RC) #0=UNTIL DROP LAST$ AddInComLine(st) ; * 42CBF
 
 * refs (6): 3DFC9 404EA 405D5 40657 4070B 42BE8
-OBJ_42CE2:
+* $ ->: adds text to the command line, and marks the menu
+AddInComLine!:
         :: ?SetEditRoll SetDA3NoCh AddInComLine(st) ; * 42CE2
 
 * $ ->
@@ -641,7 +656,7 @@ BestVisit(nm):
 Rcl&Do::
         :: DUP1LAMBIND SAFE@_HERE NOTcase SETNONEXTERR * 42E86
           'REVAL NOTcase ABND                    * 42E9F
-          AtUserStack 1GETABND CK2NOLASTWD OBJ_2157E ; * 42EAE
+          AtUserStack 1GETABND CK2NOLASTWD xSTONoCK ; * 42EAE
 
 * refs (3): 42D87 43E95 D5EF7
 AdjEdModes:
@@ -750,7 +765,7 @@ SetCursPos(s):
         :: DUP#0=ITE                             * 43309
           :: DROP ToTheLastRow ToTheEndOfRow ;   * 43313
           :: DUPONE #= caseDROP ONE_DO           * 4332C
-            OBJ_44487 ITE                        * 43345
+            NextChr=0? ITE                       * 43345
 
 drop;stop=0:
             :: DROP ExitAtLOOP ;                 * 4334F
@@ -787,13 +802,13 @@ input(st,li)~string:
 
 * refs (1): 43430
 input(st,li)~real:
-        :: OBJ_43608 COERCE BINT2 ~4ROLL;PUTLIST;SWAP ; * 434B7
+        :: InputCursPos COERCE BINT2 ~4ROLL;PUTLIST;SWAP ; * 434B7
 
 * refs (1): 4343A
 input(st,li)~list:
         :: INNERCOMP BINT2 #<>case SETSIZEERR    * 434D5
           DUPTYPEREAL? 3PICK TYPEREAL? ANDNOTcase SETSIZEERR * 434EE
-          4UNROLL OBJ_43608 COERCE 4ROLL COERCE TWO{}N BINT2 * 43507
+          4UNROLL InputCursPos COERCE 4ROLL COERCE TWO{}N BINT2 * 43507
           ~4ROLL;PUTLIST;SWAP ;                  * 4352A
 
 * refs (2): 43444 4344E
@@ -824,7 +839,8 @@ V:
           BINT6 ~4ROLL;PUTLIST;SWAP ;            * 435F9
 
 * refs (2): 434BC 4350C
-OBJ_43608:
+* Keeps the cursor position argument of INPUT: a negative one selects replace mode
+InputCursPos:
         :: DUP4UNROLL %0_2A2B4 %< ITE BINT2 BINT1 * 43608
           BINT3 ~4ROLL;PUTLIST;SWAP ROT %ABS ;   * 4362B
 
@@ -833,7 +849,8 @@ OBJ_43608:
         :: 4ROLL PUTLIST SWAP ;                  * 43644
 
 * refs (7): 3B36E 3B37D 3DDD9 3E5E4 8EB84 D51AD ...
-OBJ_4365D:
+* The interactive stack: a parameterized outer loop over the stack. Locals: 1 exit flag, 2 pointer row on the display (1-4), 3 stack level of the pointer, 4 depth when it started
+IStack:
         :: TakeOver UStackDepth #0=case          * 4365D
 
 WarningC15:
@@ -842,8 +859,8 @@ WarningC15:
           :: CacheStack InitEdModes ;            * 43694
           POLSaveUI ERRSET                       * 436A8
           :: DEPTH UStackDepth #- BINT1 BINT4 FALSE 4NULLLAM{} BIND ' * 436B2
-            OBJ_43770 ' OBJ_43842 TrueTrue EditLExists? 4GETLAM #0<> OR ITE * 436E4
-            {STACK\ECHO}_43E31                   * 43711
+            IStackDisp ' IStackKeys TrueTrue EditLExists? 4GETLAM #0<> OR * 436E4
+            ITE {STACK\ECHO}_43E31               * 4370C
 
 RclStackMenu:
             :: ' MenuSTACK ;                     * 43716
@@ -851,115 +868,131 @@ RclStackMenu:
           ERRTRAP POLResUI&Err POLRestoreUI ClrDAsOK ; * 43757
 
 * refs (1): 436E4
-OBJ_43770:
-        :: DA2OK? ?SKIP OBJ_437A2                * 43770
+* Display action of the interactive stack: status and menu areas, and the stack rows unless keys are waiting
+IStackDisp:
+        :: DA2OK? ?SKIP IStackDisp2              * 43770
           DA1OK?NOTIT ?DispStatus DA3OK?NOTIT ?DispMenu ClrDAsOK ; * 43784
 
 * refs (1): 4377F
-OBJ_437A2:
-        :: KEYINBUFFER? NOTcase OBJ_437C5        * 437A2
+* Draws the stack rows unless a key is waiting
+IStackDisp2:
+        :: KEYINBUFFER? NOTcase IStackRows       * 437A2
           SetDA2aBad SetDA2bBad ;                * 437B6
 
 * refs (1): 437B1
-OBJ_437C5:
+* Draws four stack levels around the pointer
+IStackRows:
         :: TOADISP ClrAbbrevStk 3GETLAM 2GETLAM #1-+ BINT4 ZERO_DO * 437C5
-          ISTOP-INDEX OVER OVER#- #1+DUP #3+ ~4GETLAM;#+ pick(s)? OBJ_39DBF * 437ED
-          ISTOP-INDEX 2GETLAM #= IT OBJ_441BF    * 43815
+          ISTOP-INDEX OVER OVER#- #1+DUP #3+ ~4GETLAM;#+ pick(s)? * 437ED
+          DispLevel1Row ISTOP-INDEX 2GETLAM #= IT \ShowPointer * 43810
           LOOP DROP SetDA2Valid ;                * 4382E
 
 * refs (1): 436EE
-OBJ_43842:
-        :: BINT1 #=casedrop OBJ_43883            * 43842
-          BINT2 #=casedrop OBJ_43919             * 43856
-          BINT3 #=casedrop OBJ_43982             * 43865
+* #kc #pl -> ob TRUE / FALSE: key handler of the interactive stack, by plane
+IStackKeys:
+        :: BINT1 #=casedrop IStackKeyN           * 43842
+          BINT2 #=casedrop IStackKeyLS           * 43856
+          BINT3 #=casedrop IStackKeyRS           * 43865
           2DROP 'DoBadKeyT ;                     * 43874
 
 * refs (1): 43851
-OBJ_43883:
+* Unshifted keys
+IStackKeyN:
         :: DUP#<7 casedrpfls BINT11              * 43883
-          ?CaseKeyDef OBJ_439F5 BINT17 ?CaseKeyDef OBJ_43AD1 BINT26 * 43897
-          ?CaseKeyDef OBJ_43F26 BINT29 ?CaseKeyDef OBJ_4407A BINT25 * 438B5
-          ?CaseKeyDef OBJ_43CD4 BINT45 ?CaseKeyDef OBJ_43CE8 BINT12 * 438D3
-          #=casedrpfls BINT35                    * 438F1
+          ?CaseKeyDef IStackUp BINT17 ?CaseKeyDef IStackDown BINT26 * 43897
+          ?CaseKeyDef IStackEdit BINT29 ?CaseKeyDef \DROP BINT25 ?CaseKeyDef * 438B5
+          IStackEnter BINT45 ?CaseKeyDef IStackOn BINT12 #=casedrpfls BINT35 * 438D8
           #=casedrpfls BINT40                    * 438FB
           #=casedrpfls DROP                      * 43905
           'DoBadKeyT ;                           * 4390F
 
 * refs (1): 43860
-OBJ_43919:
+* Left-shifted keys
+IStackKeyLS:
         :: DUP#<7 casedrpfls BINT11              * 43919
-          ?CaseKeyDef OBJ_43B9E BINT17 ?CaseKeyDef OBJ_43C16 BINT26 * 4392D
-          ?CaseKeyDef OBJ_43F26 BINT12 #=casedrpfls BINT35 * 4394B
+          ?CaseKeyDef IStackPageUp BINT17 ?CaseKeyDef IStackPageDn BINT26 * 4392D
+          ?CaseKeyDef IStackEdit BINT12 #=casedrpfls BINT35 * 4394B
           #=casedrpfls BINT40                    * 43964
           #=casedrpfls DROP                      * 4396E
           'DoBadKeyT ;                           * 43978
 
 * refs (1): 4386F
-OBJ_43982:
+* Right-shifted keys
+IStackKeyRS:
         :: DUP#<7 casedrpfls BINT45              * 43982
           #=casedrpfls BINT11                    * 43996
-          ?CaseKeyDef OBJ_43C89 BINT17 ?CaseKeyDef OBJ_43CAC BINT26 * 439A0
-          ?CaseKeyDef OBJ_43F49 BINT35 #=casedrpfls BINT40 * 439BE
+          ?CaseKeyDef IStackTop BINT17 ?CaseKeyDef IStackBottom BINT26 * 439A0
+          ?CaseKeyDef IStackVisit BINT35 #=casedrpfls BINT40 * 439BE
           #=casedrpfls DROP                      * 439D7
           'DoBadKeyT ;                           * 439E1
         BSS     10                               * 439EB  zeros
 
 * refs (1): 4389C
-OBJ_439F5:
+* Up key: moves the pointer up a level
+IStackUp:
         :: TakeOver 3GETLAM ~DEPTH;4GETLAM;#- #1- #=case DoBadKey * 439F5
-          TOADISP REPEATER BINT11 OBJ_43A36 SetDA123NoCh ; * 43A18
+          TOADISP REPEATER BINT11 IStackUpStep SetDA123NoCh ; * 43A18
 
 * refs (1): 43A27
-OBJ_43A36:
+* One step up, scrolling when the pointer is on the top row
+IStackUpStep:
         :: 3GETLAM ~DEPTH;4GETLAM;#- #3- #= ?SEMI * 43A36
-          OBJ_441D3 3GETLAM #1+ 3PUTLAM 2GETLAM BINT1 #=ITE * 43A54
+          \ShowColon 3GETLAM #1+ 3PUTLAM 2GETLAM BINT1 #=ITE * 43A54
           :: BINT3 ScreenDnN BINT1 3GETLAM DUP #4+ ~4GETLAM;#+ pick(s)? * 43A77
-            OBJ_39DBF ;                          * 43AA4
-          :: 2GETLAM #1- 2PUTLAM ; OBJ_441BF ;   * 43AAE
+            DispLevel1Row ;                      * 43AA4
+          :: 2GETLAM #1- 2PUTLAM ; \ShowPointer ; * 43AAE
 
 * refs (1): 438AB
-OBJ_43AD1:
+* Down key: moves the pointer down a level
+IStackDown:
         :: TakeOver 3GETLAM BINT1 #=case DoBadKey * 43AD1
-          TOADISP REPEATER BINT17 OBJ_43B0D SetDA123NoCh ; * 43AEF
+          TOADISP REPEATER BINT17 IStackDownStep SetDA123NoCh ; * 43AEF
 
 * refs (1): 43AFE
-OBJ_43B0D:
+* One step down, scrolling when the pointer is on the bottom row
+IStackDownStep:
         :: 3GETLAM #1= ?SEMI                     * 43B0D
-          OBJ_441D3 3GETLAM #1- 3PUTLAM 2GETLAM BINT4 #=ITE * 43B21
+          \ShowColon 3GETLAM #1- 3PUTLAM 2GETLAM BINT4 #=ITE * 43B21
           :: BINT3 ScreenUpN BINT4 3GETLAM DUP #4+ ~4GETLAM;#+ pick(s)? * 43B44
-            OBJ_39DBF ;                          * 43B71
-          :: 2GETLAM #1+ 2PUTLAM ; OBJ_441BF ;   * 43B7B
+            DispLevel1Row ;                      * 43B71
+          :: 2GETLAM #1+ 2PUTLAM ; \ShowPointer ; * 43B7B
 
 * refs (1): 43932
-OBJ_43B9E:
+* Left-shift up: four levels up
+IStackPageUp:
         :: TakeOver ~DEPTH;4GETLAM;#- 3GETLAM 2DUP#= case2drop DoBadKey * 43B9E
           2DUPSWAP BINT4 #MAX #4- #>ITE          * 43BC1
 
 drop;3Lput:
           :: DROP 3PUTLAM ;                      * 43BDA
-          :: #4+ 3PUTLAM DROP ; OBJ_44110 SetDA13NoCh ; * 43BEE
+          :: #4+ 3PUTLAM DROP ; \FixRow SetDA13NoCh ; * 43BEE
 
 * refs (1): 43941
-OBJ_43C16:
+* Left-shift down: four levels down
+IStackPageDn:
         :: TakeOver 3GETLAM DUP #1= casedrop DoBadKey * 43C16
           DUP BINT5 #<ITE                        * 43C39
           :: DROPONE 3PUTLAM BINT4 2PUTLAM ;     * 43C48
-          :: #4- 3PUTLAM OBJ_44110 ; SetDA13NoCh ; * 43C66
+          :: #4- 3PUTLAM \FixRow ; SetDA13NoCh ; * 43C66
 
 * refs (1): 439A5
-OBJ_43C89:
-        :: TakeOver ~DEPTH;4GETLAM;#- 3PUTLAM OBJ_44110 SetDA13NoCh ; * 43C89
+* Right-shift up: to the highest level
+IStackTop:
+        :: TakeOver ~DEPTH;4GETLAM;#- 3PUTLAM \FixRow SetDA13NoCh ; * 43C89
 
 * refs (1): 439B4
-OBJ_43CAC:
+* Right-shift down: to level 1
+IStackBottom:
         :: TakeOver BINT1 3PUTLAM BINT4 2PUTLAM SetDA13NoCh ; * 43CAC
 
 * refs (1): 438D8
-OBJ_43CD4:
+* ENTER: leaves the interactive stack
+IStackEnter:
         :: TakeOver ~TRUE;1PUTLAM ;              * 43CD4
 
 * refs (1): 438E7
-OBJ_43CE8:
+* ON: leaves the interactive stack, once the display has settled
+IStackOn:
         :: TakeOver DAsBad? ?SEMI                * 43CE8
           ~TRUE;1PUTLAM ;                        * 43CFC
 
@@ -1022,40 +1055,43 @@ _LEVEL_:
 
 * refs (1): 43D1F
 \ECHO:
-        :: TakeOver 3GETLAM ~4GETLAM;#+ PICK DUP OBJ_408C3 CkChr00 NOT * 43E40
+        :: TakeOver 3GETLAM ~4GETLAM;#+ PICK DUP KeyOb>$ CkChr00 NOT * 43E40
           case2drop                              * 43E6D
           :: #_102 JstGetTHEMESG DoWarning SetDA23NoCh ; * 43E72
           SWAP AdjEdModes DROP NoEditLine? ITE   * 43E90
           :: {STACK\ECHO}_43E31 BINT1 StartMenu SetDA2NoCh ; SetDA23NoCh * 43EA9
-          OBJ_4072E Echo$NoChr00 OBJ_4072E ;     * 43ECC
+          EchoSpaceSep Echo$NoChr00 EchoSpaceSep ; * 43ECC
 
 * refs (1): 43D45
 \VIEW:
-        :: TakeOver 3GETLAM UNCOERCE BestEditLevel(r) OBJ_440CF ; * 43EE0
+        :: TakeOver 3GETLAM UNCOERCE BestEditLevel(r) \StkChanged ; * 43EE0
 
 * refs (1): 43D4F
 \Ú>VIEW:
-        :: TakeOver 3GETLAM PICK \Ú>VIEW~1 OBJ_440CF ; * 43F03
+        :: TakeOver 3GETLAM PICK \Ú>VIEW~1 \StkChanged ; * 43F03
 
 * refs (2): 438BA 43950
-OBJ_43F26:
-        :: ComLine?:(bip;q) 3GETLAM UNCOERCE ~Roll&Do:;EditLevel1 OBJ_440CF ; * 43F26
+* Edits the level the pointer is at
+IStackEdit:
+        :: ComLine?:(bip;q) 3GETLAM UNCOERCE ~Roll&Do:;EditLevel1 * 43F26
+          \StkChanged ;                          * 43F3F
 
 * refs (1): 439C3
-OBJ_43F49:
-        :: ComLine?:(bip;q) 3GETLAM PICK OBJ_3AE71 OBJ_440CF ; * 43F49
+* VISIT on the object at the pointer
+IStackVisit:
+        :: ComLine?:(bip;q) 3GETLAM PICK VisitKey \StkChanged ; * 43F49
 
 * refs (1): 43D68
 \PICK:
-        :: OBJ_4409D PICK ~AtUserStack;SetDA13NoCh ; * 43F6C
+        :: \#LEVEL PICK ~AtUserStack;SetDA13NoCh ; * 43F6C
 
 * refs (1): 43D7C
 \ROLL:
-        :: OBJ_4409D ROLL ~AtUserStack;SetDA13NoCh ; * 43F85
+        :: \#LEVEL ROLL ~AtUserStack;SetDA13NoCh ; * 43F85
 
 * refs (1): 43D90
 \ROLLD:
-        :: OBJ_4409D UNROLL ~AtUserStack;SetDA13NoCh ; * 43F9E
+        :: \#LEVEL UNROLL ~AtUserStack;SetDA13NoCh ; * 43F9E
 
 * refs (1): 43E1D
 \LEVEL:
@@ -1063,8 +1099,8 @@ OBJ_43F49:
 
 * refs (1): 43DB8
 \DUPN:
-        :: OBJ_4409D NDUP ~AtUserStack;SetDA13NoCh ; * 43FD5
+        :: \#LEVEL NDUP ~AtUserStack;SetDA13NoCh ; * 43FD5
 
 * refs (1): 43DD9
 \DRPN:
-        :: OBJ_4409D NDROP OBJ_440CF SetDA13NoCh ; * 43FEE
+        :: \#LEVEL NDROP \StkChanged SetDA13NoCh ; * 43FEE

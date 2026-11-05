@@ -1,4 +1,4 @@
-* HP 48GX ROM revision R, #14001-#15FFF: Decompiling and displaying objects
+* HP 48GX ROM revision R, #14001-#15FFF: Error words, HALT and the single-step debugger (SST, SST↓, NEXT, DBUG), parts of the SOLVR menu, EQ access, and the front of the object decompiler
 * Addresses in the right-hand comments are those of the original ROM.
 * Most referenced: msg>TAG EDITDECOMP$ GsstFIN DOSTOE DECOMP$ sstDISP nohalt ->StkStr22! 'EQ DORCLE DO>STR CRUNCH
 * Follows on from the previous file (at #14001 in the original ROM).
@@ -28,7 +28,7 @@ ERR0:
 ERRN:
         CON(5)  (*)+5                            * 14039  primitive code object
         LC(5)   LASTERROR                        * 1403E
-        GOVLNG  OBJ_11495.L1                     * 14045
+        GOVLNG  PADCOUNT!.L1                     * 14045
         RPL
 
 * -> hxs
@@ -233,14 +233,16 @@ halt.L1:
           :: UNDO_ON? IT SAVESTACK               * 143BB
             GOTO StartupProc~1.L1 ;              * 143CF
 Π'halt.L1:
-          ERRTRAP OBJ_14E54 OBJ_1444C DropSysObs ERROR@ Err#Cont #= ?SEMI * 143DE
+          ERRTRAP ?AbndSavStk HaltFrameEnd DropSysObs ERROR@ Err#Cont #= * 143DE
+          ?SEMI                                  * 14401
           ' Π'halt DRPExitAtLOOP casedrop ERRJMP * 14406
           ERROR@ Err#Kill #<>case ERRJMP         * 1441F
-          OBJ_14EEC #0=case ABORT                * 14433
+          SstRDepth #0=case ABORT                * 14433
           ERRJMP ;                               * 14442
 
 * refs (2): 143E8 14560
-OBJ_1444C:
+* -> : leave the 'halt frame: restore the undo state saved in lam 'halt and abandon the frame
+HaltFrameEnd:
         :: Π'halt UNDO_ON ?SKIP UNDO_OFF         * 1444C
           ABND ;                                 * 14465
 
@@ -258,36 +260,37 @@ nohalt:
 * refs (1): C5DB1
 next:
         :: TakeOver SuspendOK? NOTcase DoBadKey  * 144AC
-          CK0NOLASTWD BINT2 COLA OBJ_14533       * 144C5
+          CK0NOLASTWD BINT2 COLA SstStep         * 144C5
         ;                                        * 144D9
 
 * refs (1): C5D90
 sstdown:
         :: SuspendOK? NOTcase DoBadKey           * 144DE
-          CK0NOLASTWD ONECOLA OBJ_14533 ;        * 144F2
+          CK0NOLASTWD ONECOLA SstStep ;          * 144F2
 
 * refs (1): C5D6F
 sst:
         :: SuspendOK? NOTcase DoBadKey           * 14506
-          CK0NOLASTWD BINT0 COLA OBJ_14533       * 1451A
+          CK0NOLASTWD BINT0 COLA SstStep         * 1451A
         ;                                        * 1452E
 
 * refs (3): 144D4 144FC 14529
-OBJ_14533:
+* #mode -> : SST (0), SST↓ (1) or NEXT (2) on the halted program. Fetches the next object from the suspended return stack and hands it to SstExec.
+SstStep:
         :: ' nohalt DRPExitAtLOOP casedrop NOHALTERR * 14533
-          Halted? NOTcaseDROP OBJ_14E54          * 14551
-          OBJ_1444C                              * 14560
+          Halted? NOTcaseDROP ?AbndSavStk        * 14551
+          HaltFrameEnd                           * 14560
           CODE                                   * 14565  55 nibbles
             C=B     A                            * 1456F
             CD0EX                                * 14571
             B=C     A                            * 14574
             LC(5)   Π'halt.L1                    * 14576
-OBJ_14533.loop1:
+SstStep.loop1:
             D0=D0-  5                            * 1457D
             D=D+1   A                            * 14580
             A=DAT0  A                            * 14582
             ?C#A    A                            * 14585
-            GOYES   OBJ_14533.loop1              * 14588
+            GOYES   SstStep.loop1                * 14588
             D0=D0-  5                            * 1458A
             A=DAT0  A                            * 1458D
             D0=D0+  5                            * 14590
@@ -296,10 +299,10 @@ OBJ_14533.loop1:
             D0=D0+  5                            * 14598
             A=B     A                            * 1459B
             AD0EX                                * 1459D
-            GOLONG  RROLL.L4                     * 145A0
+            GOLONG  SstStep~1                    * 145A0
           ENDCODE                                * 145A6
-OBJ_14533.loop2:
-          ticR case OBJ_14613                    * 145A6
+SstEnter~1:
+          ticR case SstExec                      * 145A6
           RDROP                                  * 145B5
           CODE                                   * 145BA  49 nibbles
             C=B     A                            * 145C4
@@ -309,39 +312,43 @@ OBJ_14533.loop2:
             D0=C                                 * 145CF
             LC(5)   ®nop¯.L1                     * 145D2
             ?C#A    A                            * 145D9
-            GOYES   OBJ_14533.L3                 * 145DC
+            GOYES   SstEnter~1.L1                * 145DC
             LC(5)   FALSE                        * 145DE
-            GONC    OBJ_14533.L4                 * 145E5
-OBJ_14533.L3:
+            GONC    SstEnter~1.L2                * 145E5
+SstEnter~1.L1:
             LC(5)   TRUE                         * 145E8
-OBJ_14533.L4:
+SstEnter~1.L2:
             A=C     A                            * 145EF
             PC=(A)                               * 145F1
           ENDCODE                                * 145F5
           caseDROP RDROP                         * 145F5
-          RDUP GOTO OBJ_14533.loop2 ;            * 145FF
+          RDUP GOTO SstEnter~1 ;                 * 145FF
 
 * refs (1): 145B0
-OBJ_14613:
-        :: ' OBJ_14640 >R RSWAP ERRSET COLA OBJ_1470D * 14613
+* #mode ob -> : run one step under an error trap; SstTrapFrame on the return stack marks the frame for SstRDepth
+SstExec:
+        :: ' SstTrapFrame >R RSWAP ERRSET COLA SstDispatch * 14613
         ;                                        * 1463B
 
 * refs (1): 1461D
-OBJ_14640:
+* The return-stack marker of a step in progress: its ERRTRAP sends errors to SstErrorTrap
+SstTrapFrame:
         ::                                       * 14640
-OBJ_14640.L1:
-          ERRTRAP OBJ_14654 ;                    * 14645
+SstTrapFrame.L1:
+          ERRTRAP SstErrorTrap ;                 * 14645
 
 * refs (1): 1464A
-OBJ_14654:
+* An error during a step: memory errors and aborts propagate, KILL ends the debugging, and any other error is reported and the program halts again at that point
+SstErrorTrap:
         :: DropSysObs RDROP ERROR@ BINT1 #= caseERRJMP ERROR@ * 14654
           #0=case ERRJMP                         * 1467C
-          ERROR@ Err#Kill #= ?GOTO OBJ_14654.L1 SysErrorTrap GOTO halt.L1 * 14686
-OBJ_14654.L1:
-          OBJ_14EEC #0=?SKIP ERRJMP kill ;       * 146AE
+          ERROR@ Err#Kill #= ?GOTO SstErrorTrap.L1 SysErrorTrap GOTO halt.L1 * 14686
+SstErrorTrap.L1:
+          SstRDepth #0=?SKIP ERRJMP kill ;       * 146AE
 
-OBJ_14654.L2:
-        CON(5)  OBJ_14EEC                        * 146C7  address (the code jumps or points through it)
+* Run a stepped object and carry on stepping: a stream that SstNEXT and SstENDDO jump into to restore the return stack
+SstErrorTrap.L2:
+        CON(5)  SstRDepth                        * 146C7  address (the code jumps or points through it)
 
         CON(5)  #1+                              * 146CC  address (the code jumps or points through it)
 
@@ -349,8 +356,9 @@ OBJ_14654.L2:
 
         CON(5)  RDROP                            * 146D6  address (the code jumps or points through it)
 
-OBJ_14654.L3:
-        CON(5)  OBJ_14EEC                        * 146DB  address (the code jumps or points through it)
+* End of a step (GsstFIN comes here): restore the suspended return stack below the step's frame, drop the frame and halt
+SstErrorTrap.L3:
+        CON(5)  SstRDepth                        * 146DB  address (the code jumps or points through it)
 
         CON(5)  DUP                              * 146E0  address (the code jumps or points through it)
 
@@ -371,28 +379,31 @@ OBJ_14654.L3:
         SEMI                                     * 14708
 
 * refs (2): 14636 14C8F
-OBJ_1470D:
-        :: SWAP BINT0 #=casedrop OBJ_14762       * 1470D
-          #1=case OBJ_147C1                      * 14726
-          'R 2Ob>Seco ->StkStr22! OBJ_14D8C RDROP BINT2 OBJ_14F8C GOTO * 14730
-          OBJ_14654.L3 ;                         * 14758
+* ob #mode -> : SST steps ob, SST↓ steps into it, and any other mode (NEXT) only shows the next two objects
+SstDispatch:
+        :: SWAP BINT0 #=casedrop SstOb           * 1470D
+          #1=case SstDownOb                      * 14726
+          'R 2Ob>Seco ->StkStr22! SstShow$ RDROP BINT2 RPICK GOTO * 14730
+          SstErrorTrap.L3 ;                      * 14758
 
 * refs (5): 14721 147D0 147DF 14802 14811
-OBJ_14762:
-        :: DUP OBJ_271C5 case EVAL               * 14762
+* ob -> : SST one object. Objects with an SST handler run it, KILL ends, ROM secondaries and non-secondaries run as one step, and a RAM secondary is entered.
+SstOb:
+        :: DUP SstHandler case EVAL              * 14762
           DROP REQcase xKILL                     * 1477B
-          ~sstDISP;kill DUPTYPECOL? NOTcase OBJ_14DFA * 1478A
-          INHARDROM? case OBJ_14DFA              * 1479E
-          ZEROSWAP COLA OBJ_14DAA                * 147AD
+          ~sstDISP;kill DUPTYPECOL? NOTcase SstEval * 1478A
+          INHARDROM? case SstEval                * 1479E
+          ZEROSWAP COLA SstEnter                 * 147AD
         ;                                        * 147BC
 
 * refs (1): 1472B
-OBJ_147C1:
-        :: DUPTYPEIDNT? NOTcase OBJ_14762        * 147C1
-          DUPSAFE@ NOTcase OBJ_14762             * 147D5
+* ob -> : SST↓ one object. A name that holds a RAM program is entered as DBUG would; everything else is stepped as SstOb does.
+SstDownOb:
+        :: DUPTYPEIDNT? NOTcase SstOb            * 147C1
+          DUPSAFE@ NOTcase SstOb                 * 147D5
           DUPTYPERRP? ITE DROPDUP SWAPDROPDUP    * 147E4
-          TYPECOL? NOTcase OBJ_14762             * 147F8
-          INHARDROM? case OBJ_14762              * 14807
+          TYPECOL? NOTcase SstOb                 * 147F8
+          INHARDROM? case SstOb                  * 14807
           debug(rpl)! GsstFIN ;                  * 14816
 
 * Unreferenced NOP between objects: padding
@@ -403,81 +414,93 @@ OBJ_147C1:
         :: sstDISP kill ;                        * 1482A
 
 * refs (1): 23434
-OBJ_1483E:
+* SST handler of IFERR: the whole IFERR ... END (5 objects, or 7 with ELSE) is one step
+SstIFERR:
         ::                                       * 1483E
 
 * refs (2): 149C9 14B18
-OBJ_14843:
-          :: DUP PALPTRDCMP DROP ; OBJ_148C0 OBJ_148C0 OBJ_148C0 OBJ_148C0 * 14843
-          BINT5 ' xIFEND 4PICK EQ ?GOTO OBJ_14843.L1 DROP OBJ_148C0 * 14870
-          OBJ_148C0 BINT7                        * 1489D
-OBJ_14843.L1:
-          SWAP OBJ_14D8C ::NEVAL GsstFIN ;       * 148A7
+* ob -> ob $: the text of the stepped command
+SstCmd$:
+          :: DUP PALPTRDCMP DROP ; SstAdd$ SstAdd$ SstAdd$ SstAdd$ BINT5 ' * 14843
+          xIFEND 4PICK EQ ?GOTO SstCmd$.L1 DROP SstAdd$ SstAdd$ BINT7 * 1487A
+SstCmd$.L1:
+          SWAP SstShow$ ::NEVAL GsstFIN ;        * 148A7
 
 * refs (6): 1485C 14861 14866 1486B 14898 1489D
-OBJ_148C0:
-        :: RSWAP 'R RSWAP DUPUNROT OBJ_15156 SPACE$ !insert$ !append$ ; * 148C0
+* $ -> ob $': take the next object of the stepped program and add its text after a space
+SstAdd$:
+        :: RSWAP 'R RSWAP DUPUNROT SstOb>$ SPACE$ !insert$ !append$ ; * 148C0
 
 * refs (2): 23051 230E1
 ~sstDISP;RDUP;GsstFIN:
         :: sstDISP RDUP GsstFIN ;                * 148F2
 
 * refs (1): 236DC
-OBJ_1490B:
+* SST handler of the END of DO..UNTIL..END: run the test and loop back when it says so
+SstENDDO:
         :: sstDISP                               * 1490B
-          :: xENDDO GOTO OBJ_14654.L2 ; 2RDROP   * 14915
-OBJ_1490B.L1:
-          OBJ_14EEC #1+ OBJ_14F8C GsstFIN ;      * 14933
+          :: xENDDO GOTO SstErrorTrap.L2 ; 2RDROP * 14915
+SstNEXT~1:
+          SstRDepth #1+ RPICK GsstFIN ;          * 14933
 
 * refs (1): 23080
-OBJ_1494C:
-        :: sstDISP xREPEAT GOTO OBJ_14654.L3 OBJ_14EEC #1+ RROLL RDROP * 1494C
-          OBJ_14EEC OBJ_14F8C RSKIP RSKIP RSKIP GsstFIN ; * 14979
+* SST handler of REPEAT
+SstREPEAT:
+        :: sstDISP xREPEAT GOTO SstErrorTrap.L3 SstRDepth #1+ RROLL RDROP * 1494C
+          SstRDepth RPICK RSKIP RSKIP RSKIP GsstFIN ; * 14979
 
 * refs (1): 236AD
-OBJ_1499C:
-        :: sstDISP OBJ_14EEC RDROP OBJ_14F8C GsstFIN ; * 1499C
+* SST handler of the END of WHILE..REPEAT..END: go back to the loop's start
+SstWHILEEND:
+        :: sstDISP SstRDepth RDROP RPICK GsstFIN ; * 1499C
 
 * refs (1): 234FD
-OBJ_149BF:
+* SST handler of → with a program body: show → and its names, and bind them
+SstRPN->:
         ::                                       * 149BF
 
 * refs (1): 14A5A
-OBJ_149C4:
-          :: OBJ_14843 ONESWAP ; GOTO OBJ_149C4.L2 * 149C4
-OBJ_149C4.loop1:
+* ob -> ob #1 $: start the list of objects of a multi-object step
+SstCmd#$:
+          :: SstCmd$ ONESWAP ; GOTO SstCmd#$.L2  * 149C4
+SstCmd#$.loop1:
           RSWAP RDROP 3UNROLL 3PICK ID>$ SPACE$ !insert$ !append$ * 149E2
           SWAP#1+SWAP                            * 14A0A
-OBJ_149C4.L2:
-          RDUP ticR DROPDUP TYPELAM? ?GOTO OBJ_149C4.loop1 RDROP DROP * 14A0F
-          OBJ_14D8C ::NEVAL ERRSET OBJ_14FC3 GsstFIN ; * 14A37
+SstCmd#$.L2:
+          RDUP ticR DROPDUP TYPELAM? ?GOTO SstCmd#$.loop1 RDROP DROP * 14A0F
+          SstShow$ ::NEVAL ERRSET UnERRSET2 GsstFIN ; * 14A37
 
 * refs (1): 23027
-OBJ_14A55:
-        :: OBJ_149C4                             * 14A55
-OBJ_14A55.loop1:
-          SWAP#1+SWAP 'R 3UNROLL 3PICK DUP TYPELAM? NOT?GOTO OBJ_14A55.L2 * 14A5F
-          ID>$ SPACE$ !insert$ !append$ GOTO OBJ_14A55.loop1 * 14A87
-OBJ_14A55.L2:
+* SST handler of → with an algebraic body: shows → and its names on one line and the body on the next
+SstALG->:
+        :: SstCmd#$                              * 14A55
+SstALG->.loop1:
+          SWAP#1+SWAP 'R 3UNROLL 3PICK DUP TYPELAM? NOT?GOTO SstALG->.L2 * 14A5F
+          ID>$ SPACE$ !insert$ !append$ GOTO SstALG->.loop1 * 14A87
+SstALG->.L2:
           ->StkStr22! CHR_Space >H$ CHR_Newline >H$ !append$ CHR_Space >H$ * 14AA5
           DISPSTATUS2 VERYSLOW ::NEVAL GsstFIN ; * 14ACD
 
 * refs (1): 2313F
-OBJ_14AE6:
-        :: sstDISP xSTART RDROP ERRSET OBJ_14FC3 RDUP GsstFIN ; * 14AE6
+* SST handler of START
+SstSTART:
+        :: sstDISP xSTART RDROP ERRSET UnERRSET2 RDUP GsstFIN ; * 14AE6
 
 * refs (1): 231DC
-OBJ_14B13:
-        :: OBJ_14843 SPACE$ &$ 'R DUPUNROT DUPTYPELIST? ITE ->StkStr22! ID>$ * 14B13
-          !append$ OBJ_14D8C 2Ob>Seco EVAL ERRSET OBJ_14FC3 RDUP GsstFIN ; * 14B45
+* SST handler of FOR: the variable's name is part of the step
+SstFOR:
+        :: SstCmd$ SPACE$ &$ 'R DUPUNROT DUPTYPELIST? ITE ->StkStr22! ID>$ * 14B13
+          !append$ SstShow$ 2Ob>Seco EVAL ERRSET UnERRSET2 RDUP GsstFIN ; * 14B45
 
-OBJ_14B72:
+* SST handler of NEXT and STEP
+SstNEXT:
         :: DUP sstDISP                           * 14B72
-          :: EVAL ERRSET GOTO OBJ_14654.L2 ; 2RDROP GOTO OBJ_1490B.L1 ; * 14B81
+          :: EVAL ERRSET GOTO SstErrorTrap.L2 ; 2RDROP GOTO SstNEXT~1 ; * 14B81
 
 * refs (1): 2366D
-OBJ_14BB3:
-        :: 'R'R OVER DECOMP$ addtics OBJ_14D8C BINT3 ::NEVAL GsstFIN ; * 14BB3
+* SST handler of ': the quoted object and the closing tick are one step, shown as 'ob'
+SstTick:
+        :: 'R'R OVER DECOMP$ addtics SstShow$ BINT3 ::NEVAL GsstFIN ; * 14BB3
 
 * refs (1): 23490
 ~sstDISP;CK0NOLASTWD;GsstFIN:
@@ -490,36 +513,42 @@ OBJ_14BB3:
 * ob ->
 * refs (13): 1482F 148F7 14910 14951 149A1 14AEB ...
 sstDISP:
-        :: PALPTRDCMP DROP OBJ_14D8C ;           * 14C17
+        :: PALPTRDCMP DROP SstShow$ ;            * 14C17
 
 * refs (1): 22F1D
-OBJ_14C30:
-        :: EVAL GOTO OBJ_14C30.L1 RSKIP 'R GOTO OBJ_14C30.L2 * 14C30
-OBJ_14C30.L1:
+* ob -> : SST handler of THEN
+SstTHEN:
+        :: EVAL GOTO SstTHEN.L1 RSKIP 'R GOTO SstTHEN.L2 * 14C30
+SstTHEN.L1:
           ' xTHEN                                * 14C58
-OBJ_14C30.L2:
+SstTHEN.L2:
           sstDISP GsstFIN ;                      * 14C62
 
 * refs (1): 22FC9
-OBJ_14C71:
-        :: DROP RSKIP 'R ZEROSWAP COLA OBJ_1470D * 14C71
+* SST handler of ELSE: skip the clause that was not taken
+SstELSE:
+        :: DROP RSKIP 'R ZEROSWAP COLA SstDispatch * 14C71
         ;                                        * 14C94
 
 * refs (1): 237D0
-OBJ_14C99:
+* SST handler of THEN inside CASE
+SstTHENCASE:
         :: sstDISP xTHENCASE                     * 14C99
           :: 'R'R RDROP 2Ob>Seco >R GsstFIN ; xIFEND RSKIP GsstFIN ; * 14CA8
 
 * refs (1): 23612
-OBJ_14CDF:
-        :: ABND ERRSET sstDISP OBJ_14D1B GsstFIN ; * 14CDF
+* SST handler of » for a local-variable block: abandons the frame, then ends as Sst>>
+SstENDABND:
+        :: ABND ERRSET sstDISP Sst?ProgEnd GsstFIN ; * 14CDF
 
 * refs (1): 23648
-OBJ_14D02:
-        :: sstDISP OBJ_14D1B GsstFIN ;           * 14D02
+* SST handler of »
+Sst>>:
+        :: sstDISP Sst?ProgEnd GsstFIN ;         * 14D02
 
 * refs (2): 14CF3 14D0C
-OBJ_14D1B:
+* -> : when the next object of the stepped program is SEMI and its frame isn't the ®nop¯ one, the program has ended: goes to SstProgEnd to drop the debugging frames
+Sst?ProgEnd:
         CON(5)  (*)+5                            * 14D1B  primitive code object
         ASSEMBLE
         C=B     A                                * 14D20
@@ -531,10 +560,10 @@ OBJ_14D1B:
         D0=C                                     * 14D31
         LC(5)   SEMI                             * 14D34
         ?C=A    A                                * 14D3B
-        GOYES   OBJ_14D1B.L2                     * 14D3E
-OBJ_14D1B.loop1:
-        GOTO    RROLL.loop3                      * 14D40
-OBJ_14D1B.L2:
+        GOYES   Sst?ProgEnd.L2                   * 14D3E
+Sst?ProgEnd.loop1:
+        GOTO    RROLL.L3                         * 14D40
+Sst?ProgEnd.L2:
         C=B     A                                * 14D44
         CD0EX                                    * 14D46
         D0=D0-  15                               * 14D49
@@ -543,28 +572,32 @@ OBJ_14D1B.L2:
         D0=C                                     * 14D52
         LC(5)   ®nop¯.L1                         * 14D55
         ?C=A    A                                * 14D5C
-        GOYES   OBJ_14D1B.loop1                  * 14D5F
-        LC(5)   OBJ_14D6E                        * 14D61
+        GOYES   Sst?ProgEnd.loop1                * 14D5F
+        LC(5)   SstProgEnd                       * 14D61
         A=C     A                                * 14D68
         PC=(A)                                   * 14D6A
         RPL
 
 * refs (1): 14D61
-OBJ_14D6E:
+* Drop the frames of the finished program and undo the step's error trap
+SstProgEnd:
         :: RDROP 3RDROP ERRTRAP NOP ;            * 14D6E
 
 * refs (8): 1473F 148AC 14A37 14B4A 14BCC 14C26 ...
-OBJ_14D8C:
+* $ -> : show $ in the two status lines and freeze them, which is how a step shows what it did
+SstShow$:
         :: CHR_Space >H$ DISPSTATUS2 SetDA1Temp ; * 14D8C
 
 * refs (1): 147B7
-OBJ_14DAA:
-        :: ' ®nop¯ >R >R OBJ_14EEC DUP RROLL RROLL 2RDROP RDUP ERRTRAP NOP * 14DAA
-          GOTO OBJ_14533.loop2 ;                 * 14DEB
+* #0 ob -> : step into a secondary: mark the return stack with ®nop¯, run the object, and carry on with the stepping loop in SstStep
+SstEnter:
+        :: ' ®nop¯ >R >R SstRDepth DUP RROLL RROLL 2RDROP RDUP ERRTRAP NOP * 14DAA
+          GOTO SstEnter~1 ;                      * 14DEB
 
 * refs (2): 14799 147A8
-OBJ_14DFA:
-        :: DUP OBJ_15156 OBJ_14D8C EVAL GsstFIN ; * 14DFA
+* ob -> : show ob and evaluate it as one step
+SstEval:
+        :: DUP SstOb>$ SstShow$ EVAL GsstFIN ;   * 14DFA
 
 * refs (1): 14DB4
 ®nop¯:
@@ -573,16 +606,19 @@ OBJ_14DFA:
           NOP ;                                  * 14E22
 
 * refs (1): 234B5
-OBJ_14E2C:
-        :: DROP 'R DUP OBJ_15156 OBJ_14D8C GsstFIN ; * 14E2C
+* SST handler of the silent quote: the next object is shown and pushed
+SstSILENT':
+        :: DROP 'R DUP SstOb>$ SstShow$ GsstFIN ; * 14E2C
 
 * refs (2): 143E3 1455B
-OBJ_14E54:
-        :: OBJ_14E6D case ABND                   * 14E54
+* -> : abandon the top temporary environment if SAVESTACK made it
+?AbndSavStk:
+        :: SavStkEnv? case ABND                  * 14E54
         ;                                        * 14E68
 
 * refs (2): 14E59 40D02
-OBJ_14E6D:
+* -> flag: the first name of the top temporary environment is SAVELAM, which marks a frame made by SAVESTACK
+SavStkEnv?:
         CON(5)  (*)+5                            * 14E6D  primitive code object
         ASSEMBLE
         CD0EX                                    * 14E72
@@ -594,9 +630,9 @@ OBJ_14E6D:
         D0=C                                     * 14E88
         LC(5)   SAVELAM                          * 14E8B
         ?C=A    A                                * 14E92
-        GOYES   OBJ_14E6D.L1                     * 14E95
+        GOYES   SavStkEnv?.L1                    * 14E95
         GOVLNG  PushFLoop                        * 14E97
-OBJ_14E6D.L1:
+SavStkEnv?.L1:
         GOVLNG  PushTLoop                        * 14E9E
 
 * ->
@@ -607,7 +643,7 @@ RDUP:
 RDUP.loop1:
         D=D-1   A                                * 14EAD
         GONC    RDUP.L2                          * 14EAF
-        GOSUB   SUB_14ED6                        * 14EB2
+        GOSUB   GCOnce                           * 14EB2
         GONC    RDUP.loop1                       * 14EB6
 RDUP.L2:
         C=B     A                                * 14EB9
@@ -619,39 +655,41 @@ RDUP.L2:
         D0=D0+  5                                * 14ECA
         CD0EX                                    * 14ECD
         B=C     A                                * 14ED0
-        GOTO    RROLL.loop3                      * 14ED2
+        GOTO    RROLL.L3                         * 14ED2
 
 * refs (2): 14EB2 1A6FE
-SUB_14ED6:
+* Out of room on the return stack or in a loop. ST10 clear: set it and garbage-collect (the caller retries). ST10 set: Insufficient Memory.
+GCOnce:
         ?ST=1   10                               * 14ED6
-        GOYES   SUB_14ED6.L1                     * 14ED9
+        GOYES   GCOnce~1                         * 14ED9
         ST=1    10                               * 14EDB
-        GOVLNG  SUB_18362.L1                     * 14EDE
-SUB_14ED6.L1:
+        GOVLNG  GCEmptyStack.L1                  * 14EDE
+GCOnce~1:
         GOVLNG  DOMEMERR                         * 14EE5
 
 * refs (9): 14433 146AE 146C7 146DB 14933 14965 ...
-OBJ_14EEC:
+* -> #n: return-stack levels down to and including the SstTrapFrame marker, or #0 when a 0 word (the end) comes first
+SstRDepth:
         CON(5)  (*)+5                            * 14EEC  primitive code object
         GOSBVL  SAVPTR                           * 14EF1
         C=B     A                                * 14EF8
         D0=C                                     * 14EFA
         B=0     A                                * 14EFD
-        LC(5)   OBJ_14640.L1                     * 14EFF
-OBJ_14EEC.loop1:
+        LC(5)   SstTrapFrame.L1                  * 14EFF
+SstRDepth.loop1:
         B=B+1   A                                * 14F06
         D0=D0-  5                                * 14F08
         A=DAT0  A                                * 14F0B
         ?A=0    A                                * 14F0E
-        GOYES   OBJ_14EEC.L2                     * 14F11
+        GOYES   SstRDepth.L2                     * 14F11
         ?C#A    A                                * 14F13
-        GOYES   OBJ_14EEC.loop1                  * 14F16
+        GOYES   SstRDepth.loop1                  * 14F16
         B=B+1   A                                * 14F18
         A=B     A                                * 14F1A
-OBJ_14EEC.L2:
+SstRDepth.L2:
         R0=A                                     * 14F1C
         GOSBVL  PUSH#                            * 14F1F
-        GOTO    RROLL.loop3                      * 14F26
+        GOTO    RROLL.L3                         * 14F26
 
 * #n ->
 * refs (9): 146D1 146E5 146EA 1496F 14DCD 14DD2 ...
@@ -663,7 +701,7 @@ RROLL:
         A=A+A   A                                * 14F3A
         A=A+C   A                                * 14F3C
         C=C-1   A                                * 14F3E
-        GOC     RROLL.loop3                      * 14F40
+        GOC     RROLL.L3                         * 14F40
         R0=C                                     * 14F43
         C=B     A                                * 14F46
         C=C-A   A                                * 14F48
@@ -687,16 +725,17 @@ RROLL.L2:
         DAT0=C  A                                * 14F74
         C=RSTK                                   * 14F77
         D0=C                                     * 14F79
-RROLL.loop3:
+RROLL.L3:
         A=DAT0  A                                * 14F7C
         D0=D0+  5                                * 14F7F
         PC=(A)                                   * 14F82
-RROLL.L4:
+SstStep~1:
         B=A     A                                * 14F86
-        GOTO    RROLL.loop3                      * 14F88
+        GOTO    RROLL.L3                         * 14F88
 
 * refs (4): 1474E 1493D 1497E 149B0
-OBJ_14F8C:
+* #n -> : copy return-stack level n to the top of the return stack
+RPICK:
         CON(5)  (*)+5                            * 14F8C  primitive code object
         GOSBVL  POP#                             * 14F91
         C=A     A                                * 14F98
@@ -715,10 +754,11 @@ OBJ_14F8C:
         D0=D0+  5                                * 14FB7
         CD0EX                                    * 14FBA
         B=C     A                                * 14FBD
-        GOTO    RROLL.loop3                      * 14FBF
+        GOTO    RROLL.L3                         * 14FBF
 
 * refs (3): 14A46 14AFF 14B5E
-OBJ_14FC3:
+* -> : take back an ERRSET from the temporary environment below the top one (decrement its protection word if not zero). A step that creates a frame moves its error trap to the new frame.
+UnERRSET2:
         CON(5)  (*)+5                            * 14FC3  primitive code object
         GOSBVL  SAVPTR                           * 14FC8
         D0=(5)  TEMPENV                          * 14FCF
@@ -729,16 +769,16 @@ OBJ_14FC3:
         D0=A                                     * 14FE1
         C=DAT0  A                                * 14FE4
         ?C=0    A                                * 14FE7
-        GOYES   OBJ_14FC3.L1                     * 14FEA
+        GOYES   UnERRSET2.L1                     * 14FEA
         D0=D0+  5                                * 14FEC
         C=DAT0  A                                * 14FEF
         ?C=0    A                                * 14FF2
-        GOYES   OBJ_14FC3.L1                     * 14FF5
+        GOYES   UnERRSET2.L1                     * 14FF5
         C=C-1   A                                * 14FF7
         DAT0=C  A                                * 14FF9
-OBJ_14FC3.L1:
+UnERRSET2.L1:
         GOSBVL  GETPTR                           * 14FFC
-        GOTO    RROLL.loop3                      * 15003
+        GOTO    RROLL.L3                         * 15003
         RPL
 
 * % ->
@@ -795,7 +835,8 @@ debug(nm):
         ;                                        * 15151
 
 * refs (3): 148D9 14E04 14E40
-OBJ_15156:
+* ob -> $: the text of ob for the status area, as a program if it isn't one: shows which object a step is about to run
+SstOb>$:
         ::                                       * 15156
           :: DUPTYPECOL? ?SEMI                   * 1515B
             Ob>Seco ;                            * 1516A
@@ -808,7 +849,7 @@ OBJ_15156:
 GsstFIN:
         CON(5)  (*)+5                            * 1518D  primitive code object
         ASSEMBLE
-        LC(5)   OBJ_14654.L3                     * 15192
+        LC(5)   SstErrorTrap.L3                  * 15192
         D0=C                                     * 15199
         A=DAT0  A                                * 1519C
         D0=D0+  5                                * 1519F
@@ -823,22 +864,24 @@ SolvMenuInit:
           ' PutStoLabel(s,_) LabelDef! ' EQReview ReviewKey! SolvMenuInit~4 ; * 151D8
 
 * refs (3): 15352 3BE68 3C329
-OBJ_15200:
-        :: PTR InitTrack: OBJ_3AE0C DORCLE DUP EqList? NOTcase * 15200
+* Build and display the SOLVR menu from EQ. A list in EQ that isn't an equation list adds NXEQ and works on its first equation.
+SolvrMenu:
+        :: PTR InitTrack: SolvrMenu~1 DORCLE DUP EqList? NOTcase * 15200
 
 * refs (1): 1529B
-OBJ_15223:
+* ob -> {keys}: the menu keys for equation ob. A list { eq {keys} } gives its own; otherwise one key for each variable found in it, then EXPR=.
+SolvrKeys:
           :: DUPTYPELIST? ITE                    * 15223
             :: INNERCOMP #2= NcaseSIZEERR DUPTYPELIST? * 15232
               NcaseSIZEERR SWAPDROP              * 1524B
             ;                                    * 15255
             FINDVAR                              * 1525A
-            {EXPR} >TCOMP OBJ_479D4 ?SKIP        * 1525F
+            {EXPR} >TCOMP NoInfo? ?SKIP          * 1525F
 
 1FrDispEQ:
             :: Trceq ->StkStr22! 1FrDisp(st) ;   * 15273
             SolvMenuInit ;                       * 1528C
-          OBJ_15366 OBJ_15223 BINT6 OVER LENCOMP OVER #/ DROP #-DUP #1= ITE * 15296
+          EqList>Eq SolvrKeys BINT6 OVER LENCOMP OVER #/ DROP #-DUP #1= ITE * 15296
           DROP                                   * 152CD
 
 +NullEntries(li,s):
@@ -859,17 +902,19 @@ _NXEQ_:
           $ "NXEQ"                               * 15331
 
 \NXEQ:
-          :: NextInEQ! ' OBJ_15200 InitMenu ; }  * 15343
+          :: NextInEQ! ' SolvrMenu InitMenu ; }  * 15343
 
 * refs (1): 15296
-OBJ_15366:
+* {eqs} -> ob: the first equation in a list, NOEQERR when the list is empty
+EqList>Eq:
         :: BINT1 NTHELCOMP NOTcase NOEQERR       * 15366
-          OBJ_15389 ;                            * 1537F
+          EqName@ ;                              * 1537F
 
 * refs (3): 1537F 4A0EB 4A113
-OBJ_15389:
+* ob -> ob': a name other than the independent variable is replaced by its contents, when it has any
+EqName@:
         :: DUPTYPEIDNT? NOT?SEMI                 * 15389
-          OBJ_473E6 OVER EQUAL ?SEMI             * 15398
+          PPARIndep OVER EQUAL ?SEMI             * 15398
           DUPSAFE@ NOT?SEMI                      * 153AC
           SWAPDROP ;                             * 153B6
 
@@ -909,7 +954,8 @@ SolvMenuInit~2:
           SETCIRCERR DROP                        * 15522
 
 * refs (2): 49BB9 B4CC3
-OBJ_1552C:
+* ob id -> : store ob in a Solver variable, keeping the unit of its old value, and show the variable as the prompt
+SolvStoKeep:
           :: dup;RclInVars(gn)? IT               * 1552C
 
 * % ob ob' -> % ob % ob u -> u' ob
@@ -1050,16 +1096,16 @@ Trceq!:
           :: SPLITEQ 1LAMBIND 'EvalNoCK:_sup xEVAL CK1NoBlame * 1589B
 
 * refs (1): A306E
-OBJ_158B9:
+SolveEqSolve~1:
             # A07 msg>TAG 1GETABND 'EvalNoCK:_sup xEVAL CK1NoBlame * 158B9  "Left"
 
 * refs (1): A307D
-OBJ_158DC:
+SolveEqSolve~2:
             # A08 msg>TAG ;                      * 158DC  "Right"
           'EvalNoCK:_sup xEVAL CK1NoBlame        * 158F0
 
 * refs (1): A3091
-OBJ_158FF:
+SolveEqSolve~3:
           # A09                                  * 158FF  2569
 
 * refs (30): 158C3 158E6 99024 99038 9904C A3073 ...
@@ -1079,7 +1125,7 @@ CRUNCHNoBlame:
 
 * refs (1): 39DF1
 DoSt:22(s,_):
-        :: OBJ_16969 COLA DoSt:(s,_,s)           * 15955
+        :: StdDcompWidth COLA DoSt:(s,_,s)       * 15955
         ;                                        * 15969
 
 * refs (3): 15964 2D974 318D1
@@ -1089,16 +1135,18 @@ DoSt:(s,_,s):
 * ob -> $
 * refs (8): 1517E 31985 4689C 468D3 49871 4A019 ...
 1stkdecomp$w:
-          :: OBJ_53914 ERRSET stkdecomp$w ERRTRAP OBJ_159AF OBJ_159B4 ; SWAP * 15978
-          stackitw ;                             * 159A5
+          :: SetISF805 ERRSET stkdecomp$w ERRTRAP DcompErr ClrDcompFlags ; * 15978
+          SWAP stackitw ;                        * 159A0
 
 * refs (3): 15991 16126 16252
-OBJ_159AF:
+* Error during decompilation: reset its flags and pass the error on
+DcompErr:
         ::                                       * 159AF
 
 * refs (4): 15996 15A13 15B18 161D5
-OBJ_159B4:
-          :: OBJ_53922 OBJ_539D8 ; ERRJMP ;      * 159B4
+* -> : clear internal flags #805 and #20B, the modes the decompiler can be left in
+ClrDcompFlags:
+          :: ClrISF805 ClrISF20B ; ERRJMP ;      * 159B4
 
 * refs (2): 4EBC2 8D6AC
 ~setStdWid;COLA;stkdecomp$w:
@@ -1112,19 +1160,19 @@ stkdecomp$w:
         ASSEMBLE
         ST=1    3                                * 159F0
         ST=0    4                                * 159F3
-        GOTO    OBJ_15B3D.L2                     * 159F6
+        GOTO    decomp$w.L2                      * 159F6
         RPL
 
 * ->
 * refs (4): 15179 159D7 15A18 15B1D
 setStdWid:
-        :: OBJ_16969 !DcompWidth ;               * 159FA
+        :: StdDcompWidth !DcompWidth ;           * 159FA
 
 * ob -> $
 * refs (21): 20E89 222F8 2DC7A 2DCA2 31C7C 408E6 ...
 EDITDECOMP$:
-        :: OBJ_159B4 setStdWid savefmt1 ERRSET editdecomp$w ERRTRAP ederr * 15A0E
-          rstfmt1 ;                              * 15A36
+        :: ClrDcompFlags setStdWid savefmt1 ERRSET editdecomp$w ERRTRAP * 15A0E
+          ederr rstfmt1 ;                        * 15A31
 
 * ->
 * refs (4): 15A31 2FCB8 45DE3 468E2
@@ -1144,7 +1192,7 @@ rstfmt1:
         CON(5)  (*)+5                            * 15A60  primitive code object
         ST=1    1                                * 15A65
 rstfmt1.L1:
-        GOSUB   SUB_15AD5                        * 15A68
+        GOSUB   FmtSaveAddr                      * 15A68
         A=DAT0  B                                * 15A6C
         DAT1=A  B                                * 15A6F
         D0=D0+  2                                * 15A72
@@ -1167,7 +1215,7 @@ TempStd:
         CON(5)  (*)+5                            * 15A97  primitive code object
         ST=0    1                                * 15A9C
 TempStd.L1:
-        GOSUB   SUB_15AD5                        * 15A9F
+        GOSUB   FmtSaveAddr                      * 15A9F
         P=      0                                * 15AA3
         A=DAT1  B                                * 15AA5
         DAT0=A  B                                * 15AA8
@@ -1184,7 +1232,8 @@ TempStd.L1:
         GOTO    rstfmt1.L2                       * 15AD1
 
 * refs (2): 15A68 15A9F
-SUB_15AD5:
+* -> D0 = save slot for two flag bytes, D1 = system flag byte #80844 (after SAVPTR). The slots are in the block leeway points at: ST1 set selects the one savefmt1/rstfmt1 use, ST1 clear that of TempStd/RclOldMode.
+FmtSaveAddr:
         GOSBVL  SAVPTR                           * 15AD5
         D0=(5)  leeway                           * 15ADC
         C=DAT0  A                                * 15AE3
@@ -1209,7 +1258,7 @@ s:str(st,s)~1:
 * ob -> $
 * refs (14): 14BC2 1ACAC 1ACC5 2261D 268A9 2F15D ...
 DECOMP$:
-        :: OBJ_159B4 setStdWid COLA OBJ_15B3D    * 15B13
+        :: ClrDcompFlags setStdWid COLA decomp$w * 15B13
         ;                                        * 15B2C
 
 * ob -> $
@@ -1218,18 +1267,19 @@ editdecomp$w:
         CON(5)  (*)+5                            * 15B31  primitive code object
         ASSEMBLE
         ST=1    4                                * 15B36
-        GOTO    OBJ_15B3D.L1                     * 15B39
+        GOTO    decomp$w.L1                      * 15B39
 
 * refs (2): 15B27 16FF2
-OBJ_15B3D:
+* ob -> $: decompile ob at width DcompWidth by type. ST3 set selects the stack-display handlers (stkdecomp$w), ST3 clear the full forms; ST4 set selects the edit forms (editdecomp$w).
+decomp$w:
         CON(5)  (*)+5                            * 15B3D  primitive code object
         ST=0    4                                * 15B42
-OBJ_15B3D.L1:
+decomp$w.L1:
         ST=0    3                                * 15B45
-OBJ_15B3D.L2:
-        GOSUB   SUB_15C5F                        * 15B48
+decomp$w.L2:
+        GOSUB   DcompDispatch                    * 15B48
 
-* Decompiler handlers by object type (walked by SUB_15C5F): prolog, handler when ST3 is set, handler when it is clear
+* Decompiler handlers by object type (walked by DcompDispatch): prolog, handler when ST3 is set, handler when it is clear
         CON(5)  DOREAL                           * 15B4C  entry 0
         CON(5)  ->str1(r)                        * 15B51
         CON(5)  a%>$                             * 15B56
@@ -1289,46 +1339,48 @@ OBJ_15B3D.L2:
         CON(5)  0                                * 15C5A  end of table
 
 * refs (1): 15B48
-SUB_15C5F:
+* Followed by an inline table of (prolog, ST3-set handler, ST3-clear handler): jump to the handler for the object at level 1. ROM words go to their name; an unknown prolog shows the type name.
+DcompDispatch:
         GOSBVL  SAVPTR                           * 15C5F
         GOSBVL  Rom-Word?                        * 15C66
-        GONC    SUB_15C5F.L3                     * 15C6D
+        GONC    DcompDispatch.L3                 * 15C6D
         LC(5)   ~PALPTRDCMP;NOTcase;_type(_)_    * 15C70
-SUB_15C5F.loop1:
+DcompDispatch.loop1:
         A=C     A                                * 15C77
-SUB_15C5F.loop2:
+DcompDispatch.loop2:
         GOSBVL  GETPTR                           * 15C79
         PC=(A)                                   * 15C80
-SUB_15C5F.L3:
+DcompDispatch.L3:
         D1=A                                     * 15C84
         A=DAT1  A                                * 15C87
         C=RSTK                                   * 15C8A
         D0=C                                     * 15C8C
-SUB_15C5F.loop4:
+DcompDispatch.loop4:
         C=DAT0  A                                * 15C8F
         ?C=A    A                                * 15C92
-        GOYES   SUB_15C5F.L5                     * 15C95
+        GOYES   DcompDispatch.L5                 * 15C95
         D0=D0+  15                               * 15C97
         ?C#0    A                                * 15C9A
-        GOYES   SUB_15C5F.loop4                  * 15C9D
+        GOYES   DcompDispatch.loop4              * 15C9D
         LC(5)   _type(_)_                        * 15C9F
-        GONC    SUB_15C5F.loop1                  * 15CA6
-SUB_15C5F.L5:
+        GONC    DcompDispatch.loop1              * 15CA6
+DcompDispatch.L5:
         D0=D0+  5                                * 15CA9
         ?ST=1   3                                * 15CAC
-        GOYES   SUB_15C5F.L6                     * 15CAF
+        GOYES   DcompDispatch.L6                 * 15CAF
         D0=D0+  5                                * 15CB1
-SUB_15C5F.L6:
+DcompDispatch.L6:
         A=DAT0  A                                * 15CB4
-        GOTO    SUB_15C5F.loop2                  * 15CB7
+        GOTO    DcompDispatch.loop2              * 15CB7
         RPL
 
 * refs (2): 15C9F 16162
 _type(_)_:
-        :: NULL$SWAP OBJ_15CCF ;                 * 15CBB
+        :: NULL$SWAP $+TypeName ;                * 15CBB
 
 * refs (6): 15CC5 17077 17CCE 181A5 2DC8E 39E05
-OBJ_15CCF:
+* $ ob -> $': append the name of ob's type (message #107 + TYPE, capped at 27)
+$+TypeName:
         :: XEQTYPE SWAPDROP COERCE BINT27 #MIN BINT_263d #+ JstGetTHEMESG &$ ; * 15CCF
 
 * refs (2): 15C50 15C55
@@ -1352,7 +1404,8 @@ AddMessage(st,s):
         :: BAKNAME DROP ID>$ # 118 AddMessage(st,s) ; * 15D97
 
 * refs (2): 15E06 15E3D
-OBJ_15DBF:
+* grob $sep -> grob "w sep h"
+GrobDim>$:
         :: SWAP GROBDIM #>$ SWAP #>$ SWAPROT !!append$ !!insert$ ; * 15DBF
 
 * refs (4): 15C32 15E2E 31A75 41323
@@ -1360,12 +1413,12 @@ OBJ_15DBF:
         ::                                       * 15DF1
 
 _chr(215)_:
-          $ " × " OBJ_15DBF # 112 AddMessage(st,s) ; * 15DF6
+          $ " × " GrobDim>$ # 112 AddMessage(st,s) ; * 15DF6
 
 * refs (1): 15C37
 ->str2(go):
-        :: OBJ_53930 case ->str1(go)             * 15E1F
-          DUP SPACE$ OBJ_15DBF APPEND_SPACE $ "GROB " !!insert$ SWAP BINT11 * 15E33
+        :: ISF805? case ->str1(go)               * 15E1F
+          DUP SPACE$ GrobDim>$ APPEND_SPACE $ "GROB " !!insert$ SWAP BINT11 * 15E33
           MINUSONE SUBHXS longhxs !!append$ ;    * 15E6A
 
 * refs (2): 15E74 15FB0
@@ -1373,32 +1426,33 @@ longhxs:
         :: NULL$TEMP OVER LENHXS #2* EXPAND longhxs~1 ; * 15E83
 
 * refs (2): 15F33 15FC5
-OBJ_15EAB:
+* $body $pre -> $: pre, the body's length, a space, the body: for "C$ n text" and "C# n hex"
+$+LenPrefix:
         :: OVERLEN$ #>$ APPEND_SPACE SWAP !!insert$ SWAP !!append$ ; * 15EAB
 
 * refs (1): 15BA1
 ->str2(st):
-        :: OBJ_53930 case ->str1(st)             * 15ED8
+        :: ISF805? case ->str1(st)               * 15ED8
           DUP CHR_DblQuote                       * 15EEC
 
 * $ $find/chr -> #pos -> #0
 * refs (1): 42C4C
 ONEPOS$:
           :: BINT1 POS$ ; #0=case add2_(st)      * 15EF6
-          OBJ_5395A case add2_(st)               * 15F14
-          $ "C$ " OBJ_15EAB ;                    * 15F23
+          ISF803? case add2_(st)                 * 15F14
+          $ "C$ " $+LenPrefix ;                  * 15F23
 
 * refs (2): 15B9C 15EE7
 ->str1(st):
-        :: OBJ_53930 NOTcase add2_(st)           * 15F3D
+        :: ISF805? NOTcase add2_(st)             * 15F3D
           BINT1 DcompWidth@ DUP BINT255d #> ITE 2DROP SUB$ * 15F51
           add2_(st) ;                            * 15F79
 
 * refs (1): 15BDD
 ->str2(b):
-        :: OBJ_53930 case HXS>$                  * 15F83
+        :: ISF805? case HXS>$                    * 15F83
           DUP LENHXS BINT17 #<case HXS>$         * 15F97
-          longhxs $ "C# " OBJ_15EAB ;            * 15FB0
+          longhxs $ "C# " $+LenPrefix ;          * 15FB0
 
 * refs (1): 15EA1
 longhxs~1:

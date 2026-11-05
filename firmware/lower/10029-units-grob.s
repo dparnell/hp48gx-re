@@ -1,4 +1,4 @@
-* HP 48GX ROM revision R, #10029-#12001: Unit arithmetic and graphics objects
+* HP 48GX ROM revision R, #10029-#12001: Unit expressions as metas: simplifying and raising them, dimension vectors; sign and exponent keys on the command line; annunciator words; editor and display counters; grob size, clipping and text in grobs
 * Addresses in the right-hand comments are those of the original ROM.
 * Most referenced: umEND GROB! um/ um^ umP MAKEGROB um* SUBGROB $>grob PrgmEntry? $>GROB w->W
 * Follows on from the previous file (at #10029 in the original ROM).
@@ -78,6 +78,7 @@ OBJ_1013C.L2:
         RPL
 
 * refs (4): 0F80F 0F85F 0F8B9 0FA3A
+* Probably: unit meta -> unit meta: bring a unit expression to simplest form: split it into terms, merge equal units by adding exponents, and rebuild
 OBJ_10194:
         :: OBJ_101CB OBJ_10324 psh OBJ_101CB OBJ_10324 OBJ_10478 OBJ_106DF * 10194
           psh OBJ_106DF ;                        * 101BC
@@ -263,6 +264,7 @@ unrot1:
         :: OVER #3+PICK 3PICK#+ BINT3 #+UNROLL ; * 10AF9
 
 * refs (1): 0F0CA
+* $ -> $: a leading K or H of a unit name is changed in place to k or h, so that those prefixes are found
 st=>uo?~3:
         CON(5)  (*)+5                            * 10B1C  primitive code object
         ASSEMBLE
@@ -318,7 +320,7 @@ umEND:
 
 * refs (1): 0F638
 UMSIN~1:
-        :: U>NCQ ROMPTR 0C1 022 %%* ;            * 10B90
+        :: U>NCQ XLIB Unit>AngleMode %%* ;       * 10B90
 
 * refs (2): 0F855 0F8B4
 OBJ_10BAF:
@@ -332,7 +334,7 @@ OBJ_10BC3:
           3UNROLL #1- ;                          * 10C13
 
 * refs (1): 0FEAD
-U>NCQ~7:
+U>NCQ~5:
         :: 4ROLLROT %%*UNROT OBJ_0F73D ;         * 10C22
 
 * refs (1): 0FEBC
@@ -354,7 +356,8 @@ U>NCQ~4:
         ASSEMBLE
 
 * refs (1): 0C44D
-SUB_10CDB:
+* A = packed dimensions, signed nibbles -> A.A = new array of 10 reals in TEMPOB: the dimension vector of a built-in unit, in the order of UDIMS
+Dims>Array:
         P=      0                                * 10CDB
         R0=A                                     * 10CDD
         LC(5)   #000B9                           * 10CE0
@@ -379,24 +382,24 @@ SUB_10CDB:
         AR0EX                                    * 10D35
         LC(1)   #9                               * 10D38
         D=C     P                                * 10D3B
-SUB_10CDB.loop1:
+Dims>Array.loop1:
         C=0     W                                * 10D3E
         C=A     P                                * 10D41
         A=A+A   P                                * 10D44
-        GONC    SUB_10CDB.L2                     * 10D47
+        GONC    Dims>Array.L2                    * 10D47
         C=-C    P                                * 10D4A
         CSRC                                     * 10D4D
         LC(1)   #9                               * 10D50
-        GOC     SUB_10CDB.L3                     * 10D53
-SUB_10CDB.L2:
+        GOC     Dims>Array.L3                    * 10D53
+Dims>Array.L2:
         CSRC                                     * 10D56
-SUB_10CDB.L3:
+Dims>Array.L3:
         CSRC                                     * 10D59
         DAT0=C  W                                * 10D5C
         D0=D0+  16                               * 10D60
         ASR     W                                * 10D63
         D=D-1   P                                * 10D66
-        GONC    SUB_10CDB.loop1                  * 10D69
+        GONC    Dims>Array.loop1                 * 10D69
         A=R0                                     * 10D6C
         P=      0                                * 10D6F
         GOVLNG  GETPTR                           * 10D71
@@ -432,8 +435,8 @@ UMTAN~1:
         GOSBVL  POP1%%                           * 10E13
         ST=0    9                                * 10E1A
         ST=0    4                                * 10E1D
-        GOSBVL  SUB_2B6F2                        * 10E20
-        GOVLNG  SUB_2AEC5.L1                     * 10E27
+        GOSBVL  aTAN                             * 10E20
+        GOVLNG  GoFltExc.L1                      * 10E27
         BSS     8                                * 10E2E  zeros
         RPL
 
@@ -493,7 +496,7 @@ LIB001:
         REL(5)  ChkUserKeys                      * 10F28  config
 LIB001.L1:
         LC(3)   #103                             * 10F2D
-        GOSBVL  SUB_53B0A                        * 10F32
+        GOSBVL  ClrFlagBit                       * 10F32
         LC(5)   #00101                           * 10F39
 
 * A=C.A <REF>GETPTR <REF>Errjmp
@@ -696,53 +699,55 @@ NoUserKeys:
         :: NULL{} StoUserKeys ;                  * 110DB
 
 * refs (1): 3B5A0
-OBJ_110EF:
+* -> # F T, T T or F: +/- key while editing: find the number under the cursor; if it has a sign, or a sign in its exponent, change it in place (T T); if it needs one, say where (# F T); if the cursor is not on a number, FALSE
+EdNegNum:
         CON(5)  (*)+5                            * 110EF  primitive code object
         ASSEMBLE
-        GOSUB   SUB_11186                        * 110F4
-        GOSUB   SUB_11156                        * 110F8
-        GOSUB   SUB_111D6                        * 110FC
-        GOC     OBJ_110EF.L1                     * 11100
-        GOSUB   SUB_11156                        * 11103
-OBJ_110EF.L1:
+        GOSUB   EdCursor@                        * 110F4
+        GOSUB   EdFlipSign                       * 110F8
+        GOSUB   EdScanFwd                        * 110FC
+        GOC     EdNegNum.L1                      * 11100
+        GOSUB   EdFlipSign                       * 11103
+EdNegNum.L1:
         A=A+1   A                                * 11107
         D0=D0-  2                                * 11109
-        GOSUB   SUB_1120D                        * 1110C
-        GOC     OBJ_110EF.L2                     * 11110
+        GOSUB   EdDigit?                         * 1110C
+        GOC     EdNegNum.L2                      * 11110
         A=A-1   A                                * 11113
         D0=D0+  2                                * 11115
         C=DAT0  B                                * 11118
         B=C     B                                * 1111B
         LC(2)   #45                              * 1111E
         ?B#C    B                                * 11122
-        GOYES   OBJ_110EF.L3                     * 11125
+        GOYES   EdNegNum.L3                      * 11125
         ?A=0    A                                * 11127
-        GOYES   OBJ_110EF.L3                     * 1112A
+        GOYES   EdNegNum.L3                      * 1112A
         A=A+1   A                                * 1112C
         D0=D0+  2                                * 1112E
-        GOSUB   SUB_1120D                        * 11131
-        GONC    OBJ_110EF.L3                     * 11135
-OBJ_110EF.L2:
+        GOSUB   EdDigit?                         * 11131
+        GONC    EdNegNum.L3                      * 11135
+EdNegNum.L2:
         R0=A                                     * 11138
         GOSBVL  PUSH#                            * 1113B
         LC(5)   FalseTrue                        * 11142
         A=C     A                                * 11149
         PC=(A)                                   * 1114B
-OBJ_110EF.L3:
+EdNegNum.L3:
         GOVLNG  GPPushFLoop                      * 1114F
 
 * refs (2): 110F8 11103
-SUB_11156:
+* B.B = character, D0 at it -> : if it is + or -, write the other and leave through TrueTrue
+EdFlipSign:
         LC(2)   #2B                              * 11156
         ?B=C    B                                * 1115A
-        GOYES   SUB_11156.L1                     * 1115D
-SUB_11156.L1:
+        GOYES   EdFlipSign.L1                    * 1115D
+EdFlipSign.L1:
         LC(2)   #2D                              * 1115F
-        GOC     SUB_11156.L2                     * 11163  never taken
+        GOC     EdFlipSign.L2                    * 11163
         ?B#C    B                                * 11166
         RTNYES                                   * 11169
         LC(2)   #2B                              * 1116B
-SUB_11156.L2:
+EdFlipSign.L2:
         DAT0=C  B                                * 1116F
         GOSBVL  GETPTR                           * 11172
         LC(5)   TrueTrue                         * 11179
@@ -750,17 +755,18 @@ SUB_11156.L2:
         PC=(A)                                   * 11182
 
 * refs (2): 110F4 11244
-SUB_11186:
+* -> SAVPTR; D.B = fraction mark (flag -51), A.A = CURSOR, B.B = character at the cursor, D0 at it in the edit line
+EdCursor@:
         GOSBVL  SAVPTR                           * 11186
         D0=(5)  #8084F                           * 1118D
         C=DAT0  1                                * 11194
         ?CBIT=1 2                                * 11198
-        GOYES   SUB_11186.L1                     * 1119D
+        GOYES   EdCursor@.L1                     * 1119D
         LC(2)   #2E                              * 1119F
-        GONC    SUB_11186.L2                     * 111A3
-SUB_11186.L1:
+        GONC    EdCursor@.L2                     * 111A3
+EdCursor@.L1:
         LC(2)   #2C                              * 111A6
-SUB_11186.L2:
+EdCursor@.L2:
         D=C     B                                * 111AA
         D0=(5)  TEMPENV                          * 111AD
         A=DAT0  A                                * 111B4
@@ -777,26 +783,28 @@ SUB_11186.L2:
         RTN                                      * 111D4
 
 * refs (2): 110FC 11248
-SUB_111D6:
+* A.A, D0, ST0 clear -> scan forward from the cursor over digits; carry set at the end of the line
+EdScanFwd:
         ST=0    0                                * 111D6
-        GOTO    SUB_111DD.loop1                  * 111D9
+        GOTO    EdScanBack.loop1                 * 111D9
 
 * refs (1): 11287
-SUB_111DD:
+* A.A, D0, ST0 set -> scan back from the cursor over digits; carry set at the start of a line or on a NUL or newline
+EdScanBack:
         ST=1    0                                * 111DD
-SUB_111DD.loop1:
+EdScanBack.loop1:
         ?ST=0   0                                * 111E0
-        GOYES   SUB_111DD.L2                     * 111E3
+        GOYES   EdScanBack.L2                    * 111E3
         A=A+1   A                                * 111E5
         D0=D0-  2                                * 111E7
-        GOTO    SUB_111DD.L3                     * 111EA
-SUB_111DD.L2:
+        GOTO    EdScanBack.L3                    * 111EA
+EdScanBack.L2:
         D0=D0+  2                                * 111EE
         A=A-1   A                                * 111F1
         RTNC                                     * 111F3
-SUB_111DD.L3:
-        GOSUB   SUB_1120D                        * 111F6
-        GOC     SUB_111DD.loop1                  * 111FA
+EdScanBack.L3:
+        GOSUB   EdDigit?                         * 111F6
+        GOC     EdScanBack.loop1                 * 111FA
         LC(2)   #0A                              * 111FD
         ?B=C    B                                * 11201
         RTNYES                                   * 11204
@@ -805,7 +813,8 @@ SUB_111DD.L3:
         RTN                                      * 1120B
 
 * refs (5): 1110C 11131 111F6 11276 11297
-SUB_1120D:
+* D0 -> B.B = character there; carry set if it is a digit or the fraction mark
+EdDigit?:
         C=DAT0  B                                * 1120D
         B=C     B                                * 11210
         C=D     B                                * 11213
@@ -813,9 +822,9 @@ SUB_1120D:
         RTNYES                                   * 11219
         LC(2)   #30                              * 1121B
         ?B>=C   B                                * 1121F
-        GOYES   SUB_1120D.L1                     * 11222
+        GOYES   EdDigit?.L1                      * 11222
         RTN                                      * 11224
-SUB_1120D.L1:
+EdDigit?.L1:
         LC(2)   #39                              * 11226
         ?B<=C   B                                * 1122A
         RTNYES                                   * 1122D
@@ -827,46 +836,47 @@ _1E_:
         $ "1E"                                   * 11231
 
 * refs (1): 3B60E
-OBJ_1123F:
+* -> # $ or NULL$: EEX key while editing: find the place for the exponent of the number at the cursor, with "E" or "1E" to insert there, or NULL$ if it already has one
+EdEEXKey:
         CON(5)  (*)+5                            * 1123F  primitive code object
         ASSEMBLE
-        GOSUB   SUB_11186                        * 11244
-        GOSUB   SUB_111D6                        * 11248
-        GOC     OBJ_1123F.L2                     * 1124C
-        GOSUB   SUB_112C5                        * 1124F
-        GOSUB   SUB_112D8                        * 11253
-        GONC    OBJ_1123F.L2                     * 11257
+        GOSUB   EdCursor@                        * 11244
+        GOSUB   EdScanFwd                        * 11248
+        GOC     EdEEXKey.L2                      * 1124C
+        GOSUB   EdIsE?                           * 1124F
+        GOSUB   EdIsSign?                        * 11253
+        GONC    EdEEXKey.L2                      * 11257
         D0=D0+  2                                * 1125A
         A=A-1   A                                * 1125D
-        GOC     OBJ_1123F.L1                     * 1125F
+        GOC     EdEEXKey.L1                      * 1125F
         C=DAT0  B                                * 11262
         B=C     B                                * 11265
-        GOSUB   SUB_112C5                        * 11268
-OBJ_1123F.L1:
+        GOSUB   EdIsE?                           * 11268
+EdEEXKey.L1:
         D0=D0-  2                                * 1126C
         A=A+1   A                                * 1126F
-OBJ_1123F.L2:
+EdEEXKey.L2:
         A=A+1   A                                * 11271
         D0=D0-  2                                * 11273
-        GOSUB   SUB_1120D                        * 11276
-        GOC     OBJ_1123F.L3                     * 1127A
-        GOSUB   SUB_112D8                        * 1127D
-        GOC     OBJ_1123F.L3                     * 11281
-        GONC    OBJ_1123F.L4                     * 11284
-OBJ_1123F.L3:
-        GOSUB   SUB_111DD                        * 11287
-OBJ_1123F.L4:
-        GOSUB   SUB_112C5                        * 1128B
+        GOSUB   EdDigit?                         * 11276
+        GOC     EdEEXKey.L3                      * 1127A
+        GOSUB   EdIsSign?                        * 1127D
+        GOC     EdEEXKey.L3                      * 11281
+        GONC    EdEEXKey.L4                      * 11284
+EdEEXKey.L3:
+        GOSUB   EdScanBack                       * 11287
+EdEEXKey.L4:
+        GOSUB   EdIsE?                           * 1128B
         D0=D0+  2                                * 1128F
         A=A-1   A                                * 11292
-        GOC     OBJ_1123F.L5                     * 11294
-        GOSUB   SUB_1120D                        * 11297
-        GONC    OBJ_1123F.L5                     * 1129B
+        GOC     EdEEXKey.L5                      * 11294
+        GOSUB   EdDigit?                         * 11297
+        GONC    EdEEXKey.L5                      * 1129B
         LC(5)   CHR_E                            * 1129E
-        GOC     OBJ_1123F.L6                     * 112A5
-OBJ_1123F.L5:
+        GOC     EdEEXKey.L6                      * 112A5
+EdEEXKey.L5:
         LC(5)   _1E_                             * 112A8
-OBJ_1123F.L6:
+EdEEXKey.L6:
         RSTK=C                                   * 112AF
         A=A+1   A                                * 112B1
         R0=A                                     * 112B3
@@ -876,15 +886,17 @@ OBJ_1123F.L6:
         PC=(A)                                   * 112C1
 
 * refs (3): 1124F 11268 1128B
-SUB_112C5:
+* B.B = character: if E, leave with NULL$ (no exponent needed)
+EdIsE?:
         LC(2)   #45                              * 112C5
         ?B#C    B                                * 112C9
         RTNYES                                   * 112CC
         LC(5)   NULL$                            * 112CE
-        GONC    OBJ_1123F.L6                     * 112D5
+        GONC    EdEEXKey.L6                      * 112D5
 
 * refs (2): 11253 1127D
-SUB_112D8:
+* B.B -> carry set if it is + or -
+EdIsSign?:
         LC(2)   #2B                              * 112D8
         ?B=C    B                                * 112DC
         RTNYES                                   * 112DF
@@ -914,7 +926,7 @@ DelLastArg:
 ClrBusyAnn:
         CON(5)  (*)+5                            * 11320  primitive code object
         LC(2)   #80                              * 11325
-        GOTO    OBJ_11387.L1                     * 11329
+        GOTO    ClrIOAnn.L1                      * 11329
 
 * ->
 * refs (3): 3FD3B 3FD68 3FD95
@@ -928,7 +940,7 @@ SetAlphaAnn:
 ClrAlphaAnn:
         CON(5)  (*)+5                            * 1133A  primitive code object
         LC(2)   #40                              * 1133F
-        GOTO    OBJ_11387.L1                     * 11343
+        GOTO    ClrIOAnn.L1                      * 11343
 
 * ->
 * refs (2): 3FD18 3FD9A
@@ -942,7 +954,7 @@ SetRightAnn:
 ClrRightAnn:
         CON(5)  (*)+5                            * 11354  primitive code object
         LC(2)   #20                              * 11359
-        GOTO    OBJ_11387.L1                     * 1135D
+        GOTO    ClrIOAnn.L1                      * 1135D
 
 * ->
 * refs (2): 3FCE6 3FD6D
@@ -956,30 +968,32 @@ SetLeftAnn:
 ClrLeftAnn:
         CON(5)  (*)+5                            * 1136E  primitive code object
         LC(2)   #10                              * 11373
-        GOTO    OBJ_11387.L1                     * 11377
+        GOTO    ClrIOAnn.L1                      * 11377
 ClrLeftAnn.L1:
-        GOSUB   SUB_113B0                        * 1137B
+        GOSUB   Ann@                             * 1137B
         C=C!A   B                                * 1137F
-        GOTO    OBJ_11387.L2                     * 11383
+        GOTO    ClrIOAnn.L2                      * 11383
 
 * refs (1): 2D368
-OBJ_11387:
+* -> : clear the I/O annunciator bit (#02) of the annunciator byte and show it. The entries before work the same way for other bits
+ClrIOAnn:
         CON(5)  (*)+5                            * 11387  primitive code object
         LC(2)   #02                              * 1138C
-OBJ_11387.L1:
+ClrIOAnn.L1:
         C=-C-1  A                                * 11390
-        GOSUB   SUB_113B0                        * 11392
+        GOSUB   Ann@                             * 11392
         C=C&A   B                                * 11396
-OBJ_11387.L2:
+ClrIOAnn.L2:
         DAT0=C  B                                * 1139A
         A=R0                                     * 1139D
         D0=A                                     * 113A0
-        LC(5)   OBJ_01E5E                        * 113A3
+        LC(5)   ShowHeldAnn                      * 113A3
         A=C     A                                * 113AA
         PC=(A)                                   * 113AC
 
 * refs (2): 1137B 11392
-SUB_113B0:
+* -> A.B = annunciator byte, D0 at it, R0 = old D0
+Ann@:
         AD0EX                                    * 113B0
         R0=A                                     * 113B3
         D0=(5)  ANNUNCIATORS                     * 113B6
@@ -987,123 +1001,133 @@ SUB_113B0:
         RTN                                      * 113C0
 
 * refs (4): 64172 6AE2E 6BABF 6C2F3
-OBJ_113C2:
+* -> #
+DEPTHSAVE@:
         CON(5)  (*)+5                            * 113C2  primitive code object
         LC(5)   DEPTHSAVE                        * 113C7
-        GOTO    OBJ_11495.L1                     * 113CE
+        GOTO    PADCOUNT!.L1                     * 113CE
 
 * refs (3): 6AE38 6BAC9 6C2FD
-OBJ_113D2:
+* # ->
+DEPTHSAVE!:
         CON(5)  (*)+5                            * 113D2  primitive code object
         LC(5)   DEPTHSAVE                        * 113D7
-        GOTO    OBJ_11495.L3                     * 113DE
+        GOTO    PADCOUNT!.L3                     * 113DE
 
 * refs (2): 4255C 428EF
-OBJ_113E2:
+* # ->
+TOPLINE!:
         CON(5)  (*)+5                            * 113E2  primitive code object
         LC(5)   TOPLINE                          * 113E7
-        GOTO    OBJ_11495.L3                     * 113EE
+        GOTO    PADCOUNT!.L3                     * 113EE
 
 * refs (8): 3A0E9 427B4 427D7 42845 42863 4288B ...
-OBJ_113F2:
+* -> #
+TOPLINE@:
         CON(5)  (*)+5                            * 113F2  primitive code object
         LC(5)   TOPLINE                          * 113F7
-        GOTO    OBJ_11495.L1                     * 113FE
+        GOTO    PADCOUNT!.L1                     * 113FE
 
 * refs (1): 4287C
-OBJ_11402:
+* -> :
+TOPLINE+1:
         CON(5)  (*)+5                            * 11402  primitive code object
         LC(5)   TOPLINE                          * 11407
-        GOTO    OBJ_11495.L6                     * 1140E
+        GOTO    PADCOUNT!.L6                     * 1140E
 
 * refs (2): 4289F 429FD
-OBJ_11412:
+* -> :
+TOPLINE-1:
         CON(5)  (*)+5                            * 11412  primitive code object
         LC(5)   TOPLINE                          * 11417
-        GOTO    OBJ_11495.L7                     * 1141E
+        GOTO    PADCOUNT!.L7                     * 1141E
 
 * refs (1): 42B98
-OBJ_11422:
+* -> :
+CR_COUNT+1:
         CON(5)  (*)+5                            * 11422  primitive code object
         LC(5)   CR_COUNT                         * 11427
-        GOTO    OBJ_11495.L6                     * 1142E
+        GOTO    PADCOUNT!.L6                     * 1142E
 
 * -> #
 * refs (8): 3A09E 3A175 4258E 4270F 4274B 427B9 ...
 FIRSTC@:
         CON(5)  (*)+5                            * 11432  primitive code object
         LC(5)   FIRSTCHAR                        * 11437
-        GOTO    OBJ_11495.L1                     * 1143E
+        GOTO    PADCOUNT!.L1                     * 1143E
 
 * ->
 * refs (3): 425CA 428D6 42B93
 SETFIRSTC_0:
         CON(5)  (*)+5                            * 11442  primitive code object
         LC(5)   FIRSTCHAR                        * 11447
-        GOTO    OBJ_11495.L8                     * 1144E
+        GOTO    PADCOUNT!.L8                     * 1144E
 
 * refs (1): 425A2
-LCursor~1:
+* -> :
+FIRSTCHAR-1:
         CON(5)  (*)+5                            * 11452  primitive code object
         LC(5)   FIRSTCHAR                        * 11457
-        GOTO    OBJ_11495.L7                     * 1145E
+        GOTO    PADCOUNT!.L7                     * 1145E
 
 * ->
 * refs (2): 42633 42656
 FIRSTC+:
         CON(5)  (*)+5                            * 11462  primitive code object
         LC(5)   FIRSTCHAR                        * 11467
-        GOTO    OBJ_11495.L6                     * 1146E
+        GOTO    PADCOUNT!.L6                     * 1146E
 
 * refs (3): 178E7 17900 17932
-OBJ_11472:
+* -> #
+PADCOUNT@:
         CON(5)  (*)+5                            * 11472  primitive code object
         LA(5)   PADCOUNT                         * 11477
         GOSBVL  SAVPTR                           * 11481
         D0=A                                     * 11488
         A=0     A                                * 1148B
         A=DAT0  1                                * 1148D
-        GOTO    OBJ_11495.L2                     * 11491
+        GOTO    PADCOUNT!.L2                     * 11491
 
 * refs (3): 172E8 178F1 1790A
-OBJ_11495:
+* # ->
+PADCOUNT!:
         CON(5)  (*)+5                            * 11495  primitive code object
         GOSBVL  POP#                             * 1149A
         LC(5)   PADCOUNT                         * 114A1
         CD0EX                                    * 114A8
         DAT0=A  1                                * 114AB
-        GOTO    OBJ_11495.L5                     * 114AF
-OBJ_11495.L1:
+        GOTO    PADCOUNT!.L5                     * 114AF
+PADCOUNT!.L1:
         A=C     A                                * 114B3
         GOSBVL  SAVPTR                           * 114B5
         D0=A                                     * 114BC
         A=DAT0  A                                * 114BF
-OBJ_11495.L2:
+PADCOUNT!.L2:
         GOVLNG  PUSH#ALOOP                       * 114C2
-OBJ_11495.L3:
+PADCOUNT!.L3:
         RSTK=C                                   * 114C9
         GOSBVL  POP#                             * 114CB
         C=RSTK                                   * 114D2
         CD0EX                                    * 114D4
-OBJ_11495.loop4:
+PADCOUNT!.loop4:
         DAT0=A  A                                * 114D7
-OBJ_11495.L5:
+PADCOUNT!.L5:
         D0=C                                     * 114DA
         GOTO    ClrLock.L3                       * 114DD
-OBJ_11495.L6:
+PADCOUNT!.L6:
         CD0EX                                    * 114E1
         A=DAT0  A                                * 114E4
         A=A+1   A                                * 114E7
-        GONC    OBJ_11495.loop4                  * 114E9
-OBJ_11495.L7:
+        GONC    PADCOUNT!.loop4                  * 114E9
+PADCOUNT!.L7:
         CD0EX                                    * 114EC
         A=DAT0  A                                * 114EF
         A=A-1   A                                * 114F2
-        GOTO    OBJ_11495.loop4                  * 114F4
-OBJ_11495.L8:
+        GOTO    PADCOUNT!.loop4                  * 114F4
+PADCOUNT!.L8:
         CD0EX                                    * 114F8
         A=0     A                                * 114FB
-        GOTO    OBJ_11495.loop4                  * 114FD
+        GOTO    PADCOUNT!.loop4                  * 114FD
 
 * -> flag
 * refs (3): 3AFB1 3FC14 D73EA
@@ -1189,7 +1213,7 @@ makegrob.loop1:
         GOSUB   w->W                             * 115B9
         R3=A.F  A                                * 115BD
         C=R1.F  A                                * 115C3
-        GOSUB   SUB_11642                        * 115C9
+        GOSUB   A*C>B                            * 115C9
         GOC     makegrob.L2                      * 115CD
         C=0     A                                * 115D0
         LC(2)   #14                              * 115D2
@@ -1228,18 +1252,19 @@ makegrob.L4:
         RTNCC                                    * 11640
 
 * refs (2): 115C9 12536
-SUB_11642:
+* A.A, C.A -> B.A = their product, by repeated addition of the larger; carry set on overflow
+A*C>B:
         B=0     A                                * 11642
         ?C<A    A                                * 11644
-        GOYES   SUB_11642.L2                     * 11647
+        GOYES   A*C>B.L2                         * 11647
         CAEX    A                                * 11649
-        GONC    SUB_11642.L2                     * 1164B
-SUB_11642.loop1:
+        GONC    A*C>B.L2                         * 1164B
+A*C>B.loop1:
         B=B+A   A                                * 1164E
         RTNC                                     * 11650
-SUB_11642.L2:
+A*C>B.L2:
         C=C-1   A                                * 11653
-        GONC    SUB_11642.loop1                  * 11655
+        GONC    A*C>B.loop1                      * 11655
         RTNCC                                    * 11658
 
 * Calculates GROB width A.A=width in pixels -> A.A=width in nibbles
@@ -1282,7 +1307,7 @@ GROB!.L1:
 * R0,R1 = (row,col), D0 = grob1, D1 = grob2 --> Stores grob1 into grob2
 * refs (2): 116AA 13D69
 grob!:
-        GOSUB   SUB_11BED                        * 116B5
+        GOSUB   GrobEmpty?                       * 116B5
         RTNC                                     * 116B9
         D1=D1+  10                               * 116BC
         C=DAT1  A                                * 116BF
@@ -1528,18 +1553,18 @@ SUB_118F3.L1:
 * refs (35): 0E051 4572B 484CC 4DD5A 4DEEF 4DF5D ...
 SUBGROB:
         CON(5)  (*)+5                            * 1192F  primitive code object
-        GOSUB   SUB_11BAA                        * 11934
+        GOSUB   PopRect                          * 11934
         GOC     SUB_118F3.L1                     * 11938
         C=DAT1  A                                * 1193B
         D1=C                                     * 1193E
-        GOSUB   SUB_11BED                        * 11941
+        GOSUB   GrobEmpty?                       * 11941
         GOC     SUB_118F3.L1                     * 11945
-        GOSUB   SUB_11C06                        * 11948
+        GOSUB   PtInGrob?                        * 11948
         GONC    SUB_118F3.L1                     * 1194C
-        GOSUB   SUB_11C29                        * 1194F
+        GOSUB   ClipRect                         * 1194F
         GOSUBL  makegrob                         * 11953
-        GOSUB   SUB_11A58                        * 11959
-        GOSUB   SUB_11C58                        * 1195D
+        GOSUB   D1=Lev1                          * 11959
+        GOSUB   GrobPixAddr                      * 1195D
         AR4EX                                    * 11961
         C=R0                                     * 11964
         D=C     A                                * 11967
@@ -1630,7 +1655,8 @@ SUBGROB.L8:
         GOLONG  $>grob.L5                        * 11A52
 
 * refs (3): 11959 11D71 11FC9
-SUB_11A58:
+* -> D1 at the object on level 1
+D1=Lev1:
         D1=(5)  DSKTOP                           * 11A58
         C=DAT1  A                                * 11A5F
         D1=C                                     * 11A62
@@ -1642,22 +1668,22 @@ SUB_11A58:
 * refs (7): 3965A 39912 44DE0 638A3 8D826 AC2E2 ...
 GROB!ZERO:
         CON(5)  (*)+5                            * 11A6D  primitive code object
-        GOSUB   SUB_11BAA                        * 11A72
+        GOSUB   PopRect                          * 11A72
         GONC    GROB!ZERO.L1                     * 11A76
         GOTO    GROB!.L1                         * 11A79
 GROB!ZERO.L1:
         C=DAT1  A                                * 11A7D
         D1=C                                     * 11A80
-        GOSUB   SUB_11BED                        * 11A83
+        GOSUB   GrobEmpty?                       * 11A83
         GONC    GROB!ZERO.L2                     * 11A87
         GOTO    GROB!.L1                         * 11A8A
 GROB!ZERO.L2:
-        GOSUB   SUB_11C06                        * 11A8E
+        GOSUB   PtInGrob?                        * 11A8E
         GOC     GROB!ZERO.L3                     * 11A92
         GOTO    GROB!.L1                         * 11A95
 GROB!ZERO.L3:
-        GOSUB   SUB_11C29                        * 11A99
-        GOSUB   SUB_11C58                        * 11A9D
+        GOSUB   ClipRect                         * 11A99
+        GOSUB   GrobPixAddr                      * 11A9D
         R3=A                                     * 11AA1
         C=R4                                     * 11AA4
         D=C     A                                * 11AA7
@@ -1756,7 +1782,8 @@ GROB!ZERO.L13:
         GOTO    GROB!.L1                         * 11BA6
 
 * refs (2): 11934 11A72
-SUB_11BAA:
+* #x1 #y1 #x2 #y2 -> R4 = x1, R2 = y1, D.A = x2, B.A = y2, R0 = width, R1 = height, after SAVPTR; carry set if the rectangle is empty
+PopRect:
         GOSUB   POP#~jump                        * 11BAA
         R0=A                                     * 11BAE
         GOSUB   POP#~jump                        * 11BB1
@@ -1782,7 +1809,8 @@ SUB_11BAA:
         RTNCC                                    * 11BEB
 
 * refs (3): 116B5 11941 11A83
-SUB_11BED:
+* D1 at a grob -> carry set if it has no pixels
+GrobEmpty?:
         D1=D1+  5                                * 11BED
         C=DAT1  A                                * 11BF0
         D1=D1-  5                                * 11BF3
@@ -1793,14 +1821,15 @@ SUB_11BED:
         RTN                                      * 11C04
 
 * refs (2): 11948 11A8E
-SUB_11C06:
+* D1 at a grob -> carry set if the point R4, R2 lies inside it
+PtInGrob?:
         D1=D1+  10                               * 11C06
         C=DAT1  A                                * 11C09
         A=R2                                     * 11C0C
         ?C>A    A                                * 11C0F
-        GOYES   SUB_11C06.L1                     * 11C12
+        GOYES   PtInGrob?.L1                     * 11C12
         RTNCC                                    * 11C14
-SUB_11C06.L1:
+PtInGrob?.L1:
         D1=D1+  5                                * 11C16
         C=DAT1  A                                * 11C19
         D1=D1-  15                               * 11C1C
@@ -1810,30 +1839,32 @@ SUB_11C06.L1:
         RTNCC                                    * 11C27
 
 * refs (2): 1194F 11A99
-SUB_11C29:
+* D1 at a grob -> : clip the rectangle from PopRect to the grob's size
+ClipRect:
         D1=D1+  10                               * 11C29
         C=DAT1  A                                * 11C2C
         ?B<=C   A                                * 11C2F
-        GOYES   SUB_11C29.L1                     * 11C32
+        GOYES   ClipRect.L1                      * 11C32
         B=C     A                                * 11C34
         A=R2                                     * 11C36
         C=C-A   A                                * 11C39
         R1=C                                     * 11C3B
-SUB_11C29.L1:
+ClipRect.L1:
         D1=D1+  5                                * 11C3E
         C=DAT1  A                                * 11C41
         ?D<=C   A                                * 11C44
-        GOYES   SUB_11C29.L2                     * 11C47
+        GOYES   ClipRect.L2                      * 11C47
         D=C     A                                * 11C49
         A=R4                                     * 11C4B
         C=C-A   A                                * 11C4E
         R0=C                                     * 11C50
-SUB_11C29.L2:
+ClipRect.L2:
         D1=D1-  15                               * 11C53
         RTN                                      * 11C56
 
 * refs (3): 1195D 11A9D 121F6
-SUB_11C58:
+* D1 at a grob, R4 = x, R2 = y -> A.A = address of the nibble holding the pixel, B.A = nibbles per row
+GrobPixAddr:
         D1=D1+  15                               * 11C58
         A=DAT1  A                                * 11C5B
         GOSUBL  w->W                             * 11C5E
@@ -1841,12 +1872,12 @@ SUB_11C58:
         D1=D1+  5                                * 11C66
         AD1EX                                    * 11C69
         C=R2                                     * 11C6C
-        GOTO    SUB_11C58.L2                     * 11C6F
-SUB_11C58.loop1:
+        GOTO    GrobPixAddr.L2                   * 11C6F
+GrobPixAddr.loop1:
         A=A+B   A                                * 11C73
-SUB_11C58.L2:
+GrobPixAddr.L2:
         C=C-1   A                                * 11C75
-        GONC    SUB_11C58.loop1                  * 11C77
+        GONC    GrobPixAddr.loop1                * 11C77
         C=R4                                     * 11C7A
         CSRB.F  A                                * 11C7D
         CSRB.F  A                                * 11C82
@@ -1895,7 +1926,7 @@ SUB_11CCC:
         A=0     A                                * 11CD7
         A=A+1   A                                * 11CD9
         GOSUB   SUB_11CCC                        * 11CDB
-        GOSUB   SUB_11D52                        * 11CDF
+        GOSUB   MakeTextGrob                     * 11CDF
         C=R3                                     * 11CE3
         D=C     A                                * 11CE6
         D1=D1+  5                                * 11CE8
@@ -1918,7 +1949,7 @@ $>GROB:
 $>GROB.L1:
         GOSUB   SAVPTR~jump_7                    * 11D08
         A=DAT1  A                                * 11D0C
-        GOSUB   SUB_120CC                        * 11D0F
+        GOSUB   $>Body                           * 11D0F
         ?A#0    A                                * 11D13
         GOYES   $>GROB.L3                        * 11D16
 $>GROB.L2:
@@ -1927,29 +1958,30 @@ $>GROB.L2:
         DAT1=C  A                                * 11D23
         GOTO    $>grob.L7                        * 11D26
 $>GROB.L3:
-        GOSUB   SUB_11D52                        * 11D2A
+        GOSUB   MakeTextGrob                     * 11D2A
         C=R3                                     * 11D2E
         D=C     A                                * 11D31
         AD1EX                                    * 11D33
-        GOSUB   SUB_120CC                        * 11D36
+        GOSUB   $>Body                           * 11D36
 $>GROB.L4:
         B=0     A                                * 11D3A
         CD0EX                                    * 11D3C
         R3=C                                     * 11D3F
         D0=C                                     * 11D42
         C=A     A                                * 11D45
-        GOSUB   SUB_11D92                        * 11D47
+        GOSUB   GrobPut$                         * 11D47
         C=R3                                     * 11D4B
         GOTO    $>grob.L4                        * 11D4E
 
 * refs (2): 11CDF 11D2A
-SUB_11D52:
+* A.A = characters, XM set for the 10-row font -> : make a grob 6 pixels a character wide and 8 or 10 rows high, D1 at it. XM kept
+MakeTextGrob:
         C=0     A                                * 11D52
         LC(1)   #8                               * 11D54
         ?XM=0                                    * 11D57
-        GOYES   SUB_11D52.L1                     * 11D5A
+        GOYES   MakeTextGrob.L1                  * 11D5A
         LC(1)   #A                               * 11D5C
-SUB_11D52.L1:
+MakeTextGrob.L1:
         R1=C                                     * 11D5F
         A=A+A   A                                * 11D62
         C=A     A                                * 11D64
@@ -1957,7 +1989,7 @@ SUB_11D52.L1:
         A=A+C   A                                * 11D68
         R0=A                                     * 11D6A
         GOSUB   makegrob                         * 11D6D
-        GOSUB   SUB_11A58                        * 11D71
+        GOSUB   D1=Lev1                          * 11D71
         A=R1                                     * 11D75
         LC(1)   #8                               * 11D78
         XM=0                                     * 11D7B
@@ -1972,7 +2004,8 @@ $5x7:
         XM=0                                     * 11D8F
 
 * refs (2): 11D47 12549
-SUB_11D92:
+* D1 at a string body, D0 at a grob, C.A = characters, D.A = nibbles per row, B.A = pixel offset, XM for the font -> : draw it, two characters at a time. Carry set if it ends on a half cell
+GrobPut$:
         P=      0                                * 11D92
         SETHEX                                   * 11D94
         A=B     A                                * 11D96
@@ -1982,26 +2015,26 @@ SUB_11D92:
         A=A+B   A                                * 11DA2
         AD0EX                                    * 11DA4
         C=C-1   A                                * 11DA7
-        GONC    SUB_11D92.L1                     * 11DA9
+        GONC    GrobPut$.L1                      * 11DA9
         ?ABIT=0 0                                * 11DAC
-        GOYES   SUB_11D92.loop4                  * 11DB1
-        GOTO    SUB_11D92.L9                     * 11DB3
-SUB_11D92.L1:
+        GOYES   GrobPut$.loop4                   * 11DB1
+        GOTO    GrobPut$.L9                      * 11DB3
+GrobPut$.L1:
         ?ABIT=1 0                                * 11DB7
-        GOYES   SUB_11D92.L2                     * 11DBC
+        GOYES   GrobPut$.L2                      * 11DBC
         ?C#0    A                                * 11DBE
-        GOYES   SUB_11D92.loop5                  * 11DC1
-        GOTO    SUB_11D92.L7                     * 11DC3
-SUB_11D92.L2:
-        GOSUB   SUB_11F17                        * 11DC7
+        GOYES   GrobPut$.loop5                   * 11DC1
+        GOTO    GrobPut$.L7                      * 11DC3
+GrobPut$.L2:
+        GOSUB   GlyphRows                        * 11DC7
         RSTK=C                                   * 11DCB
         A=DAT1  B                                * 11DCD
-        GOSBVL  SUB_7A126                        * 11DD0
+        GOSBVL  CharGlyph1                       * 11DD0
         D1=D1+  2                                * 11DD7
         CD1EX                                    * 11DDA
         GOSUB   SUB_11EF2                        * 11DDD
         RSTK=C                                   * 11DE1
-SUB_11D92.loop3:
+GrobPut$.loop3:
         A=DAT0  B                                * 11DE3
         LC(2)   #03                              * 11DE6
         A=A&C   B                                * 11DEA
@@ -2015,24 +2048,24 @@ SUB_11D92.loop3:
         C=C+D   A                                * 11E04
         CD0EX                                    * 11E06
         C=C-1   S                                * 11E09
-        GONC    SUB_11D92.loop3                  * 11E0C
+        GONC    GrobPut$.loop3                   * 11E0C
         C=RSTK                                   * 11E0F
         D1=C                                     * 11E11
-        GOSUB   SUB_11EF9                        * 11E14
+        GOSUB   GlyphNext                        * 11E14
         D0=D0+  1                                * 11E18
         C=RSTK                                   * 11E1B
         C=C-1   A                                * 11E1D
-        GOC     SUB_11D92.loop4                  * 11E1F
+        GOC     GrobPut$.loop4                   * 11E1F
         ?C#0    A                                * 11E22
-        GOYES   SUB_11D92.loop5                  * 11E25
-        GOTO    SUB_11D92.L7                     * 11E27
-SUB_11D92.loop4:
+        GOYES   GrobPut$.loop5                   * 11E25
+        GOTO    GrobPut$.L7                      * 11E27
+GrobPut$.loop4:
         RTNCC                                    * 11E2B
-SUB_11D92.loop5:
-        GOSUB   SUB_11F17                        * 11E2D
+GrobPut$.loop5:
+        GOSUB   GlyphRows                        * 11E2D
         RSTK=C                                   * 11E31
         A=DAT1  A                                * 11E33
-        GOSBVL  SUB_7A0FD                        * 11E36
+        GOSBVL  CharGlyph2                       * 11E36
         D1=D1+  4                                * 11E3D
         CD1EX                                    * 11E40
         GOSUB   SUB_11EF2                        * 11E43
@@ -2042,7 +2075,7 @@ SUB_11D92.loop5:
         AD1EX                                    * 11E50
         B=A     A                                * 11E53
         RSTK=C                                   * 11E55
-SUB_11D92.loop6:
+GrobPut$.loop6:
         C=B     A                                * 11E57
         CD1EX                                    * 11E59
         B=C     A                                * 11E5C
@@ -2062,24 +2095,24 @@ SUB_11D92.loop6:
         C=C+D   A                                * 11E85
         CD0EX                                    * 11E87
         C=C-1   S                                * 11E8A
-        GONC    SUB_11D92.loop6                  * 11E8D
+        GONC    GrobPut$.loop6                   * 11E8D
         C=RSTK                                   * 11E90
         D1=C                                     * 11E92
-        GOSUB   SUB_11EF9                        * 11E95
+        GOSUB   GlyphNext                        * 11E95
         D0=D0+  2                                * 11E99
         C=RSTK                                   * 11E9C
         C=C-1   A                                * 11E9E
         C=C-1   A                                * 11EA0
-        GOC     SUB_11D92.loop4                  * 11EA2
+        GOC     GrobPut$.loop4                   * 11EA2
         ?C#0    A                                * 11EA5
-        GOYES   SUB_11D92.loop5                  * 11EA8
-SUB_11D92.L7:
-        GOSUB   SUB_11F17                        * 11EAA
+        GOYES   GrobPut$.loop5                   * 11EA8
+GrobPut$.L7:
+        GOSUB   GlyphRows                        * 11EAA
         A=DAT1  B                                * 11EAE
-        GOSBVL  SUB_7A126                        * 11EB1
+        GOSBVL  CharGlyph1                       * 11EB1
         D1=C                                     * 11EB8
         GOSUB   SUB_11EF2                        * 11EBB
-SUB_11D92.loop8:
+GrobPut$.loop8:
         A=DAT0  B                                * 11EBF
         LC(2)   #C0                              * 11EC2
         A=A&C   B                                * 11EC6
@@ -2091,58 +2124,61 @@ SUB_11D92.loop8:
         C=C+D   A                                * 11EDA
         CD0EX                                    * 11EDC
         C=C-1   S                                * 11EDF
-        GONC    SUB_11D92.loop8                  * 11EE2
-        GOSUB   SUB_11EF9                        * 11EE5
-SUB_11D92.L9:
+        GONC    GrobPut$.loop8                   * 11EE2
+        GOSUB   GlyphNext                        * 11EE5
+GrobPut$.L9:
         RTNSC                                    * 11EE9
         BSS     7                                * 11EEB  zeros
 
 * refs (4): 11DDD 11E43 11E4C 11EBB
 SUB_11EF2:
-        GOVLNG  SUB_0C11B.L3                     * 11EF2
+        GOVLNG  CoveredRead.L3                   * 11EF2
 
 * refs (3): 11E14 11E95 11EE5
-SUB_11EF9:
+* Step D0 back to the top of the character row and on one nibble
+GlyphNext:
         AD0EX                                    * 11EF9
         C=D     A                                * 11EFC
         C=C+C   A                                * 11EFE
         C=C+C   A                                * 11F00
         C=C+C   A                                * 11F02
         ?XM=0                                    * 11F04
-        GOYES   SUB_11EF9.L1                     * 11F07
+        GOYES   GlyphNext.L1                     * 11F07
         C=C+D   A                                * 11F09
         C=C+D   A                                * 11F0B
-SUB_11EF9.L1:
+GlyphNext.L1:
         A=A-C   A                                * 11F0D
         D0=A                                     * 11F0F
         D0=D0+  1                                * 11F12
         RTN                                      * 11F15
 
 * refs (3): 11DC7 11E2D 11EAA
-SUB_11F17:
+* -> C.S = rows-1 of the font: 7, or 9 with XM
+GlyphRows:
         P=      7                                * 11F17
         ?XM=0                                    * 11F19
-        GOYES   SUB_11F17.L1                     * 11F1C
+        GOYES   GlyphRows.L1                     * 11F1C
         P=      9                                * 11F1E
-SUB_11F17.L1:
+GlyphRows.L1:
         C=P     15                               * 11F20
         P=      0                                * 11F24
         RTN                                      * 11F26
 
 * refs (1): 13C5E
 * String renderer. XM=1: 10-row font, glyph = #7A047 + 20*code; XM=0: 8-row font, glyph = #7B257 + 16*code
-SUB_11F28:
+* A.B = character -> C.A = its glyph
+Char>Glyph:
         C=0     A                                * 11F28
         C=A     B                                * 11F2A
         A=C     A                                * 11F2D
         ?XM=0                                    * 11F2F
-        GOYES   SUB_11F28.L2                     * 11F32
+        GOYES   Char>Glyph.L2                    * 11F32
         LC(2)   #1F                              * 11F34
         ?C<=A   B                                * 11F38
-        GOYES   SUB_11F28.L1                     * 11F3B
+        GOYES   Char>Glyph.L1                    * 11F3B
         LC(5)   Font10+2540                      * 11F3D  glyph used for codes below #20
         RTN                                      * 11F44
-SUB_11F28.L1:
+Char>Glyph.L1:
         C=A     A                                * 11F46
         C=C+C   A                                * 11F48
         C=C+C   A                                * 11F4A
@@ -2151,13 +2187,13 @@ SUB_11F28.L1:
         LC(5)   Font10-620                       * 11F50  glyph of code c = #7A047 + 20*c
         C=C+A   A                                * 11F57
         RTN                                      * 11F59
-SUB_11F28.L2:
+Char>Glyph.L2:
         LC(2)   #1F                              * 11F5B
         ?C<=A   B                                * 11F5F
-        GOYES   SUB_11F28.L3                     * 11F62
+        GOYES   Char>Glyph.L3                    * 11F62
         LC(5)   Font8+2032                       * 11F64  glyph used for codes below #20
         RTN                                      * 11F6B
-SUB_11F28.L3:
+Char>Glyph.L3:
         ASL     A                                * 11F6D
         LC(5)   Font8-496                        * 11F6F  glyph of code c = #7B257 + 16*c
         C=C+A   A                                * 11F76
@@ -2171,14 +2207,14 @@ $>grob:
         ST=1    3                                * 11F85
         GOSUB   SAVPTR~jump_7                    * 11F88
         A=DAT1  A                                * 11F8C
-        GOSUB   SUB_120CC                        * 11F8F
+        GOSUB   $>Body                           * 11F8F
         ?A#0    A                                * 11F93
         GOYES   $>grob.L1                        * 11F96
         GOTO    $>GROB.L2                        * 11F98
 $>grob.L1:
         R4=A.F  A                                * 11F9C
         C=A     A                                * 11FA2
-        GOSUB   SUB_120F5                        * 11FA4
+        GOSUB   Mini$Width                       * 11FA4
         A=B     A                                * 11FA8
         R0=A.F  A                                * 11FAA
         C=0     A                                * 11FB0
@@ -2189,7 +2225,7 @@ $>grob.L1:
 $>grob.L2:
         R1=C.F  A                                * 11FBD
         GOSUBL  makegrob                         * 11FC3
-        GOSUB   SUB_11A58                        * 11FC9
+        GOSUB   D1=Lev1                          * 11FC9
         D1=D1+  10                               * 11FCD
 $>grob.L3:
         A=R3.F  A                                * 11FD0
@@ -2199,7 +2235,7 @@ $>grob.L3:
         C=R4.F  A                                * 11FDE
         B=0     A                                * 11FE4
         ST=0    2                                * 11FE6
-        GOSUB   SUB_12223                        * 11FE9
+        GOSUB   MiniDraw                         * 11FE9
         C=RSTK                                   * 11FED
 $>grob.L4:
         A=C     A                                * 11FEF

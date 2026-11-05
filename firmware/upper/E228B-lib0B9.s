@@ -1,5 +1,6 @@
-* HP 48GX ROM revision R, #E228B-#E384A: Library part 0B9
+* HP 48GX ROM revision R, #E228B-#E384A: Message table of the input forms and of MODES, with the descriptions of the system flags
 * Addresses in the right-hand comments are those of the original ROM.
+* Most referenced: B9Messages
 * Follows on from the previous file (at #E228B in the original ROM).
         ENDLENGTH                                * E228B
 
@@ -7,16 +8,18 @@
         LENGTH                                   * E2290  length, to #E384B
         CON(2)  0                                * E2295  title length
 
+* Library 0B9: Messages of input forms, Choose boxes and the MODES applications, among them the text of every system flag.
 LIB0B9:
         CON(3)  #0B9                             * E2297  library number
         REL(5)  LIB0B9.hash                      * E229A  hash table
-        REL(5)  ROMP_0B9_000                     * E229F  message table
+        REL(5)  B9Messages                       * E229F  message table
         REL(5)  LIB0B9.link                      * E22A4  link table
         CON(5)  0                                * E22A9  config
 
 * ROMPTR 0B9 000
 * refs (1): E2297
-ROMP_0B9_000:
+* Message table: numbers B901 onwards.
+B9Messages:
         CON(5)  DOARRY                           * E22AE  array 155
         LENGTH                                   * E22B3  length, to #E37D4
         CON(5)  DOCSTR                           * E22B8  element type
@@ -108,7 +111,6 @@ ROMP_0B9_000:
         $BODY   "56 Standard beep on"            * E2D7E  84
         $BODY   "57 Alarm beep on"               * E2DA9  85
         $BODY   "58 Show INFO"                   * E2DCE  86
-ROMP_0B9_000.L1:
         $BODY   "59 Show variables"              * E2DEB  87
         $BODY   "60 [α][α] locks"                * E2E12  88
         $BODY   "61 [USR][USR] locks"            * E2E35  89
@@ -207,6 +209,6 @@ LIB0B9.hash.L1:
 LIB0B9.link:
         CON(5)  DOHSTR                           * E3838  link table of library 0B9
         LENGTH                                   * E383D  length, to #E3847
-        REL(5)  ROMP_0B9_000                     * E3842  000 
+        REL(5)  B9Messages                       * E3842  000 
         ENDLENGTH                                * E3847
         BSS     4                                * E3847  zeros

@@ -1,6 +1,6 @@
-* HP 48GX ROM revision R, #08001-#0A005: Directories, variables and memory management
+* HP 48GX ROM revision R, #08001-#0A005: Directories, variables and memory management; ports, cards and bank switching; libraries and backup objects in ports
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: CONTEXT@ CREATE CONTEXT! SKIPVARNAME HOMEDIR SysPtr@ RAM-WORDNAME REPLACE MYRAMROMPAIR RclBkp(nm,adr)? PURGE InitEnab
+* Most referenced: CONTEXT@ CREATE CONTEXT! SKIPVARNAME HOMEDIR SysPtr@ RAM-WORDNAME Rrp>Last REPLACE MYRAMROMPAIR RclBkp(nm,adr)? PURGE
 * Follows on from the previous file (at #08001 in the original ROM).
         GOSUBL  GETTEMP                          * 08001
         AD0EX                                    * 08007
@@ -39,8 +39,8 @@ ROMPART.L6:
         RPL
 
 * refs (1): 8573B
-libs~3:
-        :: OBJ_7028A ROMPART>ADDR ;              * 0806D
+~NullAcptr;ROMPART>ADDR:
+        :: NullAcptr ROMPART>ADDR ;              * 0806D
 
 * #libnum -> #addr T -> F
 * refs (1): 08077
@@ -52,7 +52,7 @@ ROMPART>ADDR:
         CD1EX                                    * 0808F
         D1=D1+  5                                * 08092
         D=D+1   A                                * 08095
-        GOSUB   SUB_07BF9                        * 08097
+        GOSUB   Lev1#                            * 08097
         C=R0.F  A                                * 0809B
         D1=C                                     * 080A1
         C=DAT1  A                                * 080A4
@@ -67,18 +67,18 @@ ROMPART>ADDR.L1:
 * #libnum -> #nibbles-10 T -> F
 ROMPARTSIZE:
         CON(5)  (*)+5                            * 080BF  primitive code object
-        GOSUB   SUB_07BF9                        * 080C4
+        GOSUB   Lev1#                            * 080C4
         GOSUB   SUB_0843A                        * 080C8
         GONC    ROMPARTSIZE.L1                   * 080CC
         GOTO    ROMPTR@.L2                       * 080CF
 ROMPARTSIZE.L1:
-        GOVLNG  SUB_7127A.L2                     * 080D3
+        GOVLNG  Name>Start~jump.L2               * 080D3
 
 * #libnum -> #nextlibnum T -> F
 * refs (1): 08E29
 NEXTROMPID:
         CON(5)  (*)+5                            * 080DA  primitive code object
-        GOSUB   SUB_07BF9                        * 080DF
+        GOSUB   Lev1#                            * 080DF
         D0=(5)  ROMPTAB                          * 080E3
         C=DAT0  A                                * 080EA
         D=C     X                                * 080ED
@@ -103,8 +103,8 @@ GETHASH:
         CON(5)  (*)+5                            * 08112  primitive code object
         ST=0    11                               * 08117
 GETHASH.L1:
-        GOSUB   SUB_07BF9                        * 0811A
-        GOSUB   SUB_0847C                        * 0811E
+        GOSUB   Lev1#                            * 0811A
+        GOSUB   LibTab@                          * 0811E
         GONC    GETHASH.L2                       * 08122
         GOTO    ROMPTR@.L2                       * 08125
 GETHASH.L2:
@@ -122,8 +122,8 @@ GETLINK:
         CON(5)  (*)+5                            * 0813C  primitive code object
         ST=0    11                               * 08141
 GETLINK.L1:
-        GOSUB   SUB_07BF9                        * 08144
-        GOSUB   SUB_084F5                        * 08148
+        GOSUB   Lev1#                            * 08144
+        GOSUB   LibConfig@                       * 08148
         GONC    GETLINK.L2                       * 0814C
         GOTO    ROMPTR@.L2                       * 0814F
 GETLINK.L2:
@@ -143,7 +143,7 @@ AdrPort0~1:
         GOVLNG  BANKMTHDS.L1                     * 08177
         BSS     1                                * 0817E  zeros
 AdrPort0~1.L1:
-        GOSUB   SUB_07BF9                        * 0817F
+        GOSUB   Lev1#                            * 0817F
         D1=D1+  5                                * 08183
         CD1EX                                    * 08186
         D0=C                                     * 08189
@@ -157,14 +157,14 @@ AdrPort0~1.L2:
 * refs (1): 85763
 ROMPARTNAME:
         CON(5)  (*)+5                            * 08199  primitive code object
-        GOSUB   SUB_07BF9                        * 0819E
+        GOSUB   Lev1#                            * 0819E
         GOSUB   SUB_0843A                        * 081A2
         GOC     ROMPARTNAME.L1                   * 081A6
-        GOVLNG  SUB_7127A.L3                     * 081A9
+        GOVLNG  Name>Start~jump.L3               * 081A9
 ROMPARTNAME.L1:
         GOTO    ROMPTR@.L2                       * 081B0
 ROMPARTNAME.L2:
-        GOSUB   SUB_07BAF                        * 081B4
+        GOSUB   MakeIDAt                         * 081B4
         GOTO    ROMPART.L6                       * 081B8
         NIBHEX  793A174                          * 081BC  ρ£q
 ROMPARTNAME.L3:
@@ -209,7 +209,7 @@ ROMPTRDECOMP.L1:
         B=A     A                                * 08215
         D0=D0-  3                                * 08217
         A=DAT0  X                                * 0821A
-        GOSUBL  SUB_08479                        * 0821E
+        GOSUBL  LibHash@                         * 0821E
         ST=0    1                                * 08224
         GONC    ROMPTRDECOMP.L2                  * 08227
         GOTO    ROMPTR@.L2                       * 0822A
@@ -226,7 +226,7 @@ ROMPTRDECOMP.L2:
         GOYES   ROMPTRDECOMP.L3                  * 0824C
         ST=1    1                                * 0824E
         D1=C                                     * 08251
-        GOSUB   SUB_07AB7                        * 08254
+        GOSUB   JumpC                            * 08254
         CD1EX                                    * 08258
 ROMPTRDECOMP.L3:
         D0=A                                     * 0825B
@@ -273,7 +273,7 @@ ROMPTRDECOMP.L5:
         GOTO    ROMPARTNAME.L2                   * 082D1
 ROMPTRDECOMP.L6:
         C=RSTK                                   * 082D5
-        GOSUB   SUB_07B6A                        * 082D7
+        GOSUB   LibAccessEnd                     * 082D7
         GOTO    ROMPTR@.L2                       * 082DB
         BSS     4                                * 082DF  zeros
 
@@ -284,8 +284,8 @@ RAM-WORDNAME:
         A=DAT1  A                                * 082E8
         GOSUBL  SAVPTR                           * 082EB
         D0=A                                     * 082F1
-        GOSUB   SUB_0841E                        * 082F4
-        GOSUB   SUB_07BAF                        * 082F8
+        GOSUB   Name>Start                       * 082F4
+        GOSUB   MakeIDAt                         * 082F8
         DAT1=A  A                                * 082FC
         A=DAT0  A                                * 082FF
         D0=D0+  5                                * 08302
@@ -310,7 +310,7 @@ LASTRAM-WORD:
         A=DAT1  A                                * 0832B
         CD0EX                                    * 0832E
         R0=C                                     * 08331
-        GOSUB   SUB_08503                        * 08334
+        GOSUB   Rrp>Last                         * 08334
         A=DAT0  A                                * 08338
         ?A#0    A                                * 0833B
         GOYES   LASTRAM-WORD.L2                  * 0833E
@@ -341,7 +341,7 @@ PREVRAM-WORD:
         A=DAT1  A                                * 0837B
         AD0EX                                    * 0837E
         R0=A                                     * 08381
-        GOSUB   SUB_0841E                        * 08384
+        GOSUB   Name>Start                       * 08384
         D0=D0-  5                                * 08388
         A=DAT0  A                                * 0838B
         ?A=0    A                                * 0838E
@@ -351,38 +351,39 @@ PREVRAM-WORD:
         GONC    LASTRAM-WORD.L3                  * 08398
 
 * refs (2): 083D1 0855F
-SUB_0839B:
+* A.A = directory -> D0 at the link of the first entry in the directory that holds it; carry set if it is HOME
+Rrp>FirstEnt:
         D0=(5)  USEROB                           * 0839B
         C=DAT0  A                                * 083A2
         ?C=A    A                                * 083A5
         RTNYES                                   * 083A8
         D0=A                                     * 083AA
-        GOSUB   SUB_0841E                        * 083AD
+        GOSUB   Name>Start                       * 083AD
         AD0EX                                    * 083B1
         B=A     A                                * 083B4
-SUB_0839B.loop1:
+Rrp>FirstEnt.loop1:
         D0=A                                     * 083B6
         D0=D0-  5                                * 083B9
         C=DAT0  A                                * 083BC
         ?C=0    A                                * 083BF
-        GOYES   SUB_0839B.L2                     * 083C2
+        GOYES   Rrp>FirstEnt.L2                  * 083C2
         AD0EX                                    * 083C4
         A=A-C   A                                * 083C7
-        GONC    SUB_0839B.loop1                  * 083C9
-SUB_0839B.L2:
+        GONC    Rrp>FirstEnt.loop1               * 083C9
+Rrp>FirstEnt.L2:
         D0=D0-  5                                * 083CC
         RTNCC                                    * 083CF
 
 * Returns the RRP in which the object at A.A lies. If ob is SysRRP, returns CS and leaves A.A unchanged; else CC and A.A->RRP B.A->RAM-WORD Uses A.A B.A C.A D.A D0
 * refs (3): 078DE 08317 08A27
 GETRRP:
-        GOSUB   SUB_0839B                        * 083D1
+        GOSUB   Rrp>FirstEnt                     * 083D1
         RTNC                                     * 083D5
         CD0EX                                    * 083D8
         D=C     A                                * 083DB
         D0=(5)  USEROB                           * 083DD
         A=DAT0  A                                * 083E4
-        GOSUB   SUB_08503                        * 083E7
+        GOSUB   Rrp>Last                         * 083E7
         CD0EX                                    * 083EB
         ?D=C    A                                * 083EE
         GOYES   GETRRP.L1                        * 083F1
@@ -411,18 +412,19 @@ SKIPVARNAME.L1:
         RTNCC                                    * 0841C
 
 * refs (7): 082F4 08384 083AD 18416 7127A 712DD ...
-SUB_0841E:
+* D0 at an object in a directory -> D0 at its name's length byte, before the name
+Name>Start:
         D0=D0-  2                                * 0841E
         C=0     A                                * 08421
         C=DAT0  B                                * 08423
         ?C=0    A                                * 08426
-        GOYES   SUB_0841E.L1                     * 08429
+        GOYES   Name>Start.L1                    * 08429
         C=C+C   A                                * 0842B
         AD0EX                                    * 0842D
         C=A-C   A                                * 08430
         D0=C                                     * 08432
         D0=D0-  2                                * 08435
-SUB_0841E.L1:
+Name>Start.L1:
         RTNCC                                    * 08438
 
 * refs (6): 080AD 080C8 081A2 084B2 084F5 71014
@@ -456,11 +458,13 @@ SUB_08471:
         NIBHEX  808E                             * 08475  .è
 
 * refs (1): 0821E
-SUB_08479:
+* A.X = library -> : LibTab@ with ST11 clear: the hash table
+LibHash@:
         ST=0    11                               * 08479
 
 * refs (1): 0811E
-SUB_0847C:
+* A.X = library, ST11 clear for the hash table, set for the link table -> D0 at it; carry set if there is none. Looks in HOME's attachment table first, then ROMPTAB
+LibTab@:
         D0=(5)  USEROB                           * 0847C
         C=DAT0  A                                * 08483
         D0=C                                     * 08486
@@ -468,39 +472,40 @@ SUB_0847C:
         C=DAT0  A                                * 0848C
         D=C     X                                * 0848F
         D0=D0+  3                                * 08492
-SUB_0847C.loop1:
+LibTab@.loop1:
         D=D-1   X                                * 08495
-        GOC     SUB_084B2                        * 08498
+        GOC     ROMPLibTab@                      * 08498
         C=DAT0  A                                * 0849B
         ?C#A    X                                * 0849E
-        GOYES   SUB_0847C.L2                     * 084A1
-        GOTO    SUB_084B2.L3                     * 084A3
-SUB_0847C.L2:
+        GOYES   LibTab@.L2                       * 084A1
+        GOTO    ROMPLibTab@.L3                   * 084A3
+LibTab@.L2:
         ?C>A    X                                * 084A7
-        GOYES   SUB_084B2                        * 084AA
+        GOYES   ROMPLibTab@                      * 084AA
         D0=D0+  13                               * 084AC
-        GONC    SUB_0847C.loop1                  * 084AF
+        GONC    LibTab@.loop1                    * 084AF
 
 * refs (3): 07C58 08498 084A7
-SUB_084B2:
+* As LibTab@ for libraries found through ROMPTAB only
+ROMPLibTab@:
         GOSUB   SUB_0843A                        * 084B2
         RTNC                                     * 084B6
         D0=D0+  3                                * 084B9
-SUB_084B2.L1:
+ROMPLibTab@.L1:
         ?ST=0   11                               * 084BC
-        GOYES   SUB_084B2.L2                     * 084BF
+        GOYES   ROMPLibTab@.L2                   * 084BF
         D0=D0+  5                                * 084C1
-SUB_084B2.L2:
+ROMPLibTab@.L2:
         CD0EX                                    * 084C4
         A=DAT0  A                                * 084C7
         CD0EX                                    * 084CA
         GOVLNG  SUB_72D1F.L1                     * 084CD
-SUB_084B2.L3:
+ROMPLibTab@.L3:
         D0=D0+  3                                * 084D4
         ?ST=0   11                               * 084D7
-        GOYES   SUB_084B2.L4                     * 084DA
+        GOYES   ROMPLibTab@.L4                   * 084DA
         D0=D0+  5                                * 084DC
-SUB_084B2.L4:
+ROMPLibTab@.L4:
         A=DAT0  A                                * 084DF
         ?A=0    A                                * 084E2
         RTNYES                                   * 084E5
@@ -509,36 +514,39 @@ SUB_084B2.L4:
         BSS     9                                * 084EC  zeros
 
 * refs (3): 07CEF 07EFD 08148
-SUB_084F5:
+* A.X = library -> the library's config object, found through ROMPTAB; carry set if none
+LibConfig@:
         GOSUB   SUB_0843A                        * 084F5
         RTNC                                     * 084F9
         D0=D0+  13                               * 084FC
-        GOTO    SUB_084B2.L1                     * 084FF
+        GOTO    ROMPLibTab@.L1                   * 084FF
 
 * refs (9): 07891 07C82 08334 083E7 08550 087AB ...
-SUB_08503:
+* A.A = directory -> D0 at its offset to the last name, past the attachment table; carry set. HOME's table has 13-nibble entries, others have only the count
+Rrp>Last:
         D0=(5)  USEROB                           * 08503
         C=DAT0  A                                * 0850A
         D0=A                                     * 0850D
         D0=D0+  5                                * 08510
         ?C#A    A                                * 08513
-        GOYES   SUB_08503.L2                     * 08516
+        GOYES   Rrp>Last.L2                      * 08516
         C=DAT0  A                                * 08518
-SUB_08503.loop1:
+Rrp>Last.loop1:
         C=C-1   X                                * 0851B
-        GOC     SUB_08503.L2                     * 0851E
+        GOC     Rrp>Last.L2                      * 0851E
         D0=D0+  13                               * 08521
-        GONC    SUB_08503.loop1                  * 08524
-SUB_08503.L2:
+        GONC    Rrp>Last.loop1                   * 08524
+Rrp>Last.L2:
         D0=D0+  3                                * 08527
         RTNSC                                    * 0852A
 
 * refs (6): 039F7 03A1C 087A4 08A3D 0A894 380DD
-SUB_0852C:
+* C.A = change of size, D0 = position, ST5 set for growth -> : correct every directory size link from there up to HOME
+DirLinksAdj:
         R0=C                                     * 0852C
         D=C     A                                * 0852F
         CD0EX                                    * 08531
-        GOSUBL  SUB_03A64                        * 08534
+        GOSUBL  GetINITEN                        * 08534
         ?D=0    A                                * 0853A
         RTNYES                                   * 0853D
         D0=(5)  USEROB                           * 0853F
@@ -546,36 +554,36 @@ SUB_0852C:
         ?C=A    A                                * 08549
         RTNYES                                   * 0854C
         B=C     A                                * 0854E
-        GOSUB   SUB_08503                        * 08550
+        GOSUB   Rrp>Last                         * 08550
         A=B     A                                * 08554
         AD0EX                                    * 08556
         R1=A                                     * 08559
-SUB_0852C.loop1:
+DirLinksAdj.loop1:
         AD0EX                                    * 0855C
-        GOSUB   SUB_0839B                        * 0855F
+        GOSUB   Rrp>FirstEnt                     * 0855F
         A=DAT0  A                                * 08563
         CD0EX                                    * 08566
         D0=C                                     * 08569
         C=C+A   A                                * 0856C
         ?B#C    A                                * 0856E
-        GOYES   SUB_0852C.L2                     * 08571
+        GOYES   DirLinksAdj.L2                   * 08571
         CD0EX                                    * 08573
         D=C     A                                * 08576
-        GONC    SUB_0852C.L8                     * 08578
-SUB_0852C.L2:
+        GONC    DirLinksAdj.L8                   * 08578
+DirLinksAdj.L2:
         D=C     A                                * 0857B
         C=R0                                     * 0857D
         ?ST=1   5                                * 08580
-        GOYES   SUB_0852C.L3                     * 08583
+        GOYES   DirLinksAdj.L3                   * 08583
         A=A-C   A                                * 08585
-        GONC    SUB_0852C.L4                     * 08587
-SUB_0852C.L3:
+        GONC    DirLinksAdj.L4                   * 08587
+DirLinksAdj.L3:
         A=A+C   A                                * 0858A
-SUB_0852C.L4:
+DirLinksAdj.L4:
         DAT0=A  A                                * 0858C
         CD0EX                                    * 0858F
         DCEX    A                                * 08592
-SUB_0852C.loop5:
+DirLinksAdj.loop5:
         D0=C                                     * 08594
         D0=D0-  5                                * 08597
         A=DAT0  A                                * 0859A
@@ -583,25 +591,25 @@ SUB_0852C.loop5:
         D0=C                                     * 085A0
         C=C-A   A                                * 085A3
         ?B#C    A                                * 085A5
-        GOYES   SUB_0852C.loop5                  * 085A8
+        GOYES   DirLinksAdj.loop5                * 085A8
         A=DAT0  A                                * 085AA
         C=R0                                     * 085AD
         ?ST=1   5                                * 085B0
-        GOYES   SUB_0852C.L6                     * 085B3
+        GOYES   DirLinksAdj.L6                   * 085B3
         A=A-C   A                                * 085B5
-        GONC    SUB_0852C.L7                     * 085B7
-SUB_0852C.L6:
+        GONC    DirLinksAdj.L7                   * 085B7
+DirLinksAdj.L6:
         A=A+C   A                                * 085BA
-SUB_0852C.L7:
+DirLinksAdj.L7:
         DAT0=A  A                                * 085BC
-SUB_0852C.L8:
+DirLinksAdj.L8:
         C=R1                                     * 085BF
         ?D=C    A                                * 085C2
         RTNYES                                   * 085C5
         C=D     A                                * 085C7
         D0=C                                     * 085C9
         D0=D0-  8                                * 085CC
-        GOTO    SUB_0852C.loop1                  * 085CF
+        GOTO    DirLinksAdj.loop1                * 085CF
 
 * newob oldob -> newob
 * refs (9): 08CA9 2092B 209E1 36250 36368 3647B ...
@@ -650,7 +658,7 @@ REPLACE.L4:
         A=R4                                     * 08645
         ?C#A    A                                * 08648
         GOYES   REPLACE.L5                       * 0864B
-        GOSUBL  SUB_03A64                        * 0864D
+        GOSUBL  GetINITEN                        * 0864D
         GOTO    REPLACE.L8                       * 08653
 REPLACE.L5:
         ?C>A    A                                * 08657
@@ -771,9 +779,9 @@ CREATE.L10:
         D0=A                                     * 0879C
         C=D     A                                * 0879F
         ST=1    5                                * 087A1
-        GOSUB   SUB_0852C                        * 087A4
+        GOSUB   DirLinksAdj                      * 087A4
         A=R2                                     * 087A8
-        GOSUB   SUB_08503                        * 087AB
+        GOSUB   Rrp>Last                         * 087AB
         A=DAT0  A                                * 087AF
         ?A#0    A                                * 087B2
         GOYES   CREATE.L11                       * 087B5
@@ -795,7 +803,7 @@ CREATE.L13:
         GOSUBL  MOVEDSD                          * 087DD
         D0=(5)  CONTEXT                          * 087E3
         A=DAT0  A                                * 087EA
-        GOSUB   SUB_08503                        * 087ED
+        GOSUB   Rrp>Last                         * 087ED
         A=DAT0  A                                * 087F1
         C=B     A                                * 087F4
         D1=C                                     * 087F6
@@ -890,7 +898,7 @@ CREATE.L19:
         R0=A                                     * 088F8
         A=A+C   A                                * 088FB
         C=-C    A                                * 088FD
-        GOSUBL  SUB_0686E                        * 088FF
+        GOSUBL  AdjRefs2                         * 088FF
         A=B     A                                * 08905
         R1=A                                     * 08907
         C=D     A                                * 0890A
@@ -965,7 +973,8 @@ CREATE.L23:
         GOTO    CREATE.loop17                    * 089D4
 
 * refs (1): 08C5E
-purge(_)~1:
+* ob flag -> : remove the stored object ob from its directory. FALSE discards it; other flags keep it, moved into TEMPOB. Machine code in CREATE's tail finishes
+DirDelOb:
         CON(5)  (*)+5                            * 089D8  primitive code object
         A=DAT1  A                                * 089DD
         D1=D1+  5                                * 089E0
@@ -973,13 +982,13 @@ purge(_)~1:
         ST=0    7                                * 089E5
         LC(5)   FALSE                            * 089E8
         ?C=A    A                                * 089EF
-        GOYES   purge(_)~1.L1                    * 089F2
+        GOYES   DirDelOb.L1                      * 089F2
         ST=1    7                                * 089F4
-        GONC    purge(_)~1.L1                    * 089F7
+        GONC    DirDelOb.L1                      * 089F7
 
         CON(5)  (*)+5                            * 089FA  primitive code object
         ST=0    7                                * 089FF
-purge(_)~1.L1:
+DirDelOb.L1:
         A=DAT1  A                                * 08A02
         D1=D1+  5                                * 08A05
         D=D+1   A                                * 08A08
@@ -999,7 +1008,7 @@ purge(_)~1.L1:
         C=RSTK                                   * 08A36
         C=C-A   A                                * 08A38
         ST=0    5                                * 08A3A
-        GOSUB   SUB_0852C                        * 08A3D
+        GOSUB   DirLinksAdj                      * 08A3D
         A=R3                                     * 08A41
         D0=A                                     * 08A44
         C=DAT0  A                                * 08A47
@@ -1008,17 +1017,17 @@ purge(_)~1.L1:
         D1=A                                     * 08A4F
         D1=D1-  5                                * 08A52
         ?C#A    A                                * 08A55
-        GOYES   purge(_)~1.L2                    * 08A58
+        GOYES   DirDelOb.L2                      * 08A58
         C=DAT1  A                                * 08A5A
         ?C=0    A                                * 08A5D
-        GOYES   purge(_)~1.L3                    * 08A60
+        GOYES   DirDelOb.L3                      * 08A60
         AD1EX                                    * 08A62
         D1=A                                     * 08A65
         C=A-C   A                                * 08A68
         A=R3                                     * 08A6A
         C=C-A   A                                * 08A6D
-        GONC    purge(_)~1.L3                    * 08A6F
-purge(_)~1.L2:
+        GONC    DirDelOb.L3                      * 08A6F
+DirDelOb.L2:
         A=DAT1  A                                * 08A72
         B=A     A                                * 08A75
         A=DAT0  A                                * 08A77
@@ -1029,16 +1038,16 @@ purge(_)~1.L2:
         D0=A                                     * 08A85
         GOSUBL  SKIPOB                           * 08A88
         C=B     A                                * 08A8E
-purge(_)~1.L3:
+DirDelOb.L3:
         DAT0=C  A                                * 08A90
         AD1EX                                    * 08A93
         ?ST=1   7                                * 08A96
-        GOYES   purge(_)~1.L5                    * 08A99
-purge(_)~1.loop4:
+        GOYES   DirDelOb.L5                      * 08A99
+DirDelOb.loop4:
         C=R0                                     * 08A9B
         GOSUBL  MOVEDSU                          * 08A9E
         GOTO    CREATE.loop17                    * 08AA4
-purge(_)~1.L5:
+DirDelOb.L5:
         C=R4                                     * 08AA8
         C=C-A   A                                * 08AAB
         AR0EX                                    * 08AAD
@@ -1048,7 +1057,7 @@ purge(_)~1.L5:
         GOSUBL  GARBAGECOL                       * 08ABB
         C=R0                                     * 08AC1
         GOSUBL  CREATETEMP                       * 08AC4
-        GOC     purge(_)~1.L6                    * 08ACA
+        GOC     DirDelOb.L6                      * 08ACA
         A=R4                                     * 08ACD
         C=R0                                     * 08AD0
         A=A+C   A                                * 08AD3
@@ -1058,9 +1067,9 @@ purge(_)~1.L5:
         AD0EX                                    * 08AE0
         CD1EX                                    * 08AE3
         C=C-A   A                                * 08AE6
-        GOSUBL  SUB_06863                        * 08AE8
-        GOTO    purge(_)~1.loop4                 * 08AEE
-purge(_)~1.L6:
+        GOSUBL  AdjRefs                          * 08AE8
+        GOTO    DirDelOb.loop4                   * 08AEE
+DirDelOb.L6:
         D1=(5)  TEMPTOP                          * 08AF2
         C=DAT1  A                                * 08AF9
         D=C     A                                * 08AFC
@@ -1073,7 +1082,7 @@ purge(_)~1.L6:
         C=C+A   A                                * 08B0E
         B=C     A                                * 08B10
         C=D     A                                * 08B12
-        GOSUBL  SUB_0686E                        * 08B14
+        GOSUBL  AdjRefs2                         * 08B14
         CD0EX                                    * 08B1A
         B=C     A                                * 08B1D
         R1=C                                     * 08B1F
@@ -1091,19 +1100,19 @@ purge(_)~1.L6:
         ST=0    0                                * 08B4D
         GOSUBL  ROOM                             * 08B50
         R3=C                                     * 08B56
-purge(_)~1.loop7:
+DirDelOb.loop7:
         C=R3                                     * 08B59
         A=R0                                     * 08B5C
         A=A-C   A                                * 08B5F
         R0=A                                     * 08B61
-        GONC    purge(_)~1.L8                    * 08B64
+        GONC    DirDelOb.L8                      * 08B64
         C=C+A   A                                * 08B67
         ?C=0    A                                * 08B69
-        GOYES   purge(_)~1.L9                    * 08B6C
+        GOYES   DirDelOb.L9                      * 08B6C
         ST=1    0                                * 08B6E
-purge(_)~1.L8:
+DirDelOb.L8:
         R3=C                                     * 08B71
-        GOSUB   SUB_08BF3                        * 08B74
+        GOSUB   OpenTempGapR3                    * 08B74
         A=R4                                     * 08B78
         D0=A                                     * 08B7B
         C=R3                                     * 08B7E
@@ -1124,11 +1133,11 @@ purge(_)~1.L8:
         C=A-C   A                                * 08BAF
         GOSUBL  MOVEUP                           * 08BB1
         ?ST=0   0                                * 08BB7
-        GOYES   purge(_)~1.loop7                 * 08BBA
-purge(_)~1.L9:
+        GOYES   DirDelOb.loop7                   * 08BBA
+DirDelOb.L9:
         LC(5)   #00005                           * 08BBC
         R3=C                                     * 08BC3
-        GOSUB   SUB_08BF6                        * 08BC6
+        GOSUB   OpenTempGap                      * 08BC6
         A=R1                                     * 08BCA
         LC(5)   #00006                           * 08BCD
         A=A+C   A                                * 08BD4
@@ -1142,11 +1151,13 @@ purge(_)~1.L9:
         GOTO    CREATE.loop17                    * 08BEF
 
 * refs (1): 08B74
-SUB_08BF3:
+* R3 = nibbles: as OpenTempGap
+OpenTempGapR3:
         C=R3                                     * 08BF3
 
 * refs (1): 08BC6
-SUB_08BF6:
+* C.A = nibbles -> R2 = old TEMPTOP: raise the return stack, RSKTOP and TEMPTOP by that much
+OpenTempGap:
         B=C     A                                * 08BF6
         D1=(5)  RSKTOP                           * 08BF8
         A=DAT1  A                                * 08BFF
@@ -1171,13 +1182,14 @@ PURGE:
 
 * refs (6): 08C36 097E3 1810A 1811E 210EB 72ABE
 purge(_):
-        :: OBJ_079D7 REFERENCED? COLA purge(_)~1 * 08C4A
+        :: ContextOut REFERENCED? COLA DirDelOb  * 08C4A
         ;                                        * 08C63
 
 * refs (1): 07D95
-OBJ_08C68:
+* ob id -> : store: replace the object if the variable exists (a directory being replaced is checked first and moved out of the way), otherwise CREATE it
+StoId:
         :: DUP@ '                                * 08C68
-          :: SWAPDROP OBJ_079D7 REFERENCED? '    * 08C77
+          :: SWAPDROP ContextOut REFERENCED? '   * 08C77
             :: TOTEMPOBADJ SWAPDROP ; RPIT REPLACE * 08C90
             DROP ;                               * 08CAE
           ' CREATE COLARPITE ;                   * 08CB8
@@ -1403,7 +1415,7 @@ dup2;idem(nm,bk)?.L10:
         D1=C                                     * 08F55
         A=R1.F  A                                * 08F58
         D0=A                                     * 08F5E
-        GOSUBL  SUB_07831                        * 08F61
+        GOSUBL  NameDiff?                        * 08F61
         A=0     B                                * 08F67
         GONC    dup2;idem(nm,bk)?.L11            * 08F6A
         A=A+1   B                                * 08F6D
@@ -1690,7 +1702,7 @@ HomeInBkp(nm).L4:
         C=0     B                                * 09507
         D1=(5)  INITEN                           * 0950A
         DAT1=C  1                                * 09511
-        GOSUB   SUB_0966F                        * 09515
+        GOSUB   HomeNames@                       * 09515
         LC(5)   #00022                           * 09519
         B=C     A                                * 09520
         C=RSTK                                   * 09522
@@ -1785,7 +1797,8 @@ HomeInBkp(nm).L8:
         CON(3)  #7FF                             * 0966C
 
 * refs (2): 09515 096A5
-SUB_0966F:
+* -> A.A = HOME's offset to last name, past its attachment table
+HomeNames@:
         D1=(5)  USEROB                           * 0966F
         C=DAT1  A                                * 09676
         D1=C                                     * 09679
@@ -1806,7 +1819,7 @@ SUB_0966F:
 OBJ_09699:
         CON(5)  (*)+5                            * 09699  primitive code object
         GOSBVL  SAVPTR                           * 0969E
-        GOSUB   SUB_0966F                        * 096A5
+        GOSUB   HomeNames@                       * 096A5
         R0=A.F  A                                * 096A9
         D0=A                                     * 096AF
         D0=D0+  10                               * 096B2
@@ -1864,7 +1877,7 @@ pgdir!(di):
 
 true;swap:
           :: TRUE SWAP ;                         * 097A7
-          DUP OBJ_72A8C SWAP ?SKIP               * 097BB
+          DUP PurgeDir SWAP ?SKIP                * 097BB
           :: DOADJ1 SWAPDROP ;                   * 097CF
           purge(_) ;                             * 097E3
         BSS     3                                * 097ED  zeros
@@ -1886,17 +1899,18 @@ drop;dropB;false:
         ASSEMBLE
 
 * refs (2): 02075 0421D
-SUB_098DB:
+* -> ST3 set if the config CRC is wrong: otherwise UNCNFG everything and CONFIG the modules again by their C=ID values, then rebuild the port status at #8052F (ST0 set if a card changed)
+ReconfigBus:
         ST=0    3                                * 098DB
         ST=0    0                                * 098DE
         GOSUB   COMPCONFCRC                      * 098E1
         A=0     A                                * 098E5
         A=DAT0  4                                * 098E7
         ?C=A    A                                * 098EB
-        GOYES   SUB_098DB.L1                     * 098EE
+        GOYES   ReconfigBus.L1                   * 098EE
         ST=1    3                                * 098F0
         RTN                                      * 098F3
-SUB_098DB.L1:
+ReconfigBus.L1:
         LC(5)   #C0000                           * 098F5
         B=C     A                                * 098FC
         LC(5)   #7E000                           * 098FE
@@ -1907,47 +1921,48 @@ SUB_098DB.L1:
         C=DAT0  S                                * 09914
         C=A     A                                * 09918
         ?C=0    S                                * 0991A
-        GOYES   SUB_098DB.L2                     * 0991D
+        GOYES   ReconfigBus.L2                   * 0991D
         C=B     A                                * 0991F
-SUB_098DB.L2:
+ReconfigBus.L2:
         UNCNFG                                   * 09921
         D0=D0+  2                                * 09924
         C=A     A                                * 09927
         C=DAT0  S                                * 09929
         ?C=0    S                                * 0992D
-        GOYES   SUB_098DB.L3                     * 09930
+        GOYES   ReconfigBus.L3                   * 09930
         C=B     A                                * 09932
-SUB_098DB.L3:
+ReconfigBus.L3:
         UNCNFG                                   * 09934
         ST=1    4                                * 09937
         LA(3)   #005                             * 0993A
         LC(5)   #FF000                           * 09942
-        GOSUB   SUB_099C0                        * 09949
+        GOSUB   ConfigIfID                       * 09949
         RTNC                                     * 0994D
         LA(3)   #0F6                             * 09950
         LC(5)   #7F000                           * 09958
-        GOSUB   SUB_099C0                        * 0995F
+        GOSUB   ConfigIfID                       * 0995F
         RTNC                                     * 09963
         LA(3)   #007                             * 09966
         LC(5)   #C0000                           * 0996E
-        GOSUB   SUB_099C0                        * 09975
+        GOSUB   ConfigIfID                       * 09975
         RTNC                                     * 09979
         LA(3)   #0F8                             * 0997C
         LC(5)   #C0000                           * 09984
-        GOSUB   SUB_099C0                        * 0998B
+        GOSUB   ConfigIfID                       * 0998B
         RTNC                                     * 0998F
         LA(3)   #001                             * 09992
         LC(5)   #C0000                           * 0999A
-        GOSUB   SUB_099C0                        * 099A1
+        GOSUB   ConfigIfID                       * 099A1
         RTNC                                     * 099A5
         LA(3)   #0F2                             * 099A8
         LC(5)   #C0000                           * 099B0
-        GOSUB   SUB_099C0                        * 099B7
-        GONC    SUB_099C0.L1                     * 099BB
+        GOSUB   ConfigIfID                       * 099B7
+        GONC    ConfigIfID.L1                    * 099BB
         RTN                                      * 099BE
 
 * refs (6): 09949 0995F 09975 0998B 099A1 099B7
-SUB_099C0:
+* A.X = ID, C.A = address or size -> carry set if the next module has another ID; else CONFIG it
+ConfigIfID:
         B=C     A                                * 099C0
         C=0     X                                * 099C2
         C=ID                                     * 099C5
@@ -1956,38 +1971,39 @@ SUB_099C0:
         C=B     A                                * 099CD
         CONFIG                                   * 099CF
         RTNCC                                    * 099D2
-SUB_099C0.L1:
+ConfigIfID.L1:
         ST=0    4                                * 099D4
-        GOSUBL  SUB_09D50                        * 099D7
+        GOSUBL  BankByStat                       * 099D7
         D1=(5)  CONFRAM                          * 099DD
         D0=(5)  #0010F                           * 099E4
         C=DAT0  1                                * 099EB
-        GOSUB   SUB_09B98                        * 099EF
+        GOSUB   CardProbe                        * 099EF
         D1=D1+  2                                * 099F3
         LC(5)   #C0000                           * 099F6
         UNCNFG                                   * 099FD
         D0=(5)  #0010F                           * 09A00
         C=DAT0  1                                * 09A07
         C=C+C   P                                * 09A0B
-        GOSUB   SUB_09B98                        * 09A0E
+        GOSUB   CardProbe                        * 09A0E
         D0=(5)  #8052F                           * 09A12
         D1=D1-  2                                * 09A19
         A=DAT0  B                                * 09A1C
         C=DAT1  B                                * 09A1F
         ?ABIT=0 1                                * 09A22
-        GOYES   SUB_099C0.L2                     * 09A27
+        GOYES   ConfigIfID.L2                    * 09A27
         ABIT=0  1                                * 09A29
         ?C=A    B                                * 09A2E
-        GOYES   SUB_099C0.L3                     * 09A31
+        GOYES   ConfigIfID.L3                    * 09A31
         LC(5)   #C0000                           * 09A33
         UNCNFG                                   * 09A3A
         ST=1    0                                * 09A3D
         RTNSC                                    * 09A40
-SUB_099C0.L2:
+ConfigIfID.L2:
         DAT0=C  B                                * 09A42
-SUB_099C0.L3:
+ConfigIfID.L3:
         GOVLNG  ~16GETLAM;BINT0;#<>.L1           * 09A45
-SUB_099C0.L4:
+* Set RAMEND from the card state: a merged card in port 1 extends RAM
+ConfigIfID.L4:
         A=DAT0  A                                * 09A4C
         B=A     A                                * 09A4F
         D1=(5)  HRAMEND                          * 09A51
@@ -1996,12 +2012,12 @@ SUB_099C0.L4:
         C=DAT1  P                                * 09A5C
         P=      0                                * 09A60
         ?ABIT=0 1                                * 09A62
-        GOYES   SUB_099C0.L5                     * 09A67
+        GOYES   ConfigIfID.L5                    * 09A67
         LC(5)   #D0000                           * 09A69
         ?ABIT=0 5                                * 09A70
-        GOYES   SUB_099C0.L5                     * 09A75
+        GOYES   ConfigIfID.L5                    * 09A75
         LC(5)   #FFFFB                           * 09A77
-SUB_099C0.L5:
+ConfigIfID.L5:
         D1=(5)  RAMEND                           * 09A7E
         DAT1=C  A                                * 09A85
         A=C     A                                * 09A88
@@ -2016,34 +2032,34 @@ SUB_099C0.L5:
         C=C+A   S                                * 09AA5
         P=      0                                * 09AA8
         ?C#0    S                                * 09AAA
-        GOYES   SUB_099C0.L6                     * 09AAD
+        GOYES   ConfigIfID.L6                    * 09AAD
         LC(5)   #C0000                           * 09AAF
         ?C>A    A                                * 09AB6
-        GOYES   SUB_099C0.L6                     * 09AB9
+        GOYES   ConfigIfID.L6                    * 09AB9
         C=C-1   S                                * 09ABB
-SUB_099C0.L6:
+ConfigIfID.L6:
         D0=D0+  6                                * 09ABE
         DAT0=C  S                                * 09AC1
         C=0     A                                * 09AC5
         ?C=0    S                                * 09AC7
-        GOYES   SUB_099C0.L7                     * 09ACA
+        GOYES   ConfigIfID.L7                    * 09ACA
         C=C+1   S                                * 09ACC
-        GOC     SUB_099C0.L7                     * 09ACF
+        GOC     ConfigIfID.L7                    * 09ACF
         C=C+1   B                                * 09AD2
-SUB_099C0.L7:
-        GOSUB   SUB_09CE1.L1                     * 09AD5
+ConfigIfID.L7:
+        GOSUB   BankSelect.L1                    * 09AD5
         C=0     S                                * 09AD9
         A=0     S                                * 09ADC
         A=B     A                                * 09ADF
         ?ABIT=1 13                               * 09AE1
-        GOYES   SUB_099C0.L8                     * 09AE6
+        GOYES   ConfigIfID.L8                    * 09AE6
         ?ABIT=0 12                               * 09AE8
-        GOYES   SUB_099C0.L9                     * 09AED
+        GOYES   ConfigIfID.L9                    * 09AED
         C=C+1   S                                * 09AEF
-        GONC    SUB_099C0.L9                     * 09AF2
-SUB_099C0.L8:
-        GOSUBL  SUB_09C05                        * 09AF5
-SUB_099C0.L9:
+        GONC    ConfigIfID.L9                    * 09AF2
+ConfigIfID.L8:
+        GOSUBL  CardBanks                        * 09AF5
+ConfigIfID.L9:
         D0=(5)  #80533                           * 09AFB
         DAT0=C  S                                * 09B02
         D0=D0+  1                                * 09B06
@@ -2053,30 +2069,31 @@ SUB_099C0.L9:
         LC(5)   #C0000                           * 09B15
         UNCNFG                                   * 09B1C
         D0=D0+  5                                * 09B1F
-        GOSUB   SUB_09B26                        * 09B22
+        GOSUB   ConfigCard                       * 09B22
 
 * refs (3): 09B22 0AD88 0AD8E
-SUB_09B26:
+* D0 at a port's status nibble -> D0 past it: CONFIG that card by its size, at #C0000 or the bank-switch address
+ConfigCard:
         C=DAT0  S                                * 09B26
         C=C-1   S                                * 09B2A
-        GOC     SUB_09B26.L2                     * 09B2D
+        GOC     ConfigCard.L2                    * 09B2D
         LC(5)   #C0000                           * 09B30
         A=C     A                                * 09B37
         LC(5)   #C0000                           * 09B39
         C=C-1   S                                * 09B40
-        GONC    SUB_09B26.loop1                  * 09B43
+        GONC    ConfigCard.loop1                 * 09B43
         LC(5)   #F0000                           * 09B46
-SUB_09B26.loop1:
+ConfigCard.loop1:
         CONFIG                                   * 09B4D
         C=A     A                                * 09B50
         CONFIG                                   * 09B52
         D0=D0+  2                                * 09B55
         RTN                                      * 09B58
-SUB_09B26.L2:
+ConfigCard.L2:
         LC(5)   #7E000                           * 09B5A
         A=C     A                                * 09B61
         LC(5)   #FF000                           * 09B63
-        GOC     SUB_09B26.loop1                  * 09B6A
+        GOC     ConfigCard.loop1                 * 09B6A
         BSS     6                                * 09B6D  zeros
 
 * refs (5): 04457 098E1 09B0D 09BFB 0B593
@@ -2093,35 +2110,37 @@ COMPCONFCRC:
         RTN                                      * 09B96
 
 * refs (2): 099EF 09A0E
-SUB_09B98:
+* C.P = card status bits, D1 at the port's status byte -> : set bits for present, writable and size, testing RAM size through RamSizeTest
+CardProbe:
         A=0     B                                * 09B98
         ?CBIT=0 1                                * 09B9B
-        GOYES   SUB_09B98.L1                     * 09BA0
+        GOYES   CardProbe.L1                     * 09BA0
         ABIT=1  3                                * 09BA2
         ABIT=1  5                                * 09BA7
         ?CBIT=0 3                                * 09BAC
-        GOYES   SUB_09B98.L1                     * 09BB1
+        GOYES   CardProbe.L1                     * 09BB1
         ABIT=1  2                                * 09BB3
         DAT1=A  B                                * 09BB8
         LC(5)   #C0000                           * 09BBB
         B=C     A                                * 09BC2
-        GOSBVL  SUB_01DA1                        * 09BC4
+        GOSBVL  RamSizeTest                      * 09BC4
         P=      0                                * 09BCB
-        GOC     SUB_09B98.L2                     * 09BCD
+        GOC     CardProbe.L2                     * 09BCD
         CD0EX                                    * 09BD0
         B=B-C   A                                * 09BD3
         LC(5)   #F0000                           * 09BD5
         ?B#C    A                                * 09BDC
-        GOYES   SUB_09B98.L2                     * 09BDF
+        GOYES   CardProbe.L2                     * 09BDF
         LC(2)   #1C                              * 09BE1
         A=C     B                                * 09BE5
-SUB_09B98.L1:
+CardProbe.L1:
         DAT1=A  B                                * 09BE8
-SUB_09B98.L2:
+CardProbe.L2:
         RTN                                      * 09BEB
 
 * refs (3): 02081 02093 020AA
-SUB_09BED:
+* -> : zero the port status at #8052F and store its new CRC
+ClrPortStat:
         D0=(5)  #8052F                           * 09BED
         C=0     W                                * 09BF4
         DAT0=C  7                                * 09BF7
@@ -2130,11 +2149,12 @@ SUB_09BED:
         RTN                                      * 09C03
 
 * refs (1): 09AF5
-SUB_09C05:
+* Count the 128K banks of the card in port 2 by reading at each bank until the first repeats
+CardBanks:
         ?ABIT=1 10                               * 09C05
-        GOYES   SUB_09C05.L4                     * 09C0A
+        GOYES   CardBanks~1                      * 09C0A
         C=C+1   S                                * 09C0C
-        GOSUB   SUB_09CE1                        * 09C0F
+        GOSUB   BankSelect                       * 09C0F
         D1=(5)  #C0000                           * 09C13
         D1=D1+  10                               * 09C1A
         P=      14                               * 09C1D
@@ -2145,77 +2165,78 @@ SUB_09C05:
         D=C     WP                               * 09C2D
         D1=D1-  15                               * 09C30
         P=      0                                * 09C33
-SUB_09C05.loop1:
+CardBanks.loop1:
         C=C+1   S                                * 09C35
-        GOSUB   SUB_09CE1                        * 09C38
+        GOSUB   BankSelect                       * 09C38
         C=C-1   S                                * 09C3C
         P=      14                               * 09C3F
         C=DAT1  WP                               * 09C41
         ?B#C    WP                               * 09C45
-        GOYES   SUB_09C05.L2                     * 09C48
+        GOYES   CardBanks.L2                     * 09C48
         D1=D1+  15                               * 09C4A
         C=DAT1  WP                               * 09C4D
         D1=D1-  15                               * 09C51
         P=      0                                * 09C54
         ?D=C    WP                               * 09C56
         RTNYES                                   * 09C59
-SUB_09C05.L2:
+CardBanks.L2:
         P=      0                                * 09C5B
         ?A#0    S                                * 09C5D
-        GOYES   SUB_09C05.L3                     * 09C60
+        GOYES   CardBanks.L3                     * 09C60
         C=C+C   S                                * 09C62
-        GONC    SUB_09C05.loop1                  * 09C65
+        GONC    CardBanks.loop1                  * 09C65
         A=A+1   S                                * 09C68
-        GONC    SUB_09C05.loop1                  * 09C6B
-SUB_09C05.L3:
+        GONC    CardBanks.loop1                  * 09C6B
+CardBanks.L3:
         A=A+1   S                                * 09C6E
         RTN                                      * 09C71
-SUB_09C05.L4:
+CardBanks~1:
         C=C+1   S                                * 09C73
-        GOSUB   SUB_09CE1                        * 09C76
+        GOSUB   BankSelect                       * 09C76
         D1=(5)  #C0000                           * 09C7A
         C=DAT1  A                                * 09C81
         D=C     A                                * 09C84
-SUB_09C05.loop5:
+CardBanks~1.loop1:
         C=C+1   S                                * 09C86
-        GOC     SUB_09C05.L8                     * 09C89
-SUB_09C05.loop6:
-        GOSUB   SUB_09CE1                        * 09C8C
+        GOC     CardBanks~1.L4                   * 09C89
+CardBanks~1.loop2:
+        GOSUB   BankSelect                       * 09C8C
         A=DAT1  A                                * 09C90
         B=A     A                                * 09C93
         A=-A-1  A                                * 09C95
         DAT1=A  A                                * 09C97
         LC(2)   #01                              * 09C9A
-        GOSUB   SUB_09CE1.L1                     * 09C9E
+        GOSUB   BankSelect.L1                    * 09C9E
         C=DAT1  A                                * 09CA2
         ?D#C    A                                * 09CA5
-        GOYES   SUB_09C05.L7                     * 09CA8
-        GOSUB   SUB_09CE1                        * 09CAA
+        GOYES   CardBanks~1.L3                   * 09CA8
+        GOSUB   BankSelect                       * 09CAA
         C=DAT1  A                                * 09CAE
         C=-C-1  A                                * 09CB1
         A=B     A                                * 09CB3
         DAT1=A  A                                * 09CB5
         ?C=A    A                                * 09CB8
-        GOYES   SUB_09C05.loop5                  * 09CBB
-SUB_09C05.L7:
-        GOSUB   SUB_09CE1                        * 09CBD
+        GOYES   CardBanks~1.loop1                * 09CBB
+CardBanks~1.L3:
+        GOSUB   BankSelect                       * 09CBD
         A=B     A                                * 09CC1
         DAT1=A  A                                * 09CC3
         C=C-1   S                                * 09CC6
         RTNNC                                    * 09CC9
         A=A-1   S                                * 09CCC
         RTN                                      * 09CCF
-SUB_09C05.L8:
+CardBanks~1.L4:
         ?A=0    S                                * 09CD1
-        GOYES   SUB_09C05.L9                     * 09CD4
+        GOYES   CardBanks~1.L5                   * 09CD4
         A=A+1   S                                * 09CD6
         RTN                                      * 09CD9
-SUB_09C05.L9:
+CardBanks~1.L5:
         A=A+1   S                                * 09CDB
-        GONC    SUB_09C05.loop6                  * 09CDE
+        GONC    CardBanks~1.loop2                * 09CDE
 
 * refs (6): 09C0F 09C38 09C76 09C8C 09CAA 09CBD
-SUB_09CE1:
+* C.S and A.S = bank bits -> : select a bank through the bank switcher at #7F040+2n; 0 selects the ROM view (bit 7 of LINECOUNT)
+BankSelect:
         C=0     B                                * 09CE1
         P=C     15                               * 09CE4
         CPEX    0                                * 09CE8
@@ -2223,7 +2244,8 @@ SUB_09CE1:
         P=C     15                               * 09CEF
         CAEX    S                                * 09CF3
         CPEX    1                                * 09CF6
-SUB_09CE1.L1:
+* C.B = bank number, 0 for none
+BankSelect.L1:
         A=0     A                                * 09CFA
         A=C     B                                * 09CFC
         D0=(5)  #7F000                           * 09CFF
@@ -2232,9 +2254,9 @@ SUB_09CE1.L1:
         C=DAT0  B                                * 09D10
         CBIT=0  7                                * 09D13
         ?A#0    A                                * 09D18
-        GOYES   SUB_09CE1.L2                     * 09D1B
+        GOYES   BankSelect.L2                    * 09D1B
         CBIT=1  7                                * 09D1D
-SUB_09CE1.L2:
+BankSelect.L2:
         DAT0=C  B                                * 09D22
         D0=(5)  LINECOUNT                        * 09D25
         DAT0=C  B                                * 09D2C
@@ -2249,20 +2271,22 @@ SUB_09CE1.L2:
         RTN                                      * 09D47
 
 * refs (3): 04209 7008F 70102
-SUB_09D49:
+* -> : BankSelect with bank 0
+BankNone:
         C=0     B                                * 09D49
-        GOTO    SUB_09CE1.L1                     * 09D4C
+        GOTO    BankSelect.L1                    * 09D4C
 
 * refs (1): 099D7
-SUB_09D50:
+* -> : select bank 1 if the top nibble read at #0010F is set, else none
+BankByStat:
         D0=(5)  #0010F                           * 09D50
         C=DAT0  S                                * 09D57
         C=0     A                                * 09D5B
         ?C=0    S                                * 09D5D
-        GOYES   SUB_09D50.L1                     * 09D60
+        GOYES   BankByStat.L1                    * 09D60
         C=C+1   A                                * 09D62
-SUB_09D50.L1:
-        GOTO    SUB_09CE1.L1                     * 09D64
+BankByStat.L1:
+        GOTO    BankSelect.L1                    * 09D64
 LIB>#~1:
         GOSUBL  SAVPTR                           * 09D68
         C=DAT1  A                                * 09D6E
@@ -2324,7 +2348,7 @@ NEXTLIBBAK~2:
         CON(5)  (*)+5                            * 09E4D  primitive code object
         GOSBVL  SAVPTR                           * 09E52
         D1=D1+  5                                * 09E59
-        GOSBVL  SUB_702A2                        * 09E5C
+        GOSBVL  Acptr>A                          * 09E5C
         R1=A.F  A                                * 09E63
         D0=(5)  PORT0EOS                         * 09E69
         C=R0.F  A                                * 09E70

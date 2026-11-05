@@ -1,22 +1,23 @@
-* HP 48GX ROM revision R, #78002-#7A2B2: not yet identified
+* HP 48GX ROM revision R, #78002-#7A2B2: Numerics at 15 digits: the UTPC/UTPF/UTPT and UTPN series, the 21-nibble temporaries in IRAMBUFF, then the core transcendental routines in machine code: FP, MOD, factorial, COMB, PERM, LN, EXP, y^x, SIN, COS, TAN, their inverses and the hyperbolics; at the end hex-to-BCD conversion and the copying of font glyphs for the display
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: RCLtmp1%%
+* Most referenced: RCLtmp1%% RCLCDtmp0%% RCLtmp0%% RCLCDtmp2%% STOtmp0%% RCLtmp2%% STOtmp2%% RCLCDtmp3%% RCAB0Long STOtmp6%% STOtmp4%% RCLCDtmp4%%
 * Follows on from the previous file (at #78002 in the original ROM).
+* Tail of the continued fraction of Utpn
         GOSUB   SUB_787E2.L1                     * 78002
         GOSUB   RCCD0~jump_3                     * 78006
         GOSUB   SUB_7875C.L1                     * 7800A
         GOSUB   STAB0~jump_3                     * 7800E
         GOSUB   SUB_786C7                        * 78012
-        GOSUB   SUB_785D6                        * 78016
+        GOSUB   RCLtmp6%%                        * 78016
         GOSUB   SUB_78772                        * 7801A
         GOSUBL  EXAB2~jump                       * 7801E
-        GOSUB   SUB_78688                        * 78024
-        GOSUB   SUB_78605                        * 78028
+        GOSUB   STOtmp6%%                        * 78024
+        GOSUB   RCLCDtmp0%%                      * 78028
         GOSUB   SUB_787E2.L1                     * 7802C
         GOSUB   RCCD2~jump_3                     * 78030
         GOSUB   SUB_7875C.L1                     * 78034
         GOSUB   STAB2~jump_3                     * 78038
-        GOTO    SUB_77F77.loop4                  * 7803C
+        GOTO    UtpnFrac.loop4                   * 7803C
         NIBHEX  7F15                             * 78040  ÷Q
 
 * refs (1): 785A7
@@ -24,36 +25,39 @@ SUB_78044:
         GOLONG  RADDF~jump_3.L1                  * 78044
 
 * refs (1): 77EC0
-SUB_7804A:
-        GOSUB   SUB_7806A                        * 7804A
-        GOSUB   SUB_78740                        * 7804E
+* A/B = x -> exp(-x*x/2)/sqrt(2 pi)
+NormalPDF:
+        GOSUB   Sq15                             * 7804A
+        GOSUB   ExpNegHalf                       * 7804E
         P=      0                                * 78052
         LC(16)  #0398942280401432                * 78054
-        GOTO    SUB_78505.L1                     * 78066
+        GOTO    Mul2/Pi.L1                       * 78066
 
 * refs (3): 77F0C 7804A 78947
-SUB_7806A:
+* A/B -> A/B * A/B
+Sq15:
         C=B     W                                * 7806A
         D=C     W                                * 7806D
         C=A     W                                * 78070
         GOTO    SUB_78772.L1                     * 78073
 
 * refs (2): 2C1A9 782A4
-SUB_78077:
+* UTPT: upper tail of Student's t: x and degrees of freedom in the temporaries
+UtptCore:
         ST=1    1                                * 78077
-        GOSUB   SUB_78591                        * 7807A
+        GOSUB   UtpAbsX                          * 7807A
         GOSUBL  SUB_7897B                        * 7807E
         GOSUB   STAB2~jump_3                     * 78084
-        GOSUB   SUB_787F4                        * 78088
-        GOSUB   SUB_78534                        * 7808C
+        GOSUB   LoadC1                           * 78088
+        GOSUB   C>R0R1                           * 7808C
         A=R4                                     * 78090
-        GOSUB   SUB_78524                        * 78093
+        GOSUB   LoadC.5                          * 78093
         C=0     A                                * 78097
-        GOSUBL  SUB_788AA                        * 78099
-        GOC     SUB_78077.L4                     * 7809F
+        GOSUBL  C>A?                             * 78099
+        GOC     UtptCore.L4                      * 7809F
         A=0     A                                * 780A2
         D1=A                                     * 780A4
-SUB_78077.loop1:
+UtptCore.loop1:
         GOSUB   SUB_7878C                        * 780A7
         C=C-1   A                                * 780AB
         GOSUB   SUB_787B7                        * 780AD
@@ -67,50 +71,50 @@ SUB_78077.loop1:
         GOSUB   SUB_786C7                        * 780CD
         GOSUB   SUB_7857E                        * 780D1
         GOSUB   SUB_78717                        * 780D5
-        GONC    SUB_78077.loop1                  * 780D9
+        GONC    UtptCore.loop1                   * 780D9
         GOSUB   SUB_78820                        * 780DC
         GOSUB   SUB_78865                        * 780E0
         GOSUB   SUB_78838                        * 780E4
         CD1EX                                    * 780E8
         ?C=0    A                                * 780EB
-        GOYES   SUB_78077.L2                     * 780EE
+        GOYES   UtptCore.L2                      * 780EE
         GOSUB   SUB_787DA                        * 780F0
-        GOSUB   SUB_78505                        * 780F4
-        GOTO    SUB_78077.L3                     * 780F8
-SUB_78077.L2:
-        GOSUB   SUB_78556.L1                     * 780FC
-SUB_78077.L3:
+        GOSUB   Mul2/Pi                          * 780F4
+        GOTO    UtptCore.L3                      * 780F8
+UtptCore.L2:
+        GOSUB   RCAB0Long                        * 780FC
+UtptCore.L3:
         GOSUB   DIV2~jump~jump                   * 78100
-        GOTO    SUB_77F77.L1                     * 78104
-SUB_78077.L4:
+        GOTO    UtpnFrac.L1                      * 78104
+UtptCore.L4:
         GOSUBL  SUB_78943                        * 78108
         GOSUB   SQRF~jump                        * 7810E
         GOSUB   SUB_7874D                        * 78112
         GOSUB   SUB_7887F                        * 78116
         C=C-1   A                                * 7811A
         ?C#0    A                                * 7811C
-        GOYES   SUB_78077.L5                     * 7811F
-        GOSUB   SUB_78534                        * 78121
-SUB_78077.L5:
+        GOYES   UtptCore.L5                      * 7811F
+        GOSUB   C>R0R1                           * 78121
+UtptCore.L5:
         GOSUB   SUB_78838                        * 78125
         CD1EX                                    * 78129
         ?C=0    A                                * 7812C
-        GOYES   SUB_78077.L6                     * 7812F
+        GOYES   UtptCore.L6                      * 7812F
         GOSUBL  EXAB2~jump.L1                    * 78131
         ST=1    9                                * 78137
         ST=0    4                                * 7813A
-        GOSUBL  SUB_79AE6.L2                     * 7813D
+        GOSUBL  ATAN15                           * 7813D
         GOSUB   SUB_787C7                        * 78143
         GOSUB   SUB_78405                        * 78147
-        GOSUB   SUB_78505                        * 7814B
-        GOTO    SUB_78077.L7                     * 7814F
-SUB_78077.L6:
+        GOSUB   Mul2/Pi                          * 7814B
+        GOTO    UtptCore.L7                      * 7814F
+UtptCore.L6:
         GOSUB   SUB_787DA                        * 78153
-SUB_78077.L7:
+UtptCore.L7:
         ?ST=1   0                                * 78157
-        GOYES   SUB_78077.L8                     * 7815A
+        GOYES   UtptCore.L8                      * 7815A
         A=-A-1  S                                * 7815C
-SUB_78077.L8:
+UtptCore.L8:
         GOSUB   RADD1~jump                       * 7815F
 
 * refs (1): 78100
@@ -118,79 +122,80 @@ DIV2~jump~jump:
         GOTO    DIV2~jump                        * 78163
 
 * refs (1): 2C14E
-utpn(2r)~1:
+* UTPC: upper tail of the chi-square distribution: degrees of freedom and x in the temporaries
+UtpcCore:
         GOSUB   SUB_78411                        * 78167
         GOSUB   SUB_78797                        * 7816B
-        GOSUB   SUB_77EBC                        * 7816F
+        GOSUB   Utpn                             * 7816F
         GOSUBL  SUB_78A18                        * 78173
         GOSUB   STAB0~jump_3                     * 78179
-        GOSUB   SUB_7862F                        * 7817D
-        GOSUB   SUB_7868E                        * 78181
+        GOSUB   RCLCDtmp7%%                      * 7817D
+        GOSUB   STOtmp7%%                        * 78181
         GOSUB   XYEX~jump_2                      * 78185
-        GOSUB   SUB_78664                        * 78189
+        GOSUB   STOtmp0%%                        * 78189
         GOSUB   SUB_78829                        * 7818D
-        GONC    utpn(2r)~1.L2                    * 78191
-utpn(2r)~1.loop1:
-        GOTO    SUB_78556.L1                     * 78194
-utpn(2r)~1.L2:
-        GOSUB   SUB_78591                        * 78198
+        GONC    UtpcCore.L2                      * 78191
+UtpcCore.loop1:
+        GOTO    RCAB0Long                        * 78194
+UtpcCore.L2:
+        GOSUB   UtpAbsX                          * 78198
         A=C     W                                * 7819C
-        GOSUB   SUB_78531                        * 7819F
-        GOSUB   SUB_787F4                        * 781A3
+        GOSUB   Zero>R0R1                        * 7819F
+        GOSUB   LoadC1                           * 781A3
         LC(1)   #4                               * 781A7
-        GOSUB   SUB_788AA                        * 781AA
-        GONC    utpn(2r)~1.loop1                 * 781AE
-        GOSUB   SUB_7890D                        * 781B1
+        GOSUB   C>A?                             * 781AA
+        GONC    UtpcCore.loop1                   * 781AE
+        GOSUB   LoadC2                           * 781B1
         GOSUB   SUB_788A7                        * 781B5
-        GONC    utpn(2r)~1.L5                    * 781B9
+        GONC    UtpcCore.L5                      * 781B9
         GOSUB   SUB_78809                        * 781BC
         C=0     A                                * 781C0
-        GOC     utpn(2r)~1.L3                    * 781C2
+        GOC     UtpcCore.L3                      * 781C2
         C=C+1   A                                * 781C5
-utpn(2r)~1.L3:
+UtpcCore.L3:
         D1=C                                     * 781C7
         GOSUB   SUB_7873C                        * 781CA
         GOSUB   SUB_7874D                        * 781CE
-utpn(2r)~1.loop4:
+UtpcCore.loop4:
         GOSUB   SUB_7878C                        * 781D2
         GOSUB   SUB_78820                        * 781D6
         CAEX    W                                * 781DA
         GOSUB   SUB_78453                        * 781DD
         ?C<=A   A                                * 781E1
-        GOYES   utpn(2r)~1.L8                    * 781E4
+        GOYES   UtpcCore.L8                      * 781E4
         GOSUB   SUB_7824E                        * 781E6
-        GOTO    utpn(2r)~1.loop4                 * 781EA
-utpn(2r)~1.L5:
+        GOTO    UtpcCore.loop4                   * 781EA
+UtpcCore.L5:
         GOSUB   SUB_7887F                        * 781EE
         GOSUB   SUB_783AA                        * 781F2
-utpn(2r)~1.loop6:
+UtpcCore.loop6:
         GOSUB   SUB_784F1                        * 781F6
         A=0     A                                * 781FA
         A=A+1   A                                * 781FC
         ?C<=A   A                                * 781FE
-        GOYES   utpn(2r)~1.L7                    * 78201
-        GOSUB   SUB_78556.L1                     * 78203
+        GOYES   UtpcCore.L7                      * 78201
+        GOSUB   RCAB0Long                        * 78203
         GOSUB   SUB_783AA                        * 78207
         GOSUB   STAB2~jump_3                     * 7820B
         GOSUB   SUB_7824E                        * 7820F
-        GOTO    utpn(2r)~1.loop6                 * 78213
-utpn(2r)~1.L7:
-        GOSUB   SUB_78556.L1                     * 78217
+        GOTO    UtpcCore.loop6                   * 78213
+UtpcCore.L7:
+        GOSUB   RCAB0Long                        * 78217
         GOSUB   STAB2~jump_3                     * 7821B
         GOSUB   SUB_7873C                        * 7821F
         GOSUB   SUB_786ED                        * 78223
         GOSUB   STAB0~jump_3                     * 78227
-utpn(2r)~1.L8:
+UtpcCore.L8:
         GOSUB   SUB_78809                        * 7822B
-        GOSUB   SUB_78556.L1                     * 7822F
+        GOSUB   RCAB0Long                        * 7822F
         RTNC                                     * 78233
-        GOSUB   SUB_78899                        * 78236
-        GOSUB   SUB_78505                        * 7823A
+        GOSUB   RCLtmp0%%~jump                   * 78236
+        GOSUB   Mul2/Pi                          * 7823A
         GOSUB   SUB_787DE                        * 7823E
 
 * refs (2): 78305 78329
 SUB_78242:
-        GOSUB   SUB_7862F                        * 78242
+        GOSUB   RCLCDtmp7%%                      * 78242
         GOTO    SUB_7875C.L1                     * 78246
 
 * refs (1): 77E97
@@ -199,7 +204,7 @@ SPLITA~jump~jump:
 
 * refs (2): 781E6 7820F
 SUB_7824E:
-        GOSUB   SUB_78899                        * 7824E
+        GOSUB   RCLtmp0%%~jump                   * 7824E
         GOSUB   SUB_786C7                        * 78252
         GOSUB   SUB_786E9                        * 78256
         GOSUB   STAB2~jump_3                     * 7825A
@@ -219,57 +224,58 @@ DIV2~jump.L1:
         GOTO    SUB_78340.L1                     * 78279
 
 * refs (1): 2C179
-utpf(3r)~1:
-        GOSUB   SUB_785BE                        * 7827D
-        GOSUBL  SUB_78987                        * 78281
-        GOSUB   SUB_78670                        * 78287
+* UTPF: upper tail of the F distribution: both degrees of freedom and x in the temporaries
+UtpfCore:
+        GOSUB   RCLtmp2%%                        * 7827D
+        GOSUBL  UtpDegFree                       * 78281
+        GOSUB   STOtmp2%%                        * 78287
         A=B     M                                * 7828B
         R1=A                                     * 7828E
         GOSUB   SUB_78411                        * 78291
         GOSUB   SUB_78829                        * 78295
-        GONC    utpf(3r)~1.L1                    * 78299
+        GONC    UtpfCore.L1                      * 78299
         GOSUB   SUB_78955                        * 7829C
         GOSUB   SUB_78797                        * 782A0
-        GOSUB   SUB_78077                        * 782A4
+        GOSUB   UtptCore                         * 782A4
         ST=0    1                                * 782A8
         GOSUB   SUB_786F5                        * 782AB
         GOSUB   SUB_78955                        * 782AF
         GOTO    EXAB2~jump.L1                    * 782B3
-utpf(3r)~1.L1:
+UtpfCore.L1:
         ST=0    1                                * 782B7
         GOSUB   SUB_7880D                        * 782BA
         GOC     DIV2~jump.L1                     * 782BE
         A=R1                                     * 782C1
         GOSUB   SUB_7880D                        * 782C4
-        GOC     utpf(3r)~1.L4                    * 782C8
+        GOC     UtpfCore.L4                      * 782C8
         GOSUB   SUB_788E4                        * 782CB
-        GOC     utpf(3r)~1.L2                    * 782CF
-        GOTO    SUB_78466.L1                     * 782D2
-utpf(3r)~1.L2:
+        GOC     UtpfCore.L2                      * 782CF
+        GOTO    LoadCD1.L1                       * 782D2
+UtpfCore.L2:
         GOSUB   SUB_7888E                        * 782D6
         ST=1    9                                * 782DA
         ST=0    4                                * 782DD
-        GOSUBL  SUB_79AE6.L2                     * 782E0
-        GOSUB   SUB_7868E                        * 782E6
+        GOSUBL  ATAN15                           * 782E0
+        GOSUB   STOtmp7%%                        * 782E6
         GOSUB   SUB_784E2                        * 782EA
         GOSUB   SUB_7882D                        * 782EE
-        GONC    utpf(3r)~1.L3                    * 782F2
-        GOSUB   SUB_78531                        * 782F5
-utpf(3r)~1.L3:
+        GONC    UtpfCore.L3                      * 782F2
+        GOSUB   Zero>R0R1                        * 782F5
+UtpfCore.L3:
         GOSUB   SUB_78838                        * 782F9
         GOSUB   SUB_7888E                        * 782FD
         GOSUB   SUB_784A2                        * 78301
         GOSUB   SUB_78242                        * 78305
-        GOSUB   SUB_78505                        * 78309
+        GOSUB   Mul2/Pi                          * 78309
         GOSUB   SUB_78340.L4                     * 7830D
-        GOSUB   SUB_7868E                        * 78311
+        GOSUB   STOtmp7%%                        * 78311
         GOSUB   SUB_78396                        * 78315
-        GOSUB   SUB_785BE                        * 78319
+        GOSUB   RCLtmp2%%                        * 78319
         GOSUB   SUB_787E2                        * 7831D
         GOSUB   STAB0~jump_3                     * 78321
-        GOSUB   SUB_78466.L3                     * 78325
+        GOSUB   LoadCD1.L3                       * 78325
         GOTO    SUB_78242                        * 78329
-utpf(3r)~1.L4:
+UtpfCore.L4:
         GOSUB   SUB_788E4                        * 7832D
         GOC     SUB_78340.L3                     * 78331
         GOSUB   SUB_784B2                        * 78334
@@ -289,10 +295,10 @@ SUB_78340.L1:
         GOSUB   RCLtmp1%%                        * 7835A
         ?ST=1   3                                * 7835E
         GOYES   SUB_78340.L2                     * 78361
-        GOSUB   SUB_785BE                        * 78363
+        GOSUB   RCLtmp2%%                        * 78363
 SUB_78340.L2:
         GOSUB   XYEX~jump_2                      * 78367
-        GOSUBL  SUB_792C8.L5                     * 7836B
+        GOSUBL  Pow15                            * 7836B
         GOSUB   SQRF~jump                        * 78371
         GOSUB   RCCD0~jump_3                     * 78375
         C=R4                                     * 78379
@@ -319,8 +325,8 @@ SUB_78396.loop1:
 
 * refs (4): 781F2 78207 784E5 78878
 SUB_783AA:
-        GOSUB   SUB_787F4                        * 783AA
-        GOSUB   SUB_78534                        * 783AE
+        GOSUB   LoadC1                           * 783AA
+        GOSUB   C>R0R1                           * 783AE
         GOTO    SUB_7886D.L1                     * 783B2
 
 * refs (2): 783A2 7848A
@@ -328,7 +334,7 @@ SUB_783B6:
         GOSUB   XYEX~jump_2                      * 783B6
         ?ST=1   3                                * 783BA
         GOYES   SUB_783B6.L1                     * 783BD
-        GOSUB   SUB_785BE                        * 783BF
+        GOSUB   RCLtmp2%%                        * 783BF
         GOTO    SUB_783B6.L2                     * 783C3
 SUB_783B6.L1:
         GOSUB   RCLtmp1%%                        * 783C7
@@ -364,11 +370,11 @@ SUB_78405:
 
 * refs (2): 78167 78291
 SUB_78411:
-        GOSUB   SUB_78591                        * 78411
-        GOSUB   SUB_7868E                        * 78415
+        GOSUB   UtpAbsX                          * 78411
+        GOSUB   STOtmp7%%                        * 78415
         GOSUB   RCLtmp1%%                        * 78419
-        GOSUB   SUB_78987                        * 7841D
-        GOSUB   SUB_7866A                        * 78421
+        GOSUB   UtpDegFree                       * 7841D
+        GOSUB   STOtmp1%%                        * 78421
         C=R4                                     * 78425
         ?C=0    M                                * 78428
         GOYES   SUB_78411.L1                     * 7842B
@@ -376,7 +382,7 @@ SUB_78411:
         RTNYES                                   * 78430
 SUB_78411.L1:
         C=RSTK                                   * 78432
-        GOSUB   SUB_78466                        * 78434
+        GOSUB   LoadCD1                          * 78434
 
 * refs (8): 77FD0 78185 78356 78367 783B6 78586 ...
 XYEX~jump_2:
@@ -385,9 +391,9 @@ XYEX~jump_2:
 * refs (6): 78340 783E9 783F5 784FD 7888E 78903
 SUB_7843F:
         GOSUB   RCLtmp1%%                        * 7843F
-        GOSUB   SUB_78611                        * 78443
-        GOSUB   SUB_78582.L1                     * 78447
-        GOSUB   SUB_78605                        * 7844B
+        GOSUB   RCLCDtmp2%%                      * 78443
+        GOSUB   DIVFLong                         * 78447
+        GOSUB   RCLCDtmp0%%                      * 7844B
         GOTO    SUB_787E2.L1                     * 7844F
 
 * refs (2): 781DD 78886
@@ -402,27 +408,28 @@ SUB_78453.loop1:
         RTN                                      * 78464
 
 * refs (1): 78434
-SUB_78466:
+* C = D = 1 (P = 14 on return)
+LoadCD1:
         C=0     W                                * 78466
         P=      14                               * 78469
         LC(1)   #1                               * 7846B
         D=C     W                                * 7846E
         RTN                                      * 78471
-SUB_78466.L1:
+LoadCD1.L1:
         GOSUB   SUB_784B2                        * 78473
         GOSUB   SUB_7886D                        * 78477
         GOSUB   SUB_7887C                        * 7847B
-SUB_78466.loop2:
+LoadCD1.loop2:
         GOSUB   SUB_784F1                        * 7847F
-        GOC     SUB_78466.L3                     * 78483
+        GOC     LoadCD1.L3                       * 78483
         GOSUB   SUB_787B7                        * 78486
         GOSUB   SUB_783B6                        * 7848A
-        GOTO    SUB_78466.loop2                  * 7848E
-SUB_78466.L3:
+        GOTO    LoadCD1.loop2                    * 7848E
+LoadCD1.L3:
         GOSUB   SUB_7885E                        * 78492
         GOSUB   SUB_78838                        * 78496
         GOSUB   SUB_7888E                        * 7849A
-        GOSUB   SUB_78505                        * 7849E
+        GOSUB   Mul2/Pi                          * 7849E
 
 * refs (1): 78301
 SUB_784A2:
@@ -470,17 +477,19 @@ SUB_784FD:
         GOTO    SUB_787CF                        * 78501
 
 * refs (5): 780F4 7814B 7823A 78309 7849E
-SUB_78505:
+* A/B *= 2/pi
+Mul2/Pi:
         P=      0                                * 78505
         LC(16)  #0636619772367581                * 78507
-SUB_78505.L1:
+Mul2/Pi.L1:
         D=C     W                                * 78519
         C=0     A                                * 7851C
         C=C-1   A                                * 7851E
         GOTO    SUB_78772.L1                     * 78520
 
 * refs (5): 77F67 78093 78936 78987 789A1
-SUB_78524:
+* C = .5 (P = 14 on return)
+LoadC.5:
         C=0     W                                * 78524
         P=      14                               * 78527
         LC(1)   #5                               * 78529
@@ -488,18 +497,20 @@ SUB_78524:
         RTN                                      * 7852F
 
 * refs (3): 7819F 782F5 78847
-SUB_78531:
+* R0 = R1 = 0
+Zero>R0R1:
         C=0     W                                * 78531
 
 * refs (3): 7808C 78121 783AE
-SUB_78534:
+* R0 = R1 = C
+C>R0R1:
         R0=C                                     * 78534
         R1=C                                     * 78537
         RTN                                      * 7853A
 
 * refs (1): 7839E
 SUB_7853C:
-        GOSUB   SUB_7890D                        * 7853C
+        GOSUB   LoadC2                           * 7853C
         C=-C-1  S                                * 78540
 SUB_7853C.L1:
         GOTO    SUB_7854A.L1                     * 78543
@@ -509,18 +520,21 @@ SUB_7853C.L1:
 SUB_7854A:
         GOSUB   SPLITA~jump_2                    * 7854A
 SUB_7854A.L1:
-        GOSUB   SUB_78556                        * 7854E
+        GOSUB   SPLITC~jump_2                    * 7854E
         GOTO    SUB_7875C.L1                     * 78552
 
 * refs (6): 7854E 78567 78772 78782 787BF 7898B
-SUB_78556:
-        GOVLNG  SUB_2BCAC                        * 78556
+SPLITC~jump_2:
+        GOVLNG  SPLITC                           * 78556
         C=R4                                     * 7855D
         A=C     W                                * 78560
         GOSUB   SPLITA~jump_2                    * 78563
-        GOSUB   SUB_78556                        * 78567
+        GOSUB   SPLITC~jump_2                    * 78567
         GOTO    SUB_787E2.L1                     * 7856B
-SUB_78556.L1:
+
+* refs (7): 77EF4 77F77 780FC 78194 78203 78217 ...
+* Long jump to RCAB0
+RCAB0Long:
         GOVLNG  RCAB0                            * 7856F
 
 * refs (1): 78409
@@ -536,170 +550,198 @@ SUB_7857E:
 SUB_78582:
         GOSUB   RCCD2~jump_3                     * 78582
         GOSUB   XYEX~jump_2                      * 78586
-SUB_78582.L1:
+
+* refs (4): 77F7F 78447 787C3 78951
+* Long jump to DIVF
+DIVFLong:
         GOVLNG  DIVF                             * 7858A
 
 * refs (4): 77EBC 7807A 78198 78411
-SUB_78591:
-        GOSUB   SUB_78591.L2                     * 78591
+* tmp0 -> tmp0 = |x|, ST 0 set when x was negative
+UtpAbsX:
+        GOSUB   RCLtmp0%%                        * 78591
         ST=0    0                                * 78595
         ?A=0    S                                * 78598
-        GOYES   SUB_78591.L1                     * 7859B
+        GOYES   UtpAbsX.L1                       * 7859B
         A=0     S                                * 7859D
         ST=1    0                                * 785A0
-SUB_78591.L1:
+UtpAbsX.L1:
         GOSUB   STAB2~jump_3                     * 785A3
         GOSUB   SUB_78044                        * 785A7
         R4=C                                     * 785AB
-        GOTO    SUB_78664                        * 785AE
-SUB_78591.L2:
+        GOTO    STOtmp0%%                        * 785AE
+
+* refs (10): 77F08 78591 78797 78899 78943 993C8 ...
+* -> A/B = %% temporary 0. The temporaries are 21 nibbles each, from IRAMBUFF
+RCLtmp0%%:
         P=      0                                * 785B2
-        GOTO    SUB_785D6.L1                     * 785B4
+        GOTO    RCLtmp6%%.L1                     * 785B4
 
 * refs (12): 7835A 783C7 78419 7843F 784B6 78820 ...
 * A/B = the %% in scratch slot 1 of IRAMBUFF
 RCLtmp1%%:
         P=      1                                * 785B8
-        GOTO    SUB_785D6.L1                     * 785BA
+        GOTO    RCLtmp6%%.L1                     * 785BA
 
 * refs (8): 7827D 78319 78363 783BF 78818 9941B ...
-SUB_785BE:
+* -> A/B = %% temporary 2
+RCLtmp2%%:
         P=      2                                * 785BE
-        GOTO    SUB_785D6.L1                     * 785C0
+        GOTO    RCLtmp6%%.L1                     * 785C0
 
 * refs (1): 99406
-SUB_785C4:
+* -> A/B = %% temporary 3
+RCLtmp3%%:
         P=      3                                * 785C4
-        GOTO    SUB_785D6.L1                     * 785C6
+        GOTO    RCLtmp6%%.L1                     * 785C6
 
 * refs (4): 993B3 995E2 9977F 99A45
-SUB_785CA:
+* -> A/B = %% temporary 4
+RCLtmp4%%:
         P=      4                                * 785CA
-        GOTO    SUB_785D6.L1                     * 785CC
+        GOTO    RCLtmp6%%.L1                     * 785CC
 
 * refs (1): 77FEC
-SUB_785D0:
+* -> A/B = %% temporary 5
+RCLtmp5%%:
         P=      5                                * 785D0
-        GOTO    SUB_785D6.L1                     * 785D2
+        GOTO    RCLtmp6%%.L1                     * 785D2
 
 * refs (1): 78016
-SUB_785D6:
+* -> A/B = %% temporary 6
+RCLtmp6%%:
         P=      6                                * 785D6
-        GOTO    SUB_785D6.L1                     * 785D8
+        GOTO    RCLtmp6%%.L1                     * 785D8
         P=      8                                * 785DC
-        GOTO    SUB_785D6.L1                     * 785DE
+        GOTO    RCLtmp6%%.L1                     * 785DE
         NIBHEX  2965002A                         * 785E2  δV.¢
-SUB_785D6.L1:
+RCLtmp6%%.L1:
         D0=(5)  #800E0                           * 785EA
-SUB_785D6.loop2:
+RCLtmp6%%.loop2:
         D0=D0+  16                               * 785F1
         D0=D0+  5                                * 785F4
         P=P-1                                    * 785F7
-        GONC    SUB_785D6.loop2                  * 785F9
+        GONC    RCLtmp6%%.loop2                  * 785F9
         P=      0                                * 785FC
         GOVLNG  GETAB0                           * 785FE
 
 * refs (11): 77EF8 77FFE 78028 7844B 7DA24 99640 ...
-SUB_78605:
+* -> C/D = %% temporary 0
+RCLCDtmp0%%:
         P=      0                                * 78605
-        GOTO    SUB_7862F.L1                     * 78607
+        GOTO    RCLCDtmp7%%.L1                   * 78607
 
 * refs (5): 7894D 998A0 99B78 99B9A 99BFD
-SUB_7860B:
+* -> C/D = %% temporary 1
+RCLCDtmp1%%:
         P=      1                                * 7860B
-        GOTO    SUB_7862F.L1                     * 7860D
+        GOTO    RCLCDtmp7%%.L1                   * 7860D
 
 * refs (10): 78443 78959 994D6 995F0 99683 998C7 ...
-SUB_78611:
+* -> C/D = %% temporary 2
+RCLCDtmp2%%:
         P=      2                                * 78611
-        GOTO    SUB_7862F.L1                     * 78613
+        GOTO    RCLCDtmp7%%.L1                   * 78613
 
 * refs (7): 77FC8 7DAC5 994AC 998B5 9993B 99A12 ...
-SUB_78617:
+* -> C/D = %% temporary 3
+RCLCDtmp3%%:
         P=      3                                * 78617
-        GOTO    SUB_7862F.L1                     * 78619
+        GOTO    RCLCDtmp7%%.L1                   * 78619
 
 * refs (6): 77FB9 99490 99977 99A9C 99D84 99E49
-SUB_7861D:
+* -> C/D = %% temporary 4
+RCLCDtmp4%%:
         P=      4                                * 7861D
-        GOTO    SUB_7862F.L1                     * 7861F
+        GOTO    RCLCDtmp7%%.L1                   * 7861F
 
 * refs (4): 7DA32 994C1 99749 999F4
-SUB_78623:
+* -> C/D = %% temporary 5
+RCLCDtmp5%%:
         P=      5                                * 78623
-        GOTO    SUB_7862F.L1                     * 78625
+        GOTO    RCLCDtmp7%%.L1                   * 78625
 
 * refs (4): 998DA 99913 99B58 99B6D
-SUB_78629:
+* -> C/D = %% temporary 6
+RCLCDtmp6%%:
         P=      6                                * 78629
-        GOTO    SUB_7862F.L1                     * 7862B
+        GOTO    RCLCDtmp7%%.L1                   * 7862B
 
 * refs (2): 7817D 78242
-SUB_7862F:
+* -> C/D = %% temporary 7
+RCLCDtmp7%%:
         P=      7                                * 7862F
-        GOTO    SUB_7862F.L1                     * 78631
+        GOTO    RCLCDtmp7%%.L1                   * 78631
         P=      8                                * 78635
-        GOTO    SUB_7862F.L1                     * 78637
+        GOTO    RCLCDtmp7%%.L1                   * 78637
         NIBHEX  296B002A65002B                   * 7863B  δ¶.¢V.²
-SUB_7862F.L1:
+RCLCDtmp7%%.L1:
         D0=(5)  #800E0                           * 78649
-SUB_7862F.loop2:
+RCLCDtmp7%%.loop2:
         D0=D0+  16                               * 78650
         D0=D0+  5                                * 78653
         P=P-1                                    * 78656
-        GONC    SUB_7862F.loop2                  * 78658
+        GONC    RCLCDtmp7%%.loop2                * 78658
         P=      0                                * 7865B
         GOVLNG  GETCD0                           * 7865D
 
 * refs (8): 78189 785AE 7879F 993EE 995FE 997FA ...
-SUB_78664:
+* A/B -> %% temporary 0
+STOtmp0%%:
         P=      0                                * 78664
-        GOTO    SUB_7868E.L1                     * 78666
+        GOTO    STOtmp7%%.L1                     * 78666
 
 * refs (5): 78421 78965 78983 993FF 99883
-SUB_7866A:
+* A/B -> %% temporary 1
+STOtmp1%%:
         P=      1                                * 7866A
-        GOTO    SUB_7868E.L1                     * 7866C
+        GOTO    STOtmp7%%.L1                     * 7866C
 
 * refs (7): 78287 7895D 99426 994EB 99778 99AAE ...
-SUB_78670:
+* A/B -> %% temporary 2
+STOtmp2%%:
         P=      2                                * 78670
-        GOTO    SUB_7868E.L1                     * 78672
+        GOTO    STOtmp7%%.L1                     * 78672
 
 * refs (3): 77FAD 77FCC 99414
-SUB_78676:
+* A/B -> %% temporary 3
+STOtmp3%%:
         P=      3                                * 78676
-        GOTO    SUB_7868E.L1                     * 78678
+        GOTO    STOtmp7%%.L1                     * 78678
 
 * refs (6): 77FB1 77FD4 99433 9949E 99793 99AA3
-SUB_7867C:
+* A/B -> %% temporary 4
+STOtmp4%%:
         P=      4                                * 7867C
-        GOTO    SUB_7868E.L1                     * 7867E
+        GOTO    STOtmp7%%.L1                     * 7867E
 
 * refs (3): 77F94 77FFA 994CF
-SUB_78682:
+* A/B -> %% temporary 5
+STOtmp5%%:
         P=      5                                * 78682
-        GOTO    SUB_7868E.L1                     * 78684
+        GOTO    STOtmp7%%.L1                     * 78684
 
 * refs (6): 77FA1 78024 9988E 998E5 9992C 99B13
-SUB_78688:
+* A/B -> %% temporary 6
+STOtmp6%%:
         P=      6                                * 78688
-        GOTO    SUB_7868E.L1                     * 7868A
+        GOTO    STOtmp7%%.L1                     * 7868A
 
 * refs (4): 78181 782E6 78311 78415
-SUB_7868E:
+* A/B -> %% temporary 7
+STOtmp7%%:
         P=      7                                * 7868E
-        GOTO    SUB_7868E.L1                     * 78690
+        GOTO    STOtmp7%%.L1                     * 78690
         P=      8                                * 78694
-        GOTO    SUB_7868E.L1                     * 78696
+        GOTO    STOtmp7%%.L1                     * 78696
         NIBHEX  296B002A65002B                   * 7869A  δ¶.¢V.²
-SUB_7868E.L1:
+STOtmp7%%.L1:
         D0=(5)  #800E0                           * 786A8
-SUB_7868E.loop2:
+STOtmp7%%.loop2:
         D0=D0+  16                               * 786AF
         D0=D0+  5                                * 786B2
         P=P-1                                    * 786B5
-        GONC    SUB_7868E.loop2                  * 786B7
+        GONC    STOtmp7%%.loop2                  * 786B7
         P=      0                                * 786BA
 
 * refs (2): 77E9B 77EB6
@@ -719,16 +761,17 @@ SUB_786CA:
         D1=C                                     * 786CA
 
 * refs (1): 787B7
-SUB_786CD:
+* C.A = a BCD integer -> C = the same as a 15-digit number, mantissa and exponent
+Bcd>15:
         P=      15                               * 786CD
         D=C     A                                * 786CF
         C=0     W                                * 786D1
         C=D     A                                * 786D4
-SUB_786CD.loop1:
+Bcd>15.loop1:
         CSRC                                     * 786D6
         P=P+1                                    * 786D9
         ?C#0    A                                * 786DB
-        GOYES   SUB_786CD.loop1                  * 786DE
+        GOYES   Bcd>15.loop1                     * 786DE
         CSR     W                                * 786E0
         CPEX    0                                * 786E3
         RTN                                      * 786E7
@@ -744,7 +787,7 @@ SUB_786ED:
 
 * refs (1): 782AB
 SUB_786F5:
-        GOSUB   SUB_7890D                        * 786F5
+        GOSUB   LoadC2                           * 786F5
         GOSUB   SUB_78772                        * 786F9
 
 * refs (12): 77F2E 78038 78084 780C5 7820B 7821B ...
@@ -779,14 +822,16 @@ SUB_78717.L2:
         RTNCC                                    * 7873A
 
 * refs (2): 781CA 7821F
+* exp(-x/2) of the value in tmp0
 SUB_7873C:
-        GOSUB   SUB_78899                        * 7873C
+        GOSUB   RCLtmp0%%~jump                   * 7873C
 
 * refs (1): 7804E
-SUB_78740:
+* A/B -> exp(-A/B / 2)
+ExpNegHalf:
         GOSUB   DIV2~jump                        * 78740
         A=-A-1  S                                * 78744
-        GOLONG  SUB_78F86.L5                     * 78747
+        GOLONG  EXP15                            * 78747
 
 * refs (3): 77F02 78112 781CE
 SUB_7874D:
@@ -810,18 +855,18 @@ SUB_7876F:
 
 * refs (3): 77FF0 7801A 786F9
 SUB_78772:
-        GOSUB   SUB_78556                        * 78772
+        GOSUB   SPLITC~jump_2                    * 78772
 SUB_78772.L1:
         GOTO    SUB_787E2.L1                     * 78776
 
 * refs (1): 78865
 SUB_7877A:
-        GOSUB   SUB_7890D                        * 7877A
+        GOSUB   LoadC2                           * 7877A
         GOSUB   SPLITA~jump_2                    * 7877E
 
 * refs (1): 784BE
 SUB_78782:
-        GOSUB   SUB_78556                        * 78782
+        GOSUB   SPLITC~jump_2                    * 78782
         GOLONG  SUB_78955.L1                     * 78786
 
 * refs (3): 780A7 781D2 786C3
@@ -833,9 +878,9 @@ SUB_7878C:
 
 * refs (2): 7816B 782A0
 SUB_78797:
-        GOSUB   SUB_78591.L2                     * 78797
+        GOSUB   RCLtmp0%%                        * 78797
         GOSUB   SQRF~jump                        * 7879B
-        GOTO    SUB_78664                        * 7879F
+        GOTO    STOtmp0%%                        * 7879F
 
 * refs (2): 7839A 7884B
 SUB_787A3:
@@ -851,13 +896,13 @@ SUB_787A3.L1:
 
 * refs (3): 780AD 78486 787AE
 SUB_787B7:
-        GOSUB   SUB_786CD                        * 787B7
-        GOTO    SUB_78899.L1                     * 787BB
+        GOSUB   Bcd>15                           * 787B7
+        GOTO    RCLtmp0%%~jump.L1                * 787BB
 
 * refs (4): 780B9 783D3 784D1 786E9
 SUB_787BF:
-        GOSUB   SUB_78556                        * 787BF
-        GOTO    SUB_78582.L1                     * 787C3
+        GOSUB   SPLITC~jump_2                    * 787BF
+        GOTO    DIVFLong                         * 787C3
 
 * refs (2): 780BD 78143
 SUB_787C7:
@@ -891,7 +936,8 @@ RCCD0~jump_3:
         GOVLNG  RCCD0                            * 787ED
 
 * refs (5): 77F98 78088 781A3 783AA 7882D
-SUB_787F4:
+* C = 1 (mantissa only)
+LoadC1:
         C=0     W                                * 787F4
         P=      14                               * 787F7
         LC(1)   #1                               * 787F9
@@ -899,8 +945,9 @@ SUB_787F4:
         RTN                                      * 787FE
 
 * refs (1): 788F6
-SUB_78800:
-        GOSUB   SUB_7890D                        * 78800
+* C = 3 (P = 14 on return)
+LoadC3:
+        GOSUB   LoadC2                           * 78800
         LC(1)   #3                               * 78804
         RTN                                      * 78807
 
@@ -918,7 +965,7 @@ CLRFRC~jump:
 
 * refs (3): 784E9 78861 788F2
 SUB_78818:
-        GOSUB   SUB_785BE                        * 78818
+        GOSUB   RCLtmp2%%                        * 78818
         GOTO    SUB_78820.L1                     * 7881C
 
 * refs (6): 780C9 780DC 781D6 78809 78829 7887F
@@ -934,7 +981,7 @@ SUB_78829:
 
 * refs (1): 782EE
 SUB_7882D:
-        GOSUB   SUB_787F4                        * 7882D
+        GOSUB   LoadC1                           * 7882D
         ?C=A    W                                * 78831
         RTNYES                                   * 78834
         RTN                                      * 78836
@@ -947,7 +994,7 @@ SUB_78838:
         P=      4                                * 78840
         ?A#0    P                                * 78842
         GOYES   SUB_78838.L1                     * 78845
-        GOSUB   SUB_78531                        * 78847
+        GOSUB   Zero>R0R1                        * 78847
 SUB_78838.L1:
         GOSUB   SUB_787A3                        * 7884B
         GOSBVL  RSUB1                            * 7884F
@@ -1000,9 +1047,9 @@ SQRF~jump:
         GOVLNG  SQRF                             * 78892
 
 * refs (3): 78236 7824E 7873C
-SUB_78899:
-        GOTO    SUB_78591.L2                     * 78899
-SUB_78899.L1:
+RCLtmp0%%~jump:
+        GOTO    RCLtmp0%%                        * 78899
+RCLtmp0%%~jump.L1:
         A=C     W                                * 7889D
 
 * refs (6): 7824A 78266 7854A 78563 7877E 78A04
@@ -1014,11 +1061,12 @@ SUB_788A7:
         CAEX    W                                * 788A7
 
 * refs (4): 78099 781AA 788EB 788FC
-SUB_788AA:
+* A, C positive: carry set when C > A; used to pick which series to run. Exponents are offset by #500 for the comparison
+C>A?:
         ?A#0    S                                * 788AA
         RTNYES                                   * 788AD
         ?C#0    S                                * 788AF
-        GOYES   SUB_788AA.L2                     * 788B2
+        GOYES   C>A?.L2                          * 788B2
         P=      0                                * 788B4
         BCEX    A                                * 788B6
         LC(3)   #500                             * 788B8
@@ -1026,17 +1074,17 @@ SUB_788AA:
         C=C+B   X                                * 788BF
         A=A+B   X                                * 788C2
         ?C>A    X                                * 788C5
-        GOYES   SUB_788AA.L3                     * 788C8
+        GOYES   C>A?.L3                          * 788C8
         ?C<A    X                                * 788CA
-        GOYES   SUB_788AA.L1                     * 788CD
+        GOYES   C>A?.L1                          * 788CD
         ?C>A    M                                * 788CF
-        GOYES   SUB_788AA.L3                     * 788D2
-SUB_788AA.L1:
+        GOYES   C>A?.L3                          * 788D2
+C>A?.L1:
         A=A-B   X                                * 788D4
         C=C-B   X                                * 788D7
-SUB_788AA.L2:
+C>A?.L2:
         RTNCC                                    * 788DA
-SUB_788AA.L3:
+C>A?.L3:
         A=A-B   X                                * 788DC
         C=C-B   X                                * 788DF
         RTNSC                                    * 788E2
@@ -1044,13 +1092,13 @@ SUB_788AA.L3:
 * refs (2): 782CB 7832D
 SUB_788E4:
         A=R4                                     * 788E4
-        GOSUB   SUB_7890D                        * 788E7
-        GOSUB   SUB_788AA                        * 788EB
+        GOSUB   LoadC2                           * 788E7
+        GOSUB   C>A?                             * 788EB
         RTNC                                     * 788EF
         GOSUB   SUB_78818                        * 788F2
-        GOSUB   SUB_78800                        * 788F6
+        GOSUB   LoadC3                           * 788F6
         C=C+1   A                                * 788FA
-        GOSUB   SUB_788AA                        * 788FC
+        GOSUB   C>A?                             * 788FC
         RTNNC                                    * 78900
         GOSUB   SUB_7843F                        * 78903
         C=A     A                                * 78907
@@ -1058,7 +1106,8 @@ SUB_788E4:
         RTN                                      * 7890B
 
 * refs (6): 781B1 7853C 786F5 7877A 78800 788E7
-SUB_7890D:
+* C = 2 (P = 14 on return)
+LoadC2:
         C=0     W                                * 7890D
         P=      14                               * 78910
         LC(1)   #2                               * 78912
@@ -1076,25 +1125,25 @@ EXAB0~jump:
 EXAB2~jump:
         GOVLNG  EXAB2                            * 7892B
         GOSUB   STAB0~jump_3                     * 78932
-        GOSUB   SUB_78524                        * 78936
+        GOSUB   LoadC.5                          * 78936
         P=      10                               * 7893A
 EXAB2~jump.L1:
         GOVLNG  RCAB2                            * 7893C
 
 * refs (3): 78108 783FD 787CB
 SUB_78943:
-        GOSUB   SUB_78591.L2                     * 78943
-        GOSUBL  SUB_7806A                        * 78947
-        GOSUB   SUB_7860B                        * 7894D
-        GOTO    SUB_78582.L1                     * 78951
+        GOSUB   RCLtmp0%%                        * 78943
+        GOSUBL  Sq15                             * 78947
+        GOSUB   RCLCDtmp1%%                      * 7894D
+        GOTO    DIVFLong                         * 78951
 
 * refs (2): 7829C 782AF
 SUB_78955:
         GOSUB   RCLtmp1%%                        * 78955
-        GOSUB   SUB_78611                        * 78959
-        GOSUB   SUB_78670                        * 7895D
+        GOSUB   RCLCDtmp2%%                      * 78959
+        GOSUB   STOtmp2%%                        * 7895D
         GOSUB   XYEX~jump_2                      * 78961
-        GOTO    SUB_7866A                        * 78965
+        GOTO    STOtmp1%%                        * 78965
         NIBHEX  BCC                              * 78969  Ë
 SUB_78955.L1:
         GOSUB   RADDF~jump_3                     * 7896C
@@ -1104,33 +1153,37 @@ SUB_78955.L1:
 * refs (1): 7807E
 SUB_7897B:
         GOSUB   RCLtmp1%%                        * 7897B
-        GOSUB   SUB_78987                        * 7897F
-        GOTO    SUB_7866A                        * 78983
+        GOSUB   UtpDegFree                       * 7897F
+        GOTO    STOtmp1%%                        * 78983
 
 * refs (3): 78281 7841D 7897F
-SUB_78987:
-        GOSUB   SUB_78524                        * 78987
-        GOSUB   SUB_78556                        * 7898B
+* A/B -> A/B = floor(x + .5): error #203 (Bad Argument Value) unless 1 <= n < 500, the range of the degrees of freedom
+UtpDegFree:
+        GOSUB   LoadC.5                          * 78987
+        GOSUB   SPLITC~jump_2                    * 7898B
         GOSUB   RADDF~jump_3                     * 7898F
         GOSUB   CLRFRC~jump                      * 78993
         ?B=0    M                                * 78997
-        GOYES   SUB_78987.L1                     * 7899A
+        GOYES   UtpDegFree.L1                    * 7899A
         ?A#0    S                                * 7899C
-        GOYES   SUB_78987.L1                     * 7899F
-        GOSUB   SUB_78524                        * 789A1
+        GOYES   UtpDegFree.L1                    * 7899F
+        GOSUB   LoadC.5                          * 789A1
         C=0     A                                * 789A5
         C=C+1   A                                * 789A7
         C=C+1   A                                * 789A9
         ?C<A    A                                * 789AB
-        GOYES   SUB_78987.L1                     * 789AE
+        GOYES   UtpDegFree.L1                    * 789AE
         ?C>A    A                                * 789B0
         RTNYES                                   * 789B3
         ?B<C    M                                * 789B5
         RTNYES                                   * 789B8
-SUB_78987.L1:
+UtpDegFree.L1:
         P=      0                                * 789BA
         LC(5)   #00203                           * 789BC
-SUB_78987.L2:
+
+* refs (6): 99355 995CA 9972A 99D43 99DE0 99E92
+* C.A = error number: back to hex mode, GETPTR, Errjmp
+ErrC15:
         A=C     A                                * 789C3
         P=      0                                * 789C5
         SETHEX                                   * 789C7
@@ -1149,7 +1202,7 @@ RADDF~jump_3.L1:
         C=B     W                                * 789E8
         D=C     W                                * 789EB
         D0=A                                     * 789EE
-        GOSBVL  SUB_29F76                        * 789F1
+        GOSBVL  PACKq                            * 789F1
         CD0EX                                    * 789F8
         C=A     S                                * 789FB
         GOLONG  XYEX~jump_2                      * 789FE
@@ -1157,7 +1210,7 @@ RADDF~jump_3.L1:
 * refs (1): 78A11
 SUB_78A04:
         GOSUB   SPLITA~jump_2                    * 78A04
-        GOLONG  SUB_78DE9.L3                     * 78A08
+        GOLONG  LN15                             * 78A08
         A=R0                                     * 78A0E
         GOSUB   SUB_78A04                        * 78A11
         A=-A-1  S                                * 78A15
@@ -1185,24 +1238,25 @@ SUB_78A33:
         GOVLNG  RADDF.L2                         * 78A33
 
 * refs (2): 2B674 79F78
-SUB_78A3A:
-        GOSUBL  SUB_7962B                        * 78A3A
-        GONC    SUB_78A3A.L1                     * 78A40
+* A/B -> fractional part
+FP15:
+        GOSUBL  SpecA?~jump                      * 78A3A
+        GONC    FP15.L1                          * 78A40
         ?A#0    B                                * 78A43
         RTNYES                                   * 78A46
         A=0     A                                * 78A48
         B=0     W                                * 78A4A
         RTN                                      * 78A4D
-SUB_78A3A.L1:
-        GOSBVL  SUB_2BBFC                        * 78A4F
+FP15.L1:
+        GOSBVL  FracPosChk                       * 78A4F
         P=P+1                                    * 78A56
-SUB_78A3A.loop2:
+FP15.loop2:
         P=P+1                                    * 78A58
-        GOC     SUB_78A3A.L3                     * 78A5A
+        GOC     FP15.L3                          * 78A5A
         BSL     W                                * 78A5D
         A=A-1   A                                * 78A60
-        GOTO    SUB_78A3A.loop2                  * 78A62
-SUB_78A3A.L3:
+        GOTO    FP15.loop2                       * 78A62
+FP15.L3:
         GOTO    SUB_78AE4                        * 78A66
 aMODF~1:
         HST=0   3                                * 78A6A
@@ -1258,90 +1312,93 @@ aMODF~1.L6:
 
 * refs (2): 78A66 79CF8
 SUB_78AE4:
-        GOVLNG  SUB_2BC62.L2                     * 78AE4
-SUB_78AE4.L1:
+        GOVLNG  SplitNormA.L2                    * 78AE4
+
+* refs (2): 2B716 78C4B
+* A/B = integer n -> n!
+FACT15:
         A=0     S                                * 78AEB
         B=0     S                                * 78AEE
         C=0     A                                * 78AF1
         C=C+1   A                                * 78AF3
         C=C+1   A                                * 78AF5
         ?C>=A   A                                * 78AF7
-        GOYES   SUB_78AE4.L2                     * 78AFA
+        GOYES   FACT15.L1                        * 78AFA
         A=0     W                                * 78AFC
         A=A+1   M                                * 78AFF
         B=0     W                                * 78B02
         B=B+1   A                                * 78B05
         BSR     A                                * 78B07
-        GOTO    SUB_78AE4.L12                    * 78B09
-SUB_78AE4.L2:
+        GOTO    FACT15.L11                       * 78B09
+FACT15.L1:
         BSR     W                                * 78B0D
-SUB_78AE4.loop3:
+FACT15.loop2:
         A=A-1   A                                * 78B10
-        GOC     SUB_78AE4.L4                     * 78B12
+        GOC     FACT15.L3                        * 78B12
         BSL     W                                * 78B15
-        GONC    SUB_78AE4.loop3                  * 78B18
-SUB_78AE4.L4:
+        GONC    FACT15.loop2                     * 78B18
+FACT15.L3:
         SB=0                                     * 78B1B
         D=0     W                                * 78B1E
         C=0     W                                * 78B21
         P=      14                               * 78B24
         C=C+1   P                                * 78B26
         BCEX    W                                * 78B29
-SUB_78AE4.loop5:
+FACT15.loop4:
         ?B=0    S                                * 78B2C
-        GOYES   SUB_78AE4.L6                     * 78B2F
+        GOYES   FACT15.L5                        * 78B2F
         C=C+1   A                                * 78B31
         P=      0                                * 78B33
         B=B+B   P                                * 78B35
         BSR     W                                * 78B38
-        GONC    SUB_78AE4.L6                     * 78B3B
+        GONC    FACT15.L5                        * 78B3B
         B=B+1   W                                * 78B3E
-SUB_78AE4.L6:
+FACT15.L5:
         A=0     W                                * 78B41
         P=      13                               * 78B44
         D=D-C   P                                * 78B46
-        GONC    SUB_78AE4.L8                     * 78B49
-SUB_78AE4.loop7:
+        GONC    FACT15.L7                        * 78B49
+FACT15.loop6:
         A=A+B   W                                * 78B4C
         D=D+1   P                                * 78B4F
-        GONC    SUB_78AE4.loop7                  * 78B52
-SUB_78AE4.L8:
+        GONC    FACT15.loop6                     * 78B52
+FACT15.L7:
         P=      14                               * 78B55
         D=D-C   P                                * 78B57
-        GONC    SUB_78AE4.L9                     * 78B5A
+        GONC    FACT15.L8                        * 78B5A
         DSL     W                                * 78B5D
         GOSUB   SUB_78BB9                        * 78B60
-        GOC     SUB_78AE4.L10                    * 78B64
-SUB_78AE4.L9:
+        GOC     FACT15.L9                        * 78B64
+FACT15.L8:
         ?C=0    S                                * 78B67
-        GOYES   SUB_78AE4.L11                    * 78B6A
+        GOYES   FACT15.L10                       * 78B6A
         ASR     W                                * 78B6C
         C=C+1   A                                * 78B6F
-SUB_78AE4.L10:
+FACT15.L9:
         D=D-C   S                                * 78B71
-        GONC    SUB_78AE4.L11                    * 78B74
+        GONC    FACT15.L10                       * 78B74
         GOSUB   SUB_78BB9                        * 78B77
-SUB_78AE4.L11:
+FACT15.L10:
         ABEX    W                                * 78B7B
         P=      13                               * 78B7E
         C=C-1   P                                * 78B80
-        GONC    SUB_78AE4.loop5                  * 78B83
+        GONC    FACT15.loop4                     * 78B83
         P=      14                               * 78B86
         C=C-1   P                                * 78B88
-        GONC    SUB_78AE4.loop5                  * 78B8B
+        GONC    FACT15.loop4                     * 78B8B
         C=C-1   S                                * 78B8E
-        GONC    SUB_78AE4.loop5                  * 78B91
+        GONC    FACT15.loop4                     * 78B91
         B=0     W                                * 78B94
         ABEX    WP                               * 78B97
         A=C     A                                * 78B9A
         P=      0                                * 78B9C
         LC(5)   #00300                           * 78B9E
         ?C=A    A                                * 78BA5
-        GOYES   SUB_78AE4.L12                    * 78BA8
+        GOYES   FACT15.L11                       * 78BA8
         LC(3)   #234                             * 78BAA
         ?C#A    A                                * 78BAF
         RTNYES                                   * 78BB2
-SUB_78AE4.L12:
+FACT15.L11:
         B=B-1   M                                * 78BB4
         RTNSC                                    * 78BB7
 
@@ -1358,60 +1415,66 @@ SUB_78BB9.loop1:
         D=D+1   S                                * 78BCC
         GONC    SUB_78BB9.loop1                  * 78BCF
         RTN                                      * 78BD2
-SUB_78BB9.L2:
+
+* refs (1): 2B71F
+* n and r in A/B and C/D -> the number of permutations (ST 9 set)
+PERM15:
         ST=1    9                                * 78BD4
-        GOTO    SUB_78BB9.L4                     * 78BD7
-SUB_78BB9.L3:
+        GOTO    COMB15.L1                        * 78BD7
+
+* refs (1): 2B728
+* n and r in A/B and C/D -> the number of combinations
+COMB15:
         ST=0    9                                * 78BDB
-SUB_78BB9.L4:
+COMB15.L1:
         HST=0   3                                * 78BDE
         GOSBVL  STCD0                            * 78BE1
-        GOSUB   SUB_78D1D                        * 78BE8
-        GOC     SUB_78BB9.L6                     * 78BEC
-SUB_78BB9.loop5:
+        GOSUB   ?Int15                           * 78BE8
+        GOC     COMB15.L3                        * 78BEC
+COMB15.loop2:
         P=      0                                * 78BEF
         LC(2)   #18                              * 78BF1
         GOTO    SUB_78DE9.L2                     * 78BF5
-SUB_78BB9.L6:
+COMB15.L3:
         GOSUBL  EXAB0~jump_2                     * 78BF9
-        GOSUB   SUB_78D1D                        * 78BFF
-        GONC    SUB_78BB9.loop5                  * 78C03
+        GOSUB   ?Int15                           * 78BFF
+        GONC    COMB15.loop2                     * 78C03
         GOSUBL  EXAB0~jump_2                     * 78C06
         GOSUBL  STAB2~jump_4                     * 78C0C
         GOSUBL  RCCD0~jump_4                     * 78C12
         P=      1                                * 78C18
         GOSUBL  TST15~jump_3                     * 78C1A
-        GOC     SUB_78BB9.loop5                  * 78C20
+        GOC     COMB15.loop2                     * 78C20
         ?ST=0   9                                * 78C23
-        GOYES   SUB_78BB9.L8                     * 78C26
+        GOYES   COMB15.L5                        * 78C26
         ?P=     2                                * 78C28
-        GOYES   SUB_78BB9.L7                     * 78C2B
+        GOYES   COMB15.L4                        * 78C2B
         C=-C-1  S                                * 78C2D
         GOSBVL  RADDF                            * 78C30
         GOSBVL  RSUB1                            * 78C37
         P=      14                               * 78C3E
         ?B#0    P                                * 78C40
-        GOYES   SUB_78BB9.L8                     * 78C43
+        GOYES   COMB15.L5                        * 78C43
         GOSUBL  RCAB2~jump_2                     * 78C45
-SUB_78BB9.L7:
-        GOTO    SUB_78AE4.L1                     * 78C4B
-SUB_78BB9.L8:
+COMB15.L4:
+        GOTO    FACT15                           * 78C4B
+COMB15.L5:
         GOSUBL  RCAB2~jump_2                     * 78C4F
         P=      0                                * 78C55
         LC(5)   #00012                           * 78C57
         ?C<=A   A                                * 78C5E
-        GOYES   SUB_78BB9.loop5                  * 78C61
+        GOYES   COMB15.loop2                     * 78C61
         GOSUBL  RCCD0~jump_4                     * 78C63
         C=-C-1  S                                * 78C69
         GOSBVL  RADDF                            * 78C6C
         GOSUBL  RCCD0~jump_4                     * 78C73
         ?ST=1   9                                * 78C79
-        GOYES   SUB_78BB9.L9                     * 78C7C
+        GOYES   COMB15.L6                        * 78C7C
         P=      6                                * 78C7E
         GOSUBL  TST15~jump_3                     * 78C80
-        GOC     SUB_78BB9.L9                     * 78C86
+        GOC     COMB15.L6                        * 78C86
         GOSUBL  XYEX~jump_3                      * 78C89
-SUB_78BB9.L9:
+COMB15.L6:
         GOSUBL  STCD0~jump                       * 78C8F
         A=B     M                                * 78C95
         R3=A                                     * 78C98
@@ -1423,14 +1486,14 @@ SUB_78BB9.L9:
         P=      14                               * 78CAD
         B=B+1   P                                * 78CAF
         R4=A                                     * 78CB2
-SUB_78BB9.loop10:
+COMB15.loop7:
         GOSUBL  STAB0~jump_4                     * 78CB5
         A=R4                                     * 78CBB
         C=R2                                     * 78CBE
         ?C#A    W                                * 78CC1
-        GOYES   SUB_78BB9.L11                    * 78CC4
+        GOYES   COMB15.L8                        * 78CC4
         GOLONG  STCD0~jump.L1                    * 78CC6
-SUB_78BB9.L11:
+COMB15.L8:
         B=0     W                                * 78CCC
         ABEX    M                                * 78CCF
         GOSBVL  RADD1                            * 78CD2
@@ -1442,67 +1505,71 @@ SUB_78BB9.L11:
         DCEX    M                                * 78CE8
         GOSBVL  RADDF                            * 78CEB
         ?ST=1   9                                * 78CF2
-        GOYES   SUB_78BB9.L12                    * 78CF5
+        GOYES   COMB15.L9                        * 78CF5
         C=R4                                     * 78CF7
         D=0     W                                * 78CFA
         DCEX    M                                * 78CFD
         GOSBVL  DIVF                             * 78D00
-SUB_78BB9.L12:
+COMB15.L9:
         GOSUBL  RCCD0~jump_4                     * 78D07
         GOSBVL  MULTF                            * 78D0D
         P=      3                                * 78D14
         ?A=0    P                                * 78D16
-        GOYES   SUB_78BB9.loop10                 * 78D19
+        GOYES   COMB15.loop7                     * 78D19
         RTN                                      * 78D1B
 
 * refs (2): 78BE8 78BFF
-SUB_78D1D:
+* A/B: carry set when a non-negative integer
+?Int15:
         P=      14                               * 78D1D
         ?B#0    P                                * 78D1F
-        GOYES   SUB_78D1D.L1                     * 78D22
+        GOYES   ?Int15.L1                        * 78D22
         A=0     W                                * 78D24
         B=0     W                                * 78D27
-SUB_78D1D.L1:
+?Int15.L1:
         ?A=0    S                                * 78D2A
-        GOYES   SUB_78D1D.L2                     * 78D2D
+        GOYES   ?Int15.L2                        * 78D2D
         RTNCC                                    * 78D2F
-SUB_78D1D.L2:
-        GOSBVL  SUB_2BC09                        * 78D31
+?Int15.L2:
+        GOSBVL  FracPos                          * 78D31
         ?P=     15                               * 78D38
         RTNYES                                   * 78D3B
         ?B=0    WP                               * 78D3D
         RTNYES                                   * 78D40
         RTNCC                                    * 78D42
-SUB_78D1D.L3:
+?Int15.L3:
         XM=0                                     * 78D44
         GOSUB   SUB_79510                        * 78D47
-        GONC    SUB_78D1D.L4                     * 78D4B
+        GONC    XPON15                           * 78D4B
         A=0     S                                * 78D4E
         RTNCC                                    * 78D51
-SUB_78D1D.L4:
+
+* refs (2): 2B686 78D4B
+* A/B -> the exponent of a number, as XPON
+XPON15:
         HST=0   3                                * 78D53
         B=0     S                                * 78D56
         ?B#0    W                                * 78D59
-        GOYES   SUB_78D1D.L5                     * 78D5C
+        GOYES   XPON15.L1                        * 78D5C
         A=0     S                                * 78D5E
         A=-A-1  S                                * 78D61
         P=      0                                * 78D64
         LC(2)   #03                              * 78D66
-        GOSUB   SUB_792C8.L34                    * 78D6A
+        GOSUB   XRoot15.L8                       * 78D6A
         RTNCC                                    * 78D6E
-SUB_78D1D.L5:
+XPON15.L1:
         B=0     W                                * 78D70
         B=A     A                                * 78D73
         A=A+A   A                                * 78D75
         A=0     W                                * 78D77
-        GONC    SUB_78D1D.loop6                  * 78D7A
+        GONC    XPON15.loop2                     * 78D7A
         A=-A-1  S                                * 78D7D
         B=-B    A                                * 78D80
-SUB_78D1D.loop6:
+XPON15.loop2:
         BSRC                                     * 78D82
         A=A+1   A                                * 78D85
         ?B#0    A                                * 78D87
-        GOYES   SUB_78D1D.loop6                  * 78D8A
+        GOYES   XPON15.loop2                     * 78D8A
         BSR     W                                * 78D8C
         A=A-1   A                                * 78D8F
         SB=0                                     * 78D91
@@ -1522,159 +1589,165 @@ SUB_78D96.loop1:
         P=      14                               * 78DAB
         D=D+1   P                                * 78DAD
 SUB_78D96.L2:
-        GOVLNG  SUB_2B97A.L5                     * 78DB0
+        GOVLNG  DIVF1.L5                         * 78DB0
 SUB_78D96.L3:
         B=C     W                                * 78DB7
         RTN                                      * 78DBA
-SUB_78D96.L4:
+
+* refs (4): 2B68F 79E64 7DB12 996FD
+* A/B -> ln(1 + x)
+LNP115:
         HST=0   3                                * 78DBC
         ST=0    10                               * 78DBF
         B=0     S                                * 78DC2
         C=A     A                                * 78DC5
         C=C+1   A                                * 78DC7
         C=C+C   A                                * 78DC9
-        GOC     SUB_78D96.L5                     * 78DCB
+        GOC     LNP115.L1                        * 78DCB
         GOSUB   SUB_78A28                        * 78DCE
-        GOTO    SUB_78DE9.L4                     * 78DD2
-SUB_78D96.L5:
+        GOTO    LN15.L1                          * 78DD2
+LNP115.L1:
         ?A=0    S                                * 78DD6
-        GOYES   SUB_78D96.L6                     * 78DD9
+        GOYES   LNP115.L2                        * 78DD9
         ST=1    10                               * 78DDB
-        GONC    SUB_78D96.L7                     * 78DDE
-SUB_78D96.L6:
+        GONC    LNP115.L3                        * 78DDE
+LNP115.L2:
         GOSUB   SUB_78D96                        * 78DE1
-SUB_78D96.L7:
-        GOTO    SUB_78DE9.L8                     * 78DE5
+LNP115.L3:
+        GOTO    LN15.L5                          * 78DE5
 
 * refs (2): 7920A 79377
 SUB_78DE9:
         XM=0                                     * 78DE9
         GOSUB   SUB_79510                        * 78DEC
-        GONC    SUB_78DE9.L4                     * 78DF0
+        GONC    LN15.L1                          * 78DF0
         ?A=0    S                                * 78DF3
         RTNYES                                   * 78DF6
-SUB_78DE9.loop1:
+SUB_78DE9.L1:
         P=      0                                * 78DF8
         LC(2)   #0D                              * 78DFA
 SUB_78DE9.L2:
         GOVLNG  SQRF.L27                         * 78DFE
-SUB_78DE9.L3:
+
+* refs (6): 2B698 2D04B 2D0E2 78A08 7A020 99B88
+* A/B -> ln x
+LN15:
         HST=0   3                                * 78E05
-SUB_78DE9.L4:
+LN15.L1:
         ST=0    10                               * 78E08
         C=0     W                                * 78E0B
         B=0     S                                * 78E0E
         ?B#0    W                                * 78E11
-        GOYES   SUB_78DE9.L5                     * 78E14
+        GOYES   LN15.L2                          * 78E14
         P=      0                                * 78E16
         LC(2)   #0C                              * 78E18
         A=0     S                                * 78E1C
         A=-A-1  S                                * 78E1F
-        GOTO    SUB_792C8.L34                    * 78E22
-SUB_78DE9.L5:
+        GOTO    XRoot15.L8                       * 78E22
+LN15.L2:
         ?A#0    S                                * 78E26
-        GOYES   SUB_78DE9.loop1                  * 78E29
+        GOYES   SUB_78DE9.L1                     * 78E29
         C=A     A                                * 78E2B
         ?C#0    A                                * 78E2D
-        GOYES   SUB_78DE9.L11                    * 78E30
+        GOYES   LN15.L8                          * 78E30
         P=      14                               * 78E32
         C=B     W                                * 78E34
         D=C     W                                * 78E37
         C=C-1   P                                * 78E3A
         ?C#0    W                                * 78E3D
-        GOYES   SUB_78DE9.loop6                  * 78E40
+        GOYES   LN15.loop3                       * 78E40
         SB=0                                     * 78E42
         B=0     W                                * 78E45
-        GOTO    SUB_78DE9.L26                    * 78E48
-SUB_78DE9.loop6:
+        GOTO    LN15.L23                         * 78E48
+LN15.loop3:
         ?C#0    P                                * 78E4C
-        GOYES   SUB_78DE9.L7                     * 78E4F
+        GOYES   LN15.L4                          * 78E4F
         A=A-1   A                                * 78E51
         CSL     W                                * 78E53
-        GOTO    SUB_78DE9.loop6                  * 78E56
-SUB_78DE9.L7:
+        GOTO    LN15.loop3                       * 78E56
+LN15.L4:
         GOSUB   SUB_78D96.L2                     * 78E5A
-SUB_78DE9.L8:
+LN15.L5:
         P=      14                               * 78E5E
         C=0     W                                * 78E60
         R0=C                                     * 78E63
         C=A     A                                * 78E66
         A=C     W                                * 78E68
-        GOTO    SUB_78DE9.L10                    * 78E6B
-SUB_78DE9.loop9:
+        GOTO    LN15.L7                          * 78E6B
+LN15.loop6:
         ?P=     8                                * 78E6F
-        GOYES   SUB_78DE9.L18                    * 78E72
+        GOYES   LN15.L15                         * 78E72
         P=P-1                                    * 78E74
         C=C+1   S                                * 78E76
-SUB_78DE9.L10:
+LN15.L7:
         C=C+1   A                                * 78E79
-        GONC    SUB_78DE9.loop9                  * 78E7B
-        GOC     SUB_78DE9.loop14                 * 78E7E
-SUB_78DE9.L11:
+        GONC    LN15.loop6                       * 78E7B
+        GOC     LN15.loop11                      * 78E7E
+LN15.L8:
         A=A+C   A                                * 78E81
-        GONC    SUB_78DE9.L12                    * 78E83
+        GONC    LN15.L9                          * 78E83
         C=-C-1  A                                * 78E86
         ST=1    10                               * 78E88
-SUB_78DE9.L12:
+LN15.L9:
         P=      14                               * 78E8B
         B=-B    WP                               * 78E8D
         C=C-1   P                                * 78E90
-SUB_78DE9.loop13:
+LN15.loop10:
         C=C+1   P                                * 78E93
-SUB_78DE9.loop14:
+LN15.loop11:
         A=B     W                                * 78E96
         D=C     S                                * 78E99
-        GOTO    SUB_78DE9.L16                    * 78E9C
-SUB_78DE9.loop15:
+        GOTO    LN15.L13                         * 78E9C
+LN15.loop12:
         BSR     W                                * 78EA0
-SUB_78DE9.L16:
+LN15.L13:
         D=D-1   S                                * 78EA3
-        GONC    SUB_78DE9.loop15                 * 78EA6
+        GONC    LN15.loop12                      * 78EA6
         B=B+A   W                                * 78EA9
         B=B-1   S                                * 78EAC
-        GONC    SUB_78DE9.loop13                 * 78EAF
+        GONC    LN15.loop10                      * 78EAF
         C=C+1   S                                * 78EB2
         B=A     W                                * 78EB5
         BSL     W                                * 78EB8
         P=P-1                                    * 78EBB
         ?P#     6                                * 78EBD
-        GOYES   SUB_78DE9.loop14                 * 78EC0
+        GOYES   LN15.loop11                      * 78EC0
         A=C     W                                * 78EC2
         C=0     W                                * 78EC5
         P=      0                                * 78EC8
         LC(5)   #99992                           * 78ECA
         ?A#0    A                                * 78ED1
-        GOYES   SUB_78DE9.L19                    * 78ED4
+        GOYES   LN15.L16                         * 78ED4
         R0=A                                     * 78ED6
         CAEX    W                                * 78ED9
         ?C#0    M                                * 78EDC
-        GOYES   SUB_78DE9.L17                    * 78EDF
+        GOYES   LN15.L14                         * 78EDF
         A=A-1   A                                * 78EE1
-        GOSUB   SUB_78DE9.L26                    * 78EE3
-        GONC    SUB_78DE9.L18                    * 78EE7
-SUB_78DE9.L17:
+        GOSUB   LN15.L23                         * 78EE3
+        GONC    LN15.L15                         * 78EE7
+LN15.L14:
         BSR     W                                * 78EEA
-SUB_78DE9.L18:
+LN15.L15:
         GOSUB   SUB_78F86                        * 78EED
         C=A     W                                * 78EF1
         D=C     W                                * 78EF4
         A=R0                                     * 78EF7
         P=      7                                * 78EFA
-        GOTO    SUB_78DE9.L21                    * 78EFC
-SUB_78DE9.L19:
+        GOTO    LN15.L18                         * 78EFC
+LN15.L16:
         P=      6                                * 78F00
         A=A+1   P                                * 78F02
         P=      7                                * 78F05
         D=C     W                                * 78F07
-SUB_78DE9.loop20:
+LN15.loop17:
         BSR     W                                * 78F0A
-SUB_78DE9.L21:
+LN15.L18:
         GOSUBL  SUB_799F8                        * 78F0D
         GOSUB   SUB_78F77                        * 78F13
         ?A=0    M                                * 78F17
-        GOYES   SUB_78DE9.L24                    * 78F1A
+        GOYES   LN15.L21                         * 78F1A
         ?P#     15                               * 78F1C
-        GOYES   SUB_78DE9.loop20                 * 78F1F
+        GOYES   LN15.loop17                      * 78F1F
         C=0     W                                * 78F21
         P=      0                                * 78F24
         C=B     P                                * 78F26
@@ -1683,37 +1756,37 @@ SUB_78DE9.L21:
         GOSUBL  SUB_799F6                        * 78F2F
         P=      0                                * 78F35
         ?ST=1   10                               * 78F37
-        GOYES   SUB_78DE9.loop22                 * 78F3A
+        GOYES   LN15.loop19                      * 78F3A
         B=C-B   W                                * 78F3C
-SUB_78DE9.loop22:
+LN15.loop19:
         GOSUB   SUB_78F77                        * 78F3F
         ?A=0    A                                * 78F43
-        GOYES   SUB_78DE9.L24                    * 78F46
+        GOYES   LN15.L21                         * 78F46
         BSR     W                                * 78F48
-        GONC    SUB_78DE9.loop22                 * 78F4B
-SUB_78DE9.loop23:
+        GONC    LN15.loop19                      * 78F4B
+LN15.loop20:
         BSR     W                                * 78F4E
-        GOC     SUB_78DE9.L25                    * 78F51
-SUB_78DE9.L24:
+        GOC     LN15.L22                         * 78F51
+LN15.L21:
         ?B#0    S                                * 78F54
-        GOYES   SUB_78DE9.loop23                 * 78F57
+        GOYES   LN15.loop20                      * 78F57
         D=D-1   A                                * 78F59
-SUB_78DE9.L25:
+LN15.L22:
         GOSUB   SUB_795CB                        * 78F5B
         C=D     W                                * 78F5F
         A=C     W                                * 78F62
         ?ST=0   10                               * 78F65
-        GOYES   SUB_78DE9.L26                    * 78F68
+        GOYES   LN15.L23                         * 78F68
         A=-A-1  S                                * 78F6A
-SUB_78DE9.L26:
+LN15.L23:
         GOVLNG  MULTF.L5                         * 78F6D
-SUB_78DE9.L27:
+LN15.L24:
         B=B+C   W                                * 78F74
 
 * refs (2): 78F13 78F3F
 SUB_78F77:
         A=A-1   P                                * 78F77
-        GONC    SUB_78DE9.L27                    * 78F7A
+        GONC    LN15.L24                         * 78F7A
         A=0     P                                * 78F7D
         D=D+1   A                                * 78F80
         P=P+1                                    * 78F82
@@ -1742,55 +1815,61 @@ SUB_78F86.L2:
         RTN                                      * 78FB3
 SUB_78F86.L3:
         GOSUB   SUB_79510                        * 78FB5
-        GONC    SUB_78F86.L8                     * 78FB9
+        GONC    EXPM115.L2                       * 78FB9
         ?A=0    S                                * 78FBC
         GOYES   SUB_78F86.L4                     * 78FBF
         A=0     W                                * 78FC1
         B=0     W                                * 78FC4
 SUB_78F86.L4:
-        GOTO    SUB_78F86.L28                    * 78FC7
-SUB_78F86.L5:
+        GOTO    EXPM115.L22                      * 78FC7
+
+* refs (2): 2B6AA 78747
+* A/B -> e^x. The constants after this routine are ln 2, ln 1.1, ln 1.01, ... and ln 10
+EXP15:
         HST=0   3                                * 78FCB
         ST=0    11                               * 78FCE
-        GOTO    SUB_78F86.L8                     * 78FD1
-SUB_78F86.L6:
+        GOTO    EXPM115.L2                       * 78FD1
+
+* refs (3): 2B6B3 79DAF 7DB29
+* A/B -> e^x - 1
+EXPM115:
         HST=0   3                                * 78FD5
         ST=1    11                               * 78FD8
-SUB_78F86.L7:
+EXPM115.L1:
         XM=0                                     * 78FDB
-SUB_78F86.L8:
+EXPM115.L2:
         C=0     W                                * 78FDE
         R0=C                                     * 78FE1
         ST=1    10                               * 78FE4
         ?A#0    S                                * 78FE7
-        GOYES   SUB_78F86.L9                     * 78FEA
+        GOYES   EXPM115.L3                       * 78FEA
         ST=0    10                               * 78FEC
-SUB_78F86.L9:
+EXPM115.L3:
         A=0     S                                * 78FEF
         D=0     W                                * 78FF2
-SUB_78F86.loop10:
+EXPM115.loop4:
         C=A     A                                * 78FF5
         C=0     S                                * 78FF7
         C=C+C   A                                * 78FFA
-        GONC    SUB_78F86.L14                    * 78FFC
+        GONC    EXPM115.L8                       * 78FFC
         C=A     A                                * 78FFF
         ?B=0    S                                * 79001
-        GOYES   SUB_78F86.L11                    * 79004
+        GOYES   EXPM115.L5                       * 79004
         A=A+1   A                                * 79006
         BSR     W                                * 79008
-        GOTO    SUB_78F86.loop10                 * 7900B
-SUB_78F86.L11:
+        GOTO    EXPM115.loop4                    * 7900B
+EXPM115.L5:
         P=      15                               * 7900F
-SUB_78F86.loop12:
+EXPM115.loop6:
         P=P-1                                    * 79011
         ?P=     6                                * 79013
-        GOYES   SUB_78F86.L13                    * 79016
+        GOYES   EXPM115.L7                       * 79016
         C=C+1   A                                * 79018
-        GONC    SUB_78F86.loop12                 * 7901A
-        GOTO    SUB_78F86.L20                    * 7901D
-SUB_78F86.L13:
-        GOTO    SUB_78F86.L21                    * 79021
-SUB_78F86.L14:
+        GONC    EXPM115.loop6                    * 7901A
+        GOTO    EXPM115.L14                      * 7901D
+EXPM115.L7:
+        GOTO    EXPM115.L15                      * 79021
+EXPM115.L8:
         AR0EX                                    * 79025
         ABEX    W                                * 79028
         C=0     W                                * 7902B
@@ -1803,115 +1882,115 @@ SUB_78F86.L14:
         C=0     A                                * 79044
         P=      5                                * 79046
         C=C-1   A                                * 79048
-SUB_78F86.loop15:
+EXPM115.loop9:
         C=C+1   A                                * 7904A
-SUB_78F86.loop16:
+EXPM115.loop10:
         GOSUBL  SUB_79A1F                        * 7904C
-        GONC    SUB_78F86.loop15                 * 79052
+        GONC    EXPM115.loop9                    * 79052
         GOSUBL  SUB_79A88                        * 79055
         AR0EX                                    * 7905B
         A=A-1   A                                * 7905E
         AR0EX                                    * 79060
-        GOC     SUB_78F86.L17                    * 79063
+        GOC     EXPM115.L11                      * 79063
         ?C=0    P                                * 79066
-        GOYES   SUB_78F86.loop16                 * 79069
+        GOYES   EXPM115.loop10                   * 79069
         GOTO    SUB_79226.loop2                  * 7906B
-SUB_78F86.L17:
+EXPM115.L11:
         CSR     WP                               * 7906F
         B=A     W                                * 79072
         A=R0                                     * 79075
         D=0     W                                * 79078
         D=C     A                                * 7907B
         GOSUB   SUB_79226                        * 7907D
-        GONC    SUB_78F86.L20                    * 79081
+        GONC    EXPM115.L14                      * 79081
         RTN                                      * 79084
-SUB_78F86.loop18:
+EXPM115.loop12:
         D=D+1   P                                * 79086
-SUB_78F86.loop19:
+EXPM115.loop13:
         B=B-C   W                                * 79089
-        GONC    SUB_78F86.loop18                 * 7908C
+        GONC    EXPM115.loop12                   * 7908C
         B=B+C   W                                * 7908F
         ?P=     7                                * 79092
-        GOYES   SUB_78F86.L21                    * 79095
+        GOYES   EXPM115.L15                      * 79095
         BSL     W                                * 79097
         A=A-1   A                                * 7909A
         P=P-1                                    * 7909C
-SUB_78F86.L20:
+EXPM115.L14:
         GOSUBL  SUB_799F8                        * 7909E
-        GONC    SUB_78F86.loop19                 * 790A4
-SUB_78F86.L21:
+        GONC    EXPM115.loop13                   * 790A4
+EXPM115.L15:
         ?ST=0   11                               * 790A7
-        GOYES   SUB_78F86.L22                    * 790AA
+        GOYES   EXPM115.L16                      * 790AA
         C=D     W                                * 790AC
         R0=C                                     * 790AF
         GOSUB   SUB_78F86                        * 790B2
         C=R0                                     * 790B6
         D=C     W                                * 790B9
-SUB_78F86.L22:
+EXPM115.L16:
         C=A     A                                * 790BC
         P=      15                               * 790BE
         LC(1)   #7                               * 790C0
         P=      6                                * 790C3
         ?D=0    A                                * 790C5
-        GOYES   SUB_78F86.loop23                 * 790C8
+        GOYES   EXPM115.loop17                   * 790C8
         D=D+1   P                                * 790CA
-SUB_78F86.loop23:
+EXPM115.loop17:
         ?D=0    M                                * 790CD
-        GOYES   SUB_78F86.L30                    * 790D0
+        GOYES   EXPM115.L24                      * 790D0
         P=P+1                                    * 790D2
-SUB_78F86.loop24:
+EXPM115.loop18:
         ?D=0    P                                * 790D4
-        GOYES   SUB_78F86.L27                    * 790D7
+        GOYES   EXPM115.L21                      * 790D7
         D=D-1   P                                * 790D9
         A=B     W                                * 790DC
         D=C     S                                * 790DF
-        GONC    SUB_78F86.L26                    * 790E2
-SUB_78F86.loop25:
+        GONC    EXPM115.L20                      * 790E2
+EXPM115.loop19:
         ASR     W                                * 790E5
-SUB_78F86.L26:
+EXPM115.L20:
         C=C-1   S                                * 790E8
-        GONC    SUB_78F86.loop25                 * 790EB
+        GONC    EXPM115.loop19                   * 790EB
         B=B+A   W                                * 790EE
         B=B+1   S                                * 790F1
         C=D     S                                * 790F4
-        GOTO    SUB_78F86.loop24                 * 790F7
-SUB_78F86.L27:
+        GOTO    EXPM115.loop18                   * 790F7
+EXPM115.L21:
         C=C+1   A                                * 790FB
         BSR     W                                * 790FD
         C=C-1   S                                * 79100
-        GONC    SUB_78F86.loop23                 * 79103
+        GONC    EXPM115.loop17                   * 79103
         C=D     A                                * 79106
         B=B+1   P                                * 79108
         A=C     A                                * 7910B
         A=0     S                                * 7910D
         ?ST=0   10                               * 79110
-        GOYES   SUB_78F86.L28                    * 79113
-        GOSBVL  SUB_2B78C                        * 79115
-SUB_78F86.L28:
+        GOYES   EXPM115.L22                      * 79113
+        GOSBVL  1/X15a                           * 79115
+EXPM115.L22:
         ?ST=0   11                               * 7911C
-        GOYES   SUB_78F86.L29                    * 7911F
+        GOYES   EXPM115.L23                      * 7911F
         GOSUB   STAB0~jump_4                     * 79121
         GOSBVL  RSUB1                            * 79125
         GOSUB   EXAB0~jump_2                     * 7912C
-SUB_78F86.L29:
+EXPM115.L23:
         RTNCC                                    * 79130
-SUB_78F86.L30:
+EXPM115.L24:
         A=0     S                                * 79132
         A=C     A                                * 79135
         ?ST=0   10                               * 79137
-        GOYES   SUB_78F86.L31                    * 7913A
+        GOYES   EXPM115.L25                      * 7913A
         A=-A-1  S                                * 7913C
         GOSUB   SUB_78D96                        * 7913F
-SUB_78F86.L31:
+EXPM115.L25:
         ?ST=0   11                               * 79143
-        GOYES   SUB_78F86.L32                    * 79146
+        GOYES   EXPM115.L26                      * 79146
         GOSUB   STAB0~jump_4                     * 79148
-SUB_78F86.L32:
+EXPM115.L26:
         ?B=0    W                                * 7914C
-        GOYES   SUB_78F86.L33                    * 7914F
+        GOYES   EXPM115.L27                      * 7914F
         GOSUBL  SUB_78A28                        * 79151
         GOTO    SUB_795CB                        * 79157
-SUB_78F86.L33:
+EXPM115.L27:
         GOSUBL  SUB_78A28                        * 7915B
         RTNCC                                    * 79161
 
@@ -1925,23 +2004,26 @@ SUB_78F86.L33:
         CON(16) #0999999500000333                * 791C3  entry 6
         CON(16) #0999999950000003                * 791D3  entry 7
         CON(16) #0230258509299405                * 791E3  entry 8
-SUB_78F86.L34:
-        GOSBVL  SUB_2BC62                        * 791F3
+
+* refs (1): 2B6A1
+* A/B -> log x
+LOG15:
+        GOSBVL  SplitNormA                       * 791F3
         ?A#0    S                                * 791FA
-        GOYES   SUB_78F86.L35                    * 791FD
+        GOYES   LOG15.L1                         * 791FD
         GOSUB   SUB_795D6                        * 791FF
-        GONC    SUB_78F86.L35                    * 79203
-        GOTO    SUB_78D1D.L3                     * 79206
-SUB_78F86.L35:
+        GONC    LOG15.L1                         * 79203
+        GOTO    ?Int15.L3                        * 79206
+LOG15.L1:
         GOSUB   SUB_78DE9                        * 7920A
         ?XM=0                                    * 7920E
-        GOYES   SUB_78F86.L36                    * 79211
+        GOYES   LOG15.L2                         * 79211
         RTN                                      * 79213
-SUB_78F86.L36:
+LOG15.L2:
         GOSUB   SUB_799F6                        * 79215
         D=0     W                                * 79219
         DCEX    W                                * 7921C
-        GOVLNG  SUB_2B96E.L1                     * 7921F
+        GOVLNG  DIVFchk.L1                       * 7921F
 
 * refs (2): 7907D 792A9
 SUB_79226:
@@ -1979,8 +2061,8 @@ SUB_79226.L5:
         GOSUB   EXAB0~jump_2                     * 79272
         RTNSC                                    * 79276
 SUB_79226.L6:
-        GOSUB   SUB_78D1D.L3                     * 79278
-        GOSBVL  SUB_2B915                        * 7927C
+        GOSUB   ?Int15.L3                        * 79278
+        GOSBVL  MULTFchk                         * 7927C
         ST=0    10                               * 79283
         ?A=0    S                                * 79286
         GOYES   SUB_79226.L7                     * 79289
@@ -2009,11 +2091,11 @@ SUB_79226.L9:
         A=0     S                                * 792BB
         B=0     W                                * 792BE
         B=B+1   P                                * 792C1
-        GOTO    SUB_78F86.L28                    * 792C4
+        GOTO    EXPM115.L22                      * 792C4
 
 * refs (2): 79306 7952C
 SUB_792C8:
-        GOSUB   SUB_7962B                        * 792C8
+        GOSUB   SpecA?~jump                      * 792C8
         GONC    SUB_792C8.L3                     * 792CC
         ?C#A    XS                               * 792CF
         GOYES   SUB_792C8.L1                     * 792D2
@@ -2029,203 +2111,209 @@ SUB_792C8.L1:
 SUB_792C8.loop2:
         RTNCC                                    * 792EC
 SUB_792C8.L3:
-        GOSBVL  SUB_2BD0E                        * 792EE
+        GOSBVL  SpecC?                           * 792EE
         RTNNC                                    * 792F5
 SUB_792C8.L4:
         ?C=0    B                                * 792F8
         GOYES   SUB_792C8.loop2                  * 792FB
         GOSUB   XYEX~jump_3                      * 792FD
         RTNSC                                    * 79301
-SUB_792C8.L5:
+
+* refs (3): 2B6BC 7836B 7DA8D
+* Y in A/B, X in C/D -> y^x
+Pow15:
         HST=0   3                                * 79303
         GOSUB   SUB_792C8                        * 79306
         RTNC                                     * 7930A
-SUB_792C8.loop6:
+Pow15.L1:
         ST=0    11                               * 7930D
         ST=0    8                                * 79310
         B=0     S                                * 79313
         D=0     S                                * 79316
-        GOSBVL  SUB_2BC62                        * 79319
-        GONC    SUB_792C8.L7                     * 79320
+        GOSBVL  SplitNormA                       * 79319
+        GONC    Pow15.L2                         * 79320
         ST=1    8                                * 79323
-SUB_792C8.L7:
-        GOSBVL  SUB_2BCC4                        * 79326
+Pow15.L2:
+        GOSBVL  SplitNormC                       * 79326
         GOSBVL  STCD2                            * 7932D
         ?A=0    S                                * 79334
-        GOYES   SUB_792C8.loop8                  * 79337
-        GOTO    SUB_792C8.L15                    * 79339
-SUB_792C8.loop8:
+        GOYES   Pow15.loop3                      * 79337
+        GOTO    Pow15.L10                        * 79339
+Pow15.loop3:
         ?B#0    W                                * 7933D
-        GOYES   SUB_792C8.L9                     * 79340
-        GOTO    SUB_792C8.L23                    * 79342
-SUB_792C8.L9:
+        GOYES   Pow15.L4                         * 79340
+        GOTO    Pow15.L18                        * 79342
+Pow15.L4:
         GOSUB   SUB_795D6                        * 79346
-        GONC    SUB_792C8.L10                    * 7934A
+        GONC    Pow15.L5                         * 7934A
         GOSUB   RCCD2~jump_4                     * 7934D
-        GOSBVL  SUB_2BD0E                        * 79351
-        GOC     SUB_792C8.L10                    * 79358
+        GOSBVL  SpecC?                           * 79351
+        GOC     Pow15.L5                         * 79358
         GOSUB   XYEX~jump_3                      * 7935B
         D=C     A                                * 7935F
         GOSBVL  CLRFRC                           * 79361
         C=D     A                                * 79368
         D=0     A                                * 7936A
         GOSUB   XYEX~jump_3                      * 7936C
-        GONC    SUB_792C8.L10                    * 79370
+        GONC    Pow15.L5                         * 79370
         GOTO    SUB_79226.L6                     * 79373
-SUB_792C8.L10:
+Pow15.L5:
         GOSUB   SUB_78DE9                        * 79377
         GOSUB   RCCD2~jump_4                     * 7937B
-        GOSBVL  SUB_2B915                        * 7937F
+        GOSBVL  MULTFchk                         * 7937F
         ?XM=0                                    * 79386
-        GOYES   SUB_792C8.L13                    * 79389
+        GOYES   Pow15.L8                         * 79389
         P=      0                                * 7938B
         C=0     A                                * 7938D
         LC(2)   #12                              * 7938F
         ?ST=1   8                                * 79393
-        GOYES   SUB_792C8.loop12                 * 79396
-SUB_792C8.loop11:
+        GOYES   Pow15.loop7                      * 79396
+Pow15.L6:
         LC(2)   #11                              * 79398
-        GOTO    SUB_792C8.L17                    * 7939C
-SUB_792C8.loop12:
+        GOTO    Pow15.L12                        * 7939C
+Pow15.loop7:
         A=0     W                                * 793A0
         B=0     W                                * 793A3
         P=      14                               * 793A6
         B=B+1   P                                * 793A8
         RTNSXM                                   * 793AB
-SUB_792C8.L13:
+Pow15.L8:
         ?D#0    S                                * 793AD
-        GOYES   SUB_792C8.L14                    * 793B0
+        GOYES   Pow15.L9                         * 793B0
         GOTO    SUB_78F86.L3                     * 793B2
-SUB_792C8.L14:
+Pow15.L9:
         A=A-1   A                                * 793B6
         C=D     W                                * 793B8
         BCEX    W                                * 793BB
-        GOTO    SUB_78F86.L7                     * 793BE
-SUB_792C8.L15:
+        GOTO    EXPM115.L1                       * 793BE
+Pow15.L10:
         GOSUB   EXAB2~jump_2                     * 793C2
         C=A     A                                * 793C6
         C=C+C   A                                * 793C8
-        GONC    SUB_792C8.L18                    * 793CA
-SUB_792C8.loop16:
+        GONC    Pow15.L13                        * 793CA
+Pow15.loop11:
         GOSUB   EXAB2~jump_2                     * 793CD
         ?B=0    W                                * 793D1
-        GOYES   SUB_792C8.L23                    * 793D4
+        GOYES   Pow15.L18                        * 793D4
         P=      0                                * 793D6
         LC(2)   #09                              * 793D8
-SUB_792C8.L17:
+Pow15.L12:
         GOLONG  SUB_78DE9.L2                     * 793DC
-SUB_792C8.L18:
-        GOSBVL  SUB_2BBFC                        * 793E2
+Pow15.L13:
+        GOSBVL  FracPosChk                       * 793E2
         ?P#     15                               * 793E9
-        GOYES   SUB_792C8.L19                    * 793EC
+        GOYES   Pow15.L14                        * 793EC
         ?C#0    A                                * 793EE
-        GOYES   SUB_792C8.L21                    * 793F1
-        GONC    SUB_792C8.L20                    * 793F3
-SUB_792C8.L19:
+        GOYES   Pow15.L16                        * 793F1
+        GONC    Pow15.L15                        * 793F3
+Pow15.L14:
         ?B#0    WP                               * 793F6
-        GOYES   SUB_792C8.loop16                 * 793F9
-SUB_792C8.L20:
+        GOYES   Pow15.loop11                     * 793F9
+Pow15.L15:
         P=P+1                                    * 793FB
         GOSUB   SUB_794FD                        * 793FD
-SUB_792C8.L21:
+Pow15.L16:
         GOSUB   EXAB2~jump_2                     * 79401
         A=0     S                                * 79405
-        GONC    SUB_792C8.L22                    * 79408
-        GOTO    SUB_792C8.loop8                  * 7940B
-SUB_792C8.L22:
-        GOSUB   SUB_792C8.loop8                  * 7940F
+        GONC    Pow15.L17                        * 79408
+        GOTO    Pow15.loop3                      * 7940B
+Pow15.L17:
+        GOSUB   Pow15.loop3                      * 7940F
         A=-A-1  S                                * 79413
         RTN                                      * 79416
-SUB_792C8.L23:
+Pow15.L18:
         GOSUB   RCCD2~jump_4                     * 79418
         P=      0                                * 7941C
         ?D#0    W                                * 7941E
-        GOYES   SUB_792C8.L24                    * 79421
+        GOYES   Pow15.L19                        * 79421
         C=0     A                                * 79423
         LC(2)   #06                              * 79425
-        GOTO    SUB_792C8.loop12                 * 79429
-SUB_792C8.L24:
+        GOTO    Pow15.loop7                      * 79429
+Pow15.L19:
         ?C=0    S                                * 7942D
-        GOYES   SUB_792C8.L25                    * 79430
+        GOYES   Pow15.L20                        * 79430
         LC(2)   #05                              * 79432
-        GOTO    SUB_792C8.L34                    * 79436
-SUB_792C8.L25:
-        GOTO    SUB_78F86.L28                    * 7943A
-SUB_792C8.L26:
+        GOTO    XRoot15.L8                       * 79436
+Pow15.L20:
+        GOTO    EXPM115.L22                      * 7943A
+
+* refs (1): 2B6CE
+* Y in A/B, X in C/D -> the x-th root of y (1/x with the sign kept for odd roots)
+XRoot15:
         HST=0   3                                * 7943E
         P=      14                               * 79441
         ?D#0    P                                * 79443
-        GOYES   SUB_792C8.L35                    * 79446
+        GOYES   XRoot15.L9                       * 79446
         ST=0    6                                * 79448
         ?C=0    S                                * 7944B
-        GOYES   SUB_792C8.L27                    * 7944E
+        GOYES   XRoot15.L1                       * 7944E
         ST=1    6                                * 79450
-SUB_792C8.L27:
+XRoot15.L1:
         ?B#0    P                                * 79453
-        GOYES   SUB_792C8.L28                    * 79456
+        GOYES   XRoot15.L2                       * 79456
         ?ST=0   6                                * 79458
-        GOYES   SUB_792C8.L31                    * 7945B
+        GOYES   XRoot15.L5                       * 7945B
         P=      0                                * 7945D
         LC(2)   #05                              * 7945F
-        GOTO    SUB_792C8.L33                    * 79463
-SUB_792C8.L28:
+        GOTO    XRoot15.L7                       * 79463
+XRoot15.L2:
         ?A#0    A                                * 79467
-        GOYES   SUB_792C8.L29                    * 7946A
+        GOYES   XRoot15.L3                       * 7946A
         GOSUB   SUB_795D6                        * 7946C
-        GONC    SUB_792C8.L29                    * 79470
-        GOTO    SUB_792C8.loop11                 * 79473
-SUB_792C8.L29:
+        GONC    XRoot15.L3                       * 79470
+        GOTO    Pow15.L6                         * 79473
+XRoot15.L3:
         A=A+A   A                                * 79477
-        GOC     SUB_792C8.L30                    * 79479
+        GOC     XRoot15.L4                       * 79479
         ?ST=0   6                                * 7947C
-        GOYES   SUB_792C8.L32                    * 7947F
-        GONC    SUB_792C8.L31                    * 79481
-SUB_792C8.L30:
+        GOYES   XRoot15.L6                       * 7947F
+        GONC    XRoot15.L5                       * 79481
+XRoot15.L4:
         ?ST=1   6                                * 79484
-        GOYES   SUB_792C8.L32                    * 79487
-SUB_792C8.L31:
+        GOYES   XRoot15.L6                       * 79487
+XRoot15.L5:
         A=0     W                                * 79489
         B=0     W                                * 7948C
         RTNCC                                    * 7948F
-SUB_792C8.L32:
+XRoot15.L6:
         P=      0                                * 79491
         LC(2)   #17                              * 79493
-SUB_792C8.L33:
+XRoot15.L7:
         A=0     S                                * 79497
-SUB_792C8.L34:
-        GOVLNG  SUB_2B97A.L3                     * 7949A
-SUB_792C8.L35:
+XRoot15.L8:
+        GOVLNG  DIVF1.L3                         * 7949A
+XRoot15.L9:
         GOSUB   STAB0~jump_4                     * 794A1
         GOSUB   XYEX~jump_3                      * 794A5
         ?C#0    S                                * 794A9
-        GOYES   SUB_792C8.L37                    * 794AC
-SUB_792C8.loop36:
+        GOYES   XRoot15.L11                      * 794AC
+XRoot15.loop10:
         GOSBVL  1/X15                            * 794AE
         GOSUB   RCCD0~jump_4                     * 794B5
         GOSUB   XYEX~jump_3                      * 794B9
-        GOTO    SUB_792C8.loop6                  * 794BD
-SUB_792C8.L37:
-        GOSBVL  SUB_2BBFC                        * 794C1
+        GOTO    Pow15.L1                         * 794BD
+XRoot15.L11:
+        GOSBVL  FracPosChk                       * 794C1
         ?P#     15                               * 794C8
-        GOYES   SUB_792C8.L38                    * 794CB
+        GOYES   XRoot15.L12                      * 794CB
         ?C#0    A                                * 794CD
-        GOYES   SUB_792C8.loop36                 * 794D0
-        GONC    SUB_792C8.L39                    * 794D2
-SUB_792C8.L38:
+        GOYES   XRoot15.loop10                   * 794D0
+        GONC    XRoot15.L13                      * 794D2
+XRoot15.L12:
         ?B#0    WP                               * 794D5
-        GOYES   SUB_792C8.loop36                 * 794D8
-SUB_792C8.L39:
+        GOYES   XRoot15.loop10                   * 794D8
+XRoot15.L13:
         P=P+1                                    * 794DA
         GOSUB   SUB_794FD                        * 794DC
-        GOC     SUB_792C8.loop36                 * 794E0
+        GOC     XRoot15.loop10                   * 794E0
         C=R0                                     * 794E3
         C=0     S                                * 794E6
         R0=C                                     * 794E9
-        GOSUB   SUB_792C8.loop36                 * 794EC
-        GOC     SUB_792C8.L40                    * 794F0
+        GOSUB   XRoot15.loop10                   * 794EC
+        GOC     XRoot15.L14                      * 794F0
         A=-A-1  S                                * 794F3
         RTNCC                                    * 794F6
-SUB_792C8.L40:
+XRoot15.L14:
         A=-A-1  S                                * 794F8
         RTNSC                                    * 794FB
 
@@ -2251,28 +2339,31 @@ SUB_79510:
         RTNYES                                   * 79523
         C=RSTK                                   * 79525
         RTNCC                                    * 79527
-SUB_79510.L1:
+
+* refs (1): 2B6D7
+* X, Y -> the angle of the point, with the quadrant, for %ANGLE
+Angle15:
         HST=0   3                                * 79529
         GOSUB   SUB_792C8                        * 7952C
         RTNC                                     * 79530
         R0=A                                     * 79533
         R1=C                                     * 79536
-        GOSUB   SUB_7962B                        * 79539
+        GOSUB   SpecA?~jump                      * 79539
         GOSUB   XYEX~jump_3                      * 7953D
-        GONC    SUB_79510.L2                     * 79541
+        GONC    Angle15.L1                       * 79541
         ?C#A    XS                               * 79544
-        GOYES   SUB_79510.L3                     * 79547
-        GOTO    SUB_79639.L6                     * 79549
-SUB_79510.L2:
-        GOSUB   SUB_7962B                        * 7954D
-        GOC     SUB_79510.L3                     * 79551
+        GOYES   Angle15.L2                       * 79547
+        GOTO    TAN15.L2                         * 79549
+Angle15.L1:
+        GOSUB   SpecA?~jump                      * 7954D
+        GOC     Angle15.L2                       * 79551
         ?D#0    W                                * 79554
-        GOYES   SUB_79510.L3                     * 79557
+        GOYES   Angle15.L2                       * 79557
         ?B#0    W                                * 79559
-        GOYES   SUB_79510.L3                     * 7955C
+        GOYES   Angle15.L2                       * 7955C
         RTN                                      * 7955E
-SUB_79510.L3:
-        GOSBVL  SUB_2B96E                        * 79560
+Angle15.L2:
+        GOSBVL  DIVFchk                          * 79560
         GOSUB   SUB_795B9                        * 79567
         GOSUB   SUB_79B1C                        * 7956B
         GOSUB   SUB_795C6                        * 7956F
@@ -2284,25 +2375,25 @@ SUB_79510.L3:
         C=0     WP                               * 79580
         D=C     W                                * 79583
         ?ST=1   4                                * 79586
-        GOYES   SUB_79510.L4                     * 79589
+        GOYES   Angle15.L3                       * 79589
         ?ST=1   9                                * 7958B
-        GOYES   SUB_79510.L6                     * 7958E
+        GOYES   Angle15.L5                       * 7958E
         P=      13                               * 79590
         LC(2)   #18                              * 79592
-        GOTO    SUB_79510.L5                     * 79596
-SUB_79510.L4:
+        GOTO    Angle15.L4                       * 79596
+Angle15.L3:
         P=      14                               * 7959A
         LC(1)   #2                               * 7959C
-SUB_79510.L5:
+Angle15.L4:
         D=D+1   A                                * 7959F
         D=D+1   A                                * 795A1
         DCEX    W                                * 795A3
-        GONC    SUB_79510.L7                     * 795A6
-SUB_79510.L6:
+        GONC    Angle15.L6                       * 795A6
+Angle15.L5:
         GOSUB   SUB_79AB5                        * 795A9
         D=D+D   W                                * 795AD
         D=D-1   A                                * 795B0
-SUB_79510.L7:
+Angle15.L6:
         GOVLNG  ADDF                             * 795B2
 
 * refs (1): 79567
@@ -2373,8 +2464,8 @@ XYEX~jump_3:
         GOVLNG  XYEX                             * 79624
 
 * refs (4): 78A3A 792C8 79539 7954D
-SUB_7962B:
-        GOVLNG  SUB_2BD02                        * 7962B
+SpecA?~jump:
+        GOVLNG  SpecA?                           * 7962B
 
 * refs (2): 78C1A 78C80
 TST15~jump_3:
@@ -2396,216 +2487,225 @@ SUB_79639:
         BSR     W                                * 79656
         A=A+1   A                                * 79659
         RTNSC                                    * 7965B
-SUB_79639.L1:
+
+* refs (1): 2B6E0
+* A/B -> sin x, radians
+SIN15:
         ST=1    8                                * 7965D
-        GOTO    SUB_79639.L3                     * 79660
-SUB_79639.L2:
+        GOTO    COS15.L1                         * 79660
+
+* refs (1): 2B6E9
+* A/B -> cos x
+COS15:
         ST=0    8                                * 79664
-SUB_79639.L3:
+COS15.L1:
         ST=1    6                                * 79667
-        GOTO    SUB_79639.L5                     * 7966A
-SUB_79639.L4:
+        GOTO    TAN15.L1                         * 7966A
+
+* refs (1): 2B6F2
+* A/B -> tan x
+TAN15:
         ST=0    8                                * 7966E
         ST=0    6                                * 79671
-SUB_79639.L5:
+TAN15.L1:
         HST=0   3                                * 79674
-        GOTO    SUB_79639.L7                     * 79677
-SUB_79639.L6:
+        GOTO    TAN15.L3                         * 79677
+TAN15.L2:
         P=      0                                * 7967B
         LC(2)   #0B                              * 7967D
-        GOTO    SUB_792C8.L17                    * 79681
-SUB_79639.L7:
+        GOTO    Pow15.L12                        * 79681
+TAN15.L3:
         B=0     S                                * 79685
         ?ST=0   4                                * 79688
-        GOYES   SUB_79639.L8                     * 7968B
+        GOYES   TAN15.L4                         * 7968B
         GOSUB   SUB_79639                        * 7968D
         ST=0    9                                * 79691
-SUB_79639.L8:
+TAN15.L4:
         C=0     W                                * 79694
         R0=C                                     * 79697
         ST=0    10                               * 7969A
         ST=0    11                               * 7969D
         ?ST=1   8                                * 796A0
-        GOYES   SUB_79639.L9                     * 796A3
+        GOYES   TAN15.L5                         * 796A3
         C=C+1   S                                * 796A5
-SUB_79639.L9:
+TAN15.L5:
         R1=C                                     * 796A8
         ST=0    7                                * 796AB
         ?B=0    W                                * 796AE
-        GOYES   SUB_79639.L10                    * 796B1
+        GOYES   TAN15.L6                         * 796B1
         ST=1    7                                * 796B3
-SUB_79639.L10:
+TAN15.L6:
         ?A=0    S                                * 796B6
-        GOYES   SUB_79639.L11                    * 796B9
+        GOYES   TAN15.L7                         * 796B9
         ST=1    11                               * 796BB
         ?ST=0   8                                * 796BE
-        GOYES   SUB_79639.L11                    * 796C1
+        GOYES   TAN15.L7                         * 796C1
         ST=1    10                               * 796C3
-SUB_79639.L11:
+TAN15.L7:
         A=0     S                                * 796C6
         P=      5                                * 796C9
         A=0     P                                * 796CB
         C=A     A                                * 796CE
         C=C+C   A                                * 796D0
-        GONC    SUB_79639.L12                    * 796D2
+        GONC    TAN15.L8                         * 796D2
         A=A-1   P                                * 796D5
-SUB_79639.L12:
+TAN15.L8:
         C=A     W                                * 796D8
         A=B     W                                * 796DB
         ?ST=1   9                                * 796DE
-        GOYES   SUB_79639.L13                    * 796E1
+        GOYES   TAN15.L9                         * 796E1
         C=C-1   WP                               * 796E3
         ?C#0    P                                * 796E6
-        GOYES   SUB_79639.L18                    * 796E9
+        GOYES   TAN15.L14                        * 796E9
         C=C-1   WP                               * 796EB
-        GONC    SUB_79639.L13                    * 796EE
+        GONC    TAN15.L9                         * 796EE
         C=C+1   WP                               * 796F1
         CR0EX                                    * 796F4
         GOSUB   SUB_79A93                        * 796F7
         CR0EX                                    * 796FB
-SUB_79639.L13:
+TAN15.L9:
         ?C#0    P                                * 796FE
-        GOYES   SUB_79639.L18                    * 79701
+        GOYES   TAN15.L14                        * 79701
         GOSUB   SUB_79A3E                        * 79703
         GOSUB   SUB_79A7A                        * 79707
         GOSUB   SUB_79A7A                        * 7970B
         GOSUB   SUB_79A7A                        * 7970F
         GOSUB   SUB_79A9E                        * 79713
-SUB_79639.loop14:
+TAN15.loop10:
         CR0EX                                    * 79717
-SUB_79639.loop15:
+TAN15.loop11:
         GOSUB   SUB_79A1F                        * 7971A
-        GONC    SUB_79639.loop15                 * 7971E
+        GONC    TAN15.loop11                     * 7971E
         GOSUB   SUB_79A88                        * 79721
         CR0EX                                    * 79725
         C=C-1   WP                               * 79728
-        GONC    SUB_79639.loop14                 * 7972B
+        GONC    TAN15.loop10                     * 7972B
         C=0     WP                               * 7972E
         CR0EX                                    * 79731
         GOSUB   SUB_79A3E                        * 79734
         GOSUB   SUB_79A7A                        * 79738
         ?ST=0   9                                * 7973C
-        GOYES   SUB_79639.loop16                 * 7973F
+        GOYES   TAN15.loop12                     * 7973F
         GOSUB   SUB_79A9E                        * 79741
         GOSUB   SUB_79A93                        * 79745
-SUB_79639.loop16:
+TAN15.loop12:
         GOSUB   SUB_79A1F                        * 79749
-        GOC     SUB_79639.L17                    * 7974D
-        GOSUB   SUB_79AE6                        * 79750
+        GOC     TAN15.L13                        * 7974D
+        GOSUB   ST11Flip                         * 79750
         GOSUB   SUB_79AC8                        * 79754
-        GOC     SUB_79639.loop16                 * 79758
+        GOC     TAN15.loop12                     * 79758
         GOSUB   SUB_79AD7                        * 7975B
-        GOTO    SUB_79639.loop16                 * 7975F
-SUB_79639.L17:
+        GOTO    TAN15.loop12                     * 7975F
+TAN15.L13:
         CR0EX                                    * 79763
-SUB_79639.L18:
+TAN15.L14:
         ?ST=0   9                                * 79766
-        GOYES   SUB_79639.L20                    * 79769
+        GOYES   TAN15.L16                        * 79769
         ?C#0    WP                               * 7976B
-        GOYES   SUB_79639.L19                    * 7976E
+        GOYES   TAN15.L15                        * 7976E
         CR0EX                                    * 79770
         GOSUB   SUB_79A88                        * 79773
         CR0EX                                    * 79777
-        GONC    SUB_79639.L20                    * 7977A
-SUB_79639.L19:
+        GONC    TAN15.L16                        * 7977A
+TAN15.L15:
         C=C+1   WP                               * 7977D
-SUB_79639.L20:
+TAN15.L16:
         ?C#0    P                                * 79780
-        GOYES   SUB_79639.L23                    * 79783
+        GOYES   TAN15.L19                        * 79783
         CR0EX                                    * 79785
         GOSUB   SUB_79A3E                        * 79788
         GOSUB   SUB_79A1F                        * 7978C
-        GOC     SUB_79639.L21                    * 79790
+        GOC     TAN15.L17                        * 79790
         ABEX    W                                * 79793
         DCEX    W                                * 79796
         GOSUB   SUB_79A1F                        * 79799
         GOSUB   SUB_79AC8                        * 7979D
-SUB_79639.L21:
+TAN15.L17:
         P=      14                               * 797A1
         CR0EX                                    * 797A3
         B=C     W                                * 797A6
         CR0EX                                    * 797A9
         ?A#0    W                                * 797AC
-        GOYES   SUB_79639.loop22                 * 797AF
+        GOYES   TAN15.loop18                     * 797AF
         ?C=0    W                                * 797B1
-        GOYES   SUB_79639.L24                    * 797B4
-SUB_79639.loop22:
+        GOYES   TAN15.L20                        * 797B4
+TAN15.loop18:
         ?A#0    P                                * 797B6
-        GOYES   SUB_79639.L24                    * 797B9
+        GOYES   TAN15.L20                        * 797B9
         GOSUB   SUB_79A88                        * 797BB
         B=B-1   A                                * 797BF
-        GOTO    SUB_79639.loop22                 * 797C1
-SUB_79639.L23:
+        GOTO    TAN15.loop18                     * 797C1
+TAN15.L19:
         B=C     W                                * 797C5
-SUB_79639.L24:
+TAN15.L20:
         ABEX    W                                * 797C8
         ?ST=1   9                                * 797CB
-        GOYES   SUB_79639.L27                    * 797CE
+        GOYES   TAN15.L23                        * 797CE
         ?B=0    W                                * 797D0
-        GOYES   SUB_79639.L26                    * 797D3
+        GOYES   TAN15.L22                        * 797D3
         ?A#0    A                                * 797D5
-        GOYES   SUB_79639.L27                    * 797D8
+        GOYES   TAN15.L23                        * 797D8
         C=0     W                                * 797DA
         P=      13                               * 797DD
         LC(2)   #45                              * 797DF
         ?ST=0   6                                * 797E3
-        GOYES   SUB_79639.L25                    * 797E6
+        GOYES   TAN15.L21                        * 797E6
         ?ST=0   8                                * 797E8
-        GOYES   SUB_79639.L27                    * 797EB
+        GOYES   TAN15.L23                        * 797EB
         LC(2)   #30                              * 797ED
-SUB_79639.L25:
+TAN15.L21:
         ?B#C    W                                * 797F1
-        GOYES   SUB_79639.L27                    * 797F4
-SUB_79639.L26:
+        GOYES   TAN15.L23                        * 797F4
+TAN15.L22:
         ST=0    7                                * 797F6
-SUB_79639.L27:
+TAN15.L23:
         A=A-1   A                                * 797F9
         ?ST=1   9                                * 797FB
-        GOYES   SUB_79639.L28                    * 797FE
+        GOYES   TAN15.L24                        * 797FE
         P=      7                                * 79800
         GOSUB   SUB_799E0                        * 79802
         D=C     W                                * 79806
         C=0     A                                * 79809
         GOSBVL  MULTF                            * 7980B
-SUB_79639.L28:
+TAN15.L24:
         C=A     A                                * 79812
         C=C+1   A                                * 79814
-        GONC    SUB_79639.L29                    * 79816
+        GONC    TAN15.L25                        * 79816
         BSL     W                                * 79819
         P=      14                               * 7981C
-        GOC     SUB_79639.L32                    * 7981E
-SUB_79639.L29:
+        GOC     TAN15.L28                        * 7981E
+TAN15.L25:
         C=0     A                                * 79821
         P=      0                                * 79823
         LC(1)   #8                               * 79825
         C=C+A   A                                * 79828
-        GOC     SUB_79639.L31                    * 7982A
+        GOC     TAN15.L27                        * 7982A
         ?ST=0   8                                * 7982D
-        GOYES   SUB_79639.L30                    * 79830
+        GOYES   TAN15.L26                        * 79830
         GOSBVL  1/X15                            * 79832
-SUB_79639.L30:
-        GOTO    SUB_79639.L41                    * 79839
-SUB_79639.L31:
+TAN15.L26:
+        GOTO    TAN15.L37                        * 79839
+TAN15.L27:
         C=A     B                                * 7983D
         P=      5                                * 79840
         C+P+1                                    * 79842
         P=C     0                                * 79845
-SUB_79639.L32:
+TAN15.L28:
         A=0     W                                * 79849
-SUB_79639.loop33:
+TAN15.loop29:
         GOSUB   SUB_799E0                        * 7984C
-        GONC    SUB_79639.L35                    * 79850
-SUB_79639.loop34:
+        GONC    TAN15.L31                        * 79850
+TAN15.loop30:
         A=A+1   S                                * 79853
-SUB_79639.L35:
+TAN15.L31:
         B=B-C   W                                * 79856
-        GONC    SUB_79639.loop34                 * 79859
+        GONC    TAN15.loop30                     * 79859
         B=B+C   W                                * 7985C
         P=P-1                                    * 7985F
         ASR     W                                * 79861
         BSL     W                                * 79864
         ?P#     7                                * 79867
-        GOYES   SUB_79639.loop33                 * 7986A
+        GOYES   TAN15.loop29                     * 7986A
         BSR     W                                * 7986C
         BSR     W                                * 7986F
         C=A     W                                * 79872
@@ -2616,80 +2716,80 @@ SUB_79639.L35:
         P=      14                               * 79881
         D=D+1   P                                * 79883
         C=B     W                                * 79886
-        GONC    SUB_79639.loop38                 * 79889
-SUB_79639.loop36:
+        GONC    TAN15.loop34                     * 79889
+TAN15.loop32:
         CSR     WP                               * 7988C
         CSR     WP                               * 7988F
-SUB_79639.loop37:
+TAN15.loop33:
         C=C-1   S                                * 79892
-        GONC    SUB_79639.loop36                 * 79895
+        GONC    TAN15.loop32                     * 79895
         C=0     S                                * 79898
         DCEX    W                                * 7989B
         D=C-D   W                                * 7989E
         C=C+B   W                                * 798A1
-SUB_79639.loop38:
+TAN15.loop34:
         B=C     W                                * 798A4
         C=A     S                                * 798A7
         A=A-1   P                                * 798AA
-        GONC    SUB_79639.loop37                 * 798AD
+        GONC    TAN15.loop33                     * 798AD
         ASL     M                                * 798B0
         ?A=0    M                                * 798B3
-        GOYES   SUB_79639.L39                    * 798B6
+        GOYES   TAN15.L35                        * 798B6
         A=A-1   S                                * 798B8
         A=A-1   B                                * 798BB
         C=0     S                                * 798BE
         CSR     W                                * 798C1
-        GOTO    SUB_79639.loop38                 * 798C4
-SUB_79639.L39:
+        GOTO    TAN15.loop34                     * 798C4
+TAN15.L35:
         A=0     S                                * 798C8
         C=0     S                                * 798CB
         D=D-1   W                                * 798CE
         A=-A    A                                * 798D1
         B=0     A                                * 798D3
         ?ST=0   8                                * 798D5
-        GOYES   SUB_79639.L40                    * 798D8
+        GOYES   TAN15.L36                        * 798D8
         A=-A    A                                * 798DA
         DCEX    W                                * 798DC
-SUB_79639.L40:
-        GOSBVL  SUB_2B97A                        * 798DF
-SUB_79639.L41:
+TAN15.L36:
+        GOSBVL  DIVF1                            * 798DF
+TAN15.L37:
         ?ST=1   6                                * 798E6
-        GOYES   SUB_79639.L42                    * 798E9
+        GOYES   TAN15.L38                        * 798E9
         ?XM=0                                    * 798EB
-        GOYES   SUB_79639.L44                    * 798EE
+        GOYES   TAN15.L40                        * 798EE
         A=-A-1  S                                * 798F0
         P=      0                                * 798F3
         LC(2)   #04                              * 798F5
         P=      3                                * 798F9
-        GONC    SUB_79639.L45                    * 798FB
-SUB_79639.L42:
+        GONC    TAN15.L41                        * 798FB
+TAN15.L38:
         C=R1                                     * 798FE
         ?C=0    S                                * 79901
-        GOYES   SUB_79639.L43                    * 79904
+        GOYES   TAN15.L39                        * 79904
         ?XM=0                                    * 79906
-        GOYES   SUB_79639.L43                    * 79909
+        GOYES   TAN15.L39                        * 79909
         GOSUB   SUB_79AD7                        * 7990B
-SUB_79639.L43:
+TAN15.L39:
         GOSUB   STAB0~jump_4                     * 7990F
         GOSUB   RCCD0~jump_4                     * 79913
-        GOSBVL  SUB_2B915                        * 79917
+        GOSBVL  MULTFchk                         * 79917
         GOSBVL  SUB_78A28                        * 7991E
-        GOSBVL  SUB_2B9F3                        * 79925
+        GOSBVL  SQRFchk                          * 79925
         GOSBVL  1/X15                            * 7992C
-SUB_79639.L44:
+TAN15.L40:
         GOSUB   SUB_79D58                        * 79933
         ?ST=1   6                                * 79937
-        GOYES   SUB_79639.L47                    * 7993A
-SUB_79639.L45:
+        GOYES   TAN15.L43                        * 7993A
+TAN15.L41:
         ?ST=0   11                               * 7993C
         RTNYES                                   * 7993F
-SUB_79639.loop46:
+TAN15.loop42:
         A=-A-1  S                                * 79941
         RTN                                      * 79944
-SUB_79639.L47:
+TAN15.L43:
         ?ST=0   10                               * 79946
         RTNYES                                   * 79949
-        GONC    SUB_79639.loop46                 * 7994B
+        GONC    TAN15.loop42                     * 7994B
 
 * atan(10^-k) for k = 1..7, then pi/180 and pi/4: BCD mantissas (read by SUB_799F8.L1)
         CON(16) #0996686524911620                * 7994E  entry 0
@@ -2840,26 +2940,36 @@ SUB_79AD7.L1:
         RTNSC                                    * 79AE4
 
 * refs (1): 79750
-SUB_79AE6:
+* Toggle ST 11; carry set if it was set
+ST11Flip:
         ?ST=1   11                               * 79AE6
-        GOYES   SUB_79AE6.L1                     * 79AE9
+        GOYES   ST11Flip~1                       * 79AE9
         ST=1    11                               * 79AEB
         RTNCC                                    * 79AEE
-SUB_79AE6.L1:
+ST11Flip~1:
         ST=0    11                               * 79AF0
         RTNSC                                    * 79AF3
-SUB_79AE6.L2:
+
+* refs (3): 2B6FB 7813D 782E0
+* A/B -> atan x
+ATAN15:
         ST=0    8                                * 79AF5
         ST=0    6                                * 79AF8
-        GOTO    SUB_79AE6.L6                     * 79AFB
-SUB_79AE6.L3:
+        GOTO    ACOS15.L2                        * 79AFB
+
+* refs (1): 2B704
+* A/B -> asin x
+ASIN15:
         ST=0    8                                * 79AFF
-        GOTO    SUB_79AE6.L5                     * 79B02
-SUB_79AE6.L4:
+        GOTO    ACOS15.L1                        * 79B02
+
+* refs (1): 2B70D
+* A/B -> acos x
+ACOS15:
         ST=1    8                                * 79B06
-SUB_79AE6.L5:
+ACOS15.L1:
         ST=1    6                                * 79B09
-SUB_79AE6.L6:
+ACOS15.L2:
         HST=0   3                                * 79B0C
         ST=0    7                                * 79B0F
         ST=0    10                               * 79B12
@@ -2879,7 +2989,7 @@ SUB_79B1C:
         ?ST=0   6                                * 79B35
         GOYES   SUB_79B1C.L2                     * 79B38
 SUB_79B1C.loop1:
-        GOTO    SUB_79639.L6                     * 79B3A
+        GOTO    TAN15.L2                         * 79B3A
 SUB_79B1C.L2:
         GOSUB   SUB_79AB2                        * 79B3E
         GOSUB   XYEX~jump_3                      * 79B42
@@ -2955,7 +3065,7 @@ SUB_79B1C.L11:
         A=0     S                                * 79BF9
         GOSBVL  SQRF                             * 79BFC
         GOSUB   RCCD2~jump_4                     * 79C03
-        GOSBVL  SUB_2B797                        * 79C07
+        GOSBVL  Y/X                              * 79C07
         A=0     S                                * 79C0E
         C=A     A                                * 79C11
         C=C+C   A                                * 79C13
@@ -3030,7 +3140,7 @@ SUB_79B1C.loop25:
         DCEX    W                                * 79CB8
         BCEX    W                                * 79CBB
         A=B     W                                * 79CBE
-        GOSBVL  SUB_2B97A.L6                     * 79CC1
+        GOSBVL  DIVF1.L6                         * 79CC1
         P=      8                                * 79CC8
 SUB_79B1C.loop26:
         GOSUB   SUB_799E0                        * 79CCA
@@ -3081,7 +3191,7 @@ SUB_79B1C.L35:
         C=C-1   A                                * 79D3C
         C=C-1   A                                * 79D3E
         BCEX    W                                * 79D40
-        GOSBVL  SUB_2B97A.L4                     * 79D43
+        GOSBVL  DIVF1.L4                         * 79D43
 SUB_79B1C.L36:
         GOSUB   SUB_79D58                        * 79D4A
         ?ST=0   10                               * 79D4E
@@ -3130,10 +3240,13 @@ STAB0~jump_5:
 * refs (2): 79DBC 79E06
 STAB2~jump_5:
         GOVLNG  STAB2                            * 79DA2
-STAB2~jump_5.L1:
+
+* refs (2): 2B731 79DE2
+* A/B = x -> A/B = cosh x, register 0 (RCAB0) = sinh x
+SINHCOSH15:
         R4=A                                     * 79DA9
         A=0     S                                * 79DAC
-        GOSUBL  SUB_78F86.L6                     * 79DAF
+        GOSUBL  EXPM115                          * 79DAF
         GOSBVL  1/X15                            * 79DB5
         GOSUB   STAB2~jump_5                     * 79DBC
         GOSUB   RADD1~jump_2                     * 79DC0
@@ -3147,14 +3260,20 @@ STAB2~jump_5.L1:
 * refs (2): 79E60 79F8C
 RADDF~jump_4:
         GOVLNG  RADDF                            * 79DDB
-RADDF~jump_4.L1:
-        GOSUB   STAB2~jump_5.L1                  * 79DE2
+
+* refs (1): 2B73A
+* A/B -> tanh x
+TANH15:
+        GOSUB   SINHCOSH15                       * 79DE2
         GOSUB   RCCD0~jump_5                     * 79DE6
 
 * refs (2): 79E1D 79E97
-SUB_79DEA:
-        GOVLNG  SUB_2B797                        * 79DEA
-SUB_79DEA.L1:
+Y/X~jump:
+        GOVLNG  Y/X                              * 79DEA
+
+* refs (1): 2B743
+* A/B -> asinh x
+ASINH15:
         HST=0   3                                * 79DF1
         R4=A                                     * 79DF4
         A=0     S                                * 79DF7
@@ -3166,20 +3285,23 @@ SUB_79DEA.L1:
         GOSBVL  SQRF                             * 79E0E
         GOSUB   RADD1~jump_2                     * 79E15
         GOSUB   RCCD2~jump_5                     * 79E19
-        GOSUB   SUB_79DEA                        * 79E1D
+        GOSUB   Y/X~jump                         * 79E1D
         GOSUB   SUB_79E5C                        * 79E21
         C=R4                                     * 79E25
         A=C     S                                * 79E28
         RTN                                      * 79E2B
-SUB_79DEA.L2:
+
+* refs (1): 2B74C
+* A/B -> acosh x
+ACOSH15:
         HST=0   3                                * 79E2D
         GOSUB   STAB0~jump_5                     * 79E30
         GOSUB   RSUB1~jump                       * 79E34
         ?B=0    M                                * 79E38
-        GOYES   SUB_79DEA.L3                     * 79E3B
+        GOYES   ACOSH15.L1                       * 79E3B
         ?A#0    S                                * 79E3D
-        GOYES   SUB_79E60.L2                     * 79E40
-SUB_79DEA.L3:
+        GOYES   ATANH15.L1                       * 79E40
+ACOSH15.L1:
         GOSBVL  EXAB0                            * 79E42
         GOSUB   RADD1~jump_2                     * 79E49
         GOSUB   RCCD0~jump_5                     * 79E4D
@@ -3193,8 +3315,11 @@ SUB_79E5C:
 * refs (1): 79EA4
 SUB_79E60:
         GOSUB   RADDF~jump_4                     * 79E60
-        GOLONG  SUB_78D96.L4                     * 79E64
-SUB_79E60.L1:
+        GOLONG  LNP115                           * 79E64
+
+* refs (1): 2B755
+* A/B -> atanh x
+ATANH15:
         HST=0   3                                * 79E6A
         R4=A                                     * 79E6D
         A=0     S                                * 79E70
@@ -3202,19 +3327,19 @@ SUB_79E60.L1:
         A=-A-1  S                                * 79E77
         GOSUB   RADD1~jump_2                     * 79E7A
         ?B=0    M                                * 79E7E
-        GOYES   SUB_79E60.L3                     * 79E81
+        GOYES   ATANH15.L2                       * 79E81
         ?A=0    S                                * 79E83
-        GOYES   SUB_79E60.L4                     * 79E86
-SUB_79E60.L2:
+        GOYES   ATANH15.L3                       * 79E86
+ATANH15.L1:
         P=      4                                * 79E88
         RTNSXM                                   * 79E8A
-SUB_79E60.L3:
+ATANH15.L2:
         A=R4                                     * 79E8C
         P=      3                                * 79E8F
         RTNSXM                                   * 79E91
-SUB_79E60.L4:
+ATANH15.L3:
         GOSUB   RCCD0~jump_5                     * 79E93
-        GOSUB   SUB_79DEA                        * 79E97
+        GOSUB   Y/X~jump                         * 79E97
         C=B     W                                * 79E9B
         D=C     W                                * 79E9E
         C=A     W                                * 79EA1
@@ -3249,7 +3374,7 @@ SUB_79EE1:
         RTNYES                                   * 79EE9
         A=A+1   A                                * 79EEB
         A=A+1   A                                * 79EED
-        GOSBVL  SUB_2BBFC                        * 79EEF
+        GOSBVL  FracPosChk                       * 79EEF
         ?P=     15                               * 79EF6
         GOYES   SUB_79EE1.L3                     * 79EF9
         P=P+1                                    * 79EFB
@@ -3280,7 +3405,7 @@ SUB_79F23:
 
 * refs (1): 79EDD
 SUB_79F34:
-        GOSUB   SUB_79F51                        * 79F34
+        GOSUB   HMS>H15                          * 79F34
 
 * refs (1): 35C04
 SUB_79F38:
@@ -3294,7 +3419,8 @@ SUB_79F38:
         GOVLNG  DIVF                             * 79F4A
 
 * refs (2): 2B779 79F34
-SUB_79F51:
+* A/B = H.MMSS -> decimal hours
+HMS>H15:
         HST=0   3                                * 79F51
         GOSUB   SUB_79F58                        * 79F54
 
@@ -3309,7 +3435,7 @@ SUB_79F58:
         C=C+1   A                                * 79F6B
         GOSUB   MULTF~jump_4                     * 79F6D
         GOSBVL  EXAB0                            * 79F71
-        GOSBVL  SUB_78A3A                        * 79F78
+        GOSBVL  FP15                             * 79F78
         ?B=0    M                                * 79F7F
         GOYES   SUB_79F58.L1                     * 79F82
         A=A+1   A                                * 79F84
@@ -3317,7 +3443,10 @@ SUB_79F58:
 SUB_79F58.L1:
         GOSUB   RCCD0~jump_5                     * 79F88
         GOTO    RADDF~jump_4                     * 79F8C
-SUB_79F58.L2:
+
+* refs (1): 2B75E
+* A/B -> ceiling
+CEIL15:
         HST=0   3                                * 79F90
         GOSUB   CLRFRC~jump_2                    * 79F93
         RTNC                                     * 79F97
@@ -3327,7 +3456,10 @@ SUB_79F58.L2:
 * refs (5): 79DC0 79E0A 79E15 79E49 79E7A
 RADD1~jump_2:
         GOVLNG  RADD1                            * 79F9F
-RADD1~jump_2.L1:
+
+* refs (1): 2B767
+* A/B -> floor
+FLOOR15:
         HST=0   3                                * 79FA6
         GOSUB   CLRFRC~jump_2                    * 79FA9
         RTNC                                     * 79FAD
@@ -3367,7 +3499,7 @@ SUB_79FD2.L2:
         C=R0                                     * 7A015
         RSTK=C                                   * 7A018
         R4=C.F  S                                * 7A01A
-        GOSBVL  SUB_78DE9.L3                     * 7A020
+        GOSBVL  LN15                             * 7A020
         C=R4                                     * 7A027
         C=RSTK                                   * 7A02A
         R0=C                                     * 7A02C
@@ -3390,24 +3522,27 @@ SUB_79FD2.L3:
         GOSBVL  RCCD2                            * 7A068
 
 * refs (1): 2D10B
-SUB_7A06F:
+* A/B * C/D is added to register 0
+MulAcc15:
         GOSBVL  MULTF                            * 7A06F
 
 * refs (1): 2D05A
-SUB_7A076:
+* A/B is added to register 0
+Acc15:
         GOSBVL  RCCD0                            * 7A076
         GOSBVL  RADDF                            * 7A07D
         GOVLNG  STAB0                            * 7A084
 
 * refs (2): 2CCAF 902CF
-SUB_7A08B:
-        GOSUB   SUB_7A0BE                        * 7A08B
+* A.A -> A/B: a binary integer as a normalised 15-digit number
+Hex>%%:
+        GOSUB   Hex>BCD                          * 7A08B
         A=A-1   X                                * 7A08F
-SUB_7A08B.loop1:
+Hex>%%.loop1:
         A=A+1   X                                * 7A092
         BSRC                                     * 7A095
         ?B#0    WP                               * 7A098
-        GOYES   SUB_7A08B.loop1                  * 7A09B
+        GOYES   Hex>%%.loop1                     * 7A09B
         BSR     W                                * 7A09D
         A=B     M                                * 7A0A0
         A=0     S                                * 7A0A3
@@ -3415,15 +3550,17 @@ SUB_7A08B.loop1:
         RTN                                      * 7A0A8
 
 * refs (5): 2CE52 87258 88592 CB065 CB0F8
-SUB_7A0AA:
-        GOSUB   SUB_7A0BE                        * 7A0AA
+* A.A -> A/B: as Hex>%%, exponent fixed at 14 before normalising
+Hex>15:
+        GOSUB   Hex>BCD                          * 7A0AA
         P=      0                                * 7A0AE
         LC(2)   #14                              * 7A0B0
         A=C     B                                * 7A0B4
-        GOVLNG  SUB_2BC62.L2                     * 7A0B7
+        GOVLNG  SplitNormA.L2                    * 7A0B7
 
 * refs (2): 7A08B 7A0AA
-SUB_7A0BE:
+* C.A -> B = the same value in BCD; A.A used as the running power of two
+Hex>BCD:
         SETDEC                                   * 7A0BE
         C=0     W                                * 7A0C0
         C=A     A                                * 7A0C3
@@ -3431,33 +3568,34 @@ SUB_7A0BE:
         B=0     W                                * 7A0C8
         A=A+1   A                                * 7A0CB
         P=      6                                * 7A0CD
-SUB_7A0BE.loop1:
+Hex>BCD.loop1:
         ?C=0    A                                * 7A0CF
-        GOYES   SUB_7A0BE.L3                     * 7A0D2
+        GOYES   Hex>BCD.L3                       * 7A0D2
         SB=0                                     * 7A0D4
         CSRB                                     * 7A0D7
         ?SB=0                                    * 7A0DA
-        GOYES   SUB_7A0BE.L2                     * 7A0DD
+        GOYES   Hex>BCD.L2                       * 7A0DD
         B=B+A   WP                               * 7A0DF
-SUB_7A0BE.L2:
+Hex>BCD.L2:
         A=A+A   WP                               * 7A0E2
-        GONC    SUB_7A0BE.loop1                  * 7A0E5
-SUB_7A0BE.L3:
+        GONC    Hex>BCD.loop1                    * 7A0E5
+Hex>BCD.L3:
         A=0     WP                               * 7A0E8
         RTN                                      * 7A0EB
         BSS     16                               * 7A0ED
 
 * refs (1): 11E36
-SUB_7A0FD:
+* A.A = two characters -> copy their glyphs of the current font (XM picks 10 or 8 rows) to the buffer at #1E1 and #1CD of the page in IRAM@
+CharGlyph2:
         C=A     A                                * 7A0FD
         RSTK=C                                   * 7A0FF
         ASR     A                                * 7A101
         ASR     A                                * 7A103
         LC(4)   #01E1                            * 7A105
-        GOSUB   SUB_7A12C                        * 7A10B
+        GOSUB   CopyGlyph                        * 7A10B
         C=RSTK                                   * 7A10F
         A=C     A                                * 7A111
-        GOSUB   SUB_7A126                        * 7A113
+        GOSUB   CharGlyph1                       * 7A113
         B=C     A                                * 7A117
         LC(5)   #00014                           * 7A119
         C=C+B   A                                * 7A120
@@ -3465,11 +3603,13 @@ SUB_7A0FD:
         RTN                                      * 7A124
 
 * refs (3): 11DD0 11EB1 7A113
-SUB_7A126:
+* A.B = character -> copy its glyph to the buffer at #1CD of the page in IRAM@
+CharGlyph1:
         LC(4)   #01CD                            * 7A126
 
 * refs (1): 7A10B
-SUB_7A12C:
+* C.X = buffer offset, A.B = character: copy 20 nibbles of its glyph; codes below #1F use a fixed glyph
+CopyGlyph:
         B=0     A                                * 7A12C
         B=A     B                                * 7A12E
         AD1EX                                    * 7A131
@@ -3480,13 +3620,13 @@ SUB_7A12C:
         D1=C                                     * 7A143
         P=      0                                * 7A146
         ?XM=0                                    * 7A148
-        GOYES   SUB_7A12C.L2                     * 7A14B
+        GOYES   CopyGlyph.L2                     * 7A14B
         LC(2)   #1F                              * 7A14D
         ?C<=A   B                                * 7A151
-        GOYES   SUB_7A12C.L1                     * 7A154
+        GOYES   CopyGlyph.L1                     * 7A154
         LC(5)   Font10+2540                      * 7A156
-        GONC    SUB_7A12C.L4                     * 7A15D
-SUB_7A12C.L1:
+        GONC    CopyGlyph.L4                     * 7A15D
+CopyGlyph.L1:
         C=A     A                                * 7A160
         C=C+C   A                                * 7A162
         C=C+C   A                                * 7A164
@@ -3494,18 +3634,18 @@ SUB_7A12C.L1:
         A=A+C   A                                * 7A168
         LC(5)   Font10-620                       * 7A16A
         C=C+A   A                                * 7A171
-        GONC    SUB_7A12C.L4                     * 7A173
-SUB_7A12C.L2:
+        GONC    CopyGlyph.L4                     * 7A173
+CopyGlyph.L2:
         LC(2)   #1F                              * 7A176
         ?C<=A   B                                * 7A17A
-        GOYES   SUB_7A12C.L3                     * 7A17D
+        GOYES   CopyGlyph.L3                     * 7A17D
         LC(5)   Font8+2032                       * 7A17F
-        GONC    SUB_7A12C.L4                     * 7A186
-SUB_7A12C.L3:
+        GONC    CopyGlyph.L4                     * 7A186
+CopyGlyph.L3:
         ASL     A                                * 7A189
         LC(5)   Font8-496                        * 7A18B
         C=C+A   A                                * 7A192
-SUB_7A12C.L4:
+CopyGlyph.L4:
         A=C     A                                * 7A194
         AD1EX                                    * 7A196
         C=DAT1  A                                * 7A199
@@ -3534,7 +3674,7 @@ SUB_7A12C.L4:
         C=B     A                                * 7A1DE
         CD1EX                                    * 7A1E0
         RTN                                      * 7A1E3
-SUB_7A12C.L5:
+CopyGlyph.L5:
         LC(4)   #00F5                            * 7A1E5
         A=C     A                                * 7A1EB
         C=RSTK                                   * 7A1ED
@@ -3542,13 +3682,15 @@ SUB_7A12C.L5:
         RTN                                      * 7A1F2
 
 * refs (1): 12046
-SUB_7A1F4:
+* A.B = character: one minifont glyph
+MiniGlyph1:
         C=0     S                                * 7A1F4
         C=C+1   S                                * 7A1F7
 
 * refs (1): 12146
 * Minifont renderer: glyph = #7C102 + 11*index, codes above #9F remapped through the table at #7C793
-SUB_7A1FA:
+* A = characters, C.S = how many: copy their minifont glyphs to the display line buffer
+MiniGlyphs:
         P=      0                                * 7A1FA
         LC(5)   #0011B                           * 7A1FC
         CD1EX                                    * 7A203
@@ -3556,23 +3698,23 @@ SUB_7A1FA:
         C=DAT1  A                                * 7A208
         LC(4)   #00F5                            * 7A20B
         D1=C                                     * 7A211
-SUB_7A1FA.loop1:
+MiniGlyphs.loop1:
         C=C-1   S                                * 7A214
-        GOC     SUB_7A12C.L5                     * 7A217
+        GOC     CopyGlyph.L5                     * 7A217
         C=A     A                                * 7A21A
         A=0     A                                * 7A21C
         A=C     B                                * 7A21E
         RSTK=C                                   * 7A221
         LC(2)   #1F                              * 7A223
         ?C<=A   B                                * 7A227
-        GOYES   SUB_7A1FA.L2                     * 7A22A
+        GOYES   MiniGlyphs.L2                    * 7A22A
         LC(5)   Minifont+1111                    * 7A22C  minifont glyph for codes below #20
         A=C     A                                * 7A233
-        GONC    SUB_7A1FA.L6                     * 7A235
-SUB_7A1FA.L2:
+        GONC    MiniGlyphs.L6                    * 7A235
+MiniGlyphs.L2:
         LC(2)   #9F                              * 7A238
         ?C>=A   B                                * 7A23C
-        GOYES   SUB_7A1FA.L3                     * 7A23F
+        GOYES   MiniGlyphs.L3                    * 7A23F
         A=A-C   B                                * 7A241
         LC(5)   MiniRemap                        * 7A244
         C=C+A   A                                * 7A24B
@@ -3580,21 +3722,21 @@ SUB_7A1FA.L2:
         CD1EX                                    * 7A24F
         A=DAT1  B                                * 7A252
         CD1EX                                    * 7A255
-        GOTO    SUB_7A1FA.L5                     * 7A258
-SUB_7A1FA.L3:
+        GOTO    MiniGlyphs.L5                    * 7A258
+MiniGlyphs.L3:
         LC(2)   #61                              * 7A25C
         ?C>A    B                                * 7A260
-        GOYES   SUB_7A1FA.L5                     * 7A263
+        GOYES   MiniGlyphs.L5                    * 7A263
         LC(2)   #7B                              * 7A265
         ?C>A    B                                * 7A269
-        GOYES   SUB_7A1FA.L4                     * 7A26C
+        GOYES   MiniGlyphs.L4                    * 7A26C
         LC(2)   #1A                              * 7A26E
         A=A-C   B                                * 7A272
-        GONC    SUB_7A1FA.L5                     * 7A275
-SUB_7A1FA.L4:
+        GONC    MiniGlyphs.L5                    * 7A275
+MiniGlyphs.L4:
         LC(2)   #20                              * 7A278
         A=A-C   B                                * 7A27C
-SUB_7A1FA.L5:
+MiniGlyphs.L5:
         C=A     A                                * 7A27F
         C=C+C   A                                * 7A281
         C=C+C   A                                * 7A283
@@ -3603,7 +3745,7 @@ SUB_7A1FA.L5:
         A=A+C   A                                * 7A289
         LC(5)   Minifont-341                     * 7A28B  minifont glyph i = #7C102 + 11*i
         A=A+C   A                                * 7A292
-SUB_7A1FA.L6:
+MiniGlyphs.L6:
         AD1EX                                    * 7A294
         C=DAT1  11                               * 7A297
         D1=A                                     * 7A29B
@@ -3613,4 +3755,4 @@ SUB_7A1FA.L6:
         A=C     A                                * 7A2A7
         ASR     W                                * 7A2A9
         ASR     W                                * 7A2AC
-        GOTO    SUB_7A1FA.loop1                  * 7A2AF
+        GOTO    MiniGlyphs.loop1                 * 7A2AF

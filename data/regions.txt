@@ -1,0 +1,160 @@
+# What each source file and library holds, for tools/disasm.py: the file's
+# start address (or LIBnnn)<TAB>description. Our own notes.
+00000	Reset and interrupt entries, serial and keyboard service, ON-key combinations, timers and wake-ups, battery check, beeper, display and annunciator control
+02002	Boot and memory-lost sequence, RAM and I/O configuration, warm-start log, object prologs, the RPL inner loop, array element access and stack primitives
+04003	Power off and wake-up, card and config checks, the low-battery text, lite sleep, TOUCHTAB key assignments, error traps, built-in binary integers and stack words
+06000	Garbage collection, moving memory and adjusting references, EVAL, COLA and return-stack words, DO loops, temporary environments, identifier and library name lookup
+08001	Directories, variables and memory management; ports, cards and bank switching; libraries and backup objects in ports
+0A006	Library and backup CRC checks, recovery of lost memory, ROMPTAB rebuilt at warm start, ports: status, MERGE and FREE, the hidden directory, parser token tests, and moving RAM at run time
+0C001	Reading ROM covered by RAM, unit prefix lookup, array element fetch, some plot helpers, clock and date arithmetic, alarm handling
+0E006	Alarm lists, status bits and the alarm beep; hxs helpers; unit objects: parsing a unit into number, factor and dimensions, conversion and unit arithmetic
+10029	Unit expressions as metas: simplifying and raising them, dimension vectors; sign and exponent keys on the command line; annunciator words; editor and display counters; grob size, clipping and text in grobs
+12002	Minifont text, grob subgrobs and resizing, display grobs and switching to PICT, pixels, inverting character cells, the cursor and its counters
+14001	Error words, HALT and the single-step debugger (SST, SST↓, NEXT, DBUG), parts of the SOLVR menu, EQ access, and the front of the object decompiler
+16000	Conversion of objects to text: strings for each type, number formatting, the line-at-a-time decompiler that wraps programs and lists, and the out-of-memory (VLM) dialog
+1802E	Out-of-memory dialog (continued), last arguments, the argument-count checks, type dispatch, string logic operators, and the InputForm engine's outer loop
+1A002	Input-form helpers, then the user commands of library 002 from the directory commands through +, -, *, / to the powers and the scientific functions
+1C017	User commands of library 002: variables and memory, type tests, GET/PUT/GETI/PUTI, vector commands, stats setup, comparison and logic
+1F01F	User commands of library 002: APPLY and symbolic support, →Q, STO arithmetic, conversion commands, PURGE and ORDER, memory and port commands (ARCHIVE, RESTORE, FREE, MERGE)
+22005	Commands of library 002 for ports and I/O settings, then library 700: the program structures, each with its compile routine and its SST handler (the slots after the command), and the start of their compile routines
+24028	The compiler: compile routines of program structures, literal objects by their first token, the tokenizer (GetNextToken) with its character class tables, and access to command header flags and trailer slots
+27029	The algebraic parser (an operator-precedence parser), the parser of unit expressions, the decompiler of algebraics to text, and the rounding and packing of long reals
+2A002	Real number arithmetic: entries for each % and %% operation, stack access for the numbers, real constants, and the floating point core (add, multiply, divide, square root, rounding) on 15-digit numbers split across A:B and C:D
+2C000	Probability tails (UTPN and friends), statistics (ΣDAT, ΣPAR, column sums and fits) in library 006, and the start of Kermit in library 00C: sending, server loop
+2E0A9	Serial I/O and Kermit: receiving packets, send and get commands, IOPAR and PRTPAR, packet encoding and decoding
+30000	Kermit: file translation, parameter negotiation, packet encoding. UART driver, printing (PR1, PRST, PRVAR, PRLCD, HP 82240 codes) and I/O error handling
+33012	Numeric root finder: the engine of ROOT and the solver (library 00A), bracket search and secant steps
+34006	End of the root finder; text of complex numbers, lists and arrays for display; then library 005: array element access and arithmetic
+36039	Array and matrix operations with long reals: inverse, LU, products, determinant and system solving
+38000	Unit-dimension vectors, the system outer loop and its error trap, the parameterized outer loop, status area, stack display
+3A00D	Edit-line display, menu building, and the key-action libraries: 0A6 (alpha right-shift), 0A4 (alpha), 0A1 (unshifted), 0A5 (alpha left-shift), 0A7 (built-in menus)
+3D00E	Last of the unit menus, then the key-action libraries 0A2 (left-shift) and 0A3 (right-shift)
+3E005	End of the right-shift keys, edit-line delete keys, unit and directory menu helpers, LIB and PORT menus, VAR menu, key to object lookup
+42023	GETKEY, busy annunciator, cursor and edit-line echo, INPUT, the interactive stack
+4400C	Command line editor: end of the interactive stack, edit buffer access, MatrixWriter key table, EquationWriter glue, AXES arguments, DRAX, and the PICTURE keys of the 3D plots
+46007	Plotting: PICTURE environment, tracing and cursor keys, the GRAPH menus, ZOOM and box drawing
+49017	Plotting: AUTOSCALE sampling, the FCN menu (root, slope, area, extremum), REVIEW displays, the setup for drawing and the plot loops
+4C082	Plotting: plot loops and pixel drawing per plot type, PICTURE scrolling and key handlers, cursor, mark and crosshair drawing
+4F0AC	Plotting: pixel and coordinate conversion, LINE, BOX, GOR, GXOR, REPL, SUB, ARC, grob utilities, line drawing in machine code, plot parameters; complex division
+52017	Complex functions, numerical integration (∫), user and system flags, the flags in the system nibbles, word-size and binary integer arithmetic
+54000	Binary integer display and conversion, symbolic function dispatch (SYMxxx and Metaxxx), WHERE, derivative steps, IFTE, ∫ and Σ
+57004	Symbolic algebra: user-function derivatives, ISOL, EXPAN, COLCT, SHOW, QUAD, TAYLR and the RULES menu commands
+5A01D	Symbolic algebra: the argument forms of ∂, ∫, Σ, | and APPLY, →Q and →Qπ, symbolic integration by patterns, and the RULES transformations
+5D01D	Symbolic algebra: flattening sums and products for RULES, the meta stack toolkit (psh, top&, larg, ...), operator tests, the rewrite rule interpreter, start of the pattern matcher
+6001C	End of the pattern matcher (match'), then the RPL utility words: stack shuffles, lams, case and test words, CACHE and DUMP, types, flags
+63029	RPL utility words, list and string search, built-in integers and dispatch codes, tokens and characters, then the first EquationWriter routines
+660FC	EquationWriter: root and sum handlers, size and placement of the box tree, drawing, bracket and bar grobs, RAM accessors, box record fields, work-stack frames, handler tables, start of the expression parser
+69142	EquationWriter: expression parser (operators, separators, precedence), the subexpression selection environment and its menu (RULES EDIT EXPR SUB REPL EXIT), rule application, entry points and the main key loop
+6C186	EquationWriter: key actions, start-up (local variables and work area), cursor, text input, the rendering handlers of the operators (slot 0 of the command trailers), box building helpers, size-level values
+6F360	EquationWriter: stepping back over arguments, cursor movement in the selection environment, highlighting a subexpression, hook tests and key lookup tables; ends with a few plot helpers
+70039	Odds and ends moved here for space: boot code (#7018C), ROM library table (#702C4), library message pointers, the bank-switch stubs and the access handlers for covered ROM, access pointers and backups in ports, ROMPTR handling
+73088	PICTURE environment: the menus of the plotter (ZOOM, (X,Y), TRACE, FCN, EDIT, CANCL), and helpers for its cursor modes, trace and coordinate display
+740E1	Message tables of the ROM libraries (MsgTab), then the start of the units table (#75675)
+760C9	End of the units table, hash tables of libraries 700 and 002, then, from #77E62, the probability functions UTPN, UTPF and UTPT (continued in the next file)
+78002	Numerics at 15 digits: the UTPC/UTPF/UTPT and UTPN series, the 21-nibble temporaries in IRAMBUFF, then the core transcendental routines in machine code: FP, MOD, factorial, COMB, PERM, LN, EXP, y^x, SIN, COS, TAN, their inverses and the hyperbolics; at the end hex-to-BCD conversion and the copying of font glyphs for the display
+7C855	Array primitives in machine code and RPL (inner products in 15 digits, LU decomposition and solving, conversion between real and extended arrays, norms), the TVM variable names and the TVM solver's numeric helpers, then pointers to the symbolic rules: derivatives (D/D...), integrals, WHERE, and the rule tables' ROMPTRs
+80000	Self-test (ON+D): a menu of hardware tests with their messages, run before RAM is set up; the screens of memory recovery
+82007	Library 0F0: integral pattern tables per function, and the bodies of the rewrite rules (RULES menu)
+8501B	Library 0F0: WHERE handlers, port object access, argument builders, derivative rules, rule menus and ISOL inverses
+86FE4	Library 0C0: polynomial root finder for PROOT, in machine code, with one copy for complex and one for real coefficients
+8998E	Library 0F1: drawing of WIREFRAME, GRIDMAP, PARSURFACE, YSLICE, SLOPEFIELD and PCONTOUR plots, VPAR reading, trace input and output tags, then the FUNCTION and CONIC plot types
+8C9F6	Library 0F1: the POLAR, PARAMETRIC, TRUTH, SCATTER, HISTOGRAM and BAR plot types, PPAR checks and the plot environment's exit code
+8D27C	Library 0EA: the MatrixWriter: key handling, cell display, scrolling, the EDIT, GO, +ROW, -ROW, +COL, -COL and WID menu keys; then PINIT
+90000	Library 0C2: eigenvalues: EGV, EGVL, SCHUR and SRAD, Householder reduction to Hessenberg form, QR iteration for real and complex matrices, and eigenvector back-substitution
+93079	Library 0C2: balancing, QR and LQ factoring, LSQ, the SVD's bidiagonal reduction and iteration, SNRM, RANK, SVL and SVD
+96268	Library 0C2: SVD steps, TRACE, COND, LU, DET, matrix division and inverse, RREF
+98E02	Library 0E6: TVM messages, TVM variables and menu support, AMORT and the five TVM solvers in machine code
+99FE9	Library 0E3: the Equation Library browser: its locals, subject and title screens, menus, starting the solver, and the equation viewer
+9CFFD	Library 0E3: the Equation Library's picture viewer, ~PCunpack, SOLVEQN and the library's messages
+9DA13	Library 0E4: the Multiple-Equation Solver: the Mpar variable, the solver menu, solving by chaining single equations, the results browser, and the user commands
+A07E9	Library 0E1: the Constants Library: browser, tables of 39 constants, and CONST
+A2437	Library 0B4: the Solve applications (equation, differential equation, polynomial, linear system, TVM and amortization) and the start of Plot
+A54DB	Library 0B4: the Plot form for each plot type, its keys and fields, and the options forms for 2D plots
+A8521	Library 0B4: Plot options for 2D plots, Zoom Factors, plot type handling and reset, and the forms for 3D plots
+AB534	Library 0B4: end of the 3D plot options, the Symbolic applications, and setting alarms and the time and date
+AE566	Library 0B4: the alarm browser, the Statistics applications, and I/O (send, print, transfer)
+B1606	Library 0B4: end of Transfer, Calculator Modes, the system flag browser, the Memory variable browser, and the library's hash and link tables
+B4B32	End of library 0B4's link table; the length field in front of library 0B5
+B4B39	Form data, part 1: Solve, TVM, plot parameters and PPAR fields, VPAR, Symbolic forms, Time and Alarm items
+B7B7D	Form data, part 2: alarm browser, Statistics, I/O and Kermit, Modes, Flags browser, Var browser; library tables
+BA576	Library 0B3: the Choose box: POL, keys, scrolling, messages, drawing and the pre-drawn frames
+BD8E9	Library 0B3: the last pre-drawn frames, the CHOOSE command's body, and the hash and link tables
+C0000	48G user commands (3D plot setup, ANIMATE, matrix, list, TVM, INFORM, ...) with their dispatch tables, then hash and link tables
+C31BE	End of library 0AB, and the start of the block holding 0A9, 0AA and 0A8
+C31C5	Menus by MENU number, mostly as arrays of ROMPTR keys
+C4E26	Key lists of the PLOT, STAT and I/O menus
+C5332	Soft-key definitions of the built-in menus
+C78DB	Diff Eq plotting, Runge-Kutta-Fehlberg steps for scalars and vectors, adaptive step control and Rosenbrock steps
+CA95B	RRK command, argument check for the Rosenbrock commands, angle factors for units, library tables
+CADC4	FFT and IFFT in machine code, then NDIST, the population statistics, PCOEF and PEVAL
+CBACE	Row and column operations on arrays: the RPL commands, then row delete, row insert and row copy in machine code
+CCA9F	ZFACTOR, FANNING, DARCY, F0λ, SIDENS, TDELTA and TINC, shared argument errors, then MINEHUNT with its messages and pictures
+CF380	The browser: stores and recalls for its 16 locals, key handlers, list movement, search by letter, and drawing of rows, scroll arrows and the view of a long item
+D1362	List commands, SUB and REPL on arrays, TEACH and its example programs and plots, ATICK, and Xmodem in machine code
+D4806	Hash and link tables of library 0E8
+D49CE	Input forms: error handling, menus, redisplay, then one routine for each message with its default action, and the key tables
+D79FD	Input forms: field movement, decompiling a value, pictures, alerts, validation, and access to the locals of labels and fields
+D9A51	CMD, the CHARS form with its keys and menu, pictures of the character pages and the table of key sequences
+DCA82	Hash and link tables of library 0B2
+DCB83	Message box, the outer loop that lets the user work on the stack from a form, and INFORM
+DE45F	Message table of the SOLVE applications
+DF08C	Message table of the PLOT applications, as a linked array of strings
+E04FF	Message table of the SYMBOLIC applications
+E0AFF	Message table of the TIME applications
+E114B	Message table of the STAT applications
+E1A57	Message table of the I/O applications
+E228B	Message table of the input forms and of MODES, with the descriptions of the system flags
+E384B	Library header, subject names, text tables for Columns and Beams to Gases
+E6DA5	Equation Library text tables for Heat Transfer to Stress Analysis
+E9E0F	Equation Library text table for Waves, tables of units, and the equations of Columns and Beams and Electricity
+EDBBA	Equation Library: equations of Fluids to Motion
+F0DC0	Equation Library: equations of Optics to Stress Analysis
+F3F3C	Equation Library: equations of Waves, shared variable lists, the names of all variables, first pictures
+F6FB8	Equation Library: pictures for Electricity to Magnetism
+FA04D	Equation Library: pictures for Magnetism to Plane Geometry
+FD2DB	Equation Library: pictures for Solid Geometry and Stress Analysis, the end of the ROM
+LIB005	Array element access and matrix arithmetic
+LIB006	Statistics: no commands of its own, only the message table for the Σ errors #601-#606
+LIB00A	Numeric root finder behind ROOT and the solver. State is a local array of slots: x values at the start, f(x) values #70 nibbles on, 16 nibbles each
+LIB00C	Serial I/O, Kermit and printing
+LIB0A1	Key actions, unshifted plane. Command n is the action of key n+1 (A = 1, MTH = 7, ... + = 49)
+LIB0A2	Key actions, left-shift plane. Command n is the action of key n+1
+LIB0A3	Key actions, right-shift plane. Command n is the action of key n+1
+LIB0A4	Key actions, alpha plane. Command n is the action of key n+1
+LIB0A5	Key actions, alpha left-shift plane. Command n is the action of key n+1
+LIB0A6	Key actions, alpha right-shift plane. Command n is the action of key n+1
+LIB0A7	The built-in menus: each command is a menu definition
+LIB0A8	Soft-key definitions used in the menus of libraries 0A9 and 0AA: a label and an action, for submenu keys, mode toggles and reserved variables
+LIB0A9	Built-in menus: command n of this library is the menu with MENU number n (0 to 117)
+LIB0AA	Key lists behind the PLOT, PTYPE, PPAR, 3D, VPAR, STAT, MODL, IOPAR and PRTPAR menus of library 0A7, which have no menu number of their own
+LIB0AB	User commands added by the 48G: 3D plot setup, matrix commands, lists, ANIMATE, INFORM and CHOOSE, RKF and RRK, TVM, Equation Library, utilities
+LIB0B0	The input form engine behind DoInputForm: its menus, keys, display, validation, and the messages sent to the form's and the fields' handlers.
+LIB0B1	Message boxes, the MSGBOX and INFORM commands, and a small stack-browsing loop with a menu used by input forms.
+LIB0B2	The CHARS application, a map of the 256 characters with the key for each, built as an input form, and the CMD list of recent command lines.
+LIB0B3	The Choose box: a browser of a list in a pop-up or full-screen box with its own POL, used by CHOOSE, input forms and the alarm, flag and variable browsers. It asks its handler first through numbered messages
+LIB0B4	Built-in applications as input forms: Solve (equation, differential equation, polynomial, linear system, TVM), Plot and its options, Symbolic, Time and alarms, Statistics, I/O, Modes with the flag browser, and the Memory browser. Library 0B5 holds the code behind them
+LIB0B5	Field getters, setters and choose lists behind the input forms of library 0B4: Solve, TVM, Plot, VPAR, Symbolic, Time and Alarms, Statistics, I/O and Kermit, Modes, Flags browser, Var browser. Empty fields hold -1 (MINUSONE)
+LIB0B9	Messages of input forms, Choose boxes and the MODES applications, among them the text of every system flag.
+LIB0BA	Messages of the I/O applications: Transfer, Print, Kermit and the server.
+LIB0BB	Messages of the STAT applications: single-variable statistics, frequencies, fitting and summaries.
+LIB0BC	Messages of the TIME applications: alarms and setting the time and date.
+LIB0BD	Messages of the SYMBOLIC applications: Integrate, Differentiate, Taylor poly, Isolate var, Solve quad and Manip expr.
+LIB0BE	Messages of the PLOT applications: the plot forms and the plot options, for all plot types.
+LIB0BF	Messages of the SOLVE applications: equation, differential equation, polynomial, linear system and finance.
+LIB0C0	PROOT polynomial root finder (machine code), its error message and its RPL entry
+LIB0C1	Differential equation solvers: the commands RKF, RKFSTEP, RKFERR, RRK, RRKSTEP and RSBERR and the Diff Eq plot type, using Runge-Kutta-Fehlberg and Rosenbrock steps with adaptive step size. Also the angle factors used by unit conversion.
+LIB0C2	Numerical linear algebra in extended reals: EGV, EGVL, SCHUR, SRAD, SVD, SVL, SNRM, RANK, COND, TRACE, QR, LQ, LU, LSQ, RREF, DET, matrix inverse and division
+LIB0C3	Matrix commands that rearrange arrays: RANM, RSWP, CSWP, RCI, RCIJ, ROW+, ROW-, COL+, COL-, ROW->, ->ROW, COL->, ->COL, ->DIAG, DIAG-> and three machine-code row movers.
+LIB0C4	Signal and polynomial maths: FFT and IFFT, NDIST, PSDEV, PVAR, PCOV, PCOEF, PEVAL and the symbolic results of the polynomial solver.
+LIB0E0	The full-screen list browser behind the Equation Library and Constants Library catalogs: scrolling, paging, a menu, search by first letter and viewing of long items.
+LIB0E1	The Constants Library: CONLIB's browser, CONST, and the tables of names, SI and English values and descriptions
+LIB0E2	The Equation Library's data: subjects, equation sets, descriptions of variables, default units in SI and English, and pictures. Its application is library 0E3.
+LIB0E3	The Equation Library browser (EQNLIB, SOLVEQN): subjects, titles, equation and variable views, pictures, and the unpacking of its equations and pictures
+LIB0E4	The Multiple-Equation Solver: MINIT, MITM, MSOLVR, MUSER, MCALC, MROOT, its menu and its search for equations it can solve
+LIB0E6	Time value of money: the TVM menu's support, TVMROOT, AMORT, and the machine-code solvers for N, I%YR, PV, PMT and FV, with their messages
+LIB0E7	Support for the Equation Library: the functions ZFACTOR, FANNING, DARCY, F0λ, SIDENS, TDELTA and TINC with their symbolic forms, and the game MINEHUNT.
+LIB0E8	List processing (SEQ, DOSUBS, DOLIST, ADD, SORT, REVLIST and commands applied over lists), SUB and REPL on arrays, TEACH with its EXAMPLES directory, ATICK, and the Xmodem transfers XSEND and XRECV.
+LIB0EA	The MatrixWriter, plus PINIT's port check
+LIB0F0	Symbolic algebra support: integral tables, the rules of the RULES menu, derivative rules, ISOL inverses, WHERE, and the port forms of STO, RCL, EVAL, PURGE, FREE and LIBS
+LIB0F1	Plot types: the FUNCTION..BAR commands with their information lists, the drawing code of the 3D and field plots (WIREFRAME, PARSURFACE, GRIDMAP, YSLICE, SLOPEFIELD, PCONTOUR), and VPAR handling
+LIB700	Program structure words: IF, CASE, the loops, IFERR, → and « », each followed by its compile routine and SST handler

@@ -273,7 +273,9 @@ class Analyzer:
             if flow in ("ret", "jump", "ijump"):
                 return
             # carry on fall-through
-            if is_test or ins.text.startswith(("GOC", "RTNC")):
+            if is_test and ins.target == a + ins.size:
+                carry = None    # a test that branches to the next line: either way
+            elif is_test or ins.text.startswith(("GOC", "RTNC")):
                 carry = 0
             elif ins.text.startswith(("GONC", "RTNNC")):
                 carry = 1

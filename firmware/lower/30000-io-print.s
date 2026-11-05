@@ -1,6 +1,6 @@
-* HP 48GX ROM revision R, #30000-#33011: I/O and printing
+* HP 48GX ROM revision R, #30000-#33011: Kermit: file translation, parameter negotiation, packet encoding. UART driver, printing (PR1, PRST, PRVAR, PRLCD, HP 82240 codes) and I/O error handling
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: SUB$1# PRINT root AllowPrlcdCl PrintRC(st) GetChkPRTPAR CHOOSE_INIT docr GETKP SetEcma94 SYMBNUMSOLVE Reset&BreakPRTPAR
+* Most referenced: SUB$1# PRINT UARTIntOn root AllowPrlcdCl PrintRC(st) GetChkPRTPAR CHOOSE_INIT docr UARTTxFull? PrtStatus@ PrintWire?
 * Follows on from the previous file (at #30000 in the original ROM).
 SUB_2FFD0.L2:
         ?ST=0   4                                * 30000
@@ -141,12 +141,12 @@ KINVISLF:
             R3=C                                 * 30186
             GOSBVL  SAVPTR                       * 30189
             GOSBVL  POP#                         * 30190
-            GOSUB   SUB_2FF8C                    * 30197
+            GOSUB   KVISMode                     * 30197
             GONC    KINVISLF.L2                  * 3019B
             R0=C                                 * 3019E
             D0=C                                 * 301A1
             D0=D0+  10                           * 301A4
-            GOSUB   SUB_2FFBD                    * 301A7
+            GOSUB   KVISStr                      * 301A7
             D=C     A                            * 301AB
 KINVISLF.loop1:
             D=D-1   A                            * 301AD
@@ -395,6 +395,7 @@ HeadIOString(s).L3:
         ;                                        * 30472
 
 * refs (2): 2F489 2F588
+* Probably: the file translation for received text, undoing KVIS according to the TRANSIO setting
 OBJ_30477:
         :: ChkTransio TOTEMPSWAP                 * 30477
           CODE                                   * 30486  299 nibbles
@@ -521,7 +522,7 @@ SUB_305ED.L2:
 
 * refs (2): 2F65F D45AB
 OBJ_30607:
-        :: OBJ_3073A NOT?SEMI                    * 30607
+        :: HeaderMatch? NOT?SEMI                 * 30607
           DUPLEN$ VERSTRING LEN$ SWAPOVER#- #<3 caseDROP * 30616
           CODE                                   * 30634  237 nibbles
             GOSBVL  POP#                         * 3063E
@@ -602,11 +603,13 @@ OBJ_30607.L2:
           ?ROMPTR> ;                             * 30730
 
 * refs (2): 2F3D8 3060C
-OBJ_3073A:
+* $ -> $ flag: TRUE when the string starts with the first 6 characters of the ROM's version string, the header of a binary object
+HeaderMatch?:
         :: VERSTRING BINT1 BINT6 SUB$ OVER BINT1 BINT6 SUB$ EQUAL ; * 3073A
 
 * refs (2): 2F144 2F419
-OBJ_30771:
+* -> flag: TRUE when flag -35 is clear (ASCII transfer)
+ASCIIXfer?:
         CON(5)  (*)+5                            * 30771  primitive code object
         ASSEMBLE
         CD1EX                                    * 30776
@@ -614,8 +617,8 @@ OBJ_30771:
         A=DAT1  B                                * 30780
         D1=C                                     * 30783
         ?ABIT=0 2                                * 30786
-        GOYES   OBJ_30771.L1                     * 3078B
-OBJ_30771.L1:
+        GOYES   ASCIIXfer?.L1                    * 3078B
+ASCIIXfer?.L1:
         GOVLNG  PushT/FLoop                      * 3078D
 
 * -> $
@@ -628,7 +631,7 @@ VERSTRING:
         GOSBVL  MAKE$                            * 307A5
         CD0EX                                    * 307AC
         D=C     A                                * 307AF
-        GOSBVL  SUB_72245                        * 307B1
+        GOSBVL  GetVersionId                     * 307B1
         A=DAT1  12                               * 307B8
         C=D     A                                * 307BC
         D0=C                                     * 307BE
@@ -643,7 +646,7 @@ VERSTRING:
 
 * refs (6): 2E10D 2E296 2E2B9 2F2D9 30BC3 30D3B
 GETKP:
-        :: ' LAMKP DRPExitAtLOOP NOTcase OBJ_2D37C * 307E2
+        :: ' LAMKP DRPExitAtLOOP NOTcase KermInitPar * 307E2
         ;                                        * 30800
 
 * $ #pos -> #'
@@ -666,14 +669,15 @@ SUB$1#:
 
 * refs (2): 2D613 30865
 SEND_PACKET~1:
-        :: LAMPACKET OBJ_30E44 OBJ_2E2B4 caseTRUE LAMMaxR * 30833
-          OBJ_2D7AD NOTcaseFALSE DROP            * 30851
+        :: LAMPACKET KermSendRaw KermRecvPkt caseTRUE LAMMaxR * 30833
+          KermRetry? NOTcaseFALSE DROP           * 30851
           COLA SEND_PACKET~1                     * 30860
         ;                                        * 3086A
         ASSEMBLE
 
 * refs (3): 2DE6E 308B1 30932
-SUB_3086F:
+* Levels 1 and 2 are parameter strings -> D0, D1 at their seventh character (QBIN). Saves the RPL pointers
+KermParPtrs:
         GOSUB   SAVPTR~jump_13                   * 3086F
         A=DAT1  A                                * 30873
         C=0     A                                * 30876
@@ -688,53 +692,54 @@ SUB_3086F:
         RPL
 
 * refs (1): 2D503
-OBJ_3088E:
-        :: OBJ_309EC NOTcase drop(2);false       * 3088E
+* $ours $theirs -> $par flag: after the other side's Send-Init, checks its parameters and agrees on the 8th-bit quote and block check type: both sides must accept a value
+KermMergePar:
+        :: KermChkPar NOTcase drop(2);false      * 3088E
           SWAP                                   * 308A2
           CODE                                   * 308A7  94 nibbles
-            GOSUB   SUB_3086F                    * 308B1
+            GOSUB   KermParPtrs                  * 308B1
             A=DAT0  B                            * 308B5
             LC(2)   #59                          * 308B8
             ?C#A    B                            * 308BC
-            GOYES   OBJ_3088E.L1                 * 308BF
+            GOYES   KermMergePar.L1              * 308BF
             A=DAT1  B                            * 308C1
             ?C#A    B                            * 308C4
-            GOYES   OBJ_3088E.L4                 * 308C7
-            GONC    OBJ_3088E.L2                 * 308C9
-OBJ_3088E.L1:
+            GOYES   KermMergePar.L4              * 308C7
+            GONC    KermMergePar.L2              * 308C9
+KermMergePar.L1:
             C=DAT1  B                            * 308CC
             ?C=A    B                            * 308CF
-            GOYES   OBJ_3088E.L4                 * 308D2
+            GOYES   KermMergePar.L4              * 308D2
             A=C     B                            * 308D4
             LC(2)   #59                          * 308D7
             ?C=A    B                            * 308DB
-            GOYES   OBJ_3088E.L3                 * 308DE
-OBJ_3088E.L2:
+            GOYES   KermMergePar.L3              * 308DE
+KermMergePar.L2:
             LC(2)   #20                          * 308E0
             DAT1=C  B                            * 308E4
-            GONC    OBJ_3088E.L4                 * 308E7
-OBJ_3088E.L3:
+            GONC    KermMergePar.L4              * 308E7
+KermMergePar.L3:
             A=DAT0  B                            * 308EA
             DAT1=A  B                            * 308ED
-OBJ_3088E.L4:
+KermMergePar.L4:
             D0=D0+  2                            * 308F0
             D1=D1+  2                            * 308F3
             A=DAT0  B                            * 308F6
             C=DAT1  B                            * 308F9
             ?C=A    B                            * 308FC
-            GOYES   OBJ_3088E.L5                 * 308FF
+            GOYES   KermMergePar.L5              * 308FF
             LC(2)   #31                          * 30901
             DAT1=C  B                            * 30905
-OBJ_3088E.L5:
+KermMergePar.L5:
             GOVLNG  GPOverWrTLp                  * 30908
           ENDCODE                                * 3090F
         ;                                        * 3090F
 
 * refs (2): 2DE46 2F70E
 ACK_INIT:
-        :: OBJ_309EC NOTcaseFALSE CHOOSE_INIT    * 30914
+        :: KermChkPar NOTcaseFALSE CHOOSE_INIT   * 30914
           CODE                                   * 30928  181 nibbles
-            GOSUB   SUB_3086F                    * 30932
+            GOSUB   KermParPtrs                  * 30932
             D0=D0-  10                           * 30936
             D1=D1-  10                           * 30939
             A=DAT1  B                            * 3093C
@@ -800,103 +805,107 @@ ACK_INIT.L9:
             D1=D1+  2                            * 309D4
             A=DAT1  B                            * 309D7
             DAT0=A  B                            * 309DA
-ACK_INIT.L10:
+KermChkPar~1:
             GOVLNG  GPPushTLoop                  * 309DD
             BSS     3                            * 309E4  zeros
           ENDCODE                                * 309E7
         ;                                        * 309E7
 
 * refs (2): 30893 30919
-OBJ_309EC:
-        :: OBJ_2D37C OVERLEN$ #1+LAST$ &$ CKREF  * 309EC
+* $ -> $' flag: completes a parameter string with our defaults and checks each field against its legal range. FALSE and "Protocol Error" when one is bad
+KermChkPar:
+        :: KermInitPar OVERLEN$ #1+LAST$ &$ CKREF * 309EC
           CODE                                   * 30A0A  218 nibbles
             GOSUB   SAVPTR~jump_13               * 30A14
             C=DAT1  A                            * 30A18
             D1=C                                 * 30A1B
             D1=D1+  10                           * 30A1E
             LC(4)   #7E2A                        * 30A21
-            GOSUB   SUB_30AF3                    * 30A27
-            GONC    OBJ_309EC.L1                 * 30A2B
+            GOSUB   KermParRange                 * 30A27
+            GONC    KermChkPar.L1                * 30A2B
             LC(2)   #20                          * 30A2E
             B=C     A                            * 30A32
             LC(2)   #70                          * 30A34
-            GOSUB   SUB_30B06                    * 30A38
-            GONC    OBJ_309EC.L1                 * 30A3C
+            GOSUB   KermParIs                    * 30A38
+            GONC    KermChkPar.L1                * 30A3C
             LC(5)   PROTERR                      * 30A3F
             A=C     A                            * 30A46
             GOSBVL  GETPTR                       * 30A48
             DAT1=A  A                            * 30A4F
             GOVLNG  PushFLoop                    * 30A52
-OBJ_309EC.L1:
+KermChkPar.L1:
             LC(4)   #3921                        * 30A59
-            GOSUB   SUB_30AF3                    * 30A5F
-            GONC    OBJ_309EC.L2                 * 30A63
+            GOSUB   KermParRange                 * 30A5F
+            GONC    KermChkPar.L2                * 30A63
             LC(2)   #25                          * 30A66
-            GOSUB   SUB_30B06                    * 30A6A
-            GONC    OBJ_309EC.L2                 * 30A6E
+            GOSUB   KermParIs                    * 30A6A
+            GONC    KermChkPar.L2                * 30A6E
             LC(2)   #39                          * 30A71
-            GOSUB   SUB_30B0E                    * 30A75
-OBJ_309EC.L2:
+            GOSUB   KermParSet                   * 30A75
+KermChkPar.L2:
             D1=D1+  2                            * 30A79
             LC(2)   #40                          * 30A7C
-            GOSUB   SUB_30B06                    * 30A80
-            GONC    OBJ_309EC.L3                 * 30A84
+            GOSUB   KermParIs                    * 30A80
+            GONC    KermChkPar.L3                * 30A84
             D1=D1+  2                            * 30A87
-OBJ_309EC.L3:
+KermChkPar.L3:
             LC(2)   #2D                          * 30A8A
-            GOSUB   SUB_30B06                    * 30A8E
-            GONC    OBJ_309EC.L4                 * 30A92
+            GOSUB   KermParIs                    * 30A8E
+            GONC    KermChkPar.L4                * 30A92
             D1=D1+  2                            * 30A95
-OBJ_309EC.L4:
+KermChkPar.L4:
             LC(2)   #23                          * 30A98
-            GOSUB   SUB_30B06                    * 30A9C
-            GONC    OBJ_309EC.L5                 * 30AA0
+            GOSUB   KermParIs                    * 30A9C
+            GONC    KermChkPar.L5                * 30AA0
             D1=D1+  2                            * 30AA3
-OBJ_309EC.L5:
+KermChkPar.L5:
             LC(4)   #3E21                        * 30AA6
-            GOSUB   SUB_30AF3                    * 30AAC
-            GONC    OBJ_309EC.L6                 * 30AB0
+            GOSUB   KermParRange                 * 30AAC
+            GONC    KermChkPar.L6                * 30AB0
             LC(4)   #7E60                        * 30AB3
-            GOSUB   SUB_30AF3                    * 30AB9
-            GONC    OBJ_309EC.L6                 * 30ABD
+            GOSUB   KermParRange                 * 30AB9
+            GONC    KermChkPar.L6                * 30ABD
             LC(4)   #5959                        * 30AC0
-            GOSUB   SUB_30AF3                    * 30AC6
-            GONC    OBJ_309EC.L6                 * 30ACA
+            GOSUB   KermParRange                 * 30AC6
+            GONC    KermChkPar.L6                * 30ACA
             LC(2)   #20                          * 30ACD
-            GOSUB   SUB_30B0E                    * 30AD1
-OBJ_309EC.L6:
+            GOSUB   KermParSet                   * 30AD1
+KermChkPar.L6:
             LC(4)   #3331                        * 30AD5
-            GOSUB   SUB_30AF3                    * 30ADB
-            GONC    OBJ_309EC.L7                 * 30ADF
+            GOSUB   KermParRange                 * 30ADB
+            GONC    KermChkPar.L7                * 30ADF
             LC(2)   #31                          * 30AE2
-            GOSUB   SUB_30B0E                    * 30AE6
-OBJ_309EC.L7:
-            GOTO    ACK_INIT.L10                 * 30AEA
+            GOSUB   KermParSet                   * 30AE6
+KermChkPar.L7:
+            GOTO    KermChkPar~1                 * 30AEA
           ENDCODE                                * 30AEE
         ;                                        * 30AEE
         ASSEMBLE
 
 * refs (6): 30A27 30A5F 30AAC 30AB9 30AC6 30ADB
-SUB_30AF3:
+* D1 = field, C.B = lowest, next byte of C = highest -> carry clear and D1 past the field if it is in range; otherwise carry set
+KermParRange:
         A=DAT1  B                                * 30AF3
         ?C>A    B                                * 30AF6
         RTNYES                                   * 30AF9
         CSR     A                                * 30AFB
         CSR     A                                * 30AFD
         ?C>=A   B                                * 30AFF
-        GOYES   SUB_30B0E.L1                     * 30B02
+        GOYES   KermParSet.L1                    * 30B02
         RTNSC                                    * 30B04
 
 * refs (5): 30A38 30A6A 30A80 30A8E 30A9C
-SUB_30B06:
+* D1 = field, B.B = value -> carry set if the field differs; otherwise goes on to store C.B there and step past it
+KermParIs:
         A=DAT1  B                                * 30B06
         ?A#B    B                                * 30B09
         RTNYES                                   * 30B0C
 
 * refs (3): 30A75 30AD1 30AE6
-SUB_30B0E:
+* D1 = field, C.B = value -> stores it and steps past the field
+KermParSet:
         DAT1=C  B                                * 30B0E
-SUB_30B0E.L1:
+KermParSet.L1:
         D1=D1+  2                                * 30B11
         RTNCC                                    * 30B14
 
@@ -908,7 +917,7 @@ SAVPTR~jump_13:
 * refs (7): 2D526 2D9FF 2DA95 2DE5F 2E713 30923 ...
 CHOOSE_INIT:
         :: $ "~* @-#Y" TOTEMPOB GetIOPAR DROP 5UNROLL 4DROP IOCheckReal * 30B1D
-          OBJ_2ED74 NOTcase SetIOPARerr          * 30B58
+          IO%1to3? NOTcase SetIOPARerr           * 30B58
           COERCE BINT48 #+ #>CHR >T$             * 30B67
           CODE                                   * 30B80  47 nibbles
             GOSUB   SAVPTR~jump_13               * 30B8A
@@ -949,7 +958,7 @@ ENCODE:
         A=A+C   B                                * 30BFB
         R3=A                                     * 30BFE
         D0=D0-  4                                * 30C01
-        GOSUB   SUB_30D13                        * 30C04
+        GOSUB   KermQuotes                       * 30C04
         C=R3                                     * 30C08
         GOSBVL  MAKE$                            * 30C0B
         D1=D1+  5                                * 30C12
@@ -1045,10 +1054,11 @@ ENCODE.L10:
         C=R4                                     * 30D04
         C=C-A   A                                * 30D07
         R0=C                                     * 30D09
-        GOVLNG  OBJ_2E2B4.L3                     * 30D0C
+        GOVLNG  KermRecvPkt.L3                   * 30D0C
 
 * refs (2): 30C04 30D5A
-SUB_30D13:
+* D0 = two parameter bytes -> R1 = both, with the low one 0 when it is a space (no 8th-bit quoting)
+KermQuotes:
         A=DAT0  B                                * 30D13
         ASL     A                                * 30D16
         ASL     A                                * 30D18
@@ -1056,9 +1066,9 @@ SUB_30D13:
         A=DAT0  B                                * 30D1D
         LC(2)   #20                              * 30D20
         ?C#A    B                                * 30D24
-        GOYES   SUB_30D13.L1                     * 30D27
+        GOYES   KermQuotes.L1                    * 30D27
         A=0     B                                * 30D29
-SUB_30D13.L1:
+KermQuotes.L1:
         R1=A                                     * 30D2C
         RTN                                      * 30D2F
         RPL
@@ -1072,7 +1082,7 @@ DECODE:
             D0=A                                 * 30D51
             D0=D0+  10                           * 30D54
             D0=D0+  10                           * 30D57
-            GOSUB   SUB_30D13                    * 30D5A
+            GOSUB   KermQuotes                   * 30D5A
             D1=D1+  5                            * 30D5E
             GOSUBL  GetStrLenStk                 * 30D61
             D=C     A                            * 30D67
@@ -1085,7 +1095,7 @@ DECODE.loop1:
             DAT0=A  B                            * 30D78
             D0=D0+  2                            * 30D7B
 DECODE.L2:
-            GOSUB   SUB_30DC2                    * 30D7E
+            GOSUB   KermDecodeCh                 * 30D7E
             GONC    DECODE.loop1                 * 30D82
             AD1EX                                * 30D85
             D1=A                                 * 30D88
@@ -1108,7 +1118,8 @@ DECODE.L3:
             GOVLNG  DropLoop                     * 30DBB
 
 * refs (1): 30D7E
-SUB_30DC2:
+* Decodes one character of packet data from D1, following the control and 8th-bit prefixes. D.A counts the bytes left; carry set when they run out
+KermDecodeCh:
             D=D-1   A                            * 30DC2
             RTNC                                 * 30DC4
             A=0     A                            * 30DC7
@@ -1116,53 +1127,54 @@ SUB_30DC2:
             D1=D1+  2                            * 30DCC
             C=R1                                 * 30DCF
             ?C=0    B                            * 30DD2
-            GOYES   SUB_30DC2.L1                 * 30DD5
+            GOYES   KermDecodeCh.L1              * 30DD5
             ?C#A    B                            * 30DD7
-            GOYES   SUB_30DC2.L1                 * 30DDA
+            GOYES   KermDecodeCh.L1              * 30DDA
             A=A+1   XS                           * 30DDC
             D=D-1   A                            * 30DDF
             RTNC                                 * 30DE1
             A=DAT1  B                            * 30DE4
             D1=D1+  2                            * 30DE7
-SUB_30DC2.L1:
+KermDecodeCh.L1:
             CSR     A                            * 30DEA
             CSR     A                            * 30DEC
             ?C#A    B                            * 30DEE
-            GOYES   SUB_30DC2.L4                 * 30DF1
+            GOYES   KermDecodeCh.L4              * 30DF1
             D=D-1   A                            * 30DF3
             RTNC                                 * 30DF5
             A=DAT1  B                            * 30DF8
             D1=D1+  2                            * 30DFB
             A=A+A   B                            * 30DFE
-            GONC    SUB_30DC2.L2                 * 30E01
+            GONC    KermDecodeCh.L2              * 30E01
             ?A#0    XS                           * 30E04
-            GOYES   SUB_30DC2.L2                 * 30E07
+            GOYES   KermDecodeCh.L2              * 30E07
             A=A+1   XS                           * 30E09
-SUB_30DC2.L2:
+KermDecodeCh.L2:
             ASRB.F  B                            * 30E0C
             LC(2)   #3F                          * 30E11
             ?C#A    B                            * 30E15
-            GOYES   SUB_30DC2.L3                 * 30E18
+            GOYES   KermDecodeCh.L3              * 30E18
             ABIT=1  6                            * 30E1A
-SUB_30DC2.L3:
+KermDecodeCh.L3:
             ?C>A    B                            * 30E1F
-            GOYES   SUB_30DC2.L4                 * 30E22
+            GOYES   KermDecodeCh.L4              * 30E22
             LC(2)   #5F                          * 30E24
             ?C<A    B                            * 30E28
-            GOYES   SUB_30DC2.L4                 * 30E2B
+            GOYES   KermDecodeCh.L4              * 30E2B
             ABIT=0  6                            * 30E2D
-SUB_30DC2.L4:
+KermDecodeCh.L4:
             ?A=0    XS                           * 30E32
-            GOYES   SUB_30DC2.L5                 * 30E35
+            GOYES   KermDecodeCh.L5              * 30E35
             A=A+A   B                            * 30E37
             ASRB                                 * 30E3A
-SUB_30DC2.L5:
+KermDecodeCh.L5:
             RTNCC                                * 30E3D
           ENDCODE                                * 30E3F
         ;                                        * 30E3F
 
 * refs (2): 2E0FE 3083D
-OBJ_30E44:
+* $ ->: empties the receive buffer and writes the string to the serial port, raising any error. ATTN aborts
+KermSendRaw:
         :: FLUSHRSBUF                            * 30E44
 
 * refs (1): 323AF
@@ -1172,7 +1184,8 @@ PutSerialECk:
         ;                                        * 30E67
 
 * refs (3): 2DBE9 2EFFA 2F4C0
-OBJ_30E6C:
+* $ ->: stores the text of the other side's E packet for KERRM
+KERMERRM!:
         CON(5)  (*)+5                            * 30E6C  primitive code object
         ASSEMBLE
         C=DAT1  A                                * 30E71
@@ -1180,12 +1193,14 @@ OBJ_30E6C:
         GOLONG  CLOSEUART.L1                     * 30E77
 
 * refs (1): 01976
-SUB_30E7D:
+* Sets the baud rate to 9600 and goes on into UARTSetBaud. Called from #01976
+UARTInit:
         P=      0                                * 30E7D
         LC(1)   #6                               * 30E7F
 
 * refs (1): 30EBC
-SUB_30E82:
+* C low nibble = rate code -> turns the UART and IR off (IOC and IRC 0), writes the rate to BAUD and clears the buffer pointers from #80519. The tail, .L1, also turns the UART on with its receive interrupt
+UARTSetBaud:
         D0=(5)  IOC                              * 30E82
         C=0     S                                * 30E89
         DAT0=C  S                                * 30E8C
@@ -1200,8 +1215,8 @@ SUB_30E82:
         C=0     W                                * 30EB3
         DAT0=C  10                               * 30EB6
         RTN                                      * 30EBA
-SUB_30E82.L1:
-        GOSUB   SUB_30E82                        * 30EBC
+SetBaud~1:
+        GOSUB   UARTSetBaud                      * 30EBC
         D0=(5)  IOC                              * 30EC0
         P=      0                                * 30EC7
         LC(1)   #B                               * 30EC9
@@ -1216,53 +1231,53 @@ OUTUART:
         DAT0=C  B                                * 30EE1
         GOSUB   ChkXmit                          * 30EE4
         RTNC                                     * 30EE8
-        GOSUB   SUB_3113D                        * 30EEB
+        GOSUB   IOParityOf                       * 30EEB
         B=A     B                                * 30EEF
-        GOSUB   SUB_310DE                        * 30EF2
-        GOSUB   SUB_31032                        * 30EF6
+        GOSUB   IOTicks                          * 30EF2
+        GOSUB   IODeadline                       * 30EF6
         GOSUB   SUB_31085                        * 30EFA
         GONC    OUTUART.loop4                    * 30EFE
 OUTUART.loop1:
-        GOSUB   SUB_310CA                        * 30F01
+        GOSUB   UARTTxFull?                      * 30F01
         GOC     OUTUART.loop1                    * 30F05
-        GOSUB   SUB_30FE1                        * 30F08
-        GOSUB   SUB_310CA                        * 30F0C
+        GOSUB   UARTIntOff                       * 30F08
+        GOSUB   UARTTxFull?                      * 30F0C
         GONC    OUTUART.L2                       * 30F10
-        GOSUB   SUB_3100E                        * 30F13
+        GOSUB   UARTIntOn                        * 30F13
         GOTO    OUTUART.loop1                    * 30F17
 OUTUART.L2:
         GOSUB   SUB_31085                        * 30F1B
         GONC    OUTUART.L3                       * 30F1F
         LA(2)   #13                              * 30F22
-        GOSUB   SUB_3114C                        * 30F29
+        GOSUB   ByteParity                       * 30F29
         GOSBVL  SUB_7015D                        * 30F2D
 OUTUART.L3:
-        GOSUB   SUB_3100E                        * 30F34
+        GOSUB   UARTIntOn                        * 30F34
 OUTUART.loop4:
         D1=(4)  #07F7                            * 30F38
-        GOSUB   SUB_30FC9                        * 30F3E
+        GOSUB   IOChkATTN                        * 30F3E
         GOSBVL  OnKeyDown?                       * 30F42
         GONC    OUTUART.L5                       * 30F49
-        GOTO    SUB_30FC9.L1                     * 30F4C
+        GOTO    IOChkATTN.L1                     * 30F4C
 OUTUART.L5:
-        GOSUB   SUB_310CA                        * 30F50
+        GOSUB   UARTTxFull?                      * 30F50
         GOC     OUTUART.loop4                    * 30F54
         GOSUB   SUB_310A5                        * 30F57
         GOC     OUTUART.L7                       * 30F5B
-        GOSUB   SUB_30FE1                        * 30F5E
-        GOSUB   SUB_310CA                        * 30F62
+        GOSUB   UARTIntOff                       * 30F5E
+        GOSUB   UARTTxFull?                      * 30F62
         GONC    OUTUART.L6                       * 30F66
-        GOSUB   SUB_3100E                        * 30F69
+        GOSUB   UARTIntOn                        * 30F69
         GOTO    OUTUART.loop4                    * 30F6D
 OUTUART.L6:
         GOSUB   SUB_310A5                        * 30F71
         GONC    OUTUART.L8                       * 30F75
-        GOSUB   SUB_3100E                        * 30F78
+        GOSUB   UARTIntOn                        * 30F78
 OUTUART.L7:
         D=D+1   W                                * 30F7C
         D=D-1   W                                * 30F7F
         GOC     OUTUART.loop4                    * 30F82
-        GOSUB   SUB_310DE                        * 30F85
+        GOSUB   IOTicks                          * 30F85
         P=      12                               * 30F89
         C=C-D   WP                               * 30F8B
         P=      0                                * 30F8E
@@ -1274,7 +1289,7 @@ OUTUART.L8:
         D0=(2)  #16                              * 30FA3
         A=B     B                                * 30FA7
         DAT0=A  B                                * 30FAA
-        GOSUB   SUB_3100E                        * 30FAD
+        GOSUB   UARTIntOn                        * 30FAD
         RTNCC                                    * 30FB1
 
 * refs (2): 31623 31796
@@ -1283,23 +1298,26 @@ SAVPTR~jump_14:
         BSS     8                                * 30FBA  zeros
 
 * refs (1): 324FB
-SUB_30FC2:
+* D1 = ATTNFLG, then on to IOChkATTN
+ChkATTN:
         D1=(5)  ATTNFLG                          * 30FC2
 
 * refs (2): 30F3E 311E5
-SUB_30FC9:
+* D1 = ATTNFLG. With no ON press, returns. Otherwise clears the count and leaves the caller as well, with carry set and "Interrupted" in C.A
+IOChkATTN:
         C=DAT1  A                                * 30FC9
         ?C=0    A                                * 30FCC
         RTNYES                                   * 30FCF
         C=RSTK                                   * 30FD1
         C=0     A                                * 30FD3
         DAT1=C  A                                * 30FD5
-SUB_30FC9.L1:
+IOChkATTN.L1:
         LC(5)   intrptderr                       * 30FD8  "Interrupted"
         RTNSC                                    * 30FDF
 
 * refs (4): 30F08 30F5E 311E9 312FF
-SUB_30FE1:
+* Saves IOC at #80523 and clears its two interrupt enable bits, so the buffers can be touched safely
+UARTIntOff:
         D1=(5)  =IR_16Hz_Clock                   * 30FE1
         C=DAT1  A                                * 30FE8
         D1=C                                     * 30FEB
@@ -1308,23 +1326,25 @@ SUB_30FE1:
         C=DAT0  1                                * 30FFB
         DAT1=C  1                                * 30FFF
         CBIT=0  0                                * 31003
-        GOTO    SUB_313C2.L2                     * 31008
+        GOTO    IOAnnOff.L2                      * 31008
         BSS     2                                * 3100C  zeros
 
 * refs (10): 30F13 30F34 30F69 30F78 30FAD 311F4 ...
-SUB_3100E:
+* Puts back the IOC value saved at #80523
+UARTIntOn:
         D1=(5)  =IR_16Hz_Clock                   * 3100E
         C=DAT1  A                                * 31015
         D1=C                                     * 31018
         D1=(4)  #0523                            * 3101B
         D0=(5)  IOC                              * 31021
         C=DAT1  1                                * 31028
-SUB_3100E.L1:
+UARTIntOn.L1:
         DAT0=C  1                                * 3102C
         RTN                                      * 31030
 
 * refs (2): 30EF6 31263
-SUB_31032:
+* C = time now in ticks -> D = time of the timeout. The timeout at #80521 is in tenths of a second: 0 means 10 s, FF means never (D all ones)
+IODeadline:
         D=0     W                                * 31032
         P=      12                               * 31035
         D=C     WP                               * 31037
@@ -1336,16 +1356,16 @@ SUB_31032:
         C=0     W                                * 3104F
         C=DAT1  B                                * 31052
         ?C=0    B                                * 31055
-        GOYES   SUB_31032.L1                     * 31058
+        GOYES   IODeadline.L1                    * 31058
         C=C+1   B                                * 3105A
         C=C-1   B                                * 3105D
-        GONC    SUB_31032.L2                     * 31060
+        GONC    IODeadline.L2                    * 31060
         D=0     W                                * 31063
         D=D-1   W                                * 31066
         RTNCC                                    * 31069
-SUB_31032.L1:
+IODeadline.L1:
         LC(2)   #64                              * 3106B
-SUB_31032.L2:
+IODeadline.L2:
         A=C     W                                * 3106F
         C=C+C   A                                * 31072
         C=C+A   A                                * 31074
@@ -1357,6 +1377,7 @@ SUB_31032.L2:
         RTNCC                                    * 31083
 
 * refs (2): 30EFA 30F1B
+* Probably: carry set when XON/XOFF applies: bit 3 of the nibble at #8051F
 SUB_31085:
         D1=(5)  =IR_16Hz_Clock                   * 31085
         C=DAT1  A                                * 3108C
@@ -1368,6 +1389,7 @@ SUB_31085:
         RTNCC                                    * 310A3
 
 * refs (2): 30F57 30F71
+* Probably: carry set when both high bits of the nibble at #8051E are set: a handshake setting
 SUB_310A5:
         D1=(5)  =IR_16Hz_Clock                   * 310A5
         C=DAT1  A                                * 310AC
@@ -1381,7 +1403,8 @@ SUB_310A5:
         RTNCC                                    * 310C8
 
 * refs (6): 30F01 30F0C 30F50 30F62 312F8 31303
-SUB_310CA:
+* Carry set while bit 0 of TCS (#00112) is set: the transmit buffer is full
+UARTTxFull?:
         D0=(5)  NOP1MASK18                       * 310CA
         A=DAT0  1                                * 310D1
         ?ABIT=1 0                                * 310D5
@@ -1389,7 +1412,8 @@ SUB_310CA:
         RTN                                      * 310DC
 
 * refs (6): 30EF2 30F85 3125F 31270 317B0 317C3
-SUB_310DE:
+* -> C = current time in ticks of 1/8192 s, from the RAM clock and TIMER2, without disturbing the timer
+IOTicks:
         SETHEX                                   * 310DE
         D1=(5)  TIMER2CTRL                       * 310E0
         A=DAT1  S                                * 310E7
@@ -1403,9 +1427,9 @@ SUB_310DE:
         A=A+A   P                                * 31102
         P=      12                               * 31105
         A=0     WP                               * 31107
-        GONC    SUB_310DE.L1                     * 3110A
+        GONC    IOTicks.L1                       * 3110A
         A=A-1   WP                               * 3110D
-SUB_310DE.L1:
+IOTicks.L1:
         P=      7                                * 31110
         A=C     WP                               * 31112
         D1=(2)  #1B                              * 31115
@@ -1421,14 +1445,16 @@ SUB_310DE.L1:
         RTNCC                                    * 3113B
 
 * refs (2): 30EEB 31211
-SUB_3113D:
+* A.B = byte -> A.B with its parity bit set per the setting at #80520. Sets D1 first
+IOParityOf:
         P=      0                                * 3113D
         D1=(5)  =IR_16Hz_Clock                   * 3113F
         C=DAT1  A                                * 31146
         D1=C                                     * 31149
 
 * refs (4): 005C3 30F29 31318 70156
-SUB_3114C:
+* D1 = page of the I/O settings (#80500), A.B = byte -> bit 7 of A.B set for the parity type at #80520. Uses a table of nibble parities. Also used at boot
+ByteParity:
         D1=(4)  #0520                            * 3114C
         C=DAT1  S                                * 31152
         C=C+C   S                                * 31156
@@ -1436,7 +1462,7 @@ SUB_3114C:
         ABIT=0  7                                * 3115C
         C=C+C   S                                * 31161
         C=C+C   S                                * 31164
-        GOC     SUB_3114C.L1                     * 31167
+        GOC     ByteParity.L1                    * 31167
         A=C     S                                * 3116A
         C=A     B                                * 3116D
         P=C     0                                * 31170
@@ -1447,7 +1473,7 @@ SUB_3114C:
         LC(16)  #0880800880080880                * 31190
         C=C+A   S                                * 311A2
         P=      0                                * 311A5
-SUB_3114C.L1:
+ByteParity.L1:
         CSLC                                     * 311A7
         CSL     B                                * 311AA
         A=A!C   B                                * 311AD
@@ -1466,68 +1492,70 @@ ChkXmit.L1:
         RTNSC                                    * 311CF
 
 * refs (4): 2E2FF 2E33F 2E38A 3152C
-SUB_311D1:
+* Takes a byte from the receive buffer -> A.B; carry set and an error number in D1 on failure. ON gives "Interrupted"; a parity mismatch gives #C05
+IOGetByte:
         D=0     W                                * 311D1
-SUB_311D1.L1:
+IOGetByte.L1:
         P=      0                                * 311D4
         SETHEX                                   * 311D6
         GOSBVL  D1=IRAM                          * 311D8
         D1=(4)  #07F7                            * 311DF
-        GOSUB   SUB_30FC9                        * 311E5
-        GOSUB   SUB_30FE1                        * 311E9
+        GOSUB   IOChkATTN                        * 311E5
+        GOSUB   UARTIntOff                       * 311E9
         GOSUB   POPUART                          * 311ED
-        GOC     SUB_311D1.L3                     * 311F1
-        GOSUB   SUB_3100E                        * 311F4
+        GOC     IOGetByte.L3                     * 311F1
+        GOSUB   UARTIntOn                        * 311F4
         D1=(4)  #0520                            * 311F8
         C=DAT1  XS                               * 311FE
         C=C+C   XS                               * 31202
         RTNNC                                    * 31205
         C=C+C   XS                               * 31208
-        GONC    SUB_311D1.L2                     * 3120B
+        GONC    IOGetByte.L2                     * 3120B
         B=A     B                                * 3120E
-        GOSUB   SUB_3113D                        * 31211
+        GOSUB   IOParityOf                       * 31211
         D1=(5)  #00C05                           * 31215  I/O error number #C05, returned in D1
         ?A#B    B                                * 3121C
-        GOYES   SUB_31239.loop1                  * 3121F
-SUB_311D1.L2:
+        GOYES   IORecvErr.loop1                  * 3121F
+IOGetByte.L2:
         ABIT=0  7                                * 31221
         RTNCC                                    * 31226
-SUB_311D1.L3:
+IOGetByte.L3:
         ?A=0    XS                               * 31228
-        GOYES   SUB_31239.L2                     * 3122B
+        GOYES   IORecvErr.L2                     * 3122B
         C=A     A                                * 3122D
         C=0     XS                               * 3122F
         DAT1=C  A                                * 31232
-        GOSUB   SUB_3100E                        * 31235
+        GOSUB   UARTIntOn                        * 31235
 
 * refs (1): 32127
-SUB_31239:
-        D1=(5)  #00C04                           * 31239  I/O error number #C03, returned in D1
+* D1 = the number of a receive error: #C04 "Receive Buffer Overrun" when the overrun bit is set in A, else #C03 "Receive Error"
+IORecvErr:
+        D1=(5)  #00C04                           * 31239  I/O error number #C04, returned in D1
         A=A+A   XS                               * 31240
-        GOC     SUB_31239.loop1                  * 31243
-        D1=(5)  #00C03                           * 31246  I/O error number #C04, returned in D1
-SUB_31239.loop1:
+        GOC     IORecvErr.loop1                  * 31243
+        D1=(5)  #00C03                           * 31246  I/O error number #C03, returned in D1
+IORecvErr.loop1:
         CD1EX                                    * 3124D
         RTNSC                                    * 31250
-SUB_31239.L2:
-        GOSUB   SUB_3100E                        * 31252
+IORecvErr.L2:
+        GOSUB   UARTIntOn                        * 31252
         GOSUB   SUB_312D8                        * 31256
         ?D#0    W                                * 3125A
-        GOYES   SUB_31239.L3                     * 3125D
-        GOSUB   SUB_310DE                        * 3125F
-        GOSUB   SUB_31032                        * 31263
-SUB_31239.L3:
+        GOYES   IORecvErr.L3                     * 3125D
+        GOSUB   IOTicks                          * 3125F
+        GOSUB   IODeadline                       * 31263
+IORecvErr.L3:
         D=D+1   W                                * 31267
         D=D-1   W                                * 3126A
-        GOC     SUB_31239.L4                     * 3126D
-        GOSUB   SUB_310DE                        * 31270
+        GOC     IORecvErr.L4                     * 3126D
+        GOSUB   IOTicks                          * 31270
         D1=(5)  KeyBitCodes.L2                   * 31274
         P=      12                               * 3127B
         C=C-D   WP                               * 3127D
         P=      0                                * 31280
-        GONC    SUB_31239.loop1                  * 31282
-SUB_31239.L4:
-        GOTO    SUB_311D1.L1                     * 31285
+        GONC    IORecvErr.loop1                  * 31282
+IORecvErr.L4:
+        GOTO    IOGetByte.L1                     * 31285
 
 * refs (2): 311ED 81076
 POPUART:
@@ -1573,16 +1601,16 @@ adr_uart_han:
         GOSUB   ChkXmit                          * 312F1
         RTNC                                     * 312F5
 adr_uart_han.loop1:
-        GOSUB   SUB_310CA                        * 312F8
+        GOSUB   UARTTxFull?                      * 312F8
         GOC     adr_uart_han.loop1               * 312FC
-        GOSUB   SUB_30FE1                        * 312FF
-        GOSUB   SUB_310CA                        * 31303
+        GOSUB   UARTIntOff                       * 312FF
+        GOSUB   UARTTxFull?                      * 31303
         GONC    adr_uart_han.L2                  * 31307
-        GOSUB   SUB_3100E                        * 3130A
+        GOSUB   UARTIntOn                        * 3130A
         GOC     adr_uart_han.loop1               * 3130E
 adr_uart_han.L2:
         LA(2)   #11                              * 31311
-        GOSUB   SUB_3114C                        * 31318
+        GOSUB   ByteParity                       * 31318
         D0=(2)  #16                              * 3131C
         DAT0=A  B                                * 31320
         D1=(4)  #051E                            * 31323
@@ -1590,7 +1618,7 @@ adr_uart_han.L2:
         LC(2)   #7E                              * 3132C
         A=A&C   B                                * 31330
         DAT1=A  B                                * 31334
-        GOTO    SUB_3100E                        * 31337
+        GOTO    UARTIntOn                        * 31337
 
 * refs (1): 2EDE6
 UARTBUFLEN:
@@ -1633,11 +1661,12 @@ FLUSHRSBUF.L2:
         BSS     4                                * 313BE  zeros
 
 * refs (4): 3147B 314BA 317DE 32B25
-SUB_313C2:
+* Ends a transfer: if IR is on, waits for the transmitter to empty and restores the IRC settings; then turns the I/O annunciator off
+IOAnnOff:
         D0=(5)  IRC                              * 313C2
         C=DAT0  B                                * 313C9
         ?CBIT=0 2                                * 313CC
-        GOYES   SUB_313C2.L1                     * 313D1
+        GOYES   IOAnnOff.L1                      * 313D1
         GOSBVL  D0=IRAM                          * 313D3
         D0=(4)  #0927                            * 313DA
         A=DAT0  1                                * 313E0
@@ -1648,15 +1677,15 @@ SUB_313C2:
         DAT0=C  1                                * 313F1
         D0=D0-  3                                * 313F5
         DAT0=A  1                                * 313F8
-SUB_313C2.L1:
+IOAnnOff.L1:
         D0=(2)  #0B                              * 313FC
         C=DAT0  B                                * 31400
         CBIT=0  5                                * 31403
         DAT0=C  B                                * 31408
         RTN                                      * 3140B
-SUB_313C2.L2:
+IOAnnOff.L2:
         CBIT=0  1                                * 3140D
-        GOTO    SUB_3100E.L1                     * 31412
+        GOTO    UARTIntOn.L1                     * 31412
 
 * refs (4): 313E4 315F9 3179A D4588
 WaitTbz0:
@@ -1694,7 +1723,7 @@ PUTSERIAL.loop1:
             C=R0                                 * 31473
             C=C-1   A                            * 31476
             GONC    PUTSERIAL.L2                 * 31478
-            GOSUB   SUB_313C2                    * 3147B
+            GOSUB   IOAnnOff                     * 3147B
             GOVLNG  GPPushTLoop                  * 3147F
 PUTSERIAL.L2:
             C=C-1   S                            * 31486
@@ -1716,7 +1745,7 @@ PUTSERIAL.L4:
             A=R0                                 * 314B2
             C=C-A   A                            * 314B5
             R0=C                                 * 314B7
-            GOSUB   SUB_313C2                    * 314BA
+            GOSUB   IOAnnOff                     * 314BA
             GOSBVL  PUSH2#                       * 314BE
             GOVLNG  PushFLoop                    * 314C5
           ENDCODE                                * 314CC
@@ -1746,7 +1775,7 @@ GETSERIAL.L2:
         C=C-1   A                                * 31524
         R1=C                                     * 31526
         GOC     GETSERIAL.L3                     * 31529
-        GOSUB   SUB_311D1                        * 3152C
+        GOSUB   IOGetByte                        * 3152C
         GOC     GETSERIAL.L4                     * 31530
         C=R2                                     * 31533
         D1=C                                     * 31536
@@ -1963,13 +1992,13 @@ DOSBRK~1:
         D1=(5)  NOP1MASK18                       * 317A2
         LC(1)   #8                               * 317A9
         DAT1=C  P                                * 317AC
-        GOSUB   SUB_310DE                        * 317B0
+        GOSUB   IOTicks                          * 317B0
         D=C     W                                * 317B4
         C=0     W                                * 317B7
         LC(4)   #099A                            * 317BA
         D=D+C   W                                * 317C0
 DOSBRK~1.loop1:
-        GOSUB   SUB_310DE                        * 317C3
+        GOSUB   IOTicks                          * 317C3
         P=      12                               * 317C7
         C=C-D   WP                               * 317C9
         P=      0                                * 317CC
@@ -1977,17 +2006,19 @@ DOSBRK~1.loop1:
         D1=(5)  NOP1MASK18                       * 317D1
         C=0     A                                * 317D8
         DAT1=C  1                                * 317DA
-        GOSUB   SUB_313C2                        * 317DE
+        GOSUB   IOAnnOff                         * 317DE
         GOTO    FLUSHRSBUF.L1                    * 317E2
         RPL
 
 * refs (4): 318C7 31976 319A3 319E4
-OBJ_317E6:
+* -> #: characters per print line: 24 over IR, PRTPAR's line length on the wire (flag -34)
+PrintWidth:
         :: BINT34 TestSysFlag NOTcase BINT24     * 317E6  flag -34: Print via IR / Print via wire
           GetChkPRTPAR ROTROT2DROP ;             * 317FF
 
 * refs (3): 318A9 31903 31A2A
-OBJ_3180E:
+* Selects ECMA-94; with an empty stack prints "Empty Stack" and leaves the caller. For PRST and PRSTC
+?PrintEmpty:
         :: SetEcma94 DEPTH #0<> ?SEMI            * 3180E
 
 * refs (2): 2D93D 43676
@@ -2010,8 +2041,8 @@ OpenIOPrt:
 
 * refs (1): 1EE78
 prstc:
-        :: OBJ_3180E DEPTH ZERO_DO ?ATTNQUIT ISTOP-INDEX DUP#1+PICK * 318A4
-          OBJ_317E6 #3- DoSt:(s,_,s) PRINT LOOP docr ; * 318C7
+        :: ?PrintEmpty DEPTH ZERO_DO ?ATTNQUIT ISTOP-INDEX DUP#1+PICK * 318A4
+          PrintWidth #3- DoSt:(s,_,s) PRINT LOOP docr ; * 318C7
 
 * refs (1): 31930
 dup;print!(st):
@@ -2019,7 +2050,7 @@ dup;print!(st):
 
 * refs (2): 1EE5D B83AF
 pr1:
-        :: OBJ_3180E DUPTYPECSTR? OVER NULL$? AND case docr * 318FE
+        :: ?PrintEmpty DUPTYPECSTR? OVER NULL$? AND case docr * 318FE
           CK&DISPATCH1                           * 31926
           BINT3 dup;print!(st)                   * 3192B  string
           BINT12 PrintGrob                       * 31935  grob
@@ -2036,49 +2067,53 @@ prst~1:
 
 * refs (1): 31999
 OBJ_3196C:
-            :: SWAPDROP OBJ_317E6 #3- !DcompWidth 1stkdecomp$w PRINT ; * 3196C
-            dup;r?:dq/sk OBJ_3196C NULL{} OBJ_317E6 4ROLL #- ERRSET * 31994
-            :: BEGIN ?ATTNQUIT OBJ_5393E OBJ_169FA SWAP PRINT OVERSWAP * 319B7
-              DUPNULLCOMP? OBJ_317E6 SWAP UNTIL ; * 319DF
+            :: SWAPDROP PrintWidth #3- !DcompWidth 1stkdecomp$w PRINT ; * 3196C
+            dup;r?:dq/sk OBJ_3196C NULL{} PrintWidth 4ROLL #- ERRSET * 31994
+            :: BEGIN ?ATTNQUIT SetISF803 DclLine# SWAP PRINT OVERSWAP * 319B7
+              DUPNULLCOMP? PrintWidth SWAP UNTIL ; * 319DF
             ERRTRAP                              * 319F8
-            :: OBJ_5394C ERRJMP ; OBJ_5394C 3DROP ; * 319FD
+            :: ClrISF803 ERRJMP ; ClrISF803 3DROP ; * 319FD
         ;                                        * 31A20
 
 * refs (1): 1EE93
 prst:
-        :: OBJ_3180E DEPTH ZERO_DO ISTOP-INDEX PICK ISTOP-INDEX #:>$ DUPLEN$ * 31A25
-          SWAP PRINTxNLF OVER TYPEGROB? ITE      * 31A52
+        :: ?PrintEmpty DEPTH ZERO_DO ISTOP-INDEX PICK ISTOP-INDEX #:>$ * 31A25
+          DUPLEN$ SWAP PRINTxNLF OVER TYPEGROB? ITE * 31A4D
           :: DROP ->str1(go) PRINT ;             * 31A6B
           :: prst~1 DROP ;                       * 31A84
           LOOP docr ;                            * 31A98
 
 * refs (2): 31B6F 31B92
-OBJ_31AA7:
+* Sets or clears flag -64 from the saved local IWrap
+IWrap!:
         :: BINT64 Π'IWrap case SetSysFlag        * 31AA7
           ClrSysFlag ;                           * 31AC0
 
 * refs (1): 16A86
-OBJ_31ACA:
+* Probably: the next print line while printing an array, called by the decompiler
+DclLine19~1:
         :: ?ATTNQUIT DUPNULLCOMP? BINT34 TestSysFlag case * 31ACA  flag -34: Print via IR / Print via wire
           :: IT                                  * 31AE8
-            :: SWAP OBJ_31C59 SWAP ;             * 31AF2
-            DcompWidth@ OBJ_5394C OBJ_169FA ;    * 31B0B
-          IT OBJ_31C23                           * 31B1F
+            :: SWAP PrArrayHead SWAP ;           * 31AF2
+            DcompWidth@ ClrISF803 DclLine# ;     * 31B0B
+          IT BindIWrap                           * 31B1F
           DUP INNER#1= ?SKIP SWAPDROP            * 31B29
           COERCE #>$ tok] &$ APPEND_SPACE 3UNROLL ERRSET geti(cp,lr) ERRTRAP * 31B3D
-          :: OBJ_31AA7 ERRJMP ; ROTDROP BINT64 TestSysFlag SWAP OBJ_31AA7 * 31B6A
-          OBJ_31CD6 4ROLL !insert$ 3UNROLL casedrop * 31B97
+          :: IWrap! ERRJMP ; ROTDROP BINT64 TestSysFlag SWAP IWrap! * 31B6A
+          PrRowText 4ROLL !insert$ 3UNROLL casedrop * 31B97
           :: NEWLINE$&$ NULL{} ABND ;            * 31BB0
           DUP INNER#1= caseDROP %1               * 31BC9
           EQ NOTcaseDROP COERCE                  * 31BDD
           #>$                                    * 31BEC
 
 * refs (1): 31C90
-OBJ_31BF1:
+* $ ... -> $': puts "Row " and the row number in front of a printed array row
+PrRow$:
           # C16 JstGetTHEMESG !insert$ ROT NEWLINE$&$ NEWLINE$&$ SWAP &$SWAP ; * 31BF1  "Row "
 
 * refs (1): 31B24
-OBJ_31C23:
+* Saves flag -64 in the local IWrap, because GETI changes it when walking an array
+BindIWrap:
         :: BINT64 TestSysFlag                    * 31C23
 
 {Π'IWrap}:
@@ -2090,21 +2125,22 @@ OBJ_31C23:
           BIND DROP                              * 31C4F
 
 * refs (1): 31AFC
-OBJ_31C59:
+* [] -> []: prints "Array" and the dimensions
+PrArrayHead:
           :: # 127 JstGetTHEMESG APPEND_SPACE OVER size(ar) EDITDECOMP$ &$ * 31C59  "Array"
             PrintRC(st) ;                        * 31C86
-          OBJ_31BF1 JstGetTHEMESG tok1 &$ PrintRC(st) * 31C90
+          PrRow$ JstGetTHEMESG tok1 &$ PrintRC(st) * 31C90
 
 {1}:
-          { %1 } %1 3PICK OBJ_179AC caseDROP >TCOMP * 31CA9
+          { %1 } %1 3PICK Vector? caseDROP >TCOMP * 31CA9
         ;                                        * 31CD1
 
 * refs (1): 31B97
-OBJ_31CD6:
-        :: dup;r?:dq/sk a%>$ DUP NULL{} OBJ_17518 BEGIN DUPNULLCOMP? * 31CD6
-          NOT_WHILE                              * 31CFE
-          :: SWAP NEWLINE$&$ SWAP 3PICKSWAP OBJ_17518 3UNROLL $ "    " * 31D03
-            !insert$ &$SWAP ;                    * 31D38
+* [] -> $: the text of an array row, wrapped to print width
+PrRowText:
+        :: dup;r?:dq/sk a%>$ DUP NULL{} DclCmp BEGIN DUPNULLCOMP? NOT_WHILE * 31CD6
+          :: SWAP NEWLINE$&$ SWAP 3PICKSWAP DclCmp 3UNROLL $ "    " !insert$ * 31D03
+            &$SWAP ;                             * 31D3D
           REPEAT DROPSWAPDROP ;                  * 31D47
 
 * refs (2): 1EECE 1EED8
@@ -2203,7 +2239,7 @@ ChkPRTPAR~1:
 SUB_32120:
         D1=D1+  2                                * 32120
         DAT1=C  XS                               * 32123
-        GOSUBL  SUB_31239                        * 32127
+        GOSUBL  IORecvErr                        * 32127
         D1=(5)  LASTERROR                        * 3212D
         DAT1=C  A                                * 32134
         C=0     A                                * 32137
@@ -2220,7 +2256,7 @@ PUTSERIAL~1:
 SUB_3214B:
         CBIT=0  7                                * 3214B
         DAT0=C  A                                * 32150
-        GOSUB   SUB_3287B                        * 32153
+        GOSUB   PrintWire?                       * 32153
         RTNNC                                    * 32157
         A=0     A                                * 3215A
         GOTO    PrintRC(st)~1.L1                 * 3215C
@@ -2234,15 +2270,16 @@ PRINT:
 * The Very Big List names this address PopBufA, but it is a pointer inside an object; the name is not used
           case PrintRC(st)                       * 32189
           GetChkPRTPAR 4UNROLL 2DROP BEGIN ?ATTNQUIT DUP NEWLINE$ XEQPOS$ * 32193
-          COERCE DUP#0=ITE OBJ_321E3 PRINT~1 DUPNULL$? UNTIL 2DROP ; * 321BB
+          COERCE DUP#0=ITE PrintFirst# PRINT~1 DUPNULL$? UNTIL 2DROP ; * 321BB
 
 * refs (2): 321C5 32233
-OBJ_321E3:
+* $ #w #pos -> $rest: prints the first #w characters of a too-long string and returns what follows
+PrintFirst#:
         :: DROPDUP BINT1 4PICK SUB$ PrintRC(st) OVER #1+ DUP#0=IT #1- LAST$ ; * 321E3
 
 * refs (1): 321CA
 PRINT~1:
-        :: DUP 4PICK #>case OBJ_321E3            * 3221F
+        :: DUP 4PICK #>case PrintFirst#          * 3221F
           2DUP 1_#1-SUB$ PrintRC(st) #1+LAST$ ;  * 32238
 
 * refs (7): 3185E 31C86 31CA4 32175 3218E 321FC ...
@@ -2390,7 +2427,7 @@ REMAP.L5:
 
 * refs (3): 323C5 32AC3 32B9A
 SUB_3246B:
-        GOSUB   SUB_3287B                        * 3246B
+        GOSUB   PrintWire?                       * 3246B
         GONC    SUB_3246B.L1                     * 3246F
         GOLONG  FLUSHRSBUF.L2                    * 32472
 SUB_3246B.L1:
@@ -2399,7 +2436,7 @@ SUB_3246B.L1:
         A=C     A                                * 32482
         CBIT=0  2                                * 32484
         DAT0=C  B                                * 32489
-        GOSUB   SUB_32A1D                        * 3248C
+        GOSUB   PrtStatus@                       * 3248C
         CBIT=0  10                               * 32490
         ?ABIT=0 2                                * 32495
         GOYES   SUB_3246B.L2                     * 3249A
@@ -2424,7 +2461,7 @@ OpenIO_324C8:
         CON(5)  (*)+5                            * 324C8  primitive code object
         AD0EX                                    * 324CD
 OpenIO_324C8.L1:
-        GOSUB   SUB_32A1D                        * 324D0
+        GOSUB   PrtStatus@                       * 324D0
         CBIT=0  11                               * 324D4
         DAT0=C  A                                * 324D9
         D0=A                                     * 324DC
@@ -2438,8 +2475,8 @@ OpenIO_324C8.L2:
         CD1EX                                    * 324F2
         R2=C                                     * 324F5
         ST=0    15                               * 324F8
-        GOSUBL  SUB_30FC2                        * 324FB
-        GOSUB   SUB_32602                        * 32501
+        GOSUBL  ChkATTN                          * 324FB
+        GOSUB   PrintByteA                       * 32501
         RTNC                                     * 32505
         GOSUB   AllowIntr~jump_2                 * 32508
         C=R2                                     * 3250C
@@ -2471,7 +2508,7 @@ SAVPTR~jump_15:
 SetEcma94:
         CON(5)  (*)+5                            * 3252B  primitive code object
         GOSUB   SAVPTR~jump_15                   * 32530
-        GOSUB   SUB_32A1D                        * 32534
+        GOSUB   PrtStatus@                       * 32534
         CBIT=0  7                                * 32538
         CBIT=0  9                                * 3253D
         DAT0=C  A                                * 32542
@@ -2479,9 +2516,9 @@ SetEcma94:
         GOSUB   ChkLowBat                        * 32548
         GOSUB   AllowIntr~jump_2                 * 3254C
         GOC     PrintGrob~1.L2                   * 32550
-        GOSUB   SUB_3287B                        * 32553
+        GOSUB   PrintWire?                       * 32553
         GOC     PrintGrob~1.L4                   * 32557
-        GOSUB   SUB_32A21                        * 3255A
+        GOSUB   PrtStatusD0                      * 3255A
         ?CBIT=1 3                                * 3255E
         GOYES   PrintGrob~1.L3                   * 32563
         GOSUB   SUB_3246B.L1                     * 32565
@@ -2512,7 +2549,7 @@ ChkLowBat:
         D=C     A                                * 325AA
         P=      0                                * 325AC
         LC(1)   #2                               * 325AE
-        GOSBVL  SUB_006ED                        * 325B1
+        GOSBVL  ReadLowBat                       * 325B1
         GOSUB   SUB_32A2C                        * 325B8
         ?ST=1   7                                * 325BC
         GOYES   ChkLowBat.L1                     * 325BF
@@ -2530,24 +2567,26 @@ ChkLowBat.L2:
 
 * refs (2): 32BC1 32C67
 PrintGrob~2:
-        GOSUB   SUB_32868                        * 325DD
-        GONC    SUB_32602                        * 325E1
+        GOSUB   PrintLFCode                      * 325DD
+        GONC    PrintByteA                       * 325E1
         ?C=0    A                                * 325E4
         RTNYES                                   * 325E7
         LC(2)   #0D                              * 325E9
-        GOSUB   SUB_32604                        * 325ED
+        GOSUB   PrintByte                        * 325ED
         RTNC                                     * 325F1
         LC(2)   #0A                              * 325F4
-        GONC    SUB_32604                        * 325F8
+        GONC    PrintByte                        * 325F8
 PrintGrob~2.L1:
         GOVLNG  OUTUART                          * 325FB
 
 * refs (4): 32501 325E1 32E15 32E8C
-SUB_32602:
+* A.B = byte: on to PrintByte
+PrintByteA:
         C=A     A                                * 32602
 
 * refs (6): 325ED 325F8 32C5A 32D37 32D45 32E7D
-SUB_32604:
+* C.B = byte -> sends it to the printer, through the wire (flag -34) or by IR. Carry set and C.A = error on low battery or ON
+PrintByte:
         GOSUB   ChkLowBat                        * 32604
         RTNC                                     * 32608
         A=C     A                                * 3260B
@@ -2714,12 +2753,12 @@ SUB_32634.L25:
         DAT0=C  B                                * 32798
         ?ST=0   0                                * 3279B
         GOYES   SUB_32634.L26                    * 3279E
-        GOSUB   SUB_32856                        * 327A0
+        GOSUB   NoLF?                            * 327A0
         GOC     SUB_32634.L26                    * 327A4
         LC(2)   #04                              * 327A7
         A=C     A                                * 327AB
         GOSUB   SUB_32832                        * 327AD
-        GOSUB   SUB_32844                        * 327B1
+        GOSUB   DblSpace?                        * 327B1
         GONC    SUB_32634.L26                    * 327B5
         GOSUB   SUB_328E0                        * 327B8
         LC(2)   #04                              * 327BC
@@ -2743,11 +2782,11 @@ SUB_32634.L28:
         GOSUB   SUB_32891                        * 327EA
         ?ST=0   4                                * 327EE
         GOYES   SUB_32634.L29                    * 327F1
-        GOSUB   SUB_32856                        * 327F3
+        GOSUB   NoLF?                            * 327F3
         GOC     SUB_32634.L29                    * 327F7
-        GOSUB   SUB_32844                        * 327FA
+        GOSUB   DblSpace?                        * 327FA
         GONC    SUB_32634.L29                    * 327FE
-        GOSUB   SUB_32A21                        * 32801
+        GOSUB   PrtStatusD0                      * 32801
         ?CBIT=1 9                                * 32805
         GOYES   SUB_32634.L29                    * 3280A
         ?ST=0   8                                * 3280C
@@ -2777,7 +2816,8 @@ SUB_32832:
         RTNCC                                    * 32842
 
 * refs (2): 327B1 327FA
-SUB_32844:
+* D0 = #80000 page -> carry set when flag -37 is set: double-spaced printing
+DblSpace?:
         D0=(4)  #084C                            * 32844
         C=DAT0  B                                * 3284A
         ?CBIT=1 0                                * 3284D
@@ -2785,7 +2825,8 @@ SUB_32844:
         RTNCC                                    * 32854
 
 * refs (3): 327A0 327F3 32872
-SUB_32856:
+* D0 = #80000 page -> carry set when flag -38 is set: no linefeeds
+NoLF?:
         D0=(4)  #084C                            * 32856
         C=DAT0  B                                * 3285C
         ?CBIT=1 1                                * 3285F
@@ -2793,16 +2834,18 @@ SUB_32856:
         RTNCC                                    * 32866
 
 * refs (2): 325DD 32E6A
-SUB_32868:
+* -> A.A = 4, the HP 82240's line feed. With flag -38 set, carry set and C.A = 0
+PrintLFCode:
         LC(2)   #04                              * 32868
         A=C     A                                * 3286C
         GOSUB   D0=IRAM~jump_2                   * 3286E
-        GOSUB   SUB_32856                        * 32872
+        GOSUB   NoLF?                            * 32872
         C=0     A                                * 32876
         RTNC                                     * 32878
 
 * refs (6): 32153 3246B 32553 32B1E 32CAF 32ED1
-SUB_3287B:
+* -> carry set when flag -34 is set: printing to the wire, D0 at #8084B
+PrintWire?:
         GOSUB   D0=IRAM~jump_2                   * 3287B
         D0=(4)  #084B                            * 3287F
         C=DAT0  B                                * 32885
@@ -2857,13 +2900,13 @@ SUB_328E3.loop1:
         C=0     A                                * 328F2
         GOSUB   OnKeyDown?~jump                  * 328F4
         GOC     SUB_32891.L1                     * 328F8
-        GOSUB   SUB_329E9                        * 328FB
-        GOSUB   SUB_32A0D                        * 328FF
+        GOSUB   PrintErrBeep                     * 328FB
+        GOSUB   WaitONUp                         * 328FF
         CD1EX                                    * 32903
         D0=C                                     * 32906
         C=D     A                                * 32909
         RSTK=C                                   * 3290B
-        GOSBVL  SUB_011FC                        * 3290D
+        GOSBVL  GetTimeRaw                       * 3290D
         GOC     SUB_32891.L3                     * 32914
         AD0EX                                    * 32917
         D1=A                                     * 3291A
@@ -2945,7 +2988,8 @@ AllowIntr~jump_2:
         GOVLNG  AllowIntr                        * 329E2
 
 * refs (2): 328FB 32E46
-SUB_329E9:
+* C.A = error number; if not zero, beeps unless flag -56 is set
+PrintErrBeep:
         ?C=0    A                                * 329E9
         RTNYES                                   * 329EC
         GOSUB   D0=IRAM~jump_2                   * 329EE
@@ -2957,22 +3001,25 @@ SUB_329E9:
         GOVLNG  RCKBp                            * 32A06
 
 * refs (5): 328FF 32A16 32B04 32E4A 32EDE
-SUB_32A0D:
+* Waits until the ON key is released
+WaitONUp:
         C=0     A                                * 32A0D
         GOSBVL  CINRTN                           * 32A0F
         ?C#0    A                                * 32A16
-        GOYES   SUB_32A0D                        * 32A19
+        GOYES   WaitONUp                         * 32A19
         RTNCC                                    * 32A1B
 
 * refs (6): 3248C 324D0 32534 32A4D 32B52 32D27
-SUB_32A1D:
+* D0 = #80924, C.A = the printer's status word
+PrtStatus@:
         GOSUB   D0=IRAM~jump_2                   * 32A1D
 
 * refs (3): 3255A 32801 32B2F
-SUB_32A21:
+* As PrtStatus@, with D0 already in the #80000 page
+PrtStatusD0:
         D0=(4)  #0924                            * 32A21
         C=DAT0  A                                * 32A27
-SUB_32A21.L1:
+PrtStatusD0.L1:
         RTNCC                                    * 32A2A
 
 * refs (1): 325B8
@@ -2980,7 +3027,8 @@ SUB_32A2C:
         GOSUB   D0=IRAM~jump_2                   * 32A2C
 
 * refs (1): 32EDA
-SUB_32A30:
+* ST = low flags from the printer's status word; the old ST stays in C
+PrtStatusST:
         D0=(4)  #0924                            * 32A30
         C=ST                                     * 32A36
         C=DAT0  B                                * 32A38
@@ -2997,16 +3045,16 @@ D1=IRAM~jump_4:
 
 * refs (1): 01041
 SUB_32A4D:
-        GOSUB   SUB_32A1D                        * 32A4D
+        GOSUB   PrtStatus@                       * 32A4D
         ?CBIT=1 11                               * 32A51
-        GOYES   SUB_32A21.L1                     * 32A56
+        GOYES   PrtStatusD0.L1                   * 32A56
         P=      0                                * 32A58
         GOSUBL  SUB_3214B                        * 32A5A
         ST=0    10                               * 32A60
 
 * refs (1): 31F1C
 DOPRLCD~1:
-        GOSUB   SUB_32F3C                        * 32A63
+        GOSUB   LCDRows                          * 32A63
         D1=(4)  #0692                            * 32A67
         A=0     A                                * 32A6D
         A=DAT1  X                                * 32A6F
@@ -3039,7 +3087,7 @@ DOPRLCD~1.L1:
         GOSUB   SUB_3246B                        * 32AC3
         GOSUB   SUB_32CF7                        * 32AC7
         GOC     DOPRLCD~1.L2                     * 32ACB
-        GOSUB   SUB_32F3C                        * 32ACE
+        GOSUB   LCDRows                          * 32ACE
         D1=(4)  #0695                            * 32AD2
         GOSUB   SUB_32B60                        * 32AD8
         C=0     S                                * 32ADC
@@ -3056,7 +3104,7 @@ DOPRLCD~1.L2:
         GOYES   ErrFixEIRU                       * 32AFD
         ?ST=1   10                               * 32AFF
         GOYES   ErrFixEIRU                       * 32B02
-        GOSUB   SUB_32A0D                        * 32B04
+        GOSUB   WaitONUp                         * 32B04
 
 * refs (3): 323E9 32AFA 32AFF
 ErrFixEIRU:
@@ -3069,13 +3117,13 @@ ErrFixEIRU:
 
 * refs (3): 323D7 32AF7 32B0A
 FixEIRU:
-        GOSUB   SUB_32EAD                        * 32B1A
-        GOSUB   SUB_3287B                        * 32B1E
+        GOSUB   IOAnnClr                         * 32B1A
+        GOSUB   PrintWire?                       * 32B1E
         GONC    FixEIRU.L1                       * 32B22
-        GOSUBL  SUB_313C2                        * 32B25
+        GOSUBL  IOAnnOff                         * 32B25
         GOTO    FixEIRU.L3                       * 32B2B
 FixEIRU.L1:
-        GOSUB   SUB_32A21                        * 32B2F
+        GOSUB   PrtStatusD0                      * 32B2F
         D0=(5)  IRC                              * 32B33
         A=DAT0  B                                * 32B3A
         ABIT=0  2                                * 32B3D
@@ -3085,7 +3133,7 @@ FixEIRU.L1:
 FixEIRU.L2:
         DAT0=A  1                                * 32B4E
 FixEIRU.L3:
-        GOSUB   SUB_32A1D                        * 32B52
+        GOSUB   PrtStatus@                       * 32B52
         CBIT=0  11                               * 32B56
         DAT0=C  A                                * 32B5B
         RTNCC                                    * 32B5E
@@ -3181,7 +3229,7 @@ PrintGrob.loop10:
             GOC     PrintGrob.L11                * 32C51
             RSTK=C                               * 32C54
             LC(2)   #2D                          * 32C56
-            GOSUB   SUB_32604                    * 32C5A
+            GOSUB   PrintByte                    * 32C5A
             GOC     PrintGrob.loop6              * 32C5E
             C=RSTK                               * 32C61
             GOTO    PrintGrob.loop10             * 32C63
@@ -3216,7 +3264,7 @@ PrintGrob.L12:
 
 * refs (2): 31F0C 32B96
 ChkGrHook:
-        GOSUB   SUB_3287B                        * 32CAF
+        GOSUB   PrintWire?                       * 32CAF
         RTNNC                                    * 32CB3
 
 adrGraphPrtH:
@@ -3242,7 +3290,7 @@ adrGraphPrtH.L2:
 SUB_32CF7:
         ?D#0    A                                * 32CF7
         GOYES   SUB_32CF7.L1                     * 32CFA
-        GOTO    SUB_32EAD                        * 32CFC
+        GOTO    IOAnnClr                         * 32CFC
 SUB_32CF7.L1:
         P=      0                                * 32D00
         ST=1    11                               * 32D02
@@ -3258,16 +3306,16 @@ SUB_32CF7.L2:
         RSTK=C                                   * 32D1C
         CD1EX                                    * 32D1E
         R1=C.F  A                                * 32D21
-        GOSUB   SUB_32A1D                        * 32D27
+        GOSUB   PrtStatus@                       * 32D27
         CBIT=1  9                                * 32D2B
         DAT0=C  A                                * 32D30
         LC(2)   #1B                              * 32D33
-        GOSUB   SUB_32604                        * 32D37
+        GOSUB   PrintByte                        * 32D37
         GOC     SUB_32CF7.L3                     * 32D3B
         C=R2                                     * 32D3E
         CSR     A                                * 32D41
         CSR     A                                * 32D43
-        GOSUB   SUB_32604                        * 32D45
+        GOSUB   PrintByte                        * 32D45
         GOC     SUB_32CF7.L3                     * 32D49
         C=R2                                     * 32D4C
         D=C     A                                * 32D4F
@@ -3352,7 +3400,7 @@ SUB_32CF7.L14:
 SUB_32CF7.loop15:
         R0=A.F  WP                               * 32E09
         R0=A.F  S                                * 32E0F
-        GOSUBL  SUB_32602                        * 32E15
+        GOSUBL  PrintByteA                       * 32E15
         GOC     SUB_32CF7.L20                    * 32E1B
         A=R2                                     * 32E1E
         A=A-1   B                                * 32E21
@@ -3368,8 +3416,8 @@ SUB_32CF7.loop15:
         P=      0                                * 32E3D
         GOSUB   OnKeyDown?~jump                  * 32E3F
         GOC     SUB_32CF7.L16                    * 32E43
-        GOSUB   SUB_329E9                        * 32E46
-        GOSUB   SUB_32A0D                        * 32E4A
+        GOSUB   PrintErrBeep                     * 32E46
+        GOSUB   WaitONUp                         * 32E4A
         ST=1    11                               * 32E4E
         C=RSTK                                   * 32E51
         B=C     A                                * 32E53
@@ -3380,19 +3428,19 @@ SUB_32CF7.L16:
         LC(5)   intrptderr                       * 32E60  "Interrupted"
         GOC     SUB_32CF7.L20                    * 32E67
 SUB_32CF7.L17:
-        GOSUB   SUB_32868                        * 32E6A
+        GOSUB   PrintLFCode                      * 32E6A
         GONC    SUB_32CF7.L19                    * 32E6E
         ?C#0    A                                * 32E71
         GOYES   SUB_32CF7.L18                    * 32E74
         GONC    SUB_32CF7.L20                    * 32E76
 SUB_32CF7.L18:
         LC(2)   #0D                              * 32E79
-        GOSUBL  SUB_32604                        * 32E7D
+        GOSUBL  PrintByte                        * 32E7D
         GOC     SUB_32CF7.L20                    * 32E83
         LC(2)   #0A                              * 32E86
         A=C     A                                * 32E8A
 SUB_32CF7.L19:
-        GOSUBL  SUB_32602                        * 32E8C
+        GOSUBL  PrintByteA                       * 32E8C
 SUB_32CF7.L20:
         A=C     A                                * 32E92
         C=RSTK                                   * 32E94
@@ -3407,7 +3455,8 @@ SUB_32CF7.L20:
         GOYES   SUB_32EC1.L5                     * 32EAB
 
 * refs (4): 32B1A 32CFC 32ED7 32F05
-SUB_32EAD:
+* Clears the I/O annunciator bit in ANNCTRL
+IOAnnClr:
         D0=(5)  ANNCTRL                          * 32EAD
         A=DAT0  B                                * 32EB4
         ABIT=0  5                                * 32EB7
@@ -3422,13 +3471,13 @@ SUB_32EC1:
         GOYES   SUB_32EC1.L2                     * 32ECD
 SUB_32EC1.L1:
         A=0     A                                * 32ECF
-        GOSUB   SUB_3287B                        * 32ED1
+        GOSUB   PrintWire?                       * 32ED1
 SUB_32EC1.L2:
         C=A     A                                * 32ED5
-        GOC     SUB_32EAD                        * 32ED7
-        GOSUB   SUB_32A30                        * 32EDA
+        GOC     IOAnnClr                         * 32ED7
+        GOSUB   PrtStatusST                      * 32EDA
 SUB_32EC1.loop3:
-        GOSUB   SUB_32A0D                        * 32EDE
+        GOSUB   WaitONUp                         * 32EDE
 SUB_32EC1.loop4:
         GOSUBL  SUB_32632                        * 32EE2
         GOC     SUB_32EC1.loop3                  * 32EE8
@@ -3440,7 +3489,7 @@ SUB_32EC1.loop4:
         GOC     SUB_32EC1.loop3                  * 32F00
         C=0     A                                * 32F03
         ?ST=0   3                                * 32F05
-        GOYES   SUB_32EAD                        * 32F08
+        GOYES   IOAnnClr                         * 32F08
 SUB_32EC1.L5:
         A=R1                                     * 32F0A
         C=B     A                                * 32F0D
@@ -3462,7 +3511,8 @@ SUB_32EC1.L5:
         GOTO    SUB_32CF7.L1                     * 32F38
 
 * refs (2): 32A63 32ACE
-SUB_32F3C:
+* -> D.A = rows in the main display area: the line count at #8069A plus one
+LCDRows:
         GOSUB   D1=IRAM~jump_4                   * 32F3C
         D1=(4)  #069A                            * 32F40
         A=DAT1  B                                * 32F46
@@ -3477,6 +3527,7 @@ SUB_32F3C:
         LENGTH                                   * 32F59  library object without its prolog (its place is the end of the link table before): length, to #354FF
         CON(2)  0                                * 32F5E  no title
 
+* Library 00A: Numeric root finder behind ROOT and the solver. State is a local array of slots: x values at the start, f(x) values #70 nibbles on, 16 nibbles each
 LIB00A:
         CON(3)  #00A                             * 32F60  library number
         CON(5)  0                                * 32F63  hash table

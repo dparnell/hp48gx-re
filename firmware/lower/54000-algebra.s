@@ -1,4 +1,4 @@
-* HP 48GX ROM revision R, #54000-#57003: Symbolic algebra
+* HP 48GX ROM revision R, #54000-#57003: Binary integer display and conversion, symbolic function dispatch (SYMxxx and Metaxxx), WHERE, derivative steps, IFTE, ∫ and Σ
 * Addresses in the right-hand comments are those of the original ROM.
 * Most referenced: cknumdsptch1 Cr 1GETLAMSWP1+ sscknum2 sncknum2 nscknum2 lam'dvar derargABND xssgeneral xsngeneral xnsgeneral nmetasyms
 * Follows on from the previous file (at #54000 in the original ROM).
@@ -217,7 +217,7 @@ PUSHhxs:
         R1=C                                     * 54238
         C=C+CON A,11                             * 5423B
         GOSBVL  GETTEMP                          * 54241
-        GOSBVL  SUB_37412                        * 54248
+        GOSBVL  SetHXSHdr                        * 54248
         C=R1                                     * 5424F
         P=C     0                                * 54252
         A=R0                                     * 54256
@@ -237,7 +237,7 @@ GPPushA.loop1:
         GONC    GPPushA.L2                       * 54271
         D0=(5)  OSAVE                            * 54274
         DAT0=A  A                                * 5427B
-        GOSBVL  SUB_12D68                        * 5427E
+        GOSBVL  GCorMemErr                       * 5427E
         D0=(5)  OSAVE                            * 54285
         A=DAT0  A                                * 5428C
         C=0     A                                * 5428F
@@ -611,7 +611,7 @@ COLAkeep1st:
 * QN1 id1..QNn idn #2 metan -> symf
 * refs (1): 547D8
 WHEREN:
-        :: #1-SWAP OBJ_26F6C case EVAL           * 54887
+        :: #1-SWAP CmdFieldA case EVAL           * 54887
           infarg? ITE                            * 548A0
 
 * meta&ob1 ob2 -> ob1&ob2 meta
@@ -633,7 +633,7 @@ OBJ_54922:
 * sym sym -> symf
 * refs (1): 1EF97
 SYMDER:
-        :: symcomp SWAP SYMDERSTEP COLA OBJ_54BAF * 54954
+        :: symcomp SWAP SYMDERSTEP COLA DerEvalLoop * 54954
         ;                                        * 54972
 
 * QN sym -> symf
@@ -735,26 +735,29 @@ DROP%0ABND:
 
 * refs (1): 549C2
 SYMDERSTEP~3:
-        :: OBJ_26F18 case EVAL                   * 54B32
+        :: CmdField4 case EVAL                   * 54B32
           DUP PTR>ROMPTR ROMPTRDECOMP NcaseTYPEERR SWAP * 54B46
           infarg? ITE                            * 54B5F
           :: 5ROLL 5ROLL #1- 5UNROLL ; argum     * 54B69
-          SWAPDROP 4UNROLLROT #2+ 3UNROLL COLA OBJ_56EDC * 54B8C
+          SWAPDROP 4UNROLLROT #2+ 3UNROLL COLA DerUnknown * 54B8C
         ;                                        * 54BAA
 
 * refs (2): 5496D 593CD
-OBJ_54BAF:
-        :: CK1NOLASTWD BEGIN DUPTYPESYMB? ITE OBJ_54BF5 FALSE * 54BAF
+* ob -> ob': evaluate a derivative result again until no derivative in progress (xDEREQ) is left in it
+DerEvalLoop:
+        :: CK1NOLASTWD BEGIN DUPTYPESYMB? ITE HasDEREQ? FALSE * 54BAF
           WHILE                                  * 54BD2
           :: COMPEVAL CK1NOLASTWD ; REPEAT ;     * 54BD7
 
 * refs (1): 54BC8
-OBJ_54BF5:
-        :: DUP >R BEGIN RSWAP ticR case OBJ_54C2C * 54BF5
+* symb -> symb flag: TRUE if the expression holds xDEREQ
+HasDEREQ?:
+        :: DUP >R BEGIN RSWAP ticR case DEREQ=?  * 54BF5
           RDROP FALSE ;                          * 54C1D
 
 * refs (1): 54C18
-OBJ_54C2C:
+* ob -> flag..: the loop body of HasDEREQ?: at xDEREQ, leave TRUE; otherwise on to the next object
+DEREQ=?:
         :: 'xDEREQ case RDROPCOLATRUE            * 54C2C
           RSWAP REPEAT ;                         * 54C40
 
@@ -785,7 +788,7 @@ drop(2);BAT!:
 
 * refs (1): 1AB0B
 xMINR~1:
-        :: OBJ_5EA72 %MINREAL BINT0              * 54CDB
+        :: ?ConstNum %MINREAL BINT0              * 54CDB
 
 * ob1..obn #n -> symb
 * refs (40): 1F735 54738 54D26 54D49 54D6C 54D8F ...
@@ -794,19 +797,19 @@ Cr:
 
 * refs (1): 1AAE9
 maxr:
-        :: OBJ_5EA72 %MAXREAL BINT0 Cr xMAXR ;   * 54D12
+        :: ?ConstNum %MAXREAL BINT0 Cr xMAXR ;   * 54D12
 
 * refs (1): 1AAC7
 pi:
-        :: OBJ_5EA72 %PI BINT0 Cr xPI ;          * 54D35
+        :: ?ConstNum %PI BINT0 Cr xPI ;          * 54D35
 
 * refs (1): 1AB4F
 i:
-        :: OBJ_5EA72 C%i BINT0 Cr xi ;           * 54D58
+        :: ?ConstNum C%i BINT0 Cr xi ;           * 54D58
 
 * refs (1): 1AB2D
 e:
-        :: OBJ_5EA72 %e BINT0 Cr xCONSTANTe ;    * 54D7B
+        :: ?ConstNum %e BINT0 Cr xCONSTANTe ;    * 54D7B
 
 * refs (2): 545D2 545DC
 ifte(ex,2_)~1:
@@ -835,12 +838,14 @@ ckevaleq1:
         :: SWAPDROP#1- pshzerpsharg 2GETEVAL psh 2GETEVAL ABND top&Cr x= ; * 54E2A
 
 * refs (3): 5535A 55387 553B4
-OBJ_54E5C:
-        :: RAD? IT OBJ_54E7F                     * 54E5C
+* meta -> meta': the arguments SIN, COS and TAN have exact values for: in radians apply the rules for π multiples, which run one of the next objects; otherwise skip the two objects after this call
+TrigPiRules:
+        :: RAD? IT PiRules                       * 54E5C
           'R'R 2DROP ;                           * 54E70
 
 * refs (1): 54E6B
-OBJ_54E7F:
+* Rewrite rules for multiples of π, in the argument of a trigonometric function
+PiRules:
         CON(5)  (*)+5                            * 54E7F  primitive code object
         ASSEMBLE
         GOSBVL  RuleMatch                        * 54E84  inline data follows
@@ -1055,17 +1060,17 @@ MetaSIN:
 * refs (1): 553AF
 MetaTAN~1:
           :: 1GETLAMSWP1+ metaneg ;              * 55346
-          OBJ_54E5C Repl0 Repl1 PTR ?addinver: xASIN ; * 5535A
+          TrigPiRules Repl0 Repl1 PTR ?addinver: xASIN ; * 5535A
 
 * refs (1): 54FD6
 MetaCOS:
         :: M-1stcasechs 1GETLAMSWP1+             * 55378
-          OBJ_54E5C Repl-1 Repl0 PTR ?addinver: xACOS ; * 55387
+          TrigPiRules Repl-1 Repl0 PTR ?addinver: xACOS ; * 55387
 
 * refs (1): 54FEF
 MetaTAN:
         :: M-1stcasechs MetaTAN~1                * 553A5
-          OBJ_54E5C Repl0 1GETLAMSWP1+ PTR ?addinver: xATAN ; * 553B4
+          TrigPiRules Repl0 1GETLAMSWP1+ PTR ?addinver: xATAN ; * 553B4
 
 * refs (1): 54EF5
 MetaNEG:
@@ -1759,17 +1764,18 @@ NUMINTEG:
 
 * refs (1): 56647
 NUMINTEG~unit,unit:
-        :: OVER UMCONV TRUE COLA OBJ_566BF       * 56683
+        :: OVER UMCONV TRUE COLA IntegBind       * 56683
         ;                                        * 566A1
 
 * refs (1): 5663D
 NUMINTEG~real,real:
-        :: FALSE COLA OBJ_566BF                  * 566A6
+        :: FALSE COLA IntegBind                  * 566A6
         ;                                        * 566BA
 
 * refs (2): 5669C 566B5
-OBJ_566BF:
-        :: DUPDUP OBJ_56FD1 BIND 2SWAP           * 566BF
+* ... flag -> ...: ∫: bind dv, op, nm and go on to evaluate the integral numerically; flag TRUE for arguments with units
+IntegBind:
+        :: DUPDUP {'dv,'op,'nm} BIND 2SWAP       * 566BF
 
 * refs (1): 56B0F
 %%SUM~1:
@@ -1790,30 +1796,32 @@ OBJ_566BF:
 * refs (1): 56B32
 %%SUM~3:
           :: BINT10 GETLAMPAIR DROPSWAPDROP SWAPDROP ; ' STOLAM 4ROLL ' * 5676E
-          COMPEVAL ' OBJ_568AE Π'dv ITE          * 567A0
+          COMPEVAL ' IntegUnitOf Π'dv ITE        * 567A0
           :: 7ROLL CARCOMP 7UNROLL 8ROLL UMU> OVER 10UNROLL SWAPDROP DUP ' * 567B9
             Π'op STOLAM 7UNROLL ' UM>U 7UNROLL BINT8 ; * 567F0
           BINT6                                  * 56818
-          ::N OBJ_5A952 2SWAP CALCINTEG ABND CK2NOLASTWD Π'nm OBJ_56872 Π'op * 5681D
-          OBJ_56872 ABND '                       * 5684A
+          ::N IntegBind~1 2SWAP CALCINTEG ABND CK2NOLASTWD Π'nm UnitsBack * 5681D
+          Π'op UnitsBack ABND '                  * 56845
 
 IERR:
           ID IERR XEQSTOID ;                     * 56859
 
 * refs (2): 56840 5684A
-OBJ_56872:
+* % % ob -> ...: ∫: put the unit of ob on both the result and the error
+UnitsBack:
         :: DUPTYPEEXT? NOTcase DROP              * 56872
           UMU> SWAPDROP DUPUNROT UM* 3UNROLL UM* SWAP ; * 56886
 
 * refs (1): 567AA
-OBJ_568AE:
+* ob -> : ∫: what the integrand gave; keep a unit object's unit in lam nm
+IntegUnitOf:
         :: CK&DISPATCH1                          * 568AE
-          BINT14 OBJ_568D1                       * 568B8  unit
+          BINT14 IntegUnitOf~unit                * 568B8  unit
           BINT0 NOP                              * 568C2  any
         ;                                        * 568CC
 
 * refs (1): 568BD
-OBJ_568D1:
+IntegUnitOf~unit:
         :: Π'nm DUPTYPEEXT? ITE UMCONV           * 568D1
           :: DROPDUP ' Π'nm STOLAM ;             * 568EA
           CARCOMP ;                              * 56908
@@ -1830,7 +1838,8 @@ SYMSUM:
         ::                                       * 56949
 
 * refs (2): 56A0B 56A51
-OBJ_5694E:
+* symbolic Σ: check the index is a name and bind 'sumexpr and 'sumvar
+SumBind:
           :: BINT1 nmetasyms symcomp 4ROLL symcomp ChkExpr1Name * 5694E
 
 {'sumexpr,'sumvar}:
@@ -1844,35 +1853,37 @@ OBJ_5694E:
 Π'sumvar:
               LAM 'sumvar }                      * 5698D
             BIND ;                               * 569A7
-          :: sscknum2 OBJ_569D4 OBJ_56A9C ; ABND ; * 569B1
+          :: sscknum2 SumMeta SumFinish ; ABND ; * 569B1
 
 * refs (3): 569BB 56A42 56A92
-OBJ_569D4:
+* meta -> meta': make Σ's symbolic form from the limits, sumvar and sumexpr
+SumMeta:
         :: top& Π'sumvar OVER#2+UNROL #1+ Π'sumexpr SWAP#1+ PTR addt: ä ; * 569D4
 
 * sym sym % ob -> symf
 * refs (1): 1F2EC
 SYM%SUM:
-        :: OBJ_5694E                             * 56A06
-          :: sncknum2 SYM%SUM~1 OBJ_56A9C ; ABND ; * 56A10
+        :: SumBind                               * 56A06
+          :: sncknum2 ~3GETLAM;ONECOLA;SumMeta SumFinish ; ABND ; * 56A10
 
 * refs (1): 56A1A
-SYM%SUM~1:
-        :: 3GETLAM ONECOLA OBJ_569D4 ;           * 56A33
+~3GETLAM;ONECOLA;SumMeta:
+        :: 3GETLAM ONECOLA SumMeta ;             * 56A33
 
 * sym % sym ob -> symf
 * refs (1): 1F2FB
 %SYMSUM:
-        :: OBJ_5694E                             * 56A4C
-          :: nscknum2 %SYMSUM~1 OBJ_56A9C ; ABND ; * 56A56
+        :: SumBind                               * 56A4C
+          :: nscknum2 %SYMSUM~1 SumFinish ; ABND ; * 56A56
 
 * refs (1): 56A60
 %SYMSUM~1:
-        :: 3GETLAM BINT1 psh COLA OBJ_569D4      * 56A79
+        :: 3GETLAM BINT1 psh COLA SumMeta        * 56A79
         ;                                        * 56A97
 
 * refs (3): 569C0 56A1F 56A65
-OBJ_56A9C:
+* a b -> ...: Σ: leave the bindings and go on with the numeric or symbolic summing
+SumFinish:
         :: CK2NOLASTWD 1GETLAM 3UNROLL 2GETLAM ABND RDROPCOLA ä ; * 56A9C
 
 * sym % % ob -> symf
@@ -1893,24 +1904,27 @@ DROP%0b:
         :: DROP %0_2A2B4 ;                       * 56B87
 
 * refs (3): 86411 865C4 866B4
-OBJ_56B9B:
-        :: psh derargABND top& OBJ_56C13 Cr x* ; * 56B9B
+* Derivative rule: the factor for a function whose argument is an angle, in the current mode
+DerTrigOut:
+        :: psh derargABND top& Meta*π/180 Cr x* ; * 56B9B
 
 * refs (3): 86196 86303 8639E
-OBJ_56BC3:
-        :: psh derargABND top& OBJ_56C72 Cr x* ; * 56BC3
+* Derivative rule: the factor for a function whose result is an angle, in the current mode
+DerTrigIn:
+        :: psh derargABND top& Meta*180/π Cr x* ; * 56BC3
 
 * refs (26): 56BA5 56BCD 7DD03 7DD21 85EBC 85F0C ...
 * Derivatives: wrap the argument as d/d'dv(arg) for the chain rule, then ABND the 'dv environment
 derargABND:
-        :: OBJ_56D01 ABND ;                      * 56BEB
+        :: MetaDER ABND ;                        * 56BEB
 
 * refs (6): 85EE4 85F66 85FCA 8602E 86713 86731
 ~ABND;SYMBN:
         :: ABND SYMBN ;                          * 56BFF
 
 * refs (1): 56BAF
-OBJ_56C13:
+* meta -> meta': in DEG or GRAD multiply by π/180 or π/200; nothing in RAD
+Meta*π/180:
         :: RAD? ?SEMI                            * 56C13
           DEG? ITE                               * 56C22
 
@@ -1922,7 +1936,8 @@ OBJ_56C13:
           INNERtop& ;                            * 56C68
 
 * refs (2): 56BD7 862B3
-OBJ_56C72:
+* meta -> meta': in DEG or GRAD multiply by 180/π or 200/π; nothing in RAD
+Meta*180/π:
         :: RAD? ?SEMI                            * 56C72
           DEG? ITE                               * 56C81
 
@@ -1934,11 +1949,13 @@ OBJ_56C72:
           INNERtop& ;                            * 56CC7
 
 * refs (7): 57027 5704A 7DCFE 7DD1C 86074 8655B ...
-OBJ_56CD1:
-        :: OBJ_56CE5 BIND ;                      * 56CD1
+* ob -> : bind lam dv
+BindDv:
+        :: {'dv} BIND ;                          * 56CD1
 
 * refs (1): 56CD6
-OBJ_56CE5:
+* The lam name list { dv }
+{'dv}:
         { Π'dv }                                 * 56CE5
 
 * refs (3): 567AF 56CEA 56FD6
@@ -1946,27 +1963,31 @@ OBJ_56CE5:
         LAM 'dv                                  * 56CF4
 
 * refs (10): 56BF0 7DC1D 7DC5E 85F4D 85F70 85FB1 ...
-OBJ_56D01:
+* meta -> ob...: the derivative of the meta as a call to xDER with dv
+MetaDER:
         :: SYMBN 1GETSWAP 'xDER BINT3 ;          * 56D01
 
 * refs (2): 1F6C7 86A33
-OBJ_56D1F:
-        :: 4ROLL CARCOMP NOTROMPcase OBJ_56D97   * 56D1F
-          DUP OBJ_26F18 NOTcasedrop OBJ_56D97    * 56D38
+* derivative of a function application: a ROMPTR function with a derivative in its trailer uses it, otherwise a user function
+DerFcn:
+        :: 4ROLL CARCOMP NOTROMPcase DerUser     * 56D1F
+          DUP CmdField4 NOTcasedrop DerUser      * 56D38
           SWAP ROMPTR@ DROP infarg? SWAPDROP ?SKIP * 56D4C
           :: 4ROLLDROP ROT #1-UNROT ;            * 56D6A
           ROT #1-UNROT COLA_EVAL ;               * 56D83
 
 * refs (2): 56D33 56D47
-OBJ_56D97:
+* derivative of a user function: the name holding a defining program goes through it, otherwise DerUnknown
+DerUser:
         :: DUP ROMPTR@NOT casedrop               * 56D97
-          :: NOTROMPcase OBJ_56EDC               * 56DAB
+          :: NOTROMPcase DerUnknown              * 56DAB
             SETTYPEERR ;                         * 56DBA
-          ROTSWAP 5ROLL OBJ_56FD1 BIND 2GETLAM OBJ_5DEF7 ARGNUMERR OBJ_56E96 * 56DC4
-          2DROP OBJ_56E05 COLA SYMDERSTEP        * 56DEC
+          ROTSWAP 5ROLL {'dv,'op,'nm} BIND 2GETLAM OBJ_5DEF7 ARGNUMERR * 56DC4
+          DerUserDrop 2DROP OBJ_56E05 COLA SYMDERSTEP * 56DE7
         ;                                        * 56E00
 
 * refs (2): 56DF1 58ECC
+* Probably: #n ... -> ...: put the arguments of a user function into its defining expression (the WHERE form)
 OBJ_56E05:
         :: BINT2 #- pshzer 1GETLAM ZERO_DO larg CKSYMBN psh1& LOOP DROP * 56E05
           2GETLAM SWAPDROPDUP 1GETLAM #3+ NTHCOMPDROP 1GETLAM #2+UNROLL * 56E3C
@@ -1974,28 +1995,32 @@ OBJ_56E05:
           SPLITWHERE ;                           * 56E8C
 
 * refs (1): 56DE7
-OBJ_56E96:
-        :: DROP 1GETLAM 3UNROLL 3GETLAM ABND SWAP NOTROMPcase OBJ_56EDC * 56E96
-          ROMPTRDECOMP case OBJ_56EDC            * 56EC3
+* the user function isn't defined by an expression: unbind and go to DerUnknown, or Bad Argument Type
+DerUserDrop:
+        :: DROP 1GETLAM 3UNROLL 3GETLAM ABND SWAP NOTROMPcase DerUnknown * 56E96
+          ROMPTRDECOMP case DerUnknown           * 56EC3
           SETTYPEERR ;                           * 56ED2
 
 * refs (4): 54BA5 56DB5 56EBE 56ECD
-OBJ_56EDC:
-        :: 4ROLL OBJ_56FD1 BIND BINT2 #- dup pshzer 1GETLAM ZERO_DO larg * 56EDC
+* a function with no known derivative: make the formal derivative derNAME(args, darg1, ...), as the HP 48 shows it
+DerUnknown:
+        :: 4ROLL {'dv,'op,'nm} BIND BINT2 #- dup pshzer 1GETLAM ZERO_DO larg * 56EDC
           SYMBN 3GETLAM SWAP 'xDER BINT3 ROTUntop& psh LOOP NDROP top& * 56F13
-          2GETLAM nm=>st OBJ_56F90 $DER SWAP&$ $>ID symcomp 1GETABND #2* ' * 56F45
+          2GETLAM nm=>st Name$Esc $DER SWAP&$ $>ID symcomp 1GETABND #2* ' * 56F45
           xFCNAPPLY 4ROLL #3+ SYMBN ;            * 56F77
 
 * refs (1): 56F4F
-OBJ_56F90:
-        :: OBJ_25F4E SWAPONE OVER                * 56F90
+* $ -> $': a name as text, with delimiters escaped
+Name$Esc:
+        :: ClassTblAlg SWAPONE OVER              * 56F90
           :: delimcase                           * 56FA4
             :: tokESC SWAP&$ ;                   * 56FAE
           ;                                      * 56FC2
           4UNROLL3DROP ;                         * 56FC7
 
 * refs (9): 25641 34E3F 566C9 56DCE 56EE6 58E81 ...
-OBJ_56FD1:
+* The lam name list { dv op nm }
+{'dv,'op,'nm}:
         { Π'dv Π'op Π'nm }                       * 56FD1
 
 * refs (4): 5683B 568D6 568F9 56FE0

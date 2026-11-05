@@ -1,4 +1,4 @@
-* HP 48GX ROM revision R, #D4806-#D49CD: Library part 0E8
+* HP 48GX ROM revision R, #D4806-#D49CD: Hash and link tables of library 0E8
 * Addresses in the right-hand comments are those of the original ROM.
 * Follows on from the previous file (at #D4806 in the original ROM).
 
@@ -32,70 +32,70 @@ LIB0E8.link:
         REL(5)  SEQ~1                            * D4874  000 
         REL(5)  DOSUBS~1                         * D4879  001 
         REL(5)  DOSUBS~2                         * D487E  002 
-        REL(5)  ROMP_0E8_003                     * D4883  003 
+        REL(5)  DoSUBS                           * D4883  003 
         REL(5)  DOLIST~1                         * D4888  004 
-        REL(5)  DOSUBS~3                         * D488D  005 
-        REL(5)  ROMP_0E8_006                     * D4892  006 
-        REL(5)  ROMP_0E8_007                     * D4897  007 
+        REL(5)  RclOrErr                         * D488D  005 
+        REL(5)  ProgArgs                         * D4892  006 
+        REL(5)  RomptrArgs                       * D4897  007 
         REL(5)  DOLIST~2                         * D489C  008 
-        REL(5)  ROMP_0E8_009                     * D48A1  009 
+        REL(5)  LamProgArgs                      * D48A1  009 
         REL(5)  DOLIST~3                         * D48A6  00A 
         REL(5)  DOLIST~4                         * D48AB  00B 
-        REL(5)  ROMP_0E8_00C                     * D48B0  00C 
-        REL(5)  ROMP_0E8_00D                     * D48B5  00D 
-        REL(5)  ROMP_0E8_00E                     * D48BA  00E 
-        REL(5)  ROMP_0E8_00F                     * D48BF  00F 
-        REL(5)  ROMP_0E8_010                     * D48C4  010 
-        REL(5)  ROMP_0E8_011                     * D48C9  011 
-        REL(5)  ROMP_0E8_012                     * D48CE  012 
-        REL(5)  ROMP_0E8_013                     * D48D3  013 
-        REL(5)  ROMP_0E8_014                     * D48D8  014 
+        REL(5)  DoDOLIST                         * D48B0  00C 
+        REL(5)  RomptrOverLists                  * D48B5  00D 
+        REL(5)  ArgDispN                         * D48BA  00E 
+        REL(5)  ListApply                        * D48BF  00F 
+        REL(5)  ListApplyN                       * D48C4  010 
+        REL(5)  ListApply2                       * D48C9  011 
+        REL(5)  ListApplyL                       * D48CE  012 
+        REL(5)  ListApplyR                       * D48D3  013 
+        REL(5)  ListApply1                       * D48D8  014 
         REL(5)  ADD~1                            * D48DD  015 
         REL(5)  SORT~1                           * D48E2  016 
         REL(5)  SORT~2                           * D48E7  017 
         REL(5)  SORT~3                           * D48EC  018 
         REL(5)  SORT~4                           * D48F1  019 
         REL(5)  SORT~5                           * D48F6  01A 
-        REL(5)  ROMP_0E8_01B                     * D48FB  01B 
-        REL(5)  ROMP_0E8_01C                     * D4900  01C 
+        REL(5)  EvalNumMode                      * D48FB  01B 
+        REL(5)  ListOp                           * D4900  01C 
         REL(5)  ~INNERCOMP;'REVAL;{}N            * D4905  01D 
         REL(5)  ~INTEMPOB?                       * D490A  01E ~INTEMPOB?
         REL(5)  xSUB~1                           * D490F  01F 
         REL(5)  xREPL~1                          * D4914  020 
         REL(5)  xREPL~2                          * D4919  021 
         REL(5)  xREPL~3                          * D491E  022 
-        REL(5)  ROMP_0E8_023                     * D4923  023 
+        REL(5)  ArRepl                           * D4923  023 
         REL(5)  xSUB~2                           * D4928  024 
         REL(5)  xSUB~3                           * D492D  025 
         REL(5)  xSUB~4                           * D4932  026 
-        REL(5)  ROMP_0E8_027                     * D4937  027 
+        REL(5)  ArSub                            * D4937  027 
         REL(5)  xSUB~5                           * D493C  028 
-        REL(5)  ROMP_0E8_029                     * D4941  029 
-        REL(5)  ROMP_0E8_02A                     * D4946  02A 
-        REL(5)  ROMP_0E8_02B                     * D494B  02B 
-        REL(5)  ROMP_0E8_02C                     * D4950  02C 
+        REL(5)  ArMoveBlock                      * D4941  029 
+        REL(5)  ArShape                          * D4946  02A 
+        REL(5)  Ar#>RowCol                       * D494B  02B 
+        REL(5)  DoCLTEACH                        * D4950  02C 
         REL(5)  TEACH~1                          * D4955  02D 
-        REL(5)  TEACH~2                          * D495A  02E 
-        REL(5)  TEACH~3                          * D495F  02F 
-        REL(5)  TEACH~4                          * D4964  030 
-        REL(5)  TEACH~5                          * D4969  031 
-        REL(5)  TEACH~6                          * D496E  032 
-        REL(5)  TEACH~7                          * D4973  033 
-        REL(5)  TEACH~8                          * D4978  034 
-        REL(5)  TEACH~9                          * D497D  035 
-        REL(5)  TEACH~10                         * D4982  036 
-        REL(5)  TEACH~11                         * D4987  037 
-        REL(5)  TEACH~12                         * D498C  038 
-        REL(5)  TEACH~13                         * D4991  039 
-        REL(5)  TEACH~14                         * D4996  03A 
-        REL(5)  TEACH~15                         * D499B  03B 
-        REL(5)  TEACH~16                         * D49A0  03C 
-        REL(5)  TEACH~17                         * D49A5  03D 
-        REL(5)  TEACH~18                         * D49AA  03E 
+        REL(5)  EX%TILE                          * D495A  02E 
+        REL(5)  EXSLICE                          * D495F  02F 
+        REL(5)  EXWIRE                           * D4964  030 
+        REL(5)  EXPSUR                           * D4969  031 
+        REL(5)  EXGRID                           * D496E  032 
+        REL(5)  EXPSCN                           * D4973  033 
+        REL(5)  EXSPFLD                          * D4978  034 
+        REL(5)  EXDEQ                            * D497D  035 
+        REL(5)  EXPTRN                           * D4982  036 
+        REL(5)  EXROSE                           * D4987  037 
+        REL(5)  EXLISSA                          * D498C  038 
+        REL(5)  EXELLIP                          * D4991  039 
+        REL(5)  EXXSIN                           * D4996  03A 
+        REL(5)  EX>RPN                           * D499B  03B 
+        REL(5)  EXAPLY                           * D49A0  03C 
+        REL(5)  EXFIBON                          * D49A5  03D 
+        REL(5)  EXMEDIAN                         * D49AA  03E 
         REL(5)  ATICK~1                          * D49AF  03F 
         REL(5)  XSEND~1                          * D49B4  040 
         REL(5)  XRECV~1                          * D49B9  041 
-        REL(5)  ROMP_0E8_042                     * D49BE  042 
+        REL(5)  XMTransfer                       * D49BE  042 
         ENDLENGTH                                * D49C3
         BSS     4                                * D49C3  zeros
         ENDLENGTH                                * D49C7

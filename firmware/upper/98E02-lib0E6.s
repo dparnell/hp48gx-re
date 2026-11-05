@@ -1,17 +1,20 @@
-* HP 48GX ROM revision R, #98E02-#99FE8: Library part 0E6
+* HP 48GX ROM revision R, #98E02-#99FE8: Library 0E6: TVM messages, TVM variables and menu support, AMORT and the five TVM solvers in machine code
 * Addresses in the right-hand comments are those of the original ROM.
+* Most referenced: TVMDivChk AMORTRound TVMPvFvSign TVMLn TVMChkInt TVMVal TVMStoVal TVMSolvers TVMSolvePV TVMSolvePMT TVMSolveN TVMSolveKey
 * Follows on from the previous file (at #98E02 in the original ROM).
 
+* Library 0E6: Time value of money: the TVM menu's support, TVMROOT, AMORT, and the machine-code solvers for N, I%YR, PV, PMT and FV, with their messages
 LIB0E6:
         CON(3)  #0E6                             * 98E02  library number
         REL(5)  LIB0E6.hash                      * 98E05  hash table
-        REL(5)  ROMP_0E6_000                     * 98E0A  message table
+        REL(5)  TVMMessages                      * 98E0A  message table
         REL(5)  LIB0E6.link                      * 98E0F  link table
         CON(5)  0                                * 98E14  config
 
 * ROMPTR 0E6 000
 * refs (1): 98E02
-ROMP_0E6_000:
+* Message table of library 0E6: its 13 strings are errors and prompts of the TVM code
+TVMMessages:
         CON(5)  DOARRY                           * 98E19  array 13
         LENGTH                                   * 98E1E  length, to #98FB3
         CON(5)  DOCSTR                           * 98E23  element type
@@ -35,95 +38,107 @@ ROMP_0E6_000:
 
 * ROMPTR 0E6 001
 * refs (1): 98E02
+* TVM: shows the TVM menu
 TVM~1:
-        :: ' ROMPTR 0A9 050 InitMenu ;           * 98FB3
+        :: ' XLIB MnuTVMSOLVR InitMenu ;         * 98FB3
 
 * ROMPTR 0E6 002
 * refs (1): 98E02
-ROMP_0E6_002:
+* Menu key action: with a name, solves for that variable, stores the result and leaves it tagged with the name
+TVMSolveKey:
         :: dIDNTNcase StdMenuKeyLS               * 98FD2
-          DUP ROMPTR 0E6 00C SWAP 2DUP XEQSTOID ID>TAG ; * 98FE1
+          DUP XLIB TVMSolve SWAP 2DUP XEQSTOID ID>TAG ; * 98FE1
 
 * ROMPTR 0E6 003
 * refs (1): 98E02
-ROMP_0E6_003:
-        :: ROMPTR 0AB 059 # E60D msg>TAG ROT # E60B msg>TAG ROT # E60C * 9900A  AMORT  "Balance"  "Principal"  "Interest"
-          msg>TAG ROT ;                          * 9904C
+* %n -> :Principal: :Interest: :Balance:: AMORT's result, each value tagged
+AMORTTagged:
+        :: XLIB AMORT # E60D msg>TAG ROT # E60B msg>TAG ROT # E60C msg>TAG * 9900A  "Balance"  "Principal"  "Interest"
+          ROT ;                                  * 99051
 
 * ROMPTR 0E6 004
 * refs (1): 98E02
-ROMP_0E6_004:
-        :: %0_2A2B4 SWAP ROMPTR 0E6 008 I%YR ROMPTR 0E6 008 PV * 9905B
-          ROMPTR 0E6 008 PMT 4ROLL ROMPTR 0E6 008 PYR BINT14 SysITE %1 * 9908A  flag -14: Payment at end / Payment at begin
-          %0_2A2B4 ROMPTR 0E6 00E ;              * 990BE
+* %n -> %principal %interest %balance: pushes the TVM values and runs AMORTCalc
+AMORTArgs:
+        :: %0_2A2B4 SWAP XLIB TVMVal I%YR XLIB TVMVal PV XLIB TVMVal PMT * 9905B
+          4ROLL XLIB TVMVal PYR BINT14 SysITE %1 %0_2A2B4 XLIB AMORTCalc ; * 9909A  flag -14: Payment at end / Payment at begin
 
 * ROMPTR 0E6 005
 * refs (1): 98E02
-~BINT14;SetSysFlag:
+* Sets payments at the start of the period
+TVMBegin:
         :: BINT14 SetSysFlag ;                   * 990D3  flag -14: Payment at end / Payment at begin
 
 * ROMPTR 0E6 006
 * refs (1): 98E02
-~BINT14;ClrSysFlag:
+* Sets payments at the end of the period
+TVMEnd:
         :: BINT14 ClrSysFlag ;                   * 990E7  flag -14: Payment at end / Payment at begin
 
 * ROMPTR 0E6 007
 * refs (1): 98E02
-ROMP_0E6_007:
-        :: ROMPTR 0E6 008 N ROMPTR 0E6 008 I%YR ROMPTR 0E6 008 PV * 990FB
-          ROMPTR 0E6 008 PMT ROMPTR 0E6 008 FV ROMPTR 0E6 008 PYR BINT14 * 99130
-          SysITE %1 %0_2A2B4 ;                   * 99165
+* -> %N %I%YR %PV %PMT %FV %PYR %begin: the arguments of a solver, each by TVMVal
+TVMArgs:
+        :: XLIB TVMVal N XLIB TVMVal I%YR XLIB TVMVal PV XLIB TVMVal PMT * 990FB
+          XLIB TVMVal FV XLIB TVMVal PYR BINT14 SysITE %1 %0_2A2B4 ; * 99140  flag -14: Payment at end / Payment at begin
 
 * ROMPTR 0E6 008
 * refs (1): 98E02
-ROMP_0E6_008:
+* -> %: the variable named after this call in the runstream, or 0 if it does not exist or is not a real
+TVMVal:
         :: 'R SAFE@ ?SKIP %0_2A2B4               * 99179
           DUPTYPEREAL? ?SEMI                     * 99192
           DROP %0_2A2B4 ;                        * 9919C
 
 * ROMPTR 0E6 009
 * refs (1): 98E02
-~'R;XEQSTOID:
+* % -> : stores into the variable named after this call in the runstream
+TVMStoVal:
         :: 'R XEQSTOID ;                         * 991AB
 
 * ROMPTR 0E6 00A
 * refs (1): 98E02
-ROMP_0E6_00A:
-        :: BINT14 SysITE # E609 # E608 JstGetTHEMESG ROMPTR 0E6 008 PYR %ABS * 991BF  flag -14: Payment at end / Payment at begin  "BEGIN mode"  "END mode"
+* Shows the TVM status line: "12 payments/year" and END or BEGIN mode. PYR below 1 shows as 12
+TVMPrompt:
+        :: BINT14 SysITE # E609 # E608 JstGetTHEMESG XLIB TVMVal PYR %ABS * 991BF  flag -14: Payment at end / Payment at begin  "BEGIN mode"  "END mode"
           %IP DUP %0> ?SKIP                      * 991FC
           :: DROP %12 ;                          * 99210
-          DUP ROMPTR 0E6 009 PYR EDITDECOMP$ # E60A JstGetTHEMESG !append$ * 99224  " payments/year"
+          DUP XLIB TVMStoVal PYR EDITDECOMP$ # E60A JstGetTHEMESG !append$ * 99224  " payments/year"
           APPprompt2 ;                           * 99252
 
 * ROMPTR 0E6 00B
 * refs (1): 98E02
+* { name } -> %: TVMROOT: Bad Argument unless it holds one name
 TVMROOT~1:
-        :: INNERCOMP #1<> case ROMPTR 0E7 006    * 9925C
-          DUPTYPEIDNT? NOTcase ROMPTR 0E7 006    * 9927B
-          ROMPTR 0E6 00C ;                       * 99290
+        :: INNERCOMP #1<> case XLIB BadTypeErr   * 9925C
+          DUPTYPEIDNT? NOTcase XLIB BadTypeErr   * 9927B
+          XLIB TVMSolve ;                        * 99290
 
 * ROMPTR 0E6 00C
 * refs (1): 98E02
-ROMP_0E6_00C:
-        :: OBJ_7D966 NTHOF DUP#0=csedrp          * 992A0
-          :: # E607 ERROROUT ; ROMPTR 0E6 00D SWAP NTHCOMPDROP * 992B4  "Undefined TVM Variable"
-          ROMPTR 0E6 007 8ROLL EVAL ;            * 992E2
+* name -> %: solves for this variable; error "Undefined TVM Variable" for any other name
+TVMSolve:
+        :: TvmVars NTHOF DUP#0=csedrp            * 992A0
+          :: # E607 ERROROUT ; XLIB TVMSolvers SWAP NTHCOMPDROP XLIB TVMArgs * 992B4  "Undefined TVM Variable"
+          8ROLL EVAL ;                           * 992ED
 
 * ROMPTR 0E6 00D
 * refs (1): 98E02
-ROMP_0E6_00D:
-        { ROMPTR 0E6 00F ROMPTR 0E6 010 ROMPTR 0E6 011 ROMPTR 0E6 012 * 992FC
-          ROMPTR 0E6 013 }                       * 9932D
+* List of the five solvers, in the order of the variable names
+TVMSolvers:
+        { XLIB TVMSolveN XLIB TVMSolveI XLIB TVMSolvePV XLIB TVMSolvePMT * 992FC
+          XLIB TVMSolveFV }                      * 9932D
 
 * ROMPTR 0E6 00E
 * refs (1): 98E02
-ROMP_0E6_00E:
+* %n %I %PV %PMT %PYR %begin -> %principal %interest %balance: the code object behind AMORT. Each amount is rounded to the display format (flags -49..-52), as a real loan is
+AMORTCalc:
         CODE                                     * 9933D  619 nibbles
-          GOSBVL  SUB_7D9B8                      * 99347
-          GOSUB   SUB_993B0                      * 9934E
-          GONC    ROMP_0E6_00E.L1                * 99352
-          GOVLNG  SUB_78987.L2                   * 99355
-ROMP_0E6_00E.L1:
+          GOSBVL  TvmArgs                        * 99347
+          GOSUB   AMORTLoop                      * 9934E
+          GONC    AMORTCalc.L1                   * 99352
+          GOVLNG  ErrC15                         * 99355
+AMORTCalc.L1:
           D1=(5)  #800F5                         * 9935C
           GOSUB   SUB_99394                      * 99363
           GOSUB   SUB_9938E                      * 99367
@@ -153,101 +168,105 @@ SUB_993A2:
           GOVLNG  SAVPTR                         * 993A9
 
 * refs (1): 9934E
-SUB_993B0:
+* Checks N, sets up the periodic rate and loops over the periods. Carry set with an error number in C on failure
+AMORTLoop:
           HST=0   3                              * 993B0
-          GOSBVL  SUB_785CA                      * 993B3
+          GOSBVL  RCLtmp4%%                      * 993B3
           GOSBVL  STAB0                          * 993BA
-          GOSUB   SUB_9950D                      * 993C1
+          GOSUB   TVMChkInt                      * 993C1
           RTNC                                   * 993C5
-          GOSBVL  SUB_78591.L2                   * 993C8
-          GOSUB   SUB_9950D                      * 993CF
+          GOSBVL  RCLtmp0%%                      * 993C8
+          GOSUB   TVMChkInt                      * 993CF
           RTNC                                   * 993D3
           P=      14                             * 993D6
           ?B=0    P                              * 993D8
-          GOYES   SUB_993B0.L1                   * 993DB
+          GOYES   AMORTLoop.L1                   * 993DB
           ST=0    8                              * 993DD
-SUB_993B0.L1:
+AMORTLoop.L1:
           GOSBVL  RCCD0                          * 993E0
           GOSBVL  RADDF                          * 993E7
-          GOSBVL  SUB_78664                      * 993EE
-          GOSBVL  SUB_7DA2B                      * 993F5
+          GOSBVL  STOtmp0%%                      * 993EE
+          GOSBVL  TvmI                           * 993F5
           RTNC                                   * 993FC
-          GOSBVL  SUB_7866A                      * 993FF
-          GOSBVL  SUB_785C4                      * 99406
+          GOSBVL  STOtmp1%%                      * 993FF
+          GOSBVL  RCLtmp3%%                      * 99406
           R4=A                                   * 9940D
-          GOSUB   SUB_99534                      * 99410
-          GOSBVL  SUB_78676                      * 99414
-          GOSBVL  SUB_785BE                      * 9941B
-          GOSUB   SUB_99534                      * 99422
-          GOSBVL  SUB_78670                      * 99426
+          GOSUB   AMORTRound                     * 99410
+          GOSBVL  STOtmp3%%                      * 99414
+          GOSBVL  RCLtmp2%%                      * 9941B
+          GOSUB   AMORTRound                     * 99422
+          GOSBVL  STOtmp2%%                      * 99426
           A=0     W                              * 9942D
           B=0     W                              * 99430
-          GOSBVL  SUB_7867C                      * 99433
+          GOSBVL  STOtmp4%%                      * 99433
           GOSBVL  PUTAB0                         * 9943A
           GOSBVL  RCAB0                          * 99441
-SUB_993B0.loop2:
+AMORTLoop.loop2:
           P=      14                             * 99448
           ?B#0    P                              * 9944A
-          GOYES   SUB_993B0.L3                   * 9944D
+          GOYES   AMORTLoop.L3                   * 9944D
           RTNCC                                  * 9944F
-SUB_993B0.L3:
+AMORTLoop.L3:
           GOSBVL  STAB0                          * 99451
           GOSBVL  RCLtmp1%%                      * 99458
           GOSBVL  GETCD0                         * 9945F
           GOSBVL  MULTF                          * 99466
-          GOSUB   SUB_99534                      * 9946D
+          GOSUB   AMORTRound                     * 9946D
           ?ST=0   8                              * 99471
-          GOYES   SUB_993B0.L4                   * 99474
+          GOYES   AMORTLoop.L4                   * 99474
           A=0     W                              * 99476
           B=0     W                              * 99479
           ST=0    8                              * 9947C
-SUB_993B0.L4:
-          GOSUB   SUB_99574                      * 9947F
+AMORTLoop.L4:
+          GOSUB   AMORTExpLimit                  * 9947F
           GOSBVL  STAB2                          * 99483
           C=R4                                   * 9948A
           A=C     S                              * 9948D
-          GOSBVL  SUB_7861D                      * 99490
+          GOSBVL  RCLCDtmp4%%                    * 99490
           GOSBVL  RADDF                          * 99497
-          GOSBVL  SUB_7867C                      * 9949E
+          GOSBVL  STOtmp4%%                      * 9949E
           GOSBVL  RCAB2                          * 994A5
-          GOSBVL  SUB_78617                      * 994AC
+          GOSBVL  RCLCDtmp3%%                    * 994AC
           GOSBVL  RADDF                          * 994B3
           GOSBVL  STAB2                          * 994BA
-          GOSBVL  SUB_78623                      * 994C1
+          GOSBVL  RCLCDtmp5%%                    * 994C1
           GOSBVL  RADDF                          * 994C8
-          GOSBVL  SUB_78682                      * 994CF
-          GOSBVL  SUB_78611                      * 994D6
+          GOSBVL  STOtmp5%%                      * 994CF
+          GOSBVL  RCLCDtmp2%%                    * 994D6
           GOSBVL  RCAB2                          * 994DD
           GOSBVL  RADDF                          * 994E4
-          GOSBVL  SUB_78670                      * 994EB
+          GOSBVL  STOtmp2%%                      * 994EB
           GOSBVL  CkATTNcode                     * 994F2
           SETDEC                                 * 994F9
           GOSBVL  RCAB0                          * 994FB
           GOSBVL  RSUB1                          * 99502
-          GOTO    SUB_993B0.loop2                * 99509
+          GOTO    AMORTLoop.loop2                * 99509
 
 * refs (2): 993C1 993CF
-SUB_9950D:
-          GOSUB   SUB_99521                      * 9950D
-          GONC    SUB_9950D.L2                   * 99511
-SUB_9950D.L1:
+* A = % -> carry and error #E606 ("Invalid #Periods") unless it is a non-negative integer
+TVMChkInt:
+          GOSUB   ?Whole%                        * 9950D
+          GONC    TVMChkInt.L2                   * 99511
+TVMChkInt.L1:
           RTNCC                                  * 99514
-SUB_9950D.L2:
+TVMChkInt.L2:
           P=      0                              * 99516
           LC(5)   #0E606                         * 99518
           RTNSC                                  * 9951F
 
 * refs (1): 9950D
-SUB_99521:
+* A = % -> carry set if it is a non-negative integer
+?Whole%:
           ?A#0    S                              * 99521
-          GOYES   SUB_9950D.L1                   * 99524
+          GOYES   TVMChkInt.L1                   * 99524
           C=A     A                              * 99526
           C=C+C   A                              * 99528
-          GOC     SUB_9950D.L1                   * 9952A
+          GOC     TVMChkInt.L1                   * 9952A
           GOVLNG  CLRFRC                         * 9952D
 
 * refs (3): 99410 99422 9946D
-SUB_99534:
+* AB -> AB rounded to the display format in the system flags
+AMORTRound:
           GOSBVL  CCSB1                          * 99534
           P=      0                              * 9953B
           D0=(5)  #8084E                         * 9953D
@@ -263,119 +282,123 @@ SUB_99534:
           GOVLNG  CCSB1                          * 9956D
 
 * refs (1): 9947F
-SUB_99574:
+* AB -> carry set if the exponent is beyond 2000 either way, replacing AB with a value of that size
+AMORTExpLimit:
           P=      14                             * 99574
           ?B=0    P                              * 99576
-          GOYES   SUB_99574.L3                   * 99579
+          GOYES   AMORTExpLimit.L3               * 99579
           C=A     A                              * 9957B
           C=C+C   A                              * 9957D
           C=0     A                              * 9957F
           P=      4                              * 99581
           LC(1)   #2                             * 99583
-          GOC     SUB_99574.L1                   * 99586
+          GOC     AMORTExpLimit.L1               * 99586
           ?C>A    A                              * 99589
-          GOYES   SUB_99574.L3                   * 9958C
+          GOYES   AMORTExpLimit.L3               * 9958C
           B=0     W                              * 9958E
           P=      14                             * 99591
           B=-B-1  WP                             * 99593
           C=C-1   A                              * 99596
-          GONC    SUB_99574.L2                   * 99598
-SUB_99574.L1:
+          GONC    AMORTExpLimit.L2               * 99598
+AMORTExpLimit.L1:
           C=-C    A                              * 9959B
           ?C<A    A                              * 9959D
-          GOYES   SUB_99574.L3                   * 995A0
+          GOYES   AMORTExpLimit.L3               * 995A0
           B=0     W                              * 995A2
           P=      14                             * 995A5
           B=B+1   P                              * 995A7
           C=C+1   A                              * 995AA
-SUB_99574.L2:
+AMORTExpLimit.L2:
           A=C     A                              * 995AC
           RTNSC                                  * 995AE
-SUB_99574.L3:
+AMORTExpLimit.L3:
           RTNCC                                  * 995B0
         ENDCODE                                  * 995B2
 
 * ROMPTR 0E6 00F
 * refs (1): 98E02
-ROMP_0E6_00F:
+* %%args -> %N: solves for N with logarithms
+TVMSolveN:
         CODE                                     * 995B2  342 nibbles
-          GOSBVL  SUB_7D9B8                      * 995BC
-          GOSUB   SUB_995DF                      * 995C3
-          GONC    ROMP_0E6_00F.L1                * 995C7
-          GOVLNG  SUB_78987.L2                   * 995CA
-ROMP_0E6_00F.L1:
+          GOSBVL  TvmArgs                        * 995BC
+          GOSUB   TVMCalcN                       * 995C3
+          GONC    TVMSolveN.L1                   * 995C7
+          GOVLNG  ErrC15                         * 995CA
+TVMSolveN.L1:
           GOSBVL  PACK                           * 995D1
           GOVLNG  PUSH%LOOP                      * 995D8
 
 * refs (1): 995C3
-SUB_995DF:
+* -> AB = N. Carry set with an error number: "No Solution" and "Invalid N" among them
+TVMCalcN:
           HST=0   3                              * 995DF
-          GOSBVL  SUB_785CA                      * 995E2
+          GOSBVL  RCLtmp4%%                      * 995E2
           GOSBVL  STAB0                          * 995E9
-          GOSBVL  SUB_78611                      * 995F0
+          GOSBVL  RCLCDtmp2%%                    * 995F0
           GOSBVL  RADDF                          * 995F7
-          GOSBVL  SUB_78664                      * 995FE
-          GOSBVL  SUB_7DA2B                      * 99605
+          GOSBVL  STOtmp0%%                      * 995FE
+          GOSBVL  TvmI                           * 99605
           RTNC                                   * 9960C
           GOSBVL  STAB2                          * 9960F
-          GOSBVL  SUB_7DABE                      * 99616
+          GOSBVL  TvmBegin                       * 99616
           GOSBVL  EXAB0                          * 9961D
           GOSBVL  RCCD2                          * 99624
           GOSUB   MULTF~jump_7                   * 9962B
           GOSBVL  RCCD0                          * 9962F
           C=-C-1  S                              * 99636
           GOSBVL  RADDF                          * 99639
-          GOSBVL  SUB_78605                      * 99640
+          GOSBVL  RCLCDtmp0%%                    * 99640
           GOSBVL  XYEX                           * 99647
-          GOSBVL  SUB_7DB73                      * 9964E
+          GOSBVL  TvmDiv                         * 9964E
           RTNC                                   * 99655
           P=      14                             * 99658
           ?B=0    P                              * 9965A
-          GOYES   SUB_995DF.L1                   * 9965D
+          GOYES   TVMCalcN.L1                    * 9965D
           GOSBVL  RCCD2                          * 9965F
           ?D#0    P                              * 99666
-          GOYES   SUB_995DF.L2                   * 99669
-SUB_995DF.L1:
+          GOYES   TVMCalcN.L2                    * 99669
+TVMCalcN.L1:
           RTNCC                                  * 9966B
-SUB_995DF.L2:
+TVMCalcN.L2:
           GOSUB   MULTF~jump_7                   * 9966D
           ST=1    2                              * 99671
           ?A#0    S                              * 99674
-          GOYES   SUB_995DF.L3                   * 99677
+          GOYES   TVMCalcN.L3                    * 99677
           ST=0    2                              * 99679
           GOSBVL  RCAB2                          * 9967C
-          GOSBVL  SUB_78611                      * 99683
+          GOSBVL  RCLCDtmp2%%                    * 99683
           GOSUB   MULTF~jump_7                   * 9968A
           GOSBVL  RCCD0                          * 9968E
           GOSBVL  RADDF                          * 99695
-          GOSBVL  SUB_78605                      * 9969C
+          GOSBVL  RCLCDtmp0%%                    * 9969C
           GOSBVL  XYEX                           * 996A3
-          GOSBVL  SUB_7DB73                      * 996AA
+          GOSBVL  TvmDiv                         * 996AA
           RTNC                                   * 996B1
           GOSBVL  RCCD2                          * 996B4
           GOSUB   MULTF~jump_7                   * 996BB
-SUB_995DF.L3:
+TVMCalcN.L3:
           A=-A-1  S                              * 996BF
-          GOSUB   SUB_996FD                      * 996C2
-          GOC     SUB_995DF.L5                   * 996C6
+          GOSUB   TVMLn                          * 996C2
+          GOC     TVMCalcN.L5                    * 996C6
           GOSBVL  EXAB2                          * 996C9
-          GOSUB   SUB_996FD                      * 996D0
-          GOC     SUB_995DF.L5                   * 996D4
+          GOSUB   TVMLn                          * 996D0
+          GOC     TVMCalcN.L5                    * 996D4
           GOSBVL  RCCD2                          * 996D7
           GOSBVL  XYEX                           * 996DE
           GOSBVL  DIVF                           * 996E5
           ?ST=0   2                              * 996EC
-          GOYES   SUB_995DF.L4                   * 996EF
+          GOYES   TVMCalcN.L4                    * 996EF
           A=-A-1  S                              * 996F1
-SUB_995DF.L4:
+TVMCalcN.L4:
           RTNCC                                  * 996F4
-SUB_995DF.L5:
-          GOVLNG  SUB_7DB73.L2                   * 996F6
+TVMCalcN.L5:
+          GOVLNG  TVMSolveI~2.L1                 * 996F6
 
 * refs (2): 996C2 996D0
-SUB_996FD:
-          GOSBVL  SUB_78D96.L4                   * 996FD
-          GOVLNG  SUB_7DAE2.L3                   * 99704
+* AB -> AB = LN(AB), or carry when the argument is out of range
+TVMLn:
+          GOSBVL  LNP115                         * 996FD
+          GOVLNG  TvmGrowth.L3                   * 99704
 
 * refs (4): 9962B 9966D 9968A 996BB
 MULTF~jump_7:
@@ -384,49 +407,51 @@ MULTF~jump_7:
 
 * ROMPTR 0E6 010
 * refs (1): 98E02
-ROMP_0E6_010:
+* %%args -> %I%YR: solves for the rate by Newton iteration
+TVMSolveI:
         CODE                                     * 99712  1551 nibbles
-          GOSBVL  SUB_7D9B8                      * 9971C
-          GOSUB   SUB_9973F                      * 99723
-          GONC    ROMP_0E6_010.L1                * 99727
-          GOVLNG  SUB_78987.L2                   * 9972A
-ROMP_0E6_010.L1:
+          GOSBVL  TvmArgs                        * 9971C
+          GOSUB   TVMCalcI                       * 99723
+          GONC    TVMSolveI.L1                   * 99727
+          GOVLNG  ErrC15                         * 9972A
+TVMSolveI.L1:
           GOSBVL  PACK                           * 99731
           GOVLNG  PUSH%LOOP                      * 99738
 
 * refs (1): 99723
-SUB_9973F:
+* -> AB = I%YR. Carry set with an error number. Checks N, handles a zero rate, takes a starting value and iterates
+TVMCalcI:
           HST=0   3                              * 9973F
           CSTEX                                  * 99742
           C=0     P                              * 99744
           CSTEX                                  * 99747
-          GOSBVL  SUB_78623                      * 99749
-          GOSBVL  SUB_7DA74                      * 99750
+          GOSBVL  RCLCDtmp5%%                    * 99749
+          GOSBVL  TvmCheckPyr                    * 99750
           RTNC                                   * 99757
-          GOSBVL  SUB_785BE                      * 9975A
+          GOSBVL  RCLtmp2%%                      * 9975A
           GOSBVL  GETCD0                         * 99761
           GOSBVL  STCD2                          * 99768
           ?ST=0   8                              * 9976F
-          GOYES   SUB_9973F.L1                   * 99772
+          GOYES   TVMCalcI.L1                    * 99772
           GOSUB   RADDF~jump_5                   * 99774
-SUB_9973F.L1:
-          GOSBVL  SUB_78670                      * 99778
-          GOSBVL  SUB_785CA                      * 9977F
+TVMCalcI.L1:
+          GOSBVL  STOtmp2%%                      * 99778
+          GOSBVL  RCLtmp4%%                      * 9977F
           ?ST=1   8                              * 99786
-          GOYES   SUB_9973F.L2                   * 99789
+          GOYES   TVMCalcI.L2                    * 99789
           GOSUB   RCCD2~jump_8                   * 9978B
           GOSUB   RADDF~jump_5                   * 9978F
-SUB_9973F.L2:
-          GOSBVL  SUB_7867C                      * 99793
-          GOSBVL  SUB_78591.L2                   * 9979A
+TVMCalcI.L2:
+          GOSBVL  STOtmp4%%                      * 99793
+          GOSBVL  RCLtmp0%%                      * 9979A
           P=      14                             * 997A1
           ?B=0    P                              * 997A3
-          GOYES   SUB_9973F.loop3                * 997A6
+          GOYES   TVMCalcI.loop3                 * 997A6
           ?A#0    S                              * 997A8
-          GOYES   SUB_9973F.loop3                * 997AB
+          GOYES   TVMCalcI.loop3                 * 997AB
           GOSUB   RCCD2~jump_8                   * 997AD
           ?D=0    P                              * 997B1
-          GOYES   SUB_9973F.L6                   * 997B4
+          GOYES   TVMCalcI.L6                    * 997B4
           C=0     W                              * 997B6
           P=      10                             * 997B9
           LC(5)   #99999                         * 997BB
@@ -434,26 +459,26 @@ SUB_9973F.L2:
           C=C-1   A                              * 997C5
           P=      3                              * 997C7
           GOSBVL  TST15                          * 997C9
-          GONC    SUB_9973F.L4                   * 997D0
-SUB_9973F.loop3:
+          GONC    TVMCalcI.L4                    * 997D0
+TVMCalcI.loop3:
           P=      0                              * 997D3
           LC(5)   #0E604                         * 997D5
           RTNSC                                  * 997DC
-SUB_9973F.L4:
+TVMCalcI.L4:
           ?C#A    A                              * 997DE
-          GOYES   SUB_9973F.L5                   * 997E1
+          GOYES   TVMCalcI.L5                    * 997E1
           A=0     W                              * 997E3
           B=0     W                              * 997E6
           P=      14                             * 997E9
           B=B+1   P                              * 997EB
-SUB_9973F.L5:
+TVMCalcI.L5:
           C=0     A                              * 997EE
           P=      1                              * 997F0
           C=C+1   P                              * 997F2
           ?C<=A   A                              * 997F5
-          GOYES   SUB_9973F.loop3                * 997F8
-SUB_9973F.L6:
-          GOSBVL  SUB_78664                      * 997FA
+          GOYES   TVMCalcI.loop3                 * 997F8
+TVMCalcI.L6:
+          GOSBVL  STOtmp0%%                      * 997FA
           GOSUB   STAB0~jump_8                   * 99801
           C=0     W                              * 99805
           D=0     W                              * 99808
@@ -461,96 +486,97 @@ SUB_9973F.L6:
           D=D+1   P                              * 9980D
           P=      2                              * 99810
           GOSBVL  TST15                          * 99812
-          GOC     SUB_9973F.L7                   * 99819
+          GOC     TVMCalcI.L7                    * 99819
           GOSUB   RCAB2~jump_5                   * 9981C
           ?B#0    W                              * 99820
-          GOYES   SUB_9973F.L10                  * 99823
-SUB_9973F.L7:
-          GOSUB   SUB_99A45                      * 99825
-          GONC    SUB_9973F.L9                   * 99829
+          GOYES   TVMCalcI.L10                   * 99823
+TVMCalcI.L7:
+          GOSUB   TVMPvFvSign                    * 99825
+          GONC    TVMCalcI.L9                    * 99829
           ?B#0    P                              * 9982C
-          GOYES   SUB_9973F.L8                   * 9982F
+          GOYES   TVMCalcI.L8                    * 9982F
           ?D#0    P                              * 99831
-          GOYES   SUB_9973F.L8                   * 99834
-          GOVLNG  SUB_7DB73.L1                   * 99836
-SUB_9973F.L8:
-          GOVLNG  SUB_7DB73.L2                   * 9983D
-SUB_9973F.L9:
+          GOYES   TVMCalcI.L8                    * 99834
+          GOVLNG  TVMSolveI~2                    * 99836
+TVMCalcI.L8:
+          GOVLNG  TVMSolveI~2.L1                 * 9983D
+TVMCalcI.L9:
           GOSUB   DIVF~jump_5                    * 99844
           A=-A-1  S                              * 99848
           GOSBVL  EXAB0                          * 9984B
           GOSBVL  1/X15                          * 99852
           GOSUB   RCCD0~jump_8                   * 99859
           GOSUB   XYEX~jump_6                    * 9985D
-          GOSBVL  SUB_7DA8D                      * 99861
+          GOSBVL  TvmPow                         * 99861
           RTNC                                   * 99868
-          GOTO    SUB_999DE.L1                   * 9986B
-SUB_9973F.L10:
-          GOSUB   SUB_99A01                      * 9986F
+          GOTO    TVMDivChk.L1                   * 9986B
+TVMCalcI.L10:
+          GOSUB   TVMRateCases                   * 9986F
           RTNC                                   * 99873
-          GOSUB   SUB_99A66                      * 99876
-SUB_9973F.loop11:
+          GOSUB   TVMRateStart                   * 99876
+* The iteration: evaluates the TVM equation and its slope at the current rate
+TVMCalcI.loop11:
           GOSBVL  CkATTNcode                     * 9987A
           SETDEC                                 * 99881
-          GOSBVL  SUB_7866A                      * 99883
+          GOSBVL  STOtmp1%%                      * 99883
           GOSUB   RADD1~jump_3                   * 9988A
-          GOSBVL  SUB_78688                      * 9988E
-          GOSBVL  SUB_78591.L2                   * 99895
+          GOSBVL  STOtmp6%%                      * 9988E
+          GOSBVL  RCLtmp0%%                      * 99895
           GOSUB   RSUB1~jump_2                   * 9989C
-          GOSBVL  SUB_7860B                      * 998A0
+          GOSBVL  RCLCDtmp1%%                    * 998A0
           GOSUB   XYEX~jump_6                    * 998A7
-          GOSBVL  SUB_7DAE2                      * 998AB
+          GOSBVL  TvmGrowth                      * 998AB
           RTNC                                   * 998B2
-          GOSBVL  SUB_78617                      * 998B5
+          GOSBVL  RCLCDtmp3%%                    * 998B5
           GOSUB   MULTF~jump_8                   * 998BC
           GOSBVL  EXAB0                          * 998C0
-          GOSBVL  SUB_78611                      * 998C7
+          GOSBVL  RCLCDtmp2%%                    * 998C7
           GOSUB   MULTF~jump_8                   * 998CE
           GOSUB   RCCD0~jump_8                   * 998D2
           GOSUB   RADDF~jump_5                   * 998D6
-          GOSBVL  SUB_78629                      * 998DA
+          GOSBVL  RCLCDtmp6%%                    * 998DA
           GOSUB   MULTF~jump_8                   * 998E1
-          GOSBVL  SUB_78688                      * 998E5
-          GOSBVL  SUB_78605                      * 998EC
+          GOSBVL  STOtmp6%%                      * 998E5
+          GOSBVL  RCLCDtmp0%%                    * 998EC
           GOSBVL  GETAB0                         * 998F3
-          GOSBVL  SUB_7DAE2                      * 998FA
+          GOSBVL  TvmGrowth                      * 998FA
           RTNC                                   * 99901
-          GOSBVL  SUB_78605                      * 99904
-          GOSUB   SUB_99BEF                      * 9990B
+          GOSBVL  RCLCDtmp0%%                    * 99904
+          GOSUB   TVMDamp                        * 9990B
           GOSUB   STAB0~jump_8                   * 9990F
-          GOSBVL  SUB_78629                      * 99913
+          GOSBVL  RCLCDtmp6%%                    * 99913
           GOSBVL  STCD2                          * 9991A
           GOSBVL  RCLtmp1%%                      * 99921
           GOSUB   RADD1~jump_3                   * 99928
-          GOSBVL  SUB_78688                      * 9992C
+          GOSBVL  STOtmp6%%                      * 9992C
           GOSUB   RCCD0~jump_8                   * 99933
           GOSUB   MULTF~jump_8                   * 99937
-          GOSBVL  SUB_78617                      * 9993B
+          GOSBVL  RCLCDtmp3%%                    * 9993B
           GOSUB   MULTF~jump_8                   * 99942
           GOSUB   STAB0~jump_8                   * 99946
           GOSUB   RCAB2~jump_5                   * 9994A
-          GOSBVL  SUB_78605                      * 9994E
+          GOSBVL  RCLCDtmp0%%                    * 9994E
           GOSUB   MULTF~jump_8                   * 99955
           GOSUB   RCCD0~jump_8                   * 99959
           GOSUB   RADDF~jump_5                   * 9995D
           GOSUB   RCCD2~jump_8                   * 99961
           GOSUB   XYEX~jump_6                    * 99965
-          GOSUB   SUB_999DE                      * 99969
+          GOSUB   TVMDivChk                      * 99969
           RTNC                                   * 9996D
           GOSBVL  EXAB2                          * 99970
-          GOSBVL  SUB_7861D                      * 99977
+          GOSBVL  RCLCDtmp4%%                    * 99977
           GOSUB   XYEX~jump_6                    * 9997E
           A=-A-1  S                              * 99982
-          GOSUB   SUB_999DE                      * 99985
+          GOSUB   TVMDivChk                      * 99985
           RTNC                                   * 99989
-          GOSUB   SUB_99B04                      * 9998C
+          GOSUB   TVMCompound                    * 9998C
           RTNC                                   * 99990
-          GOSUB   SUB_99B96                      * 99993
-          GOC     SUB_9973F.L12                  * 99997
-          GOTO    SUB_9973F.loop11               * 9999A
-SUB_9973F.L12:
+          GOSUB   TVMConverged                   * 99993
+          GOC     TVMCalcI.L12                   * 99997
+          GOTO    TVMCalcI.loop11                * 9999A
+TVMCalcI.L12:
           ?ST=0   6                              * 9999E
-          GOYES   SUB_9973F.L14                  * 999A1
+          GOYES   TVMCalcI.L14                   * 999A1
           C=0     W                              * 999A3
           C=C-1   W                              * 999A6
           D=0     W                              * 999A9
@@ -558,62 +584,66 @@ SUB_9973F.L12:
           D=0     A                              * 999AF
           P=      3                              * 999B1
           GOSBVL  TST15                          * 999B3
-          GONC    SUB_9973F.L13                  * 999BA
-          GOVLNG  SUB_7DA8D.L2                   * 999BD
-SUB_9973F.L13:
+          GONC    TVMCalcI.L13                   * 999BA
+          GOVLNG  TVMSolveI~1                    * 999BD
+TVMCalcI.L13:
           GOSUB   RADD1~jump_3                   * 999C4
           GOSUB   RCCD0~jump_8                   * 999C8
           GOSUB   XYEX~jump_6                    * 999CC
-          GOSUB   SUB_999DE                      * 999D0
+          GOSUB   TVMDivChk                      * 999D0
           RTNC                                   * 999D4
           A=-A-1  S                              * 999D7
-SUB_9973F.L14:
-          GOTO    SUB_999DE.L2                   * 999DA
+TVMCalcI.L14:
+          GOTO    TVMDivChk.L2                   * 999DA
 
 * refs (3): 99969 99985 999D0
-SUB_999DE:
+* AB / CD with an overflow check
+TVMDivChk:
           XM=0                                   * 999DE
           GOSUB   DIVF~jump_5                    * 999E1
-          GOVLNG  SUB_7DAE2.L3                   * 999E5
-SUB_999DE.L1:
+          GOVLNG  TvmGrowth.L3                   * 999E5
+* Convert the periodic rate to I%YR: -1, times 100, times PYR
+TVMDivChk.L1:
           GOSUB   RSUB1~jump_2                   * 999EC
-SUB_999DE.L2:
+TVMDivChk.L2:
           A=A+1   A                              * 999F0
           A=A+1   A                              * 999F2
-          GOSBVL  SUB_78623                      * 999F4
+          GOSBVL  RCLCDtmp5%%                    * 999F4
           GOSUB   MULTF~jump_8                   * 999FB
           RTNCC                                  * 999FF
 
 * refs (1): 9986F
-SUB_99A01:
-          GOSUB   SUB_99A45                      * 99A01
-          GONC    SUB_99A01.L4                   * 99A05
+* Picks out the cases with no solution or with many from the signs of PV, PMT and FV. Carry set with an error number
+TVMRateCases:
+          GOSUB   TVMPvFvSign                    * 99A01
+          GONC    TVMRateCases.L4                * 99A05
           ?B=0    P                              * 99A08
-          GOYES   SUB_99A01.L2                   * 99A0B
+          GOYES   TVMRateCases.L2                * 99A0B
           ?D=0    P                              * 99A0D
-          GOYES   SUB_99A01.L3                   * 99A10
-          GOSBVL  SUB_78617                      * 99A12
+          GOYES   TVMRateCases.L3                * 99A10
+          GOSBVL  RCLCDtmp3%%                    * 99A12
           ?C=A    S                              * 99A19
-          GOYES   SUB_99A01.loop1                * 99A1C
-          GOVLNG  SUB_7DB73.L1                   * 99A1E
-SUB_99A01.loop1:
-          GOVLNG  SUB_7DB73.L2                   * 99A25
-SUB_99A01.L2:
+          GOYES   TVMRateCases.loop1             * 99A1C
+          GOVLNG  TVMSolveI~2                    * 99A1E
+TVMRateCases.loop1:
+          GOVLNG  TVMSolveI~2.L1                 * 99A25
+TVMRateCases.L2:
           GOSUB   XYEX~jump_6                    * 99A2C
-SUB_99A01.L3:
-          GOSBVL  SUB_78617                      * 99A30
+TVMRateCases.L3:
+          GOSBVL  RCLCDtmp3%%                    * 99A30
           P=      14                             * 99A37
           ?B=0    P                              * 99A39
-          GOYES   SUB_99A01.loop1                * 99A3C
+          GOYES   TVMRateCases.loop1             * 99A3C
           ?C=A    S                              * 99A3E
-          GOYES   SUB_99A01.loop1                * 99A41
-SUB_99A01.L4:
+          GOYES   TVMRateCases.loop1             * 99A41
+TVMRateCases.L4:
           RTNCC                                  * 99A43
 
 * refs (2): 99825 99A01
-SUB_99A45:
-          GOSBVL  SUB_785CA                      * 99A45
-          GOSBVL  SUB_78611                      * 99A4C
+* -> carry set if PV or FV is 0 or they have the same sign
+TVMPvFvSign:
+          GOSBVL  RCLtmp4%%                      * 99A45
+          GOSBVL  RCLCDtmp2%%                    * 99A4C
           P=      14                             * 99A53
           ?D=0    P                              * 99A55
           RTNYES                                 * 99A58
@@ -624,143 +654,148 @@ SUB_99A45:
           RTN                                    * 99A64
 
 * refs (1): 99876
-SUB_99A66:
+* -> AB = a starting rate from the signs and sizes of PV, PMT and FV
+TVMRateStart:
           ST=0    6                              * 99A66
-          GOSBVL  SUB_78611                      * 99A69
+          GOSBVL  RCLCDtmp2%%                    * 99A69
           GOSBVL  GETAB0                         * 99A70
           P=      14                             * 99A77
           ?D=0    P                              * 99A79
-          GOYES   SUB_99A66.L1                   * 99A7C
+          GOYES   TVMRateStart.L1                * 99A7C
           ?C#A    S                              * 99A7E
-          GOYES   SUB_99A66.L3                   * 99A81
-SUB_99A66.L1:
-          GOSBVL  SUB_7DA2B                      * 99A83
-          GONC    SUB_99A66.L4                   * 99A8A
-SUB_99A66.loop2:
+          GOYES   TVMRateStart.L3                * 99A81
+TVMRateStart.L1:
+          GOSBVL  TvmI                           * 99A83
+          GONC    TVMRateStart.L4                * 99A8A
+TVMRateStart.loop2:
           A=0     W                              * 99A8D
           B=0     W                              * 99A90
           RTNCC                                  * 99A93
-SUB_99A66.L3:
+TVMRateStart.L3:
           ST=1    6                              * 99A95
           GOSUB   XYEX~jump_6                    * 99A98
-          GOSBVL  SUB_7861D                      * 99A9C
-          GOSBVL  SUB_7867C                      * 99AA3
+          GOSBVL  RCLCDtmp4%%                    * 99A9C
+          GOSBVL  STOtmp4%%                      * 99AA3
           GOSUB   XYEX~jump_6                    * 99AAA
-          GOSBVL  SUB_78670                      * 99AAE
-          GOSBVL  SUB_7DA2B                      * 99AB5
-          GOC     SUB_99A66.loop2                * 99ABC
+          GOSBVL  STOtmp2%%                      * 99AAE
+          GOSBVL  TvmI                           * 99AB5
+          GOC     TVMRateStart.loop2             * 99ABC
           GOSBVL  STAB2                          * 99ABF
           GOSUB   RADD1~jump_3                   * 99AC6
           GOSUB   RCCD2~jump_8                   * 99ACA
           C=-C-1  S                              * 99ACE
           GOSUB   XYEX~jump_6                    * 99AD1
           GOSUB   DIVF~jump_5                    * 99AD5
-SUB_99A66.L4:
+TVMRateStart.L4:
           C=A     A                              * 99AD9
           C=C+C   A                              * 99ADB
-          GONC    SUB_99A66.loop2                * 99ADD
+          GONC    TVMRateStart.loop2             * 99ADD
           C=0     A                              * 99AE0
           P=      0                              * 99AE2
           LC(2)   #12                            * 99AE4
           C=C+A   A                              * 99AE8
-          GONC    SUB_99A66.loop2                * 99AEA
-          GOSBVL  SUB_78605                      * 99AED
+          GONC    TVMRateStart.loop2             * 99AEA
+          GOSBVL  RCLCDtmp0%%                    * 99AED
           D=C     A                              * 99AF4
           C=0     A                              * 99AF6
           P=      0                              * 99AF8
           LC(1)   #2                             * 99AFA
           ?D>C    A                              * 99AFD
-          GOYES   SUB_99A66.loop2                * 99B00
+          GOYES   TVMRateStart.loop2             * 99B00
           RTN                                    * 99B02
 
 * refs (1): 9998C
-SUB_99B04:
+* AB = rate -> the compounding factor (1+i)^N and (1+i)^N-1, kept accurate for small i with LNP1 and EXPM
+TVMCompound:
           GOSUB   STAB0~jump_8                   * 99B04
           GOSBVL  RCLtmp1%%                      * 99B08
           GOSUB   RADD1~jump_3                   * 99B0F
-          GOSBVL  SUB_78688                      * 99B13
+          GOSBVL  STOtmp6%%                      * 99B13
           GOSUB   RCAB0~jump_3                   * 99B1A
-          GOSUB   SUB_99B85                      * 99B1E
+          GOSUB   TVMLnp1                        * 99B1E
           RTNC                                   * 99B22
           GOSUB   RCCD2~jump_8                   * 99B25
           GOSUB   MULTF~jump_8                   * 99B29
           ST=1    11                             * 99B2D
-          GOSBVL  SUB_792C8.L13                  * 99B30
-          GONC    SUB_99B04.L1                   * 99B37
-          GOVLNG  SUB_7DA8D.L1                   * 99B3A
-SUB_99B04.L1:
+          GOSBVL  Pow15.L8                       * 99B30
+          GONC    TVMCompound.L1                 * 99B37
+          GOVLNG  TvmPow.L1                      * 99B3A
+TVMCompound.L1:
           GOSBVL  EXAB0                          * 99B41
           P=      14                             * 99B48
           ?B=0    P                              * 99B4A
-          GOYES   SUB_99B04.L2                   * 99B4D
+          GOYES   TVMCompound.L2                 * 99B4D
           C=A     A                              * 99B4F
           C=C+1   A                              * 99B51
           C=C+C   A                              * 99B53
-          GOC     SUB_99B04.L2                   * 99B55
-          GOSBVL  SUB_78629                      * 99B58
+          GOC     TVMCompound.L2                 * 99B55
+          GOSBVL  RCLCDtmp6%%                    * 99B58
           GOSUB   RCAB0~jump_3                   * 99B5F
           GOSUB   MULTF~jump_8                   * 99B63
           GOSUB   RSUB1~jump_2                   * 99B67
           RTNCC                                  * 99B6B
-SUB_99B04.L2:
-          GOSBVL  SUB_78629                      * 99B6D
+TVMCompound.L2:
+          GOSBVL  RCLCDtmp6%%                    * 99B6D
           GOSUB   MULTF~jump_8                   * 99B74
-          GOSBVL  SUB_7860B                      * 99B78
+          GOSBVL  RCLCDtmp1%%                    * 99B78
           GOSUB   RADDF~jump_5                   * 99B7F
           RTNCC                                  * 99B83
 
 * refs (1): 99B1E
-SUB_99B85:
+* AB -> AB = LNP1(AB), or carry
+TVMLnp1:
           XM=0                                   * 99B85
-          GOSBVL  SUB_78DE9.L3                   * 99B88
-          GOVLNG  SUB_7DAE2.L3                   * 99B8F
+          GOSBVL  LN15                           * 99B88
+          GOVLNG  TvmGrowth.L3                   * 99B8F
 
 * refs (1): 99993
-SUB_99B96:
+* Carry set when the Newton step is small against the rate
+TVMConverged:
           GOSUB   STAB0~jump_8                   * 99B96
-          GOSBVL  SUB_7860B                      * 99B9A
+          GOSBVL  RCLCDtmp1%%                    * 99B9A
           C=-C-1  S                              * 99BA1
           GOSUB   RADDF~jump_5                   * 99BA4
           P=      14                             * 99BA8
           ?B=0    P                              * 99BAA
-          GOYES   SUB_99B96.L2                   * 99BAD
+          GOYES   TVMConverged.L2                * 99BAD
           GOSUB   RCCD0~jump_8                   * 99BAF
           ?D=0    P                              * 99BB3
-          GOYES   SUB_99B96.L1                   * 99BB6
+          GOYES   TVMConverged.L1                * 99BB6
           GOSUB   DIVF~jump_5                    * 99BB8
           C=A     A                              * 99BBC
           C=C+C   A                              * 99BBE
-          GONC    SUB_99B96.L1                   * 99BC0
+          GONC    TVMConverged.L1                * 99BC0
           C=0     A                              * 99BC3
           P=      0                              * 99BC5
           LC(2)   #12                            * 99BC7
           C=C+A   A                              * 99BCB
-          GONC    SUB_99B96.L2                   * 99BCD
+          GONC    TVMConverged.L2                * 99BCD
           C=C-1   A                              * 99BD0
-          GONC    SUB_99B96.L1                   * 99BD2
+          GONC    TVMConverged.L1                * 99BD2
           CSTEX                                  * 99BD5
           SETHEX                                 * 99BD7
           C=C+1   P                              * 99BD9
           SETDEC                                 * 99BDC
           CSTEX                                  * 99BDE
-          GOC     SUB_99B96.L2                   * 99BE0
-SUB_99B96.L1:
+          GOC     TVMConverged.L2                * 99BE0
+TVMConverged.L1:
           GOSUB   RCAB0~jump_3                   * 99BE3
           RTNCC                                  * 99BE7
-SUB_99B96.L2:
+TVMConverged.L2:
           GOSUB   RCAB0~jump_3                   * 99BE9
           RTNSC                                  * 99BED
 
 * refs (1): 9990B
-SUB_99BEF:
+* Limits or damps a Newton step
+TVMDamp:
           GOSBVL  STCD2                          * 99BEF
           A=-A-1  S                              * 99BF6
           GOSUB   RADDF~jump_5                   * 99BF9
-          GOSBVL  SUB_7860B                      * 99BFD
+          GOSBVL  RCLCDtmp1%%                    * 99BFD
           GOSBVL  STCD0                          * 99C04
           P=      14                             * 99C0B
           ?B=0    P                              * 99C0D
-          GOYES   SUB_99BEF.L2                   * 99C10
+          GOYES   TVMDamp.L2                     * 99C10
           C=R2                                   * 99C12
           C=A-C   A                              * 99C15
           D=C     A                              * 99C17
@@ -768,16 +803,16 @@ SUB_99BEF:
           P=      5                              * 99C1B
           CPEX    4                              * 99C1D
           ?D<C    A                              * 99C21
-          GOYES   SUB_99BEF.L1                   * 99C24
+          GOYES   TVMDamp.L1                     * 99C24
           LC(5)   #99994                         * 99C26
           ?D>C    A                              * 99C2D
-          GOYES   SUB_99BEF.L1                   * 99C30
-          GONC    SUB_99BEF.L2                   * 99C32
-SUB_99BEF.L1:
+          GOYES   TVMDamp.L1                     * 99C30
+          GONC    TVMDamp.L2                     * 99C32
+TVMDamp.L1:
           GOSUB   RCCD0~jump_8                   * 99C35
           GOSUB   DIVF~jump_5                    * 99C39
           RTNCC                                  * 99C3D
-SUB_99BEF.L2:
+TVMDamp.L2:
           GOSUB   RCAB2~jump_5                   * 99C3F
           C=0     W                              * 99C43
           P=      14                             * 99C46
@@ -812,14 +847,15 @@ SUB_99BEF.L2:
           GOSUB   RADD1~jump_3                   * 99CA7
           GOSUB   STAB0~jump_8                   * 99CAB
           GOSUB   RCAB2~jump_5                   * 99CAF
-          GOSUB   SUB_99CC4                      * 99CB3
+          GOSUB   TVMHalfDiff                    * 99CB3
           A=-A-1  S                              * 99CB7
           GOSUB   RCCD0~jump_8                   * 99CBA
           GOSUB   MULTF~jump_8                   * 99CBE
           RTNCC                                  * 99CC2
 
 * refs (1): 99CB3
-SUB_99CC4:
+* AB CD -> (AB-1)*CD/2
+TVMHalfDiff:
           GOSBVL  STAB2                          * 99CC4
           GOSUB   RSUB1~jump_2                   * 99CCB
           GOSUB   RCCD2~jump_8                   * 99CCF
@@ -873,31 +909,33 @@ RSUB1~jump_2:
 
 * ROMPTR 0E6 011
 * refs (1): 98E02
-ROMP_0E6_011:
+* %%args -> %PV
+TVMSolvePV:
         CODE                                     * 99D2B  147 nibbles
-          GOSBVL  SUB_7D9B8                      * 99D35
-          GOSUB   SUB_99D58                      * 99D3C
-          GONC    ROMP_0E6_011.L1                * 99D40
-          GOVLNG  SUB_78987.L2                   * 99D43
-ROMP_0E6_011.L1:
+          GOSBVL  TvmArgs                        * 99D35
+          GOSUB   TVMCalcPV                      * 99D3C
+          GONC    TVMSolvePV.L1                  * 99D40
+          GOVLNG  ErrC15                         * 99D43
+TVMSolvePV.L1:
           GOSBVL  PACK                           * 99D4A
           GOVLNG  PUSH%LOOP                      * 99D51
 
 * refs (1): 99D3C
-SUB_99D58:
+* -> AB = PV, from the compounding factors
+TVMCalcPV:
           HST=0   3                              * 99D58
-          GOSBVL  SUB_7DA1D                      * 99D5B
+          GOSBVL  TvmI%                          * 99D5B
           RTNC                                   * 99D62
-          GOSBVL  SUB_78670                      * 99D65
+          GOSBVL  STOtmp2%%                      * 99D65
           GOSBVL  SUB_7DADF                      * 99D6C
           RTNC                                   * 99D73
           GOSBVL  STAB2                          * 99D76
           GOSBVL  RCAB0                          * 99D7D
-          GOSBVL  SUB_7861D                      * 99D84
+          GOSBVL  RCLCDtmp4%%                    * 99D84
           GOSBVL  MULTF                          * 99D8B
           GOSBVL  STAB0                          * 99D92
-          GOSBVL  SUB_785BE                      * 99D99
-          GOSBVL  SUB_7DABE                      * 99DA0
+          GOSBVL  RCLtmp2%%                      * 99D99
+          GOSBVL  TvmBegin                       * 99DA0
           GOSBVL  RCCD2                          * 99DA7
           GOSBVL  MULTF                          * 99DAE
           GOSBVL  RCCD0                          * 99DB5
@@ -908,70 +946,74 @@ SUB_99D58:
 
 * ROMPTR 0E6 012
 * refs (1): 98E02
-ROMP_0E6_012:
+* %%args -> %PMT
+TVMSolvePMT:
         CODE                                     * 99DC8  168 nibbles
-          GOSBVL  SUB_7D9B8                      * 99DD2
-          GOSUB   SUB_99DF5                      * 99DD9
-          GONC    ROMP_0E6_012.L1                * 99DDD
-          GOVLNG  SUB_78987.L2                   * 99DE0
-ROMP_0E6_012.L1:
+          GOSBVL  TvmArgs                        * 99DD2
+          GOSUB   TVMCalcPMT                     * 99DD9
+          GONC    TVMSolvePMT.L1                 * 99DDD
+          GOVLNG  ErrC15                         * 99DE0
+TVMSolvePMT.L1:
           GOSBVL  PACK                           * 99DE7
           GOVLNG  PUSH%LOOP                      * 99DEE
 
 * refs (1): 99DD9
-SUB_99DF5:
+* -> AB = PMT, from the compounding factors
+TVMCalcPMT:
           HST=0   3                              * 99DF5
-          GOSBVL  SUB_7DA1D                      * 99DF8
+          GOSBVL  TvmI%                          * 99DF8
           RTNC                                   * 99DFF
-          GOSBVL  SUB_78664                      * 99E02
+          GOSBVL  STOtmp0%%                      * 99E02
           GOSBVL  SUB_7DADF                      * 99E09
           RTNC                                   * 99E10
           GOSBVL  STAB2                          * 99E13
-          GOSBVL  SUB_78591.L2                   * 99E1A
+          GOSBVL  RCLtmp0%%                      * 99E1A
           GOSBVL  RADD1                          * 99E21
           GOSBVL  RCCD2                          * 99E28
           GOSBVL  XYEX                           * 99E2F
           ?ST=0   8                              * 99E36
-          GOYES   SUB_99DF5.L1                   * 99E39
+          GOYES   TVMCalcPMT.L1                  * 99E39
           GOSBVL  MULTF                          * 99E3B
-SUB_99DF5.L1:
+TVMCalcPMT.L1:
           GOSBVL  STAB2                          * 99E42
-          GOSBVL  SUB_7861D                      * 99E49
+          GOSBVL  RCLCDtmp4%%                    * 99E49
           GOSBVL  RCAB0                          * 99E50
           GOSBVL  MULTF                          * 99E57
-          GOSBVL  SUB_78611                      * 99E5E
+          GOSBVL  RCLCDtmp2%%                    * 99E5E
           GOSBVL  RADDF                          * 99E65
           GOSBVL  RCCD2                          * 99E6C
-          GOVLNG  SUB_7DB73                      * 99E73
+          GOVLNG  TvmDiv                         * 99E73
         ENDCODE                                  * 99E7A
 
 * ROMPTR 0E6 013
 * refs (1): 98E02
-ROMP_0E6_013:
+* %%args -> %FV
+TVMSolveFV:
         CODE                                     * 99E7A  147 nibbles
-          GOSBVL  SUB_7D9B8                      * 99E84
-          GOSUB   SUB_99EA7                      * 99E8B
-          GONC    ROMP_0E6_013.L1                * 99E8F
-          GOVLNG  SUB_78987.L2                   * 99E92
-ROMP_0E6_013.L1:
+          GOSBVL  TvmArgs                        * 99E84
+          GOSUB   TVMCalcFV                      * 99E8B
+          GONC    TVMSolveFV.L1                  * 99E8F
+          GOVLNG  ErrC15                         * 99E92
+TVMSolveFV.L1:
           GOSBVL  PACK                           * 99E99
           GOVLNG  PUSH%LOOP                      * 99EA0
 
 * refs (1): 99E8B
-SUB_99EA7:
+* -> AB = FV, from the compounding factors
+TVMCalcFV:
           HST=0   3                              * 99EA7
-          GOSBVL  SUB_7DA1D                      * 99EAA
+          GOSBVL  TvmI%                          * 99EAA
           RTNC                                   * 99EB1
-          GOSBVL  SUB_78664                      * 99EB4
-          GOSBVL  SUB_7DAE2                      * 99EBB
+          GOSBVL  STOtmp0%%                      * 99EB4
+          GOSBVL  TvmGrowth                      * 99EBB
           RTNC                                   * 99EC2
           GOSBVL  STAB2                          * 99EC5
           GOSBVL  RCAB0                          * 99ECC
-          GOSBVL  SUB_78611                      * 99ED3
+          GOSBVL  RCLCDtmp2%%                    * 99ED3
           GOSBVL  MULTF                          * 99EDA
           GOSBVL  STAB0                          * 99EE1
-          GOSBVL  SUB_78591.L2                   * 99EE8
-          GOSBVL  SUB_7DABE                      * 99EEF
+          GOSBVL  RCLtmp0%%                      * 99EE8
+          GOSBVL  TvmBegin                       * 99EEF
           GOSBVL  RCCD2                          * 99EF6
           GOSBVL  MULTF                          * 99EFD
           GOSBVL  RCCD0                          * 99F04
@@ -1007,23 +1049,23 @@ LIB0E6.hash.L1:
 LIB0E6.link:
         CON(5)  DOHSTR                           * 99F7B  link table of library 0E6
         LENGTH                                   * 99F80  length, to #99FE9
-        REL(5)  ROMP_0E6_000                     * 99F85  000 
+        REL(5)  TVMMessages                      * 99F85  000 
         REL(5)  TVM~1                            * 99F8A  001 
-        REL(5)  ROMP_0E6_002                     * 99F8F  002 
-        REL(5)  ROMP_0E6_003                     * 99F94  003 
-        REL(5)  ROMP_0E6_004                     * 99F99  004 
-        REL(5)  ~BINT14;SetSysFlag               * 99F9E  005 
-        REL(5)  ~BINT14;ClrSysFlag               * 99FA3  006 
-        REL(5)  ROMP_0E6_007                     * 99FA8  007 
-        REL(5)  ROMP_0E6_008                     * 99FAD  008 
-        REL(5)  ~'R;XEQSTOID                     * 99FB2  009 
-        REL(5)  ROMP_0E6_00A                     * 99FB7  00A 
+        REL(5)  TVMSolveKey                      * 99F8F  002 
+        REL(5)  AMORTTagged                      * 99F94  003 
+        REL(5)  AMORTArgs                        * 99F99  004 
+        REL(5)  TVMBegin                         * 99F9E  005 
+        REL(5)  TVMEnd                           * 99FA3  006 
+        REL(5)  TVMArgs                          * 99FA8  007 
+        REL(5)  TVMVal                           * 99FAD  008 
+        REL(5)  TVMStoVal                        * 99FB2  009 
+        REL(5)  TVMPrompt                        * 99FB7  00A 
         REL(5)  TVMROOT~1                        * 99FBC  00B 
-        REL(5)  ROMP_0E6_00C                     * 99FC1  00C 
-        REL(5)  ROMP_0E6_00D                     * 99FC6  00D 
-        REL(5)  ROMP_0E6_00E                     * 99FCB  00E 
-        REL(5)  ROMP_0E6_00F                     * 99FD0  00F 
-        REL(5)  ROMP_0E6_010                     * 99FD5  010 
-        REL(5)  ROMP_0E6_011                     * 99FDA  011 
-        REL(5)  ROMP_0E6_012                     * 99FDF  012 
-        REL(5)  ROMP_0E6_013                     * 99FE4  013 
+        REL(5)  TVMSolve                         * 99FC1  00C 
+        REL(5)  TVMSolvers                       * 99FC6  00D 
+        REL(5)  AMORTCalc                        * 99FCB  00E 
+        REL(5)  TVMSolveN                        * 99FD0  00F 
+        REL(5)  TVMSolveI                        * 99FD5  010 
+        REL(5)  TVMSolvePV                       * 99FDA  011 
+        REL(5)  TVMSolvePMT                      * 99FDF  012 
+        REL(5)  TVMSolveFV                       * 99FE4  013 

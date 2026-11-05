@@ -1,6 +1,6 @@
-* HP 48GX ROM revision R, #57004-#5A01C: Symbolic algebra
+* HP 48GX ROM revision R, #57004-#5A01C: Symbolic algebra: user-function derivatives, ISOL, EXPAN, COLCT, SHOW, QUAD, TAYLR and the RULES menu commands
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: BindDvDup IsolContinue IsolInv1 drop;q_58A0C MEQU? Π'+s Π'*s SYMCOLCT NoIdsInMeta? {RULES\D->} swappargunrot nm=>st
+* Most referenced: BindDvDup IsolContinue IsolInv1 drop;q_58A0C IsolInvN ObInMeta MEQU? Π'+s Π'*s SYMCOLCT Pict3DPrep Isol2πIn
 * Follows on from the previous file (at #57004 in the original ROM).
         RPL
 
@@ -10,60 +10,70 @@ nm=>st:
           ID>$ ;                                 * 57018
 
 * refs (5): 85EAD 85F2F 85F8E 85FF2 86704
-OBJ_57022:
-        :: OBJ_56CD1 pshzer parg& COLA MetaConcase * 57022
+* meta -> ...: bind dv and take the derivative of each argument
+DerArgs:
+        :: BindDv pshzer parg& COLA MetaConcase  * 57022
         ;                                        * 57040
 
 * refs (22): 860BA 86150 861A5 86213 86263 862C7 ...
 * Derivatives: bind the variable to 'dv, then duplicate the argument meta
 BindDvDup:
-        :: OBJ_56CD1 dup ;                       * 57045
+        :: BindDv dup ;                          * 57045
 
 * refs (1): 571D1
-OBJ_57059:
+* ...: 3D plots: move 7 of the lams to the places the 2D code expects, then copy the rest in
+Lams3DOrder:
         :: BINT28 ROLL BINT28 4GETLAM 5GETLAM 6GETLAM 9GETLAM 10GETLAM * 57059
           15GETLAM 16GETLAM BINT7 psh DROP BINT29 ONE_DO INDEX@ PUTLAM LOOP * 57086
           DROP 20PUTLAM 15PUTLAM 10PUTLAM 9PUTLAM 6PUTLAM 5PUTLAM 21PUTLAM ; * 570B8
 
 * refs (1): C0228
-OBJ_570E5:
+* -> : WIREFRAME: element 13 of the plot info, run on entering PICTURE
+WirePictStart:
         :: OBJ_73230                             * 570E5
-          :: OBJ_57171 OBJ_57211 ; ;             * 570EF
+          :: Pict3DPrep WirePictStart~1 ; ;      * 570EF
 
 * refs (1): C0410
-OBJ_57108:
+* -> : GRIDMAP: element 13 of the plot info, run on entering PICTURE
+GridPictStart:
         :: OBJ_73230                             * 57108
-          :: OBJ_57171 OBJ_44F4D ; ;             * 57112
+          :: Pict3DPrep GridPictStart~1 ; ;      * 57112
 
 * refs (1): C031C
-OBJ_5712B:
+* -> : PARSURFACE: element 13 of the plot info, run on entering PICTURE
+ParsurfPictStart:
         :: OBJ_73230                             * 5712B
-          :: OBJ_57171 OBJ_44F6C ; ;             * 57135
+          :: Pict3DPrep ParsurfPictStart~1 ; ;   * 57135
 
 * refs (1): C06EC
-OBJ_5714E:
+* -> : PCONTOUR: element 13 of the plot info, run on entering PICTURE
+PcontourPictStart:
         :: OBJ_73230                             * 5714E
-          :: OBJ_57171 OBJ_458CF ; ;             * 57158
+          :: Pict3DPrep PcontourPictStart~1 ; ;  * 57158
 
 * refs (6): 45C49 45C6C 570F4 57117 5713A 5715D
-OBJ_57171:
-        :: OBJ_4EE42 NOTcase                     * 57171
-          :: BINT21 ROLLDROP ' OBJ_73594 BINT21 UNROLL RDROP ROMPTR 0F1 03E ; * 57180
-          'REVAL BINT24 ROLLDROP BINT23 UNROLL OBJ_57059 18GETLAM ' * 571B8
+* -> : entering PICTURE on a 3D plot: with no EQ, plain menu and leave; otherwise set up lams and the depth
+Pict3DPrep:
+        :: EqExists? NOTcase                     * 57171
+          :: BINT21 ROLLDROP ' PictMenuBare BINT21 UNROLL RDROP * 57180
+            XLIB PlotEnvOK ;                     * 571A8
+          'REVAL BINT24 ROLLDROP BINT23 UNROLL Lams3DOrder 18GETLAM ' * 571B8
           Π'SAVEDDEPTH STOLAM TRUE'              * 571E0
 
 Π'EnvOK_571EF:
           LAM 'EnvOK STOLAM DispMenu ;           * 571EF
 
 * refs (1): 570F9
-OBJ_57211:
+* Probably: wireframe setup on entering PICTURE
+WirePictStart~1:
         ::                                       * 57211
 
 * refs (5): 44F52 44F81 458EE 8AB90 8B5B6
-OBJ_57216:
-          :: ROMPTR 0F1 001 ROMPTR 0F1 00B ROMPTR 0F1 003 BIND ; * 57216
-          ROMPTR 0F1 004 DUP ' PlotEval ROMPTR 0F1 005 ' NOP %1 * 57246
-          ROMPTR 0F1 006 OBJ_4C314 ;             * 5727A
+* -> ...: 3D plots: read the view parameters and bind them, then make the independent variable
+Plot3DBind:
+          :: XLIB VPARBounds XLIB Plot3DVars XLIB Plot3DLams BIND ; * 57216
+          XLIB WireSetup DUP ' PlotEval XLIB WireInit ' NOP %1 * 57246
+          XLIB Plot3DBegin MakeIndep ;           * 5727A
         BSS     4                                * 5728F  zeros
 
 * sym id -> symb
@@ -71,26 +81,28 @@ OBJ_57216:
 SYMISOL:
         ::                                       * 57293
           :: 2DUP %0_2A2B4 3UNROLL BINT1 SWAPROT SINNER get1 SYMISOL~1 * 57298
-            OBJ_57324 ABND NOTcase SETISOLERR    * 572C5
+            IsolStep ABND NOTcase SETISOLERR     * 572C5
           ;                                      * 572D9
-          DUP#2+PICK OBJ_57676 case SETISOLERR   * 572DE
+          DUP#2+PICK ObInMeta case SETISOLERR    * 572DE
           DROP #1+ PTR addt: x= get1 DROP CKSYMBN uncrunch coleval ; * 572F2
 
 * refs (3): 572C5 57626 86DB2
-OBJ_57324:
-        :: OBJ_57676 NOTcase DROP2dropf          * 57324
+* meta ob -> ...: ISOL: unwrap one operator around the variable by its inverse from the operator's trailer
+IsolStep:
+        :: ObInMeta NOTcase DROP2dropf           * 57324
           OVER #1=case                           * 57338
           :: DROP 2DROP TRUE ;                   * 57342
           3UNROLL #1-SWAP ROTSWAP nonopcase 2DROP2dropf * 5735B
           REQcasedrop xFCNAPPLY                  * 57374
-          OBJ_5739C OBJ_26F26 NOTcase 2DROP2dropf * 5737E
+          IsolStep~1 CmdField5 NOTcase 2DROP2dropf * 5737E
           COLA_EVAL ;                            * 57392
 
 * refs (1): 5737E
-OBJ_5739C:
+* Probably: ISOL: run the operator's isolation rule from its ROMPTR
+IsolStep~1:
         :: SWAP#1-SWAP 4ROLL CARCOMP NOTROMPcase 2DROP2dropf * 5739C
-          DUP OBJ_26F26 NOTcasedrop 2DROP2dropf  * 573BA
-          SWAP OBJ_5E9E1 ?SKIP                   * 573CE
+          DUP CmdField5 NOTcasedrop 2DROP2dropf  * 573BA
+          SWAP ROMPinfarg? ?SKIP                 * 573CE
           :: 4ROLLDROP ROT #1- 3UNROLL ;         * 573DD
           COLA_EVAL ;                            * 573FB
 
@@ -110,28 +122,33 @@ addtpsh:
         :: SWAP#1+ psh ;                         * 57432
 
 * refs (1): 1AC89
-OBJ_57446:
-        ROMPTR 0F0 0C7                           * 57446
+* ISOL rule of +
+Isol+Rule:
+        XLIB Isol+                               * 57446
 
 * refs (2): 1A982 1ADDB
-OBJ_57451:
-        ROMPTR 0F0 0C9                           * 57451
+* ISOL rule of - and =
+Isol-Rule:
+        XLIB Isol-                               * 57451
 
 * refs (1): 1AEF2
-OBJ_5745C:
-        ROMPTR 0F0 0CA                           * 5745C
+* ISOL rule of *
+Isol*Rule:
+        XLIB Isol*                               * 5745C
 
 * refs (1): 1AFEB
-OBJ_57467:
-        ROMPTR 0F0 0CB                           * 57467
+* ISOL rule of /
+Isol/Rule:
+        XLIB Isol/                               * 57467
 
 * refs (1): 1B0D7
-OBJ_57472:
-        ROMPTR 0F0 0CC                           * 57472
+* ISOL rule of ^
+Isol^Rule:
+        XLIB Isol^                               * 57472
 
 * refs (1): 86D35
-OBJ_5747D:
-        ROMPTR 0F0 0CD                           * 5747D
+Isol^~1:
+        XLIB Isol^Base                           * 5747D
 
 * refs (1): 1AA0C
 ~IsolInv1;xNEG:
@@ -142,36 +159,43 @@ OBJ_5747D:
         :: IsolInv1 xINV ;                       * 5749C
 
 * refs (1): 1B937
-OBJ_574B0:
-        ROMPTR 0F0 0CE                           * 574B0
+* ISOL rule of EXP
+IsolEXPRule:
+        XLIB IsolEXP                             * 574B0
 
 * refs (1): 1B981
 ~IsolInv1;xEXP:
         :: IsolInv1 xEXP ;                       * 574BB
 
 * refs (1): 1B4E8
-OBJ_574CF:
-        ROMPTR 0F0 0CF                           * 574CF
+* ISOL rule of SIN
+IsolSINRule:
+        XLIB IsolSIN                             * 574CF
 
 * refs (1): 1B541
-OBJ_574DA:
-        ROMPTR 0F0 0D0                           * 574DA
+* ISOL rule of COS
+IsolCOSRule:
+        XLIB IsolCOS                             * 574DA
 
 * refs (1): 1B59A
-OBJ_574E5:
-        ROMPTR 0F0 0D1                           * 574E5
+* ISOL rule of TAN
+IsolTANRule:
+        XLIB IsolTAN                             * 574E5
 
 * refs (1): 1B5E9
-OBJ_574F0:
-        ROMPTR 0F0 0D2                           * 574F0
+* ISOL rule of SINH
+IsolSINHRule:
+        XLIB IsolSINH                            * 574F0
 
 * refs (1): 1B638
-OBJ_574FB:
-        ROMPTR 0F0 0D3                           * 574FB
+* ISOL rule of COSH
+IsolCOSHRule:
+        XLIB IsolCOSH                            * 574FB
 
 * refs (1): 1B687
-OBJ_57506:
-        ROMPTR 0F0 0D4                           * 57506
+* ISOL rule of TANH
+IsolTANHRule:
+        XLIB IsolTANH                            * 57506
 
 * refs (1): 1B6D6
 ~IsolInv1;xSIN:
@@ -198,8 +222,9 @@ OBJ_57506:
         :: IsolInv1 xTANH ;                      * 57575
 
 * refs (1): 1B46C
-OBJ_57589:
-        :: OBJ_57630 xSQRT OBJ_57856 IsolContinue ; * 57589
+* ISOL rule of SQ: ±√ with the sign variable s
+IsolSQ:
+        :: IsolInvN xSQRT Isol*s IsolContinue ;  * 57589
 
 * refs (1): 1B3BA
 ~IsolInv1;xSQ:
@@ -214,25 +239,28 @@ OBJ_57589:
         :: IsolInv1 xEXPM ;                      * 575CF
 
 * refs (1): 1BA6F
-OBJ_575E3:
-        ROMPTR 0F0 0D5                           * 575E3
+* ISOL rule of ALOG
+IsolALOGRule:
+        XLIB IsolALOG                            * 575E3
 
 * refs (1): 1AAAA
 ~IsolInv1;xCONJ:
         :: IsolInv1 xCONJ ;                      * 575EE
 
 * refs (1): 1BAEA
-OBJ_57602:
-        ROMPTR 0F0 0D6                           * 57602
+* ISOL rule of EXPM
+IsolEXPMRule:
+        XLIB IsolEXPM                            * 57602
 
 * refs (21): 5759D 5764E 5766C 86BCD 86C3B 86C9A ...
 * SYMISOL: carry on isolating with the next inverse (tail call into the isolation loop)
 IsolContinue:
-        :: RDROP psh #1-SWAP COLA OBJ_57324      * 5760D
+        :: RDROP psh #1-SWAP COLA IsolStep       * 5760D
         ;                                        * 5762B
 
 * refs (10): 5758E 86E70 86E98 86EBB 86EE3 86F06 ...
-OBJ_57630:
+* Isolation step for an inverse with many values: as IsolInv1 for principal solutions (flag -1); otherwise goes on to the general-solution terms after it
+IsolInvN:
         :: addtpsh 'R SWAP#1+ PRSOL? case IsolContinue * 57630
         ;                                        * 57653
 
@@ -242,7 +270,8 @@ IsolInv1:
         :: addtpsh 'RRDROP SWAP#1+ IsolContinue ; * 57658
 
 * refs (8): 572E3 57329 5A1D0 86BAA 86BF0 86C5E ...
-OBJ_57676:
+* meta ob -> meta ob flag: the secondary around ObInMeta?
+ObInMeta:
         :: OVER BEGIN DUP#0=case                 * 57676
 
 * meta ob -> meta ob flag
@@ -260,39 +289,45 @@ ObInMeta?:
         :: DROPRDROP FALSE ;                     * 576CB
 
 * refs (2): 86F10 86F5B
-OBJ_576DF:
+* meta -> meta': add π·i·n, n a new integer variable
+IsolπIn:
         ::                                       * 576DF
 
 {PI,I,*}:
           { xPI xi x* } INNERCOMP ~TRUE;Π'ni;EVAL SWAP#1+ meta* ; * 576E4
 
 * refs (6): 86D5D 86E3E 86E7A 86F38 86F7E 86FC4
-OBJ_57716:
+* meta -> meta': add 2·π·i·n, n a new integer variable
+Isol2πIn:
         ::                                       * 57716
 
 {2,Pi,*,I,*}:
           { %2 xPI x* xi x* } INNERCOMP ~TRUE;Π'ni;EVAL SWAP#1+ meta* ; * 5771B
 
 * refs (1): 86ECA
-OBJ_57757:
+* -> meta: the full turn times n, in the current angle mode
+Isol2πn:
         :: RAD? case                             * 57757
           :: %2 ' xPI 'x* ~TRUE;Π'ni;EVAL 'x* BINT5 ; * 57766
           DEG? ITE %360 %400                     * 57793
           ~TRUE;Π'ni;EVAL ' x* BINT3 ;           * 577A7
 
 * refs (2): 86EA2 86EED
-OBJ_577C0:
+* -> meta: the half turn times n, in the current angle mode
+Isolπn:
         :: RAD? case                             * 577C0
           :: ' xPI ~TRUE;Π'ni;EVAL 'x* BINT3 ;   * 577CF
           DEG? ITE %180 %200                     * 577F2
           ~TRUE;Π'ni;EVAL 'x* BINT3 ;            * 57806
 
 * refs (2): 86EA7 86F15
-OBJ_5781A:
+* meta -> meta': multiply by (-1)^n
+Isol(-1)^n:
         :: %-1 psh1&rev 3PICK psh1&rev psh PTR addt2: x^ x* pshtop& meta+ ; * 5781A
 
 * refs (4): 57598 86DE9 86EC5 86F33
-OBJ_57856:
+* meta -> meta': multiply by the sign variable s, a new one
+Isol*s:
         :: ~TRUE;Π'ns;EVAL BINT1 pshtop& meta* ; * 57856
 
 * refs (5): 86D62 86ECF 86EF2 86F3D 86F60
@@ -476,6 +511,7 @@ expansq:
           pshtop& meta* ;                        * 57C2B
 
 * refs (2): 57ACA 57BE5
+* EXPAN of a power: expand a sum in the base, else repeat the multiplication
 OBJ_57C3A:
         :: DROP delB[1-2] M1st+case expansum^    * 57C3A
           M1st-case expansum^                    * 57C53
@@ -575,7 +611,7 @@ colrev:
 colrev~1:
         :: SWAPDROP#1- psh larg BINT0 rot parg& unrot count* #1+ * 57E71
           { Π'*s } BIND psh count* Π'*s #+ ' Π'*s STO BINT0 unrot COLA * 57EA3
-          OBJ_57F00                              * 57EE9
+          colrev*Next                            * 57EE9
         ;                                        * 57EEE
 
 * refs (6): 57EA8 57EC1 57ED0 5805E 58086 58095
@@ -583,12 +619,13 @@ colrev~1:
         LAM '*s                                  * 57EF3
 
 * refs (2): 57EE9 57FE6
-OBJ_57F00:
-        :: pick1#0=case OBJ_58045                * 57F00
+* COLCT: take the next factor, numbers apart from the rest
+colrev*Next:
+        :: pick1#0=case colrev*End               * 57F00
           swappargunrot NoIdsInMeta? '           * 57F0F
-          :: pshtop& COLA OBJ_58045              * 57F1E
+          :: pshtop& COLA colrev*End             * 57F1E
           ;                                      * 57F32
-          ' OBJ_57F64 COLARPITE ;                * 57F37
+          ' colrev*Loop COLARPITE ;              * 57F37
 
 * meta1 meta2 -> M_rest meta2 M_last
 * refs (4): 57F0F 57F87 58165 581BF
@@ -596,32 +633,36 @@ swappargunrot:
         :: psh pshzerpsharg unrot ;              * 57F4B
 
 * refs (3): 57F3C 58013 5803B
-OBJ_57F64:
+* COLCT: combine like factors, comparing each with the factor collected so far
+colrev*Loop:
         :: pick1#0=case                          * 57F64
-          :: top& COLA OBJ_58045                 * 57F6E
+          :: top& COLA colrev*End                * 57F6E
           ;                                      * 57F82
           swappargunrot NoIdsInMeta? case        * 57F87
-          :: psh roll2top& roll2top& COLA OBJ_58045 * 57F96
+          :: psh roll2top& roll2top& COLA colrev*End * 57F96
           ;                                      * 57FB4
-          OBJ_582BE case                         * 57FB9
-          :: OBJ_58081 OBJ_582E6 4roll top& unrot COLA OBJ_57F00 * 57FC3
+          SameBase? case                         * 57FB9
+          :: Lam*s-1 AddPowers 4roll top& unrot COLA colrev*Next * 57FC3
           ;                                      * 57FEB
-          OBJ_58313 case                         * 57FF0
-          :: 5roll top& 4unroll COLA OBJ_57F64   * 57FFA
+          OrderFactors case                      * 57FF0
+          :: 5roll top& 4unroll COLA colrev*Loop * 57FFA
           ;                                      * 58018
-          psh 5roll top& 4unroll rotswap COLA OBJ_57F64 * 5801D
+          psh 5roll top& 4unroll rotswap COLA colrev*Loop * 5801D
         ;                                        * 58040
 
 * refs (4): 57F0A 57F2D 57F7D 57FAF
-OBJ_58045:
+* COLCT: factors done: rebuild the product from what is left
+colrev*End:
         :: top& pshtop& top& 'x* Π'*s ABND NDUPN top& psh AGAIN ; * 58045
 
 * refs (1): 57FC8
-OBJ_58081:
+* -> : one factor fewer (lam *s)
+Lam*s-1:
         :: Π'*s #1- ' Π'*s STO ;                 * 58081
 
 * refs (1): 58200
-OBJ_580A4:
+* -> : one term fewer (lam +s)
+Lam+s-1:
         :: Π'+s #1- ' Π'+s STO ;                 * 580A4
 
 * refs (1): 57E53
@@ -630,7 +671,7 @@ colrev~2:
 
 {'+s}:
           { Π'+s } BIND psh count+ Π'+s #+ ' Π'+s STO BINT0 unrot COLA * 580F9
-          OBJ_58156                              * 5813F
+          colrev+Next                            * 5813F
         ;                                        * 58144
 
 * refs (6): 580A9 580B8 580FE 58117 58126 5829B
@@ -638,69 +679,79 @@ colrev~2:
         LAM '+s                                  * 58149
 
 * refs (2): 5813F 5821E
-OBJ_58156:
-        :: pick1#0=case OBJ_5827D                * 58156
+* COLCT: as colrev*Next, for terms
+colrev+Next:
+        :: pick1#0=case colrev+End               * 58156
           swappargunrot NoIdsInMeta? case        * 58165
-          :: pshtop& COLA OBJ_5827D              * 58174
+          :: pshtop& COLA colrev+End             * 58174
           ;                                      * 58188
-          COLA OBJ_5819C                         * 5818D
+          COLA colrev+Loop                       * 5818D
         ;                                        * 58197
 
 * refs (3): 58192 5824B 58273
-OBJ_5819C:
+* COLCT: as colrev*Loop, for terms
+colrev+Loop:
         :: pick1#0=case                          * 5819C
-          :: top& COLA OBJ_5827D                 * 581A6
+          :: top& COLA colrev+End                * 581A6
           ;                                      * 581BA
           swappargunrot NoIdsInMeta? case        * 581BF
-          :: psh roll2top& roll2top& COLA OBJ_5827D * 581CE
+          :: psh roll2top& roll2top& COLA colrev+End * 581CE
           ;                                      * 581EC
-          OBJ_583C7 case                         * 581F1
-          :: OBJ_580A4 OBJ_5848A 4roll top& unrot COLA OBJ_58156 * 581FB
+          SameTerm? case                         * 581F1
+          :: Lam+s-1 AddCoeffs 4roll top& unrot COLA colrev+Next * 581FB
           ;                                      * 58223
-          OBJ_583EF case                         * 58228
-          :: 5roll top& 4unroll COLA OBJ_5819C   * 58232
+          OrderTerms case                        * 58228
+          :: 5roll top& 4unroll COLA colrev+Loop * 58232
           ;                                      * 58250
-          psh 5roll top& 4unroll rotswap COLA OBJ_5819C * 58255
+          psh 5roll top& 4unroll rotswap COLA colrev+Loop * 58255
         ;                                        * 58278
 
 * refs (4): 58160 58183 581B5 581E7
-OBJ_5827D:
+* COLCT: as colrev*End, for terms
+colrev+End:
         :: top& pshtop& top& ' x+ Π'+s ABND NDUPN top& psh AGAIN ; * 5827D
 
 * refs (1): 57FB9
-OBJ_582BE:
-        :: OBJ_58620 rot OBJ_58620 rot COLA MEQU? * 582BE
+* meta1 meta2 -> ...: COLCT: do two factors have the same base?
+SameBase?:
+        :: BasePower rot BasePower rot COLA MEQU? * 582BE
         ;                                        * 582E1
 
 * refs (1): 57FCD
-OBJ_582E6:
+* ... -> meta: COLCT: same base: add the exponents, x^(a+b)
+AddPowers:
         :: NDROP unrot psh 2top& PTR addt2: x+ x^ ; * 582E6
 
 * refs (1): 57FF0
-OBJ_58313:
+* ... -> ...: COLCT: put two factors in order, flag saying if they swapped
+OrderFactors:
         :: MetaLess? '                           * 58313
-          :: OBJ_58359 TRUE ; '                  * 58322
-          :: OBJ_58359 FALSE ; COLARPITE ;       * 5833B
+          :: FactorBack TRUE ; '                 * 58322
+          :: FactorBack FALSE ; COLARPITE ;      * 5833B
 
 * refs (2): 58327 58340
-OBJ_58359:
+* meta -> meta': COLCT: put x^1 back as x, or base^power together
+FactorBack:
         :: unrot psh OVER %1 EQITE 2DROP         * 58359
           :: top& ' x^ SWAP#1+ ; unrot psh %1 MEQ1stcase 2DROP * 5837C
           top& PTR addt: x^ ;                    * 583B3
 
 * refs (1): 581F1
-OBJ_583C7:
-        :: OBJ_5863E rot OBJ_5863E rot COLA MEQU? * 583C7
+* meta1 meta2 -> ...: COLCT: do two terms differ only by a number?
+SameTerm?:
+        :: CoeffTerm rot CoeffTerm rot COLA MEQU? * 583C7
         ;                                        * 583EA
 
 * refs (1): 58228
-OBJ_583EF:
+* ... -> ...: COLCT: put two terms in order, flag saying if they swapped
+OrderTerms:
         :: MetaLess? case                        * 583EF
-          :: OBJ_58421 TRUE ;                    * 583FE
-          OBJ_58421 FALSE ;                      * 58412
+          :: TermBack TRUE ;                     * 583FE
+          TermBack FALSE ;                       * 58412
 
 * refs (2): 58403 58412
-OBJ_58421:
+* meta -> meta': COLCT: put 1*x back as x, or coefficient*term together
+TermBack:
         :: unrot psh OVER %1 EQITE               * 58421
 
 drop2;delB[1]:
@@ -709,7 +760,8 @@ drop2;delB[1]:
           pshtop& ;                              * 58480
 
 * refs (1): 58205
-OBJ_5848A:
+* ... -> meta: COLCT: same term: add the coefficients
+AddCoeffs:
         :: NDROP unrot pshtop& PTR addt: x+ pshtop& ; * 5848A
 
 * meta1 meta2 -> meta1 meta2 flag
@@ -779,18 +831,21 @@ BodyMore?.L3:
         RPL
 
 * refs (2): 582C3 582CD
-OBJ_58620:
+* meta -> base power: COLCT: split x^n; anything else has power 1
+BasePower:
         :: M1st^case plDRPpZparg                 * 58620
           %1 pshm1 ;                             * 5862F
 
 * refs (2): 583CC 583D6
-OBJ_5863E:
-        :: M1st*case OBJ_58661                   * 5863E
+* meta -> term coeff: COLCT: split the number from a product; anything else has coefficient 1
+CoeffTerm:
+        :: M1st*case CoeffSplit                  * 5863E
           %1 pshm1 addt* ;                       * 5864D
 
 * refs (1): 58648
-OBJ_58661:
-        :: OBJ_58CB7 pshzer BEGIN parg& NoIdsInMeta? UNTIL DUP#0= IT * 58661
+* meta -> term coeff: COLCT: take the numbers of a product apart from the other factors
+CoeffSplit:
+        :: Metas* pshzer BEGIN parg& NoIdsInMeta? UNTIL DUP#0= IT * 58661
           :: DROP psh PTR addt: x* psh %1 BINT1 ; * 5868E
           rotswap pshzerpsharg BEGIN DUP#0= NOT WHILE * 586BB
           :: parg& psh rot pullrev1& psh rot ; REPEAT DROP roll2top& ; * 586D9
@@ -855,25 +910,26 @@ colfac:
         :: BEGIN DUP#0=case drop;q_58A0C         * 587AA
           M1st-case colfac~1                     * 587BE
           M1st/case colfac~2                     * 587C8
-          M1stNEGcase OBJ_58854                  * 587D2
-          M1stINVcase OBJ_58912                  * 587DC
+          M1stNEGcase colfac+                    * 587D2
+          M1stINVcase colfac*                    * 587DC
           M1stSQcase colfac~3                    * 587E6
           pullrev1& AGAIN ;                      * 587F0
 
 * refs (1): 587C3
 colfac~1:
-        :: SWAPDROP#1- PTR psh1&rev: x+ addtNEG COLA OBJ_58854 * 587FF
+        :: SWAPDROP#1- PTR psh1&rev: x+ addtNEG COLA colfac+ * 587FF
         ;                                        * 58822
 
 * refs (1): 587CD
 colfac~2:
-        :: SWAPDROP#1- PTR psh1&rev: x* PTR addt: xINV COLA OBJ_58912 * 58827
+        :: SWAPDROP#1- PTR psh1&rev: x* PTR addt: xINV COLA colfac* * 58827
         ;                                        * 5884F
 
 * refs (4): 587D7 5881D 588DB 589DF
-OBJ_58854:
-        :: SWAPDROP#1- M1st+case OBJ_588B8       * 58854
-          M1st-case OBJ_588E5                    * 58868
+* COLCT: into a sum, turning - and NEG into + of a negated term
+colfac+:
+        :: SWAPDROP#1- M1st+case colfac+Add      * 58854
+          M1st-case colfac-                      * 58868
           M1stNEGcase ~SWAPDROP#1-;AGAIN         * 58872
           PTR psh1&rev: x* pshzerpsharg %-1 SWAP#1+ pshtop& AGAIN ; * 5887C
 
@@ -882,36 +938,42 @@ OBJ_58854:
         :: SWAPDROP#1- AGAIN ;                   * 588A4
 
 * refs (1): 58863
-OBJ_588B8:
-        :: pullrev1& pshzerpsharg addtNEG pshtop& addtNEG COLA OBJ_58854 * 588B8
+* COLCT: a sum under NEG: distribute
+colfac+Add:
+        :: pullrev1& pshzerpsharg addtNEG pshtop& addtNEG COLA colfac+ * 588B8
         ;                                        * 588E0
 
 * refs (1): 5886D
-OBJ_588E5:
+* COLCT: a difference: write it as a + with a NEG
+colfac-:
         :: SWAPDROP#1- PTR psh1&rev: x+ pshzerpsharg addtNEG pshtop& AGAIN ; * 588E5
 
 * refs (3): 587E1 5884A 5898F
-OBJ_58912:
-        :: SWAPDROP#1- M1st*case OBJ_58962       * 58912
-          M1st/case OBJ_58999                    * 58926
+* COLCT: into a product, turning / and INV into * and ^-1
+colfac*:
+        :: SWAPDROP#1- M1st*case colfac*Mul      * 58912
+          M1st/case colfac/                      * 58926
           M1stINVcase ~SWAPDROP#1-;AGAIN         * 58930
-          M1st^case OBJ_589CB                    * 5893A
+          M1st^case colfac^                      * 5893A
           PTR psh1&rev: x^ %-1 SWAP#1+ AGAIN ;   * 58944
 
 * refs (1): 58921
-OBJ_58962:
+* COLCT: a product under INV: invert each factor
+colfac*Mul:
         :: pullrev1& pshzerpsharg PTR addt: xINV pshtop& PTR addt: xINV COLA * 58962
-          OBJ_58912                              * 5898F
+          colfac*                                * 5898F
         ;                                        * 58994
 
 * refs (1): 5892B
-OBJ_58999:
+* COLCT: a quotient: write it as * with INV
+colfac/:
         :: SWAPDROP#1- PTR psh1&rev: x* pshzerpsharg PTR addt: xINV pshtop& * 58999
           AGAIN ;                                * 589C1
 
 * refs (1): 5893F
-OBJ_589CB:
-        :: pullrev1& addtNEG COLA OBJ_58854      * 589CB
+* COLCT: a power: negate the exponent, under INV
+colfac^:
+        :: pullrev1& addtNEG COLA colfac+        * 589CB
         ;                                        * 589E4
 
 * refs (1): 587EB
@@ -1059,7 +1121,8 @@ count*.L3:
         :: count+ ' x+ SWAP NDUPN psh ;          * 58C8F
 
 * refs (1): 58666
-OBJ_58CB7:
+* #n -> meta: n-1 x* for rebuilding a product
+Metas*:
         :: count* 'x* SWAP NDUPN psh ;           * 58CB7
 
 * ob -> ob'
@@ -1079,7 +1142,7 @@ eval:
               WHILE                              * 58D20
               :: 1GETLAM EVAL case AGAIN         * 58D25
                 nonopcase AGAIN                  * 58D3E
-                OBJ_26F34 DROP EVAL ;            * 58D48
+                CmdField6 DROP EVAL ;            * 58D48
               REPEAT ;                           * 58D5C
             ABND ;                               * 58D66
         ;                                        * 58D70
@@ -1087,10 +1150,11 @@ eval:
 * sym id/lam -> symf
 * refs (4): 20AE2 20AEC 49832 5960A
 SYMSHOW:
-        :: BINT1 {}N dvarlsBIND EXPLODE OBJ_58DA7 ABND DROP IMPLODE ; * 58D75
+        :: BINT1 {}N dvarlsBIND EXPLODE ShowMeta ABND DROP IMPLODE ; * 58D75
 
 * refs (4): 58D8E 58FCB 590A2 59207
-OBJ_58DA7:
+* meta -> meta' flag: SHOW: walk the meta, replacing names that aren't wanted by their values; TRUE (lam fl) if none of the names was reached
+ShowMeta:
         :: TRUE                                  * 58DA7
 
 {'fl}:
@@ -1098,11 +1162,11 @@ OBJ_58DA7:
 
 Π'fl:
             LAM 'fl }                            * 58DB6
-          BIND pshzer BEGIN M1stFNCcase OBJ_58E45 * 58DC8
-          Mid1stcase OBJ_58F12                   * 58DE1
+          BIND pshzer BEGIN M1stFNCcase ShowFcn  * 58DC8
+          Mid1stcase ShowName                    * 58DE1
           :: OVER nonopcase FALSE                * 58DEB
-            OBJ_26F7A ;                          * 58DFF
-          casedrop OBJ_59020                     * 58E09
+            CmdFieldB ;                          * 58DFF
+          casedrop ShowWhere                     * 58E09
           DROP pullpsh1& COLA ~#0=UNTIL;DROP;1GETABND * 58E13
         ;                                        * 58E27
 
@@ -1111,61 +1175,69 @@ OBJ_58DA7:
         :: #0=UNTIL DROP 1GETABND ;              * 58E2C
 
 * refs (1): 58DDC
-OBJ_58E45:
-        :: 4PICK TYPEROMP? case OBJ_59020        * 58E45
-          4PICK ROMPTR@NOT casedrop OBJ_58EEF    * 58E5E
-          5PICK SWAP 5PICK OBJ_56FD1 BIND 2GETLAM OBJ_5DEF7 * 58E72
+* SHOW: a function application: expand it where it can be shown
+ShowFcn:
+        :: 4PICK TYPEROMP? case ShowWhere        * 58E45
+          4PICK ROMPTR@NOT casedrop ShowCopy3    * 58E5E
+          5PICK SWAP 5PICK {'dv,'op,'nm} BIND 2GETLAM OBJ_5DEF7 * 58E72
 
 * refs (1): 58EB3
-OBJ_58E95:
-          :: DROP ABND COLA OBJ_58EEF            * 58E95
+* SHOW: the function isn't defined in a way that can be expanded: keep it
+ShowFcnSkip:
+          :: DROP ABND COLA ShowCopy3            * 58E95
           ;                                      * 58EAE
-          OBJ_58E95 DROP larg SWAPDROP#1- ROTROT2DROP OBJ_56E05 SWAPDROP * 58EB3
+          ShowFcnSkip DROP larg SWAPDROP#1- ROTROT2DROP OBJ_56E05 SWAPDROP * 58EB3
           EXPLODE top& COLA ~#0=UNTIL;DROP;1GETABND * 58ED6
         ;                                        * 58EEA
 
 * refs (2): 58E6D 58EA9
-OBJ_58EEF:
+* SHOW: copy the application and its parts unchanged
+ShowCopy3:
         :: pullpsh1& pullpsh1& pullpsh1& COLA ~#0=UNTIL;DROP;1GETABND * 58EEF
         ;                                        * 58F0D
 
 * refs (1): 58DE6
-OBJ_58F12:
+* SHOW: a name: keep it if wanted, expand a variable that holds an expression
+ShowName:
         :: #1-SWAP lam'dvar OVER EQUALPOSCOMP #0<> case * 58F12
           :: psh1& FALSE 1PUTLAM COLA ~#0=UNTIL;DROP;1GETABND * 58F35
           ;                                      * 58F53
-          DUP ROMPTR@NOT case OBJ_58FA8          * 58F58
+          DUP ROMPTR@NOT case ShowKeep           * 58F58
           idntlamcase                            * 58F6C
-          :: ONECOLA OBJ_58FC6 ;                 * 58F71
-          dup;ex? NOTcase OBJ_58FA8              * 58F85
-          EXPLODE COLA OBJ_58FC6                 * 58F94
+          :: ONECOLA ShowValue ;                 * 58F71
+          dup;ex? NOTcase ShowKeep               * 58F85
+          EXPLODE COLA ShowValue                 * 58F94
         ;                                        * 58FA3
 
 * refs (2): 58F67 58F8F
-OBJ_58FA8:
+* SHOW: copy the object unchanged
+ShowKeep:
         :: DROP psh1& COLA ~#0=UNTIL;DROP;1GETABND * 58FA8
         ;                                        * 58FC1
 
 * refs (2): 58F7B 58F9E
-OBJ_58FC6:
-        :: OBJ_58DA7 case                        * 58FC6
+* SHOW: the name's value goes through ShowMeta
+ShowValue:
+        :: ShowMeta case                         * 58FC6
           :: NDROP psh1& COLA ~#0=UNTIL;DROP;1GETABND * 58FD5
           ;                                      * 58FEE
           get1 DROP ROTUntop& psh FALSE 1PUTLAM COLA ~#0=UNTIL;DROP;1GETABND * 58FF3
         ;                                        * 5901B
 
 * refs (2): 58E0E 58E59
-OBJ_59020:
+* SHOW: inside a WHERE: names bound there aren't to be replaced
+ShowWhere:
         :: larg pshzer BINT3 BEGIN DUP#1+PICK    * 59020
-          :: idntlamcase OBJ_590D4               * 5903E
+          :: idntlamcase ShowWhere~1             * 5903E
           ;                                      * 5904D
           DROP BINT1 splitup 2DUPSWAP #- #2= UNTIL DROP psh lam'dvar * 59052
-          INNERtop& {}N dvarlsBIND rotswap pullpsh1& rotswap OBJ_58DA7 ABND * 59084
+          INNERtop& {}N dvarlsBIND rotswap pullpsh1& rotswap ShowMeta ABND * 59084
           1GETLAM AND 1PUTLAM ROTUntop& psh COLA ~#0=UNTIL;DROP;1GETABND * 590AC
         ;                                        * 590CF
 
 * refs (1): 59048
-OBJ_590D4:
+* Part of ShowWhere
+ShowWhere~1:
         :: OVER #2+ OBJ_5F5AD NOT?SEMI           * 590D4
           ROT#1+ SWAP psh1& #1-SWAP DUP ;        * 590ED
 
@@ -1203,17 +1275,18 @@ SYMQUAD:
 
 * refs (1): 591B7
 quad!(ex,gn):
-        :: DUP1LAMBIND OBJ_591E9 DROP 1ABNDSWAP 'EvalNoCK:_sup x= ; * 591C1
+        :: DUP1LAMBIND QuadCore DROP 1ABNDSWAP 'EvalNoCK:_sup x= ; * 591C1
 
 * refs (2): 4BD28 591CB
-OBJ_591E9:
-        :: SWAPcompSWAP ONE{}N dvarlsBIND DUP EXPLODE OBJ_58DA7 1GETLAM * 591E9
+* symb id -> symb' flag: QUAD: SHOW the variable, turn an equation into a difference, take the Taylor polynomial of degree 2 and solve it: linear, or by quad(3ex)?
+QuadCore:
+        :: SWAPcompSWAP ONE{}N dvarlsBIND DUP EXPLODE ShowMeta 1GETLAM * 591E9
           CARCOMP 1PUTLAM 3UNROLL                * 59211
           :: AEQ1stcase x=                       * 59220
             :: drpmeta- ROTDROP FALSE 3UNROLL ; ; * 5922F
           ROT ITE NDROP                          * 59252
           :: IMPLODE symcomp SWAPDROP ;          * 59261
-          BINT2 OBJ_59373 ABND DROP DUP%0= NOTcase quad(3ex)? * 5927A
+          BINT2 TaylorPoly ABND DROP DUP%0= NOTcase quad(3ex)? * 5927A
           DROP x/ xNEG FALSE ;                   * 5929D
 
 * refs (1): 59298
@@ -1242,39 +1315,44 @@ s1_59304:
           x^ %4 1GETLAM x* 3GETLAM x* x- xSQRT x* x+ %2 1GETABND x* x/ TRUE ; * 59323
 
 * refs (2): 5927F 59619
-OBJ_59373:
-        :: OBJ_59503 OBJ_593AF ;                 * 59373
+* Taylor polynomial of the expression around 0 by repeated DERIV and EVAL at 0
+TaylorPoly:
+        :: KeepNameSym TaylorSum ;               * 59373
 
 * refs (2): 593A0 59560
 ~lam'dvar;?PURGE_HERE:
         :: lam'dvar ?PURGE_HERE ;                * 59387
 
 * refs (1): 5955B
-OBJ_5939B:
+* ERRTRAP arm: purge the variable and carry the error on
+TaylorErr:
         :: ~lam'dvar;?PURGE_HERE ERRJMP ;        * 5939B
 
 * refs (1): 5937D
-OBJ_593AF:
-        :: DUP %0_2A2B4 lam'dvar XEQSTOID xEVAL OBJ_54BAF xSWAP 1GETLAM * 593AF
+* TAYLR's loop: term by term
+TaylorSum:
+        :: DUP %0_2A2B4 lam'dvar XEQSTOID xEVAL DerEvalLoop xSWAP 1GETLAM * 593AF
           lam'dvar XEQSTOID 2GETLAM #0=case DROPONE * 593DC
           2GETLAM #1=?SKIP                       * 593F5
           :: 2GETLAM ONE_DO ?ATTNQUIT0 lam'dvar DERIV xEVAL xDUP %0_2A2B4 * 593FF
-            lam'dvar XEQSTOID xEVAL 1GETLAM lam'dvar XEQSTOID INDEX@ * 5942C
-            OBJ_594AE xSWAP LOOP ;               * 5944F
-          %0_2A2B4 lam'dvar XEQSTOID lam'dvar DERIV 2GETLAM OBJ_594AE DEPTH * 59463
+            lam'dvar XEQSTOID xEVAL 1GETLAM lam'dvar XEQSTOID INDEX@ Term/n! * 5942C
+            xSWAP LOOP ;                         * 59454
+          %0_2A2B4 lam'dvar XEQSTOID lam'dvar DERIV 2GETLAM Term/n! DEPTH * 59463
           2GETLAM #1+ #<case SETSTACKERR         * 5948B
           2GETLAM #1+ ;                          * 5949F
 
 * refs (2): 5944F 59481
-OBJ_594AE:
+* symb %n -> symb': divide a term by n!
+Term/n!:
         :: UNCOERCE %1=case DROP                 * 594AE
           %2=case x/                             * 594C2
           SYMFACT OVER %ABS %1 EQUALNOTcase x/   * 594CC
           SWAP ONESYMBN SWAP x/ ;                * 594EA
 
 * refs (2): 59378 595C9
-OBJ_59503:
-        :: lam'dvar OBJ_5956F                    * 59503
+* ...: create the variable holding a program that gives its own quoted name, so that it stays symbolic during DERIV and EVAL, run the object after this call, and purge it
+KeepNameSym:
+        :: lam'dvar Quote<<id>>                  * 59503
 
 {'n,'prog}:
           {                                      * 59512
@@ -1284,17 +1362,18 @@ OBJ_59503:
 
 Π'prog:
             LAM 'prog }                          * 59522
-          BIND 1GETLAM lam'dvar CREATE ERRSET 'REVAL ERRTRAP OBJ_5939B * 59538
+          BIND 1GETLAM lam'dvar CREATE ERRSET 'REVAL ERRTRAP TaylorErr * 59538
           ~lam'dvar;?PURGE_HERE ABND ;           * 59560
 
 * refs (2): 4BD19 5950D
-OBJ_5956F:
+* id -> program: a program that quotes id
+Quote<<id>>:
         :: ' x<< ' x' ROT ' xENDTIC ' x>> BINT5 ::N ; * 5956F
 
 * refs (1): 49ADD
 SymDer(ex,nm):
         :: uncrunch                              * 595B0
-          :: DUPDUP dvarlsBIND OBJ_59503 DERIV ; ; * 595BA
+          :: DUPDUP dvarlsBIND KeepNameSym DERIV ; ; * 595BA
 
 * sym id % -> symf
 * refs (3): 20B2F B6B8F B6B94
@@ -1304,7 +1383,7 @@ SYMTAYLR:
 * refs (1): 595E7
 taylr!(ex,gn,r):
         :: COERCE UNROTDUP dvarlsBIND SWAPcompSWAP SYMSHOW symcomp SWAP * 595F1
-          OBJ_59373 DUP#1- #0=case               * 59619
+          TaylorPoly DUP#1- #0=case              * 59619
 
 drop;Lpop:
           :: DROP ABND ;                         * 59628
@@ -1328,7 +1407,7 @@ _COLCT_:
 
 * restricted collection
 MetaRCOLCT:
-            :: OBJ_59F32 ROMPTR 0F0 076 RDROP ; ; * 596D3
+            :: OBJ_59F32 XLIB {RULES\COLCT}~1 RDROP ; ; * 596D3
         }                                        * 596F7
 
 * refs (1): 3F21F
@@ -1648,6 +1727,7 @@ _TRG*_:
           :: EqwRuleKey0 MetaTRG* ; }            * 59F19
 
 * refs (7): 596D8 59722 59770 597BA 59840 5988A ...
+* Probably: RULES: look past the = at the top of an equation and find the argument
 OBJ_59F32:
         :: AEQ1stcase x=                         * 59F32
           :: RDROP ; DUP#2+PICK OVER#+ #3+ DUP#1+PICK BINT0 #=casedrop DROP * 59F41

@@ -1,6 +1,6 @@
-* HP 48GX ROM revision R, #00000-#02001: Reset and interrupt entries, keyboard, timers, low-level system code
+* HP 48GX ROM revision R, #00000-#02001: Reset and interrupt entries, serial and keyboard service, ON-key combinations, timers and wake-ups, battery check, beeper, display and annunciator control
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: AllowIntr FLUSHKEYS DisableIntr ClrScrMn D0->Sft1 D0->Row1 TryToRM? GetTimChk RCKBp OnKeyDown? Flush CINRTN
+* Most referenced: AllowIntr FLUSHKEYS DisableIntr ClrScrMn D0->Sft1 D0->Row1 KbdOutAll TryToRM? SetT2WakeClk GetTimeRaw GetTimChk WaitCardStat
 
         ORG     #00000
 
@@ -102,7 +102,7 @@ Interrupt.L9:
         DAT0=C  1                                * 00169
         ?MP=0                                    * 0016D
         GOYES   Interrupt.L11                    * 00170
-        GOSUB   SUB_002DA                        * 00172
+        GOSUB   WaitMPClear                      * 00172
 Interrupt.loop10:
         P=      11                               * 00176
         GOTO    Interrupt.L13                    * 00178
@@ -115,7 +115,7 @@ Interrupt.L11:
         ?CBIT=0 0                                * 0018F
         GOYES   Interrupt.L12                    * 00194
         ST=1    0                                * 00196
-        GOSUB   SUB_002FF                        * 00199
+        GOSUB   BatSleep                         * 00199
         P=      1                                * 0019D
         GOTO    Interrupt.L13                    * 0019F
 Interrupt.L12:
@@ -129,7 +129,7 @@ Interrupt.L12:
 Interrupt.L13:
         GOVLNG  Warmstart.L1                     * 001BC
 Interrupt.L14:
-        GOSUB   SUB_003C0                        * 001C3
+        GOSUB   SrvcSerial                       * 001C3
         D0=(5)  #0011C                           * 001C7
         C=DAT0  1                                * 001CE
         ?CBIT=0 2                                * 001D2
@@ -154,13 +154,13 @@ Interrupt.L17:
         GOTO    Interrupt.loop10                 * 00214
 Interrupt.L18:
         GOSBVL  srvc_timer2                      * 00218
-        GOSUB   SUB_005EC                        * 0021F
-        GOSUB   SUB_00672                        * 00223
+        GOSUB   SrvcTimer1                       * 0021F
+        GOSUB   CkLowBat                         * 00223
         GOSUBL  OnKeyDown?                       * 00227
         GONC    Interrupt.L19                    * 0022D
-        GOLONG  SUB_00E21.L1                     * 00230
+        GOLONG  OnKeyCombo                       * 00230
 Interrupt.L19:
-        GOSUB   SUB_00735.L2                     * 00236
+        GOSUB   WaitCardStat.L2                  * 00236
 Interrupt.L20:
         GOSUB   D1=IRAM~jump                     * 0023A
         D1=(4)  #0608                            * 0023E
@@ -212,37 +212,39 @@ Interrupt.L21:
         RTI                                      * 002D8
 
 * refs (2): 00172 043E0
-SUB_002DA:
+* -> : a card was pulled (MP set): keep writing #C to the card control register #0010E, after a short delay, until MP stays clear
+WaitMPClear:
         P=      0                                * 002DA
         D0=(5)  NOP1MASK14                       * 002DC
-SUB_002DA.loop1:
+WaitMPClear.loop1:
         MP=0                                     * 002E3
         C=0     A                                * 002E6
         C=C+1   XS                               * 002E8
-SUB_002DA.loop2:
+WaitMPClear.loop2:
         C=C-1   A                                * 002EB
-        GONC    SUB_002DA.loop2                  * 002ED
+        GONC    WaitMPClear.loop2                * 002ED
         LC(1)   #C                               * 002F0
         DAT0=C  1                                * 002F3
         ?MP=0                                    * 002F7
         RTNYES                                   * 002FA
-        GONC    SUB_002DA.loop1                  * 002FC
+        GONC    WaitMPClear.loop1                * 002FC
 
 * refs (2): 00199 01097
-SUB_002FF:
-        GOVLNG  SUB_70242.L1                     * 002FF
-SUB_002FF.L1:
+* ST0 = 1 when the very-low-battery bit caused this: go through the stub at #70250 (blanks the display, serial off), then SHUTDN in a loop until the battery is fine and the machine is woken
+BatSleep:
+        GOVLNG  BatSleep~1                       * 002FF
+BatSleep.L1:
         D0=(2)  #2E                              * 00306
         C=DAT0  B                                * 0030A
         RSTK=C                                   * 0030D
         P=      0                                * 0030F
         C=0     A                                * 00311
         ?ST=0   0                                * 00313
-        GOYES   SUB_002FF.L2                     * 00316
+        GOYES   BatSleep.L2                      * 00316
         LC(2)   #10                              * 00318
-SUB_002FF.L2:
+BatSleep.L2:
         DAT0=C  B                                * 0031C
-        GOSUBL  SUB_00DF8                        * 0031F
+        GOSUBL  KbdOut0                          * 0031F
         INTOFF                                   * 00325
         D0=(2)  #1C                              * 00329
         C=0     A                                * 0032D
@@ -250,12 +252,12 @@ SUB_002FF.L2:
         D0=(2)  #0E                              * 00333
         LC(1)   #8                               * 00337
         DAT0=C  1                                * 0033A
-SUB_002FF.loop3:
+BatSleep.loop3:
         C=0     A                                * 0033E
         D0=(2)  #09                              * 00340
         DAT0=C  1                                * 00344
-        GOVLNG  SUB_04391.L1                     * 00348
-SUB_002FF.L4:
+        GOVLNG  ShutdnInRAM.L1                   * 00348
+BatSleep.L4:
         D0=(2)  #09                              * 0034F
         LC(1)   #4                               * 00353
         DAT0=C  1                                * 00356
@@ -268,19 +270,19 @@ SUB_002FF.L4:
         A=DAT0  1                                * 0036E
         LC(1)   #A                               * 00372
         A=A-C   P                                * 00375
-SUB_002FF.loop5:
+BatSleep.loop5:
         C=DAT0  1                                * 00378
         ?C#A    P                                * 0037C
-        GOYES   SUB_002FF.loop5                  * 0037F
+        GOYES   BatSleep.loop5                   * 0037F
         C=RSTK                                   * 00381
         D0=(2)  #2E                              * 00383
         DAT0=C  B                                * 00387
         GOSBVL  ScrOn+                           * 0038A
-        GOSBVL  SUB_019DA                        * 00391
+        GOSBVL  T1Nap                            * 00391
         D0=(2)  #08                              * 00398
         C=DAT0  1                                * 0039C
         ?CBIT=1 0                                * 003A0
-        GOYES   SUB_002FF.loop3                  * 003A5
+        GOYES   BatSleep.loop3                   * 003A5
         D0=(2)  #0E                              * 003A7
         LC(1)   #C                               * 003AB
         DAT0=C  1                                * 003AE
@@ -291,7 +293,8 @@ SUB_002FF.loop5:
         BSS     3                                * 003BD  zeros
 
 * refs (1): 001C3
-SUB_003C0:
+* -> : interrupt service for the serial port: if it is on (IOC bit 3) and a byte waits, move received bytes into the ring buffer at #80319 (status at #80519), handling XON/XOFF, and wait out one character time before giving up
+SrvcSerial:
         P=      0                                * 003C0
         D0=(5)  IOC                              * 003C2
         A=DAT0  1                                * 003C9
@@ -314,9 +317,9 @@ SUB_003C0:
         DAT1=C  1                                * 0040B
         CBIT=1  1                                * 0040F
         DAT0=C  1                                * 00414
-SUB_003C0.loop1:
+SrvcSerial.loop1:
         GOSBVL  SUB_7011B                        * 00418
-        GOC     SUB_003C0.L5                     * 0041F
+        GOC     SrvcSerial.L5                    * 0041F
         D0=(2)  #0D                              * 00422
         A=0     A                                * 00426
         A=DAT0  1                                * 00428
@@ -324,22 +327,22 @@ SUB_003C0.loop1:
         C=A     A                                * 00431
         A=A+A   A                                * 00433
         A=A+C   A                                * 00435
-        LC(5)   SUB_003C0.L4                     * 00437  table of 3-nibble entries, indexed by 3*A
+        LC(5)   SrvcSerial.L4                    * 00437  table of 3-nibble entries, indexed by 3*A
         C=C+A   A                                * 0043E
         D0=C                                     * 00440
         A=DAT0  X                                * 00443
         D0=(5)  TIMER2                           * 00447
         C=DAT0  X                                * 0044E
         C=C-A   X                                * 00452
-SUB_003C0.loop2:
+SrvcSerial.loop2:
         D0=(2)  #38                              * 00455
         A=DAT0  X                                * 00459
         ?C=A    X                                * 0045D
-        GOYES   SUB_003C0.L3                     * 00460
+        GOYES   SrvcSerial.L3                    * 00460
         GOSBVL  SUB_7011B                        * 00462
-        GOC     SUB_003C0.L5                     * 00469
-        GONC    SUB_003C0.loop2                  * 0046C
-SUB_003C0.L3:
+        GOC     SrvcSerial.L5                    * 00469
+        GONC    SrvcSerial.loop2                 * 0046C
+SrvcSerial.L3:
         D1=(4)  #0654                            * 0046F
         C=DAT1  1                                * 00475
         D0=(2)  #0C                              * 00479
@@ -347,8 +350,9 @@ SUB_003C0.L3:
         INTON                                    * 00481
         RTNSC                                    * 00485
 
+* Time-out in TIMER2 ticks for one character at each baud code
 * Time-out ticks by baud code 0-7 (read at #00437)
-SUB_003C0.L4:
+SrvcSerial.L4:
         CON(3)  #12C                             * 00487  entry 0
         CON(3)  #0BC                             * 0048A  entry 1
         CON(3)  #096                             * 0048D  entry 2
@@ -357,65 +361,65 @@ SUB_003C0.L4:
         CON(3)  #02F                             * 00496  entry 5
         CON(3)  #026                             * 00499  entry 6
         CON(3)  #017                             * 0049C  entry 7
-SUB_003C0.L5:
+SrvcSerial.L5:
         ?ABIT=0 8                                * 0049F
-        GOYES   SUB_003C0.L6                     * 004A4
+        GOYES   SrvcSerial.L6                    * 004A4
         D0=(2)  #14                              * 004A6
         A=DAT0  B                                * 004AA
         B=A     A                                * 004AD
-SUB_003C0.L6:
+SrvcSerial.L6:
         D1=(4)  #0519                            * 004AF
         C=DAT1  7                                * 004B5
         ?ABIT=0 10                               * 004B9
-        GOYES   SUB_003C0.L7                     * 004BE
+        GOYES   SrvcSerial.L7                    * 004BE
         D0=(2)  #13                              * 004C0
         DAT0=A  1                                * 004C4
         CBIT=1  8                                * 004C8
-        GONC    SUB_003C0.L10                    * 004CD
-SUB_003C0.L7:
+        GONC    SrvcSerial.L10                   * 004CD
+SrvcSerial.L7:
         P=      5                                * 004D0
         A=C     P                                * 004D2
         A=A+A   P                                * 004D5
         P=      0                                * 004D8
-        GONC    SUB_003C0.L10                    * 004DA
+        GONC    SrvcSerial.L10                   * 004DA
         D=C     W                                * 004DD
         LA(2)   #13                              * 004E0
         GOSBVL  SUB_70134                        * 004E7
         C=D     W                                * 004EE
         ?A=B    B                                * 004F1
-        GOYES   SUB_003C0.L8                     * 004F4
+        GOYES   SrvcSerial.L8                    * 004F4
         LA(2)   #11                              * 004F6
         GOSBVL  SUB_70134                        * 004FD
         C=D     W                                * 00504
         ?A#B    B                                * 00507
-        GOYES   SUB_003C0.L10                    * 0050A
+        GOYES   SrvcSerial.L10                   * 0050A
         P=      5                                * 0050C
         A=C     P                                * 0050E
         LC(1)   #B                               * 00511
         C=C&A   P                                * 00514
-        GONC    SUB_003C0.L9                     * 00518
-SUB_003C0.L8:
+        GONC    SrvcSerial.L9                    * 00518
+SrvcSerial.L8:
         P=      5                                * 0051B
         A=C     P                                * 0051D
         LC(1)   #4                               * 00520
         C=C!A   P                                * 00523
-SUB_003C0.L9:
+SrvcSerial.L9:
         D1=(4)  #051E                            * 00527
         DAT1=C  P                                * 0052D
         P=      0                                * 00531
-        GOTO    SUB_003C0.loop1                  * 00533
-SUB_003C0.L10:
+        GOTO    SrvcSerial.loop1                 * 00533
+SrvcSerial.L10:
         ?C#0    XS                               * 00537
-        GOYES   SUB_003C0.L11                    * 0053A
+        GOYES   SrvcSerial.L11                   * 0053A
         C=C+1   B                                * 0053C
-        GONC    SUB_003C0.L11                    * 0053F
+        GONC    SrvcSerial.L11                   * 0053F
         C=C-1   B                                * 00542
         CBIT=1  11                               * 00545
-SUB_003C0.L11:
+SrvcSerial.L11:
         D1=(4)  #0519                            * 0054A
         DAT1=C  7                                * 00550
         ?C#0    XS                               * 00554
-        GOYES   SUB_003C0.L12                    * 00557
+        GOYES   SrvcSerial.L12                   * 00557
         A=C     A                                * 00559
         ASR     A                                * 0055B
         ASR     A                                * 0055D
@@ -429,56 +433,57 @@ SUB_003C0.L11:
         CD1EX                                    * 00574
         A=B     A                                * 00577
         DAT1=A  B                                * 00579
-SUB_003C0.L12:
+SrvcSerial.L12:
         D1=(4)  #0519                            * 0057C
         A=DAT1  X                                * 00582
         LC(2)   #DF                              * 00586
         ?C<=A   B                                * 0058A
-        GOYES   SUB_003C0.L13                    * 0058D
+        GOYES   SrvcSerial.L13                   * 0058D
         ?A=0    XS                               * 0058F
-        GOYES   SUB_003C0.L15                    * 00592
-SUB_003C0.L13:
+        GOYES   SrvcSerial.L15                   * 00592
+SrvcSerial.L13:
         D1=(4)  #051E                            * 00594
         A=DAT1  1                                * 0059A
         LC(1)   #3                               * 0059E
         A=A&C   P                                * 005A1
         LC(1)   #2                               * 005A5
         ?C#A    P                                * 005A8
-        GOYES   SUB_003C0.L15                    * 005AB
+        GOYES   SrvcSerial.L15                   * 005AB
         D0=(2)  #12                              * 005AD
         A=DAT0  1                                * 005B1
         ?ABIT=1 0                                * 005B5
-        GOYES   SUB_003C0.L14                    * 005BA
+        GOYES   SrvcSerial.L14                   * 005BA
         LA(2)   #13                              * 005BC
-        GOSBVL  SUB_3114C                        * 005C3
+        GOSBVL  ByteParity                       * 005C3
         GOSBVL  SUB_7015D                        * 005CA
-        GOTO    SUB_003C0.loop1                  * 005D1
-SUB_003C0.L14:
+        GOTO    SrvcSerial.loop1                 * 005D1
+SrvcSerial.L14:
         D1=D1+  1                                * 005D5
         A=DAT1  1                                * 005D8
         ABIT=1  3                                * 005DC
         DAT1=A  1                                * 005E1
-SUB_003C0.L15:
-        GOTO    SUB_003C0.loop1                  * 005E5
+SrvcSerial.L15:
+        GOTO    SrvcSerial.loop1                 * 005E5
         BSS     3                                * 005E9  zeros
 
 * refs (1): 0021F
-SUB_005EC:
+* -> : TIMER1 interrupt: if TIMER1 went negative, count down the nibble at #808CC and re-arm the timer while a key is held or the bit at #80805 asks for it; otherwise stop TIMER1
+SrvcTimer1:
         P=      0                                * 005EC
         SETHEX                                   * 005EE
         D0=(5)  TIMER1CTRL                       * 005F0
         A=DAT0  1                                * 005F7
         ?ABIT=1 3                                * 005FB
-        GOYES   SUB_005EC.L1                     * 00600
+        GOYES   SrvcTimer1.L1                    * 00600
         RTNCC                                    * 00602
-SUB_005EC.L1:
-        GOSUB   SUB_008DF                        * 00604
+SrvcTimer1.L1:
+        GOSUB   AD1=IRAM~jump                    * 00604
         D1=(4)  #08CC                            * 00608
         C=DAT1  1                                * 0060E
         C=C-1   P                                * 00612
-        GOC     SUB_005EC.L2                     * 00615
+        GOC     SrvcTimer1.L2                    * 00615
         DAT1=C  1                                * 00618
-SUB_005EC.L2:
+SrvcTimer1.L2:
         LA(4)   #0801                            * 0061C
         LC(3)   #205                             * 00625
         A=C     B                                * 0062A
@@ -486,17 +491,18 @@ SUB_005EC.L2:
         A=DAT1  XS                               * 00630
         A=A&C   XS                               * 00634
         ?A#0    XS                               * 00638
-        GOYES   SUB_00655                        * 0063B
+        GOYES   ArmKeyPoll                       * 0063B
         D1=(4)  #065C                            * 0063D
         C=0     W                                * 00643
         C=DAT1  13                               * 00646
         ?C#0    W                                * 0064A
-        GOYES   SUB_00655                        * 0064D
+        GOYES   ArmKeyPoll                       * 0064D
         DAT0=C  1                                * 0064F
         RTNSC                                    * 00653
 
 * refs (5): 00638 0064A 008C9 01F5D 04214
-SUB_00655:
+* -> : TIMER1 = 0 with wake and interrupt enabled (control 6): it fires at the next 1/16 s tick, which is how a held key gets scanned again
+ArmKeyPoll:
         D0=(5)  TIMER1CTRL                       * 00655
         P=      0                                * 0065C
         LC(1)   #6                               * 0065E
@@ -507,14 +513,15 @@ SUB_00655:
         RTNSC                                    * 00670
 
 * refs (6): 00223 02141 041F9 043F8 04550 0E1C5
-SUB_00672:
-        GOSUB   SUB_00735                        * 00672
+* -> : read the battery and card status, update the low-battery nibble #80840, set or clear the alert bit in the annunciator byte #80841, and refresh the annunciators
+CkLowBat:
+        GOSUB   WaitCardStat                     * 00672
         CSR     A                                * 00676
         CSR     A                                * 00678
         C=C+C   A                                * 0067A
         C=C+C   A                                * 0067C
         CBIT=1  1                                * 0067E
-        GOSUB   SUB_006ED                        * 00683
+        GOSUB   ReadLowBat                       * 00683
         B=A     B                                * 00687
         BSR     A                                * 0068A
         GOSUB   D1=IRAM~jump                     * 0068C
@@ -528,23 +535,24 @@ SUB_00672:
         C=DAT1  XS                               * 006B2
         A=A!C   XS                               * 006B6
         ?A=0    XS                               * 006BA
-        GOYES   SUB_00672.L1                     * 006BD
+        GOYES   CkLowBat.L1                      * 006BD
         A=A+1   A                                * 006BF
-SUB_00672.L1:
+CkLowBat.L1:
         D1=(4)  #0840                            * 006C1
         DAT1=A  1                                * 006C7
         D1=(4)  #0841                            * 006CB
         C=DAT1  B                                * 006D1
         CBIT=0  3                                * 006D4
         ?A=0    P                                * 006D9
-        GOYES   SUB_00672.L2                     * 006DC
+        GOYES   CkLowBat.L2                      * 006DC
         CBIT=1  3                                * 006DE
-SUB_00672.L2:
+CkLowBat.L2:
         DAT1=C  B                                * 006E3
-        GOVLNG  OBJ_01E5E.L1                     * 006E6
+        GOVLNG  ShowHeldAnn.L1                   * 006E6
 
 * refs (2): 00683 325B1
-SUB_006ED:
+* C.A = mask of bits wanted -> A.B = bits of #00108, sampled six times with the detector enabled (#00109 = #C, then 4 again); carry set if bit 1 (main battery low) is on
+ReadLowBat:
         B=C     A                                * 006ED
         D0=(5)  DA1BadMASK                       * 006EF
         LC(1)   #C                               * 006F6
@@ -552,14 +560,14 @@ SUB_006ED:
         D0=(2)  #08                              * 006FD
         LC(3)   #50F                             * 00701
         A=C     A                                * 00706
-SUB_006ED.loop1:
+ReadLowBat.loop1:
         C=DAT0  1                                * 00708
         C=C&B   P                                * 0070C
         A=A&C   P                                * 00710
         CSL     B                                * 00714
         A=A!C   B                                * 00717
         C=C-1   XS                               * 0071B
-        GONC    SUB_006ED.loop1                  * 0071E
+        GONC    ReadLowBat.loop1                 * 0071E
         D0=(2)  #09                              * 00721
         LC(1)   #4                               * 00725
         DAT0=C  1                                * 00728
@@ -568,7 +576,8 @@ SUB_006ED.loop1:
         RTN                                      * 00733
 
 * refs (6): 00672 0443A 81099 810A6 81102 81183
-SUB_00735:
+* -> C.XS = card status (#0010F), read after writing #C to #0010E and waiting for 5 ticks of TIMER2 so the lines settle
+WaitCardStat:
         P=      0                                * 00735
         SETHEX                                   * 00737
         D0=(5)  NOP1MASK14                       * 00739
@@ -578,36 +587,37 @@ SUB_00735:
         A=DAT0  1                                * 0074B
         LC(1)   #5                               * 0074F
         A=A-C   P                                * 00752
-SUB_00735.loop1:
+WaitCardStat.loop1:
         C=DAT0  1                                * 00755
         ?C#A    P                                * 00759
-        GOYES   SUB_00735.loop1                  * 0075C
+        GOYES   WaitCardStat.loop1               * 0075C
         D0=(2)  #0F                              * 0075E
         C=DAT0  XS                               * 00762
         RTNCC                                    * 00766
-SUB_00735.L2:
+* Keyboard interrupt: nothing to do while #8065B says scanning is off; otherwise read the matrix (BITMAP), debounce, and hand changes to SrvcKbdAB
+WaitCardStat.L2:
         GOSUB   D1=IRAM~jump                     * 00768
         D1=(4)  #065B                            * 0076C
         C=DAT1  S                                * 00772
         ?C=0    S                                * 00776
-        GOYES   SUB_00735.L3                     * 00779
+        GOYES   WaitCardStat.L3                  * 00779
         P=      0                                * 0077B
         RTNCC                                    * 0077D
-SUB_00735.L3:
+WaitCardStat.L3:
         GOSUB   BITMAP                           * 0077F
         B=A     W                                * 00783
         ?A#0    W                                * 00786
-        GOYES   SUB_00735.L5                     * 00789
+        GOYES   WaitCardStat.L5                  * 00789
         D1=(4)  #065C                            * 0078B
         C=0     W                                * 00791
         C=DAT1  13                               * 00794
         ?C#0    W                                * 00798
-        GOYES   SUB_00735.L5                     * 0079B
-SUB_00735.L4:
+        GOYES   WaitCardStat.L5                  * 0079B
+WaitCardStat.L4:
         RSI                                      * 0079D
         P=      0                                * 007A2
         RTNCC                                    * 007A4
-SUB_00735.L5:
+WaitCardStat.L5:
         GOSUB   Debounce                         * 007A6  inline data follows
         ?ABIT=0 0                                * 007AA
         GOYES   SrvcKbdAB                        * 007AF
@@ -633,7 +643,7 @@ SrvcKbdAB.loop3:
         GONC    SrvcKbdAB.loop2                  * 007D5
         GOTO    SrvcKbdAB.L18                    * 007D8
 SrvcKbdAB.L4:
-        GOSUB   SUB_009E1                        * 007DC
+        GOSUB   KeyShiftBits                     * 007DC
         D=C     S                                * 007E0
         D1=(4)  #065C                            * 007E3
         C=0     W                                * 007E9
@@ -641,7 +651,7 @@ SrvcKbdAB.L4:
         DAT1=A  13                               * 007F0
         ?A#0    W                                * 007F4
         GOYES   SrvcKbdAB.L5                     * 007F7
-        GOTO    SUB_00735.L4                     * 007F9
+        GOTO    WaitCardStat.L4                  * 007F9
 SrvcKbdAB.L5:
         ?C#A    W                                * 007FD
         GOYES   SrvcKbdAB.L6                     * 00800
@@ -654,7 +664,7 @@ SrvcKbdAB.L6:
         GOYES   SrvcKbdAB.L7                     * 00812
         GOTO    SrvcKbdAB.L18                    * 00814
 SrvcKbdAB.L7:
-        GOSUB   SUB_009E1                        * 00818
+        GOSUB   KeyShiftBits                     * 00818
         B=C     S                                * 0081C
         LC(6)   #7DF7FF                          * 0081F
         P=      5                                * 00827
@@ -664,7 +674,7 @@ SrvcKbdAB.L7:
         ?A#0    W                                * 00832
         GOYES   SrvcKbdAB.L9                     * 00835
         C=B     S                                * 00837
-        GOSUB   SUB_00A09                        * 0083A
+        GOSUB   ShiftBits>Plane                  * 0083A
         GONC    SrvcKbdAB.L8                     * 0083E
         GOTO    SrvcKbdAB.L16                    * 00841
 SrvcKbdAB.L8:
@@ -672,7 +682,7 @@ SrvcKbdAB.L8:
         GONC    SrvcKbdAB.loop14                 * 00848
 SrvcKbdAB.L9:
         C=D     S                                * 0084B
-        GOSUB   SUB_00A09                        * 0084E
+        GOSUB   ShiftBits>Plane                  * 0084E
         D=C     A                                * 00852
         GOC     SrvcKbdAB.L16                    * 00854
         D0=(5)  SUB_00A37.L3+1                   * 00857
@@ -700,7 +710,7 @@ SrvcKbdAB.L13:
         GOYES   SrvcKbdAB.loop12                 * 00890
 SrvcKbdAB.loop14:
         C=B     A                                * 00892
-        GOSUB   SUB_00D9F                        * 00894
+        GOSUB   KeyBufPut                        * 00894
         GOC     SrvcKbdAB.L15                    * 00898
         BSR     W                                * 0089B
         BSR     W                                * 0089E
@@ -714,22 +724,22 @@ SrvcKbdAB.L15:
         LC(2)   #F9                              * 008B5
         GOSBVL  RCKBp                            * 008B9
 SrvcKbdAB.L16:
-        GOSUB   SUB_00D3B                        * 008C0
+        GOSUB   ClrKeyState                      * 008C0
 SrvcKbdAB.L17:
         RSI                                      * 008C4
 SrvcKbdAB.L18:
-        GOSUB   SUB_00655                        * 008C9
+        GOSUB   ArmKeyPoll                       * 008C9
         GOSUB   SUB_00A37                        * 008CD
         RTNC                                     * 008D1
-        GOTO    SUB_00735.L2                     * 008D4
+        GOTO    WaitCardStat.L2                  * 008D4
 
 * refs (11): 0023A 0068C 00768 007B5 00D8E 00FF8 ...
 D1=IRAM~jump:
         GOVLNG  D1=IRAM                          * 008D8
 
 * refs (1): 00604
-SUB_008DF:
-        GOVLNG  SUB_0C1B6                        * 008DF
+AD1=IRAM~jump:
+        GOVLNG  AD1=IRAM                         * 008DF
 
 * refs (4): 0077F 009C5 00E73 0ED47
 BITMAP:
@@ -823,7 +833,8 @@ Debounce.loop2:
         PC=C                                     * 009DD
 
 * refs (2): 007DC 00818
-SUB_009E1:
+* A.W = key map from BITMAP -> C.S = three bits: the alpha, left and right shift keys held (map bits 23, 17, 11)
+KeyShiftBits:
         C=A     W                                * 009E1
         CSR     W                                * 009E4
         CSL     X                                * 009E7
@@ -831,36 +842,39 @@ SUB_009E1:
         C=C+C   P                                * 009EC
         C=C+C   P                                * 009EF
         P=      13                               * 009F2
-SUB_009E1.loop1:
+KeyShiftBits.loop1:
         C=C+C   S                                * 009F4
         C=C+C   XS                               * 009F7
-        GONC    SUB_009E1.L2                     * 009FA
+        GONC    KeyShiftBits.L2                  * 009FA
         C=C+1   S                                * 009FD
-SUB_009E1.L2:
+KeyShiftBits.L2:
         CSR     A                                * 00A00
         P=P+1                                    * 00A02
-        GONC    SUB_009E1.loop1                  * 00A04
+        GONC    KeyShiftBits.loop1               * 00A04
         RTNCC                                    * 00A07
 
 * refs (2): 0083A 0084E
-SUB_00A09:
-        D0=(5)  SUB_00A09.L2                     * 00A09
+* C.S = held shift bits -> C.A = their keycode plane in the high nibble of a byte; carry set if the combination is not allowed
+ShiftBits>Plane:
+        D0=(5)  ShiftBits>Plane.L2               * 00A09
         P=C     15                               * 00A10
         C=0     W                                * 00A14
-SUB_00A09.loop1:
+ShiftBits>Plane.loop1:
         C=DAT0  1                                * 00A17
         D0=D0+  1                                * 00A1B
         P=P-1                                    * 00A1E
-        GONC    SUB_00A09.loop1                  * 00A20
+        GONC    ShiftBits>Plane.loop1            * 00A20
         P=      0                                * 00A23
         C=C+1   P                                * 00A25
         C=C-1   P                                * 00A28
         CSL     A                                * 00A2B
         RTN                                      * 00A2D
-SUB_00A09.L2:
+* Plane nibble by value of C.S; F marks a combination that is refused
+ShiftBits>Plane.L2:
         NIBHEX  084FCFFF                         * 00A2F  ∡ôüÿ
 
 * refs (1): 008CD
+* Probably: after a key scan, decides if the 1/16 s TIMER1 tick is close enough that a rescan is not needed (carry set); carry clear makes SrvcKbdAB scan again
 SUB_00A37:
         D0=(5)  TIMER1CTRL                       * 00A37
         A=DAT0  1                                * 00A3E
@@ -1114,28 +1128,29 @@ OnKeyStable?:
         RTN                                      * 00C8B
 
 * refs (2): 04805 814BE
-SUB_00C8D:
+* A.B = keycode 1-49, or #80 for alpha, #40 for left shift -> carry set if that key is held now. ON (#2D) and bad codes return carry clear. The matrix table gives the OUT and IN masks
+KeyDown?:
         P=      0                                * 00C8D
         LC(2)   #80                              * 00C8F
         ?C#A    B                                * 00C93
-        GOYES   SUB_00C8D.L1                     * 00C96
+        GOYES   KeyDown?.L1                      * 00C96
         LC(2)   #1E                              * 00C98
         A=C     B                                * 00C9C
-SUB_00C8D.L1:
+KeyDown?.L1:
         LC(2)   #40                              * 00C9F
         ?C#A    B                                * 00CA3
-        GOYES   SUB_00C8D.L2                     * 00CA6
+        GOYES   KeyDown?.L2                      * 00CA6
         LC(2)   #23                              * 00CA8
         A=C     B                                * 00CAC
-SUB_00C8D.L2:
+KeyDown?.L2:
         LC(2)   #2D                              * 00CAF
         ?C=A    B                                * 00CB3
-        GOYES   SUB_00C8D.L3                     * 00CB6
+        GOYES   KeyDown?.L3                      * 00CB6
         ?A=0    B                                * 00CB8
-        GOYES   SUB_00C8D.L3                     * 00CBB
+        GOYES   KeyDown?.L3                      * 00CBB
         LC(2)   #31                              * 00CBD
         ?C<A    B                                * 00CC1
-        GOYES   SUB_00C8D.L3                     * 00CC4
+        GOYES   KeyDown?.L3                      * 00CC4
         C=0     A                                * 00CC6
         C=A     B                                * 00CC8
         C=C+C   A                                * 00CCB
@@ -1153,29 +1168,32 @@ SUB_00C8D.L2:
         C=DAT1  P                                * 00CF3
         D1=C                                     * 00CF7
         P=      0                                * 00CFA
-        GOSUB   SUB_00E21                        * 00CFC
+        GOSUB   KbdOutC                          * 00CFC
         A=A&C   X                                * 00D00
         LC(3)   #1FF                             * 00D04
-        GOSUB   SUB_00E21                        * 00D09
+        GOSUB   KbdOutC                          * 00D09
         ?A#0    X                                * 00D0D
         RTNYES                                   * 00D10
-SUB_00C8D.L3:
+KeyDown?.L3:
         RTNCC                                    * 00D12
 
 * refs (1): 01E95
-SUB_00D14:
+* -> carry set if left shift is held (OUT bit 2, IN bit 5)
+LShiftDown?:
         LC(3)   #004                             * 00D14
-        GOTO    SUB_00D26.L1                     * 00D19
+        GOTO    AlphaDown?.L1                    * 00D19
 
 * refs (1): 01EA7
-SUB_00D1D:
+* -> carry set if right shift is held (OUT bit 1, IN bit 5)
+RShiftDown?:
         LC(3)   #002                             * 00D1D
-        GOTO    SUB_00D26.L1                     * 00D22
+        GOTO    AlphaDown?.L1                    * 00D22
 
 * refs (1): 01E83
-SUB_00D26:
+* -> carry set if alpha is held (OUT bit 3, IN bit 5)
+AlphaDown?:
         LC(3)   #008                             * 00D26
-SUB_00D26.L1:
+AlphaDown?.L1:
         OUT=C                                    * 00D2B
         GOSUB   CINRTN                           * 00D2E
         ?CBIT=1 5                                * 00D32
@@ -1183,7 +1201,8 @@ SUB_00D26.L1:
         RTN                                      * 00D39
 
 * refs (6): 008C0 04369 047AB 80031 80EFA 80FBA
-SUB_00D3B:
+* -> : clear the 13-nibble map at #8065C of keys already seen as down
+ClrKeyState:
         D1=(5)  =IR_16Hz_Clock                   * 00D3B
         C=DAT1  A                                * 00D42
         D1=C                                     * 00D45
@@ -1228,7 +1247,8 @@ FlushAttn:
         RTN                                      * 00D9D
 
 * refs (1): 00894
-SUB_00D9F:
+* C.B = keycode -> carry set if the key buffer is full; otherwise append it. #80669 is the read index, #8066A the write index, entries of 2 nibbles follow
+KeyBufPut:
         A=C     A                                * 00D9F
         D1=(5)  =IR_16Hz_Clock                   * 00DA1
         C=DAT1  A                                * 00DA8
@@ -1260,15 +1280,17 @@ SUB_00D9F:
         RTNCC                                    * 00DF6
 
 * refs (2): 0031F 0435B
-SUB_00DF8:
+* -> carry set if IN # 0: drive no OUT line (only ON can read), remembering it in #80642
+KbdOut0:
         D1=(5)  =IR_16Hz_Clock                   * 00DF8
         C=DAT1  A                                * 00DFF
         D1=C                                     * 00E02
         C=0     A                                * 00E05
-        GOTO    SUB_00E21                        * 00E07
+        GOTO    KbdOutC                          * 00E07
 
 * refs (8): 019AF 04377 04929 80838 80A45 80A67 ...
-SUB_00E0B:
+* -> carry set if IN # 0: drive all nine OUT lines, remembering it in #80642
+KbdOutAll:
         D1=(5)  =IR_16Hz_Clock                   * 00E0B
         C=DAT1  A                                * 00E12
         D1=C                                     * 00E15
@@ -1277,7 +1299,8 @@ SUB_00E0B:
         LC(3)   #1FF                             * 00E1C
 
 * refs (3): 00CFC 00D09 00E07
-SUB_00E21:
+* C.X = OUT lines -> carry set if IN # 0: store C.X in #80642 (the interrupt code restores OUT from there), set OUT and read IN
+KbdOutC:
         D1=(4)  #0642                            * 00E21
         DAT1=C  X                                * 00E27
         OUT=C                                    * 00E2B
@@ -1285,149 +1308,164 @@ SUB_00E21:
         ?C#0    A                                * 00E31
         RTNYES                                   * 00E34
         RTN                                      * 00E36
-SUB_00E21.L1:
+
+* refs (1): 00230
+* ON is down: match the keyboard map against OnKeyTable until all keys are released. The return address pushed here counts one ATTN in #807F7; a combination replaces it
+OnKeyCombo:
         P=      0                                * 00E38
-        LC(5)   SUB_00E21.L17                    * 00E3A  return address, pushed with RSTK=C
+        LC(5)   OnKeyTable.L7                    * 00E3A  return address, pushed with RSTK=C
         RSTK=C                                   * 00E41
         D1=(4)  #065A                            * 00E43
         A=DAT1  S                                * 00E49
         B=A     S                                * 00E4D
-SUB_00E21.loop2:
+OnKeyCombo.loop1:
         P=      0                                * 00E50
         LC(3)   #1FF                             * 00E52
         OUT=C                                    * 00E57
         LC(5)   #0004E                           * 00E5A
         A=0     A                                * 00E61
-SUB_00E21.loop3:
+OnKeyCombo.loop2:
         GOSUB   AINRTN                           * 00E63
         ?A#0    A                                * 00E67
-        GOYES   SUB_00E21.L4                     * 00E6A
+        GOYES   OnKeyCombo.L3                    * 00E6A
         C=C-1   A                                * 00E6C
-        GONC    SUB_00E21.loop3                  * 00E6E
+        GONC    OnKeyCombo.loop2                 * 00E6E
         RTN                                      * 00E71
-SUB_00E21.L4:
+OnKeyCombo.L3:
         GOSBVL  BITMAP                           * 00E73
-        D1=(5)  SUB_00E21.L10                    * 00E7A
+        D1=(5)  OnKeyTable                       * 00E7A
         P=      12                               * 00E81
-SUB_00E21.loop5:
+OnKeyCombo.loop4:
         C=DAT1  S                                * 00E83
         C=C-1   S                                * 00E87
-        GOC     SUB_00E21.loop2                  * 00E8A
+        GOC     OnKeyCombo.loop1                 * 00E8A
         D1=D1+  1                                * 00E8D
         C=DAT1  13                               * 00E90
         D1=D1+  13                               * 00E94
         ?C=A    WP                               * 00E97
-        GOYES   SUB_00E21.L6                     * 00E9A
+        GOYES   OnKeyCombo.L5                    * 00E9A
         D1=D1+  5                                * 00E9C
-        GONC    SUB_00E21.loop5                  * 00E9F
-SUB_00E21.L6:
+        GONC    OnKeyCombo.loop4                 * 00E9F
+OnKeyCombo.L5:
         P=      0                                * 00EA2
         C=C-1   S                                * 00EA4
-        GONC    SUB_00E21.L7                     * 00EA7
+        GONC    OnKeyCombo.L6                    * 00EA7
         C=RSTK                                   * 00EAA
         AD1EX                                    * 00EAC
         PC=(A)                                   * 00EAF
-SUB_00E21.L7:
+OnKeyCombo.L6:
         A=DAT1  A                                * 00EB3
         C=C-1   S                                * 00EB6
-        GONC    SUB_00E21.L8                     * 00EB9
+        GONC    OnKeyCombo.L7                    * 00EB9
         ?B#0    S                                * 00EBC
-        GOYES   SUB_00E21.L8                     * 00EBF
+        GOYES   OnKeyCombo.L7                    * 00EBF
         LA(5)   Interrupt.L20                    * 00EC1  return address, pushed with RSTK=C
-SUB_00E21.L8:
+OnKeyCombo.L7:
         C=RSTK                                   * 00ECB
         C=A     A                                * 00ECD
-SUB_00E21.loop9:
+OnKeyCombo.L8:
         RSTK=C                                   * 00ECF
-        GOTO    SUB_00E21.loop2                  * 00ED1
+        GOTO    OnKeyCombo.loop1                 * 00ED1
 
+* Entries: kind (1 run now, 2 and 3 run on release), key map as BITMAP gives it, handler. Keys by map bit: 0 ON, 1 +, 2 SPC, 6 -, 9 1, 10 A, 15 4, 44 F, 45 E, 46 D, 47 C, 48 B
 * ON-key combinations (read at #00E7A): kind (1 jump, 2 and 3 other actions), 13-nibble key bitmap, handler
-SUB_00E21.L10:
+OnKeyTable:
         CON(1)  1                                * 00ED5  entry 0
+* ON + : contrast up. Next entry, ON - : contrast down
         CON(13) #0000000000003                   * 00ED6
-        CON(5)  SUB_00E21.L11                    * 00EE3
+        CON(5)  OnKeyTable.L1                    * 00EE3
         CON(1)  1                                * 00EE8  entry 1
         CON(13) #0000000000041                   * 00EE9
-        CON(5)  SUB_00E21.L12                    * 00EF6
+        CON(5)  OnKeyTable.L2                    * 00EF6
         CON(1)  3                                * 00EFB  entry 2
+* ON B : no action, no ATTN counted
         CON(13) #1000000000001                   * 00EFC
         CON(5)  Interrupt.L20                    * 00F09
         CON(1)  3                                * 00F0E  entry 3
+* ON A F : cold start
         CON(13) #0100000000401                   * 00F0F
         CON(5)  Coldstart                        * 00F1C
         CON(1)  3                                * 00F21  entry 4
+* ON 1 : print the LCD
         CON(13) #0000000000201                   * 00F22
-        CON(5)  SUB_00E21.L19                    * 00F2F
+        CON(5)  OnPrintLCD                       * 00F2F
         CON(1)  3                                * 00F34  entry 5
+* ON 4 : set DOUSEALARM (#80834), which stops a sounding alarm
         CON(13) #0000000008001                   * 00F35
-        CON(5)  SUB_010A9.L2                     * 00F42
+        CON(5)  ClrWSLog.L2                      * 00F42
         CON(1)  2                                * 00F47  entry 6
+* ON C : warm start. Then ON D : interactive self-test, ON E : continuous self-test, ON SPC : deep sleep
         CON(13) #0800000000001                   * 00F48
         CON(5)  Warmstart                        * 00F55
         CON(1)  2                                * 00F5A  entry 7
         CON(13) #0400000000001                   * 00F5B
-        CON(5)  CINRTN.L3                        * 00F68
+        CON(5)  TestSetEnd~1.L1                  * 00F68
         CON(1)  2                                * 00F6D  entry 8
         CON(13) #0200000000001                   * 00F6E
         CON(5)  CINRTN.L1                        * 00F7B
         CON(1)  2                                * 00F80  entry 9
         CON(13) #0000000000005                   * 00F81
-        CON(5)  SUB_00E21.L23                    * 00F8E
+        CON(5)  OnDeepSleep                      * 00F8E
         CON(1)  0                                * 00F93  end of table
-SUB_00E21.L11:
+OnKeyTable.L1:
         P=      1                                * 00F94
-        GOTO    SUB_00E21.L13                    * 00F96
-SUB_00E21.L12:
+        GOTO    OnKeyTable.L3                    * 00F96
+OnKeyTable.L2:
         P=      0                                * 00F9A
-SUB_00E21.L13:
+* Contrast is 5 bits at #00101 and stays within #09..#18. P=0 here means down: P=P-1 then sets carry
+OnKeyTable.L3:
         D1=(5)  CONTRAST                         * 00F9C
         A=DAT1  B                                * 00FA3
         P=P-1                                    * 00FA6
         P=      0                                * 00FA8
         LC(2)   #1F                              * 00FAA
         A=A&C   B                                * 00FAE
-        GOC     SUB_00E21.L14                    * 00FB2
+        GOC     OnKeyTable.L4                    * 00FB2
         A=A+1   B                                * 00FB5
         LC(2)   #18                              * 00FB8
         ?C<A    B                                * 00FBC
-        GOYES   SUB_00E21.L16                    * 00FBF
-        GONC    SUB_00E21.L15                    * 00FC1
-SUB_00E21.L14:
+        GOYES   OnKeyTable.L6                    * 00FBF
+        GONC    OnKeyTable.L5                    * 00FC1
+OnKeyTable.L4:
         A=A-1   B                                * 00FC4
-        GOC     SUB_00E21.L16                    * 00FC7
+        GOC     OnKeyTable.L6                    * 00FC7
         LC(2)   #09                              * 00FCA
         ?C>A    B                                * 00FCE
-        GOYES   SUB_00E21.L16                    * 00FD1
-SUB_00E21.L15:
+        GOYES   OnKeyTable.L6                    * 00FD1
+OnKeyTable.L5:
         C=DAT1  B                                * 00FD3
         C=0     P                                * 00FD6
         CBIT=0  4                                * 00FD9
         A=A!C   B                                * 00FDE
         DAT1=A  B                                * 00FE2
-SUB_00E21.L16:
-        GOSUB   SUB_01145                        * 00FE5
-        GOSUB   SUB_01145                        * 00FE9
+OnKeyTable.L6:
+        GOSUB   ContrastWait                     * 00FE5
+        GOSUB   ContrastWait                     * 00FE9
         LC(5)   Interrupt.L20                    * 00FED
-        GOTO    SUB_00E21.loop9                  * 00FF4
-SUB_00E21.L17:
+        GOTO    OnKeyCombo.L8                    * 00FF4
+* ON released on its own: count one ATTN, without letting the counter wrap
+OnKeyTable.L7:
         GOSUB   D1=IRAM~jump                     * 00FF8
         D1=(4)  #07F7                            * 00FFC
         C=DAT1  A                                * 01002
         C=C+1   A                                * 01005
-        GOC     SUB_00E21.L18                    * 01007
+        GOC     OnKeyTable.L8                    * 01007
         DAT1=C  A                                * 0100A
-SUB_00E21.L18:
-        GOTO    SUB_00E21.L22                    * 0100D
-SUB_00E21.L19:
+OnKeyTable.L8:
+        GOTO    OnPrintLCD.L3                    * 0100D
+
+* refs (1): 00F2F
+* Save the return stack, R1 and R2 in IRAM at #8069C, print the LCD, and restore them
+OnPrintLCD:
         GOSUB   D1=IRAM~jump                     * 01011
         D1=(4)  #069C                            * 01015
         P=      10                               * 0101B
-SUB_00E21.loop20:
+OnPrintLCD.loop1:
         C=RSTK                                   * 0101D
         DAT1=C  A                                * 0101F
         D1=D1+  5                                * 01022
         P=P+1                                    * 01025
-        GONC    SUB_00E21.loop20                 * 01027
+        GONC    OnPrintLCD.loop1                 * 01027
         C=R2                                     * 0102A
         CSLC                                     * 0102D
         GOSBVL  CSLW5                            * 01030
@@ -1443,44 +1481,49 @@ SUB_00E21.loop20:
         R2=C.F  S                                * 01066
         R2=C.F  A                                * 0106C
         P=      10                               * 01072
-SUB_00E21.loop21:
+OnPrintLCD.loop2:
         D1=D1-  5                                * 01074
         C=DAT1  A                                * 01077
         RSTK=C                                   * 0107A
         P=P+1                                    * 0107C
-        GONC    SUB_00E21.loop21                 * 0107E
-SUB_00E21.L22:
+        GONC    OnPrintLCD.loop2                 * 0107E
+OnPrintLCD.L3:
         GOLONG  Interrupt.L20                    * 01081
-SUB_00E21.L23:
+
+* refs (1): 00F8E
+* Beep, sleep (BatSleep with ST0 clear), clear #80010.. and restart with reset code 0
+OnDeepSleep:
         P=      0                                * 01087
         LC(2)   #E4                              * 01089
         GOSBVL  RCKBp                            * 0108D
         ST=0    0                                * 01094
-        GOSUBL  SUB_002FF                        * 01097
-        GOSUB   SUB_010A9                        * 0109D
+        GOSUBL  BatSleep                         * 01097
+        GOSUB   ClrWSLog                         * 0109D
         P=      0                                * 010A1
         GOLONG  Interrupt.L13                    * 010A3
 
 * refs (2): 0109D 80C9A
-SUB_010A9:
+* -> : clear the warm-start log: four 18-nibble entries at #80010 (see LogWarmstart)
+ClrWSLog:
         GOSUBL  D1=IRAM~jump                     * 010A9
         D1=(4)  #0010                            * 010AF
         C=0     W                                * 010B5
         P=      12                               * 010B8
-SUB_010A9.loop1:
+ClrWSLog.loop1:
         DAT1=C  W                                * 010BA
         D1=D1+  16                               * 010BE
         DAT1=C  B                                * 010C1
         D1=D1+  2                                * 010C4
         P=P+1                                    * 010C7
-        GONC    SUB_010A9.loop1                  * 010C9
+        GONC    ClrWSLog.loop1                   * 010C9
         RTN                                      * 010CC
-SUB_010A9.L2:
+* ON 4 handler
+ClrWSLog.L2:
         GOSUBL  D1=IRAM~jump                     * 010CE
         D1=(4)  #0834                            * 010D4
         LC(1)   #F                               * 010DA
         DAT1=C  1                                * 010DD
-        GOTO    SUB_00E21.L22                    * 010E1
+        GOTO    OnPrintLCD.L3                    * 010E1
 
 * Allow interrupts.
 * refs (34): 01199 01300 0173E 01E6E 02165 04557 ...
@@ -1523,13 +1566,14 @@ DisableIntr:
         RTNCC                                    * 01143
 
 * refs (2): 00FE5 00FE9
-SUB_01145:
+* -> : idle loop of #597F turns, so a held ON + or ON - steps the contrast slowly
+ContrastWait:
         AD1EX                                    * 01145
         D1=(5)  #0597F                           * 01148  loop count, swapped into A
         AD1EX                                    * 0114F
-SUB_01145.loop1:
+ContrastWait.loop1:
         A=A-1   A                                * 01152
-        GONC    SUB_01145.loop1                  * 01154
+        GONC    ContrastWait.loop1               * 01154
         RTNCC                                    * 01157
         BSS     1                                * 01159  zeros
 
@@ -1548,14 +1592,14 @@ CINRTN:
 CINRTN.L1:
         ST=0    8                                * 01165
         ST=0    10                               * 01168
-CINRTN.L2:
-        GOSUB   SUB_0119D                        * 0116B
+TestSetEnd~1:
+        GOSUB   RebootIO                         * 0116B
         ST=1    6                                * 0116F
-        GOTO    CINRTN.L4                        * 01172
-CINRTN.L3:
-        GOSUB   SUB_0119D                        * 01176
+        GOTO    TestSetEnd~1.L2                  * 01172
+TestSetEnd~1.L1:
+        GOSUB   RebootIO                         * 01176
         ST=0    6                                * 0117A
-CINRTN.L4:
+TestSetEnd~1.L2:
         GOSUBL  D1=IRAM~jump                     * 0117D
         D1=(4)  #065A                            * 01183
         LC(1)   #F                               * 01189
@@ -1565,22 +1609,25 @@ CINRTN.L4:
         GOTO    AllowIntr                        * 01199
 
 * refs (2): 0116B 01176
-SUB_0119D:
-        GOSUB   SUB_011AC                        * 0119D
-        GOSUB   SUB_011CA                        * 011A1
-        GOVLNG  SUB_01929                        * 011A5
+* -> : reset the bus, reconfigure memory, clear the bit at #80805 and reinitialise the hardware. First step of the self-tests
+RebootIO:
+        GOSUB   ResetConfig                      * 0119D
+        GOSUB   ClrPollBit                       * 011A1
+        GOVLNG  InitIO                           * 011A5
 
 * refs (3): 0119D 8120A 81EB1
-SUB_011AC:
+* -> : RESET, then configure I/O, RAM and the ports again (ST15 clear: interrupts held off)
+ResetConfig:
         ST=0    15                               * 011AC
         RESET                                    * 011AF
         MP=0                                     * 011B2
-        GOSBVL  SUB_02241                        * 011B5
-        GOSBVL  SUB_022D9                        * 011BC
+        GOSBVL  ConfigIO                         * 011B5
+        GOSBVL  ConfigBootRAM                    * 011BC
         GOVLNG  SUB_7017C.L2                     * 011C3
 
 * refs (1): 011A1
-SUB_011CA:
+* -> : clear bit 1 of the nibble at #80805, the one that keeps TIMER1 polling in SrvcTimer1
+ClrPollBit:
         P=      0                                * 011CA
         D1=(5)  =IR_16Hz_Clock                   * 011CC
         A=DAT1  A                                * 011D3
@@ -1596,15 +1643,16 @@ SUB_011CA:
         BSS     1                                * 011FB  zeros
 
 * refs (7): 012EE 012FC 0133A 0148C 01A3E 0275A ...
-SUB_011FC:
+* -> C.W = time in ticks of 1/8192 s since year 0 (the offset at #80058 minus TIMER2); carry set if the clock is not to be trusted: TIMER2 stopped, the CRC at #80065 is wrong, or the time is outside 1991-2090. A.W, B.W, D.W clobbered
+GetTimeRaw:
         SETHEX                                   * 011FC
         D1=(5)  TIMER2CTRL                       * 011FE
         C=DAT1  1                                * 01205
         D=0     S                                * 01209
         ?CBIT=1 0                                * 0120C
-        GOYES   SUB_011FC.L1                     * 01211
+        GOYES   GetTimeRaw.L1                    * 01211
         D=D+1   S                                * 01213
-SUB_011FC.L1:
+GetTimeRaw.L1:
         D1=(2)  #1B                              * 01216
         A=DAT1  A                                * 0121A
         D1=(2)  #04                              * 0121D
@@ -1621,9 +1669,9 @@ SUB_011FC.L1:
         A=0     A                                * 0124A
         A=DAT1  4                                * 0124C
         ?C=A    A                                * 01250
-        GOYES   SUB_011FC.L2                     * 01253
+        GOYES   GetTimeRaw.L2                    * 01253
         D=D+1   S                                * 01255
-SUB_011FC.L2:
+GetTimeRaw.L2:
         D1=(4)  #0058                            * 01258
         A=0     W                                * 0125E
         A=DAT1  13                               * 01261
@@ -1632,31 +1680,31 @@ SUB_011FC.L2:
         C=0     W                                * 0126F
         P=      0                                * 01272
         ?D#0    S                                * 01274
-        GOYES   SUB_011FC.L4                     * 01277
+        GOYES   GetTimeRaw.L4                    * 01277
         A=DAT1  1                                * 01279
-SUB_011FC.loop3:
+GetTimeRaw.loop3:
         C=DAT1  1                                * 0127D
         ?C=A    P                                * 01281
-        GOYES   SUB_011FC.loop3                  * 01284
+        GOYES   GetTimeRaw.loop3                 * 01284
         C=DAT1  8                                * 01286
-SUB_011FC.L4:
+GetTimeRaw.L4:
         A=B     W                                * 0128A
         P=      7                                * 0128D
         B=C     P                                * 0128F
         B=B+B   P                                * 01292
-        GONC    SUB_011FC.L5                     * 01295
+        GONC    GetTimeRaw.L5                    * 01295
         C=-C    W                                * 01298
         C=-C    WP                               * 0129B
-SUB_011FC.L5:
+GetTimeRaw.L5:
         DCEX    W                                * 0129E
         P=C     15                               * 012A1
         C=A     W                                * 012A5
         C=C-D   W                                * 012A8
         ?P=     0                                * 012AB
-        GOYES   SUB_011FC.L6                     * 012AE
+        GOYES   GetTimeRaw.L6                    * 012AE
         P=      0                                * 012B0
         RTNSC                                    * 012B2
-SUB_011FC.L6:
+GetTimeRaw.L6:
         B=C     W                                * 012B4
         C=0     W                                * 012B7
         P=      5                                * 012BA
@@ -1677,14 +1725,15 @@ SUB_011FC.L6:
 
 * refs (7): 027D3 0CD8E 0CDB8 0CDDC 0CE73 0E37A ...
 GetTimChk:
-        GOSUB   SUB_011FC                        * 012EE
+        GOSUB   GetTimeRaw                       * 012EE
         RTNNC                                    * 012F2
         GOTO    GetTime++.L1                     * 012F5
 
 * refs (5): 0130E 0D39E 0EF8E 80167 8173A
-SUB_012F9:
+* -> C.W: GetTimeRaw with interrupts held off (ST15), then AllowIntr
+GetTimeNoInt:
         ST=0    15                               * 012F9
-        GOSUB   SUB_011FC                        * 012FC
+        GOSUB   GetTimeRaw                       * 012FC
         GOVLNG  AllowIntr                        * 01300
 
 * refs (2): 0D2E9 0EB95
@@ -1693,7 +1742,7 @@ SavPtrTime*:
 
 * refs (3): 1A813 1A82C 80B52
 GetTime++:
-        GOSUB   SUB_012F9                        * 0130E
+        GOSUB   GetTimeNoInt                     * 0130E
         RTNNC                                    * 01312
 GetTime++.L1:
         P=      4                                * 01315
@@ -1711,9 +1760,9 @@ srvc_timer2.loop1:
 srvc_timer2.L2:
         ?ABIT=0 3                                * 01333
         GOYES   srvc_timer2.loop1                * 01338
-        GOSBVL  SUB_011FC                        * 0133A
+        GOSBVL  GetTimeRaw                       * 0133A
         GONC    srvc_timer2.L3                   * 01341
-        GOTO    SUB_01496.L1                     * 01344
+        GOTO    SetT2WakeC.L1                    * 01344
 srvc_timer2.L3:
         ST=0    2                                * 01348
         B=C     W                                * 0134B
@@ -1741,19 +1790,19 @@ srvc_timer2.L6:
         R0=C                                     * 01391
         D0=A                                     * 01394
         A=DAT0  A                                * 01397
-        GOSBVL  SUB_0E914                        * 0139A
+        GOSBVL  ?D0#LIST                         * 0139A
         GOC     srvc_timer2.L9                   * 013A1
 srvc_timer2.loop7:
         D0=D0+  5                                * 013A4
-        GOSBVL  SUB_0E8F3                        * 013A7
+        GOSBVL  ?D0#SEMI                         * 013A7
         GONC    srvc_timer2.L10                  * 013AE
-        GOSBVL  SUB_0E914                        * 013B1
+        GOSBVL  ?D0#LIST                         * 013B1
         GOC     srvc_timer2.L9                   * 013B8
         D0=D0+  5                                * 013BB
-        GOSBVL  SUB_0E8FE                        * 013BE
+        GOSBVL  ?D0#HXS                          * 013BE
         GOC     srvc_timer2.L9                   * 013C5
         D0=D0+  5                                * 013C8
-        GOSBVL  SUB_0E909                        * 013CB
+        GOSBVL  ?D0#1D                           * 013CB
         GOC     srvc_timer2.L9                   * 013D2
         D0=D0+  5                                * 013D5
         C=0     W                                * 013D8
@@ -1787,7 +1836,7 @@ srvc_timer2.L10:
         DAT1=A  B                                * 01433
         C=B     A                                * 01436
         D=C     A                                * 01438
-        GOSBVL  OBJ_01E5E.L1                     * 0143A  inline data follows
+        GOSBVL  ShowHeldAnn.L1                   * 0143A  inline data follows
         NIBHEX  DBD5                             * 01441  ½]
 srvc_timer2.L11:
         C=R0                                     * 01445
@@ -1800,9 +1849,9 @@ srvc_timer2.L12:
         C=0     W                                * 0145D
         C=DAT1  13                               * 01460
         ?C=0    W                                * 01464
-        GOYES   SUB_01485                        * 01467
+        GOYES   SetT2WakeClk                     * 01467
         ?B<C    W                                * 01469
-        GOYES   SUB_01485                        * 0146C
+        GOYES   SetT2WakeClk                     * 0146C
         C=0     W                                * 0146E
         D1=(4)  #0076                            * 01471
         DAT1=C  1                                * 01477
@@ -1810,26 +1859,30 @@ srvc_timer2.L12:
         DAT1=C  13                               * 01481
 
 * refs (7): 01464 01469 0173A 04411 046DF 0CF03 ...
-SUB_01485:
-        GOSBVL  SUB_0D877                        * 01485
+* ST0 from ClkOn>ST0, then SetT2Wake
+SetT2WakeClk:
+        GOSBVL  ClkOn>ST0                        * 01485
 
 * refs (1): 042F6
-SUB_0148C:
-        GOSBVL  SUB_011FC                        * 0148C
-        GOC     SUB_01496.L1                     * 01493
+* Reprogram TIMER2 for the next event; a bad clock restarts through the memory-lost path
+SetT2Wake:
+        GOSBVL  GetTimeRaw                       * 0148C
+        GOC     SetT2WakeC.L1                    * 01493
 
 * refs (1): 0CEA0
-SUB_01496:
+* C.W = time now in ticks. Choose the next wake-up: at most 3 days ahead (1 hour if #80077 is set), the time at #80069 if earlier, a due alarm in the ALARMS list, or the next whole second while the clock shows (ST0); then wrap the clock into 1991-2090 and load TIMER2 (done at TryToRM?.L9)
+SetT2WakeC:
         B=C     W                                * 01496
         D0=(5)  TIMER2CTRL                       * 01499
         C=DAT0  1                                * 014A0
         ?CBIT=1 0                                * 014A4
-        GOYES   SUB_01496.L2                     * 014A9
-SUB_01496.L1:
+        GOYES   SetT2WakeC.L2                    * 014A9
+SetT2WakeC.L1:
         GOVLNG  GetTime++.L1                     * 014AB
-SUB_01496.L2:
+SetT2WakeC.L2:
         P=      0                                * 014B2
         C=0     W                                * 014B4
+* Longest wait: #7E900000 ticks is 3 days
         LC(8)   #7E900000                        * 014B7
         A=C     W                                * 014C1
         A=A+B   W                                * 014C4
@@ -1837,46 +1890,47 @@ SUB_01496.L2:
         D0=(4)  #0077                            * 014CB
         C=DAT0  1                                * 014D1
         ?C=0    P                                * 014D5
-        GOYES   SUB_01496.L3                     * 014D8
+        GOYES   SetT2WakeC.L3                    * 014D8
         C=0     W                                * 014DA
+* #1C20000 ticks is 1 hour
         LC(7)   #1C20000                         * 014DD
         A=C     W                                * 014E6
         A=A+B   W                                * 014E9
-SUB_01496.L3:
+SetT2WakeC.L3:
         D0=(4)  #0069                            * 014EC
         C=0     W                                * 014F2
         C=DAT0  13                               * 014F5
         ?C=0    W                                * 014F9
-        GOYES   SUB_01496.L4                     * 014FC
+        GOYES   SetT2WakeC.L4                    * 014FC
         ?C>=A   W                                * 014FE
-        GOYES   SUB_01496.L4                     * 01501
+        GOYES   SetT2WakeC.L4                    * 01501
         A=C     W                                * 01503
         ?A>=B   W                                * 01506
-        GOYES   SUB_01496.L4                     * 01509
+        GOYES   SetT2WakeC.L4                    * 01509
         A=B     W                                * 0150B
-SUB_01496.L4:
+SetT2WakeC.L4:
         D0=(4)  #0835                            * 0150E
         C=DAT0  1                                * 01514
         ?C#0    P                                * 01518
-        GOYES   SUB_01496.L6                     * 0151B
+        GOYES   SetT2WakeC.L6                    * 0151B
         D0=(4)  #072A                            * 0151D
         C=DAT0  A                                * 01523
         ?C=0    A                                * 01526
-        GOYES   SUB_01496.L5                     * 01529
+        GOYES   SetT2WakeC.L5                    * 01529
         D0=(4)  #065A                            * 0152B
         C=DAT0  1                                * 01531
         ?C#0    P                                * 01535
-        GOYES   SUB_01496.L7                     * 01538
-SUB_01496.L5:
+        GOYES   SetT2WakeC.L7                    * 01538
+SetT2WakeC.L5:
         C=0     W                                * 0153A
         LC(4)   #2000                            * 0153D
         C=C+B   W                                * 01543
         ?C>=A   W                                * 01546
-        GOYES   SUB_01496.L6                     * 01549
+        GOYES   SetT2WakeC.L6                    * 01549
         A=C     W                                * 0154B
-SUB_01496.L6:
+SetT2WakeC.L6:
         GOTO    TryToRM?.L2                      * 0154E
-SUB_01496.L7:
+SetT2WakeC.L7:
         C=RSTK                                   * 01552
         GOSBVL  CSLW5                            * 01554
         C=RSTK                                   * 0155B
@@ -1885,22 +1939,22 @@ SUB_01496.L7:
         C=DAT0  A                                * 01567
         D0=C                                     * 0156A
         D1=A                                     * 0156D
-        GOSBVL  SUB_0E914                        * 01570
+        GOSBVL  ?D0#LIST                         * 01570
         GOC     TryToRM?                         * 01577
-SUB_01496.loop8:
+SetT2WakeC.loop8:
         D0=D0+  5                                * 0157A
-        GOSBVL  SUB_0E8F3                        * 0157D
-        GOC     SUB_01496.L9                     * 01584
+        GOSBVL  ?D0#SEMI                         * 0157D
+        GOC     SetT2WakeC.L9                    * 01584
         AD1EX                                    * 01587
         GONC    TryToRM?.L1                      * 0158A
-SUB_01496.L9:
-        GOSBVL  SUB_0E914                        * 0158D
+SetT2WakeC.L9:
+        GOSBVL  ?D0#LIST                         * 0158D
         GOC     TryToRM?                         * 01594
         D0=D0+  5                                * 01597
-        GOSBVL  SUB_0E8FE                        * 0159A
+        GOSBVL  ?D0#HXS                          * 0159A
         GOC     TryToRM?                         * 015A1
         D0=D0+  5                                * 015A4
-        GOSBVL  SUB_0E909                        * 015A7
+        GOSBVL  ?D0#1D                           * 015A7
         GOC     TryToRM?                         * 015AE
         D0=D0+  5                                * 015B1
         C=0     W                                * 015B4
@@ -1913,16 +1967,16 @@ SUB_01496.L9:
         D0=D0+  10                               * 015C9
         C=DAT0  1                                * 015CC
         ?C#0    P                                * 015D0
-        GOYES   SUB_01496.L10                    * 015D3
+        GOYES   SetT2WakeC.L10                   * 015D3
         A=C     W                                * 015D5
         ?A>=B   W                                * 015D8
         GOYES   TryToRM?.L1                      * 015DB
         A=B     W                                * 015DD
         GONC    TryToRM?.L1                      * 015E0
-SUB_01496.L10:
+SetT2WakeC.L10:
         D0=D0+  1                                * 015E3
         GOSBVL  SAFESKIPOB                       * 015E6
-        GONC    SUB_01496.loop8                  * 015ED
+        GONC    SetT2WakeC.loop8                 * 015ED
 
 * refs (7): 0140A 01577 01594 015A1 015AE 0CBA7 ...
 TryToRM?:
@@ -1952,10 +2006,10 @@ TryToRM?.L2:
         A=C     W                                * 01631
 TryToRM?.L3:
         GOSUB   D0=IRAM~jump                     * 01634
-        GOSUB   SUB_01750                        * 01638
+        GOSUB   ClockMaxTicks                    * 01638
         ?C<A    W                                * 0163C
         GOYES   TryToRM?.L5                      * 0163F
-        GOSUB   SUB_01763                        * 01641
+        GOSUB   ClockMinTicks                    * 01641
         ?C>A    W                                * 01645
         GOYES   TryToRM?.L4                      * 01648
         ?B>=C   W                                * 0164A
@@ -1963,7 +2017,7 @@ TryToRM?.L3:
         B=C     W                                * 0164F
         GONC    TryToRM?.L9                      * 01652
 TryToRM?.L4:
-        GOSUB   SUB_01776                        * 01655
+        GOSUB   Ticks100Years                    * 01655
         C=-C    W                                * 01659
         GOTO    TryToRM?.L7                      * 0165C
 TryToRM?.L5:
@@ -1972,7 +2026,7 @@ TryToRM?.L5:
         A=C     W                                * 01665
         GONC    TryToRM?.L9                      * 01668
 TryToRM?.L6:
-        GOSUB   SUB_01776                        * 0166B
+        GOSUB   Ticks100Years                    * 0166B
 TryToRM?.L7:
         A=A-C   W                                * 0166F
         B=B-C   W                                * 01672
@@ -1986,9 +2040,9 @@ TryToRM?.L7:
         DAT0=A  13                               * 0168D
 TryToRM?.L8:
         A=R0                                     * 01691
-        GOTO    SUB_01496.L2                     * 01694
+        GOTO    SetT2WakeC.L2                    * 01694
 TryToRM?.L9:
-        GOSUB   SUB_016E9                        * 01698
+        GOSUB   SetClockOffs                     * 01698
         C=A     W                                * 0169C
         C=C-B   W                                * 0169F
         C=C-D   W                                * 016A2
@@ -2019,7 +2073,8 @@ D0=IRAM~jump:
         GOVLNG  D0=IRAM                          * 016E2
 
 * refs (3): 01698 01A82 027EA
-SUB_016E9:
+* A.W = clock offset (the time at TIMER2 = 0) -> stored at #80058 with its CRC at #80065; D0 kept
+SetClockOffs:
         D0=A                                     * 016E9
         D1=(5)  =IR_16Hz_Clock                   * 016EC
         A=DAT1  A                                * 016F3
@@ -2028,7 +2083,8 @@ SUB_016E9:
         AD0EX                                    * 016FF
 
 * refs (1): 80BD5
-SUB_01702:
+* As SetClockOffs with D1 already at #80058: the CRC circuit computes the check while the 13 nibbles are read back
+SetClockOffsD1:
         DAT1=A  13                               * 01702
         D0=(5)  #00104                           * 01706
         A=0     A                                * 0170D
@@ -2042,18 +2098,20 @@ SUB_01702:
         RTN                                      * 01729
 
 * refs (6): 0DCC7 0DD8F 0DE48 0E71A 0E760 0E7A1
-OBJ_0172B:
+* -> : code object: run SetT2Wake with interrupts held off, so that a new or changed alarm takes effect
+SetT2WakeOb:
         CON(5)  (*)+5                            * 0172B  primitive code object
         GOSBVL  SAVPTR                           * 01730
         ST=0    15                               * 01737
-        GOSUB   SUB_01485                        * 0173A
+        GOSUB   SetT2WakeClk                     * 0173A
         GOSBVL  AllowIntr                        * 0173E
         P=      0                                * 01745
         SETHEX                                   * 01747
         GOVLNG  GETPTRLOOP                       * 01749
 
 * refs (1): 01638
-SUB_01750:
+* -> C.W = #1EBA1AC100000: ticks at the end of the clock's range (1 January 2091)
+ClockMaxTicks:
         C=0     W                                * 01750
         P=      5                                * 01753
         LC(8)   #1EBA1AC1                        * 01755
@@ -2061,7 +2119,8 @@ SUB_01750:
         RTN                                      * 01761
 
 * refs (2): 01641 01A6E
-SUB_01763:
+* -> C.W = #1D41E89A00000: ticks at the start of the clock's range (1 January 1991)
+ClockMinTicks:
         C=0     W                                * 01763
         P=      5                                * 01766
         LC(8)   #1D41E89A                        * 01768
@@ -2069,7 +2128,8 @@ SUB_01763:
         RTN                                      * 01774
 
 * refs (2): 01655 0166B
-SUB_01776:
+* -> C.W = #178322700000: ticks in 100 years (36525 days). The clock wraps by this much at the end of its range
+Ticks100Years:
         C=0     W                                * 01776
         P=      5                                * 01779
         LC(8)   #01783227                        * 0177B
@@ -2077,14 +2137,16 @@ SUB_01776:
         RTN                                      * 01787
 
 * refs (2): 01A4B 01A78
-SUB_01789:
+* -> C.W = #78000: ticks in one minute
+Ticks1Min:
         P=      0                                * 01789
         C=0     W                                * 0178B
         LC(5)   #78000                           * 0178E
         RTN                                      * 01795
 
 * refs (2): 027E0 423C5
-SUB_01797:
+* -> C.W = #4B0000: ticks in 10 minutes
+Ticks10Min:
         P=      0                                * 01797
         C=0     W                                * 01799
         LC(6)   #4B0000                          * 0179C
@@ -2222,7 +2284,8 @@ clkspd.loop3:
         BSS     5                                * 01924  zeros
 
 * refs (2): 011A5 02045
-SUB_01929:
+* -> : power-up: sane contrast (#09..#18, default #0E), annunciators on, restart the timers and clock, enable keyboard and interrupts, clear and show the display, then fall into T1Nap
+InitIO:
         ST=0    15                               * 01929
         P=      0                                * 0192C
         SETHEX                                   * 0192E
@@ -2232,14 +2295,14 @@ SUB_01929:
         A=A&C   X                                * 0193F
         LC(2)   #09                              * 01943
         ?C>A    B                                * 01947
-        GOYES   SUB_01929.L1                     * 0194A
+        GOYES   InitIO.L1                        * 0194A
         LC(2)   #18                              * 0194C
         ?C>=A   B                                * 01950
-        GOYES   SUB_01929.L2                     * 01953
-SUB_01929.L1:
+        GOYES   InitIO.L2                        * 01953
+InitIO.L1:
         LC(2)   #0E                              * 01955
         A=C     B                                * 01959
-SUB_01929.L2:
+InitIO.L2:
         DAT0=A  X                                * 0195C
         D0=(2)  #09                              * 01960
         LC(1)   #4                               * 01964
@@ -2247,7 +2310,7 @@ SUB_01929.L2:
         D0=(2)  #0B                              * 0196B
         LC(2)   #80                              * 0196F
         DAT0=C  B                                * 01973
-        GOSBVL  SUB_30E7D                        * 01976
+        GOSBVL  UARTInit                         * 01976
         D0=(5)  #0011C                           * 0197D
         C=0     A                                * 01984
         DAT0=C  1                                * 01986
@@ -2259,8 +2322,8 @@ SUB_01929.L2:
         D0=(2)  #0E                              * 019A0
         LC(1)   #C                               * 019A4
         DAT0=C  1                                * 019A7
-        GOSUB   SUB_01A33                        * 019AB
-        GOSBVL  SUB_00E0B                        * 019AF
+        GOSUB   InitClock                        * 019AB
+        GOSBVL  KbdOutAll                        * 019AF
         INTON                                    * 019B6
         GOSBVL  D0=IRAM                          * 019BA
         D0=(4)  #065B                            * 019C1
@@ -2270,7 +2333,8 @@ SUB_01929.L2:
         GOSBVL  ScrOn+                           * 019D3
 
 * refs (2): 00391 01D4B
-SUB_019DA:
+* -> : SHUTDN until TIMER1 has run down from 1 or the very-low-battery bit is set, then TIMER1 = 7; the timer control byte is kept
+T1Nap:
         D0=(5)  TIMER1CTRL                       * 019DA
         C=DAT0  B                                * 019E1
         D=C     B                                * 019E4
@@ -2280,17 +2344,17 @@ SUB_019DA:
         D0=(2)  #37                              * 019F0
         LC(1)   #1                               * 019F4
         DAT0=C  1                                * 019F7
-SUB_019DA.loop1:
+T1Nap.loop1:
         SHUTDN                                   * 019FB
         D0=(2)  #08                              * 019FE
         C=DAT0  1                                * 01A02
         ?CBIT=1 0                                * 01A06
-        GOYES   SUB_019DA.L2                     * 01A0B
+        GOYES   T1Nap.L2                         * 01A0B
         D0=(2)  #37                              * 01A0D
         C=DAT0  1                                * 01A11
         ?CBIT=0 3                                * 01A15
-        GOYES   SUB_019DA.loop1                  * 01A1A
-SUB_019DA.L2:
+        GOYES   T1Nap.loop1                      * 01A1A
+T1Nap.L2:
         D0=(2)  #37                              * 01A1C
         LC(1)   #7                               * 01A20
         DAT0=C  1                                * 01A23
@@ -2300,35 +2364,37 @@ SUB_019DA.L2:
         RTNCC                                    * 01A31
 
 * refs (1): 019AB
-SUB_01A33:
+* -> : clear the next-alarm time, restart TIMER2 from the saved clock. A bad clock reports warm-start reason 4 and starts at 1 January 1991. TIMER2 is loaded so the first event comes within a minute
+InitClock:
         A=0     W                                * 01A33
-        GOSUB   SUB_01A96                        * 01A36
-        GOSUB   SUB_01ABD                        * 01A3A
-        GOSBVL  SUB_011FC                        * 01A3E
-        GOC     SUB_01A33.L1                     * 01A45
+        GOSUB   SetNextAlarm                     * 01A36
+        GOSUB   SetT2Awake                       * 01A3A
+        GOSBVL  GetTimeRaw                       * 01A3E
+        GOC     InitClock.L1                     * 01A45
         B=C     W                                * 01A48
-        GOSBVL  SUB_01789                        * 01A4B
+        GOSBVL  Ticks1Min                        * 01A4B
         DCEX    W                                * 01A52
         C=-C    W                                * 01A55
         C=C+D   W                                * 01A58
         A=A+C   W                                * 01A5B
         C=D     W                                * 01A5E
-        GOTO    SUB_01A33.L2                     * 01A61
-SUB_01A33.L1:
+        GOTO    InitClock.L2                     * 01A61
+InitClock.L1:
         P=      4                                * 01A65
-        GOSBVL  SUB_02708                        * 01A67
-        GOSBVL  SUB_01763                        * 01A6E
+        GOSBVL  LogWarmstart                     * 01A67
+        GOSBVL  ClockMinTicks                    * 01A6E
         A=C     W                                * 01A75
-        GOSBVL  SUB_01789                        * 01A78
+        GOSBVL  Ticks1Min                        * 01A78
         A=A+C   W                                * 01A7F
-SUB_01A33.L2:
-        GOSBVL  SUB_016E9                        * 01A82
+InitClock.L2:
+        GOSBVL  SetClockOffs                     * 01A82
         D1=(5)  TIMER2                           * 01A89
         DAT1=C  8                                * 01A90
         RTN                                      * 01A94
 
 * refs (3): 01A36 042E3 423D6
-SUB_01A96:
+* A.W = time -> stored at #80069; #80076 is set to F
+SetNextAlarm:
         D1=(5)  =IR_16Hz_Clock                   * 01A96
         C=DAT1  A                                * 01A9D
         D1=C                                     * 01AA0
@@ -2341,8 +2407,9 @@ SUB_01A96:
         RTN                                      * 01ABB
 
 * refs (3): 01A3A 042EF 0440B
-SUB_01ABD:
-        GOSBVL  SUB_0C1B6                        * 01ABD
+* C.P = nibble -> stored at #80077: zero before turning off, F after waking; nonzero makes SetT2WakeC wake at least every hour
+SetT2Awake:
+        GOSBVL  AD1=IRAM                         * 01ABD
         D1=(4)  #0077                            * 01AC4
         DAT1=C  1                                * 01ACA
         RTN                                      * 01ACE
@@ -2354,7 +2421,7 @@ SAVPTR~jump:
 * refs (6): 008B9 0108D 0238E 0E88E 32A06 802D8
 RCKBp:
         B=C     A                                * 01AD7
-        GOSUB   SUB_01B66                        * 01AD9
+        GOSUB   KbdOutRestore                    * 01AD9
         INTOFF                                   * 01ADD
         AD1EX                                    * 01AE1
         D1=(5)  TIMER1CTRL                       * 01AE4
@@ -2402,7 +2469,8 @@ RCKBp.loop3:
         AD1EX                                    * 01B63
 
 * refs (1): 01AD9
-SUB_01B66:
+* -> A.A = IN: set OUT back from #80642 and allow interrupts; D1 kept. Part of the beeper
+KbdOutRestore:
         AD1EX                                    * 01B66
         D1=(5)  =IR_16Hz_Clock                   * 01B69
         C=DAT1  A                                * 01B70
@@ -2452,7 +2520,8 @@ ScrOff+:
         RTN                                      * 01BE9
 
 * refs (1): 0204C
-SUB_01BEB:
+* -> : light the BUSY annunciator in the hardware (ANNCTRL bit 4)
+BusyAnnOn:
         D0=(5)  ANNCTRL                          * 01BEB
         C=DAT0  B                                * 01BF2
         CBIT=1  4                                * 01BF5
@@ -2466,7 +2535,7 @@ ClrScrMn:
         GOSUB   D0->Row1                         * 01C03
         LC(5)   #00076                           * 01C07
         A=0     W                                * 01C0E
-        GOSUB   SUB_01C23                        * 01C11
+        GOSUB   FillD0W                          * 01C11
 
 * refs (1): 81D37
 ClrMenu:
@@ -2475,17 +2544,18 @@ ClrMenu:
         A=0     W                                * 01C20
 
 * refs (2): 01C11 01C2C
-SUB_01C23:
+* A.W = value, C.A = count-1, D0 -> : write count 16-nibble words, D0 past them
+FillD0W:
         DAT0=A  W                                * 01C23
         D0=D0+  16                               * 01C27
         C=C-1   A                                * 01C2A
-        GONC    SUB_01C23                        * 01C2C
+        GONC    FillD0W                          * 01C2C
         RTNCC                                    * 01C2F
 
 * ( --> D0 ) Gets addr of current display
 * refs (9): 01C03 01C7F 80414 80456 80A10 814C5 ...
 D0->Row1:
-        GOSBVL  SUB_0C1C5                        * 01C31
+        GOSBVL  AD0=IRAM                         * 01C31
         RSTK=C                                   * 01C38
         D0=(4)  #06DA                            * 01C3A
         A=DAT0  4                                * 01C40
@@ -2500,7 +2570,7 @@ D0->Row1:
 * ( --> D0 ) Gets address of menu grob
 * refs (9): 01C15 01C96 12851 80425 80467 814D9 ...
 D0->Sft1:
-        GOSBVL  SUB_0C1C5                        * 01C58
+        GOSBVL  AD0=IRAM                         * 01C58
         RSTK=C                                   * 01C5F
         D0=(4)  #06D0                            * 01C61
         A=DAT0  4                                * 01C67
@@ -2553,9 +2623,12 @@ SUB_01CEC:
         D0=(4)  #069A                            * 01D12
         GOVLNG  EXPR>~1~romptr.L1                * 01D18
         FILLTO  #01D44                           * 01D1F  37 zero nibbles: the next entry stays at #01D44
-SUB_01CEC.L1:
-        GOSBVL  SUB_12690                        * 01D44
-        GOSUB   SUB_019DA                        * 01D4B
+
+* refs (1): 04315
+* -> : wait, turn the display off, and restore DISPADDR, line offset and line count from the copies at #8068D, #80692 and #8069A
+DispRestore:
+        GOSBVL  DispPark                         * 01D44
+        GOSUB   T1Nap                            * 01D4B
         GOSUB   DispOff                          * 01D4F
         GOSBVL  D0=IRAM                          * 01D53
         D0=(4)  #068D                            * 01D5A
@@ -2577,11 +2650,12 @@ SUB_01CEC.L1:
         RTN                                      * 01D9F
 
 * refs (4): 09BC4 8068F 8112A 8199D
-SUB_01DA1:
+* B.A = RAM base -> carry clear with C = "128K" or " 32K" text, D0 past the word tested; carry set if offset #3FFFB does not hold data. Offsets that mirror each other mean 32K. Words touched are restored
+RamSizeTest:
         P=      0                                * 01DA1
         LC(5)   #3FFFB                           * 01DA3
         GOSUB   SUB_01E2A                        * 01DAA
-        GONC    SUB_01DA1.L3                     * 01DAE
+        GONC    RamSizeTest.L3                   * 01DAE
         GOSUB   SUB_01DFD                        * 01DB1
         R3=A                                     * 01DB5
         GOSUB   SUB_01E08                        * 01DB8
@@ -2593,17 +2667,17 @@ SUB_01DA1:
         C=R3                                     * 01DCC
         DAT0=C  A                                * 01DCF
         ?C#A    A                                * 01DD2
-        GOYES   SUB_01DA1.L1                     * 01DD5
+        GOYES   RamSizeTest.L1                   * 01DD5
         A=R4                                     * 01DD7
         GOSUB   SUB_01E19                        * 01DDA
         LC(8)   #4B383231                        * 01DDE
-        GOTO    SUB_01DA1.L2                     * 01DE8
-SUB_01DA1.L1:
+        GOTO    RamSizeTest.L2                   * 01DE8
+RamSizeTest.L1:
         LC(8)   #4B323320                        * 01DEC
-SUB_01DA1.L2:
+RamSizeTest.L2:
         D0=D0+  5                                * 01DF6
         RTNCC                                    * 01DF9
-SUB_01DA1.L3:
+RamSizeTest.L3:
         RTNSC                                    * 01DFB
 
 * refs (2): 01DB1 01DC8
@@ -2654,44 +2728,46 @@ SUB_01E2A.L1:
         RTNCC                                    * 01E5C
 
 * refs (3): 04895 113A3 17BA4
-OBJ_01E5E:
+* -> : code object: read the alpha and shift keys and light the annunciator of the one held (none if two or more) on top of the byte at #80841. Machine code enters at the GOSUB target below
+ShowHeldAnn:
         CON(5)  (*)+5                            * 01E5E  primitive code object
         GOSUB   SAVPTR~jump                      * 01E63
         ST=0    15                               * 01E67
-        GOSUB   OBJ_01E5E.L1                     * 01E6A  inline data follows
+        GOSUB   ShowHeldAnn.L1                   * 01E6A  inline data follows
         GOSBVL  AllowIntr                        * 01E6E
         GOTO    CLEARLCD.L1                      * 01E75
-OBJ_01E5E.L1:
+* Bits 6, 5, 4 of the annunciator byte are alpha, right and left shift; the XS nibble counts keys held
+ShowHeldAnn.L1:
         C=RSTK                                   * 01E79
         B=C     A                                * 01E7B
         P=      0                                * 01E7D
         SETHEX                                   * 01E7F
         A=0     A                                * 01E81
-        GOSBVL  SUB_00D26                        * 01E83
-        GONC    OBJ_01E5E.L2                     * 01E8A
+        GOSBVL  AlphaDown?                       * 01E83
+        GONC    ShowHeldAnn.L2                   * 01E8A
         ABIT=1  6                                * 01E8D
         A=A+1   XS                               * 01E92
-OBJ_01E5E.L2:
-        GOSBVL  SUB_00D14                        * 01E95
-        GONC    OBJ_01E5E.L3                     * 01E9C
+ShowHeldAnn.L2:
+        GOSBVL  LShiftDown?                      * 01E95
+        GONC    ShowHeldAnn.L3                   * 01E9C
         ABIT=1  4                                * 01E9F
         A=A+1   XS                               * 01EA4
-OBJ_01E5E.L3:
-        GOSBVL  SUB_00D1D                        * 01EA7
-        GONC    OBJ_01E5E.L4                     * 01EAE
+ShowHeldAnn.L3:
+        GOSBVL  RShiftDown?                      * 01EA7
+        GONC    ShowHeldAnn.L4                   * 01EAE
         ABIT=1  5                                * 01EB1
         A=A+1   XS                               * 01EB6
-OBJ_01E5E.L4:
+ShowHeldAnn.L4:
         ASRB.F  XS                               * 01EB9
         ?A=0    XS                               * 01EBE
-        GOYES   OBJ_01E5E.L5                     * 01EC1
+        GOYES   ShowHeldAnn.L5                   * 01EC1
         A=0     A                                * 01EC3
-OBJ_01E5E.L5:
+ShowHeldAnn.L5:
         GOSUB   D1=IRAM~jump_3                   * 01EC5
         D1=(4)  #0841                            * 01EC9
         C=DAT1  B                                * 01ECF
         A=A!C   B                                * 01ED2
-        GOSUB   SUB_01EFD                        * 01ED6
+        GOSUB   AnnByte>HW                       * 01ED6
         C=B     A                                * 01EDA
         RSTK=C                                   * 01EDC
         GOSUB   D1=IRAM~jump_3                   * 01EDE
@@ -2707,21 +2783,22 @@ D1=IRAM~jump_3:
         GOVLNG  D1=IRAM                          * 01EF6
 
 * refs (2): 01ED6 804B9
-SUB_01EFD:
-        D1=(5)  SUB_01EFD.L3                     * 01EFD
+* A.B = annunciator byte (#80841 layout) -> : map it through the table below and write it to ANNCTRL, keeping the two top bits; B.A kept
+AnnByte>HW:
+        D1=(5)  AnnByte>HW.L3                    * 01EFD
         C=B     A                                * 01F04
         RSTK=C                                   * 01F06
         B=0     A                                * 01F08
-SUB_01EFD.loop1:
+AnnByte>HW.loop1:
         D1=D1+  2                                * 01F0A
         A=A+A   B                                * 01F0D
-        GONC    SUB_01EFD.L2                     * 01F10
+        GONC    AnnByte>HW.L2                    * 01F10
         C=DAT1  B                                * 01F13
         B=B!C   B                                * 01F16
-        GOC     SUB_01EFD.loop1                  * 01F1A
-SUB_01EFD.L2:
+        GOC     AnnByte>HW.loop1                 * 01F1A
+AnnByte>HW.L2:
         ?A#0    B                                * 01F1D
-        GOYES   SUB_01EFD.loop1                  * 01F20
+        GOYES   AnnByte>HW.loop1                 * 01F20
         D1=(5)  ANNCTRL                          * 01F22
         A=DAT1  B                                * 01F29
         P=      0                                * 01F2C
@@ -2731,7 +2808,7 @@ SUB_01EFD.L2:
         DAT1=A  B                                * 01F3A
         C=RSTK                                   * 01F3D
         B=C     A                                * 01F3F
-SUB_01EFD.L3:
+AnnByte>HW.L3:
         RTNCC                                    * 01F41
 
 * Annunciator bit for each bit of the annunciator byte (read at #01F13)
@@ -2745,11 +2822,12 @@ SUB_01EFD.L3:
         CON(2)  #00                              * 01F51  entry 7
 
 * refs (1): 423F3
-GETKEY~8:
+* -> : code object: ArmKeyPoll, D0 kept
+ArmKeyPollOb:
         CON(5)  (*)+5                            * 01F53  primitive code object
         CD0EX                                    * 01F58
         RSTK=C                                   * 01F5B
-        GOSBVL  SUB_00655                        * 01F5D
+        GOSBVL  ArmKeyPoll                       * 01F5D
         C=RSTK                                   * 01F64
         D0=C                                     * 01F66
         GOTO    CLCD10.L1                        * 01F69

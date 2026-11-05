@@ -1,4 +1,4 @@
-* HP 48GX ROM revision R, #5D01D-#6001B: Symbolic algebra
+* HP 48GX ROM revision R, #5D01D-#6001B: Symbolic algebra: flattening sums and products for RULES, the meta stack toolkit (psh, top&, larg, ...), operator tests, the rewrite rule interpreter, start of the pattern matcher
 * Addresses in the right-hand comments are those of the original ROM.
 * Most referenced: psh top& pshtop& #1-SWAP SWAPDROP#1- pshm1 addt: NOTcaseFALSE rot dup unrot larg
 * Follows on from the previous file (at #5D01D in the original ROM).
@@ -16,56 +16,61 @@ OBJ_5D01D:
 * meta -> meta'
 * refs (6): 5ACD1 5D176 83919 840A3 841E3 844B3
 forceadd:
-        :: M1st+case OBJ_5D167                   * 5D0C2
-          M1st-case OBJ_5D0EA                    * 5D0D1
+        :: M1st+case forceadd+                   * 5D0C2
+          M1st-case forceadd-                    * 5D0D1
           M1stNEGcase forceadd~1                 * 5D0DB
         ;                                        * 5D0E5
 
 * refs (2): 5D0D6 5D130
-OBJ_5D0EA:
-        :: SWAPDROP#1- metaneg ~addt:;x+ COLA OBJ_5D167 * 5D0EA
+* sum case of forceadd: X-Y is taken as X+(-Y)
+forceadd-:
+        :: SWAPDROP#1- metaneg ~addt:;x+ COLA forceadd+ * 5D0EA
         ;                                        * 5D108
 
 * refs (1): 5D0E0
 forceadd~1:
         :: 3PICK REQcasedrop x+                  * 5D10D
-          :: ~SWAPDROP#1-;COLA;[f(X,Y)]=>[-X-Y]! COLA OBJ_5D0EA * 5D121
+          :: ~SWAPDROP#1-;COLA;[f(X,Y)]=>[-X-Y]! COLA forceadd- * 5D121
           ;                                      * 5D135
           REQcasedrop x-                         * 5D13A
-          :: ~SWAPDROP#1-;COLA;[f(X,Y)]=>[-X+Y]! COLA OBJ_5D167 * 5D144
+          :: ~SWAPDROP#1-;COLA;[f(X,Y)]=>[-X+Y]! COLA forceadd+ * 5D144
           ;                                      * 5D158
           DROP ;                                 * 5D15D
 
 * refs (3): 5D0CC 5D103 5D153
-OBJ_5D167:
+* forceadd of a sum: gather the left argument into one chain of +
+forceadd+:
         :: SWAPDROP#1- larg forceadd OVER' x+ EQIT * 5D167
           :: plDRPpZparg meta+ pshtop& ; top& ~addt:;x+ ; * 5D18A
 
 * refs (5): 5D261 839BE 840B2 84355 844A9
-OBJ_5D1B2:
-        :: M1st+case OBJ_5D257                   * 5D1B2
-          M1st-case OBJ_5D234                    * 5D1C1
-          M1stNEGcase OBJ_5D1DA                  * 5D1CB
+* meta -> meta': as forceadd, gathering from the right argument
+forcesumR:
+        :: M1st+case forcesumR+                  * 5D1B2
+          M1st-case forcesumR-                   * 5D1C1
+          M1stNEGcase forcesumR~1                * 5D1CB
         ;                                        * 5D1D5
 
 * refs (1): 5D1D0
-OBJ_5D1DA:
+forcesumR~1:
         :: 3PICK REQcasedrop x+                  * 5D1DA
-          :: ~SWAPDROP#1-;COLA;[f(X,Y)]=>[-X-Y]! COLA OBJ_5D234 * 5D1EE
+          :: ~SWAPDROP#1-;COLA;[f(X,Y)]=>[-X-Y]! COLA forcesumR- * 5D1EE
           ;                                      * 5D202
           REQcasedrop x-                         * 5D207
-          :: ~SWAPDROP#1-;COLA;[f(X,Y)]=>[-X+Y]! COLA OBJ_5D257 * 5D211
+          :: ~SWAPDROP#1-;COLA;[f(X,Y)]=>[-X+Y]! COLA forcesumR+ * 5D211
           ;                                      * 5D225
           DROP ;                                 * 5D22A
 
 * refs (2): 5D1C6 5D1FD
-OBJ_5D234:
-        :: SWAPDROP#1- metaneg ~addt:;x+ COLA OBJ_5D257 * 5D234
+* X-Y is taken as X+(-Y)
+forcesumR-:
+        :: SWAPDROP#1- metaneg ~addt:;x+ COLA forcesumR+ * 5D234
         ;                                        * 5D252
 
 * refs (3): 5D1BC 5D220 5D24D
-OBJ_5D257:
-        :: plDRPpZparg OBJ_5D1B2 OVER' x+ EQIT   * 5D257
+* gather the right argument into one chain of +
+forcesumR+:
+        :: plDRPpZparg forcesumR OVER' x+ EQIT   * 5D257
           :: SWAPDROP#1- pshtop& meta+ pshzer ; pshtop& ~addt:;x+ ; * 5D275
 
 * refs (1): 5D7AE
@@ -74,69 +79,77 @@ OBJ_5D2A2:
         ;                                        * 5D2C6
 
 * refs (2): 840A8 844B8
-OBJ_5D2CB:
+* meta -> M1 M2: the two arguments of a sum, or two empty metas
+Sum>Parts:
         :: M1st+case                             * 5D2CB
           :: #1-SWAP pshm1 pshzerpsharg unrot ;  * 5D2D5
           pshzer pshzer ;                        * 5D2F3
 
 * refs (2): 840B7 844C2
-OBJ_5D302:
+* meta -> M2 M1: as Sum>Parts, swapped
+Sum>PartsSw:
         :: M1st+case                             * 5D302
           :: #1-SWAP pshm1 pshzerpsharg rotswap ; * 5D30C
           pshzer pshzer ;                        * 5D32A
 
 * refs (5): 5D3ED 838EC 840F8 8429C 8454E
-OBJ_5D339:
-        :: M1st*case OBJ_5D3DE                   * 5D339
-          M1st/case OBJ_5D361                    * 5D348
-          M1stINVcase OBJ_5D384                  * 5D352
+* meta -> meta': gather a product into one chain of *: / and INV are taken as * of an inverse
+forceprod:
+        :: M1st*case forceprod*                  * 5D339
+          M1st/case forceprod/                   * 5D348
+          M1stINVcase forceprod~1                * 5D352
         ;                                        * 5D35C
 
 * refs (2): 5D34D 5D3A7
-OBJ_5D361:
-        :: SWAPDROP#1- metainv addt* COLA OBJ_5D3DE * 5D361
+* X/Y is taken as X*INV(Y)
+forceprod/:
+        :: SWAPDROP#1- metainv addt* COLA forceprod* * 5D361
         ;                                        * 5D37F
 
 * refs (1): 5D357
-OBJ_5D384:
+forceprod~1:
         :: 3PICK REQcasedrop x*                  * 5D384
-          :: ~SWAPDROP#1-;COLA;[f(X,Y)]=>[INV(X)/Y]! COLA OBJ_5D361 * 5D398
+          :: ~SWAPDROP#1-;COLA;[f(X,Y)]=>[INV(X)/Y]! COLA forceprod/ * 5D398
           ;                                      * 5D3AC
           REQcasedrop x/                         * 5D3B1
-          :: ~SWAPDROP#1-;COLA;[f(X,Y)]=>[INV(X)*Y]! COLA OBJ_5D3DE * 5D3BB
+          :: ~SWAPDROP#1-;COLA;[f(X,Y)]=>[INV(X)*Y]! COLA forceprod* * 5D3BB
           ;                                      * 5D3CF
           DROP ;                                 * 5D3D4
 
 * refs (3): 5D343 5D37A 5D3CA
-OBJ_5D3DE:
-        :: SWAPDROP#1- larg OBJ_5D339 OVER' x* EQIT * 5D3DE
+* gather the left argument into one chain of *
+forceprod*:
+        :: SWAPDROP#1- larg forceprod OVER' x* EQIT * 5D3DE
           :: plDRPpZparg meta* pshtop& ; top& addt* ; * 5D401
 
 * refs (5): 5D4D8 83987 84107 8440E 84544
-OBJ_5D429:
-        :: M1st*case OBJ_5D4CE                   * 5D429
-          M1st/case OBJ_5D4AB                    * 5D438
-          M1stINVcase OBJ_5D451                  * 5D442
+* meta -> meta': as forceprod, gathering from the right argument
+forceprodR:
+        :: M1st*case forceprodR*                 * 5D429
+          M1st/case forceprodR/                  * 5D438
+          M1stINVcase forceprodR~1               * 5D442
         ;                                        * 5D44C
 
 * refs (1): 5D447
-OBJ_5D451:
+forceprodR~1:
         :: 3PICK REQcasedrop x*                  * 5D451
-          :: ~SWAPDROP#1-;COLA;[f(X,Y)]=>[INV(X)/Y]! COLA OBJ_5D4AB * 5D465
+          :: ~SWAPDROP#1-;COLA;[f(X,Y)]=>[INV(X)/Y]! COLA forceprodR/ * 5D465
           ;                                      * 5D479
           REQcasedrop x/                         * 5D47E
-          :: ~SWAPDROP#1-;COLA;[f(X,Y)]=>[INV(X)*Y]! COLA OBJ_5D4CE * 5D488
+          :: ~SWAPDROP#1-;COLA;[f(X,Y)]=>[INV(X)*Y]! COLA forceprodR* * 5D488
           ;                                      * 5D49C
           DROP ;                                 * 5D4A1
 
 * refs (2): 5D43D 5D474
-OBJ_5D4AB:
-        :: SWAPDROP#1- metainv addt* COLA OBJ_5D4CE * 5D4AB
+* X/Y is taken as X*INV(Y)
+forceprodR/:
+        :: SWAPDROP#1- metainv addt* COLA forceprodR* * 5D4AB
         ;                                        * 5D4C9
 
 * refs (3): 5D433 5D497 5D4C4
-OBJ_5D4CE:
-        :: plDRPpZparg OBJ_5D429 OVER' x* EQIT   * 5D4CE
+* gather the right argument into one chain of *
+forceprodR*:
+        :: plDRPpZparg forceprodR OVER' x* EQIT  * 5D4CE
           :: SWAPDROP#1- pshtop& meta* pshzer ; pshtop& addt* ; * 5D4EC
 
 * refs (1): 5D809
@@ -145,29 +158,32 @@ OBJ_5D519:
         ;                                        * 5D53D
 
 * refs (2): 840FD 84553
-OBJ_5D542:
+* meta -> M1 M2: the two arguments of a product, or two empty metas
+Prod>Parts:
         :: M1st*case                             * 5D542
           :: #1-SWAP pshm1 pshzerpsharg unrot ;  * 5D54C
           pshzer pshzer ;                        * 5D56A
 
 * refs (2): 8410C 8455D
-OBJ_5D579:
+* meta -> M2 M1: as Prod>Parts, swapped
+Prod>PartsSw:
         :: M1st*case                             * 5D579
           :: #1-SWAP pshm1 pshzerpsharg rotswap ; * 5D583
           pshzer pshzer ;                        * 5D5A1
 
 * refs (3): 5D6EA 5D75D 5D877
-OBJ_5D5B0:
+* meta -> ... flag: RULES: walk the meta for the place lam which of the operators op1 and op2 (lams 1 and 2) chain; = ends the search
+FindOp1/Op2:
         :: DUP#0=case FALSE                      * 5D5B0
           DUP#2+ BINT1 BEGIN splitdown OVER #2+PICK 1GETLAM EQcasedrop * 5D5BF
-          OBJ_5D62D                              * 5D5E7
-          2GETLAM EQcasedrop OBJ_5D62D           * 5D5EC
+          FindOp1/Op2~1                          * 5D5E7
+          2GETLAM EQcasedrop FindOp1/Op2~1       * 5D5EC
           REQcasedrop x=                         * 5D5FB
-          OBJ_5D62D 2DROP BINT2 #=casedrop RDROPFALSE * 5D605
+          FindOp1/Op2~1 2DROP BINT2 #=casedrop RDROPFALSE * 5D605
           BINT1 AGAIN ;                          * 5D61E
 
 * refs (3): 5D5E7 5D5F6 5D605
-OBJ_5D62D:
+FindOp1/Op2~1:
         :: 3GETLAM #=casedrop COLATRUE           * 5D62D
           DROP BINT2 #=casedrop RDROPFALSE       * 5D641
           BINT1 AGAIN ;                          * 5D655
@@ -177,7 +193,8 @@ OBJ_5D664:
         :: BINT1 'R'R                            * 5D664
 
 * refs (4): 5D730 5D86D 5D935 5DA0C
-OBJ_5D673:
+* #which op1 op2 -> : bind the lams which, op1, op2
+BindWhichOps:
           ::                                     * 5D673
             {                                    * 5D678
 
@@ -192,7 +209,7 @@ OBJ_5D673:
             BIND ;                               * 5D6B3
           3PICK 2GETLAM EQcasedrop pullpsh1&     * 5D6BD
           1GETLAM EQcasedrop pullpsh1&           * 5D6D1
-          DROP psh OBJ_5D5B0 NOTcase             * 5D6E0
+          DROP psh FindOp1/Op2 NOTcase           * 5D6E0
 
 swapB;B2[n]=>B1[1]:
           :: psh pullpsh1& ;                     * 5D6F4
@@ -200,9 +217,9 @@ swapB;B2[n]=>B1[1]:
 
 * refs (2): 84152 8417A
 OBJ_5D721:
-        :: BINT2 'R'R OBJ_5D673 pargop 2GETLAM MEQ1stcase overev& * 5D721
+        :: BINT2 'R'R BindWhichOps pargop 2GETLAM MEQ1stcase overev& * 5D721
           1GETLAM MEQ1stcase overev&             * 5D749
-          rot OBJ_5D5B0 NOTcase psh&             * 5D758
+          rot FindOp1/Op2 NOTcase psh&           * 5D758
           SWAP#1+ overev& #1-SWAP #1- tailpsh rotswap top& ; * 5D76C
 
 * refs (2): 5C6A5 5C6AF
@@ -210,7 +227,7 @@ OBJ_5D794:
         ::                                       * 5D794
 
 * refs (1): 84148
-OBJ_5D799:
+Rule<-T+~1:
           :: M1st+case ROMPTR 0F0 055            * 5D799
             OBJ_5D2A2 ;                          * 5D7AE
           rotswap OBJ_5D664 x+ x-                * 5D7B8
@@ -224,7 +241,7 @@ OBJ_5D7EF:
         ::                                       * 5D7EF
 
 * refs (1): 84170
-OBJ_5D7F4:
+Rule<-T*~1:
           :: M1st*case ROMPTR 0F0 056            * 5D7F4
             OBJ_5D519 ;                          * 5D809
           rotswap OBJ_5D664 x* x/ OBJ_5D7CC ;    * 5D813
@@ -241,7 +258,7 @@ OBJ_5D84A:
 
 * refs (2): 5D840 5D859
 OBJ_5D863:
-        :: 'R'R OBJ_5D673 rot OBJ_5D5B0 ABND NOTcase * 5D863
+        :: 'R'R BindWhichOps rot FindOp1/Op2 ABND NOTcase * 5D863
           :: unrot FALSE ;                       * 5D886
           #1- tailpsh psh over& over& psh larg TRUE ; * 5D89A
 
@@ -252,8 +269,8 @@ OBJ_5D8C7:
 
 * refs (1): 5D903
 OBJ_5D926:
-        :: BINT0 'R'R OBJ_5D673 pshzer pshzer BEGIN 1GETLAM 3PICK EQ 2GETLAM * 5D926
-          4PICK EQ OR WHILE                      * 5D95D
+        :: BINT0 'R'R BindWhichOps pshzer pshzer BEGIN 1GETLAM 3PICK EQ * 5D926
+          2GETLAM 4PICK EQ OR WHILE              * 5D958
           :: overev& pargop ; REPEAT pshtop& ABND ; * 5D971
 
 * refs (2): 84341 843FA
@@ -263,18 +280,20 @@ OBJ_5D999:
 
 * refs (1): 5D9D5
 OBJ_5D9FD:
-        :: BINT0 'R'R OBJ_5D673 pshzer pshzer BEGIN 1GETLAM 3PICK EQ 2GETLAM * 5D9FD
-          4PICK EQ OR WHILE                      * 5DA34
+        :: BINT0 'R'R BindWhichOps pshzer pshzer BEGIN 1GETLAM 3PICK EQ * 5D9FD
+          2GETLAM 4PICK EQ OR WHILE              * 5DA2F
           :: overev& #1-SWAP pshm1 ; REPEAT pshtop& ABND ; * 5DA48
 
 * refs (2): 841FC 8422E
-OBJ_5DA75:
+* RULES: the two ends of a chain: negate unless op is +
+Rule(<-+~1:
         :: 1GETLAM ' x+ EQ ?SKIP [X]=>[NEG(X)]!  * 5DA75
           pshtop& pargop meta+ overev& psh 1GETABND ' x+ EQ ?SKIP addtNEG * 5DA98
         ;                                        * 5DACF
 
 * refs (2): 842B5 842E7
-OBJ_5DAD4:
+* RULES: the two ends of a chain: invert unless op is *
+Rule(<-*~1:
         :: 1GETLAM ' x* EQ ?SKIP [X]=>[INV(X)]!  * 5DAD4
           pshtop& pargop meta* overev& psh 1GETABND ' x* EQ ?SKIP addtINV * 5DAF7
         ;                                        * 5DB2E
@@ -284,7 +303,7 @@ OBJ_5DB33:
         :: pargop psh 4roll top& unrot ;         * 5DB33
 
 * refs (2): 8436E 843B4
-OBJ_5DB56:
+Rule->)+~1:
         :: 1GETABND ' x+ EQ ?SKIP [X]=>[NEG(X)]! * 5DB56
           rot dup rotswap BEGIN DUP#0<>WHILE     * 5DB79
           :: OVER ' x- EQ IT                     * 5DB92
@@ -293,7 +312,7 @@ OBJ_5DB56:
           REPEAT DROP meta+ psh over& over& rot top& psh larg ; * 5DBD3
 
 * refs (2): 84427 8446D
-OBJ_5DC0A:
+Rule->)*~1:
         :: 1GETABND ' x* EQ ?SKIP [X]=>[INV(X)]! * 5DC0A
           rot dup rotswap BEGIN DUP#0<>WHILE     * 5DC2D
           :: OVER ' x/ EQ IT                     * 5DC46
@@ -497,7 +516,7 @@ OBJ_5DEF7.L10:
         C=R0                                     * 5E048
         ?C#A    A                                * 5E04B
         GOYES   OBJ_5DEF7.L11                    * 5E04E
-        LC(5)   OBJ_22F3B                        * 5E050
+        LC(5)   THENskip                         * 5E050
         GONC    OBJ_5DEF7.L12                    * 5E057
 OBJ_5DEF7.L11:
         LC(5)   COLA                             * 5E05A
@@ -1081,8 +1100,9 @@ infarg?.L1:
         RPL
 
 * refs (3): 573D3 5F451 5F6D4
-OBJ_5E9E1:
-        :: OBJ_26BED NOTcase SETROMPERR          * 5E9E1
+* romptr -> flag: TRUE if the function takes any number of arguments (its count is -1); bad ROMPTR error if it isn't a function
+ROMPinfarg?:
+        :: FnInfo NOTcase SETROMPERR             * 5E9E1
           ROTROT2DROP MINUSONE #= ;              * 5E9F5
 
 * ->
@@ -1098,7 +1118,8 @@ CKINFARGS~1:
         :: dup P{}N OVER #2+ UNROLL NDROP CK1NOLASTWD INNERCOMP ; * 5EA40
 
 * refs (5): 54CE0 54D17 54D3A 54D5D 54D80
-OBJ_5EA72:
+* -> : by flags -2 and -3, run a constant's symbolic or numeric form from the runstream
+?ConstNum:
         :: NOTCONST? NOTcase COLA                * 5EA72
           NOTNUM?                                * 5EA86
           case SKIP                              * 5EA8B
@@ -1781,7 +1802,7 @@ IMPLODE:
 IMPLODE~1:
         :: BEGIN pullrev IMPLODE~5 IMPLODE~6 nonopcase ~psh1&rev;#0=UNTIL * 5F31B
           DUP M1stFNCcase IMPLODE~2              * 5F33E
-          OBJ_26F7A case IMPLODE~4               * 5F34D
+          CmdFieldB case IMPLODE~4               * 5F34D
           DROP psh1&rev #0=UNTIL ;               * 5F35C
 
 * refs (1): 5F339
@@ -1808,8 +1829,8 @@ IMPLODE~2:
 OBJ_5F3FC:
           :: DROP PTR addt: xFCNAPPLY psh #0=UNTIL ; * 5F3FC
           DUPROMPTR@ ?SKIP SETROMPERR            * 5F41F
-          DROP OBJ_26F7A NOTcase OBJ_5F3FC       * 5F42E
-          CARCOMP 4PICK CARCOMP OBJ_5E9E1 NOTcase IMPLODE~3 * 5F442
+          DROP CmdFieldB NOTcase OBJ_5F3FC       * 5F42E
+          CARCOMP 4PICK CARCOMP ROMPinfarg? NOTcase IMPLODE~3 * 5F442
           4ROLLSWAP 4UNROLL psh1&rev #1-ROT EVAL #1+DUP #2+PICK 3UNROLL * 5F460
           PTR addt: xFCNAPPLY psh SWAPDROP#1- #0=UNTIL ; * 5F488
 
@@ -1846,13 +1867,13 @@ IMPLODE~5.L2:
 
 * refs (1): 5F32F
 IMPLODE~6:
-        :: psh1&rev psh OVER ' ~CK2&Dispatch EQITE OBJ_2818D OBJ_281F6 psh * 5F571
-          #0=UNTIL ;                             * 5F5A3
+        :: psh1&rev psh OVER ' ~CK2&Dispatch EQITE AlgFoldCmp AlgFoldPolar * 5F571
+          psh #0=UNTIL ;                         * 5F59E
 
 * refs (5): 590E3 59F7D 60A27 60E19 6B15B
 OBJ_5F5AD:
         :: BINT1 splitdown OVER #2+PICK REQcasedrop xFCNAPPLY * 5F5AD
-          OBJ_5F63E DUP OBJ_26F7A NOTcase        * 5F5D0
+          OBJ_5F63E DUP CmdFieldB NOTcase        * 5F5D0
 
 * ob1..ob4 -> F
 4DROPFALSE:
@@ -1873,23 +1894,24 @@ OBJ_5F63E:
 4dropn;false:
           :: 4DROP FALSE ;                       * 5F67F
           ?OKINALG NOTcase SETROMPERR            * 5F693
-          DUP OBJ_26F7A NOTcase                  * 5F6A2
+          DUP CmdFieldB NOTcase                  * 5F6A2
 
 * ob1..ob5 -> F
 * refs (1): 2FDF8
 5DROPFALSE:
           :: 5DROP FALSE ;                       * 5F6B1
-          BINT2 NTHCOMPDROP SWAP OBJ_5E9E1 ?SKIP SWAPDROP * 5F6C5
+          BINT2 NTHCOMPDROP SWAP ROMPinfarg? ?SKIP SWAPDROP * 5F6C5
           EVAL SWAPDROP ;                        * 5F6E3
         ASSEMBLE
 
 * refs (23): 54E84 57B51 5BE5B 5BE86 5BED3 5BF58 ...
-* Rewrite rules with the default operator table: the inline pattern/action pairs after the call are matched against the meta (see SUB_5F6F9)
+* Rewrite rules with the default operator table: the inline pattern/action pairs after the call are matched against the meta (see RuleMatchR4)
 RuleMatch:
-        LC(5)   SUB_5F6F9.L9                     * 5F6F2
+        LC(5)   RuleMatchR4.L9                   * 5F6F2
 
 * refs (5): 5C699 5C6E5 5C749 5C851 5C929
-SUB_5F6F9:
+* Rewrite rules with the operator table in R4.A: as RuleMatch; the inline pattern/action pairs follow the call. Patterns are words of operator indexes, ending at a nibble F
+RuleMatchR4:
         R4=C.F  A                                * 5F6F9
         GOSBVL  SAVPTR                           * 5F6FF
         C=RSTK                                   * 5F706
@@ -1897,21 +1919,21 @@ SUB_5F6F9:
         D1=D1+  5                                * 5F70B
         CD1EX                                    * 5F70E
         R2=C.F  A                                * 5F711
-SUB_5F6F9.loop1:
+RuleMatchR4.loop1:
         C=R2.F  A                                * 5F717
         D1=C                                     * 5F71D
         C=DAT0  A                                * 5F720
         D0=D0+  5                                * 5F723
         C=C+1   P                                * 5F726
-        GOC     SUB_5F6F9.L5                     * 5F729
+        GOC     RuleMatchR4.L5                   * 5F729
         C=C-1   P                                * 5F72C
-SUB_5F6F9.loop2:
+RuleMatchR4.loop2:
         ?C#0    A                                * 5F72F
-        GOYES   SUB_5F6F9.L3                     * 5F732
-        GOTO    SUB_5F6F9.L8                     * 5F734
-SUB_5F6F9.L3:
+        GOYES   RuleMatchR4.L3                   * 5F732
+        GOTO    RuleMatchR4.L8                   * 5F734
+RuleMatchR4.L3:
         C=C-1   P                                * 5F738
-        GOC     SUB_5F6F9.L6                     * 5F73B
+        GOC     RuleMatchR4.L6                   * 5F73B
         CPEX    0                                * 5F73E
         CSR     A                                * 5F742
         D=C     A                                * 5F744
@@ -1928,37 +1950,37 @@ SUB_5F6F9.L3:
         CD0EX                                    * 5F762
         C=DAT1  A                                * 5F765
         ?C=A    A                                * 5F768
-        GOYES   SUB_5F6F9.L4                     * 5F76B
+        GOYES   RuleMatchR4.L4                   * 5F76B
         A=DAT0  A                                * 5F76D
         D0=D0+  5                                * 5F770
         LC(5)   DOROMP                           * 5F773
         ?C#A    A                                * 5F77A
-        GOYES   SUB_5F6F9.loop1                  * 5F77D
+        GOYES   RuleMatchR4.loop1                * 5F77D
         D0=D0+  6                                * 5F77F
-        GONC    SUB_5F6F9.loop1                  * 5F782
-SUB_5F6F9.L4:
+        GONC    RuleMatchR4.loop1                * 5F782
+RuleMatchR4.L4:
         D1=D1+  5                                * 5F785
         C=D     A                                * 5F788
-        GOTO    SUB_5F6F9.loop2                  * 5F78A
-SUB_5F6F9.L5:
+        GOTO    RuleMatchR4.loop2                * 5F78A
+RuleMatchR4.L5:
         GOSBVL  GETPTR                           * 5F78E
         A=DAT0  A                                * 5F795
         D0=D0+  5                                * 5F798
         PC=(A)                                   * 5F79B
-SUB_5F6F9.L6:
+RuleMatchR4.L6:
         A=0     A                                * 5F79F
-SUB_5F6F9.loop7:
+RuleMatchR4.loop7:
         A=A+1   A                                * 5F7A1
         CSR     A                                * 5F7A3
         ?C=0    P                                * 5F7A5
-        GOYES   SUB_5F6F9.loop7                  * 5F7A8
+        GOYES   RuleMatchR4.loop7                * 5F7A8
         RSTK=C                                   * 5F7AA
         R1=A.F  A                                * 5F7AC
         R0=A.F  A                                * 5F7B2
-        GOSUB   SUB_5F6F9.loop10                 * 5F7B8
+        GOSUB   RuleMatchR4.loop10               * 5F7B8
         C=RSTK                                   * 5F7BC
-        GOTO    SUB_5F6F9.loop2                  * 5F7BE
-SUB_5F6F9.L8:
+        GOTO    RuleMatchR4.loop2                * 5F7BE
+RuleMatchR4.L8:
         CD0EX                                    * 5F7C2
         RSTK=C                                   * 5F7C5
         GOSBVL  GETPTR                           * 5F7C7
@@ -1968,7 +1990,7 @@ SUB_5F6F9.L8:
         A=C     A                                * 5F7DA
         PC=(A)                                   * 5F7DC
 
-SUB_5F6F9.L9:
+RuleMatchR4.L9:
         CON(5)  x+                               * 5F7E0  address (the code jumps or points through it)
 
         CON(5)  x-                               * 5F7E5  address (the code jumps or points through it)
@@ -1994,47 +2016,47 @@ SUB_5F6F9.L9:
         CON(5)  xPI                              * 5F817  address (the code jumps or points through it)
 
         CON(5)  %2                               * 5F81C  address (the code jumps or points through it)
-SUB_5F6F9.loop10:
+RuleMatchR4.loop10:
         ST=1    4                                * 5F821
-SUB_5F6F9.L11:
+RuleMatchR4.L11:
         ST=0    5                                * 5F824
         A=DAT1  A                                * 5F827
         LC(5)   xFCNAPPLY                        * 5F82A
         ?C=A    A                                * 5F831
-        GOYES   SUB_5F6F9.L16                    * 5F834
+        GOYES   RuleMatchR4.L16                  * 5F834
         AD1EX                                    * 5F836
         B=A     A                                * 5F839
         A=DAT1  A                                * 5F83B
         LC(5)   DOCOL                            * 5F83E
         ?C#A    A                                * 5F845
-        GOYES   SUB_5F6F9.L13                    * 5F848
+        GOYES   RuleMatchR4.L13                  * 5F848
         D1=D1+  5                                * 5F84A
         A=DAT1  A                                * 5F84D
         LC(5)   CKINFARGS                        * 5F850
         ?C=A    A                                * 5F857
-        GOYES   SUB_5F6F9.L15                    * 5F85A
+        GOYES   RuleMatchR4.L15                  * 5F85A
         D1=(5)  SUB_5F8F0.L1                     * 5F85C
         P=P-1                                    * 5F863
-SUB_5F6F9.loop12:
+RuleMatchR4.loop12:
         P=P+1                                    * 5F865
         C=DAT1  A                                * 5F867
         D1=D1+  5                                * 5F86A
         ?C#A    A                                * 5F86D
-        GOYES   SUB_5F6F9.loop12                 * 5F870
-        GONC    SUB_5F6F9.L14                    * 5F872
-SUB_5F6F9.L13:
+        GOYES   RuleMatchR4.loop12               * 5F870
+        GONC    RuleMatchR4.L14                  * 5F872
+RuleMatchR4.L13:
         P=      0                                * 5F875
-SUB_5F6F9.L14:
+RuleMatchR4.L14:
         C=0     A                                * 5F877
         CPEX    0                                * 5F879
         A=B     A                                * 5F87D
         D1=A                                     * 5F87F
-        GOTO    SUB_5F6F9.L17                    * 5F882
-SUB_5F6F9.L15:
+        GOTO    RuleMatchR4.L17                  * 5F882
+RuleMatchR4.L15:
         ST=1    5                                * 5F886
         A=B     A                                * 5F889
         D1=A                                     * 5F88B
-SUB_5F6F9.L16:
+RuleMatchR4.L16:
         D1=D1+  5                                * 5F88E
         A=DAT1  A                                * 5F891
         AD1EX                                    * 5F894
@@ -2044,11 +2066,11 @@ SUB_5F6F9.L16:
         D1=D1-  5                                * 5F8A0
         C=C+1   A                                * 5F8A3
         ?ST=1   5                                * 5F8A5
-        GOYES   SUB_5F6F9.L17                    * 5F8A8
+        GOYES   RuleMatchR4.L17                  * 5F8A8
         C=C+1   A                                * 5F8AA
-SUB_5F6F9.L17:
+RuleMatchR4.L17:
         ?ST=0   4                                * 5F8AC
-        GOYES   SUB_5F6F9.L18                    * 5F8AF
+        GOYES   RuleMatchR4.L18                  * 5F8AF
         D1=D1+  5                                * 5F8B1
         A=R0.F  A                                * 5F8B4
         A=A+1   A                                * 5F8BA
@@ -2059,8 +2081,8 @@ SUB_5F6F9.L17:
         R1=A.F  A                                * 5F8CC
         ?A=0    A                                * 5F8D2
         RTNYES                                   * 5F8D5
-        GOTO    SUB_5F6F9.loop10                 * 5F8D7
-SUB_5F6F9.L18:
+        GOTO    RuleMatchR4.loop10               * 5F8D7
+RuleMatchR4.L18:
         A=R1.F  A                                * 5F8DB
         ?C>=A   A                                * 5F8E1
         RTNYES                                   * 5F8E4
@@ -2075,7 +2097,7 @@ SUB_5F8F0:
         A=A-1   A                                * 5F8F9
         R0=A.F  A                                * 5F8FB
         D1=D1-  5                                * 5F901
-        GOTO    SUB_5F6F9.L11                    * 5F904
+        GOTO    RuleMatchR4.L11                  * 5F904
 
 SUB_5F8F0.L1:
         CON(5)  CK0                              * 5F908  address (the code jumps or points through it)
@@ -2095,7 +2117,7 @@ SUB_5F8F0.L1:
 splitup:
         CON(5)  (*)+5                            * 5F926  primitive code object
         GOSUB   SUB_5F93A                        * 5F92B
-        GOSUB   SUB_5F6F9.loop10                 * 5F92F
+        GOSUB   RuleMatchR4.loop10               * 5F92F
         GOVLNG  PUSH#LOOP                        * 5F933
 
 * refs (2): 5F92B 5F973
@@ -2138,7 +2160,7 @@ tailpsh:
 * refs (3): 35144 68DB9 6DEA0
 ->StrExpr(_):
         :: CK&DISPATCH1                          * 5F9B9
-          BINT1 OBJ_35264                        * 5F9C3  real
+          BINT1 a%>$Alg                          * 5F9C3  real
           BINT2 ->StdStr(c)                      * 5F9CD  complex
           BINT6 ID>$                             * 5F9D7  name
           BINT7 ID>$                             * 5F9E1  local
@@ -2174,7 +2196,7 @@ revpulldrop:
 
 * refs (2): 5FACC 8D25A
 OBJ_5FAE0:
-        :: DUP OBJ_26F7A IT                      * 5FAE0
+        :: DUP CmdFieldB IT                      * 5FAE0
           :: BINT3 NTHELCOMP case                * 5FAF4
 
 eval;tq:
@@ -2208,7 +2230,7 @@ ROT#1+UNROT:
         LC(5)   #0002B                           * 5FB8F
         ?C<A    A                                * 5FB96
         GOYES   ROT#1+UNROT.L2                   * 5FB99
-        GOSUB   SUB_5FBDC                        * 5FB9B
+        GOSUB   Mul5A                            * 5FB9B
         A=A+A   A                                * 5FB9F
         LC(5)   BINT0                            * 5FBA1
         A=A+C   A                                * 5FBA8
@@ -2229,7 +2251,8 @@ ROT#1+UNROT.L2:
         GONC    ROT#1+UNROT.loop1                * 5FBD9
 
 * refs (2): 5FB9B 5FBFC
-SUB_5FBDC:
+* A.A = 5*A.A (5 nibbles a stack level). C.A holds the old A
+Mul5A:
         C=A     A                                * 5FBDC
         A=A+A   A                                * 5FBDE
         A=A+A   A                                * 5FBE0
@@ -2246,7 +2269,7 @@ pick1#0=case:
         A=DAT1  A                                * 5FBF4
         D1=C                                     * 5FBF7
         A=A+1   A                                * 5FBFA
-        GOSUB   SUB_5FBDC                        * 5FBFC
+        GOSUB   Mul5A                            * 5FBFC
         CD1EX                                    * 5FC00
         A=A+C   A                                * 5FC03
         D1=A                                     * 5FC05
@@ -2277,8 +2300,8 @@ B2(n)<='B1(1)':
         :: #1-SWAP symcomp psh1& ;               * 5FC4C
 
 * refs (1): 83F00
-OBJ_5FC65:
-        :: pargop ROMPTR 0F0 04B psh #1-SWAP pshm1 ROMPTR 0F0 04B pshtop& * 5FC65
+Rule<-M~1:
+        :: pargop XLIB RuleMTerm psh #1-SWAP pshm1 XLIB RuleMTerm pshtop& * 5FC65
           top& ;                                 * 5FC99
         ASSEMBLE
 
@@ -2384,7 +2407,8 @@ SUB_5FCFC.L8:
         RPL
 
 * refs (2): 60437 606A3
-OBJ_5FDB7:
+* Probably: pattern matcher: match one pattern against the meta. Lams ct (items left), pp (place in the pattern), ep (place in the expression)
+MatPattern:
         ::                                       * 5FDB7
 
 {'ct,'pp,'ep}:
@@ -2401,38 +2425,42 @@ OBJ_5FDB7:
 * refs (13): 5FE0B 5FE3D 5FE83 5FEC4 5FF41 5FF50 ...
 Π'ep:
             LAM 'ep }                            * 5FDDB
-          BIND BEGIN Π'pp PICK OBJ_5FF5F OBJ_5FE56 Π'ep #1+PICK EQUALNOTcase * 5FDED
-          OBJ_6007B                              * 5FE1A
-          OBJ_5FF23 OBJ_5FEFB UNTIL              * 5FE1F
+          BIND BEGIN Π'pp PICK ~PatVar?;COLAcase MatPattern~1 * 5FDED
+          Π'ep #1+PICK EQUALNOTcase MatPatFail   * 5FE0B
+          MatStep MatCt-1 UNTIL                  * 5FE1F
 
 * refs (2): 5FEF1 60290
-OBJ_5FE2E:
+* ... -> #ct #pp #ep TRUE: the pattern matched: leave the counters, unbind
+MatPatOK:
           :: Π'ct Π'pp Π'ep ABND TRUE ; ;        * 5FE2E
 
 * refs (1): 5FE06
-OBJ_5FE56:
+MatPattern~1:
         :: undo DROP REQcasedrop NULL{}          * 5FE56
-          OBJ_600FD REQcasedrop {}_600F3         * 5FE6F
-          OBJ_60139 Π'ep OBJ_6019D NOTcase       * 5FE7E
-          :: 2DROP COLA OBJ_6007B                * 5FE92
+          MatPattern~2 REQcasedrop {}_600F3      * 5FE6F
+          MatPattern~3 Π'ep MatPattern~6 NOTcase * 5FE7E
+          :: 2DROP COLA MatPatFail               * 5FE92
           ;                                      * 5FEA6
-          SWAP BINT2 NTHCOMPDROP #+ ' Π'ep STO Π'pp #1+ ' Π'pp STO OBJ_5FEFB * 5FEAB
-          UNTIL OBJ_5FE2E ;                      * 5FEEC
+          SWAP BINT2 NTHCOMPDROP #+ ' Π'ep STO Π'pp #1+ ' Π'pp STO MatCt-1 * 5FEAB
+          UNTIL MatPatOK ;                       * 5FEEC
 
 * refs (3): 5FE24 5FEE7 60286
-OBJ_5FEFB:
+* -> flag: one item fewer; TRUE if none is left (lam ct)
+MatCt-1:
         :: Π'ct #1-DUP ' Π'ct STO #0= ;          * 5FEFB
 
 * refs (1): 5FE1F
-OBJ_5FF23:
+* -> : step the pattern and the expression (lams pp and ep) past one item
+MatStep:
         :: Π'pp #1+ ' Π'pp STO Π'ep #1+ ' Π'ep STO ; * 5FF23
 
 * refs (1): 5FE01
-OBJ_5FF5F:
-        :: OBJ_5FF73 COLAcase ;                  * 5FF5F
+~PatVar?;COLAcase:
+        :: PatVar? COLAcase ;                    * 5FF5F
 
 * refs (5): 5FF64 600C1 60996 609C8 60BAD
-OBJ_5FF73:
+* ob -> ob flag: TRUE for a name (id or lam) that starts with &, a pattern variable
+PatVar?:
         CON(5)  (*)+5                            * 5FF73  primitive code object
         ASSEMBLE
         C=DAT1  A                                * 5FF78
@@ -2441,31 +2469,31 @@ OBJ_5FF73:
         A=DAT1  A                                * 5FF80
         LC(5)   DOIDNT                           * 5FF83
         ?C=A    A                                * 5FF8A
-        GOYES   OBJ_5FF73.L3                     * 5FF8D
+        GOYES   PatVar?.L3                       * 5FF8D
         LC(5)   DOLAM                            * 5FF8F
         ?C=A    A                                * 5FF96
-        GOYES   OBJ_5FF73.L3                     * 5FF99
-OBJ_5FF73.loop1:
+        GOYES   PatVar?.L3                       * 5FF99
+PatVar?.loop1:
         LA(5)   FALSE                            * 5FF9B
-OBJ_5FF73.loop2:
+PatVar?.loop2:
         C=RSTK                                   * 5FFA5
         D1=C                                     * 5FFA7
         PC=(A)                                   * 5FFAA
-OBJ_5FF73.L3:
+PatVar?.L3:
         D1=D1+  5                                * 5FFAE
         A=DAT1  B                                * 5FFB1
         A=A-1   B                                * 5FFB4
-        GOC     OBJ_5FF73.loop1                  * 5FFB7
+        GOC     PatVar?.loop1                    * 5FFB7
         D1=D1+  2                                * 5FFBA
         A=DAT1  B                                * 5FFBD
         LC(2)   #26                              * 5FFC0
         ?C#A    B                                * 5FFC4
-        GOYES   OBJ_5FF73.loop1                  * 5FFC7
+        GOYES   PatVar?.loop1                    * 5FFC7
         LA(5)   TRUE                             * 5FFC9
-        GONC    OBJ_5FF73.loop2                  * 5FFD3
+        GONC    PatVar?.loop2                    * 5FFD3
         RPL
 
 * refs (1): 60107
-OBJ_5FFD6:
-        :: BINT1 SWAP#1+ BEGIN DUP#1+PICK OBJ_6001C SWAPDROP ROT#+ #1- * 5FFD6
+MatPattern~4:
+        :: BINT1 SWAP#1+ BEGIN DUP#1+PICK MatPattern~5 SWAPDROP ROT#+ #1- * 5FFD6
           SWAP#1+ OVER#0= UNTIL SWAPDROP#1- ;    * 60003

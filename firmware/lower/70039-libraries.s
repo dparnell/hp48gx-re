@@ -1,6 +1,6 @@
-* HP 48GX ROM revision R, #70039-#73087: Library table, access pointers, bank switching
+* HP 48GX ROM revision R, #70039-#73087: Odds and ends moved here for space: boot code (#7018C), ROM library table (#702C4), library message pointers, the bank-switch stubs and the access handlers for covered ROM, access pointers and backups in ports, ROMPTR handling
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: ?ROMPTR@ CallC ?ACCPTR> RPTRACC rNTHELCOMP {{}}_7303D RomLibTable Code_72EDD Code_72A11 BANKMTHDS
+* Most referenced: ?ROMPTR@ BankAccess CallC AccessC0000 ACPTR>Ob ?ACCPTR> RPTRACC Acptr>A NullAcptr PurgeDir MakeAcptr GetVersionId
 * Follows on from the previous file (at #70039 in the original ROM).
 
 * refs (1): 855DD
@@ -29,13 +29,13 @@ XEQIOBACKUP~4.L1:
 SUB_7008B:
         D=C     A                                * 7008B
         SETHEX                                   * 7008D
-        GOSBVL  SUB_09D49                        * 7008F
+        GOSBVL  BankNone                         * 7008F
         C=D     A                                * 70096
         RSTK=C                                   * 70098
         P=      0                                * 7009A
         LC(5)   CMOS                             * 7009C
         UNCNFG                                   * 700A3
-        GOSBVL  SUB_022D9                        * 700A6
+        GOSBVL  ConfigBootRAM                    * 700A6
         GOSUB   SUB_700F7                        * 700AD
         C=RSTK                                   * 700B1
         A=C     A                                * 700B3
@@ -46,7 +46,7 @@ SUB_7008B.L1:
         P=      0                                * 700C2
         LC(5)   #C0000                           * 700C4
         UNCNFG                                   * 700CB
-        GOSBVL  SUB_0224F                        * 700CE
+        GOSBVL  ConfigRAM                        * 700CE
         D0=(5)  #80535                           * 700D5
         C=DAT0  S                                * 700DC
         C=0     A                                * 700E0
@@ -56,21 +56,22 @@ SUB_7008B.L1:
         GOC     SUB_7008B.L2                     * 700EA
         C=C+1   B                                * 700ED
 SUB_7008B.L2:
-        GOSBVL  SUB_09CE1.L1                     * 700F0
+        GOSBVL  BankSelect.L1                    * 700F0
 
 * refs (1): 700AD
 SUB_700F7:
         GOVLNG  D0->Sft1.L1                      * 700F7
-SUB_700F7.L1:
+CallTestROM~1:
         D=C     A                                * 700FE
         SETHEX                                   * 70100
-        GOSBVL  SUB_09D49                        * 70102
+        GOSBVL  BankNone                         * 70102
         C=D     A                                * 70109
         RSTK=C                                   * 7010B
         LC(5)   CMOS                             * 7010D
-        GOVLNG  SUB_026CA.L1                     * 70114
+        GOVLNG  CallTestROM.L1                   * 70114
 
 * refs (2): 00418 00462
+* Probably: keyboard scan helper moved out of the low page: tests the keyboard-interrupt bits at #11 (A.XS, bits 9 and 11 masked)
 SUB_7011B:
         D0=(2)  #11                              * 7011B
         A=DAT0  XS                               * 7011F
@@ -91,7 +92,7 @@ SUB_70134:
         A=A!C   B                                * 7014C
         C=C+C   S                                * 70150
         RTNNC                                    * 70153
-        GOVLNG  SUB_3114C                        * 70156
+        GOVLNG  ByteParity                       * 70156
 
 * refs (2): 005CA 30F2D
 SUB_7015D:
@@ -117,11 +118,11 @@ SUB_7017C.L1:
         MP=0                                     * 7018C
         P=      0                                * 7018F
         SETHEX                                   * 70191
-        GOSBVL  SUB_02241                        * 70193
+        GOSBVL  ConfigIO                         * 70193
         D0=(5)  LINECOUNT                        * 7019A
         C=0     B                                * 701A1
         DAT0=C  B                                * 701A4
-        GOSBVL  SUB_0224F                        * 701A7
+        GOSBVL  ConfigRAM                        * 701A7
         D0=(5)  LINECOUNTg                       * 701AE
         LC(2)   #3F                              * 701B5
         DAT0=C  B                                * 701B9
@@ -162,7 +163,7 @@ SUB_7017C.L2:
 SUB_70242:
         GOSBVL  AllowIntr                        * 70242
         GOVLNG  SUB_7DFB6.L1                     * 70249
-SUB_70242.L1:
+BatSleep~1:
         D0=(5)  #7F000                           * 70250
         C=DAT0  B                                * 70257
         D0=(5)  LINECOUNT                        * 7025A
@@ -172,7 +173,7 @@ SUB_70242.L1:
         D0=(5)  IOC                              * 7026C
         C=0     A                                * 70273
         DAT0=C  1                                * 70275
-        GOVLNG  SUB_002FF.L1                     * 70279
+        GOVLNG  BatSleep.L1                      * 70279
         RPL
 
 * refs (1): 0AAC1
@@ -180,7 +181,8 @@ PORTSTATUS~2:
         # 40000                                  * 70280  262144
 
 * refs (4): 08072 0AACB 0AB27 0BBAC
-OBJ_7028A:
+* -> acptr: a new access pointer object (DOEXT1) with both words zero
+NullAcptr:
         CON(5)  (*)+5                            * 7028A  primitive code object
         ASSEMBLE
         GOSBVL  SAVPTR                           * 7028F
@@ -189,7 +191,8 @@ OBJ_7028A:
         GOTO    BANKMTHDS.L1                     * 7029E
 
 * refs (5): 09E5C 7134C 7136E 716B8 7188F
-SUB_702A2:
+* acptr -> : A.A = its first word, R0 = its second, level 1 dropped
+Acptr>A:
         C=DAT1  A                                * 702A2
         CD1EX                                    * 702A5
         D1=D1+  10                               * 702A8
@@ -260,103 +263,103 @@ RomLibTable:
         CON(5)  0                                * 703A9  directly visible
         CON(3)  #0F0                             * 703AE  library
         CON(5)  LIB0F0                           * 703B1  header
-        CON(5)  SUB_7266B.L3                     * 703B6  access handler
+        CON(5)  AccessIntOff3.L3                 * 703B6  access handler
         CON(3)  #0C0                             * 703BB  library
         CON(5)  LIB0C0                           * 703BE  header
-        CON(5)  SUB_7266B.L3                     * 703C3  access handler
+        CON(5)  AccessIntOff3.L3                 * 703C3  access handler
         CON(3)  #0F1                             * 703C8  library
         CON(5)  LIB0F1                           * 703CB  header
-        CON(5)  SUB_7266B.L3                     * 703D0  access handler
+        CON(5)  AccessIntOff3.L3                 * 703D0  access handler
         CON(3)  #0EA                             * 703D5  library
         CON(5)  LIB0EA                           * 703D8  header
-        CON(5)  SUB_7266B.L3                     * 703DD  access handler
+        CON(5)  AccessIntOff3.L3                 * 703DD  access handler
         CON(3)  #0C2                             * 703E2  library
         CON(5)  LIB0C2                           * 703E5  header
-        CON(5)  SUB_72350.L3                     * 703EA  access handler
+        CON(5)  AccessIntOff2.L3                 * 703EA  access handler
         CON(3)  #0E6                             * 703EF  library
         CON(5)  LIB0E6                           * 703F2  header
-        CON(5)  SUB_72350.L3                     * 703F7  access handler
+        CON(5)  AccessIntOff2.L3                 * 703F7  access handler
         CON(3)  #0E3                             * 703FC  library
         CON(5)  LIB0E3                           * 703FF  header
-        CON(5)  SUB_72350.L3                     * 70404  access handler
+        CON(5)  AccessIntOff2.L3                 * 70404  access handler
         CON(3)  #0E4                             * 70409  library
         CON(5)  LIB0E4                           * 7040C  header
-        CON(5)  SUB_72350.L3                     * 70411  access handler
+        CON(5)  AccessIntOff2.L3                 * 70411  access handler
         CON(3)  #0E1                             * 70416  library
         CON(5)  LIB0E1                           * 70419  header
-        CON(5)  SUB_72350.L3                     * 7041E  access handler
+        CON(5)  AccessIntOff2.L3                 * 7041E  access handler
         CON(3)  #0B4                             * 70423  library
         CON(5)  LIB0B4                           * 70426  header
-        CON(5)  SUB_72350.L3                     * 7042B  access handler
+        CON(5)  AccessIntOff2.L3                 * 7042B  access handler
         CON(3)  #0B5                             * 70430  library
         CON(5)  LIB0B5                           * 70433  header
-        CON(5)  SUB_72350.L3                     * 70438  access handler
+        CON(5)  AccessIntOff2.L3                 * 70438  access handler
         CON(3)  #0B3                             * 7043D  library
         CON(5)  LIB0B3                           * 70440  header
-        CON(5)  SUB_72350.L3                     * 70445  access handler
+        CON(5)  AccessIntOff2.L3                 * 70445  access handler
         CON(3)  #0AB                             * 7044A  library
         CON(5)  LIB0AB                           * 7044D  header
-        CON(5)  SUB_7089F.L21                    * 70452  access handler
+        CON(5)  AccessC0000                      * 70452  access handler
         CON(3)  #0A9                             * 70457  library
         CON(5)  LIB0A9                           * 7045A  header
-        CON(5)  SUB_7089F.L21                    * 7045F  access handler
+        CON(5)  AccessC0000                      * 7045F  access handler
         CON(3)  #0AA                             * 70464  library
         CON(5)  LIB0AA                           * 70467  header
-        CON(5)  SUB_7089F.L21                    * 7046C  access handler
+        CON(5)  AccessC0000                      * 7046C  access handler
         CON(3)  #0A8                             * 70471  library
         CON(5)  LIB0A8                           * 70474  header
-        CON(5)  SUB_7089F.L21                    * 70479  access handler
+        CON(5)  AccessC0000                      * 70479  access handler
         CON(3)  #0C1                             * 7047E  library
         CON(5)  LIB0C1                           * 70481  header
-        CON(5)  SUB_7089F.L21                    * 70486  access handler
+        CON(5)  AccessC0000                      * 70486  access handler
         CON(3)  #0C4                             * 7048B  library
         CON(5)  LIB0C4                           * 7048E  header
-        CON(5)  SUB_7089F.L21                    * 70493  access handler
+        CON(5)  AccessC0000                      * 70493  access handler
         CON(3)  #0C3                             * 70498  library
         CON(5)  LIB0C3                           * 7049B  header
-        CON(5)  SUB_7089F.L21                    * 704A0  access handler
+        CON(5)  AccessC0000                      * 704A0  access handler
         CON(3)  #0E7                             * 704A5  library
         CON(5)  LIB0E7                           * 704A8  header
-        CON(5)  SUB_7089F.L21                    * 704AD  access handler
+        CON(5)  AccessC0000                      * 704AD  access handler
         CON(3)  #0E0                             * 704B2  library
         CON(5)  LIB0E0                           * 704B5  header
-        CON(5)  SUB_7089F.L21                    * 704BA  access handler
+        CON(5)  AccessC0000                      * 704BA  access handler
         CON(3)  #0E8                             * 704BF  library
         CON(5)  LIB0E8                           * 704C2  header
-        CON(5)  SUB_7089F.L21                    * 704C7  access handler
+        CON(5)  AccessC0000                      * 704C7  access handler
         CON(3)  #0B0                             * 704CC  library
         CON(5)  LIB0B0                           * 704CF  header
-        CON(5)  SUB_7089F.L21                    * 704D4  access handler
+        CON(5)  AccessC0000                      * 704D4  access handler
         CON(3)  #0B2                             * 704D9  library
         CON(5)  LIB0B2                           * 704DC  header
-        CON(5)  SUB_7089F.L21                    * 704E1  access handler
+        CON(5)  AccessC0000                      * 704E1  access handler
         CON(3)  #0B1                             * 704E6  library
         CON(5)  LIB0B1                           * 704E9  header
-        CON(5)  SUB_7089F.L21                    * 704EE  access handler
+        CON(5)  AccessC0000                      * 704EE  access handler
         CON(3)  #0BF                             * 704F3  library
         CON(5)  LIB0BF                           * 704F6  header
-        CON(5)  SUB_7089F.L21                    * 704FB  access handler
+        CON(5)  AccessC0000                      * 704FB  access handler
         CON(3)  #0BE                             * 70500  library
         CON(5)  LIB0BE                           * 70503  header
-        CON(5)  SUB_7089F.L21                    * 70508  access handler
+        CON(5)  AccessC0000                      * 70508  access handler
         CON(3)  #0BD                             * 7050D  library
         CON(5)  LIB0BD                           * 70510  header
-        CON(5)  SUB_7089F.L21                    * 70515  access handler
+        CON(5)  AccessC0000                      * 70515  access handler
         CON(3)  #0BC                             * 7051A  library
         CON(5)  LIB0BC                           * 7051D  header
-        CON(5)  SUB_7089F.L21                    * 70522  access handler
+        CON(5)  AccessC0000                      * 70522  access handler
         CON(3)  #0BB                             * 70527  library
         CON(5)  LIB0BB                           * 7052A  header
-        CON(5)  SUB_7089F.L21                    * 7052F  access handler
+        CON(5)  AccessC0000                      * 7052F  access handler
         CON(3)  #0BA                             * 70534  library
         CON(5)  LIB0BA                           * 70537  header
-        CON(5)  SUB_7089F.L21                    * 7053C  access handler
+        CON(5)  AccessC0000                      * 7053C  access handler
         CON(3)  #0B9                             * 70541  library
         CON(5)  LIB0B9                           * 70544  header
-        CON(5)  SUB_7089F.L21                    * 70549  access handler
+        CON(5)  AccessC0000                      * 70549  access handler
         CON(3)  #0E2                             * 7054E  library
         CON(5)  LIB0E2                           * 70551  header
-        CON(5)  SUB_7089F.L21                    * 70556  access handler
+        CON(5)  AccessC0000                      * 70556  access handler
         CON(3)  #700                             * 7055B  library
         CON(5)  LIB700                           * 7055E  header
         CON(5)  0                                * 70563  directly visible
@@ -432,15 +435,16 @@ BANKMTHDS:
 BANKMTHDS.L1:
         C=0     A                                * 706A1
         R1=C.F  A                                * 706A3
-        GOSUB   SUB_706B7                        * 706A9
+        GOSUB   MakeAcptr                        * 706A9
         A=DAT0  A                                * 706AD
         D0=D0+  5                                * 706B0
         PC=(A)                                   * 706B3
 
 * refs (2): 706A9 71B1A
-SUB_706B7:
+* R0, R1 = the two words -> pushes a new access pointer object (DOEXT1), collecting garbage once if memory is short
+MakeAcptr:
         ST=0    10                               * 706B7
-SUB_706B7.loop1:
+MakeAcptr.loop1:
         LC(5)   #0000F                           * 706BA
         B=C     A                                * 706C1
         LC(2)   #1A                              * 706C3
@@ -451,7 +455,7 @@ SUB_706B7.loop1:
         A=DAT1  A                                * 706DA
         C=C-A   A                                * 706DD
         C=C-D   A                                * 706DF
-        GOC     SUB_706B7.L2                     * 706E1
+        GOC     MakeAcptr.L2                     * 706E1
         C=B     A                                * 706E4
         GOSBVL  CREATETEMP                       * 706E6
         AD0EX                                    * 706ED
@@ -469,114 +473,115 @@ SUB_706B7.loop1:
         D1=D1-  5                                * 7071E
         DAT1=A  A                                * 70721
         RTN                                      * 70724
-SUB_706B7.L2:
+MakeAcptr.L2:
         ?ST=1   10                               * 70726
-        GOYES   SUB_706B7.L3                     * 70729
+        GOYES   MakeAcptr.L3                     * 70729
         GOSBVL  GARBAGECOL                       * 7072B
         ST=1    10                               * 70732
-        GONC    SUB_706B7.loop1                  * 70735
-SUB_706B7.L3:
+        GONC    MakeAcptr.loop1                  * 70735
+MakeAcptr.L3:
         GOVLNG  GPMEMERR                         * 70738
 * Bank-select stubs, reached through computed jumps: D0=(5) #7F040+2n, then GOTO
 BANKMTHDS~1:
         D0=(5)  #7F040                           * 7073F
-        GOTO    SUB_7089F.L1                     * 70746
+        GOTO    BankAccess                       * 70746
 BANKMTHDS~1.L1:
         D0=(5)  #7F042                           * 7074A
-        GOTO    SUB_7089F.L1                     * 70751
+        GOTO    BankAccess                       * 70751
 BANKMTHDS~1.L2:
         D0=(5)  #7F044                           * 70755
-        GOTO    SUB_7089F.L1                     * 7075C
+        GOTO    BankAccess                       * 7075C
 BANKMTHDS~1.L3:
         D0=(5)  #7F046                           * 70760
-        GOTO    SUB_7089F.L1                     * 70767
+        GOTO    BankAccess                       * 70767
 BANKMTHDS~1.L4:
         D0=(5)  #7F048                           * 7076B
-        GOTO    SUB_7089F.L1                     * 70772
+        GOTO    BankAccess                       * 70772
 BANKMTHDS~1.L5:
         D0=(5)  #7F04A                           * 70776
-        GOTO    SUB_7089F.L1                     * 7077D
+        GOTO    BankAccess                       * 7077D
 BANKMTHDS~1.L6:
         D0=(5)  #7F04C                           * 70781
-        GOTO    SUB_7089F.L1                     * 70788
+        GOTO    BankAccess                       * 70788
 BANKMTHDS~1.L7:
         D0=(5)  #7F04E                           * 7078C
-        GOTO    SUB_7089F.L1                     * 70793
+        GOTO    BankAccess                       * 70793
 BANKMTHDS~1.L8:
         D0=(5)  #7F050                           * 70797
-        GOTO    SUB_7089F.L1                     * 7079E
+        GOTO    BankAccess                       * 7079E
 BANKMTHDS~1.L9:
         D0=(5)  #7F052                           * 707A2
-        GOTO    SUB_7089F.L1                     * 707A9
+        GOTO    BankAccess                       * 707A9
 BANKMTHDS~1.L10:
         D0=(5)  #7F054                           * 707AD
-        GOTO    SUB_7089F.L1                     * 707B4
+        GOTO    BankAccess                       * 707B4
 BANKMTHDS~1.L11:
         D0=(5)  #7F056                           * 707B8
-        GOTO    SUB_7089F.L1                     * 707BF
+        GOTO    BankAccess                       * 707BF
 BANKMTHDS~1.L12:
         D0=(5)  #7F058                           * 707C3
-        GOTO    SUB_7089F.L1                     * 707CA
+        GOTO    BankAccess                       * 707CA
 BANKMTHDS~1.L13:
         D0=(5)  #7F05A                           * 707CE
-        GOTO    SUB_7089F.L1                     * 707D5
+        GOTO    BankAccess                       * 707D5
 BANKMTHDS~1.L14:
         D0=(5)  #7F05C                           * 707D9
-        GOTO    SUB_7089F.L1                     * 707E0
+        GOTO    BankAccess                       * 707E0
 BANKMTHDS~1.L15:
         D0=(5)  #7F05E                           * 707E4
-        GOTO    SUB_7089F.L1                     * 707EB
+        GOTO    BankAccess                       * 707EB
 BANKMTHDS~1.L16:
         D0=(5)  #7F060                           * 707EF
-        GOTO    SUB_7089F.L1                     * 707F6
+        GOTO    BankAccess                       * 707F6
 BANKMTHDS~1.L17:
         D0=(5)  #7F062                           * 707FA
-        GOTO    SUB_7089F.L1                     * 70801
+        GOTO    BankAccess                       * 70801
 BANKMTHDS~1.L18:
         D0=(5)  #7F064                           * 70805
-        GOTO    SUB_7089F.L1                     * 7080C
+        GOTO    BankAccess                       * 7080C
 BANKMTHDS~1.L19:
         D0=(5)  #7F066                           * 70810
-        GOTO    SUB_7089F.L1                     * 70817
+        GOTO    BankAccess                       * 70817
 BANKMTHDS~1.L20:
         D0=(5)  #7F068                           * 7081B
-        GOTO    SUB_7089F.L1                     * 70822
+        GOTO    BankAccess                       * 70822
 BANKMTHDS~1.L21:
         D0=(5)  #7F06A                           * 70826
-        GOTO    SUB_7089F.L1                     * 7082D
+        GOTO    BankAccess                       * 7082D
 BANKMTHDS~1.L22:
         D0=(5)  #7F06C                           * 70831
-        GOTO    SUB_7089F.L1                     * 70838
+        GOTO    BankAccess                       * 70838
 BANKMTHDS~1.L23:
         D0=(5)  #7F06E                           * 7083C
-        GOTO    SUB_7089F.L1                     * 70843
+        GOTO    BankAccess                       * 70843
 BANKMTHDS~1.L24:
         D0=(5)  #7F070                           * 70847
-        GOTO    SUB_7089F.L1                     * 7084E
+        GOTO    BankAccess                       * 7084E
 BANKMTHDS~1.L25:
         D0=(5)  #7F072                           * 70852
-        GOTO    SUB_7089F.L1                     * 70859
+        GOTO    BankAccess                       * 70859
 BANKMTHDS~1.L26:
         D0=(5)  #7F074                           * 7085D
-        GOTO    SUB_7089F.L1                     * 70864
+        GOTO    BankAccess                       * 70864
 BANKMTHDS~1.L27:
         D0=(5)  #7F076                           * 70868
-        GOTO    SUB_7089F.L1                     * 7086F
+        GOTO    BankAccess                       * 7086F
 BANKMTHDS~1.L28:
         D0=(5)  #7F078                           * 70873
-        GOTO    SUB_7089F.L1                     * 7087A
+        GOTO    BankAccess                       * 7087A
 BANKMTHDS~1.L29:
         D0=(5)  #7F07A                           * 7087E
-        GOTO    SUB_7089F.L1                     * 70885
+        GOTO    BankAccess                       * 70885
 BANKMTHDS~1.L30:
         D0=(5)  #7F07C                           * 70889
-        GOTO    SUB_7089F.L1                     * 70890
+        GOTO    BankAccess                       * 70890
 BANKMTHDS~1.L31:
         D0=(5)  #7F07E                           * 70894
-        GOTO    SUB_7089F.L1                     * 7089B
+        GOTO    BankAccess                       * 7089B
 
 * refs (2): 70917 70B7E
-SUB_7089F:
+* Save the nibble at INITEN in AccessInit and clear INITEN, so that no interrupt runs with ROM covered
+AccessIntOff:
         D0=(5)  INITEN                           * 7089F
         C=0     B                                * 708A6
         C=DAT0  1                                * 708A9
@@ -586,23 +591,26 @@ SUB_7089F:
         P=      0                                * 708BA
         DAT0=C  P                                * 708BC
         RTN                                      * 708C0
-SUB_7089F.L1:
+
+* refs (32): 70746 70751 7075C 70767 70772 7077D ...
+* Access handler of the bank-select stubs, D0 at the stub's bank switcher address. Method in P, as in all access handlers: 0 uncover, 1 cover, 2 copy A nibbles between R0 and R1 (C.S picks the direction), 3 copy an object to a new temporary, 4 the stub's index, 5 the object's size
+BankAccess:
         ?P=     0                                * 708C2
-        GOYES   SUB_7089F.loop5                  * 708C5
+        GOYES   BankAccess.loop4                 * 708C5
         ?P=     1                                * 708C7
-        GOYES   SUB_7089F.loop6                  * 708CA
+        GOYES   BankAccess.loop5                 * 708CA
         ?P=     2                                * 708CC
-        GOYES   SUB_7089F.L2                     * 708CF
+        GOYES   BankAccess.L1                    * 708CF
         ?P=     3                                * 708D1
-        GOYES   SUB_7089F.L3                     * 708D4
+        GOYES   BankAccess.L2                    * 708D4
         ?P=     4                                * 708D6
-        GOYES   SUB_7089F.L4                     * 708D9
-        GOTO    SUB_7089F.L20                    * 708DB
-SUB_7089F.L2:
-        GOTO    SUB_7089F.L9                     * 708DF
-SUB_7089F.L3:
-        GOTO    SUB_7089F.L11                    * 708E3
-SUB_7089F.L4:
+        GOYES   BankAccess.L3                    * 708D9
+        GOTO    BankAccess.L19                   * 708DB
+BankAccess.L1:
+        GOTO    BankAccess.L8                    * 708DF
+BankAccess.L2:
+        GOTO    BankAccess.L10                   * 708E3
+BankAccess.L3:
         P=      0                                * 708E7
         LC(5)   #7F03C                           * 708E9
         CD0EX                                    * 708F0
@@ -611,18 +619,18 @@ SUB_7089F.L4:
         CSRB.F  A                                * 708F8
         AD0EX                                    * 708FD
         RTN                                      * 70900
-SUB_7089F.loop5:
+BankAccess.loop4:
         P=      0                                * 70902
         C=DAT0  B                                * 70904
         D0=(5)  #80530                           * 70907
         C=DAT0  1                                * 7090E
         ?C=0    P                                * 70912
         RTNYES                                   * 70915
-        GOSUB   SUB_7089F                        * 70917
+        GOSUB   AccessIntOff                     * 70917
         LC(5)   #C0000                           * 7091B
         UNCNFG                                   * 70922
         RTN                                      * 70925
-SUB_7089F.loop6:
+BankAccess.loop5:
         P=      0                                * 70927
         LC(5)   #F0000                           * 70929
         D0=(5)  #80530                           * 70930
@@ -630,22 +638,22 @@ SUB_7089F.loop6:
         C=C-1   P                                * 7093B
         RTNC                                     * 7093E
         ?C=0    P                                * 70941
-        GOYES   SUB_7089F.L7                     * 70944
+        GOYES   BankAccess.L6                    * 70944
         LC(5)   #C0000                           * 70946
-SUB_7089F.L7:
+BankAccess.L6:
         CONFIG                                   * 7094D
         LC(5)   #C0000                           * 70950
         CONFIG                                   * 70957
-SUB_7089F.loop8:
+BankAccess.L7:
         D0=(5)  AccessInit                       * 7095A
         C=DAT0  1                                * 70961
         D0=(5)  INITEN                           * 70965
         DAT0=C  1                                * 7096C
         RTN                                      * 70970
-SUB_7089F.L9:
+BankAccess.L8:
         P=      0                                * 70972
         ?C=0    S                                * 70974
-        GOYES   SUB_7089F.L10                    * 70977
+        GOYES   BankAccess.L9                    * 70977
         C=R1.F  A                                * 70979
         D0=C                                     * 7097F
         C=R0.F  A                                * 70982
@@ -656,8 +664,8 @@ SUB_7089F.L9:
         R0=C.F  A                                * 70997
         CD0EX                                    * 7099D
         R1=C.F  A                                * 709A0
-        GOTO    SUB_7089F.loop6                  * 709A6
-SUB_7089F.L10:
+        GOTO    BankAccess.loop5                 * 709A6
+BankAccess.L9:
         C=R0.F  A                                * 709AA
         D0=C                                     * 709B0
         C=R1.F  A                                * 709B3
@@ -668,28 +676,28 @@ SUB_7089F.L10:
         R1=C.F  A                                * 709C8
         CD0EX                                    * 709CE
         R0=C.F  A                                * 709D1
-        GOTO    SUB_7089F.loop6                  * 709D7
-SUB_7089F.L11:
+        GOTO    BankAccess.loop5                 * 709D7
+BankAccess.L10:
         P=      0                                * 709DB
         ST=0    10                               * 709DD
         CD0EX                                    * 709E0
         R1=C.F  A                                * 709E3
-SUB_7089F.loop12:
+BankAccess.loop11:
         C=A     A                                * 709E9
         GOSBVL  CREATETEMP                       * 709EB
         C=B     A                                * 709F2
         D0=C                                     * 709F4
-        GOC     SUB_7089F.L13                    * 709F7
+        GOC     BankAccess.L12                   * 709F7
         D0=D0-  6                                * 709FA
         A=R3.F  A                                * 709FD
         AD0EX                                    * 70A03
-        GOSUB   SUB_7089F.loop5                  * 70A06
+        GOSUB   BankAccess.loop4                 * 70A06
         D0=(5)  #8052F                           * 70A0A
         C=DAT0  1                                * 70A11
         ?CBIT=0 1                                * 70A15
-        GOYES   SUB_7089F.L14                    * 70A1A
-        GOTO    SUB_7089F.L16                    * 70A1C
-SUB_7089F.L13:
+        GOYES   BankAccess.L13                   * 70A1A
+        GOTO    BankAccess.L15                   * 70A1C
+BankAccess.L12:
         ?ST=1   10                               * 70A20
         RTNYES                                   * 70A23
         ST=1    10                               * 70A25
@@ -706,32 +714,32 @@ SUB_7089F.L13:
         A=C     A                                * 70A4F
         GOSUB   CSRW5~jump                       * 70A51
         RSTK=C                                   * 70A55
-        GONC    SUB_7089F.loop12                 * 70A57
-SUB_7089F.L14:
+        GONC    BankAccess.loop11                * 70A57
+BankAccess.L13:
         C=R0.F  A                                * 70A5A
         C=C+A   A                                * 70A60
         D0=C                                     * 70A62
         C=A     A                                * 70A65
         GOSBVL  MOVEUP                           * 70A67
-SUB_7089F.loop15:
+BankAccess.loop14:
         AD1EX                                    * 70A6E
         R0=A.F  A                                * 70A71
-        GOSUB   SUB_7089F.loop6                  * 70A77
+        GOSUB   BankAccess.loop5                 * 70A77
         RTNCC                                    * 70A7B
-SUB_7089F.L16:
+BankAccess.L15:
         C=R0.F  A                                * 70A7D
         C=C+A   A                                * 70A83
-SUB_7089F.loop17:
+BankAccess.loop16:
         D0=C                                     * 70A85
         LC(5)   #80309                           * 70A88
         CD1EX                                    * 70A8F
         R0=C.F  A                                * 70A92
         LC(5)   #00214                           * 70A98
         A=A-C   A                                * 70A9F
-        GONC    SUB_7089F.L18                    * 70AA1
+        GONC    BankAccess.L17                   * 70AA1
         C=C+A   A                                * 70AA4
         A=0     A                                * 70AA6
-SUB_7089F.L18:
+BankAccess.L17:
         DAT1=A  A                                * 70AA8
         GOSBVL  MOVEUP                           * 70AAB
         A=R0.F  A                                * 70AB2
@@ -753,42 +761,45 @@ SUB_7089F.L18:
         D0=(5)  #80309                           * 70AF8
         A=DAT0  A                                * 70AFF
         ?A#0    A                                * 70B02
-        GOYES   SUB_7089F.L19                    * 70B05
-        GOTO    SUB_7089F.loop15                 * 70B07
-SUB_7089F.L19:
+        GOYES   BankAccess.L18                   * 70B05
+        GOTO    BankAccess.loop14                * 70B07
+BankAccess.L18:
         C=R0.F  A                                * 70B0B
-        GOTO    SUB_7089F.loop17                 * 70B11
-SUB_7089F.L20:
-        GOSUB   SUB_7089F.loop5                  * 70B15
+        GOTO    BankAccess.loop16                * 70B11
+BankAccess.L19:
+        GOSUB   BankAccess.loop4                 * 70B15
         C=R0.F  A                                * 70B19
         D0=C                                     * 70B1F
         GOSBVL  SKIPOB                           * 70B22
         AD0EX                                    * 70B29
         C=R0.F  A                                * 70B2C
         A=A-C   A                                * 70B32
-        GOTO    SUB_7089F.loop6                  * 70B34
-SUB_7089F.L21:
+        GOTO    BankAccess.loop5                 * 70B34
+
+* refs (21): C0007 C31C5 C4E26 C5332 C78DB CADC4 ...
+* Access handler for library parts at #C0000-#FFFFF (methods as for BankAccess). #80535 holds the state of port 2 so that it can be taken away and given back
+AccessC0000:
         ?P=     0                                * 70B38
-        GOYES   SUB_7089F.loop25                 * 70B3B
+        GOYES   AccessC0000.loop4                * 70B3B
         ?P=     1                                * 70B3D
-        GOYES   SUB_7089F.loop26                 * 70B40
+        GOYES   AccessC0000.loop5                * 70B40
         ?P=     2                                * 70B42
-        GOYES   SUB_7089F.L23                    * 70B45
+        GOYES   AccessC0000.L2                   * 70B45
         ?P=     3                                * 70B47
-        GOYES   SUB_7089F.L22                    * 70B4A
+        GOYES   AccessC0000.L1                   * 70B4A
         ?P=     4                                * 70B4C
-        GOYES   SUB_7089F.L24                    * 70B4F
-        GOTO    SUB_7089F.L42                    * 70B51
-SUB_7089F.L22:
-        GOTO    SUB_7089F.L33                    * 70B55
-SUB_7089F.L23:
-        GOTO    SUB_7089F.L31                    * 70B59
-SUB_7089F.L24:
+        GOYES   AccessC0000.L3                   * 70B4F
+        GOTO    AccessC0000.L21                  * 70B51
+AccessC0000.L1:
+        GOTO    AccessC0000.L12                  * 70B55
+AccessC0000.L2:
+        GOTO    AccessC0000.L10                  * 70B59
+AccessC0000.L3:
         C=0     A                                * 70B5D
         P=      0                                * 70B5F
         C=C-1   A                                * 70B61
         RTNC                                     * 70B63
-SUB_7089F.loop25:
+AccessC0000.loop4:
         P=      0                                * 70B66
         D0=(5)  #80535                           * 70B68
         C=DAT0  1                                * 70B6F
@@ -796,7 +807,7 @@ SUB_7089F.loop25:
         RTNYES                                   * 70B76
         C=C+1   P                                * 70B78
         RTNC                                     * 70B7B
-        GOSUB   SUB_7089F                        * 70B7E
+        GOSUB   AccessIntOff                     * 70B7E
         D0=(5)  #7F000                           * 70B82
         C=DAT0  B                                * 70B89
         D0=(5)  LINECOUNTg                       * 70B8C
@@ -809,7 +820,7 @@ SUB_7089F.loop25:
         UNCNFG                                   * 70BAF
         UNCNFG                                   * 70BB2
         RTNCC                                    * 70BB5
-SUB_7089F.loop26:
+AccessC0000.loop5:
         P=      0                                * 70BB7
         D0=(5)  #80535                           * 70BB9
         C=DAT0  1                                * 70BC0
@@ -820,29 +831,29 @@ SUB_7089F.loop26:
         D0=D0-  5                                * 70BCF
         C=DAT0  1                                * 70BD2
         C=C-1   P                                * 70BD6
-        GOC     SUB_7089F.L28                    * 70BD9
+        GOC     AccessC0000.L7                   * 70BD9
         C=C-1   P                                * 70BDC
         LC(5)   #F0000                           * 70BDF
-        GOC     SUB_7089F.L27                    * 70BE6
+        GOC     AccessC0000.L6                   * 70BE6
         LC(5)   #C0000                           * 70BE9
-SUB_7089F.L27:
+AccessC0000.L6:
         CONFIG                                   * 70BF0
         LC(5)   #C0000                           * 70BF3
         CONFIG                                   * 70BFA
-SUB_7089F.L28:
+AccessC0000.L7:
         D0=D0+  2                                * 70BFD
         C=DAT0  1                                * 70C00
         C=C-1   P                                * 70C04
-        GOC     SUB_7089F.L30                    * 70C07
+        GOC     AccessC0000.L9                   * 70C07
         C=C-1   P                                * 70C0A
         LC(5)   #F0000                           * 70C0D
-        GOC     SUB_7089F.L29                    * 70C14
+        GOC     AccessC0000.L8                   * 70C14
         LC(5)   #C0000                           * 70C17
-SUB_7089F.L29:
+AccessC0000.L8:
         CONFIG                                   * 70C1E
         LC(5)   #C0000                           * 70C21
         CONFIG                                   * 70C28
-SUB_7089F.L30:
+AccessC0000.L9:
         D0=(5)  LINECOUNTg                       * 70C2B
         C=DAT0  B                                * 70C32
         CBIT=0  7                                * 70C35
@@ -851,11 +862,11 @@ SUB_7089F.L30:
         DAT0=C  B                                * 70C44
         D0=(5)  #7F040                           * 70C47
         C=DAT0  B                                * 70C4E
-        GOTO    SUB_7089F.loop8                  * 70C51
-SUB_7089F.L31:
+        GOTO    BankAccess.L7                    * 70C51
+AccessC0000.L10:
         P=      0                                * 70C55
         ?C=0    S                                * 70C57
-        GOYES   SUB_7089F.L32                    * 70C5A
+        GOYES   AccessC0000.L11                  * 70C5A
         C=R1.F  A                                * 70C5C
         D0=C                                     * 70C62
         C=R0.F  A                                * 70C65
@@ -866,8 +877,8 @@ SUB_7089F.L31:
         R0=C.F  A                                * 70C7A
         CD0EX                                    * 70C80
         R1=C.F  A                                * 70C83
-        GOTO    SUB_7089F.loop26                 * 70C89
-SUB_7089F.L32:
+        GOTO    AccessC0000.loop5                * 70C89
+AccessC0000.L11:
         C=R0.F  A                                * 70C8D
         D0=C                                     * 70C93
         C=R1.F  A                                * 70C96
@@ -878,25 +889,25 @@ SUB_7089F.L32:
         R1=C.F  A                                * 70CAB
         CD0EX                                    * 70CB1
         R0=C.F  A                                * 70CB4
-        GOTO    SUB_7089F.loop26                 * 70CBA
-SUB_7089F.L33:
+        GOTO    AccessC0000.loop5                * 70CBA
+AccessC0000.L12:
         P=      0                                * 70CBE
         ST=0    10                               * 70CC0
-SUB_7089F.loop34:
+AccessC0000.loop13:
         C=A     A                                * 70CC3
         GOSBVL  CREATETEMP                       * 70CC5
         C=B     A                                * 70CCC
         D0=C                                     * 70CCE
-        GOC     SUB_7089F.L35                    * 70CD1
+        GOC     AccessC0000.L14                  * 70CD1
         D0=D0-  6                                * 70CD4
         AD0EX                                    * 70CD7
-        GOSUB   SUB_7089F.loop25                 * 70CDA
+        GOSUB   AccessC0000.loop4                * 70CDA
         D0=(5)  #8052F                           * 70CDE
         C=DAT0  1                                * 70CE5
         ?CBIT=0 1                                * 70CE9
-        GOYES   SUB_7089F.L36                    * 70CEE
-        GOTO    SUB_7089F.L38                    * 70CF0
-SUB_7089F.L35:
+        GOYES   AccessC0000.L15                  * 70CEE
+        GOTO    AccessC0000.L17                  * 70CF0
+AccessC0000.L14:
         ?ST=1   10                               * 70CF4
         RTNYES                                   * 70CF7
         ST=1    10                               * 70CF9
@@ -913,32 +924,32 @@ SUB_7089F.L35:
         A=C     A                                * 70D23
         GOSUB   CSRW5~jump                       * 70D25
         RSTK=C                                   * 70D29
-        GONC    SUB_7089F.loop34                 * 70D2B
-SUB_7089F.L36:
+        GONC    AccessC0000.loop13               * 70D2B
+AccessC0000.L15:
         C=R0.F  A                                * 70D2E
         C=C+A   A                                * 70D34
         D0=C                                     * 70D36
         C=A     A                                * 70D39
         GOSBVL  MOVEUP                           * 70D3B
-SUB_7089F.loop37:
+AccessC0000.loop16:
         AD1EX                                    * 70D42
         R0=A.F  A                                * 70D45
-        GOSUB   SUB_7089F.loop26                 * 70D4B
+        GOSUB   AccessC0000.loop5                * 70D4B
         RTNCC                                    * 70D4F
-SUB_7089F.L38:
+AccessC0000.L17:
         C=R0.F  A                                * 70D51
         C=C+A   A                                * 70D57
-SUB_7089F.loop39:
+AccessC0000.loop18:
         D0=C                                     * 70D59
         LC(5)   #80309                           * 70D5C
         CD1EX                                    * 70D63
         R0=C.F  A                                * 70D66
         LC(5)   #00214                           * 70D6C
         A=A-C   A                                * 70D73
-        GONC    SUB_7089F.L40                    * 70D75
+        GONC    AccessC0000.L19                  * 70D75
         C=C+A   A                                * 70D78
         A=0     A                                * 70D7A
-SUB_7089F.L40:
+AccessC0000.L19:
         DAT1=A  A                                * 70D7C
         GOSBVL  MOVEUP                           * 70D7F
         A=R0.F  A                                * 70D86
@@ -960,20 +971,20 @@ SUB_7089F.L40:
         D0=(5)  #80309                           * 70DCC
         A=DAT0  A                                * 70DD3
         ?A=0    A                                * 70DD6
-        GOYES   SUB_7089F.L41                    * 70DD9
+        GOYES   AccessC0000.L20                  * 70DD9
         C=R0.F  A                                * 70DDB
-        GOTO    SUB_7089F.loop39                 * 70DE1
-SUB_7089F.L41:
-        GOTO    SUB_7089F.loop37                 * 70DE5
-SUB_7089F.L42:
-        GOSUB   SUB_7089F.loop25                 * 70DE9
+        GOTO    AccessC0000.loop18               * 70DE1
+AccessC0000.L20:
+        GOTO    AccessC0000.loop16               * 70DE5
+AccessC0000.L21:
+        GOSUB   AccessC0000.loop4                * 70DE9
         C=R0.F  A                                * 70DED
         D0=C                                     * 70DF3
         GOSBVL  SKIPOB                           * 70DF6
         AD0EX                                    * 70DFD
         C=R0.F  A                                * 70E00
         A=A-C   A                                * 70E06
-        GOTO    SUB_7089F.loop26                 * 70E08
+        GOTO    AccessC0000.loop5                * 70E08
 SET~1:
         AD1EX                                    * 70E0C
         C=DAT1  A                                * 70E0F
@@ -996,7 +1007,7 @@ SET~1:
         ?C>=A   A                                * 70E52
         GOYES   SET~1.L2                         * 70E55
 SET~1.loop1:
-        GOSBVL  SUB_077B2                        * 70E57
+        GOSBVL  Home#Lib                         * 70E57
         GOVLNG  SET.L4                           * 70E5E
 SET~1.L2:
         C=C-CON A,11                             * 70E65
@@ -1067,7 +1078,7 @@ SET~1.L11:
         D0=D0-  5                                * 70F3C
         P=      0                                * 70F3F
         LC(5)   #0000F                           * 70F41
-        GOSBVL  SUB_02541                        * 70F48
+        GOSBVL  DispPtrs+                        * 70F48
         AD0EX                                    * 70F4F
         GOSBVL  MOVERSU                          * 70F52
         GOC     SET~1.L13                        * 70F59
@@ -1278,7 +1289,7 @@ SUB_7116E.L2:
 SUB_7116E.L3:
         D0=A                                     * 711D8
         CD1EX                                    * 711DB
-        GOSBVL  SUB_02541                        * 711DE
+        GOSBVL  DispPtrs+                        * 711DE
         AD0EX                                    * 711E5
         GOSBVL  MOVERSU                          * 711E8
         RTNC                                     * 711EF
@@ -1304,7 +1315,7 @@ CSRW5~jump:
         GOVLNG  CSRW5                            * 7121C
 CSRW5~jump.L1:
         GOSUB   SUB_7122B                        * 71223
-        GOTO    SUB_7127A.L1                     * 71227
+        GOTO    Name>Start~jump.L1               * 71227
 
 * refs (2): 71223 712AE
 SUB_7122B:
@@ -1312,7 +1323,7 @@ SUB_7122B:
         C=DAT1  A                                * 7122E
         ?C#0    A                                * 71231
         GOYES   SUB_7122B.L1                     * 71234
-        GOSUB   SUB_7127A                        * 71236
+        GOSUB   Name>Start~jump                  * 71236
         D0=D0-  5                                * 7123A
         A=DAT0  A                                * 7123D
         D1=A                                     * 71240
@@ -1325,7 +1336,7 @@ SUB_7122B.L1:
         RSTK=C                                   * 71250
         GOSUB   CallC                            * 71252
         D0=A                                     * 71256
-        GOSUB   SUB_7127A                        * 71259
+        GOSUB   Name>Start~jump                  * 71259
         D0=D0-  5                                * 7125D
         A=DAT0  A                                * 71260
         D1=A                                     * 71263
@@ -1339,9 +1350,9 @@ SUB_7122B.L1:
         RTN                                      * 71278
 
 * refs (2): 71236 71259
-SUB_7127A:
-        GOVLNG  SUB_0841E                        * 7127A
-SUB_7127A.L1:
+Name>Start~jump:
+        GOVLNG  Name>Start                       * 7127A
+Name>Start~jump.L1:
         GOSUB   CSLW5~jump                       * 71281
         C=A     A                                * 71285
         A=C     W                                * 71287
@@ -1354,28 +1365,28 @@ SUB_7127A.L1:
         LC(5)   TRUE                             * 712A1
         A=C     A                                * 712A8
         PC=(A)                                   * 712AA
-SUB_7127A.L2:
+Name>Start~jump.L2:
         GOSUB   SUB_7122B                        * 712AE
         AD1EX                                    * 712B2
         LC(5)   #00005                           * 712B5
         A=A-C   A                                * 712BC
         GOVLNG  ROMPART.L1                       * 712BE
-SUB_7127A.L3:
+Name>Start~jump.L3:
         CD0EX                                    * 712C5
         A=C     A                                * 712C8
         C=DAT0  A                                * 712CA
         ?C=0    A                                * 712CD
-        GOYES   SUB_7127A.L6                     * 712D0
+        GOYES   Name>Start~jump.L6               * 712D0
         RSTK=C                                   * 712D2
         GOSUB   CallC                            * 712D4
         D0=A                                     * 712D8
         B=A     A                                * 712DB
-        GOSBVL  SUB_0841E                        * 712DD
+        GOSBVL  Name>Start                       * 712DD
         CD0EX                                    * 712E4
         A=B     A                                * 712E7
         A=A-C   A                                * 712E9
         R0=C.F  A                                * 712EB
-SUB_7127A.L4:
+Name>Start~jump.L4:
         LC(5)   IRAMBUFF                         * 712F1
         R1=C.F  A                                * 712F8
         C=RSTK                                   * 712FE
@@ -1383,13 +1394,13 @@ SUB_7127A.L4:
         P=      2                                * 71303
         GOSUB   CallC                            * 71305
         D0=(5)  IRAMBUFF                         * 71309
-SUB_7127A.loop5:
+Name>Start~jump.loop5:
         GOVLNG  ROMPARTNAME.L2                   * 71310
-SUB_7127A.L6:
+Name>Start~jump.L6:
         D0=A                                     * 71317
-        GOSBVL  SUB_0841E                        * 7131A
-        GONC    SUB_7127A.loop5                  * 71321
-SUB_7127A.L7:
+        GOSBVL  Name>Start                       * 7131A
+        GONC    Name>Start~jump.loop5            * 71321
+Name>Start~jump.L7:
         C=0     A                                * 71324
         R0=C.F  A                                * 71326
         C=DAT1  A                                * 7132C
@@ -1402,27 +1413,27 @@ SUB_7127A.L7:
         CD1EX                                    * 71342
         CAEX    A                                * 71345
         ?C#0    A                                * 71347
-        GOYES   SUB_7127A.L8                     * 7134A
-        GOSBVL  SUB_702A2                        * 7134C
-        GOTO    SUB_7127A.L9                     * 71353
-SUB_7127A.L8:
+        GOYES   Name>Start~jump.L8               * 7134A
+        GOSBVL  Acptr>A                          * 7134C
+        GOTO    Name>Start~jump.L9               * 71353
+Name>Start~jump.L8:
         D1=D1+  5                                * 71357
         D=D+1   A                                * 7135A
-SUB_7127A.L9:
+Name>Start~jump.L9:
         R2=A.F  A                                * 7135C
         A=R0.F  A                                * 71362
         R3=A.F  A                                * 71368
-        GOSBVL  SUB_702A2                        * 7136E
+        GOSBVL  Acptr>A                          * 7136E
         R0=A.F  A                                * 71375
         GOSBVL  POP#                             * 7137B
         GOSBVL  SAVPTR                           * 71382
         ST=0    1                                * 71389
         C=R3.F  A                                * 7138C
         ?C=0    A                                * 71392
-        GOYES   SUB_7127A.L10                    * 71395
+        GOYES   Name>Start~jump.L10              * 71395
         ST=1    1                                * 71397
         GOSUB   CallC                            * 7139A
-SUB_7127A.L10:
+Name>Start~jump.L10:
         C=R0.F  A                                * 7139E
         C=C+A   A                                * 713A4
         C=C-1   A                                * 713A6
@@ -1438,11 +1449,11 @@ SUB_7127A.L10:
         ST=0    1                                * 713D0
         C=R3.F  A                                * 713D3
         ?C=0    A                                * 713D9
-        GOYES   SUB_7127A.L11                    * 713DC
+        GOYES   Name>Start~jump.L11              * 713DC
         ST=1    1                                * 713DE
         P=      1                                * 713E1
         GOSUB   CallC                            * 713E3
-SUB_7127A.L11:
+Name>Start~jump.L11:
         C=R2.F  A                                * 713E7
         C=C-A   A                                * 713ED
         R0=C.F  A                                * 713EF
@@ -1456,54 +1467,54 @@ SUB_7127A.L11:
         P=      0                                * 7140C
         A=R1.F  A                                * 7140E
         GOVLNG  OBJ_0B23B.L1                     * 71414
-SUB_7127A.L12:
+Name>Start~jump.L12:
         D=C     A                                * 7141B
         P=      9                                * 7141D
         C=A     WP                               * 7141F
         C=0     A                                * 71422
         ?C#0    WP                               * 71424
-        GOYES   SUB_7127A.L18                    * 71427
+        GOYES   Name>Start~jump.L18              * 71427
         D0=(5)  PORT0EOS                         * 71429
         GOSUB   SUB_714EA                        * 71430
         D0=D0+  5                                * 71434
         GOSUB   SUB_714EA                        * 71437
-SUB_7127A.loop13:
+Name>Start~jump.loop13:
         D0=(5)  ROMPTAB                          * 7143B
         C=0     A                                * 71442
         C=DAT0  X                                * 71444
         D1=C                                     * 71448
         D1=D1-  1                                * 7144B
-        GOC     SUB_7127A.L15                    * 7144E
+        GOC     Name>Start~jump.L15              * 7144E
         D0=D0-  10                               * 71451
-SUB_7127A.loop14:
+Name>Start~jump.loop14:
         D0=D0+  16                               * 71454
         C=DAT0  10                               * 71457
         GOSUB   SUB_714EA                        * 7145B
         D1=D1-  1                                * 7145F
-        GONC    SUB_7127A.loop14                 * 71462
+        GONC    Name>Start~jump.loop14           * 71462
         D0=D0+  10                               * 71465
-SUB_7127A.L15:
+Name>Start~jump.L15:
         D1=(5)  VDISP2                           * 71468
         C=DAT1  A                                * 7146F
         D1=C                                     * 71472
         D0=D0-  7                                * 71475
-        GONC    SUB_7127A.L17                    * 71478
-SUB_7127A.loop16:
+        GONC    Name>Start~jump.L17              * 71478
+Name>Start~jump.loop16:
         AD1EX                                    * 7147B
         CD0EX                                    * 7147E
         C=DAT0  10                               * 71481
         GOSUB   SUB_714EA                        * 71485
-SUB_7127A.L17:
+Name>Start~jump.L17:
         D0=D0+  15                               * 71489
         AD1EX                                    * 7148C
         CD0EX                                    * 7148F
         ?C<A    A                                * 71492
-        GOYES   SUB_7127A.loop16                 * 71495
+        GOYES   Name>Start~jump.loop16           * 71495
         AD1EX                                    * 71497
         CD0EX                                    * 7149A
         P=      0                                * 7149D
         RTN                                      * 7149F
-SUB_7127A.L18:
+Name>Start~jump.L18:
         CSR     WP                               * 714A1
         CSR     WP                               * 714A4
         CSR     WP                               * 714A7
@@ -1513,9 +1524,9 @@ SUB_7127A.L18:
         GOSUB   CallC                            * 714B2
         P=      9                                * 714B6
         C=C+1   A                                * 714B8
-        GONC    SUB_7127A.L19                    * 714BA
-        GOTO    SUB_7127A.loop13                 * 714BD
-SUB_7127A.L19:
+        GONC    Name>Start~jump.L19              * 714BA
+        GOTO    Name>Start~jump.loop13           * 714BD
+Name>Start~jump.L19:
         D0=C                                     * 714C1
         C=C+C   A                                * 714C4
         C=C+C   A                                * 714C6
@@ -1528,7 +1539,7 @@ SUB_7127A.L19:
         AD0EX                                    * 714DC
         C=A     WP                               * 714DF
         GOSUB   SUB_714EA                        * 714E2
-        GOTO    SUB_7127A.loop13                 * 714E6
+        GOTO    Name>Start~jump.loop13           * 714E6
 
 * refs (7): 71430 71437 7145B 71485 714E2 7151D ...
 SUB_714EA:
@@ -1677,7 +1688,7 @@ GETEL~1.L1:
         CD0EX                                    * 716B2
         GONC    GETEL~1.L3                       * 716B5
 GETEL~1.L2:
-        GOSBVL  SUB_702A2                        * 716B8
+        GOSBVL  Acptr>A                          * 716B8
         R1=A.F  A                                * 716BF
         GONC    GETEL~1.L4                       * 716C5
 GETEL~1.L3:
@@ -1810,7 +1821,7 @@ sto12(bk,nm,s)~2:
         GOSBVL  POP2#                            * 7187C
         R4=C.F  A                                * 71883
         R3=A.F  A                                * 71889
-        GOSBVL  SUB_702A2                        * 7188F
+        GOSBVL  Acptr>A                          * 7188F
         C=R0.F  A                                * 71896
         R2=C.F  A                                * 7189C
         D1=D1+  10                               * 718A2
@@ -2002,7 +2013,7 @@ BAK>OB~1.L2:
         C=A     A                                * 71B12
         P=      1                                * 71B14
         GOSUB   CallC                            * 71B16
-        GOSBVL  SUB_706B7                        * 71B1A
+        GOSBVL  MakeAcptr                        * 71B1A
         A=DAT0  A                                * 71B21
         D0=D0+  5                                * 71B24
         PC=(A)                                   * 71B27
@@ -2051,9 +2062,10 @@ BAKNAME~1.L3:
 BAKNAME~1.L4:
         A=A+1   A                                * 71BAC
         A=A+A   A                                * 71BAE
-        GOLONG  SUB_7127A.L4                     * 71BB0
+        GOLONG  Name>Start~jump.L4               * 71BB0
 
 * refs (3): 219DB 21B25 85C38
+* Probably: test whether an access pointer's target is a backup object; the entry at #71BC6 does the same for a library
 OBJ_71BB6:
         CON(5)  (*)+5                            * 71BB6  primitive code object
         LC(5)   DOBAK                            * 71BBB
@@ -2234,12 +2246,13 @@ RPTRACC.L2:
         RPL
 
 * refs (5): 26ACD 26C1F 270DE 271E8 72A07
+* Probably: ob -> ob ob' TRUE, or FALSE: fetch through an access pointer object
 OBJ_71DFF:
         :: DUP RPTRACC COLA NOTcase              * 71DFF
         ;                                        * 71E18
         ASSEMBLE
-OBJ_71DFF.L1:
-        GOSUB   SUB_71E57                        * 71E1D
+CmdIndent~1:
+        GOSUB   ACPTR>Ob                         * 71E1D
         D1=D1-  7                                * 71E21
         A=0     A                                * 71E24
         A=DAT1  1                                * 71E26
@@ -2259,7 +2272,8 @@ OBJ_71DFF.L1:
         PC=(A)                                   * 71E53
 
 * refs (11): 71E1D 71F00 71F13 71F8B 71F99 71FA7 ...
-SUB_71E57:
+* Level 1 an access pointer: uncover its target; R3 = its second word (the handler), ST 1 clear, C = its address. Other objects return with A.A non-zero
+ACPTR>Ob:
         C=0     A                                * 71E57
         R3=C.F  A                                * 71E59
         C=DAT1  A                                * 71E5F
@@ -2281,11 +2295,11 @@ SUB_71E57:
         A=DAT1  A                                * 71E9A
         R3=A.F  A                                * 71E9D
         ?A#0    A                                * 71EA3
-        GOYES   SUB_71E57.L1                     * 71EA6
+        GOYES   ACPTR>Ob.L1                      * 71EA6
         A=R0.F  A                                * 71EA8
         D1=A                                     * 71EAE
         RTNSC                                    * 71EB1
-SUB_71E57.L1:
+ACPTR>Ob.L1:
         D1=C                                     * 71EB3
         GOSBVL  SAVPTR                           * 71EB6
         ST=1    1                                * 71EBD
@@ -2304,15 +2318,15 @@ SUB_71E57.L1:
         LC(5)   #800FF                           * 71EF4
         CD1EX                                    * 71EFB
         RTN                                      * 71EFE
-SUB_71E57.L2:
-        GOSUB   SUB_71E57                        * 71F00
+HdrFn?~1:
+        GOSUB   ACPTR>Ob                         * 71F00
         D1=D1-  6                                * 71F04
-        GOVLNG  OBJ_26B04.L1                     * 71F07
+        GOVLNG  HdrFn?.L1                        * 71F07
 
 * refs (1): 26AD7
 ?OKINALG~romptr~1:
         CON(5)  (*)+5                            * 71F0E  primitive code object
-        GOSUB   SUB_71E57                        * 71F13
+        GOSUB   ACPTR>Ob                         * 71F13
         RSTK=C                                   * 71F17
         A=DAT1  A                                * 71F19
         D1=(5)  ?OKINALG~romptr~1.L5             * 71F1C
@@ -2334,7 +2348,7 @@ SUB_71E57.L2:
 ?OKINALG~romptr~1.L4:
         LC(5)   DOCOL                            * 71F48
         A=A-C   A                                * 71F4F
-        LC(5)   OBJ_26AE1                        * 71F51
+        LC(5)   OKINALGRomp?                     * 71F51
         ?A=0    A                                * 71F58
         GOYES   ?OKINALG~romptr~1.loop3          * 71F5B
         LC(5)   DROPFALSE                        * 71F5D
@@ -2350,39 +2364,39 @@ SUB_71E57.L2:
         CON(5)  DOSYMB                           * 71F81  entry 5
         CON(5)  #00000                           * 71F86  entry 6
 ?OKINALG~romptr~1.L6:
-        GOSUB   SUB_71E57                        * 71F8B
+        GOSUB   ACPTR>Ob                         * 71F8B
         D1=D1-  6                                * 71F8F
         GOVLNG  OBJ_26B2E.L1                     * 71F92
 ?OKINALG~romptr~1.L7:
-        GOSUB   SUB_71E57                        * 71F99
+        GOSUB   ACPTR>Ob                         * 71F99
         D1=D1-  7                                * 71F9D
         GOVLNG  OBJ_26953.L1                     * 71FA0
-?OKINALG~romptr~1.L8:
-        GOSUB   SUB_71E57                        * 71FA7
+CmdFieldCode~1:
+        GOSUB   ACPTR>Ob                         * 71FA7
         D1=D1-  6                                * 71FAB
-        GOVLNG  OBJ_2710B.L1                     * 71FAE
-?OKINALG~romptr~1.L9:
-        GOSUB   SUB_71E57                        * 71FB5
+        GOVLNG  CmdFieldCode.L1                  * 71FAE
+SstHandlerCode~1:
+        GOSUB   ACPTR>Ob                         * 71FB5
         D1=D1-  7                                * 71FB9
-        GOVLNG  OBJ_27206.L1                     * 71FBC
-?OKINALG~romptr~1.L10:
+        GOVLNG  SstHandlerCode.L1                * 71FBC
+SstHandlerCode~1.L1:
         C=C-A   A                                * 71FC3
         AD1EX                                    * 71FC5
         ?C=0    A                                * 71FC8
-        GOYES   ?OKINALG~romptr~1.L13            * 71FCB
-?OKINALG~romptr~1.loop11:
+        GOYES   SstHandlerCode~1.L4              * 71FCB
+SstHandlerCode~1.loop2:
         C=0     A                                * 71FCD
         R3=C.F  A                                * 71FCF
         R0=A.F  A                                * 71FD5
-?OKINALG~romptr~1.loop12:
+SstHandlerCode~1.loop3:
         GOVLNG  GETPTRFALSE.L1                   * 71FDB
-?OKINALG~romptr~1.L13:
+SstHandlerCode~1.L4:
         GOSBVL  ROMPTR>ADDR                      * 71FE2
-        GONC    ?OKINALG~romptr~1.L14            * 71FE9
+        GONC    SstHandlerCode~1.L5              * 71FE9
         GOVLNG  GETPTRFALSE                      * 71FEC
-?OKINALG~romptr~1.L14:
+SstHandlerCode~1.L5:
         ?ST=0   1                                * 71FF3
-        GOYES   ?OKINALG~romptr~1.loop11         * 71FF6
+        GOYES   SstHandlerCode~1.loop2           * 71FF6
         D1=(5)  #800FA                           * 71FF8
         A=DAT1  A                                * 71FFF
         R0=A.F  A                                * 72002
@@ -2390,7 +2404,7 @@ SUB_71E57.L2:
         C=DAT1  A                                * 7200B
         R3=C.F  A                                * 7200E
         ?C=0    A                                * 72014
-        GOYES   ?OKINALG~romptr~1.loop12         * 72017
+        GOYES   SstHandlerCode~1.loop3           * 72017
         GOSUB   SUB_72048                        * 72019
         D1=A                                     * 7201D
         D1=D1-  10                               * 72020
@@ -2402,7 +2416,7 @@ SUB_71E57.L2:
         DAT1=A  W                                * 7203A
         D1=D1+  10                               * 7203E
         AD1EX                                    * 72041
-        GOTO    ?OKINALG~romptr~1.loop12         * 72044
+        GOTO    SstHandlerCode~1.loop3           * 72044
 
 * refs (10): 71EC2 71EDE 72019 7202F 7206F 720C9 ...
 SUB_72048:
@@ -2454,18 +2468,18 @@ SUB_72080.L2:
         GOVLNG  GETPTR                           * 720CD
 
 * refs (1): 26C29
-OBJ_720D4:
+FnInfoRomp~1:
         CON(5)  (*)+5                            * 720D4  primitive code object
-        GOSUB   SUB_71E57                        * 720D9
+        GOSUB   ACPTR>Ob                         * 720D9
         GOSUB   SUB_72107                        * 720DD
         ?A=0    A                                * 720E1
-        GOYES   OBJ_720D4.L1                     * 720E4
+        GOYES   FnInfoRomp~1.L1                  * 720E4
         LC(5)   FALSE                            * 720E6
         DAT1=C  A                                * 720ED
         LC(5)   SEMI                             * 720F0
         A=C     A                                * 720F7
         PC=(A)                                   * 720F9
-OBJ_720D4.L1:
+FnInfoRomp~1.L1:
         A=DAT0  A                                * 720FD
         D0=D0+  5                                * 72100
         PC=(A)                                   * 72103
@@ -2479,7 +2493,7 @@ SUB_72107:
         C=RSTK                                   * 72115
         CD1EX                                    * 72117
         RTN                                      * 7211A
-SUB_72107.L1:
+FnInfoCode~2:
         GOSBVL  SAVPTR                           * 7211C
         C=0     A                                * 72123
         R3=C.F  A                                * 72125
@@ -2491,7 +2505,7 @@ SUB_72107.L1:
         A=A-C   A                                * 72141
         ST=0    1                                * 72143
         ?A#0    A                                * 72146
-        GOYES   SUB_72107.L3                     * 72149
+        GOYES   FnInfoCode~2.L2                  * 72149
         D0=D0+  5                                * 7214B
         A=DAT0  A                                * 7214E
         R0=A.F  A                                * 72151
@@ -2499,43 +2513,43 @@ SUB_72107.L1:
         A=DAT0  A                                * 7215A
         R3=A.F  A                                * 7215D
         ?A=0    A                                * 72163
-        GOYES   SUB_72107.L2                     * 72166
+        GOYES   FnInfoCode~2.L1                  * 72166
         C=A     A                                * 72168
         GOSUB   SUB_72048                        * 7216A
         ST=1    1                                * 7216E
-SUB_72107.L2:
+FnInfoCode~2.L1:
         A=R0.F  A                                * 72171
         D0=A                                     * 72177
-SUB_72107.L3:
+FnInfoCode~2.L2:
         D0=D0+  5                                * 7217A
         A=DAT0  A                                * 7217D
         LC(5)   x<<                              * 72180
-        GOVLNG  OBJ_26C8B.L1                     * 72187
-SUB_72107.L4:
+        GOVLNG  FnInfoCode.L1                    * 72187
+FnInfoCode~2.L3:
         C=R3.F  A                                * 7218E
         ?C=0    A                                * 72194
-        GOYES   SUB_72107.L5                     * 72197
+        GOYES   FnInfoCode~2.L4                  * 72197
         P=      1                                * 72199
         GOSUB   SUB_72048                        * 7219B
-SUB_72107.L5:
+FnInfoCode~2.L4:
         GOVLNG  GETPTRFALSE                      * 7219F
         RPL
 
 * refs (1): 26C81
-OBJ_721A6:
+FnInfoWd~1:
         :: ?ACCPTR> EVAL SWAP TRUE ;             * 721A6
         ASSEMBLE
-OBJ_721A6.L1:
+FnInfoWd~1.L1:
         C=R3.F  A                                * 721C4
         ?C#0    A                                * 721CA
-        GOYES   OBJ_721A6.L3                     * 721CD
-OBJ_721A6.loop2:
+        GOYES   FnInfoWd~1.L3                    * 721CD
+FnInfoWd~1.loop2:
         GOSBVL  PUSH#                            * 721CF
         A=R1.F  A                                * 721D6
         PC=(A)                                   * 721DC
-OBJ_721A6.L3:
+FnInfoWd~1.L3:
         ?ST=0   1                                * 721E0
-        GOYES   OBJ_721A6.L4                     * 721E3
+        GOYES   FnInfoWd~1.L4                    * 721E3
         D0=(5)  #800FF                           * 721E5
         DAT0=C  A                                * 721EC
         D0=D0-  5                                * 721EF
@@ -2548,26 +2562,27 @@ OBJ_721A6.L3:
         CD0EX                                    * 7220A
         R1=C.F  A                                * 7220D
         C=A     A                                * 72213
-OBJ_721A6.L4:
+FnInfoWd~1.L4:
         P=      1                                * 72215
         GOSUB   SUB_72048                        * 72217
-        GOTO    OBJ_721A6.loop2                  * 7221B
+        GOTO    FnInfoWd~1.loop2                 * 7221B
 
 * refs (1): 270E8
-OBJ_7221F:
+CmdFieldRomp~1:
         CON(5)  (*)+5                            * 7221F  primitive code object
-        GOSUB   SUB_71E57                        * 72224
+        GOSUB   ACPTR>Ob                         * 72224
         GOSUB   SUB_72107                        * 72228
-        LC(5)   OBJ_270F2                        * 7222C
+        LC(5)   CmdFieldRomp2                    * 7222C
         ?A=0    A                                * 72233
-        GOYES   OBJ_7221F.L1                     * 72236
+        GOYES   CmdFieldRomp~1.L1                * 72236
         LC(5)   DROPFALSE                        * 72238
-OBJ_7221F.L1:
+CmdFieldRomp~1.L1:
         A=C     A                                * 7223F
         PC=(A)                                   * 72241
 
 * refs (2): 307B1 D4633
-SUB_72245:
+* -> C = 12 nibbles read from #7FFBF in ROM, with the bank switcher moved away for the read; the bytes go to IRAMBUFF
+GetVersionId:
         D1=(5)  #7FFBF                           * 72245
         P=      0                                * 7224C
         LC(5)   #7F000                           * 7224E
@@ -2631,7 +2646,8 @@ sto12(bk,nm,s)~3:
         ASSEMBLE
 
 * refs (1): 723BD
-SUB_72350:
+* As AccessIntOff, for the #90000 window's handler; ST 15 says whether interrupts were on
+AccessIntOff2:
         D0=(5)  INITEN                           * 72350
         C=0     B                                * 72357
         C=DAT0  1                                * 7235A
@@ -2639,41 +2655,41 @@ SUB_72350:
         DAT0=C  P                                * 72360
         D0=(5)  AccessInit                       * 72364
         ?ST=0   15                               * 7236B
-        GOYES   SUB_72350.L1                     * 7236E
+        GOYES   AccessIntOff2.L1                 * 7236E
         C=C+1   P                                * 72370
-SUB_72350.L1:
+AccessIntOff2.L1:
         P=      0                                * 72373
         DAT0=C  B                                * 72375
         ST=0    15                               * 72378
         RTN                                      * 7237B
-SUB_72350.loop2:
+AccessIntOff2.loop2:
         C=0     A                                * 7237D
         P=      0                                * 7237F
         C=C-1   A                                * 72381
         RTNC                                     * 72383
-SUB_72350.L3:
+AccessIntOff2.L3:
         ?P=     0                                * 72386
-        GOYES   SUB_72350.loop6                  * 72389
+        GOYES   AccessIntOff2.loop6              * 72389
         ?P=     1                                * 7238B
-        GOYES   SUB_72350.loop7                  * 7238E
+        GOYES   AccessIntOff2.loop7              * 7238E
         ?P=     2                                * 72390
-        GOYES   SUB_72350.L5                     * 72393
+        GOYES   AccessIntOff2.L5                 * 72393
         ?P=     3                                * 72395
-        GOYES   SUB_72350.L4                     * 72398
+        GOYES   AccessIntOff2.L4                 * 72398
         ?P=     4                                * 7239A
-        GOYES   SUB_72350.loop2                  * 7239D
-        GOTO    SUB_72350.L21                    * 7239F
-SUB_72350.L4:
-        GOTO    SUB_72350.L12                    * 723A3
-SUB_72350.L5:
-        GOTO    SUB_72350.L10                    * 723A7
-SUB_72350.loop6:
+        GOYES   AccessIntOff2.loop2              * 7239D
+        GOTO    AccessIntOff2.L21                * 7239F
+AccessIntOff2.L4:
+        GOTO    AccessIntOff2.L12                * 723A3
+AccessIntOff2.L5:
+        GOTO    AccessIntOff2.L10                * 723A7
+AccessIntOff2.loop6:
         P=      0                                * 723AB
         D0=(5)  #80535                           * 723AD
         C=DAT0  1                                * 723B4
         ?C=0    P                                * 723B8
         RTNYES                                   * 723BB
-        GOSUB   SUB_72350                        * 723BD
+        GOSUB   AccessIntOff2                    * 723BD
         D0=(5)  #7F000                           * 723C1
         C=DAT0  B                                * 723C8
         D0=(5)  LINECOUNTg                       * 723CB
@@ -2689,14 +2705,14 @@ SUB_72350.loop6:
         LC(5)   CMOS                             * 723FB
         CONFIG                                   * 72402
         RTNCC                                    * 72405
-SUB_72350.loop7:
+AccessIntOff2.loop7:
         P=      0                                * 72407
         D0=(5)  #80535                           * 72409
         C=DAT0  1                                * 72410
         ?C=0    P                                * 72414
         RTNYES                                   * 72417
         C=C+1   P                                * 72419
-        GOC     SUB_72350.L8                     * 7241C
+        GOC     AccessIntOff2.L8                 * 7241C
         D0=(5)  LINECOUNTg                       * 7241F
         C=DAT0  B                                * 72426
         CBIT=0  7                                * 72429
@@ -2705,7 +2721,7 @@ SUB_72350.loop7:
         DAT0=C  B                                * 72438
         D0=(5)  #7F040                           * 7243B
         C=DAT0  B                                * 72442
-SUB_72350.L8:
+AccessIntOff2.L8:
         LC(5)   CMOS                             * 72445
         UNCNFG                                   * 7244C
         LC(5)   #C0000                           * 7244F
@@ -2718,16 +2734,16 @@ SUB_72350.L8:
         DAT0=C  1                                * 72474
         C=0     P                                * 72478
         ?C#0    B                                * 7247B
-        GOYES   SUB_72350.L9                     * 7247E
+        GOYES   AccessIntOff2.L9                 * 7247E
         RTN                                      * 72480
-SUB_72350.L9:
+AccessIntOff2.L9:
         ST=1    15                               * 72482
         RSI                                      * 72485
         RTI                                      * 7248A
-SUB_72350.L10:
+AccessIntOff2.L10:
         P=      0                                * 7248C
         ?C=0    S                                * 7248E
-        GOYES   SUB_72350.L11                    * 72491
+        GOYES   AccessIntOff2.L11                * 72491
         C=R1.F  A                                * 72493
         D0=C                                     * 72499
         C=R0.F  A                                * 7249C
@@ -2738,8 +2754,8 @@ SUB_72350.L10:
         R0=C.F  A                                * 724B1
         CD0EX                                    * 724B7
         R1=C.F  A                                * 724BA
-        GOTO    SUB_72350.loop7                  * 724C0
-SUB_72350.L11:
+        GOTO    AccessIntOff2.loop7              * 724C0
+AccessIntOff2.L11:
         C=R0.F  A                                * 724C4
         D0=C                                     * 724CA
         C=R1.F  A                                * 724CD
@@ -2750,25 +2766,25 @@ SUB_72350.L11:
         R1=C.F  A                                * 724E2
         CD0EX                                    * 724E8
         R0=C.F  A                                * 724EB
-        GOTO    SUB_72350.loop7                  * 724F1
-SUB_72350.L12:
+        GOTO    AccessIntOff2.loop7              * 724F1
+AccessIntOff2.L12:
         P=      0                                * 724F5
         ST=0    10                               * 724F7
-SUB_72350.loop13:
+AccessIntOff2.loop13:
         C=A     A                                * 724FA
         GOSBVL  CREATETEMP                       * 724FC
         C=B     A                                * 72503
         D0=C                                     * 72505
-        GOC     SUB_72350.L14                    * 72508
+        GOC     AccessIntOff2.L14                * 72508
         D0=D0-  6                                * 7250B
         AD0EX                                    * 7250E
-        GOSUB   SUB_72350.loop6                  * 72511
+        GOSUB   AccessIntOff2.loop6              * 72511
         D0=(5)  #80535                           * 72515
         C=DAT0  1                                * 7251C
         ?C=0    P                                * 72520
-        GOYES   SUB_72350.L15                    * 72523
-        GOTO    SUB_72350.L17                    * 72525
-SUB_72350.L14:
+        GOYES   AccessIntOff2.L15                * 72523
+        GOTO    AccessIntOff2.L17                * 72525
+AccessIntOff2.L14:
         ?ST=1   10                               * 72529
         RTNYES                                   * 7252C
         ST=1    10                               * 7252E
@@ -2785,36 +2801,36 @@ SUB_72350.L14:
         A=C     A                                * 72558
         GOSUB   CSRW5~jump_2                     * 7255A
         RSTK=C                                   * 7255E
-        GONC    SUB_72350.loop13                 * 72560
-SUB_72350.L15:
+        GONC    AccessIntOff2.loop13             * 72560
+AccessIntOff2.L15:
         C=R0.F  A                                * 72563
         C=C+A   A                                * 72569
         D0=C                                     * 7256B
         C=A     A                                * 7256E
         GOSBVL  MOVEUP                           * 72570
-SUB_72350.loop16:
+AccessIntOff2.loop16:
         AD1EX                                    * 72577
         R0=A.F  A                                * 7257A
-        GOSUB   SUB_72350.loop7                  * 72580
+        GOSUB   AccessIntOff2.loop7              * 72580
         RTNCC                                    * 72584
-SUB_72350.L17:
+AccessIntOff2.L17:
         LC(5)   #C0000                           * 72586
         B=C     A                                * 7258D
         LC(5)   #F0000                           * 7258F
         D=C     A                                * 72596
         C=R0.F  A                                * 72598
         C=C+A   A                                * 7259E
-SUB_72350.loop18:
+AccessIntOff2.loop18:
         D0=C                                     * 725A0
         LC(5)   #80309                           * 725A3
         CD1EX                                    * 725AA
         R0=C.F  A                                * 725AD
         LC(5)   #00214                           * 725B3
         A=A-C   A                                * 725BA
-        GONC    SUB_72350.L19                    * 725BC
+        GONC    AccessIntOff2.L19                * 725BC
         C=C+A   A                                * 725BF
         A=0     A                                * 725C1
-SUB_72350.L19:
+AccessIntOff2.L19:
         DAT1=A  A                                * 725C3
         GOSBVL  MOVEUP                           * 725C6
         A=R0.F  A                                * 725CD
@@ -2842,20 +2858,20 @@ SUB_72350.L19:
         D0=(5)  #80309                           * 7261D
         A=DAT0  A                                * 72624
         ?A=0    A                                * 72627
-        GOYES   SUB_72350.L20                    * 7262A
+        GOYES   AccessIntOff2.L20                * 7262A
         C=R0.F  A                                * 7262C
-        GOTO    SUB_72350.loop18                 * 72632
-SUB_72350.L20:
-        GOTO    SUB_72350.loop16                 * 72636
-SUB_72350.L21:
-        GOSUB   SUB_72350.loop6                  * 7263A
+        GOTO    AccessIntOff2.loop18             * 72632
+AccessIntOff2.L20:
+        GOTO    AccessIntOff2.loop16             * 72636
+AccessIntOff2.L21:
+        GOSUB   AccessIntOff2.loop6              * 7263A
         C=R0.F  A                                * 7263E
         D0=C                                     * 72644
         GOSBVL  SKIPOB                           * 72647
         AD0EX                                    * 7264E
         C=R0.F  A                                * 72651
         A=A-C   A                                * 72657
-        GOTO    SUB_72350.loop7                  * 72659
+        GOTO    AccessIntOff2.loop7              * 72659
 
 * refs (4): 72536 7253D 72849 72850
 CSLW5~jump_2:
@@ -2866,7 +2882,8 @@ CSRW5~jump_2:
         GOVLNG  CSRW5                            * 72664
 
 * refs (1): 726C8
-SUB_7266B:
+* As AccessIntOff, for the #80000 window's handler; ST 15 says whether interrupts were on
+AccessIntOff3:
         D0=(5)  INITEN                           * 7266B
         C=0     B                                * 72672
         C=DAT0  1                                * 72675
@@ -2874,37 +2891,37 @@ SUB_7266B:
         DAT0=C  P                                * 7267B
         D0=(5)  AccessInit                       * 7267F
         ?ST=0   15                               * 72686
-        GOYES   SUB_7266B.L1                     * 72689
+        GOYES   AccessIntOff3.L1                 * 72689
         C=C+1   P                                * 7268B
-SUB_7266B.L1:
+AccessIntOff3.L1:
         P=      0                                * 7268E
         DAT0=C  B                                * 72690
         ST=0    15                               * 72693
         RTN                                      * 72696
-SUB_7266B.loop2:
+AccessIntOff3.loop2:
         C=0     A                                * 72698
         P=      0                                * 7269A
         C=C-1   A                                * 7269C
         RTNC                                     * 7269E
-SUB_7266B.L3:
+AccessIntOff3.L3:
         ?P=     0                                * 726A1
-        GOYES   SUB_7266B.loop6                  * 726A4
+        GOYES   AccessIntOff3.loop6              * 726A4
         ?P=     1                                * 726A6
-        GOYES   SUB_7266B.loop7                  * 726A9
+        GOYES   AccessIntOff3.loop7              * 726A9
         ?P=     2                                * 726AB
-        GOYES   SUB_7266B.L5                     * 726AE
+        GOYES   AccessIntOff3.L5                 * 726AE
         ?P=     3                                * 726B0
-        GOYES   SUB_7266B.L4                     * 726B3
+        GOYES   AccessIntOff3.L4                 * 726B3
         ?P=     4                                * 726B5
-        GOYES   SUB_7266B.loop2                  * 726B8
-        GOTO    SUB_7266B.L22                    * 726BA
-SUB_7266B.L4:
-        GOTO    SUB_7266B.L14                    * 726BE
-SUB_7266B.L5:
-        GOTO    SUB_7266B.L12                    * 726C2
-SUB_7266B.loop6:
+        GOYES   AccessIntOff3.loop2              * 726B8
+        GOTO    AccessIntOff3.L22                * 726BA
+AccessIntOff3.L4:
+        GOTO    AccessIntOff3.L14                * 726BE
+AccessIntOff3.L5:
+        GOTO    AccessIntOff3.L12                * 726C2
+AccessIntOff3.loop6:
         P=      0                                * 726C6
-        GOSUB   SUB_7266B                        * 726C8
+        GOSUB   AccessIntOff3                    * 726C8
         D0=(5)  #7F000                           * 726CC
         C=DAT0  B                                * 726D3
         D0=(5)  LINECOUNTg                       * 726D6
@@ -2920,14 +2937,14 @@ SUB_7266B.loop6:
         LC(5)   CMOS                             * 72706
         CONFIG                                   * 7270D
         RTNCC                                    * 72710
-SUB_7266B.loop7:
+AccessIntOff3.loop7:
         P=      0                                * 72712
         D0=(5)  #80535                           * 72714
         C=DAT0  1                                * 7271B
         ?C=0    P                                * 7271F
-        GOYES   SUB_7266B.L11                    * 72722
+        GOYES   AccessIntOff3.L11                * 72722
         C=C+1   P                                * 72724
-        GOC     SUB_7266B.L8                     * 72727
+        GOC     AccessIntOff3.L8                 * 72727
         D0=(5)  LINECOUNTg                       * 7272A
         C=DAT0  B                                * 72731
         CBIT=0  7                                * 72734
@@ -2936,12 +2953,12 @@ SUB_7266B.loop7:
         DAT0=C  B                                * 72743
         D0=(5)  #7F040                           * 72746
         C=DAT0  B                                * 7274D
-SUB_7266B.L8:
+AccessIntOff3.L8:
         LC(5)   CMOS                             * 72750
         UNCNFG                                   * 72757
         LC(5)   #C0000                           * 7275A
         CONFIG                                   * 72761
-SUB_7266B.loop9:
+AccessIntOff3.loop9:
         LC(5)   CMOS                             * 72764
         CONFIG                                   * 7276B
         D0=(5)  AccessInit                       * 7276E
@@ -2950,22 +2967,22 @@ SUB_7266B.loop9:
         DAT0=C  1                                * 7277F
         C=0     P                                * 72783
         ?C#0    B                                * 72786
-        GOYES   SUB_7266B.L10                    * 72789
+        GOYES   AccessIntOff3.L10                * 72789
         RTN                                      * 7278B
-SUB_7266B.L10:
+AccessIntOff3.L10:
         ST=1    15                               * 7278D
         RSI                                      * 72790
         RTI                                      * 72795
-SUB_7266B.L11:
+AccessIntOff3.L11:
         LC(5)   CMOS                             * 72797
         UNCNFG                                   * 7279E
         LC(5)   #F0000                           * 727A1
         CONFIG                                   * 727A8
-        GOTO    SUB_7266B.loop9                  * 727AB
-SUB_7266B.L12:
+        GOTO    AccessIntOff3.loop9              * 727AB
+AccessIntOff3.L12:
         P=      0                                * 727AF
         ?C=0    S                                * 727B1
-        GOYES   SUB_7266B.L13                    * 727B4
+        GOYES   AccessIntOff3.L13                * 727B4
         C=R1.F  A                                * 727B6
         D0=C                                     * 727BC
         C=R0.F  A                                * 727BF
@@ -2976,8 +2993,8 @@ SUB_7266B.L12:
         R0=C.F  A                                * 727D4
         CD0EX                                    * 727DA
         R1=C.F  A                                * 727DD
-        GOTO    SUB_7266B.loop7                  * 727E3
-SUB_7266B.L13:
+        GOTO    AccessIntOff3.loop7              * 727E3
+AccessIntOff3.L13:
         C=R0.F  A                                * 727E7
         D0=C                                     * 727ED
         C=R1.F  A                                * 727F0
@@ -2988,21 +3005,21 @@ SUB_7266B.L13:
         R1=C.F  A                                * 72805
         CD0EX                                    * 7280B
         R0=C.F  A                                * 7280E
-        GOTO    SUB_7266B.loop7                  * 72814
-SUB_7266B.L14:
+        GOTO    AccessIntOff3.loop7              * 72814
+AccessIntOff3.L14:
         P=      0                                * 72818
         ST=0    10                               * 7281A
-SUB_7266B.loop15:
+AccessIntOff3.loop15:
         C=A     A                                * 7281D
         GOSBVL  CREATETEMP                       * 7281F
         C=B     A                                * 72826
         D0=C                                     * 72828
-        GOC     SUB_7266B.L16                    * 7282B
+        GOC     AccessIntOff3.L16                * 7282B
         D0=D0-  6                                * 7282E
         AD0EX                                    * 72831
-        GOSUB   SUB_7266B.loop6                  * 72834
-        GOTO    SUB_7266B.L18                    * 72838
-SUB_7266B.L16:
+        GOSUB   AccessIntOff3.loop6              * 72834
+        GOTO    AccessIntOff3.L18                * 72838
+AccessIntOff3.L16:
         ?ST=1   10                               * 7283C
         RTNYES                                   * 7283F
         ST=1    10                               * 72841
@@ -3019,30 +3036,30 @@ SUB_7266B.L16:
         A=C     A                                * 7286B
         GOSUB   CSRW5~jump_2                     * 7286D
         RSTK=C                                   * 72871
-        GONC    SUB_7266B.loop15                 * 72873
-SUB_7266B.loop17:
+        GONC    AccessIntOff3.loop15             * 72873
+AccessIntOff3.loop17:
         AD1EX                                    * 72876
         R0=A.F  A                                * 72879
-        GOSUB   SUB_7266B.loop7                  * 7287F
+        GOSUB   AccessIntOff3.loop7              * 7287F
         RTNCC                                    * 72883
-SUB_7266B.L18:
+AccessIntOff3.L18:
         LC(5)   #C0000                           * 72885
         B=C     A                                * 7288C
         LC(5)   #FE000                           * 7288E
         D=C     A                                * 72895
         C=R0.F  A                                * 72897
         C=C+A   A                                * 7289D
-SUB_7266B.loop19:
+AccessIntOff3.loop19:
         D0=C                                     * 7289F
         LC(5)   #80309                           * 728A2
         CD1EX                                    * 728A9
         R0=C.F  A                                * 728AC
         LC(5)   #00214                           * 728B2
         A=A-C   A                                * 728B9
-        GONC    SUB_7266B.L20                    * 728BB
+        GONC    AccessIntOff3.L20                * 728BB
         C=C+A   A                                * 728BE
         A=0     A                                * 728C0
-SUB_7266B.L20:
+AccessIntOff3.L20:
         DAT1=A  A                                * 728C2
         GOSBVL  MOVEUP                           * 728C5
         A=R0.F  A                                * 728CC
@@ -3070,20 +3087,20 @@ SUB_7266B.L20:
         D0=(5)  #80309                           * 7291C
         A=DAT0  A                                * 72923
         ?A=0    A                                * 72926
-        GOYES   SUB_7266B.L21                    * 72929
+        GOYES   AccessIntOff3.L21                * 72929
         C=R0.F  A                                * 7292B
-        GOTO    SUB_7266B.loop19                 * 72931
-SUB_7266B.L21:
-        GOTO    SUB_7266B.loop17                 * 72935
-SUB_7266B.L22:
-        GOSUB   SUB_7266B.loop6                  * 72939
+        GOTO    AccessIntOff3.loop19             * 72931
+AccessIntOff3.L21:
+        GOTO    AccessIntOff3.loop17             * 72935
+AccessIntOff3.L22:
+        GOSUB   AccessIntOff3.loop6              * 72939
         C=R0.F  A                                * 7293D
         D0=C                                     * 72943
         GOSBVL  SKIPOB                           * 72946
         AD0EX                                    * 7294D
         C=R0.F  A                                * 72950
         A=A-C   A                                * 72956
-        GOTO    SUB_7266B.loop7                  * 72958
+        GOTO    AccessIntOff3.loop7              * 72958
 
 * refs (1): C07F8
 VERSION~1:
@@ -3135,7 +3152,7 @@ OBJ_729F8:
 
 Code_72A11:
           CODE                                   * 72A11  83 nibbles
-            GOSBVL  SUB_71E57                    * 72A1B
+            GOSBVL  ACPTR>Ob                     * 72A1B
             D1=D1-  6                            * 72A22
             A=DAT1  6                            * 72A25
             R2=A                                 * 72A29
@@ -3154,7 +3171,7 @@ Code_72A11:
 Code_72A11.L1:
             P=      0                            * 72A4E
             LC(5)   TRUE                         * 72A50
-            GOC     Code_72A11.L2                * 72A57  never taken
+            GOC     Code_72A11.L2                * 72A57
             LC(5)   FALSE                        * 72A5A
 Code_72A11.L2:
             DAT1=C  A                            * 72A61
@@ -3169,7 +3186,8 @@ Code_72A11.L2:
         :: BINT33 #> COLAcase ;                  * 72A73
 
 * refs (2): 097C0 72AF0
-OBJ_72A8C:
+* dir -> : purge every variable and subdirectory of a directory
+PurgeDir:
         :: BEGIN DUP LASTRAM-WORD WHILE          * 72A8C
           :: DUP TYPERRP? ITE pgdir!(di) purge(_) * 72AA5
           ;                                      * 72AC3
@@ -3177,7 +3195,7 @@ OBJ_72A8C:
 
 * refs (1): 8554B
 restore(nm,s)~3:
-        :: HOMEDIR SYSSTOPSIGN CONTEXT@ COLA OBJ_72A8C * 72AD7
+        :: HOMEDIR SYSSTOPSIGN CONTEXT@ COLA PurgeDir * 72AD7
         ;                                        * 72AF5
 
 * refs (44): 1A025 1A034 5B31B 5B3C0 5B40B 5B46F ...
@@ -3248,7 +3266,7 @@ StartMenu~1~romptr~1:
 OBJ_72BD2:
         CON(5)  (*)+5                            * 72BD2  primitive code object
         ASSEMBLE
-        GOSUBL  SUB_71E57                        * 72BD7
+        GOSUBL  ACPTR>Ob                         * 72BD7
         A=DAT1  A                                * 72BDD
         D1=C                                     * 72BE0
         D1=D1+  5                                * 72BE3
@@ -3414,7 +3432,8 @@ SUB_72D1F.L3:
         BSS     22                               * 72DAF
 
 * refs (1): 2462C
-OBJ_72DC5:
+* Probably: id -> id or lam: a name whose first character is #8E becomes a local name, in place
+Tok>Name~1:
         CON(5)  (*)+5                            * 72DC5  primitive code object
         A=DAT1  A                                * 72DCA
         AD1EX                                    * 72DCD
@@ -3425,7 +3444,7 @@ OBJ_72DC5:
         D1=A                                     * 72DE0
         LA(2)   #8E                              * 72DE3
         ?C#A    B                                * 72DEA
-        GOYES   OBJ_72DC5.L1                     * 72DED
+        GOYES   Tok>Name~1.L1                    * 72DED
         C=B     A                                * 72DEF
         CD0EX                                    * 72DF1
         D0=D0-  5                                * 72DF4
@@ -3433,9 +3452,9 @@ OBJ_72DC5:
         C=DAT0  A                                * 72DF9
         CD0EX                                    * 72DFC
         B=C     A                                * 72DFF
-        LA(5)   OBJ_24681                        * 72E01
+        LA(5)   PutTok                           * 72E01
         PC=(A)                                   * 72E0B
-OBJ_72DC5.L1:
+Tok>Name~1.L1:
         A=DAT0  A                                * 72E0F
         D0=D0+  5                                * 72E12
         PC=(A)                                   * 72E15
@@ -3481,13 +3500,14 @@ OBJ_72E87:
 
 * refs (1): 18F44
 OBJ_72EA5:
-        :: OBJ_18802 DUP PTR>ROMPTR OBJ_2699F case SETTYPEERR * 72EA5
-          ROMPTR 0E8 00D ;                       * 72EC8
+        :: LastRomWd> DUP PTR>ROMPTR Lib700? case SETTYPEERR * 72EA5
+          XLIB RomptrOverLists ;                 * 72EC8
 
 * refs (1): 3A256
 DispMenu.1~2:
         ::                                       * 72ED8
 
+* Sets bit 3 at VDISP2+#122 (an internal display state word)
 Code_72EDD:
           CODE                                   * 72EDD  51 nibbles
             CD1EX                                * 72EE7
@@ -3503,7 +3523,7 @@ Code_72EDD:
             DAT1=A  1                            * 72F0D
             C=RSTK                               * 72F11
             D1=C                                 * 72F13
-            GOTO    OBJ_72DC5.L1                 * 72F16
+            GOTO    Tok>Name~1.L1                * 72F16
           ENDCODE                                * 72F1A
         ;                                        * 72F1A
 
@@ -3514,16 +3534,17 @@ OBJ_72F1F:
           BINT14 OBJ_72F89                       * 72F33  unit
           BINT5                                  * 72F3D  list
           :: '                                   * 72F42
-            :: OBJ_1FA07 ABND ; 1GETLAM >HCOMP BINT1 FALSE ROMPTR 0E8 00F ; * 72F4C
+            :: >Qcore ABND ; 1GETLAM >HCOMP BINT1 FALSE XLIB ListApply ; * 72F4C
         ;                                        * 72F84
 
 * refs (2): 72F38 72FD9
+* Probably: unit -> ob: applies %>Q to the number of a unit object and puts the unit back, or builds number * unit
 OBJ_72F89:
-        :: UMU> SWAP OBJ_5A9F5 DUPUNROT TYPEREAL? case UM>U * 72F89
+        :: UMU> SWAP %>Q DUPUNROT TYPEREAL? case UM>U * 72F89
           BINT2 SINNERMETA Cr x* ;               * 72FB1
 
 * refs (1): 5AA9A
-OBJ_72FCA:
+Symb>Q~any:
         :: CK&DISPATCH0                          * 72FCA
           BINT14 OBJ_72F89                       * 72FD4  unit
           BINT0 NOP                              * 72FDE  any
@@ -3535,15 +3556,16 @@ OBJ_72FED:
           DUPTYPECSTR? ;                         * 73006
 
 * refs (1): 28B78
-OBJ_73010:
-        :: BINT27 TestSysFlag case OBJ_28BAF     * 73010  flag -27: 'X+Y*i' → '(X,Y)' / 'X+Y*i' → 'X+Y*i'
-          COLA OBJ_73038                         * 73029
+* Probably: the 'X+Y*i' flag (-27) decides whether complex numbers are expanded when decompiled
+Symb>Pieces~2:
+        :: BINT27 TestSysFlag case Symb>Pieces~5 * 73010  flag -27: 'X+Y*i' → '(X,Y)' / 'X+Y*i' → 'X+Y*i'
+          COLA Symb>Pieces~3                     * 73029
         ;                                        * 73033
 
 * refs (1): 7302E
-OBJ_73038:
+Symb>Pieces~3:
         ::                                       * 73038
 
 {{}}_7303D:
-          { {}_600F3 } >R >R BEGIN OBJ_73088 DUP {}_600F3 EQ NOT_WHILE * 7303D
-          OBJ_28BFF REPEAT DROP ;                * 73074
+          { {}_600F3 } >R >R BEGIN Symb>Pieces~4 DUP {}_600F3 EQ NOT_WHILE * 7303D
+          SdcNode REPEAT DROP ;                  * 73074

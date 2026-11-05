@@ -1,6 +1,6 @@
-* HP 48GX ROM revision R, #0E006-#10028: Unit objects and conversion
+* HP 48GX ROM revision R, #0E006-#10028: Alarm lists, status bits and the alarm beep; hxs helpers; unit objects: parsing a unit into number, factor and dimensions, conversion and unit arithmetic
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: tok_m tok_s UM>U ALARMS@ UMCONV U>NCQ tok_g 4dropn;IU! val(2uo) HBUFF_X_Y UMU> UM*
+* Most referenced: tok_m tok_s UM>U ALARMS@ UMCONV U>NCQ tok_g ?D0#LIST 4dropn;IU! val(2uo) HBUFF_X_Y AlarmUpdate
 * Follows on from the previous file (at #0E006 in the original ROM).
         RPL
 
@@ -63,30 +63,34 @@ ExecAlarm(r):
         :: DUP RCLALARM% BINT3 NTHCOMPDROP EVAL ; * 0E141
 
 * refs (8): 0CD35 0CD49 0CD5D 0DCCC 0DD94 0DE4D ...
-OBJ_0E164:
-        :: OBJ_0E17D OBJ_0E19B OBJ_0E1B9 ;       * 0E164
+* -> : after a change in the list: find the next alarm, find the oldest past due, refresh the alert annunciator
+AlarmUpdate:
+        :: UpdNextAlarm UpdPastDue CkLowBatOb ;  * 0E164
 
 * refs (1): 0E169
-OBJ_0E17D:
+* -> : NextAlarm(li)? on the list, for its effect on the timer
+UpdNextAlarm:
         :: ALARMS@ NextAlarm(li)? case DROP      * 0E17D
         ;                                        * 0E196
 
 * refs (1): 0E16E
-OBJ_0E19B:
+* -> : OldestPastDue(li)? on the list, for its effect on the alarms-due nibble
+UpdPastDue:
         :: ALARMS@ OldestPastDue(li)? case DROP  * 0E19B
         ;                                        * 0E1B4
 
 * refs (1): 0E173
-OBJ_0E1B9:
+* -> : code object: CkLowBat
+CkLowBatOb:
         CON(5)  (*)+5                            * 0E1B9  primitive code object
         ASSEMBLE
         GOSUB   SAVPTR~jump_5                    * 0E1BE
         ST=0    15                               * 0E1C2
-        GOSBVL  SUB_00672                        * 0E1C5
+        GOSBVL  CkLowBat                         * 0E1C5
         GOSUB   AllowIntr~jump                   * 0E1CC
         P=      0                                * 0E1D0
         SETHEX                                   * 0E1D2
-        GOTO    OBJ_0E302.L5                     * 0E1D4
+        GOTO    AlmNextTime.L5                   * 0E1D4
         RPL
 
 * {} -> {}'
@@ -96,7 +100,8 @@ ALRMLS>:
           4ROLL SWAP BINT4 {}N ;                 * 0E200
 
 * refs (2): 0CB39 0DEE8
-OBJ_0E219:
+* {} -> {}: point ALARMS at the list
+ALARMS!:
         CON(5)  (*)+5                            * 0E219  primitive code object
         ASSEMBLE
         LC(5)   ALARMS                           * 0E21E
@@ -114,7 +119,8 @@ ALARMS@:
         GOVLNG  GBUFF.L1                         * 0E241
 
 * refs (2): 0DDE9 0DE9D
-OBJ_0E248:
+* # -> #: set ALARM# from the bint
+ALARM#!:
         CON(5)  (*)+5                            * 0E248  primitive code object
         CD0EX                                    * 0E24D
         A=DAT1  A                                * 0E250
@@ -127,7 +133,8 @@ OBJ_0E248:
         GOTO    NewAlarm(li)~1.L1                * 0E269
 
 * refs (4): 0DCBD 0DD58 0DE16 0DE70
-OBJ_0E26D:
+* -> #: the alarm number at ALARM#
+ALARM#@:
         CON(5)  (*)+5                            * 0E26D  primitive code object
         LC(5)   ALARM#                           * 0E272
         GOTO    IndexPastDue(li).L1              * 0E279
@@ -146,25 +153,28 @@ IndexPastDue(li).L1:
         GOVLNG  PUSH#LOOP                        * 0E29A
 
 * refs (1): 0DFA2
-OBJ_0E2A1:
+* alarm -> alarm flag: code object: system flag -44
+Flag44?:
         CON(5)  (*)+5                            * 0E2A1  primitive code object
         AD1EX                                    * 0E2A6
-        GOSBVL  SUB_0D7D5.L1                     * 0E2A9
+        GOSBVL  Flag44>ST4                       * 0E2A9
         D1=A                                     * 0E2B0
-        GOC     OBJ_0E2D1.L2                     * 0E2B3
-        GONC    OBJ_0E2D1.L1                     * 0E2B6
+        GOC     AlmRepeats?.L2                   * 0E2B3
+        GONC    AlmRepeats?.L1                   * 0E2B6
 
 * refs (1): 0DFF2
-OBJ_0E2B9:
+* alarm -> alarm flag: code object: system flag -43
+Flag43?:
         CON(5)  (*)+5                            * 0E2B9  primitive code object
         AD1EX                                    * 0E2BE
-        GOSBVL  SUB_0D7D5                        * 0E2C1
+        GOSBVL  Flag43>ST3                       * 0E2C1
         D1=A                                     * 0E2C8
-        GOC     OBJ_0E2D1.L2                     * 0E2CB
-        GONC    OBJ_0E2D1.L1                     * 0E2CE
+        GOC     AlmRepeats?.L2                   * 0E2CB
+        GONC    AlmRepeats?.L1                   * 0E2CE
 
 * refs (2): 0DF93 0DFDE
-OBJ_0E2D1:
+* alarm -> alarm flag: TRUE if its repeat interval (10 nibbles at +#1C) is not 0
+AlmRepeats?:
         CON(5)  (*)+5                            * 0E2D1  primitive code object
         A=DAT1  A                                * 0E2D6
         LC(5)   #0001C                           * 0E2D9
@@ -174,59 +184,61 @@ OBJ_0E2D1:
         A=DAT1  10                               * 0E2E8
         D1=C                                     * 0E2EC
         ?A#0    W                                * 0E2EF
-        GOYES   OBJ_0E2D1.L2                     * 0E2F2
-OBJ_0E2D1.L1:
+        GOYES   AlmRepeats?.L2                   * 0E2F2
+AlmRepeats?.L1:
         GOVLNG  PushFLoop                        * 0E2F4
-OBJ_0E2D1.L2:
+AlmRepeats?.L2:
         GOVLNG  PushTLoop                        * 0E2FB
 
 * refs (1): 0DE8E
-OBJ_0E302:
+* alarm -> alarm: add the repeat interval to its time until it lies in the future; large gaps are stepped in powers of 16
+AlmNextTime:
         CON(5)  (*)+5                            * 0E302  primitive code object
         GOSUB   SAVPTR~jump_5                    * 0E307
         C=DAT1  A                                * 0E30B
         D0=C                                     * 0E30E
         D0=D0+  15                               * 0E311
-        GOSUB   SUB_0E377                        * 0E314
+        GOSUB   Now+52                           * 0E314
         A=0     W                                * 0E318
         A=DAT0  13                               * 0E31B
         ?A>B    W                                * 0E31F
-        GOYES   OBJ_0E302.L5                     * 0E322
+        GOYES   AlmNextTime.L5                   * 0E322
         R0=A                                     * 0E324
         D0=D0+  13                               * 0E327
         A=0     W                                * 0E32A
         A=DAT0  10                               * 0E32D
         R1=A                                     * 0E331
         ?A=0    W                                * 0E334
-        GOYES   OBJ_0E302.L5                     * 0E337
+        GOYES   AlmNextTime.L5                   * 0E337
         D0=D0-  13                               * 0E339
-OBJ_0E302.loop1:
-        GOSUB   SUB_0E377                        * 0E33C
+AlmNextTime.loop1:
+        GOSUB   Now+52                           * 0E33C
         A=R0                                     * 0E340
         C=R1                                     * 0E343
         P=      0                                * 0E346
-OBJ_0E302.loop2:
+AlmNextTime.loop2:
         A=A+C   W                                * 0E348
         ?A>B    W                                * 0E34B
-        GOYES   OBJ_0E302.L4                     * 0E34E
+        GOYES   AlmNextTime.L4                   * 0E34E
         P=P+1                                    * 0E350
-        GONC    OBJ_0E302.loop2                  * 0E352
-OBJ_0E302.loop3:
+        GONC    AlmNextTime.loop2                * 0E352
+AlmNextTime.loop3:
         CSL     W                                * 0E355
         A=A+C   W                                * 0E358
         ?A<=B   W                                * 0E35B
-        GOYES   OBJ_0E302.loop3                  * 0E35E
+        GOYES   AlmNextTime.loop3                * 0E35E
         A=A-C   W                                * 0E360
         R0=A                                     * 0E363
-        GOTO    OBJ_0E302.loop1                  * 0E366
-OBJ_0E302.L4:
+        GOTO    AlmNextTime.loop1                * 0E366
+AlmNextTime.L4:
         P=      0                                * 0E36A
         DAT0=A  13                               * 0E36C
-OBJ_0E302.L5:
+AlmNextTime.L5:
         GOVLNG  GETPTRLOOP                       * 0E370
 
 * refs (2): 0E314 0E33C
-SUB_0E377:
+* -> B.W = the time now plus #52 ticks, the least an alarm may lie ahead
+Now+52:
         ST=0    15                               * 0E377
         GOSBVL  GetTimChk                        * 0E37A
         B=C     W                                * 0E381
@@ -278,7 +290,7 @@ ALARMxcp~5:
         CON(5)  (*)+5                            * 0E41B  primitive code object
         ASSEMBLE
         AD1EX                                    * 0E420
-        GOSBVL  SUB_0D877                        * 0E423
+        GOSBVL  ClkOn>ST0                        * 0E423
         D1=(5)  SAVECLK                          * 0E42A
         DAT1=C  1                                * 0E431
         D1=A                                     * 0E435
@@ -290,7 +302,7 @@ ALARMxcp~6:
         AD1EX                                    * 0E441
         D1=(5)  SAVECLK                          * 0E444
         C=DAT1  S                                * 0E44B
-        GOSBVL  SUB_0D877                        * 0E44F
+        GOSBVL  ClkOn>ST0                        * 0E44F
         DAT1=C  S                                * 0E456
         D1=A                                     * 0E45A
         GOTO    NewAlarm(li)~1.L1                * 0E45D
@@ -369,9 +381,9 @@ chkdate(r):
         A=DAT1  W                                * 0E642
         GOSBVL  CLKUTL1                          * 0E646
         SETDEC                                   * 0E64D
-        GOSBVL  SUB_0D36C                        * 0E64F
+        GOSBVL  %>YMD                            * 0E64F
         GOC     chkdate(r).L1                    * 0E656
-        GOSBVL  SUB_0DB0B                        * 0E659
+        GOSBVL  DateRange?                       * 0E659
         GONC    Ornd(abs(r))~1.L1                * 0E660
 chkdate(r).L1:
         GOVLNG  NOALARMERR.L1                    * 0E663
@@ -410,7 +422,7 @@ Ornd(abs(r))~1:
 Ornd(abs(r))~1.L1:
         P=      0                                * 0E6CC
         SETHEX                                   * 0E6CE
-        GOTO    OBJ_0E302.L5                     * 0E6D0
+        GOTO    AlmNextTime.L5                   * 0E6D0
         RPL
 
 * refs (1): 0E5F9
@@ -421,14 +433,14 @@ Ornd(abs(r)):
 * refs (2): 0E543 0E626
 STOALM:
         :: SWAP 4UNROLL >ALRMLS ALARMS@ TOTEMPSWAP InsAlarm(2li) * 0E6ED
-          NewAlarm(li) UNCOERCE OBJ_0172B ;      * 0E710
+          NewAlarm(li) UNCOERCE SetT2WakeOb ;    * 0E710
 
 * %n ->
 * refs (2): 19981 B7D2D
 DELALARM:
         :: COERCE DUP#0= casedrop DelAlarrm(0)   * 0E724
           DUP ALARMS@ LENCOMP #> case NOALARMERR * 0E73D
-          DelAlarrm(s) OBJ_0172B OBJ_0E164 ;     * 0E75B
+          DelAlarrm(s) SetT2WakeOb AlarmUpdate ; * 0E75B
 
 * refs (1): 0E75B
 DelAlarrm(s):
@@ -436,24 +448,26 @@ DelAlarrm(s):
 
 * refs (2): 0E738 17E25
 DelAlarrm(0):
-        :: NULL{} TOTEMPOB NewAlarm(li) OBJ_0172B OBJ_0E164 ; * 0E78D
+        :: NULL{} TOTEMPOB NewAlarm(li) SetT2WakeOb AlarmUpdate ; * 0E78D
 
         CON(5)  (*)+5                            * 0E7B0  primitive code object
         ASSEMBLE
         P=      1                                * 0E7B5
-        GOTO    OBJ_0E7BB.L1                     * 0E7B7
+        GOTO    Alm4?.L1                         * 0E7B7
 
 * refs (2): 0DF89 0DFE8
-OBJ_0E7BB:
+* alarm -> alarm flag: TRUE if bit 4 of its status is set. An alarm is {hxs ob}: the hxs has time 13, repeat 10, status 1
+Alm4?:
         CON(5)  (*)+5                            * 0E7BB  primitive code object
         P=      4                                * 0E7C0
-OBJ_0E7BB.L1:
-        GOSUB   SUB_0E859                        * 0E7C2
+Alm4?.L1:
+        GOSUB   AlmStatus                        * 0E7C2
         C=C&A   S                                * 0E7C6
         GOTO    addrClkOnNib.L2                  * 0E7CA
 
 * refs (1): 048AE
-OBJ_0E7CE:
+* -> flag: TRUE if ClkOnNib is set
+ClkOn?:
         CON(5)  (*)+5                            * 0E7CE  primitive code object
 
 * refs (1): 0E7CE
@@ -471,56 +485,63 @@ addrClkOnNib.L3:
         GOVLNG  PushFLoop                        * 0E7F0
 
 * refs (3): 0DC9A 0DD2B 0DDF3
-OBJ_0E7F7:
+* alarm -> alarm: set status bit 4
+AlmSet4:
         CON(5)  (*)+5                            * 0E7F7  primitive code object
         P=      4                                * 0E7FC
-        GOTO    OBJ_0E80D.L1                     * 0E7FE
+        GOTO    AlmSet8.L1                       * 0E7FE
 
 * refs (2): 0DC95 0DD12
-OBJ_0E802:
+* alarm -> alarm: set status bit 2
+AlmSet2:
         CON(5)  (*)+5                            * 0E802  primitive code object
         P=      2                                * 0E807
-        GOTO    OBJ_0E80D.L1                     * 0E809
+        GOTO    AlmSet8.L1                       * 0E809
 
 * refs (1): 0DFC5
-OBJ_0E80D:
+* alarm -> alarm: set status bit 8
+AlmSet8:
         CON(5)  (*)+5                            * 0E80D  primitive code object
         P=      8                                * 0E812
-OBJ_0E80D.L1:
-        GOSUB   SUB_0E859                        * 0E814
+AlmSet8.L1:
+        GOSUB   AlmStatus                        * 0E814
         A=A!C   S                                * 0E818
-        GOTO    OBJ_0E836.L2                     * 0E81C
+        GOTO    AlmClr2.L2                       * 0E81C
 
 * refs (4): 0DC9F 0DD17 0DDFD 0DE89
-OBJ_0E820:
+* alarm -> alarm: clear status bit 1
+AlmClr1:
         CON(5)  (*)+5                            * 0E820  primitive code object
         P=      1                                * 0E825
-        GOTO    OBJ_0E836.L1                     * 0E827
+        GOTO    AlmClr2.L1                       * 0E827
 
 * refs (1): 0DE84
-OBJ_0E82B:
+* alarm -> alarm: clear status bit 4
+AlmClr4:
         CON(5)  (*)+5                            * 0E82B  primitive code object
         P=      4                                * 0E830
-        GOTO    OBJ_0E836.L1                     * 0E832
+        GOTO    AlmClr2.L1                       * 0E832
 
 * refs (3): 0DD30 0DDF8 0DE7F
-OBJ_0E836:
+* alarm -> alarm: clear status bit 2
+AlmClr2:
         CON(5)  (*)+5                            * 0E836  primitive code object
         P=      2                                * 0E83B
-OBJ_0E836.L1:
-        GOSUB   SUB_0E859                        * 0E83D
+AlmClr2.L1:
+        GOSUB   AlmStatus                        * 0E83D
         C=-C-1  S                                * 0E841
         A=A&C   S                                * 0E844
-OBJ_0E836.L2:
+AlmClr2.L2:
         DAT1=A  S                                * 0E848
         D1=C                                     * 0E84C
-OBJ_0E836.L3:
+AlmClr2.L3:
         A=DAT0  A                                * 0E84F
         D0=D0+  5                                * 0E852
         PC=(A)                                   * 0E855
 
 * refs (3): 0E7C2 0E814 0E83D
-SUB_0E859:
+* P = bit, D1 at the alarm pointer -> A.S = status nibble, C.S = the bit, D1 at the status, C.A = old D1
+AlmStatus:
         A=DAT1  A                                * 0E859
         C=P     15                               * 0E85C
         P=      0                                * 0E860
@@ -529,7 +550,7 @@ SUB_0E859:
         CD1EX                                    * 0E86B
         A=DAT1  S                                * 0E86E
         RTN                                      * 0E872
-SUB_0E859.L1:
+AlmStatus.L1:
         GOVLNG  GETPTRLOOP                       * 0E874
 
 * refs (7): 0EA37 0EC13 0EE1B 0EEB0 0EF25 0EF83 ...
@@ -541,7 +562,8 @@ SAVPTR~jump_6:
         GOVLNG  SAVPTR                           * 0E882
 
 * refs (4): 0ECC2 0ECD8 0ECF3 0ED09
-SUB_0E889:
+* C = beep parameters -> : RCKBp unless ST5 (flag -57) is set
+BeepUnless57:
         ?ST=1   5                                * 0E889
         RTNYES                                   * 0E88C
         GOVLNG  RCKBp                            * 0E88E
@@ -551,55 +573,60 @@ SAFESKIPOB~jump:
         GOVLNG  SAFESKIPOB                       * 0E895
 
 * refs (1): 0CB90
-SUB_0E89C:
+* -> B.A = number of alarms; carry set if the list at ALARMS is not all {hxs ob}
+CkAlarmList:
         P=      0                                * 0E89C
         SETHEX                                   * 0E89E
         B=0     A                                * 0E8A0
         D0=(5)  ALARMS                           * 0E8A2
         C=DAT0  A                                * 0E8A9
         D0=C                                     * 0E8AC
-        GOSUB   SUB_0E914                        * 0E8AF
+        GOSUB   ?D0#LIST                         * 0E8AF
         RTNC                                     * 0E8B3
-SUB_0E89C.loop1:
+CkAlarmList.loop1:
         D0=D0+  5                                * 0E8B6
-        GOSUB   SUB_0E8F3                        * 0E8B9
+        GOSUB   ?D0#SEMI                         * 0E8B9
         RTNNC                                    * 0E8BD
         B=B+1   A                                * 0E8C0
-        GOSUB   SUB_0E914                        * 0E8C2
+        GOSUB   ?D0#LIST                         * 0E8C2
         RTNC                                     * 0E8C6
         D0=D0+  5                                * 0E8C9
-        GOSUB   SUB_0E8FE                        * 0E8CC
+        GOSUB   ?D0#HXS                          * 0E8CC
         RTNC                                     * 0E8D0
         D0=D0+  5                                * 0E8D3
-        GOSUB   SUB_0E909                        * 0E8D6
+        GOSUB   ?D0#1D                           * 0E8D6
         RTNC                                     * 0E8DA
         D0=D0+  16                               * 0E8DD
         D0=D0+  13                               * 0E8E0
         GOSUB   SAFESKIPOB~jump                  * 0E8E3
         RTNC                                     * 0E8E7
-        GOSUB   SUB_0E8F3                        * 0E8EA
-        GONC    SUB_0E89C.loop1                  * 0E8EE
+        GOSUB   ?D0#SEMI                         * 0E8EA
+        GONC    CkAlarmList.loop1                * 0E8EE
         RTNSC                                    * 0E8F1
 
 * refs (8): 013A7 0157D 0E8B9 0E8EA 0E95A 0E9E7 ...
-SUB_0E8F3:
+* D0 -> carry set if the word at D0 is not SEMI
+?D0#SEMI:
         LC(5)   SEMI                             * 0E8F3
-        GOTO    SUB_0E914.L1                     * 0E8FA
+        GOTO    ?D0#LIST.L1                      * 0E8FA
 
 * refs (4): 013BE 0159A 0E8CC 0EC80
-SUB_0E8FE:
+* D0 -> carry set if the word at D0 is not DOHSTR
+?D0#HXS:
         LC(5)   DOHSTR                           * 0E8FE
-        GOTO    SUB_0E914.L1                     * 0E905
+        GOTO    ?D0#LIST.L1                      * 0E905
 
 * refs (4): 013CB 015A7 0E8D6 0EC8A
-SUB_0E909:
+* D0 -> carry set if the word at D0 is not #1D, the length of an alarm's hxs
+?D0#1D:
         LC(5)   #0001D                           * 0E909
-        GOTO    SUB_0E914.L1                     * 0E910
+        GOTO    ?D0#LIST.L1                      * 0E910
 
 * refs (9): 0139A 013B1 01570 0158D 0E8AF 0E8C2 ...
-SUB_0E914:
+* D0 -> carry set if the word at D0 is not DOLIST
+?D0#LIST:
         LC(5)   DOLIST                           * 0E914
-SUB_0E914.L1:
+?D0#LIST.L1:
         A=DAT0  A                                * 0E91B
         ?C#A    A                                * 0E91E
         RTNYES                                   * 0E921
@@ -623,7 +650,7 @@ OldestPastDue(li)?:
 OldestPastDue(li)?.loop1:
         D0=D0+  5                                * 0E955
         B=B+1   A                                * 0E958
-        GOSUB   SUB_0E8F3                        * 0E95A
+        GOSUB   ?D0#SEMI                         * 0E95A
         GONC    OldestPastDue(li)?.L3            * 0E95E
         AD0EX                                    * 0E961
         LC(5)   #00026                           * 0E964
@@ -666,7 +693,7 @@ NextAlarm(li)?:
 NextAlarm(li)?.loop1:
         D0=D0+  5                                * 0E9E2
         B=B+1   A                                * 0E9E5
-        GOSUB   SUB_0E8F3                        * 0E9E7
+        GOSUB   ?D0#SEMI                         * 0E9E7
         GONC    OldestPastDue(li)?.L3            * 0E9EB
         AD0EX                                    * 0E9EE
         LC(5)   #00026                           * 0E9F1
@@ -700,42 +727,43 @@ NextAlarm(li)?.L3:
         GOTO    FindAlarm(li,b).loop2            * 0EA54
 
 * refs (1): 0CE89
-SUB_0EA58:
+* C.W = time -> : for every alarm in the list set or clear its status bit 8 by whether it is past that time. Status 2 is left alone
+MarkPastDue:
         R0=C                                     * 0EA58
         B=C     W                                * 0EA5B
         D0=(5)  ALARMS                           * 0EA5E
         A=DAT0  A                                * 0EA65
         D0=A                                     * 0EA68
         P=      0                                * 0EA6B
-        GOSUB   SUB_0E914                        * 0EA6D
-        GOC     SUB_0EA58.L5                     * 0EA71
-SUB_0EA58.loop1:
+        GOSUB   ?D0#LIST                         * 0EA6D
+        GOC     MarkPastDue.L5                   * 0EA71
+MarkPastDue.loop1:
         D0=D0+  5                                * 0EA74
-        GOSUB   SUB_0E8F3                        * 0EA77
+        GOSUB   ?D0#SEMI                         * 0EA77
         RTNNC                                    * 0EA7B
-        GOSUB   SUB_0EC76                        * 0EA7E
+        GOSUB   Alm>Time                         * 0EA7E
         A=C     W                                * 0EA82
-        GOC     SUB_0EA58.L5                     * 0EA85
+        GOC     MarkPastDue.L5                   * 0EA85
         D0=D0+  13                               * 0EA88
         D0=D0+  10                               * 0EA8B
         C=DAT0  1                                * 0EA8E
         ?A<B    W                                * 0EA92
-        GOYES   SUB_0EA58.L2                     * 0EA95
+        GOYES   MarkPastDue.L2                   * 0EA95
         C=0     A                                * 0EA97
-        GONC    SUB_0EA58.L3                     * 0EA99
-SUB_0EA58.L2:
+        GONC    MarkPastDue.L3                   * 0EA99
+MarkPastDue.L2:
         P=C     0                                * 0EA9C
         ?P=     2                                * 0EAA0
-        GOYES   SUB_0EA58.L4                     * 0EAA3
+        GOYES   MarkPastDue.L4                   * 0EAA3
         CBIT=1  3                                * 0EAA5
-SUB_0EA58.L3:
+MarkPastDue.L3:
         DAT0=C  1                                * 0EAAA
-SUB_0EA58.L4:
+MarkPastDue.L4:
         P=      0                                * 0EAAE
         D0=D0+  1                                * 0EAB0
         GOSUB   SAFESKIPOB~jump                  * 0EAB3
-        GONC    SUB_0EA58.loop1                  * 0EAB7
-SUB_0EA58.L5:
+        GONC    MarkPastDue.loop1                * 0EAB7
+MarkPastDue.L5:
         GOTO    FindAlarm(li,b).loop2            * 0EABA
         RPL
 
@@ -788,7 +816,7 @@ alarm<>{}?:
 FindAlarm(li,b):
         CON(5)  (*)+5                            * 0EC07  primitive code object
         ASSEMBLE
-        GOSBVL  SUB_0D90A                        * 0EC0C
+        GOSBVL  PopHxs13                         * 0EC0C
         GOSUB   GETPTR~jump_2                    * 0EC13
         C=DAT1  A                                * 0EC17
         R1=C                                     * 0EC1A
@@ -799,15 +827,15 @@ FindAlarm(li,b):
         D=C     W                                * 0EC29
         C=R1                                     * 0EC2C
         D0=C                                     * 0EC2F
-        GOSUB   SUB_0E914                        * 0EC32
+        GOSUB   ?D0#LIST                         * 0EC32
         GOC     FindAlarm(li,b).loop2            * 0EC36
         B=0     A                                * 0EC39
 FindAlarm(li,b).loop1:
         D0=D0+  5                                * 0EC3B
         B=B+1   A                                * 0EC3E
-        GOSUB   SUB_0E8F3                        * 0EC40
+        GOSUB   ?D0#SEMI                         * 0EC40
         GONC    FindAlarm(li,b).L4               * 0EC44
-        GOSUB   SUB_0EC76                        * 0EC47
+        GOSUB   Alm>Time                         * 0EC47
         GONC    FindAlarm(li,b).L3               * 0EC4B
 FindAlarm(li,b).loop2:
         GOVLNG  TryToRM?                         * 0EC4E
@@ -825,14 +853,15 @@ FindAlarm(li,b).L4:
         GOVLNG  PUSH#LOOP                        * 0EC6F
 
 * refs (2): 0EA7E 0EC47
-SUB_0EC76:
-        GOSUB   SUB_0E914                        * 0EC76
+* D0 at an alarm -> C.W = its time, D0 at it; carry set if the shape is wrong
+Alm>Time:
+        GOSUB   ?D0#LIST                         * 0EC76
         RTNC                                     * 0EC7A
         D0=D0+  5                                * 0EC7D
-        GOSUB   SUB_0E8FE                        * 0EC80
+        GOSUB   ?D0#HXS                          * 0EC80
         RTNC                                     * 0EC84
         D0=D0+  5                                * 0EC87
-        GOSUB   SUB_0E909                        * 0EC8A
+        GOSUB   ?D0#1D                           * 0EC8A
         RTNC                                     * 0EC8E
         D0=D0+  5                                * 0EC91
         C=0     W                                * 0EC94
@@ -840,61 +869,63 @@ SUB_0EC76:
         RTNCC                                    * 0EC9B
 
 * refs (1): 0DD1C
-ALARMxcp~7:
+* -> T: code object: sound the alarm pattern, waiting between beeps, until a key is pressed or the pattern ends. Flag -57 silences it
+AlarmBeep:
         CON(5)  (*)+5                            * 0EC9D  primitive code object
         ST=0    15                               * 0ECA2
         GOSUB   SAVPTR~jump_6                    * 0ECA5
-        GOSBVL  SUB_0D840                        * 0ECA9
+        GOSBVL  Flag57>ST5                       * 0ECA9
         LC(5)   #00199                           * 0ECB0
-        GOSUB   SUB_0ED45                        * 0ECB7
-        GOC     ALARMxcp~7.loop3                 * 0ECBB
+        GOSUB   WaitKeyTurns                     * 0ECB7
+        GOC     AlarmBeep.loop3                  * 0ECBB
         LC(2)   #B9                              * 0ECBE
-        GOSUB   SUB_0E889                        * 0ECC2
+        GOSUB   BeepUnless57                     * 0ECC2
         LC(5)   #00028                           * 0ECC6
-        GOSUB   SUB_0ED45                        * 0ECCD
-        GOC     ALARMxcp~7.loop3                 * 0ECD1
+        GOSUB   WaitKeyTurns                     * 0ECCD
+        GOC     AlarmBeep.loop3                  * 0ECD1
         LC(2)   #B9                              * 0ECD4
-        GOSUB   SUB_0E889                        * 0ECD8
+        GOSUB   BeepUnless57                     * 0ECD8
         LC(5)   #01551                           * 0ECDC
-        GOSUB   SUB_0ED45                        * 0ECE3
-        GOC     ALARMxcp~7.loop3                 * 0ECE7
+        GOSUB   WaitKeyTurns                     * 0ECE3
+        GOC     AlarmBeep.loop3                  * 0ECE7
         LC(1)   #9                               * 0ECEA
-ALARMxcp~7.loop1:
+AlarmBeep.loop1:
         RSTK=C                                   * 0ECED
         LC(2)   #E0                              * 0ECEF
-        GOSUB   SUB_0E889                        * 0ECF3
+        GOSUB   BeepUnless57                     * 0ECF3
         LC(5)   #000CB                           * 0ECF7
-        GOSUB   SUB_0ED45                        * 0ECFE
-        GOC     ALARMxcp~7.L2                    * 0ED02
+        GOSUB   WaitKeyTurns                     * 0ECFE
+        GOC     AlarmBeep.L2                     * 0ED02
         LC(2)   #F0                              * 0ED05
-        GOSUB   SUB_0E889                        * 0ED09
+        GOSUB   BeepUnless57                     * 0ED09
         LC(5)   #00376                           * 0ED0D
-        GOSUB   SUB_0ED45                        * 0ED14
-        GOC     ALARMxcp~7.L2                    * 0ED18
+        GOSUB   WaitKeyTurns                     * 0ED14
+        GOC     AlarmBeep.L2                     * 0ED18
         C=RSTK                                   * 0ED1B
         C=C-1   P                                * 0ED1D
-        GONC    ALARMxcp~7.loop1                 * 0ED20
+        GONC    AlarmBeep.loop1                  * 0ED20
         GOTO    OldestPastDue(li)?.L3            * 0ED23
-ALARMxcp~7.L2:
+AlarmBeep.L2:
         C=RSTK                                   * 0ED27
-ALARMxcp~7.loop3:
+AlarmBeep.loop3:
         LC(5)   #00028                           * 0ED29
-        GOSUB   SUB_0ED45                        * 0ED30
-        GOC     ALARMxcp~7.loop3                 * 0ED34
+        GOSUB   WaitKeyTurns                     * 0ED30
+        GOC     AlarmBeep.loop3                  * 0ED34
         GOSBVL  AllowIntr                        * 0ED37
         GOVLNG  GETPTRTRUE                       * 0ED3E
 
 * refs (6): 0ECB7 0ECCD 0ECE3 0ECFE 0ED14 0ED30
-SUB_0ED45:
+* C.A = turns -> carry set if a key is down within them. Key map #8001 sets DOUSEALARM too
+WaitKeyTurns:
         B=C     A                                * 0ED45
-SUB_0ED45.loop1:
+WaitKeyTurns.loop1:
         GOSBVL  BITMAP                           * 0ED47
         ?A#0    W                                * 0ED4E
-        GOYES   SUB_0ED45.L2                     * 0ED51
+        GOYES   WaitKeyTurns.L2                  * 0ED51
         B=B-1   A                                * 0ED53
-        GONC    SUB_0ED45.loop1                  * 0ED55
+        GONC    WaitKeyTurns.loop1               * 0ED55
         RTNCC                                    * 0ED58
-SUB_0ED45.L2:
+WaitKeyTurns.L2:
         C=0     W                                * 0ED5A
         LC(4)   #8001                            * 0ED5D
         ?C#A    W                                * 0ED63
@@ -912,10 +943,11 @@ ClrDouseAlm:
         CD1EX                                    * 0ED87
         DAT1=C  S                                * 0ED8A
         CD1EX                                    * 0ED8E
-        GOTO    OBJ_0E836.L3                     * 0ED91
+        GOTO    AlmClr2.L3                       * 0ED91
 
 * refs (1): 0DFB6
-OBJ_0ED95:
+* -> flag: TRUE if DOUSEALARM is set
+Doused?:
         CON(5)  (*)+5                            * 0ED95  primitive code object
         LC(5)   DOUSEALARM                       * 0ED9A
         GOTO    addrClkOnNib.L1                  * 0EDA1
@@ -940,27 +972,28 @@ MAKEHXS:
         ASSEMBLE
 
 * refs (1): 12673
-SUB_0EDFA:
+* D.A = room in words -> : if it is 0, collect garbage once; Insufficient Memory if still none
+GCIfD=0:
         ST=0    10                               * 0EDFA
-SUB_0EDFA.loop1:
+GCIfD=0.loop1:
         D=D-1   A                                * 0EDFD
         D=D+1   A                                * 0EDFF
         RTNNC                                    * 0EE01
         ?ST=0   10                               * 0EE04
-        GOYES   SUB_0EDFA.L2                     * 0EE07
+        GOYES   GCIfD=0.L2                       * 0EE07
         GOVLNG  DOMEMERR                         * 0EE09
-SUB_0EDFA.L2:
+GCIfD=0.L2:
         GOSUB   SAVPTR~jump_6                    * 0EE10
         GOSBVL  GARBAGECOL                       * 0EE14
         GOSUB   GETPTR~jump_2                    * 0EE1B
         ST=1    10                               * 0EE1F
-        GOTO    SUB_0EDFA.loop1                  * 0EE22
+        GOTO    GCIfD=0.loop1                    * 0EE22
 
 * hxs_d hxs_t -> hxs
 * refs (2): 0EB59 0EF63
 Date+Time:
         CON(5)  (*)+5                            * 0EE26  primitive code object
-        GOSBVL  SUB_0D90A                        * 0EE2B
+        GOSBVL  PopHxs13                         * 0EE2B
         A=DAT1  A                                * 0EE32
         D1=A                                     * 0EE35
         D1=D1+  10                               * 0EE38
@@ -969,7 +1002,7 @@ Date+Time:
         A=R0                                     * 0EE42
         C=C+A   W                                * 0EE45
         DAT1=C  13                               * 0EE48
-        GOTO    SUB_0E859.L1                     * 0EE4C
+        GOTO    AlmStatus.L1                     * 0EE4C
         RPL
 
 * %date -> hxs
@@ -1001,7 +1034,7 @@ TOD>Ticks.L1:
             C=R0                                 * 0EEBD
             DAT1=C  13                           * 0EEC0
             D1=A                                 * 0EEC4
-            GOTO    OBJ_0E836.L3                 * 0EEC7
+            GOTO    AlmClr2.L3                   * 0EEC7
           ENDCODE                                * 0EECB
         ;                                        * 0EECB
 
@@ -1034,7 +1067,7 @@ r=>b10.L2:
             C=R0                                 * 0EF32
             DAT1=C  10                           * 0EF35
             D1=A                                 * 0EF39
-            GOTO    OBJ_0E836.L3                 * 0EF3C
+            GOTO    AlmClr2.L3                   * 0EF3C
           ENDCODE                                * 0EF40
         ;                                        * 0EF40
 
@@ -1044,10 +1077,10 @@ r=>b10.L2:
         :: r=>b10 ROT Date>hxs13 ROT TOD>Ticks Date+Time ~BINT24;MAKEHXS * 0EF45
           3UNROLL                                * 0EF6D
           CODE                                   * 0EF72  99 nibbles
-            GOSBVL  SUB_0D90A                    * 0EF7C
+            GOSBVL  PopHxs13                     * 0EF7C
             GOSUB   GETPTR~jump_2                * 0EF83
             GOSBVL  >ALRMLS~1                    * 0EF87
-            GOSBVL  SUB_012F9                    * 0EF8E
+            GOSBVL  GetTimeNoInt                 * 0EF8E
             A=R0                                 * 0EF95
             ST=0    8                            * 0EF98
             P=      12                           * 0EF9B
@@ -1073,7 +1106,7 @@ r=>b10.L2:
 >ALRMLS.L2:
             DAT1=C  1                            * 0EFD2
             D1=A                                 * 0EFD6
-            GOLONG  OBJ_0E836.L3                 * 0EFD9
+            GOLONG  AlmClr2.L3                   * 0EFD9
           ENDCODE                                * 0EFDF
           SWAP TWO{}N ;                          * 0EFDF
 
@@ -1119,13 +1152,13 @@ LIB00B:
 * refs (2): 289EA 28AD3
 st=>uo?:
         :: %1 SWAP dup;stdunit(st)? case makeuo!(r,st) * 0F075
-          DUP CAR$ OBJ_0C2CD NOTcase st=>uo?~1   * 0F093
+          DUP CAR$ SIPrefix? NOTcase st=>uo?~1   * 0F093
           OVER CDR$ dup;stdunit(st)? NOTcasedrop st=>uo?~1 * 0F0AC
-          ROTDROPSWAP st=>uo?~3 SWAP umP BINT4 OBJ_0F124 TRUE ; * 0F0C5
+          ROTDROPSWAP st=>uo?~3 SWAP umP BINT4 Meta>Unit TRUE ; * 0F0C5
 
 * refs (2): 0F08E 0F11A
 makeuo!(r,st):
-        :: BINT2 OBJ_0F124 TRUE ;                * 0F0ED
+        :: BINT2 Meta>Unit TRUE ;                * 0F0ED
 
 * refs (2): 0F0A7 0F0C0
 st=>uo?~1:
@@ -1133,7 +1166,8 @@ st=>uo?~1:
         ;                                        * 0F11F
 
 * refs (2): 0F0DE 0F0F7
-OBJ_0F124:
+* ob1..obn #n -> unit: add umEND, build a symbolic from the meta and change its prolog to DOEXT
+Meta>Unit:
         :: umEND SWAP#1+ PSYMBN                  * 0F124
           CODE                                   * 0F138  29 nibbles
             A=DAT1  A                            * 0F142
@@ -1150,8 +1184,8 @@ OBJ_0F124:
 * refs (1): 0F110
 st=>uo?~2:
         :: ngsizecase TRUE                       * 0F164
-          OBJ_25F4E SWAPONE OVER delimcase drop(1-2,4);true * 0F173
-          DROP OBJ_25A93 DROP OBJ_25A93 nultrior * 0F18C
+          ClassTblAlg SWAPONE OVER delimcase drop(1-2,4);true * 0F173
+          DROP NextTok DROP NextTok nultrior     * 0F18C
           :: 2DROP SWAPDROPDUP $>ID COMPILEID DROP NOTROMPcase * 0F1A5
 
 <>gn?:
@@ -1172,7 +1206,7 @@ UNIT>$.loop1:
 UNIT>$.L2:
           DUPTYPECSTR? ?GOTO UNIT>$.loop1 DUPTYPECHAR? ?GOTO UNIT>$.loop1 * 0F24A
           dup;r?:dq/sk                           * 0F268
-          :: OBJ_35264 GOTO UNIT>$.loop1 ; REQcasedrop umP * 0F26D
+          :: a%>$Alg GOTO UNIT>$.loop1 ; REQcasedrop umP * 0F26D
           :: SWAP >H$ GOTO UNIT>$.loop1 ; REQcasedrop um* * 0F290
           :: tok* GOTO UNIT>$.L3 ; REQcasedrop um/ * 0F2B8
           :: tok/ GOTO UNIT>$.L3 ; REQcasedrop um^ * 0F2DB
@@ -1195,14 +1229,14 @@ UMU>:
 UMCONV:
         :: OBJ_0FDE5 ROTDROP 3PICK 5ROLL OBJ_0FDE5 5UNROLL 7UNROLL 7UNROLL * 0F371
           2DROP puretemp? ITE TempConv           * 0F39E
-          :: OBJ_0FCA5 %%/ %%* ;                 * 0F3B2
+          :: CkConvDims %%/ %%* ;                * 0F3B2
           %%>% Unbr>U ;                          * 0F3CB
         BSS     10                               * 0F3DA  zeros
 
 * [] []' -> [] []' flag
 * refs (4): 0F3A3 0F6ED CD63A CD695
 puretemp?:
-        :: DUP puretemp?~1 EQ NOTcaseFALSE 2DUPEQ * 0F3E4
+        :: DUP UDimTemp EQ NOTcaseFALSE 2DUPEQ   * 0F3E4
         ;                                        * 0F402
 
 * refs (9): 9362E 94032 95D56 95EC1 9616E 9632B ...
@@ -1246,12 +1280,12 @@ val(2uo):
 * u u' -> %flag
 * refs (3): 1E9D1 1E9DB 1E9E5
 UM=?:
-        :: val(2uo) OBJ_1EA30 ;                  * 0F584
+        :: val(2uo) EQUAL% ;                     * 0F584
 
 * u u' -> %flag
 * refs (3): 1EAFC 1EB06 1EB10
 UM#?:
-        :: val(2uo) OBJ_1EB51 ;                  * 0F598
+        :: val(2uo) NOTEQUAL% ;                  * 0F598
 
 * u u' -> %flag
 * refs (3): 1EC09 1EC13 1EC1D
@@ -1289,6 +1323,7 @@ UMSIN:
         ::                                       * 0F62E
 
 * refs (2): 0F665 0F679
+* Probably: the angle-mode test of unit trigonometry: a value in degrees goes through %%SINDEG
 OBJ_0F633:
           :: UMSIN~1 'REVAL %%>% ; %%SINDEG ;    * 0F633
 
@@ -1316,13 +1351,13 @@ UM+:
         :: OBJ_0F6C0 %%+ %%>% Unbr>U ;           * 0F6A2
 
 * refs (4): 0F6A7 0F779 0FC41 0FCD2
+* Probably: u u' -> %%: conversion factor from u to u'. Pure temperatures take an offset and must be alike, others must have the same dimensions
 OBJ_0F6C0:
         :: OBJ_0FDE5 4PICK 6ROLL OBJ_0FDE5 5UNROLL 7UNROLL 7UNROLL 2DROP * 0F6C0
           puretemp? ITE                          * 0F6ED
-          :: 2DROP OBJ_0FC6E 3PICK OBJ_0FC6E SWAPDROP EQ NOTcase * 0F6F7
-            CONSTUNITERR                         * 0F71F
+          :: 2DROP TempZero 3PICK TempZero SWAPDROP EQ NOTcase CONSTUNITERR * 0F6F7
           ;                                      * 0F724
-          OBJ_0FCA5                              * 0F729
+          CkConvDims                             * 0F729
           %%/ %%*SWAP ;                          * 0F72E
 
 * refs (1): 10C31
@@ -1488,12 +1523,14 @@ UM%:
         BSS     10                               * 0FBD8  zeros
 
 * refs (1): 0FDBD
-OBJ_0FBE2:
-        :: OBJ_0FBFB case2DROP CONSTUNITERR      * 0FBE2
+* q q' -> : Inconsistent Units unless the dimension vectors agree
+CkSameDims:
+        :: SameDims? case2DROP CONSTUNITERR      * 0FBE2
         ;                                        * 0FBF6
 
 * refs (3): 0FBE7 0FCAA CAC6D
-OBJ_0FBFB:
+* q q' -> q q' flag: compare the vectors, and if they differ again after rounding to 10 places
+SameDims?:
         :: 2DUP EQUAL caseTRUE %10               * 0FBFB
           MATRND SWAP %10 MATRND SWAP 2DUP EQUAL ; * 0FC14
 
@@ -1505,14 +1542,16 @@ UM%T~1:
           SWAP%%/ %%1E2 %%* %%>% SWAPDROP ;      * 0FC50
 
 * refs (2): 0F701 0F70B
-OBJ_0FC6E:
+* cf -> cf %%: %%KZERO for Celsius, %%RZERO for Fahrenheit, otherwise %%0
+TempZero:
         :: DUP cfC jEQcase %%KZERO               * 0FC6E
           DUP cfF jEQcase %%RZERO                * 0FC87
           %%0 ;                                  * 0FC9B
 
 * refs (2): 0F3B7 0F729
-OBJ_0FCA5:
-        :: OBJ_0FBFB case2DROP ROMPTR 0C1 020    * 0FCA5
+* q q' -> : error (ROMPTR 0C1 020) unless SameDims?
+CkConvDims:
+        :: SameDims? case2DROP XLIB UnitAngleFix * 0FCA5
         ;                                        * 0FCBF
         BSS     9                                * 0FCC4  zeros
 
@@ -1563,7 +1602,7 @@ UMTRC:
 
 * refs (2): 0F878 0F8FF
 OBJ_0FDAE:
-        :: U>NCQ OBJ_3835E OBJ_0FBE2 %%* %%>% ;  * 0FDAE
+        :: U>NCQ UDimNone CkSameDims %%* %%>% ;  * 0FDAE
 
 * refs (5): B6166 B617B B6195 B61B3 B6204
 ~%0;%1:
@@ -1586,7 +1625,7 @@ U>NCQ:
 
 * refs (1): 0FE3A
 OBJ_0FE53:
-          :: %>%% %%1 OBJ_3835E ;                * 0FE53
+          :: %>%% %%1 UDimNone ;                 * 0FE53
 OBJ_0FE53.L1:
           >R                                     * 0FE6C
 OBJ_0FE53.loop2:
@@ -1595,24 +1634,24 @@ OBJ_0FE53.loop2:
 
 * refs (1): 0FE7B
 U>NCQ~1:
-        :: DUPTYPECHAR? case U>NCQ~5             * 0FE8F
+        :: DUPTYPECHAR? case SIPrefix>%%         * 0FE8F
           REQcasedrop um*                        * 0FEA3
-          U>NCQ~7 REQcasedrop um/                * 0FEAD
+          U>NCQ~5 REQcasedrop um/                * 0FEAD
           U>NCQ~3 REQcasedrop umP                * 0FEBC
           ~3UNROLL;%%*SWAP;TOTEMPOB REQcasedrop um^ * 0FECB
           U>NCQ~4 REQcasedrop umEND              * 0FEDA
           ~ROT;%>%%;3UNROLL DUPTYPECSTR? NOT?SEMI * 0FEE9
-          U>NCQ~6 case SWAP                      * 0FEF8
+          Unit$>Ob case SWAP                     * 0FEF8
           DUP$>ID U>NCQ~2 NOT?GOTO U>NCQ~1.L1 DUPTYPEREAL? case * 0FF07
-          :: SWAPDROP %>%% OBJ_3835E ;           * 0FF25
+          :: SWAPDROP %>%% UDimNone ;            * 0FF25
           DUPTYPEEXT? case                       * 0FF3E
           :: SWAPDROP U>NCQ ~3UNROLL;%%*SWAP;TOTEMPOB ; * 0FF48
           DROP                                   * 0FF61
 U>NCQ~1.L1:
-          DUP CAR$ OBJ_0C2CD NOTcase INVUNITERR  * 0FF66
-          U>NCQ~5 SWAP CDR$ $>ID U>NCQ~2 NOTcase INVUNITERR * 0FF7F
+          DUP CAR$ SIPrefix? NOTcase INVUNITERR  * 0FF66
+          SIPrefix>%% SWAP CDR$ $>ID U>NCQ~2 NOTcase INVUNITERR * 0FF7F
           DUPTYPEREAL? case                      * 0FFA2
-          :: %>%% %%* OBJ_3835E ;                * 0FFAC
+          :: %>%% %%* UDimNone ;                 * 0FFAC
           DUPTYPEEXT? NOTcase INVUNITERR         * 0FFC5
           U>NCQ 4UNROLL %%* %%*SWAP TOTEMPOB ;   * 0FFD4
 

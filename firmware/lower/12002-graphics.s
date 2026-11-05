@@ -1,4 +1,4 @@
-* HP 48GX ROM revision R, #12002-#14000: Display buffers and graphics
+* HP 48GX ROM revision R, #12002-#14000: Minifont text, grob subgrobs and resizing, display grobs and switching to PICT, pixels, inverting character cells, the cursor and its counters
 * Addresses in the right-hand comments are those of the original ROM.
 * Most referenced: HARDBUFF GBUFF TOADISP XYGROBDISP INVGROB HARDBUFF2 BLANKIT PIXON3 WINDOWXY DISPSTATUS2 DISPROW5 WINDOWCORNER
 * Follows on from the previous file (at #12002 in the original ROM).
@@ -15,7 +15,7 @@ RIGHT$3x6:
         GOSUB   POP#~jump                        * 12015
         R0=A                                     * 12019
         A=DAT1  A                                * 1201C
-        GOSUB   SUB_120CC                        * 1201F
+        GOSUB   $>Body                           * 1201F
         CD1EX                                    * 12023
         C=C+A   A                                * 12026
         C=C+A   A                                * 12028
@@ -31,9 +31,9 @@ RIGHT$3x6.loop1:
         GOC     RIGHT$3x6.L3                     * 1203D
         D1=D1-  2                                * 12040
         A=DAT1  B                                * 12043
-        GOSBVL  SUB_7A1F4                        * 12046
+        GOSBVL  MiniGlyph1                       * 12046
         AD1EX                                    * 1204D
-        GOSBVL  SUB_0C11B.L3                     * 12050
+        GOSBVL  CoveredRead.L3                   * 12050
         C=0     A                                * 12057
         C=DAT1  1                                * 12059
         D1=A                                     * 1205D
@@ -63,7 +63,7 @@ RIGHT$3x6.L4:
         D1=D1+  5                                * 120A7
         A=DAT1  A                                * 120AA
         DAT1=C  A                                * 120AD
-        GOSUB   SUB_120CC                        * 120B0
+        GOSUB   $>Body                           * 120B0
         C=R4                                     * 120B4
         A=A-C   A                                * 120B7
         CD1EX                                    * 120B9
@@ -74,7 +74,8 @@ RIGHT$3x6.L4:
         BSS     5                                * 120C7  zeros
 
 * refs (8): 11D0F 11D36 11F8F 1201F 120B0 1219A ...
-SUB_120CC:
+* A.A = string -> D1 at its first character, B.A = characters
+$>Body:
         D1=A                                     * 120CC
         D1=D1+  5                                * 120CF
         A=DAT1  A                                * 120D2
@@ -90,34 +91,36 @@ GETPTR~jump_3:
         NIBHEX  8DF7530                          * 120EE  Ø.5
 
 * refs (1): 11FA4
-SUB_120F5:
+* C.A = characters, D1 at them -> B.A = width in pixels of the text in the minifont, D0 used; carry set if the fetch fails
+Mini$Width:
         B=0     A                                * 120F5
         D=C     A                                * 120F7
         D=0     S                                * 120F9
-SUB_120F5.loop1:
+Mini$Width.loop1:
         D=D-1   S                                * 120FC
-        GONC    SUB_120F5.L2                     * 120FF
-        GOSUB   SUB_1211E                        * 12102
+        GONC    Mini$Width.L2                    * 120FF
+        GOSUB   MiniFetch8                       * 12102
         RTNC                                     * 12106
         AD1EX                                    * 12109
         D0=A                                     * 1210C
-SUB_120F5.L2:
+Mini$Width.L2:
         A=0     A                                * 1210F
         A=DAT0  1                                * 12111
         B=B+A   A                                * 12115
         D0=D0+  11                               * 12117
-        GOTO    SUB_120F5.loop1                  * 1211A
+        GOTO    Mini$Width.loop1                 * 1211A
 
 * refs (3): 12102 121B3 12267
-SUB_1211E:
+* D1, D.A = characters left -> up to 8 more turned into glyph addresses, D0 at the first; carry set at the end
+MiniFetch8:
         ?D=0    A                                * 1211E
         RTNYES                                   * 12121
         C=0     A                                * 12123
         LC(1)   #8                               * 12125
         ?D>=C   A                                * 12128
-        GOYES   SUB_1211E.L1                     * 1212B
+        GOYES   MiniFetch8.L1                    * 1212B
         C=D     A                                * 1212D
-SUB_1211E.L1:
+MiniFetch8.L1:
         D=D-C   A                                * 1212F
         P=C     0                                * 12131
         C=P     15                               * 12135
@@ -125,9 +128,9 @@ SUB_1211E.L1:
         D=D-1   S                                * 1213C
         A=DAT1  W                                * 1213F
         D1=D1+  16                               * 12143
-        GOSBVL  SUB_7A1FA                        * 12146
+        GOSBVL  MiniGlyphs                       * 12146
         AD1EX                                    * 1214D
-        GOSBVL  SUB_0C11B.L3                     * 12150
+        GOSBVL  CoveredRead.L3                   * 12150
         RTNCC                                    * 12157
         BSS     5                                * 12159  zeros
 
@@ -152,7 +155,7 @@ CENTER$3x5.L1:
         A=DAT1  A                                * 12191
         R4=A                                     * 12194
         A=R1                                     * 12197
-        GOSUB   SUB_120CC                        * 1219A
+        GOSUB   $>Body                           * 1219A
         C=A     A                                * 1219E
         D=0     W                                * 121A0
         DCEX    A                                * 121A3
@@ -162,7 +165,7 @@ CENTER$3x5.loop2:
         D=D-1   S                                * 121AA
         GONC    CENTER$3x5.L3                    * 121AD
         D0=C                                     * 121B0
-        GOSUB   SUB_1211E                        * 121B3
+        GOSUB   MiniFetch8                       * 121B3
         AD1EX                                    * 121B7
         C=A     A                                * 121BA
         CD0EX                                    * 121BC
@@ -190,7 +193,7 @@ CENTER$3x5.L5:
 CENTER$3x5.L6:
         CR4EX                                    * 121F0
         D1=C                                     * 121F3
-        GOSUB   SUB_11C58                        * 121F6
+        GOSUB   GrobPixAddr                      * 121F6
         D0=A                                     * 121FA
         A=B     A                                * 121FD
         C=R4                                     * 121FF
@@ -202,11 +205,12 @@ CENTER$3x5.L6:
         D1=D1+  10                               * 12211
         C=D     A                                * 12214
         ST=0    2                                * 12216
-        GOSUB   SUB_12223                        * 12219
+        GOSUB   MiniDraw                         * 12219
         GOLONG  GROB!.L1                         * 1221D
 
 * refs (2): 11FE9 12219
-SUB_12223:
+* Draw minifont text into a grob: one glyph at a time, masked into rows at the pixel offset kept in A.S
+MiniDraw:
         SETHEX                                   * 12223
         D=0     S                                * 12225
         R1=C                                     * 12228
@@ -217,32 +221,32 @@ SUB_12223:
         CD1EX                                    * 12235
         R2=C                                     * 12238
         P=      15                               * 1223B
-SUB_12223.loop1:
+MiniDraw.loop1:
         LC(1)   #4                               * 1223D
-SUB_12223.loop2:
+MiniDraw.loop2:
         ?C>A    S                                * 12240
-        GOYES   SUB_12223.L3                     * 12243
+        GOYES   MiniDraw.L3                      * 12243
         A=A-C   S                                * 12245
         D0=D0+  1                                * 12248
-        GONC    SUB_12223.loop2                  * 1224B
-SUB_12223.L3:
+        GONC    MiniDraw.loop2                   * 1224B
+MiniDraw.L3:
         P=      0                                * 1224E
         D=D-1   S                                * 12250
-        GONC    SUB_12223.L4                     * 12253
+        GONC    MiniDraw.L4                      * 12253
         B=A     S                                * 12256
         C=R2                                     * 12259
         D1=C                                     * 1225C
         C=R1                                     * 1225F
         DCEX    A                                * 12262
         R1=C                                     * 12264
-        GOSUB   SUB_1211E                        * 12267
+        GOSUB   MiniFetch8                       * 12267
         RTNC                                     * 1226B
         R2=A                                     * 1226E
         C=R1                                     * 12271
         DCEX    A                                * 12274
         R1=C                                     * 12276
         A=B     S                                * 12279
-SUB_12223.L4:
+MiniDraw.L4:
         C=0     W                                * 1227C
         C=DAT1  11                               * 1227F
         D1=D1+  11                               * 12283
@@ -250,22 +254,22 @@ SUB_12223.L4:
         B=C     W                                * 12289
         C=0     A                                * 1228C
         C=C-1   A                                * 1228E
-        GOC     SUB_12223.L6                     * 12290
-SUB_12223.loop5:
+        GOC     MiniDraw.L6                      * 12290
+MiniDraw.loop5:
         C=C+C   A                                * 12293
-SUB_12223.L6:
+MiniDraw.L6:
         C=C-1   S                                * 12295
-        GONC    SUB_12223.loop5                  * 12298
+        GONC    MiniDraw.loop5                   * 12298
         C=-C-1  A                                * 1229B
         C=A     S                                * 1229D
         A=A+B   S                                * 122A0
-        GONC    SUB_12223.L8                     * 122A3
-SUB_12223.loop7:
+        GONC    MiniDraw.L8                      * 122A3
+MiniDraw.loop7:
         C=C+C   A                                * 122A6
         B=B+B   W                                * 122A8
-SUB_12223.L8:
+MiniDraw.L8:
         C=C-1   S                                * 122AB
-        GONC    SUB_12223.loop7                  * 122AE
+        GONC    MiniDraw.loop7                   * 122AE
         C=-C-1  A                                * 122B1
         CD1EX                                    * 122B3
         RSTK=C                                   * 122B6
@@ -274,9 +278,9 @@ SUB_12223.L8:
         CD1EX                                    * 122BE
         P=      4                                * 122C1
         ?ST=0   2                                * 122C3
-        GOYES   SUB_12223.loop9                  * 122C6
+        GOYES   MiniDraw.loop9                   * 122C6
         P=      5                                * 122C8
-SUB_12223.loop9:
+MiniDraw.loop9:
         RSTK=C                                   * 122CA
         A=DAT1  A                                * 122CC
         A=A&C   X                                * 122CF
@@ -291,10 +295,10 @@ SUB_12223.loop9:
         D1=C                                     * 122EC
         C=RSTK                                   * 122EF
         P=P-1                                    * 122F1
-        GONC    SUB_12223.loop9                  * 122F3
+        GONC    MiniDraw.loop9                   * 122F3
         C=RSTK                                   * 122F6
         D1=C                                     * 122F8
-        GOTO    SUB_12223.loop1                  * 122FB
+        GOTO    MiniDraw.loop1                   * 122FB
 
 * grob -> grob'
 * refs (24): 3A380 3A3E2 3A444 4CDC0 4DBBD 4FC32 ...
@@ -505,7 +509,7 @@ DISPROW8.L3:
         D1=D1+  5                                * 124DF
         D=D+1   A                                * 124E2
         GOSUBL  SAVPTR~jump_7                    * 124E4
-        GOSUB   SUB_120CC                        * 124EA
+        GOSUB   $>Body                           * 124EA
         LC(5)   #00016                           * 124EE
         ST=0    1                                * 124F5
         ?C>=A   A                                * 124F8
@@ -528,13 +532,13 @@ DISPROW8.L4:
         D=C     A                                * 1252F
         D0=D0+  5                                * 12531
         C=RSTK                                   * 12534
-        GOSUBL  SUB_11642                        * 12536
+        GOSUBL  A*C>B                            * 12536
         AD0EX                                    * 1253C
         A=A+B   A                                * 1253F
         D0=A                                     * 12541
         B=0     A                                * 12544
         C=R2                                     * 12546
-        GOSBVL  SUB_11D92                        * 12549
+        GOSBVL  GrobPut$                         * 12549
         A=R2                                     * 12550
         C=0     A                                * 12553
         LC(2)   #16                              * 12555
@@ -659,7 +663,7 @@ GBUFF:
         LC(5)   GDISP                            * 1266A
 GBUFF.L1:
         RSTK=C                                   * 12671
-        GOSBVL  SUB_0EDFA                        * 12673
+        GOSBVL  GCIfD=0                          * 12673
         C=RSTK                                   * 1267A
         CD0EX                                    * 1267C
         A=DAT0  A                                * 1267F
@@ -669,12 +673,13 @@ GBUFF.L1:
         GOLONG  $>grob.L6                        * 1268A
 
 * refs (1): 01D44
-SUB_12690:
+* -> : before the display goes off, point the LCD at fixed data in ROM (#01D22) with line offset #FDE and 64 lines
+DispPark:
         D1=(5)  LINECOUNTg                       * 12690
         C=DAT1  B                                * 12697
         ?CBIT=0 7                                * 1269A
-        GOYES   SUB_12690.L1                     * 1269F
-SUB_12690.L1:
+        GOYES   DispPark.L1                      * 1269F
+DispPark.L1:
         D1=(5)  DISPADDR                         * 126A1
         P=      0                                * 126A8
         LC(5)   #01D22                           * 126AA
@@ -1018,7 +1023,7 @@ BROADENGROB.loop1:
         ?B<=C   A                                * 12BED
         GOYES   BROADENGROB.L3                   * 12BF0
 BROADENGROB.loop2:
-        GOTO    SUB_12D68.L1                     * 12BF2
+        GOTO    GCorMemErr.L1                    * 12BF2
 BROADENGROB.L3:
         C=B     A                                * 12BF6
         R0=C.F  A                                * 12BF8
@@ -1038,7 +1043,7 @@ BROADENGROB.L3:
         R0=C.F  A                                * 12C2E
 BROADENGROB.L4:
         R4=C.F  A                                * 12C34
-        GOSUB   SUB_12D85                        * 12C3A
+        GOSUB   GrobSetRows                      * 12C3A
         GOTO    StoNoCurGrob(go).L1              * 12C3E
 BROADENGROB.L5:
         R3=A.F  A                                * 12C42
@@ -1059,7 +1064,7 @@ BROADENGROB.loop6:
         GOSBVL  MOVERSU                          * 12C67
         C=RSTK                                   * 12C6E
         GONC    BROADENGROB.L7                   * 12C70
-        GOSUB   SUB_12D68                        * 12C73
+        GOSUB   GCorMemErr                       * 12C73
         GOTO    BROADENGROB.loop1                * 12C77
 BROADENGROB.L7:
         R4=C.F  A                                * 12C7B
@@ -1088,7 +1093,7 @@ BROADENGROB.loop8:
         C=RSTK                                   * 12CC7
         C=C-1   A                                * 12CC9
         GONC    BROADENGROB.loop8                * 12CCB
-        GOSUB   SUB_12D85                        * 12CCE
+        GOSUB   GrobSetRows                      * 12CCE
         CD1EX                                    * 12CD2
         D0=(5)  VDISP                            * 12CD5
         A=DAT0  A                                * 12CDC
@@ -1097,7 +1102,7 @@ BROADENGROB.loop8:
         D0=(5)  SAVE_OFFSET                      * 12CE4
         A=0     W                                * 12CEB
         A=DAT0  A                                * 12CEE
-        GOSUB   SUB_12DB1                        * 12CF1
+        GOSUB   A/R1*R2                          * 12CF1
         A=DAT0  A                                * 12CF5
         A=A+C   A                                * 12CF8
         DAT0=A  A                                * 12CFA
@@ -1114,7 +1119,7 @@ BROADENGROB.L9:
         A=0     W                                * 12D26
         A=DAT0  A                                * 12D29
         A=A-C   A                                * 12D2C
-        GOSUB   SUB_12DB1                        * 12D2E
+        GOSUB   A/R1*R2                          * 12D2E
         A=DAT0  A                                * 12D32
         A=A+C   A                                * 12D35
         DAT0=A  A                                * 12D37
@@ -1130,17 +1135,19 @@ BROADENGROB.L9:
         GOTO    StoCurGrob(go).L1                * 12D64
 
 * refs (7): 12C73 12E39 40C64 44520 446DC 5427E ...
-SUB_12D68:
+* -> : first time: collect garbage and set ST10; second time: Insufficient Memory
+GCorMemErr:
         ?ST=1   10                               * 12D68
-        GOYES   SUB_12D68.L1                     * 12D6B
+        GOYES   GCorMemErr.L1                    * 12D6B
         GOSBVL  GARBAGECOL                       * 12D6D
         ST=1    10                               * 12D74
         GOVLNG  GETPTR                           * 12D77
-SUB_12D68.L1:
+GCorMemErr.L1:
         GOVLNG  GPMEMERR                         * 12D7E
 
 * refs (2): 12C3A 12CCE
-SUB_12D85:
+* R4 = added length, R0 = rows -> : update the length and height of the grob on level 1
+GrobSetRows:
         GOSUB   GETPTR~jump_4                    * 12D85
         C=DAT1  A                                * 12D89
         D1=C                                     * 12D8C
@@ -1156,13 +1163,14 @@ SUB_12D85:
         RTNCC                                    * 12DAF
 
 * refs (2): 12CF1 12D2E
-SUB_12DB1:
+* A.W -> A.W: integer divide by R1, then multiply by R2
+A/R1*R2:
         C=0     W                                * 12DB1
         C=R1.F  A                                * 12DB4
         GOSBVL  IntDivW                          * 12DBA
         C=0     W                                * 12DC1
         C=R2.F  A                                * 12DC4
-        GOVLNG  SUB_0DB9B                        * 12DCA
+        GOVLNG  MulAC                            * 12DCA
 
 * grob #rows ->
 * refs (2): 12973 51201
@@ -1201,7 +1209,7 @@ HEIGHTENGROB.loop3:
         GOSBVL  MOVERSU                          * 12E2D
         C=RSTK                                   * 12E34
         GONC    HEIGHTENGROB.L4                  * 12E36
-        GOSUBL  SUB_12D68                        * 12E39
+        GOSUBL  GCorMemErr                       * 12E39
         A=R4.F  A                                * 12E3F
         GOTO    HEIGHTENGROB.loop1               * 12E45
 HEIGHTENGROB.L4:
@@ -1230,7 +1238,7 @@ HEIGHTENGROB.L5:
 StoCurGrob(go):
         CON(5)  (*)+5                            * 12E89  primitive code object
         LC(5)   VDISP                            * 12E8E
-        GOSUB   SUB_12FC0                        * 12E95
+        GOSUB   StoDispGrob                      * 12E95
         D0=(5)  VDISP                            * 12E99
         C=DAT0  A                                * 12EA0
         D0=C                                     * 12EA3
@@ -1262,7 +1270,7 @@ StoCurGrob(go).L1:
 StoNoCurGrob(go):
         CON(5)  (*)+5                            * 12F0A  primitive code object
         LC(5)   VDISP3                           * 12F0F
-        GOSUB   SUB_12FC0                        * 12F16
+        GOSUB   StoDispGrob                      * 12F16
         D0=(5)  VDISP3                           * 12F1A
         C=DAT0  A                                * 12F21
         D0=C                                     * 12F24
@@ -1309,10 +1317,11 @@ GETPTR~jump_4:
         GOVLNG  GETPTR                           * 12FB9
 
 * refs (2): 12E95 12F16
-SUB_12FC0:
+* C.A = address of a display grob variable, grob on level 1 -> : empty the old one, collect garbage, make room in place and copy the new one over it
+StoDispGrob:
         R0=C.F  A                                * 12FC0
         GOSUB   SAVPTR~jump_8                    * 12FC6
-        GOSUB   SUB_13075                        * 12FCA
+        GOSUB   EmptyDispGrob                    * 12FCA
         GOSBVL  GARBAGECOL                       * 12FCE
         GOSUB   GETPTR~jump_4                    * 12FD5
         A=DAT1  A                                * 12FD9
@@ -1328,9 +1337,9 @@ SUB_12FC0:
         C=DAT1  A                                * 13003
         C=C-CON A,15                             * 13006
         GOSBVL  MOVERSU                          * 1300C
-        GONC    SUB_12FC0.L1                     * 13013
-        GOTO    SUB_12D68.L1                     * 13016
-SUB_12FC0.L1:
+        GONC    StoDispGrob.L1                   * 13013
+        GOTO    GCorMemErr.L1                    * 13016
+StoDispGrob.L1:
         GOSUB   GETPTR~jump_4                    * 1301A
         C=DAT1  A                                * 1301E
         D0=C                                     * 13021
@@ -1351,7 +1360,7 @@ KILLADISP:
         LC(5)   VDISP3                           * 1304C
 KILLADISP.L1:
         R0=C                                     * 13053
-        GOSUB   SUB_13075                        * 13056
+        GOSUB   EmptyDispGrob                    * 13056
 KILLADISP.L2:
         GOVLNG  GETPTRLOOP                       * 1305A
 
@@ -1364,7 +1373,8 @@ KILLGDISP:
         GOTO    KILLADISP.L1                     * 13071
 
 * refs (2): 12FCA 13056
-SUB_13075:
+* R0 = address of a display grob variable -> : shrink it to no pixels, moving what follows
+EmptyDispGrob:
         C=R0.F  A                                * 13075
         D1=C                                     * 1307B
         A=DAT1  A                                * 1307E
@@ -1424,9 +1434,9 @@ RSZVDISP:
 TOGDISP:
         CON(5)  (*)+5                            * 13135  primitive code object
         GOSUB   SAVPTR~jump_8                    * 1313A
-        GOSUB   SUB_13197                        * 1313E
+        GOSUB   PICTShown?                       * 1313E
         GOC     TOADISP.L1                       * 13142
-        GOSUB   SUB_132C5                        * 13145
+        GOSUB   SwapVDisp                        * 13145
         GOTO    KILLADISP.L2                     * 13149
 
 * ->
@@ -1434,9 +1444,9 @@ TOGDISP:
 TOADISP:
         CON(5)  (*)+5                            * 1314D  primitive code object
         GOSUB   SAVPTR~jump_8                    * 13152
-        GOSUB   SUB_13197                        * 13156
+        GOSUB   PICTShown?                       * 13156
         GONC    TOADISP.L1                       * 1315A
-        GOSUB   SUB_132C5                        * 1315D
+        GOSUB   SwapVDisp                        * 1315D
 TOADISP.L1:
         GOLONG  KILLADISP.L2                     * 13161
 
@@ -1446,7 +1456,7 @@ GDISPON?:
         CON(5)  (*)+5                            * 13167  primitive code object
         CD1EX                                    * 1316C
         R0=C                                     * 1316F
-        GOSUB   SUB_13197                        * 13172
+        GOSUB   PICTShown?                       * 13172
         C=R0                                     * 13176
         CD1EX                                    * 13179
         GOC     GDISPON?.L2                      * 1317C
@@ -1459,7 +1469,8 @@ GDISPON?.L2:
         GOTO    GDISPON?.loop1                   * 13193
 
 * refs (3): 1313E 13156 13172
-SUB_13197:
+* -> carry set if GDISP is the current display grob. If it is neither VDISP nor VDISP3 something is wrong: warm start
+PICTShown?:
         D1=(5)  GDISP                            * 13197
         C=DAT1  A                                * 1319E
         D1=(5)  VDISP                            * 131A1
@@ -1469,9 +1480,9 @@ SUB_13197:
         D1=(5)  VDISP3                           * 131B0
         A=DAT1  A                                * 131B7
         ?C#A    A                                * 131BA
-        GOYES   SUB_13197.L1                     * 131BD
+        GOYES   PICTShown?.L1                    * 131BD
         RTN                                      * 131BF
-SUB_13197.L1:
+PICTShown?.L1:
         GOVLNG  Warmstart                        * 131C1
 
 * ->
@@ -1563,7 +1574,8 @@ WINDOWDOWN.L4:
         GOTO    WINDOWUP.L1                      * 132C1
 
 * refs (2): 13145 1315D
-SUB_132C5:
+* -> : swap VDISP with VDISP3 and the saved line count, bit offset, line width and scroll offset, then set the LCD: changes between the stack and the graphics view
+SwapVDisp:
         P=      0                                * 132C5
         SETHEX                                   * 132C7
         D0=(5)  VDISP                            * 132C9
@@ -1573,9 +1585,9 @@ SUB_132C5:
         D0=(5)  DISP1CTLg                        * 132DC
         C=DAT0  A                                * 132E3
         C=C-A   A                                * 132E6
-        GONC    SUB_132C5.L1                     * 132E8
+        GONC    SwapVDisp.L1                     * 132E8
         C=0     A                                * 132EB
-SUB_132C5.L1:
+SwapVDisp.L1:
         D1=(5)  SAVE_OFFSET                      * 132ED
         A=DAT1  A                                * 132F4
         B=A     A                                * 132F7
@@ -1656,13 +1668,13 @@ disprange.L2:
 disprange.L3:
         LC(2)   #22                              * 1341A
         GONC    disprange.L4                     * 1341E
-        NIBHEX  3142                             * 13421  .$
+        LC(2)   #24                              * 13421
 disprange.L4:
         D=C     A                                * 13425
         C=C+A   W                                * 13427
         A=B     W                                * 1342A
         A=A+1   W                                * 1342D
-        GOSBVL  SUB_0DB9B                        * 13430
+        GOSBVL  MulAC                            * 13430
         D1=(4)  #068D                            * 13437
         A=DAT1  A                                * 1343D
         C=C+A   A                                * 13440
@@ -1745,10 +1757,10 @@ WINDOWLEFT:
 WINDOWLEFT.L1:
         A=A!B   P                                * 13520
         DAT0=A  1                                * 13524
-        GOSUB   SUB_13642                        * 13528
+        GOSUB   LineNibs+2                       * 13528
         GOTO    WINDOWRIGHT.L4                   * 1352C
 WINDOWLEFT.L2:
-        GOSUB   SUB_13606                        * 13530
+        GOSUB   VDispOffs                        * 13530
         C=0     W                                * 13534
         C=R0.F  A                                * 13537
         GOSBVL  IntDivW                          * 1353D
@@ -1767,7 +1779,7 @@ WINDOWLEFT.L3:
         LC(1)   #7                               * 1356C
         A=A!C   P                                * 1356F
         DAT0=A  1                                * 13573
-        GOSUB   SUB_13657                        * 13577
+        GOSUB   LineNibs-2                       * 13577
         GOTO    WINDOWRIGHT.L4                   * 1357B
 
 * ->
@@ -1802,7 +1814,7 @@ WINDOWRIGHT.L1:
 WINDOWRIGHT.L2:
         A=A!B   P                                * 135CD
         DAT0=A  1                                * 135D1
-        GOSUB   SUB_13657                        * 135D5
+        GOSUB   LineNibs-2                       * 135D5
         GOTO    WINDOWRIGHT.L4                   * 135D9
 WINDOWRIGHT.L3:
         A=B     A                                * 135DD
@@ -1814,12 +1826,13 @@ WINDOWRIGHT.L3:
         DAT0=A  A                                * 135F1
         D0=(5)  DISPADDR                         * 135F4
         DAT0=A  A                                * 135FB
-        GOSUB   SUB_13642                        * 135FE
+        GOSUB   LineNibs+2                       * 135FE
 WINDOWRIGHT.L4:
         GOTO    WINDOWUP.L2                      * 13602
 
 * refs (2): 13530 137DC
-SUB_13606:
+* -> A.A = DISP1CTLg's offset into VDISP's pixels, R0 = nibbles per row, B.A = width in pixels, R1 = DISP1CTLg
+VDispOffs:
         D0=(5)  VDISP                            * 13606
         C=DAT0  A                                * 1360D
         D0=C                                     * 13610
@@ -1839,20 +1852,22 @@ SUB_13606:
         RTN                                      * 13640
 
 * refs (2): 13528 135FE
-SUB_13642:
+* -> : LINENIBS 2 larger, copied to the hardware LINEOFFS
+LineNibs+2:
         D0=(5)  LINENIBSg                        * 13642
         A=DAT0  X                                * 13649
         A=A+1   X                                * 1364D
         A=A+1   X                                * 13650
-        GOTO    SUB_13657.L1                     * 13653
+        GOTO    LineNibs-2.L1                    * 13653
 
 * refs (2): 13577 135D5
-SUB_13657:
+* -> : LINENIBS 2 smaller, copied to the hardware LINEOFFS
+LineNibs-2:
         D0=(5)  LINENIBSg                        * 13657
         A=DAT0  X                                * 1365E
         A=A-1   X                                * 13662
         A=A-1   X                                * 13665
-SUB_13657.L1:
+LineNibs-2.L1:
         DAT0=A  X                                * 13668
         D0=(5)  LINEOFFS                         * 1366C
         DAT0=A  X                                * 13673
@@ -1930,7 +1945,7 @@ addrLINECNTg.L3:
         C=0     A                                * 1372D
         LC(2)   #22                              * 1372F
         GONC    addrLINECNTg.L4                  * 13733
-        NIBHEX  3142                             * 13736  .$
+        LC(2)   #24                              * 13736
 addrLINECNTg.L4:
         C=A-C   A                                * 1373A
         D0=(5)  LINEOFFS                         * 1373C
@@ -1985,7 +2000,7 @@ WINDOWCORNER.L1:
 
 * refs (2): 13588 137C1
 corner:
-        GOSUB   SUB_13606                        * 137DC
+        GOSUB   VDispOffs                        * 137DC
         C=B     A                                * 137E0
         RSTK=C                                   * 137E2
         C=R0                                     * 137E4
@@ -2170,6 +2185,7 @@ PIXON?.L4:
         PC=(A)                                   * 139E3
 
 * refs (1): 40B9C
+* #row #col #chars -> : code object: invert that many character cells of the stack display, by half bytes as cells are 6 pixels wide
 DispBadToken~1:
         CON(5)  (*)+5                            * 139E7  primitive code object
         GOSBVL  POP#                             * 139EC
@@ -2179,7 +2195,7 @@ DispBadToken~1:
         GOSBVL  POP#                             * 13A00
         GOSBVL  SAVPTR                           * 13A07
         C=R1                                     * 13A0E
-        GOSUB   SUB_13AF8                        * 13A11
+        GOSUB   CellAddr                         * 13A11
         B=0     S                                * 13A15
         ?ST=0   0                                * 13A18
         GOYES   DispBadToken~1.L1                * 13A1B
@@ -2252,7 +2268,8 @@ DispBadToken~1.L5:
         GOTO    DispBadToken~1.loop2             * 13AF4
 
 * refs (1): 13A11
-SUB_13AF8:
+* A.A = row, C.A = column -> D1 and A.A: nibble offset of that 6-pixel cell, ST0 set if it starts half way through a byte
+CellAddr:
         D=C     A                                * 13AF8
         C=C+C   A                                * 13AFA
         D=D+C   A                                * 13AFC
@@ -2260,9 +2277,9 @@ SUB_13AF8:
         SB=0                                     * 13B01
         DSRB.F  A                                * 13B04
         ?SB=0                                    * 13B09
-        GOYES   SUB_13AF8.L1                     * 13B0C
+        GOYES   CellAddr.L1                      * 13B0C
         ST=1    0                                * 13B0E
-SUB_13AF8.L1:
+CellAddr.L1:
         A=A-1   A                                * 13B11
         C=A     A                                * 13B13
         ASL     A                                * 13B15
@@ -2290,36 +2307,39 @@ SUB_13AF8.L1:
 * refs (2): 42976 42B4D
 DISPCHAR+PC:
         :: SWAP 3->grob(s) HARDBUFF CURSOR_OFF #1- #6* 4PICK #1- #10* BINT16 * 13B51
-          #+ GROB! OBJ_13B9C ;                   * 13B88
+          #+ GROB! CursorShow ;                  * 13B88
 
 * refs (2): 13B92 42854
-OBJ_13B9C:
-        :: OBJ_13BB5 OBJ_13BF1 OBJ_13E22 ;       * 13B9C
+* #row -> : set up the cursor for that row and turn it on
+CursorShow:
+        :: CursorChr! CursorPos! CursorStateOn ; * 13B9C
 
 * refs (1): 13BA1
-OBJ_13BB5:
+* -> : code object: store the character under the cursor in CURSORCHR; NUL and newline become a space
+CursorChr!:
         CON(5)  (*)+5                            * 13BB5  primitive code object
         ASSEMBLE
         GOSUB   SAVPTR~jump_9                    * 13BBA
-        GOSBVL  SUB_42AC4                        * 13BBE
+        GOSBVL  CursorAddr                       * 13BBE
         D0=C                                     * 13BC5
         A=DAT0  B                                * 13BC8
         ?A=0    B                                * 13BCB
-        GOYES   OBJ_13BB5.L1                     * 13BCE
+        GOYES   CursorChr!.L1                    * 13BCE
         LC(2)   #0A                              * 13BD0
         ?C#A    B                                * 13BD4
-        GOYES   OBJ_13BB5.L2                     * 13BD7
-OBJ_13BB5.L1:
+        GOYES   CursorChr!.L2                    * 13BD7
+CursorChr!.L1:
         LC(2)   #20                              * 13BD9
         A=C     B                                * 13BDD
-OBJ_13BB5.L2:
+CursorChr!.L2:
         D0=(5)  CURSORCHR                        * 13BE0
         DAT0=A  B                                * 13BE7
-OBJ_13BB5.L3:
+CursorChr!.L3:
         GOVLNG  GETPTRLOOP                       * 13BEA
 
 * refs (1): 13BA6
-OBJ_13BF1:
+* #row -> : code object: set CURSORY and CURSORX from the row and CURSOROFFSET, 10 pixels a row and 6 a column, and build the cursor's grob
+CursorPos!:
         CON(5)  (*)+5                            * 13BF1  primitive code object
         GOSBVL  POP#                             * 13BF6
         GOSUB   SAVPTR~jump_9                    * 13BFD
@@ -2344,18 +2364,19 @@ OBJ_13BF1:
         DAT1=A  A                                * 13C3B
         D1=(5)  CURSORCHR                        * 13C3E
         A=DAT1  B                                * 13C45
-        GOSBVL  SUB_13C5A                        * 13C48
-        GOTO    OBJ_13BB5.L3                     * 13C4F
+        GOSBVL  CursorGrob                       * 13C48
+        GOTO    CursorChr!.L3                    * 13C4F
         BSS     5                                * 13C53  zeros
 
 * refs (1): 13C5A
-SUB_13C58:
+CursorGrob~1:
         RTNSXM                                   * 13C58
 
 * refs (1): 13C48
-SUB_13C5A:
-        GOSUB   SUB_13C58                        * 13C5A
-        GOSBVL  SUB_11F28                        * 13C5E
+* A.B = character -> : build a 6 x 10 grob of it at #80891, for blinking over the text; XM set
+CursorGrob:
+        GOSUB   CursorGrob~1                     * 13C5A
+        GOSBVL  Char>Glyph                       * 13C5E
         D0=C                                     * 13C65
         GOSBVL  D1=IRAM                          * 13C68
         D1=(4)  #0891                            * 13C6F
@@ -2377,23 +2398,24 @@ SUB_13C5A:
 
 * refs (2): 42186 421B8
 GETKEY~1:
-        :: GETKEY~4 case                         * 13CB0
-          :: GETKEY~11 GETKEY~2 ;                * 13CBF
-          GETKEY~12 OBJ_13E22 ;                  * 13CD3
+        :: CursorState? case                     * 13CB0
+          :: ~BlinkDue?;NOT?SEMI;cursorblink+ CursorStateOff ; * 13CBF
+          ~BlinkDue?;NOT?SEMI;cursorblink- CursorStateOn ; * 13CD3
 
 * refs (1): 13CC4
-GETKEY~11:
-        :: OBJ_13D14 NOT?SEMI                    * 13CE2
+~BlinkDue?;NOT?SEMI;cursorblink+:
+        :: BlinkDue? NOT?SEMI                    * 13CE2
           cursorblink+ ;                         * 13CF1
 
 * refs (1): 13CD3
-GETKEY~12:
-        :: OBJ_13D14 NOT?SEMI                    * 13CFB
+~BlinkDue?;NOT?SEMI;cursorblink-:
+        :: BlinkDue? NOT?SEMI                    * 13CFB
           cursorblink- ;                         * 13D0A
 
 * refs (2): 13CE7 13D00
-OBJ_13D14:
-        :: OBJ_13E05 OBJ_53906 ;                 * 13D14
+* -> flag: reset T1COUNT to 8 and test whether the blink should act
+BlinkDue?:
+        :: T1Count=8 ISF205? ;                   * 13D14
 
 * refs (5): 13CF1 427FA 42999 429C1 42B52
 cursorblink+:
@@ -2402,7 +2424,7 @@ cursorblink+:
         GOSUB   SAVPTR~jump_9                    * 13D2D
         LC(3)   #203                             * 13D31
         GOSBVL  NoIgnoreAlm.L1                   * 13D36
-        GOSUB   SUB_13DDC                        * 13D3D
+        GOSUB   CursorXY                         * 13D3D
         D0=(5)  CURSOR1                          * 13D41
         GOC     cursorblink-.L1                  * 13D48
         D0=(5)  CURSOR2                          * 13D4B
@@ -2412,7 +2434,7 @@ cursorblink+:
 cursorblink-:
         CON(5)  (*)+5                            * 13D55  primitive code object
         GOSUB   SAVPTR~jump_9                    * 13D5A
-        GOSUB   SUB_13DDC                        * 13D5E
+        GOSUB   CursorXY                         * 13D5E
         D0=(5)  CURSORGROB                       * 13D62
 cursorblink-.L1:
         GOSBVL  grob!                            * 13D69
@@ -2424,7 +2446,7 @@ cursorblink-.L1:
         C=C-1   A                                * 13D82
 cursorblink-.L2:
         DAT0=C  1                                * 13D84
-        GOTO    OBJ_13BB5.L3                     * 13D88
+        GOTO    CursorChr!.L3                    * 13D88
         RPL
 
 * -> grob
@@ -2439,7 +2461,8 @@ CURSOR2:
         ASSEMBLE
 
 * refs (2): 13D3D 13D5E
-SUB_13DDC:
+* -> D1 at the display grob, R0 = CURSORY, R1 = CURSORX
+CursorXY:
         D1=(5)  VDISP                            * 13DDC
         C=DAT1  A                                * 13DE3
         D1=C                                     * 13DE6
@@ -2452,53 +2475,58 @@ SUB_13DDC:
         RTN                                      * 13E03
 
 * refs (1): 13D19
-OBJ_13E05:
+* -> : T1COUNT = 8
+T1Count=8:
         CON(5)  (*)+5                            * 13E05  primitive code object
         AD1EX                                    * 13E0A
         D1=(5)  T1COUNT                          * 13E0D
         LC(1)   #8                               * 13E14
         DAT1=C  1                                * 13E17
         D1=A                                     * 13E1B
-        GOTO    ToTheLastRow~1.L4                * 13E1E
+        GOTO    CURSORPART=Last.L4               * 13E1E
 
 * refs (3): 13BAB 13CD8 42181
-OBJ_13E22:
+* -> : top nibble of CURSORSTATE = F
+CursorStateOn:
         CON(5)  (*)+5                            * 13E22  primitive code object
         ST=1    0                                * 13E27
-        GOTO    GETKEY~2.L1                      * 13E2A
+        GOTO    CursorStateOff.L1                * 13E2A
 
 * refs (1): 13CC9
-GETKEY~2:
+* -> : top nibble of CURSORSTATE = 0
+CursorStateOff:
         CON(5)  (*)+5                            * 13E2E  primitive code object
         ST=0    0                                * 13E33
-GETKEY~2.L1:
+CursorStateOff.L1:
         LC(5)   CURSORSTATE                      * 13E36
         CD0EX                                    * 13E3D
         C=0     S                                * 13E40
         ?ST=0   0                                * 13E43
-        GOYES   GETKEY~2.L2                      * 13E46
+        GOYES   CursorStateOff.L2                * 13E46
         C=C-1   S                                * 13E48
-GETKEY~2.L2:
+CursorStateOff.L2:
         DAT0=C  S                                * 13E4B
-        GOTO    ToTheLastRow~1.L3                * 13E4F
+        GOTO    CURSORPART=Last.L3               * 13E4F
 
 * refs (1): 421AE
-GETKEY~3:
+* -> flag: TRUE if the top nibble of T1COUNT is set
+T1Count?:
         CON(5)  (*)+5                            * 13E53  primitive code object
         LC(5)   T1COUNT                          * 13E58
-        GOTO    GETKEY~4.L1                      * 13E5F
+        GOTO    CursorState?.L1                  * 13E5F
 
 * refs (1): 13CB5
-GETKEY~4:
+* -> flag: TRUE if the top nibble of CURSORSTATE is set
+CursorState?:
         CON(5)  (*)+5                            * 13E63  primitive code object
         LC(5)   CURSORSTATE                      * 13E68
-GETKEY~4.L1:
+CursorState?.L1:
         CD0EX                                    * 13E6F
         C=DAT0  S                                * 13E72
         D0=C                                     * 13E76
         ?C#0    S                                * 13E79
-        GOYES   GETKEY~4.L2                      * 13E7C
-GETKEY~4.L2:
+        GOYES   CursorState?.L2                  * 13E7C
+CursorState?.L2:
         GOVLNG  PushT/FLoop                      * 13E7E
 
 * -> #
@@ -2512,7 +2540,8 @@ CURSOR_OFF:
         GOTO    CurrentRow.L2                    * 13E9A
 
 * refs (3): 425AC 42827 42912
-OBJ_13E9E:
+* # ->
+CURSOROFFSET!:
         CON(5)  (*)+5                            * 13E9E  primitive code object
         LC(5)   CURSOROFFSET                     * 13EA3
         RSTK=C                                   * 13EAA
@@ -2542,7 +2571,7 @@ CURSOR_OFF+:
 CURSOR_OFF+.L1:
         DAT0=A  B                                * 13EEA
 CURSOR_OFF+.L2:
-        GOTO    ToTheLastRow~1.L3                * 13EED
+        GOTO    CURSORPART=Last.L3               * 13EED
 
 * -> #
 * refs (7): 3B5CD 3B618 3E639 424EE 42746 42769 ...
@@ -2555,16 +2584,17 @@ CURSOR@:
 CURSOR+:
         CON(5)  (*)+5                            * 13F01  primitive code object
         LC(5)   CURSOR                           * 13F06
-        GOTO    OBJ_13F69.L1                     * 13F0D
+        GOTO    CURSORPART+1.L1                  * 13F0D
 
 * refs (1): 4257A
-LCursor~2:
+* -> :
+CURSOR-1:
         CON(5)  (*)+5                            * 13F11  primitive code object
         LC(5)   CURSOR                           * 13F16
         CD0EX                                    * 13F1D
         A=DAT0  A                                * 13F20
         A=A-1   A                                * 13F23
-        GOTO    ToTheLastRow~1.L2                * 13F25
+        GOTO    CURSORPART=Last.L2               * 13F25
 
 * refs (6): 3B5D7 3B5EB 4253E 425C0 4268D 4292B
 SETCURSOR:
@@ -2574,7 +2604,7 @@ SETCURSOR:
         GOSBVL  POP#                             * 13F37
         C=RSTK                                   * 13F3E
         CD0EX                                    * 13F40
-        GOTO    ToTheLastRow~1.L2                * 13F43
+        GOTO    CURSORPART=Last.L2               * 13F43
 
 * refs (6): 426F6 42732 42840 4286D 42890 448A8
 CurrentRow:
@@ -2590,48 +2620,52 @@ CurrentRow.L2:
         GOVLNG  PUSH#LOOP                        * 13F62
 
 * refs (3): 4250C 428D1 42B8E
-OBJ_13F69:
+* -> :
+CURSORPART+1:
         CON(5)  (*)+5                            * 13F69  primitive code object
         LC(5)   CURSORPART                       * 13F6E
-OBJ_13F69.L1:
+CURSORPART+1.L1:
         CD0EX                                    * 13F75
         A=DAT0  A                                * 13F78
-        GOTO    ToTheLastRow~1.L1                * 13F7B
+        GOTO    CURSORPART=Last.L1               * 13F7B
 
 * refs (1): 4267E
-UCursor~1:
+* -> : not below 1
+CURSORPART-1:
         CON(5)  (*)+5                            * 13F7F  primitive code object
         LC(5)   CURSORPART                       * 13F84
         CD0EX                                    * 13F8B
         A=DAT0  A                                * 13F8E
         A=A-1   A                                * 13F91
         ?A=0    A                                * 13F93
-        GOYES   ToTheLastRow~1.L3                * 13F96
-        GONC    ToTheLastRow~1.L2                * 13F98
+        GOYES   CURSORPART=Last.L3               * 13F96
+        GONC    CURSORPART=Last.L2               * 13F98
 
 * refs (1): 426A6
-ToTheFirstRow~1:
+* -> :
+CURSORPART=1:
         CON(5)  (*)+5                            * 13F9B  primitive code object
         LC(5)   CURSORPART                       * 13FA0
         CD0EX                                    * 13FA7
         A=0     A                                * 13FAA
-        GOTO    ToTheLastRow~1.L1                * 13FAC
+        GOTO    CURSORPART=Last.L1               * 13FAC
 
 * refs (1): 4252A
-ToTheLastRow~1:
+* -> : CURSORPART = CR_COUNT + 1, the last line
+CURSORPART=Last:
         CON(5)  (*)+5                            * 13FB0  primitive code object
         LC(5)   CR_COUNT                         * 13FB5
         CD0EX                                    * 13FBC
         A=DAT0  A                                * 13FBF
         D0=(5)  CURSORPART                       * 13FC2
-ToTheLastRow~1.L1:
+CURSORPART=Last.L1:
         A=A+1   A                                * 13FC9
-        GOC     ToTheLastRow~1.L3                * 13FCB
-ToTheLastRow~1.L2:
+        GOC     CURSORPART=Last.L3               * 13FCB
+CURSORPART=Last.L2:
         DAT0=A  A                                * 13FCE
-ToTheLastRow~1.L3:
+CURSORPART=Last.L3:
         D0=C                                     * 13FD1
-ToTheLastRow~1.L4:
+CURSORPART=Last.L4:
         A=DAT0  A                                * 13FD4
         D0=D0+  5                                * 13FD7
         PC=(A)                                   * 13FDA

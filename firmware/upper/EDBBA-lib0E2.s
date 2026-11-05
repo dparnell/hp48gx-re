@@ -1,16 +1,19 @@
-* HP 48GX ROM revision R, #EDBBA-#F0DBF: Library part 0E2
+* HP 48GX ROM revision R, #EDBBA-#F0DBF: Equation Library: equations of Fluids to Motion
 * Addresses in the right-hand comments are those of the original ROM.
+* Most referenced: EqSubMotion EqSubMagnetism EqSubHeatTransfer EqSubGases EqSubForcesAndEnergy EqSubFluids
 * Follows on from the previous file (at #EDBBA in the original ROM).
         RPL
 
 * ROMPTR 0E2 018
 * refs (1): E3857
-ROMP_0E2_018:
-        { ROMPTR 0E2 006 # 4                     * EDBBA
+* The subject Fluids: its text, the number of equation sets and one list for each set of the equations, the variables and the picture.
+EqSubFluids:
+        { XLIB EqTextFluids # 4                  * EDBBA
           {                                      * EDBD4
             {                                    * EDBD9
               { BINT1 EQ$ "P=P0+ρ*g*h" EQ$ "P=P0+ρ*CONST(g)*h" } * EDBDE
-              { $ "I\0AB\1E" # 5 # 4 $ "\03\03\023" } ROMPTR 0E2 03B } * EDC2B  variables P0 P h ρ
+              { $ "I\0AB\1E" # 5 # 4 $ "\03\03\023" } * EDC2B  variables P0 P h ρ
+              XLIB EqPicPressureAtDepth }        * EDC6D
             {                                    * EDC7D
               { BINT3 BINT10                     * EDC82
                 { EQ$ "ΔP/ρ+(v2^2-v1^2)/2+\0Ag*Δy=0" * EDC91
@@ -25,7 +28,7 @@ ROMP_0E2_018:
               }                                  * EDF06
               { $ "VUTSRQPONMLK\1EJ\10" # 9 # F  * EDF0B  variables ΔP P1 P2 Δy y1 y2 v1 v2 A1 A2 D1 D2 ρ Q M
                 $ "\03\03\03\02\02\02\09\09\11\11\18\183?@" } * EDF4C
-              ROMPTR 0E2 03C }                   * EDF79
+              XLIB EqPicBernoulliEquation }      * EDF79
             {                                    * EDF89
               { BINT3 BINT10                     * EDF8E
                 { EQ$ "M*(ΔP/ρ+(v2^2-v1^2)/\0A2+g*Δy+hL)=W" * EDF9D
@@ -40,7 +43,7 @@ ROMP_0E2_018:
               }                                  * EE25A
               { $ "VUTSRQPONMLK\1EJ\10XW" # 18 # 11 * EE25F  variables ΔP P1 P2 Δy y1 y2 v1 v2 A1 A2 D1 D2 ρ Q M hL W
                 $ "\03\03\03\02\02\02\09\09\11\11\18\183?@A<" } * EE2A4
-              ROMPTR 0E2 03D }                   * EE2D5
+              XLIB EqPicFlowWithLosses }         * EE2D5
             {                                    * EE2E5
               { BINT3 BINT8                      * EE2EA
                 {                                * EE2F9
@@ -53,14 +56,15 @@ ROMP_0E2_018:
               }                                  * EE4E0
               { $ "VUTSRQ]\03\\\08\0C[\1EZCJ\10WY" # 29 # 13 * EE4E5  variables ΔP P1 P2 Δy y1 y2 vavg A D L ε ΣK ρ µ n Q M W Re
                 $ "\03\03\03\02\02\02\09\11\18\02\18\013=>?@<\01" } * EE52E
-              ROMPTR 0E2 03E }                   * EE563
+              XLIB EqPicFlowInFullPipes }        * EE563
           }                                      * EE573
         }                                        * EE578
 
 * ROMPTR 0E2 019
 * refs (1): E3857
-ROMP_0E2_019:
-        { ROMPTR 0E2 007 # 8                     * EE57D
+* The subject Forces and Energy: its text, the number of equation sets and one list for each set of the equations, the variables and the picture.
+EqSubForcesAndEnergy:
+        { XLIB EqTextForcesAndEnergy # 8         * EE57D
           {                                      * EE597
             {                                    * EE59C
               { BINT2 BINT8                      * EE5A1
@@ -70,7 +74,7 @@ ROMP_0E2_019:
               }                                  * EE684
               { $ "d\11cba\0E:\15`_îîW\0A^" # 9 # D * EE689  variables m a v vi vf x t F Ki Kf - - W P Pavg
                 $ "\08%\09\09\09\02\17\0BBBB<<" } * EE6CA
-              ROMPTR 0E2 02A }                   * EE6F3
+              XLIB EqNoPic }                     * EE6F3
             {                                    * EE703
               { BINT3 BINT12                     * EE708
                 { EQ$ "τ=I*α" EQ$ "Ki=1/2*I*ωi^2" EQ$ "Kf=1/2*I*ωf^2" * EE717
@@ -85,63 +89,64 @@ ROMP_0E2_019:
               }                                  * EE97A
               { $ "\04k/ji\12:h`_îîW\0A^îîîg\06Efe" # 16 # 12 * EE97F  variables I α ω ωi ωf θ t τ Ki Kf - - W P Pavg - - - at r N Ni Nf
                 $ "$&''')5\"BBB<<%\18EEE" }      * EE9D0
-              ROMPTR 0E2 02A }                   * EEA03
+              XLIB EqNoPic }                     * EEA03
             {                                    * EEA13
               { BINT3 BINT4                      * EEA18
                 { EQ$ "F=m*ω^2*r" EQ$ "ω=v/r" EQ$ "ar=v^2/r" EQ$ "ω=2*π*N" } * EEA27
                 { EQ$ "F=m*ω^2*r/CONST(rad)^2" EQ$ "ω=CONST(rad)*v/r" CHR_D * EEA8D
                   EQ$ "ω=CONST(twoπ)*N" }        * EEAD5
               }                                  * EEAF2
-              { $ "d\06cl/\15E" # 28 # 7 $ "\08\18\09%'\0BE" } * EEAF7  variables m r v ar ω F N
-              ROMPTR 0E2 02A }                   * EEB45
+              { $ "d\06cl/\15E" # 28 # 7 $ "\08\18\09%'\0BE" } XLIB EqNoPic } * EEAF7  variables m r v ar ω F N
             {                                    * EEB55
               { BINT2 BINT2                      * EEB5A
                 { EQ$ "F=-k*x" EQ$ "W=-1/2*k*x^2" } } * EEB69
-              { $ "m\0E\15W" # 2F # 4 $ "-\18\0BB" } ROMPTR 0E2 03F } * EEBAC  variables k x F W
+              { $ "m\0E\15W" # 2F # 4 $ "-\18\0BB" } XLIB EqPicHookeSLaw } * EEBAC  variables k x F W
             {                                    * EEBFE
               { BINT2 BINT2                      * EEC03
                 { EQ$ "v1f=(m1-m2)/(m1+m2)*\0Av1i" * EEC12
                   EQ$ "v2f=(2*m1)/(m1+m2)*\0Av1i" } * EEC4B
               }                                  * EEC80
-              { $ "rqpon" # 33 # 5 $ "\08\08\09\09\09" } ROMPTR 0E2 040 } * EEC85  variables m1 m2 v1i v1f v2f
+              { $ "rqpon" # 33 # 5 $ "\08\08\09\09\09" } * EEC85  variables m1 m2 v1i v1f v2f
+              XLIB EqPic1DElasticCollisions }    * EECCB
             {                                    * EECDB
               { BINT0 EQ$ "F=Cd*((ρ*v^2)/2)*A" } * EECE0
-              { $ "s\1E\03c\15" # 38 # 5 $ "\013\11\09\0B" } ROMPTR 0E2 02A } * EED17  variables Cd ρ A v F
+              { $ "s\1E\03c\15" # 38 # 5 $ "\013\11\09\0B" } XLIB EqNoPic } * EED17  variables Cd ρ A v F
             {                                    * EED6D
               { BINT1 EQ$ "F=G*((m1*m2)/r^2)" EQ$ "F=CONST(G)*((m1*m2)/r^2)" } * EED72
-              { $ "rq\06\15" # 3D # 4 $ "\08\08C\0B" } ROMPTR 0E2 02A } * EEDD5  variables m1 m2 r F
+              { $ "rq\06\15" # 3D # 4 $ "\08\08C\0B" } XLIB EqNoPic } * EEDD5  variables m1 m2 r F
             {                                    * EEE27
               { BINT1 EQ$ "E=m*c^2" EQ$ "E=m*CONST(c)^2" } * EEE2C
-              { $ "d\05" # 41 # 2 $ "\08B" } ROMPTR 0E2 02A } * EEE6B  variables m E
+              { $ "d\05" # 41 # 2 $ "\08B" } XLIB EqNoPic } * EEE6B  variables m E
           }                                      * EEEB5
         }                                        * EEEBA
 
 * ROMPTR 0E2 01A
 * refs (1): E3857
-ROMP_0E2_01A:
-        { ROMPTR 0E2 008 # 8                     * EEEBF
+* The subject Gases: its text, the number of equation sets and one list for each set of the equations, the variables and the picture.
+EqSubGases:
+        { XLIB EqTextGases # 8                   * EEEBF
           {                                      * EEED9
             {                                    * EEEDE
               { BINT3 BINT2                      * EEEE3
                 { EQ$ "P*V=n*R*T" EQ$ "m=n*MW" } * EEEF2
                 { EQ$ "P*V=n*CONST(R)*UBASE(T)" CHR_D } } * EEF2E
-              { $ "\0A\14uCdt" # 9 # 6 $ "\03(\1C\1B\08!" } ROMPTR 0E2 02A } * EEF64  variables P V T n m MW
+              { $ "\0A\14uCdt" # 9 # 6 $ "\03(\1C\1B\08!" } XLIB EqNoPic } * EEF64  variables P V T n m MW
             {                                    * EEFBE
               { BINT1 EQ$ "(Pf*Vf)/Tf=(Pi*Vi)/Ti\0A" * EEFC3
                 EQ$ "(Pf*Vf)/UBASE(Tf)=(Pi*Vi)/UBASE(Ti)" } * EF001
-              { $ "yx32wv" # F # 6 $ "\03\03((\1C\1C" } ROMPTR 0E2 02A } * EF040  variables Pi Pf Vi Vf Ti Tf
+              { $ "yx32wv" # F # 6 $ "\03\03((\1C\1C" } XLIB EqNoPic } * EF040  variables Pi Pf Vi Vf Ti Tf
             {                                    * EF09A
               { BINT3 BINT2                      * EF09F
                 { EQ$ "W=n*R*T*LN(Vf/Vi)" EQ$ "m=n*MW" } * EF0AE
                 { EQ$ "W=n*CONST(R)*UBASE(T)*LN(UBASE(Vf/Vi))" CHR_D } } * EF0FA
-              { $ "32uCWîdt" # 15 # 7 $ "((\1C\1BB\08!" } ROMPTR 0E2 02A } * EF140  variables Vi Vf T n W - m MW
+              { $ "32uCWîdt" # 15 # 7 $ "((\1C\1BB\08!" } XLIB EqNoPic } * EF140  variables Vi Vf T n W - m MW
             {                                    * EF1A0
               { BINT3 BINT2                      * EF1A5
                 { EQ$ "Pf/Pi=(Vf/Vi)^-n" EQ$ "Tf/Ti=(Pf/Pi)^\0A((n-1)/n)" } * EF1B4
                 { EQ$ "Pf/Pi=(UBASE(Vf/Vi))^-n"  * EF21E
                   EQ$ "UBASE(Tf)/UBASE(Ti)=(UBASE(Pf/Pi))^((n-1)/n)" } * EF24D
               }                                  * EF292
-              { $ "yx32wvC" # 1C # 7 $ "\03\03((\1C\1C\01" } ROMPTR 0E2 02A } * EF297  variables Pi Pf Vi Vf Ti Tf n
+              { $ "yx32wvC" # 1C # 7 $ "\03\03((\1C\1C\01" } XLIB EqNoPic } * EF297  variables Pi Pf Vi Vf Ti Tf n
             {                                    * EF2F5
               { BINT3 BINT4                      * EF2FA
                 { EQ$ "T/T0=2/(2+(k-1)*M^2)" EQ$ "P/P0=(T/T0)^(k/(k-1))\0A" * EF309
@@ -154,7 +159,7 @@ ROMP_0E2_01A:
               }                                  * EF50F
               { $ "m\10I\0A|\1E{uz\03" # 23 # A  * EF514  variables k M P0 P ρ0 ρ T0 T At A
                 $ "\01\01\03\0333\1C\1C\11\11" } * EF54B
-              ROMPTR 0E2 041 }                   * EF56E
+              XLIB EqPicIsentropicFlow }         * EF56E
             {                                    * EF57E
               { BINT3 BINT2                      * EF583
                 { EQ$ "P*V=n*Z*R*T" EQ$ "m=n*MW" } * EF592
@@ -163,12 +168,12 @@ ROMP_0E2_01A:
                   CHR_D }                        * EF625
               }                                  * EF62F
               { $ "~\0A\14}uCdt" # 2D # 8 $ "\03\03(\1D\1C\1B\08!" } * EF634  variables Pc P V Tc T n m MW
-              ROMPTR 0E2 02A }                   * EF686
+              XLIB EqNoPic }                     * EF686
             {                                    * EF696
               { BINT1 EQ$ "(Pf*Vf)/(Zf*Tf)=\0A(Pi*Vi)/(Zi*Ti)" * EF69B
                 EQ$ "(Pf*Vf)/(ZFACTOR(UBASE(Tf)/UBASE(Tc);Pf/Pc)*UBASE(Tf))=(Pi*Vi)/(ZFACTOR(UBASE(Ti)/UBASE(Tc);Pi/Pc)*UBASE(Ti))" } * EF6EB
               { $ "~yx32î}wv" # 35 # 8 $ "\03\03\03((\1D\1C\1C" } * EF78A  variables Pc Pi Pf Vi Vf - Tc Ti Tf
-              ROMPTR 0E2 02A }                   * EF7DE
+              XLIB EqNoPic }                     * EF7DE
             {                                    * EF7EE
               { BINT3 BINT4                      * EF7F3
                 { EQ$ "P=(n*MW*vrms^2)/(3*V)\0A" EQ$ "vrms=√((3*R*T)/MW)" * EF802
@@ -177,36 +182,39 @@ ROMP_0E2_01A:
                   EQ$ "λ=1/(√(2)*π*((n*CONST(NA))/V)*d^2)" CHR_D } * EF8F6
               }                                  * EF938
               { $ "\0A\14uCt∡?\7Fd" # 3D # 9 $ "\03(\1C\1B!\09  \08" } * EF93D  variables P V T n MW vrms d λ m
-              ROMPTR 0E2 02A }                   * EF993
+              XLIB EqNoPic }                     * EF993
           }                                      * EF9A3
         }                                        * EF9A8
 
 * ROMPTR 0E2 01B
 * refs (1): E3857
-ROMP_0E2_01B:
-        { ROMPTR 0E2 009 # 6                     * EF9AD
+* The subject Heat Transfer: its text, the number of equation sets and one list for each set of the equations, the variables and the picture.
+EqSubHeatTransfer:
+        { XLIB EqTextHeatTransfer # 6            * EF9AD
           {                                      * EF9C7
             {                                    * EF9CC
               { BINT3 BINT2                      * EF9D1
                 { EQ$ "Q=m*c*ΔT" EQ$ "Q=m*c*(Tf-Ti)" } * EF9E0
                 { CHR_D EQ$ "Q=m*c*TDELTA(Tf;Ti)" } } * EFA26
-              { $ "āwvd\0BJ" # 7 # 6 $ "\1C\1C\1C\086\1E" } ROMPTR 0E2 02A } * EFA6A  variables ΔT Ti Tf m c Q
+              { $ "āwvd\0BJ" # 7 # 6 $ "\1C\1C\1C\086\1E" } XLIB EqNoPic } * EFA6A  variables ΔT Ti Tf m c Q
             {                                    * EFAC4
               { BINT3 BINT2                      * EFAC9
                 { EQ$ "δ=α*L*ΔT" EQ$ "δ=α*L*(Tf-Ti)" } * EFAD8
                 { CHR_D EQ$ "δ=α*L*TDELTA(Tf;Ti)" } } * EFB1E
-              { $ "āwv\08k∇" # D # 6 $ "\1C\1C\1C\02:\18" } ROMPTR 0E2 042 } * EFB62  variables ΔT Ti Tf L α δ
+              { $ "āwv\08k∇" # D # 6 $ "\1C\1C\1C\02:\18" } * EFB62  variables ΔT Ti Tf L α δ
+              XLIB EqPicThermalExpansion }       * EFBAC
             {                                    * EFBBC
               { BINT3 BINT2                      * EFBC1
                 { EQ$ "q=k*A/L*ΔT" EQ$ "q=k*A/L*(Th-Tc)" } * EFBD0
                 { CHR_D EQ$ "q=k*A/L*TDELTA(Th;Tc)" } } * EFC1E
               { $ "ā√}\03\08m6" # 13 # 7 $ "\1C\1C\1C/\1897" } * EFC66  variables ΔT Th Tc A L k q
-              ROMPTR 0E2 043 }                   * EFCB4
+              XLIB EqPicConduction }             * EFCB4
             {                                    * EFCC4
               { BINT3 BINT2                      * EFCC9
                 { EQ$ "q=h*A*ΔT" EQ$ "q=h*A*(Th-Tc)" } * EFCD8
                 { CHR_D EQ$ "q=h*A*TDELTA(Th;Tc)" } } * EFD1E
-              { $ "ā√}\03B6" # 1A # 6 $ "\1C\1C\1C/87" } ROMPTR 0E2 044 } * EFD62  variables ΔT Th Tc A h q
+              { $ "ā√}\03B6" # 1A # 6 $ "\1C\1C\1C/87" } * EFD62  variables ΔT Th Tc A h q
+              XLIB EqPicConvection }             * EFDAC
             {                                    * EFDBC
               { BINT3 BINT4                      * EFDC1
                 { EQ$ "q=A*ΔT/(1/h1+L1/k1+\0AL2/k2+L3/k3+1/h3)" * EFDD0
@@ -218,7 +226,7 @@ ROMP_0E2_01B:
                   EQ$ "U=q/(A*TDELTA(Th;Tc))" }  * EFF3B
               }                                  * EFF70
               { $ "ā√}\03≥≤('∂π▶Σ∫6" # 20 # E $ "\1C\1C\1C/88\18\18\1899987" } * EFF75  variables ΔT Th Tc A h1 h3 L1 L2 L3 k1 k2 k3 U q
-              ROMPTR 0E2 045 }                   * EFFDF
+              XLIB EqPicConductionConvection }   * EFFDF
             {                                    * EFFEF
               { BINT3 BINT5                      * EFFF4
                 { EQ$ "eb=σ*T^4" EQ$ "f=F0λ(λ2;T)-F0λ(λ1;T)\0A" * F0003
@@ -227,44 +235,51 @@ ROMP_0E2_01B:
                   EQ$ "f=ABS(F0λ(λ2;T)-F0λ(λ1;T))" CHR_D * F00D0
                   EQ$ "λmax*UBASE(T)=CONST(c3)" CHR_D } * F0111
               }                                  * F013F
-              { $ "u↓←→.α≠\036" # 2E # 9 $ "\1C;++\01;+/7" } ROMPTR 0E2 046 } * F0144  variables T eb λ1 λ2 f eb12 λmax A q
+              { $ "u↓←→.α≠\036" # 2E # 9 $ "\1C;++\01;+/7" } * F0144  variables T eb λ1 λ2 f eb12 λmax A q
+              XLIB EqPicBlackBodyRadiation }     * F019A
           }                                      * F01AA
         }                                        * F01AF
 
 * ROMPTR 0E2 01C
 * refs (1): E3857
-ROMP_0E2_01C:
-        { ROMPTR 0E2 00A # 4                     * F01B4
+* The subject Magnetism: its text, the number of equation sets and one list for each set of the equations, the variables and the picture.
+EqSubMagnetism:
+        { XLIB EqTextMagnetism # 4               * F01B4
           {                                      * F01CE
             {                                    * F01D3
               { BINT1 EQ$ "B=(µ0*µr*I)/(2*π*r)"  * F01D8
                 EQ$ "B=IFTE(r<rw;(CONST(µ0)*µr*I*r)/(2*π*rw^2);(CONST(µ0)*µr*I)/(2*π*r))" } * F020C
-              { $ "D\06γ\04↑" # 5 # 5 $ "\01\18\18\0D*" } ROMPTR 0E2 047 } * F0275  variables µr r rw I B
+              { $ "D\06γ\04↑" # 5 # 5 $ "\01\18\18\0D*" } * F0275  variables µr r rw I B
+              XLIB EqPicStraightWire }           * F02BB
             {                                    * F02CB
               { BINT1 EQ$ "Fba=(µ0*µr*L*Ib*Ia)/\0A(2*π*d)" * F02D0
                 EQ$ "Fba=(CONST(µ0)*µr*L*Ib*Ia)/(2*π*d)" } * F0318
-              { $ "D\08?ηεδ" # A # 6 $ "\01\18\18\0D\0D\0B" } ROMPTR 0E2 048 } * F0359  variables µr L d Ib Ia Fba
+              { $ "D\08?ηεδ" # A # 6 $ "\01\18\18\0D\0D\0B" } * F0359  variables µr L d Ib Ia Fba
+              XLIB EqPicForceBetweenWires }      * F03A3
             {                                    * F03B3
               { BINT1 EQ$ "B=µ0*µr*I*n" EQ$ "B=CONST(µ0)*µr*I*n" } * F03B8
-              { $ "DC\04↑" # 10 # 4 $ "\01\19\0D*" } ROMPTR 0E2 049 } * F0409  variables µr n I B
+              { $ "DC\04↑" # 10 # 4 $ "\01\19\0D*" } * F0409  variables µr n I B
+              XLIB EqPicBFieldInSolenoid }       * F044B
             {                                    * F045B
               { BINT1 EQ$ "B=(µ0*µr*I*N)/(2*π)*\0A(2/(ro+ri))" * F0460
                 EQ$ "B=(CONST(µ0)*µr*I*N)/(2*π)*(2/(ro+ri))" } * F04A8
-              { $ "DEA@\04↑" # 14 # 6 $ "\01\01\18\18\0D*" } ROMPTR 0E2 04A } * F04EB  variables µr N ri ro I B
+              { $ "DEA@\04↑" # 14 # 6 $ "\01\01\18\18\0D*" } * F04EB  variables µr N ri ro I B
+              XLIB EqPicBFieldInToroid }         * F0535
           }                                      * F0545
         }                                        * F054A
 
 * ROMPTR 0E2 01D
 * refs (1): E3857
-ROMP_0E2_01D:
-        { ROMPTR 0E2 00B # 7                     * F054F
+* The subject Motion: its text, the number of equation sets and one list for each set of the equations, the variables and the picture.
+EqSubMotion:
+        { XLIB EqTextMotion # 7                  * F054F
           {                                      * F0569
             {                                    * F056E
               { BINT2 BINT4                      * F0573
                 { EQ$ "x=x0+v0*t+1/2*a*t^2" EQ$ "x=x0+v*t-1/2*a*t^2" * F0582
                   EQ$ "x=x0+1/2*(v0+v)*t" EQ$ "v=v0+a*t" } * F05DD
               }                                  * F0624
-              { $ "λ\0Eθc\11:" # 8 # 6 $ "\02\02\09\09%\17" } ROMPTR 0E2 02A } * F0629  variables x0 x v0 v a t
+              { $ "λ\0Eθc\11:" # 8 # 6 $ "\02\02\09\09%\17" } XLIB EqNoPic } * F0629  variables x0 x v0 v a t
             {                                    * F0683
               { BINT3 BINT4                      * F0688
                 { EQ$ "y=y0+v0*t-1/2*g*t^2" EQ$ "y=y0+v*t+1/2*g*t^2" * F0697
@@ -273,7 +288,7 @@ ROMP_0E2_01D:
                   EQ$ "y=y0+v*t+1/2*CONST(g)*t^2" * F076C
                   EQ$ "v^2=v0^2-2*CONST(g)*(y-y0)" EQ$ "v=v0-CONST(g)*t" } * F0798
               }                                  * F07E5
-              { $ "ρ\0Dθc:" # E # 5 $ "\02\02\09\09\17" } ROMPTR 0E2 02A } * F07EA  variables y0 y v0 v t
+              { $ "ρ\0Dθc:" # E # 5 $ "\02\02\09\09\17" } XLIB EqNoPic } * F07EA  variables y0 y v0 v t
             {                                    * F0840
               { BINT3 BINT5                      * F0845
                 { EQ$ "x=x0+v0*COS(θ0)*t"        * F0854
@@ -285,25 +300,25 @@ ROMP_0E2_01D:
               }                                  * F09B8
               { $ "λ\0Eρ\0Dωîθτσ:\19" # 13 # A   * F09BD  variables x0 x y0 y θ0 - v0 vx vy t R
                 $ "\02\02\02\024\09\09\09\17\02" } * F09F6
-              ROMPTR 0E2 04B }                   * F0A19
+              XLIB EqPicProjectileMotion }       * F0A19
             {                                    * F0A29
               { BINT2 BINT4                      * F0A2E
                 { EQ$ "θ=θ0+ω0*t+1/2*α*t^2" EQ$ "θ=θ0+ω*t-1/2*α*t^2" * F0A3D
                   EQ$ "θ=θ0+1/2*(ω0+ω)*t" EQ$ "ω=ω0+α*t" } * F0A98
               }                                  * F0ADF
-              { $ "ω\12>/k:" # 1D # 6 $ "))''&5" } ROMPTR 0E2 02A } * F0AE4  variables θ0 θ ω0 ω α t
+              { $ "ω\12>/k:" # 1D # 6 $ "))''&5" } XLIB EqNoPic } * F0AE4  variables θ0 θ ω0 ω α t
             {                                    * F0B3E
               { BINT3 BINT3                      * F0B43
                 { EQ$ "ω=v/r" EQ$ "ar=v^2/r" EQ$ "ω=2*π*N" } * F0B52
                 { EQ$ "ω=CONST(rad)*v/r" CHR_D EQ$ "ω=CONST(twoπ)*N" } } * F0B9E
-              { $ "\06cl/E" # 23 # 5 $ "\18\09%'E" } ROMPTR 0E2 02A } * F0BE4  variables r v ar ω N
+              { $ "\06cl/E" # 23 # 5 $ "\18\09%'E" } XLIB EqNoPic } * F0BE4  variables r v ar ω N
             {                                    * F0C3A
               { BINT1 EQ$ "v=√((2*m*g)/(Cd*ρ*A))\0A" * F0C3F
                 EQ$ "v=√(UBASE((2*m*CONST(g))/(Cd*ρ*A)))" } * F0C79
-              { $ "s\1E\03dc" # 28 # 5 $ "\013\11\08\09" } ROMPTR 0E2 02A } * F0CB2  variables Cd ρ A m v
+              { $ "s\1E\03dc" # 28 # 5 $ "\013\11\08\09" } XLIB EqNoPic } * F0CB2  variables Cd ρ A m v
             {                                    * F0D08
               { BINT1 EQ$ "v=√((2*G*M)/R)"       * F0D0D
                 EQ$ "v=√(UBASE((2*CONST(G)*M)/R))" } * F0D3B
-              { $ "\10\19c" # 2D # 3 $ "\08C\09" } ROMPTR 0E2 02A } * F0D68  variables M R v
+              { $ "\10\19c" # 2D # 3 $ "\08C\09" } XLIB EqNoPic } * F0D68  variables M R v
           }                                      * F0DB6
         }                                        * F0DBB

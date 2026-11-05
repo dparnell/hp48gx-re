@@ -1,6 +1,6 @@
-* HP 48GX ROM revision R, #16000-#1802D: Conversion of objects to strings
+* HP 48GX ROM revision R, #16000-#1802D: Conversion of objects to text: strings for each type, number formatting, the line-at-a-time decompiler that wraps programs and lists, and the out-of-memory (VLM) dialog
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: #>$ NULL$TEMP St10Gb a%>$ !DcompWidth DPRADIX? ->str2(ar) DcompWidth@ 9rolld ->str(c) ->str1(ar) #:>$
+* Most referenced: #>$ NULL$TEMP St10Gb a%>$ DclEndLine !DcompWidth VLMPurge? DPRADIX? DclFit? ->str2(ar) DcompWidth@ 9rolld
 * Follows on from the previous file (at #16000 in the original ROM).
         B=B-C   A                                * 16000
         D1=D1+  5                                * 16002
@@ -96,8 +96,8 @@ add2_(st).L1:
 
 * refs (2): 15BBA 15BE7
 ->str1(ex):
-        :: MINUSONE NULL$TEMP OBJ_539CA ERRSET OBJ_34D3C ERRTRAP OBJ_159AF * 16103
-          OBJ_539D8 ?SEMI                        * 1612B
+        :: MINUSONE NULL$TEMP SetISF20B ERRSET OBJ_34D3C ERRTRAP DcompErr * 16103
+          ClrISF20B ?SEMI                        * 1612B
           ROTROT2DROP ;                          * 16135
 
 * -> $
@@ -118,17 +118,16 @@ NULL$TEMP:
 
 * refs (7): 15B74 15B83 15B92 15BBF 15BEC 15BFB ...
 ->str2(ar):
-        :: OBJ_159B4 NULL$TEMP SWAP NULL{}       * 161D0
+        :: ClrDcompFlags NULL$TEMP SWAP NULL{}   * 161D0
 ->str2(ar).loop1:
-          OVERSWAP OBJ_169E1 4ROLLROT !append$ OVER NULLCOMP? case * 161E9
-          ROTROT2DROP                            * 1620C
+          OVERSWAP DclLine 4ROLLROT !append$ OVER NULLCOMP? case ROTROT2DROP * 161E9
           NEWLINE$&$ 3UNROLL GOTO ->str2(ar).loop1 ; * 16211
 
 * refs (5): 15B6F 15B7E 15B8D 15BF6 15C05
 ->str1(ar):
         :: NULL$TEMP OVER NULL{}                 * 1622A
 ->str1(ar).loop1:
-          OBJ_539CA ERRSET OBJ_169E1 ERRTRAP OBJ_159AF OBJ_539D8 3UNROLL * 1623E
+          SetISF20B ERRSET DclLine ERRTRAP DcompErr ClrISF20B 3UNROLL * 1623E
           !append$ DUPLEN$ DcompWidth@ #1+ #> 3PICK NULLCOMP? ORcase * 16261
           ROTROT2DROP                            * 16289
           APPEND_SPACE 3PICK ROT GOTO ->str1(ar).loop1 ; * 1628E
@@ -147,31 +146,33 @@ a%>$:
         ST=0    0                                * 162BD
 a%>$.L1:
         LC(5)   #00030                           * 162C0
-        GOSUB   SUB_162EA                        * 162C7
+        GOSUB   Temp$Alloc                       * 162C7
         A=DAT1  A                                * 162CB
         D1=A                                     * 162CE
         D1=D1+  5                                * 162D1
         A=DAT1  W                                * 162D4
-        GOSUB   SUB_16353                        * 162D8
+        GOSUB   %>Text                           * 162D8
         AD0EX                                    * 162DC
         GOSUB   Clean$                           * 162DF
         GOVLNG  GPOverWrR0Lp                     * 162E3
 
 * refs (1): 162C7
-SUB_162EA:
+* C.A = size in nibbles -> SAVPTR, then as Temp$AllocR0
+Temp$Alloc:
         R0=C                                     * 162EA
         GOSBVL  SAVPTR                           * 162ED
 
 * refs (1): 18448
-SUB_162F4:
+* R0.A = size in nibbles -> new string in TEMPOB (garbage-collecting once if needed), R0 = the object, R1 = its length field, D0 = its body, D1 = stack level 1
+Temp$AllocR0:
         ST=0    10                               * 162F4
-SUB_162F4.loop1:
+Temp$AllocR0.loop1:
         C=R0                                     * 162F7
         GOSBVL  CREATETEMP                       * 162FA
-        GONC    SUB_162F4.L2                     * 16301
+        GONC    Temp$AllocR0.L2                  * 16301
         GOSUB   St10Gb                           * 16304
-        GOTO    SUB_162F4.loop1                  * 16308
-SUB_162F4.L2:
+        GOTO    Temp$AllocR0.loop1               * 16308
+Temp$AllocR0.L2:
         D1=(5)  DSKTOP                           * 1630C
         C=DAT1  A                                * 16313
         D1=C                                     * 16316
@@ -197,13 +198,14 @@ St10Gb~1:
         GOVLNG  GARBAGECOL                       * 1634C
 
 * refs (1): 162D8
-SUB_16353:
+* A.W = real number, D0 = output -> the number's characters at D0 in the display format of flags -45..-50, with the fraction mark of flag -51, D0 past them
+%>Text:
         ?A=0    S                                * 16353
-        GOYES   SUB_16353.L1                     * 16356
+        GOYES   %>Text~1                         * 16356
         LC(2)   #2D                              * 16358
         DAT0=C  B                                * 1635C
         D0=D0+  2                                * 1635F
-SUB_16353.L1:
+%>Text~1:
         D1=(5)  #8084D                           * 16362
         C=DAT1  B                                * 16369
         D1=(5)  #8084F                           * 1636C
@@ -214,30 +216,30 @@ SUB_16353.L1:
         P=      1                                * 16382
         LC(1)   #B                               * 16384
         ?D<=C   P                                * 16387
-        GOYES   SUB_16353.L2                     * 1638A
+        GOYES   %>Text~1.L1                      * 1638A
         D=C     P                                * 1638C
-SUB_16353.L2:
+%>Text~1.L1:
         P=      0                                * 1638F
         C=D     B                                * 16391
         ?C#0    P                                * 16394
-        GOYES   SUB_16353.L9                     * 16397
+        GOYES   %>Text~1.L8                      * 16397
         ST=0    0                                * 16399
         ?A#0    M                                * 1639C
-        GOYES   SUB_16353.L3                     * 1639F
+        GOYES   %>Text~1.L2                      * 1639F
         LC(2)   #30                              * 163A1
         DAT0=C  B                                * 163A5
         D0=D0+  2                                * 163A8
         RTNCC                                    * 163AB
-SUB_16353.L3:
+%>Text~1.L2:
         SETDEC                                   * 163AD
         LC(3)   #012                             * 163AF
         B=C     A                                * 163B4
         P=      2                                * 163B6
-SUB_16353.loop4:
+%>Text~1.loop3:
         P=P+1                                    * 163B8
         B=B-1   X                                * 163BA
         ?A=0    P                                * 163BD
-        GOYES   SUB_16353.loop4                  * 163C0
+        GOYES   %>Text~1.loop3                   * 163C0
         P=P+1                                    * 163C2
         CPEX    15                               * 163C4
         SETHEX                                   * 163C8
@@ -245,33 +247,33 @@ SUB_16353.loop4:
         SETDEC                                   * 163CD
         P=      0                                * 163CF
         B=B-A   X                                * 163D1
-        GONC    SUB_16353.loop5                  * 163D4
+        GONC    %>Text~1.loop4                   * 163D4
         LC(3)   #500                             * 163D7
         ?C<A    X                                * 163DC
-        GOYES   SUB_16353.L7                     * 163DF
+        GOYES   %>Text~1.L6                      * 163DF
         LC(3)   #011                             * 163E1
         ?C<A    X                                * 163E6
-        GOYES   SUB_16353.L8                     * 163E9
+        GOYES   %>Text~1.L7                      * 163E9
         B=0     A                                * 163EB
-SUB_16353.loop5:
+%>Text~1.loop4:
         P=      15                               * 163ED
-SUB_16353.loop6:
+%>Text~1.loop5:
         P=P+1                                    * 163EF
         B=B-1   X                                * 163F1
-        GONC    SUB_16353.loop6                  * 163F4
+        GONC    %>Text~1.loop5                   * 163F4
         CPEX    1                                * 163F7
         P=      0                                * 163FB
         LC(1)   #9                               * 163FD
-        GOC     SUB_16353.L9                     * 16400
-SUB_16353.L7:
+        GOC     %>Text~1.L8                      * 16400
+%>Text~1.L6:
         LC(3)   #012                             * 16403
         ?B<=C   X                                * 16408
-        GOYES   SUB_16353.loop5                  * 1640B
-SUB_16353.L8:
+        GOYES   %>Text~1.loop4                   * 1640B
+%>Text~1.L7:
         CSLC                                     * 1640D
         CSL     A                                * 16410
         LC(1)   #2                               * 16412
-SUB_16353.L9:
+%>Text~1.L8:
         D=C     B                                * 16415
         B=0     W                                * 16418
         ABEX    M                                * 1641B
@@ -279,17 +281,17 @@ SUB_16353.L9:
         A=0     S                                * 16421
         SETDEC                                   * 16424
         C=C+C   XS                               * 16426
-        GONC    SUB_16353.L10                    * 16429
+        GONC    %>Text~1.L9                      * 16429
         A=A+1   S                                * 1642C
-SUB_16353.L10:
+%>Text~1.L9:
         C=D     B                                * 1642F
         CSTEX                                    * 16432
         ?ST=1   1                                * 16434
-        GOYES   SUB_16353.L11                    * 16437
-        GOTO    SUB_16353.L22                    * 16439
-SUB_16353.L11:
+        GOYES   %>Text~1.L10                     * 16437
+        GOTO    %>Text~1.L21                     * 16439
+%>Text~1.L10:
         CSTEX                                    * 1643D
-SUB_16353.loop12:
+%>Text~1.loop11:
         SETHEX                                   * 1643F
         ST=0    0                                * 16441
         P=      1                                * 16444
@@ -301,12 +303,12 @@ SUB_16353.loop12:
         C=B     WP                               * 16455
         B=B+C   W                                * 16458
         ?B=0    S                                * 1645B
-        GOYES   SUB_16353.L13                    * 1645E
+        GOYES   %>Text~1.L12                     * 1645E
         BSR     W                                * 16460
         A=A+1   X                                * 16463
-        GONC    SUB_16353.L13                    * 16466
+        GONC    %>Text~1.L12                     * 16466
         A=0     S                                * 16469
-SUB_16353.L13:
+%>Text~1.L12:
         B=0     WP                               * 1646C
         SETHEX                                   * 1646F
         B=B-1   WP                               * 16471
@@ -314,154 +316,154 @@ SUB_16353.L13:
         B=0     P                                * 16476
         SETDEC                                   * 16479
         ?A=0    S                                * 1647B
-        GOYES   SUB_16353.L14                    * 1647E
+        GOYES   %>Text~1.L13                     * 1647E
         A=-A    X                                * 16480
         LC(3)   #499                             * 16483
         ?C=A    X                                * 16488
-        GOYES   SUB_16353.L19                    * 1648B
-SUB_16353.L14:
+        GOYES   %>Text~1.L18                     * 1648B
+%>Text~1.L13:
         C=D     B                                * 1648D
         CSTEX                                    * 16490
         ?ST=1   0                                * 16492
-        GOYES   SUB_16353.L15                    * 16495
-SUB_16353.L15:
+        GOYES   %>Text~1.L14                     * 16495
+%>Text~1.L14:
         CSTEX                                    * 16497
-        GONC    SUB_16353.L19                    * 16499
+        GONC    %>Text~1.L18                     * 16499
         LC(3)   #300                             * 1649C
         D=C     X                                * 164A1
         C=A     A                                * 164A4
-SUB_16353.loop16:
+%>Text~1.loop15:
         C=C-D   X                                * 164A6
-        GONC    SUB_16353.loop16                 * 164A9
+        GONC    %>Text~1.loop15                  * 164A9
         C=C+D   X                                * 164AC
         DSR     X                                * 164AF
         ?D#0    X                                * 164B2
-        GOYES   SUB_16353.loop16                 * 164B5
+        GOYES   %>Text~1.loop15                  * 164B5
         ?C=0    X                                * 164B7
-        GOYES   SUB_16353.L19                    * 164BA
+        GOYES   %>Text~1.L18                     * 164BA
         B=C     P                                * 164BC
         A=A-C   A                                * 164BF
         ?A=0    S                                * 164C1
-        GOYES   SUB_16353.L17                    * 164C4
+        GOYES   %>Text~1.L16                     * 164C4
         LC(1)   #3                               * 164C6
         A=A+C   A                                * 164C9
         B=C-B   P                                * 164CB
-SUB_16353.L17:
+%>Text~1.L16:
         SETHEX                                   * 164CE
         LC(1)   #D                               * 164D0
         C=C-B   P                                * 164D3
         P=C     0                                * 164D6
-SUB_16353.loop18:
+%>Text~1.loop17:
         P=P+1                                    * 164DA
         B=B+1   P                                * 164DC
-        GOC     SUB_16353.loop18                 * 164DF
+        GOC     %>Text~1.loop17                  * 164DF
         B=B-1   P                                * 164E2
-SUB_16353.L19:
+%>Text~1.L18:
         SETHEX                                   * 164E5
         A=A+1   A                                * 164E7
         P=      14                               * 164E9
-SUB_16353.loop20:
+%>Text~1.loop19:
         ASL     WP                               * 164EB
         ?A=0    P                                * 164EE
-        GOYES   SUB_16353.loop20                 * 164F1
+        GOYES   %>Text~1.loop19                  * 164F1
         A=A-1   WP                               * 164F3
-        GOTO    SUB_16353.L31                    * 164F6
-SUB_16353.loop21:
-        GOTO    SUB_16353.loop12                 * 164FA
-SUB_16353.L22:
+        GOTO    %>Text~1.L30                     * 164F6
+%>Text~1.loop20:
+        GOTO    %>Text~1.loop11                  * 164FA
+%>Text~1.L21:
         ST=0    0                                * 164FE
         CSTEX                                    * 16501
         D=C     B                                * 16503
         P=C     1                                * 16506
         C=A     A                                * 1650A
-SUB_16353.loop23:
+%>Text~1.loop22:
         C=C+1   A                                * 1650C
         P=P-1                                    * 1650E
-        GONC    SUB_16353.loop23                 * 16510
+        GONC    %>Text~1.loop22                  * 16510
         C=C+C   XS                               * 16513
-        GOC     SUB_16353.loop21                 * 16516
-SUB_16353.loop24:
+        GOC     %>Text~1.loop20                  * 16516
+%>Text~1.loop23:
         P=P-1                                    * 16519
         ?P=     1                                * 1651B
-        GOYES   SUB_16353.L26                    * 1651E
+        GOYES   %>Text~1.L25                     * 1651E
         C=C-1   X                                * 16520
-        GONC    SUB_16353.loop24                 * 16523
+        GONC    %>Text~1.loop23                  * 16523
         C=0     W                                * 16526
         ?B=0    M                                * 16529
-        GOYES   SUB_16353.L27                    * 1652C
+        GOYES   %>Text~1.L26                     * 1652C
         C=B     WP                               * 1652E
         C=C+B   W                                * 16531
         C=0     WP                               * 16534
         ?C=0    W                                * 16537
-        GOYES   SUB_16353.loop21                 * 1653A
+        GOYES   %>Text~1.loop20                  * 1653A
         ?C=0    S                                * 1653C
-        GOYES   SUB_16353.L27                    * 1653F
+        GOYES   %>Text~1.L26                     * 1653F
         CSR     W                                * 16541
         A=A+1   X                                * 16544
-        GONC    SUB_16353.L25                    * 16547
+        GONC    %>Text~1.L24                     * 16547
         A=0     S                                * 1654A
-SUB_16353.L25:
+%>Text~1.L24:
         P=P-1                                    * 1654D
         ?P#     1                                * 1654F
-        GOYES   SUB_16353.L27                    * 16552
-SUB_16353.L26:
+        GOYES   %>Text~1.L26                     * 16552
+%>Text~1.L25:
         P=      0                                * 16554
         LC(3)   #011                             * 16556
         P=      2                                * 1655B
         ?C<A    X                                * 1655D
-        GOYES   SUB_16353.loop21                 * 16560
+        GOYES   %>Text~1.loop20                  * 16560
         C=B     W                                * 16562
-SUB_16353.L27:
+%>Text~1.L26:
         B=C     W                                * 16565
         ?A=0    S                                * 16568
-        GOYES   SUB_16353.L29                    * 1656B
-SUB_16353.loop28:
+        GOYES   %>Text~1.L28                     * 1656B
+%>Text~1.loop27:
         BSR     W                                * 1656D
         P=P-1                                    * 16570
         A=A+1   X                                * 16572
-        GONC    SUB_16353.loop28                 * 16575
-SUB_16353.L29:
+        GONC    %>Text~1.loop27                  * 16575
+%>Text~1.L28:
         SETHEX                                   * 16578
         B=B-1   WP                               * 1657A
         P=      0                                * 1657D
         B=A     P                                * 1657F
         ASR     B                                * 16582
         ?A=0    P                                * 16585
-        GOYES   SUB_16353.L30                    * 16588
+        GOYES   %>Text~1.L29                     * 16588
         LC(1)   #A                               * 1658A
         B=B+C   P                                * 1658D
-SUB_16353.L30:
+%>Text~1.L29:
         A=0     W                                * 16590
         A=A-1   W                                * 16593
-SUB_16353.L31:
+%>Text~1.L30:
         P=      0                                * 16596
         A=B     P                                * 16598
         D=D+D   P                                * 1659B
         BSL     W                                * 1659E
-        GONC    SUB_16353.loop33                 * 165A1
+        GONC    %>Text~1.loop32                  * 165A1
         ?B=0    S                                * 165A4
-        GOYES   SUB_16353.loop35                 * 165A7
+        GOYES   %>Text~1.loop34                  * 165A7
         LC(1)   #E                               * 165A9
         C=C-A   P                                * 165AC
         P=C     0                                * 165AF
         LC(1)   #F                               * 165B3
         ?B#C    P                                * 165B6
-        GOYES   SUB_16353.L32                    * 165B9
+        GOYES   %>Text~1.L31                     * 165B9
         A=0     A                                * 165BB
         A=A-1   A                                * 165BD
-SUB_16353.L32:
+%>Text~1.L31:
         P=      0                                * 165BF
-SUB_16353.loop33:
+%>Text~1.loop32:
         C=B     S                                * 165C1
         B=B+1   S                                * 165C4
-        GOC     SUB_16353.L36                    * 165C7
+        GOC     %>Text~1.L35                     * 165C7
         LC(1)   #3                               * 165CA
         CSLC                                     * 165CD
-SUB_16353.loop34:
+%>Text~1.loop33:
         DAT0=C  B                                * 165D0
         D0=D0+  2                                * 165D3
         ?ST=0   0                                * 165D6
-        GOYES   SUB_16353.loop35                 * 165D9
+        GOYES   %>Text~1.loop34                  * 165D9
         C=A     A                                * 165DB
         C=-C    A                                * 165DD
         P=C     0                                * 165DF
@@ -469,21 +471,21 @@ SUB_16353.loop34:
         LC(10)  #1001001000                      * 165E5
         P=      0                                * 165F1
         ?C=0    P                                * 165F3
-        GOYES   SUB_16353.loop35                 * 165F6
+        GOYES   %>Text~1.loop34                  * 165F6
         LC(4)   #2E2C                            * 165F8
-        GOSUB   SUB_16656                        * 165FE
+        GOSUB   ?Comma                           * 165FE
         DAT0=C  B                                * 16602
         D0=D0+  2                                * 16605
-SUB_16353.loop35:
+%>Text~1.loop34:
         BSL     W                                * 16608
         A=A-1   P                                * 1660B
-        GONC    SUB_16353.loop33                 * 1660E
+        GONC    %>Text~1.loop32                  * 1660E
         ST=0    0                                * 16611
         LC(4)   #2C2E                            * 16614
-        GOSUB   SUB_16656                        * 1661A
+        GOSUB   ?Comma                           * 1661A
         BSR     W                                * 1661E
-        GOTO    SUB_16353.loop34                 * 16621
-SUB_16353.L36:
+        GOTO    %>Text~1.loop33                  * 16621
+%>Text~1.L35:
         A=A+1   S                                * 16625
         RTNC                                     * 16628
         LC(2)   #45                              * 1662B
@@ -491,27 +493,28 @@ SUB_16353.L36:
         D0=D0+  2                                * 16632
         A=A-1   S                                * 16635
         ?A=0    S                                * 16638
-        GOYES   SUB_16353.L37                    * 1663B
+        GOYES   %>Text~1.L36                     * 1663B
         LC(2)   #2D                              * 1663D
         DAT0=C  B                                * 16641
         D0=D0+  2                                * 16644
-SUB_16353.L37:
+%>Text~1.L36:
         B=A     W                                * 16647
         A=0     W                                * 1664A
         A=A-1   W                                * 1664D
         ST=0    0                                * 16650
-        GOC     SUB_16353.loop35                 * 16653
+        GOC     %>Text~1.loop34                  * 16653
 
 * refs (2): 165FE 1661A
-SUB_16656:
+* C.A = two characters -> C.B: the low one, or the high one when flag -51 (comma as fraction mark) is set
+?Comma:
         D=C     A                                * 16656
         D1=(5)  #8084F                           * 16658
         C=DAT1  B                                * 1665F
         ?CBIT=0 2                                * 16662
-        GOYES   SUB_16656.L1                     * 16667
+        GOYES   ?Comma.L1                        * 16667
         DSR     A                                * 16669
         DSR     A                                * 1666B
-SUB_16656.L1:
+?Comma.L1:
         C=D     A                                * 1666D
         RTN                                      * 1666F
 
@@ -620,41 +623,42 @@ DOSTD.L2:
         PC=(A)                                   * 16766
 
 * refs (1): 16841
-SUB_1676A:
+* A.A = binary number, D0 = output -> its decimal digits as characters, D0 past them
+Bin>Dec$:
         C=0     W                                * 1676A
         C=A     A                                * 1676D
         A=0     W                                * 1676F
         A=A+1   A                                * 16772
         SETDEC                                   * 16774
         B=0     W                                * 16776
-SUB_1676A.loop1:
+Bin>Dec$.loop1:
         SB=0                                     * 16779
         CSRB                                     * 1677C
         ?SB=0                                    * 1677F
-        GOYES   SUB_1676A.L2                     * 16782
+        GOYES   Bin>Dec$.L2                      * 16782
         B=B+A   W                                * 16784
-SUB_1676A.L2:
+Bin>Dec$.L2:
         A=A+A   W                                * 16787
         ?C#0    W                                * 1678A
-        GOYES   SUB_1676A.loop1                  * 1678D
+        GOYES   Bin>Dec$.loop1                   * 1678D
         C=B     W                                * 1678F
         SETHEX                                   * 16792
         A=0     B                                * 16794
         P=      5                                * 16797
-SUB_1676A.loop3:
+Bin>Dec$.loop3:
         A=A+1   B                                * 16799
         CSRC                                     * 1679C
         ?C#0    WP                               * 1679F
-        GOYES   SUB_1676A.loop3                  * 167A2
+        GOYES   Bin>Dec$.loop3                   * 167A2
         P=      1                                * 167A4
         A=A-1   B                                * 167A6
-SUB_1676A.loop4:
+Bin>Dec$.loop4:
         CSLC                                     * 167A9
         LC(1)   #3                               * 167AC
         DAT0=C  B                                * 167AF
         D0=D0+  2                                * 167B2
         A=A-1   B                                * 167B5
-        GONC    SUB_1676A.loop4                  * 167B8
+        GONC    Bin>Dec$.loop4                   * 167B8
         P=      0                                * 167BB
         RTNCC                                    * 167BD
         RPL
@@ -703,14 +707,15 @@ DPRADIX?:
         B=B+1   A                                * 1682B
 #>$.L4:
         C=B     A                                * 1682D
-        GOSUB   SUB_16837                        * 1682F
+        GOSUB   Make#:$                          * 1682F
         GOTO    stackitw.loop11                  * 16833
 
 * refs (2): 1682F 168D6
-SUB_16837:
+* C.A = size, R1 = number -> new string (MAKE$) starting with the number in decimal; ": " follows unless ST9 is set
+Make#:$:
         GOSBVL  MAKE$                            * 16837
         A=R1                                     * 1683E
-        GOSBVL  SUB_1676A                        * 16841
+        GOSBVL  Bin>Dec$                         * 16841
         ?ST=1   9                                * 16848
         RTNYES                                   * 1684B
         LC(4)   #203A                            * 1684D
@@ -762,7 +767,7 @@ stackitw.L3:
 stackitw.L4:
         R2=C                                     * 168D0
         ST=0    9                                * 168D3
-        GOSUB   SUB_16837                        * 168D6
+        GOSUB   Make#:$                          * 168D6
         AD0EX                                    * 168DA
         D0=A                                     * 168DD
         C=R0                                     * 168E0
@@ -820,7 +825,8 @@ stackitw.L12:
         RPL
 
 * refs (3): 1595A 159FF 16A18
-OBJ_16969:
+* # 13: the characters of a stack line
+StdDcompWidth:
         # 13                                     * 16969  19
 
 * refs (2): 16A54 1709A
@@ -837,190 +843,215 @@ NDROPFALSE:
           DROPFALSE ;                            * 169D7
 
 * refs (2): 161EE 16248
-OBJ_169E1:
-        :: OBJ_5394C GOTO OBJ_16A0E.L2 ;         * 169E1
+* ob {state} -> $line {state'}: the next line of ob, at width DcompWidth, in edit form. {state} is where the last line stopped ({} to start) and {state'} is {} when ob is finished. Text is produced line by line, so a large object can be shown or edited without its whole text in memory.
+DclLine:
+        :: ClrISF803 GOTO DclLine~1 ;            * 169E1
 
 * refs (2): 319CB 31B15
-OBJ_169FA:
-        :: GOTO OBJ_16A0E.L1 ;                   * 169FA
+* ob {state} #width -> $line {state'}: DclLine at another width, keeping the form flag (#803); used for printing
+DclLine#:
+        :: GOTO DclLine#~1 ;                     * 169FA
 
 * refs (2): 2FCAE 39E8C
-OBJ_16A0E:
-        :: OBJ_5394C OBJ_16969                   * 16A0E
-OBJ_16A0E.L1:
+* ob {state} -> $line {state'}: DclLine at the standard width
+DclLine19:
+        :: ClrISF803 StdDcompWidth               * 16A0E
+DclLine#~1:
           !DcompWidth                            * 16A1D
-OBJ_16A0E.L2:
-          ?ATTNQUIT OVER TYPECMP? case OBJ_17518 * 16A22
+DclLine~1:
+          ?ATTNQUIT OVER TYPECMP? case DclCmp    * 16A22
           OVER TYPEARRAY? IT                     * 16A3B
           :: OVER 2D/3D(ar)? case                * 16A4A
-            :: RDROP OBJ_1748C ;                 * 16A5E
-            OBJ_5395A case                       * 16A72
-            :: RDROP OBJ_31ACA ;                 * 16A7C
+            :: RDROP DclVecAr ;                  * 16A5E
+            ISF803? case                         * 16A72
+            :: RDROP DclLine19~1 ;               * 16A7C
           ;                                      * 16A90
           ERRSET                                 * 16A95
-          :: OBJ_172C0 COLA                      * 16A9A
+          :: DclResume COLA                      * 16A9A
 
 * refs (4): 16BE6 16CD4 16D9F 17202
-OBJ_16AA9:
-            :: 4PICK DUPROM-WORD? SWAP TYPECOL? NOTAND case OBJ_16FDE * 16AA9
+* Add the current object to the line by type; composites descend into their contents and leave resume information on the stack. Works on a 4-level frame with the object in level 4.
+DclOb:
+            :: 4PICK DUPROM-WORD? SWAP TYPECOL? NOTAND case DclAtom * 16AA9
               CK&DISPATCH0                       * 16AD1
-              # 4000 OBJ_1700B                   * 16AD6  array any any any
-              # 5000 OBJ_16BA3                   * 16AE5  list any any any
-              # 8000 OBJ_16E2B                   * 16AF4  program any any any
-              # 9000 OBJ_16DB3                   * 16B03  algebraic any any any
-              # E000 OBJ_16DB3                   * 16B12  unit any any any
-              # D000 OBJ_16D16                   * 16B21  tagged any any any
-              # 2F000 OBJ_16C01                  * 16B30  directory any any any
-              BINT0 OBJ_16FDE                    * 16B3F  any
+              # 4000 DclArray                    * 16AD6  array any any any
+              # 5000 DclList                     * 16AE5  list any any any
+              # 8000 DclSeco                     * 16AF4  program any any any
+              # 9000 DclSymb                     * 16B03  algebraic any any any
+              # E000 DclSymb                     * 16B12  unit any any any
+              # D000 DclTag                      * 16B21  tagged any any any
+              # 2F000 DclDir                     * 16B30  directory any any any
+              BINT0 DclAtom                      * 16B3F  any
             ;                                    * 16B49
           ;                                      * 16B4E
+* An error during the walk unwinds to the marker pushed by DclResume and passes on
           ERRTRAP                                * 16B53
-          :: BEGIN FixRRP OBJ_177B6 UNTIL ERRJMP ; ; * 16B58
+          :: BEGIN FixRRP DclMark? UNTIL ERRJMP ; ; * 16B58
 
 * refs (2): 16BF7 1707C
-OBJ_16B80:
-        :: RDROP OBJ_177CA COLAITE OBJ_171DF OBJ_1727A ; * 16B80
+* $ -> : add a composite's closing token, or end the line when it doesn't fit
+DclCloser:
+        :: RDROP DclFit? COLAITE OBJ_171DF DclEndLine ; * 16B80
 
 * refs (1): 16AEF
-OBJ_16BA3:
+* Lists: { and the elements, one by one, then }
+DclList:
         :: IT                                    * 16BA3
           ::                                     * 16BAD
 
 _{_:
-            $ "{" OBJ_177CA ?SEMI                * 16BB2
-            RDROP XYZ>ZCOLA OBJ_1727A ;          * 16BC8
-          OBJ_17351 case OBJ_16AA9               * 16BDC
+            $ "{" DclFit? ?SEMI                  * 16BB2
+            RDROP XYZ>ZCOLA DclEndLine ;         * 16BC8
+          DclNextOb? case DclOb                  * 16BDC
 
 _}_:
-          $ "}" OBJ_16B80 ;                      * 16BEB
+          $ "}" DclCloser ;                      * 16BEB
 
 * refs (1): 16B3A
-OBJ_16C01:
+* Directories: DIR, each name followed by its object, then END, indented
+DclDir:
         :: OVER NULL$? NOTcase                   * 16C01
           :: IT ROTROT2DROP                      * 16C15
-            COLA OBJ_1727A                       * 16C24
+            COLA DclEndLine                      * 16C24
           ;                                      * 16C2E
           casedrop                               * 16C33
-          :: OBJ_178E2                           * 16C38
+          :: Dcl+Indent                          * 16C38
 
 _DIR_:
-            $ "DIR" OBJ_17914 OBJ_178E2 SWAP ONE{}N SWAPCOLA OBJ_1727A ; * 16C42
-          SWAPDUP TYPELIST? DUPUNROT ?CARCOMP 3UNROLL 4UNROLL OBJ_17351 case * 16C75
+            $ "DIR" ?DclIndent$ Dcl+Indent SWAP ONE{}N SWAPCOLA DclEndLine ; * 16C42
+          SWAPDUP TYPELIST? DUPUNROT ?CARCOMP 3UNROLL 4UNROLL DclNextOb? * 16C75
+          case                                   * 16C98
           :: 7ROLL IT                            * 16C9D
-            :: SWAP4PICK RAM-WORDNAME ID>$ OBJ_17914 !append$SWAP ; * 16CAC
-            COLA OBJ_16AA9                       * 16CCF
+            :: SWAP4PICK RAM-WORDNAME ID>$ ?DclIndent$ !append$SWAP ; * 16CAC
+            COLA DclOb                           * 16CCF
           ;                                      * 16CD9
-          4ROLL 2DROP OBJ_178FB                  * 16CDE
+          4ROLL 2DROP Dcl-Indent                 * 16CDE
 
 _END_:
-          $ "END" OBJ_17914 OBJ_178FB COLA OBJ_17211 * 16CED
+          $ "END" ?DclIndent$ Dcl-Indent COLA OBJ_17211 * 16CED
         ;                                        * 16D11
 
 * refs (1): 16B2B
-OBJ_16D16:
+* Tagged objects: :tag: then the object
+DclTag:
         :: case                                  * 16D16
           ::                                     * 16D20
 
 _:_:
-            $ ":" 4PICK ID>$ OVER !append$SWAP 6PICK OBJ_177B6 OBJ_53930 * 16D25
-            OBJ_5395A OR AND ITE_DROP !insert$ OBJ_177CA case OBJ_171E9 * 16D54
-_:_.L1:
-            XYZ>ZCOLA OBJ_1727A ;                * 16D7C
+            $ ":" 4PICK ID>$ OVER !append$SWAP 6PICK DclMark? ISF805? * 16D25
+            ISF803? OR AND ITE_DROP !insert$ DclFit? case OBJ_171E9 * 16D54
+DclSymb~1:
+            XYZ>ZCOLA DclEndLine ;               * 16D7C
 
 * refs (1): 16FD4
-OBJ_16D8B:
-          :: RDROP OBJ_17351 COLAITE OBJ_16AA9 OBJ_171DF ; ; * 16D8B
+* Go on with the next object of the composite, or close it when there are none
+DclNext:
+          :: RDROP DclNextOb? COLAITE DclOb OBJ_171DF ; ; * 16D8B
 
 * refs (2): 16B0D 16B1C
-OBJ_16DB3:
+* Algebraics and units: their text as one piece
+DclSymb:
         :: IT                                    * 16DB3
 
 Rep2(<FFFFF>):
           :: SWAPDROP MINUSONE SWAP ;            * 16DBD
-          SPACE$ OBJ_177CA NOT?GOTO _:_.L1 OBJ_6B359 OBJ_34D3C * 16DD6
+          SPACE$ DclFit? NOT?GOTO DclSymb~1 $DropLast OBJ_34D3C * 16DD6
 
 * refs (3): 16E21 16FC0 16FFC
-OBJ_16DF4:
-          :: RDROP COLAITE OBJ_171E9 OBJ_1727A ; ; * 16DF4
+* flag -> : the word fit: go on at the same level, otherwise finish the line and resume there
+DclPut:
+          :: RDROP COLAITE OBJ_171E9 DclEndLine ; ; * 16DF4
 
 * refs (3): 16E80 16E8A 16ED5
-OBJ_16E17:
-        :: OBJ_177CA OBJ_16DF4 ;                 * 16E17
+* $line $word -> : add the word to the line and go on
+DclPut$:
+        :: DclFit? DclPut ;                      * 16E17
 
 * refs (1): 16AFE
-OBJ_16E2B:
+* Programs: each word on the line in turn; program structures (MACRODCMP) change the indentation and start new lines
+DclSeco:
         :: 4PICK REQcasedrop x'                  * 16E2B
-          OBJ_16EDF ROM-WORD? NOTcase OBJ_16FCA  * 16E3F
-          DROPSWAPDROP SWAP OBJ_53930 case OBJ_16FED * 16E53
-          MACRODCMP NOTcase OBJ_16FED            * 16E6C
-          NOTcase OBJ_16E17                      * 16E7B
-          DUP#0=csedrp OBJ_16E17 3PICK NULL$? NOTcase2drop OBJ_1727A * 16E85
-          DUP#1= IT OBJ_178E2                    * 16EA3
-          SWAP OBJ_1792D SWAP #3= IT OBJ_178FB   * 16EB2
-          COLA OBJ_16E17                         * 16ED0
+          DclTick ROM-WORD? NOTcase DclSecoOb    * 16E3F
+          DROPSWAPDROP SWAP ISF805? case DclWord * 16E53
+          MACRODCMP NOTcase DclWord              * 16E6C
+          NOTcase DclPut$                        * 16E7B
+          DUP#0=csedrp DclPut$ 3PICK NULL$? NOTcase2drop DclEndLine * 16E85
+          DUP#1= IT Dcl+Indent                   * 16EA3
+          SWAP DclIndent$ SWAP #3= IT Dcl-Indent * 16EB2
+          COLA DclPut$                           * 16ED0
         ;                                        * 16EDA
 
 * refs (1): 16E3F
-OBJ_16EDF:
+* Program words ' ob ': names are written 'X' as a unit
+DclTick:
         :: DROP ROTROT2DROP UNROTDUP 4UNROLL NEXTCOMPOB DROP PALPTRDCMP DROP * 16EDF
-          4UNROLL OBJ_173A6 ?SKIP NULL{}         * 16F0C
-          ROT 3PICK OBJ_173A6 ?SKIP NULL{}       * 16F20
+          4UNROLL DclGetOb ?SKIP NULL{}          * 16F0C
+          ROT 3PICK DclGetOb ?SKIP NULL{}        * 16F20
           SWAPDROPSWAP 4UNROLL ' xENDTIC EQOVER DUPTYPEIDNT? SWAP TYPELAM? * 16F39
           OR ANDITE                              * 16F61
           :: 5ROLLDROP ID>$ addtics ;            * 16F6B
-          :: 2DROP 4PICK 4ROLL ; 4ROLLSWAP OBJ_177CA DUP 4ROLL 6ROLL RPITE * 16F84
-          3UNROLL OBJ_16DF4                      * 16FBB
+          :: 2DROP 4PICK 4ROLL ; 4ROLLSWAP DclFit? DUP 4ROLL 6ROLL RPITE * 16F84
+          3UNROLL DclPut                         * 16FBB
         ;                                        * 16FC5
 
 * refs (1): 16E4E
-OBJ_16FCA:
-        :: DROP OBJ_16D8B ;                      * 16FCA
+* A non-ROM word in a program: an object in its own right
+DclSecoOb:
+        :: DROP DclNext ;                        * 16FCA
 
 * refs (2): 16ACC 16B44
-OBJ_16FDE:
+* Any object without structure: decompile it whole
+DclAtom:
         :: DROPSWAPDROP SWAPCOLA                 * 16FDE
 
 * refs (2): 16E67 16E76
-OBJ_16FED:
-          :: OBJ_15B3D OBJ_177CA OBJ_16DF4 ; ;   * 16FED
+* ob -> : a ROM word in a program: its name
+DclWord:
+          :: decomp$w DclFit? DclPut ; ;         * 16FED
 
 * refs (1): 16AE0
-OBJ_1700B:
+* Arrays: real and complex arrays row by row; other types show "Array of ..."
+DclArray:
         :: DROP 3PICK prefix(ar) DUP TYPEREAL EQ SWAP TYPECMP EQOR NOTcase * 1700B
-          :: $ "Array of " BINT1 5PICK GETATELN IT OBJ_15CCF * 17042
-            OBJ_16B80 ;                          * 1707C
-          DUPNULL$? NOTcase OBJ_1727A            * 17086
-          3PICK 2D/3D(ar)? case OBJ_1716C        * 17095
-          3PICK OBJ_179AC ?SKIP                  * 170A9
+          :: $ "Array of " BINT1 5PICK GETATELN IT $+TypeName * 17042
+            DclCloser ;                          * 1707C
+          DUPNULL$? NOTcase DclEndLine           * 17086
+          3PICK 2D/3D(ar)? case DclVec2D3D       * 17095
+          3PICK Vector? ?SKIP                    * 170A9
           :: OVER#0= ITE CHR_[ CHR_Space         * 170B8
             >T$ ;                                * 170D1
           lbrac !append$ SWAP#1+SWAP 3PICK DUPUNROT MDIMS ITE SWAP BINT1 * 170DB
-          4UNROLLDUP 6PICK #* #1+DUP ROT#- OBJ_17847 * 17108
+          4UNROLLDUP 6PICK #* #1+DUP ROT#- DclElems * 17108
 
 * refs (1): 17158
-OBJ_17126:
-          :: tok] !append$ ; SWAP3PICK #<>case OBJ_1727A * 17126
-          3PICK OBJ_179AC ?SKIP OBJ_17126        * 17149
+* Close a matrix row; the next row starts on a new line
+DclRowEnd:
+          :: tok] !append$ ; SWAP3PICK #<>case DclEndLine * 17126
+          3PICK Vector? ?SKIP DclRowEnd          * 17149
           COLA OBJ_17211                         * 1715D
         ;                                        * 17167
 
 * refs (1): 170A4
-OBJ_1716C:
-        :: SWAPDROP #3= 3UNROLL tok[ TRUE OBJ_174C3 drop;dq OBJ_1721B ; * 1716C
+* Two- and three-element vectors, shown in the current coordinate mode
+DclVec2D3D:
+        :: SWAPDROP #3= 3UNROLL tok[ TRUE DclVecEnd drop;dq DclVec2D3D~1 ; * 1716C
 
 * refs (2): 171EE 17220
-OBJ_1719E:
-        :: OVER OBJ_177B6 case                   * 1719E
+* Leave a composite: drop to the level above, or stop with {} at the marker
+DclLevelUp:
+        :: OVER DclMark? case                    * 1719E
           :: RDROP SWAPDROP NULL{} ;             * 171B2
-          3UNROLL OBJ_173A6 2DROP ;              * 171CB
+          3UNROLL DclGetOb 2DROP ;               * 171CB
 
 * refs (2): 16B94 16DA4
+* Probably: line decompiler: keep the top of the frame and go on as the routine at #171E9
 OBJ_171DF:
         :: XYZ>ZCOLA                             * 171DF
 
 * refs (2): 16D77 16E03
+* Probably: line decompiler: leave a composite and go on with what follows it in its parent
 OBJ_171E9:
-          :: OBJ_1719E ROT FALSE COLA OBJ_16AA9  * 171E9
+          :: DclLevelUp ROT FALSE COLA DclOb     * 171E9
           ;                                      * 17207
         ;                                        * 1720C
 
@@ -1029,54 +1060,62 @@ OBJ_17211:
         :: XYZ>ZCOLA                             * 17211
 
 * refs (2): 17194 1726B
-OBJ_1721B:
-          :: OBJ_1719E 2DUP OBJ_1737E casedrop   * 1721B
-            :: ROT COLA OBJ_1727A                * 17234
+* Probably: line decompiler: go up levels until a composite with more elements is found, then end the line there
+DclVec2D3D~1:
+          :: DclLevelUp 2DUP DclStepOb casedrop  * 1721B
+            :: ROT COLA DclEndLine               * 17234
             ;                                    * 17248
-            OVERDUP TYPERRP? SWAP TYPELIST? ORNOT case2drop OBJ_1721B * 1724D
+            OVERDUP TYPERRP? SWAP TYPELIST? ORNOT case2drop DclVec2D3D~1 * 1724D
             ROT COLA                             * 17270
 
 * refs (10): 16B99 16BD2 16C29 16C6B 16D81 16E08 ...
-OBJ_1727A:
-            :: NULL{} BEGIN ROT >HCOMP ROT FixRRP DROP3PICK OBJ_177B6 UNTIL * 1727A
+* End the line: pop the walk's levels back to the marker, collecting the resume state as a list
+DclEndLine:
+            :: NULL{} BEGIN ROT >HCOMP ROT FixRRP DROP3PICK DclMark? UNTIL * 1727A
               ROTDROP ;                          * 172AC
           ;                                      * 172B6
         ;                                        * 172BB
 
 * refs (1): 16A9F
-OBJ_172C0:
-        :: OBJ_25CF5 3UNROLL BINT0 NEXTCOMPOB NOTcase * 172C0
-          :: BINT14 OBJ_11495 DROPZERO NULL$TEMP TRUE ; * 172DE
+* ob {state} -> ...: start at ob, or descend again along the saved {state}. Pushes the marker that ends the walk.
+DclResume:
+        :: Mark$ 3UNROLL BINT0 NEXTCOMPOB NOTcase * 172C0
+          :: BINT14 PADCOUNT! DROPZERO NULL$TEMP TRUE ; * 172DE
           3UNROLL BEGIN NEXTCOMPOB WHILE         * 17301
-          :: 5PICK 5PICK OBJ_1737E DROPSWAP 2SWAP ; REPEAT DROP NULL$TEMP * 17315
+          :: 5PICK 5PICK DclStepOb DROPSWAP 2SWAP ; REPEAT DROP NULL$TEMP * 17315
           FALSE ;                                * 17347
 
 * refs (3): 16BDC 16C93 16D95
-OBJ_17351:
-        :: 3PICK3PICK OBJ_1737E DUP NOT?SEMI     * 17351
+* -> flag: move to the next element of the composite in the frame, if it has one
+DclNextOb?:
+        :: 3PICK3PICK DclStepOb DUP NOT?SEMI     * 17351
           ROT ZEROSWAP ROTDUP ;                  * 1736A
 
 * refs (3): 1722A 17324 1735B
-OBJ_1737E:
-        :: OBJ_173A6 DUP ITE 2SWAP 3UNROLL       * 1737E
+* Next element of the composite, with the frame moved up a level when there is one
+DclStepOb:
+        :: DclGetOb DUP ITE 2SWAP 3UNROLL        * 1737E
           2DROP ;                                * 1739C
 
 * refs (4): 16F11 16F2A 171D0 17383
-OBJ_173A6:
-        :: SWAP2DUP TYPE OBJ_173D3 DUP case 5ROLLDROP * 173A6
+* Step into the composite: next element by its type (see DclNextByType)
+DclGetOb:
+        :: SWAP2DUP TYPE DclNextByType DUP case 5ROLLDROP * 173A6
           ROTSWAP ;                              * 173C9
 
 * refs (1): 173B5
-OBJ_173D3:
+* #type -> ob TRUE | FALSE: the next element of a secondary or list (NEXTCOMPOB), a directory (DclNextVar), or the object of a tagged object
+DclNextByType:
         :: TYPECOL EQcasedrop NEXTCOMPOB         * 173D3
           TYPELIST EQcasedrop NEXTCOMPOB         * 173E7
-          TYPERRP EQcasedrop OBJ_1743C           * 173F6
+          TYPERRP EQcasedrop DclNextVar          * 173F6
           DROP BINT2 EQcasedrop FALSE            * 17405
           #1+ 2DUP ONE_EQ caseTRUE TAG>          * 17419
           DROPTRUE ;                             * 17432
 
 * refs (1): 17400
-OBJ_1743C:
+* Next variable of a directory (NEXTRRPOB) with its name in a list
+DclNextVar:
         :: DUPTYPELIST? casedrpfls NEXTRRPOB     * 1743C
           DUP NOT?SEMI                           * 17450
           ROT ONE{}N 3UNROLL ;                   * 1745A
@@ -1086,22 +1125,25 @@ OBJ_1743C:
         :: ->str(c)~1 TRUE ->str(c)~2 DROP ;     * 1746E
 
 * refs (1): 16A68
-OBJ_1748C:
+* A 2D or 3D vector: [ then its elements in the angle mode
+DclVecAr:
         :: #3= 3UNROLL INNERCOMP #0=ITE          * 1748C
           :: BINT0 tok[ ; NULL$TEMP FALSE        * 174A5
 
 * refs (1): 1718A
-OBJ_174C3:
-          :: tok] SPACE$ 6ROLL OBJ_1DD51 OBJ_34C49 3PICK TYPEREAL? IT * 174C3
+* Set up the closing ] and the polar or rectangular forms of the elements
+DclVecEnd:
+          :: tok] SPACE$ 6ROLL Vec>%% OBJ_34C49 3PICK TYPEREAL? IT * 174C3
 
 * refs (6): 296B0 45213 6D8B9 96565 A9A11 B3F91
 9rolld:
             :: BINT9 UNROLL ;                    * 174F0
-            GOTO ->str(c)~2.L1 ;                 * 17504
+            GOTO DclVecAr~1 ;                    * 17504
         ;                                        * 17513
 
 * refs (3): 16A36 31CEF 31D1C
-OBJ_17518:
+* Complex numbers in the same frame, using the steps of DclCmpSteps
+DclCmp:
         :: INNERCOMP #0=ITE                      * 17518
 
 * refs (1): 17473
@@ -1111,46 +1153,51 @@ OBJ_17518:
 * refs (1): 1747D
 ->str(c)~2:
           :: FALSE 5UNROLL tokrparen DPRADIX? tok, tok; RPITE 6ROLL * 17545
-            OBJ_1DE19                            * 17572
+            C>%%Coords                           * 17572
             OBJ_34C49                            * 17577
-->str(c)~2.L1:
-            6ROLL 7ROLL DUP OBJ_175C7 >R         * 1757C
-->str(c)~2.loop2:
-            DUP#0= ?GOTO ->str(c)~2.L3 RSKIP #1- GOTO ->str(c)~2.loop2 * 17595
-->str(c)~2.L3:
+DclVecAr~1:
+            6ROLL 7ROLL DUP DclCmpSteps >R       * 1757C
+DclVecAr~1.loop1:
+            DUP#0= ?GOTO DclVecAr~1.L2 RSKIP #1- GOTO DclVecAr~1.loop1 * 17595
+DclVecAr~1.L2:
             DROP ;                               * 175B8
         ;                                        * 175C2
 
 * refs (1): 1758B
-OBJ_175C7:
+* The steps of a complex or a vector in polar form, as a list: each is run in turn by putting it on the return stack
+DclCmpSteps:
         {                                        * 175C7
-          :: 4PICK a%>$ OBJ_176EE ; OBJ_1768A    * 175CC
-          :: 3PICK TRUE BINT16 OBJ_176AD ;       * 175EA
-          :: 8PICK case OBJ_1768A                * 17608
+          :: 4PICK a%>$ DclCmpPut ; DclCmpAdd    * 175CC
+          :: 3PICK TRUE BINT16 DclAngle ;        * 175EA
+          :: 8PICK case DclCmpAdd                * 17608
             #2+ COLASKIP ;                       * 1761C
-          :: BINT9 PICK BINT16 TestSysFlag BINT15 OBJ_176AD ; * 1762B  flag -16: coordinate system
-          :: 6PICK OBJ_176EE ; DROP 7UNROLL 5DROP IT SWAPDROP * 17653
+          :: BINT9 PICK BINT16 TestSysFlag BINT15 DclAngle ; * 1762B  flag -16: coordinate system
+          :: 6PICK DclCmpPut ; DROP 7UNROLL 5DROP IT SWAPDROP * 17653
           NULL{} }                               * 17680
 
 * refs (2): 175E5 17617
-OBJ_1768A:
+* Add a complex or vector token and go on
+DclCmpAdd:
         :: 5PICK SPACE$ EQcasedrop #1+           * 1768A
-          OBJ_17734 ;                            * 176A3
+          DclCmpFit ;                            * 176A3
 
 * refs (2): 175FE 17649
-OBJ_176AD:
-        :: RDROP TestSysFlag AND SWAP a%>$ SWAP ?SKIP OBJ_176EE * 176AD
-          tokanglesign !!insert$ OBJ_176EE ;     * 176DA
+* Add an angle with its ∡ sign where the coordinate flags call for it
+DclAngle:
+        :: RDROP TestSysFlag AND SWAP a%>$ SWAP ?SKIP DclCmpPut * 176AD
+          tokanglesign !!insert$ DclCmpPut ;     * 176DA
 
 * refs (4): 175DB 1765D 176D5 176E4
-OBJ_176EE:
+* Add an element, a separator first when one is needed
+DclCmpPut:
         :: RDROP 3PICK NULL$? ?SKIP              * 176EE
           :: 6PICK SPACE$ EQ NOT?SEMI            * 17707
             +(sp,st) ;                           * 17720
-          OBJ_17734 ;                            * 1772A
+          DclCmpFit ;                            * 1772A
 
 * refs (2): 176A3 1772A
-OBJ_17734:
+* Add the token if it fits; otherwise stop and save the step reached
+DclCmpFit:
         :: RDROP ROTSWAP 8PICK ?SKIP             * 17734
           :: OVER NULL$? ?SEMI                   * 1774D
             2LEN$#+ DcompWidth@ #> NOT?SEMI      * 17761
@@ -1159,11 +1206,13 @@ OBJ_17734:
           !append$ SWAP#1+ ;                     * 177A7
 
 * refs (4): 16B67 16D4A 171A8 172A2
-OBJ_177B6:
-        :: OBJ_25CF5 EQ ;                        * 177B6
+* ob -> flag: ob is the marker (the object at #25CF5) that bounds the walk on the stack
+DclMark?:
+        :: Mark$ EQ ;                            * 177B6
 
 * refs (7): 16B8A 16BBE 16D6D 16DDB 16E1C 16FA2 ...
-OBJ_177CA:
+* $line $word -> $line' TRUE when the two fit in DcompWidth with a space between, or when one is empty; else $line $word FALSE
+DclFit?:
         :: DUPNULL$? casedrptru SWAPDUP          * 177CA
           NULL$? casedrptru 2LEN$#+              * 177DE
           #1+ DcompWidth@ #>case drop(2);false   * 177ED
@@ -1179,33 +1228,39 @@ drop(2);false:
         :: OVERLEN$ OVERLEN$ #+ ;                * 1782E
 
 * refs (1): 17121
-OBJ_17847:
+* Add array elements until the line is full
+DclElems:
         :: ' a%>$ ' ->str(c) 6PICK TYPERARRY? NOT?SWAPDROP 5UNROLL DO * 17847
-          SWAPINDEX@ PULLEL 4PICK EVAL ROTSWAP !append$ APPEND_SPACE * 17879
-          OBJ_53930 IT OBJ_178BA                 * 1789C
+          SWAPINDEX@ PULLEL 4PICK EVAL ROTSWAP !append$ APPEND_SPACE ISF805? * 17879
+          IT ?DclFull                            * 178A1
           LOOP ROTROT2DROP ;                     * 178AB
 
 * refs (1): 178A6
-OBJ_178BA:
+* $ -> $: leave the DO loop once the text passes the width
+?DclFull:
         :: DUPLEN$ DcompWidth@ #3+ #< ?SEMI      * 178BA
           ExitAtLOOP ;                           * 178D8
 
 * refs (3): 16C3D 16C57 16EAD
-OBJ_178E2:
-        :: OBJ_11472 #2+ OBJ_11495 ;             * 178E2
+* Indent by two more (PADCOUNT)
+Dcl+Indent:
+        :: PADCOUNT@ #2+ PADCOUNT! ;             * 178E2
 
 * refs (3): 16CE8 16D02 16ECB
-OBJ_178FB:
-        :: OBJ_11472 #2- OBJ_11495 ;             * 178FB
+* Indent by two less
+Dcl-Indent:
+        :: PADCOUNT@ #2- PADCOUNT! ;             * 178FB
 
 * refs (3): 16C52 16CC0 16CFD
-OBJ_17914:
-        :: OBJ_53930 ?SEMI                       * 17914
-          OBJ_1792D ;                            * 17923
+* $ -> $': as DclIndent$, except in stack display (flag #805), which has no indentation
+?DclIndent$:
+        :: ISF805? ?SEMI                         * 17914
+          DclIndent$ ;                           * 17923
 
 * refs (2): 16EB7 17923
-OBJ_1792D:
-        :: OBJ_11472 DUP#0=csDROP 14SPACES$ BINT1 ROT SUB$ !insert$ ; * 1792D
+* $ -> $': prefix the current indentation
+DclIndent$:
+        :: PADCOUNT@ DUP#0=csDROP 14SPACES$ BINT1 ROT SUB$ !insert$ ; * 1792D
 
 * # ->
 * refs (10): 14092 15973 15A04 16A1D 31980 46897 ...
@@ -1238,7 +1293,8 @@ DcompWidth@.L1:
         GOVLNG  PUSH#LOOP                        * 179A5
 
 * refs (3): 170AE 1714E 31CC2
-OBJ_179AC:
+* array -> flag: the array has one dimension
+Vector?:
         CON(5)  (*)+5                            * 179AC  primitive code object
         C=DAT1  A                                * 179B1
         D1=D1+  5                                * 179B4
@@ -1271,7 +1327,7 @@ addrTEMPTOP:
         GOYES   addrTEMPTOP.L1                   * 17A07
         ST=1    0                                * 17A09
 addrTEMPTOP.L1:
-        GOSBVL  SUB_08503                        * 17A0C
+        GOSBVL  Rrp>Last                         * 17A0C
         CD0EX                                    * 17A13
         D1=C                                     * 17A16
         A=DAT1  A                                * 17A19
@@ -1352,7 +1408,7 @@ FixRRP:
           CODE                                   * 17AEA  141 nibbles
             GOSBVL  SAVPTR                       * 17AF4
             A=DAT1  A                            * 17AFB
-            GOSBVL  SUB_08503                    * 17AFE
+            GOSBVL  Rrp>Last                     * 17AFE
             AD0EX                                * 17B05
             D1=A                                 * 17B08
 FixRRP.L1:
@@ -1401,28 +1457,31 @@ FixRRP.L4:
 
 * refs (3): 17C0D 17C48 3859D
 VLM:
-        :: RDROP VLM~3 ClrBusyAnn RECLAIMDISP ClrDA1IsStat OBJ_01E5E ERROR@ * 17B86
-          OBJ_38854 #1<> OBJ_18338 AND ?GOTO VLM.L1 ERRBEEP DoMenuMTH * 17BAE
-          ERRORCLR #135_64EAA JstGetTHEMESG DISPROW1 ERRSET VLM~4 ERRTRAP * 17BD6
-          VLM~2                                  * 17BF9
+        :: RDROP VLMClrLeeway ClrBusyAnn RECLAIMDISP ClrDA1IsStat * 17B86
+          ShowHeldAnn ERROR@ ErrResetState #1<> VLMRoomOK? AND ?GOTO VLM.L1 * 17BA4
+          ERRBEEP DoMenuMTH ERRORCLR #135_64EAA JstGetTHEMESG DISPROW1 * 17BCC
+          ERRSET VLMAsk ERRTRAP VLMAgain         * 17BEA
 VLM.L1:
-          OBJ_17F40 VLM~1 ERRTRAP VLM ;          * 17BFE
+          VLMReserve VLMRestart ERRTRAP VLM ;    * 17BFE
 
 * refs (1): 17C03
-VLM~1:
+* Re-enter the outer loop at HOME after recovering
+VLMRestart:
         :: HOMEDIR ERRSET SetThisRow ClrDAsOK GOTO StartupProc~1.L1 ; * 17C17
 
 * refs (1): 17BF9
-VLM~2:
+* Empty the stack, garbage-collect and start the dialog again
+VLMAgain:
         CON(5)  (*)+5                            * 17C3F  primitive code object
         ASSEMBLE
-        GOSUB   SUB_18362                        * 17C44
+        GOSUB   GCEmptyStack                     * 17C44
         LC(5)   VLM                              * 17C48
         A=C     A                                * 17C4F
         PC=(A)                                   * 17C51
 
 * refs (1): 17B90
-VLM~3:
+* Forget the reserve: leeway = 0
+VLMClrLeeway:
         CON(5)  (*)+5                            * 17C55  primitive code object
         A=0     A                                * 17C5A
         D1=(5)  leeway                           * 17C5C
@@ -1431,45 +1490,46 @@ VLM~3:
         RPL
 
 * refs (1): 17BEF
-VLM~4:
+* Out of Memory dialog: offers to delete, in turn, the command line, stack levels, saved items, PICT, key assignments, alarms, then variables and port libraries, until there is room
+VLMAsk:
         :: #134_64EA0 JstGetTHEMESG DISPROW3 Y/N-Menu BEGIN HOMEDIR * 17C6A
           NoEditLine? ?SKIP                      * 17C8D
-          :: #13D_64EF0 JstGetTHEMESG VLM~5 InitEd&Modes ; * 17C97
-VLM~4.loop1:
+          :: #13D_64EF0 JstGetTHEMESG VLMPurge? InitEd&Modes ; * 17C97
+VLMAsk.loop1:
           DEPTH #0=?SKIP                         * 17CB5
-          :: VLM~6 OVER OBJ_15CCF VLM~5          * 17CBF
-            :: DROP CK0NOLASTWD 3RDROP GOTO VLM~4.loop1 ; ; * 17CD8
+          :: VLMAsk~1 OVER $+TypeName VLMPurge?  * 17CBF
+            :: DROP CK0NOLASTWD 3RDROP GOTO VLMAsk.loop1 ; ; * 17CD8
           NoMemComLine? ?SKIP                    * 17D00
-          :: #138_64EC8 JstGetTHEMESG VLM~5 DelMemComLine ; * 17D0A
+          :: #138_64EC8 JstGetTHEMESG VLMPurge? DelMemComLine ; * 17D0A
           NoLastStack? ?SKIP                     * 17D28
-          :: #137_64EBE JstGetTHEMESG VLM~5      * 17D32
+          :: #137_64EBE JstGetTHEMESG VLMPurge?  * 17D32
 
 DelLastStack:
             :: ABND BINT0 ' SAVELAM CACHE ERRSET ; ; * 17D46
           NoLastArg? ?SKIP                       * 17D73
-          :: #13B_64EE6 JstGetTHEMESG VLM~5 DelLastArg ; * 17D7D
+          :: #13B_64EE6 JstGetTHEMESG VLMPurge? DelLastArg ; * 17D7D
           GBUFF GROBDIM DROP #0=?SKIP            * 17D9B
           ::                                     * 17DAF
 
 _PICT_:
-            $ "PICT" VLM~5 KILLADISP ;           * 17DB4
+            $ "PICT" VLMPurge? KILLADISP ;       * 17DB4
           GetUserKeys NULL{} EQUAL ?SKIP         * 17DD5
-          :: #139_64ED2 JstGetTHEMESG VLM~5 ClrUserKeys ; * 17DE9
+          :: #139_64ED2 JstGetTHEMESG VLMPurge? ClrUserKeys ; * 17DE9
           alarm<>{}? IT                          * 17E07
-          :: #13A_64EDC JstGetTHEMESG VLM~5 DelAlarrm(0) ; * 17E11
+          :: #13A_64EDC JstGetTHEMESG VLMPurge? DelAlarrm(0) ; * 17E11
           DEPTH #0=?SKIP                         * 17E2F
-          :: #136_64EB4 JstGetTHEMESG VLM~5 DelStack ; CONTEXT@ LastNonNull * 17E39
-          IT OBJ_1804C                           * 17E61
+          :: #136_64EB4 JstGetTHEMESG VLMPurge? DelStack ; CONTEXT@ * 17E39
+          LastNonNull IT VLMAskVars              * 17E5C
           AdrPort0 NEXTLIBBAK IT                 * 17E6B
           :: BEGIN NEXTLIBBAK DUP ITE 4ROLL SWAP * 17E7A
             REFERENCED? ITE DROP                 * 17E9D
-            :: OBJ_18178 casedrop                * 17EAC
+            :: VLMAskVar casedrop                * 17EAC
               :: IT 2DROP                        * 17EBB
                 2RDROP 2RDROP ;                  * 17ECA
               NOTcaseDROP purge(bk,s)            * 17ED9
             ;                                    * 17EE3
             NOT_UNTIL ;                          * 17EE8
-          NULL$ DISPROW5 NULL$ DISPROW6 OBJ_18338 UNTIL ; * 17EF2
+          NULL$ DISPROW5 NULL$ DISPROW6 VLMRoomOK? UNTIL ; * 17EF2
 
 * refs (1): 17C7E
 Y/N-Menu:
@@ -1477,14 +1537,15 @@ Y/N-Menu:
         ASSEMBLE
         GOSBVL  SAVPTR                           * 17F1A
         ST=0    15                               * 17F21
-        LC(5)   SUB_81BA2.L10                    * 17F24  code in the self-test area
+        LC(5)   YesNoLabels                      * 17F24  code in the self-test area
         GOSBVL  SUB_7008B                        * 17F2B
         GOSBVL  AllowIntr                        * 17F32
         GOVLNG  GETPTRLOOP                       * 17F39
         RPL
 
 * refs (2): 17BFE 3861A
-OBJ_17F40:
+* Give leeway a fresh 184-nibble hex string. It holds the system's work space at the out-of-memory dialog.
+VLMReserve:
         :: NULLHXS # B8 EXPAND                   * 17F40
           CODE                                   * 17F59  28 nibbles
             A=DAT1  A                            * 17F63
@@ -1499,19 +1560,21 @@ OBJ_17F40:
         ;                                        * 17F7F
 
 * refs (9): 17CA6 17CD3 17D19 17D41 17D8C 17DC6 ...
-VLM~5:
-        :: DISPROW5 'R OBJ_17FB1 casedrop 2RDROP * 17F84
+* $ -> : show $ with the question and run the next object in the stream if the answer is YES
+VLMPurge?:
+        :: DISPROW5 'R VLMYesNo casedrop 2RDROP  * 17F84
           NOTcaseDROP EVAL                       * 17FA2
         ;                                        * 17FAC
 
 * refs (2): 17F93 181BE
-OBJ_17FB1:
+* -> flag TRUE (a menu key: YES or NO) | FALSE (ATTN, when memory is now enough): waits, turning off on timeout
+VLMYesNo:
         :: NOBLINK                               * 17FB1
-OBJ_17FB1.loop1:
-          OBJ_53AD6 GETKEY ?GOTO OBJ_1802E ATTN? ?GOTO OBJ_17FB1.L2 TIMEOUT? * 17FBB
-          IT off!                                * 17FE3
+VLMYesNo.loop1:
+          SetISF801 GETKEY ?GOTO VLMYesNoKey ATTN? ?GOTO VLMYesNo.L2 * 17FBB
+          TIMEOUT? IT off!                       * 17FDE
           UART? IT FLUSHRSBUF                    * 17FED
-          GOTO OBJ_17FB1.loop1                   * 17FFC
-OBJ_17FB1.L2:
-          ATTNFLGCLR OBJ_42396 OBJ_18338 caseTRUE ERRBEEP * 18006
-          GOTO OBJ_17FB1.loop1 ;                 * 1801F
+          GOTO VLMYesNo.loop1                    * 17FFC
+VLMYesNo.L2:
+          ATTNFLGCLR ClrTimeout VLMRoomOK? caseTRUE ERRBEEP * 18006
+          GOTO VLMYesNo.loop1 ;                  * 1801F

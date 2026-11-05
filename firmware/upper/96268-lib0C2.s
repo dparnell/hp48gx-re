@@ -1,11 +1,13 @@
-* HP 48GX ROM revision R, #96268-#98E01: Library part 0C2
+* HP 48GX ROM revision R, #96268-#98E01: Library 0C2: SVD steps, TRACE, COND, LU, DET, matrix division and inverse, RREF
 * Addresses in the right-hand comments are those of the original ROM.
+* Most referenced: TinyPivot SVDZeroUp SVDZeroDown SVDSweepUp SVDSweepDown SVDSort SVDShift SVDConvUp SVDConvDown SVDBind SVD2x2 RotateRows
 * Follows on from the previous file (at #96268 in the original ROM).
         RPL
 
 * ROMPTR 0C2 040
 * refs (1): 90007
-ROMP_0C2_040:
+* The singular values and rotations of a 2x2 block
+SVD2x2:
         :: ROTOVER PULL%%EL SWAP3PICK 3GETLAM #+ PULL%%EL SWAP 5PICK * 96268
           PULL%%EL SWAP 4UNROLL 3PICK %%ABS OVER %%ABS 2DUP %%< DUP 7UNROLL * 96295
           ITE                                    * 962CC
@@ -28,10 +30,10 @@ ROMP_0C2_040:
           BINT11 ROLL IT                         * 9653D
           :: BINT9 ROLL 7UNROLL 8ROLL 9rolld 4UNROLL SWAPROT ; * 9654C
           6ROLL 6ROLL BINT10 ROLL DUP#0= ITE     * 96579
-          :: DROP 4PICK OBJ_36C2A 6PICK OBJ_36C2A BINT9 PICK OBJ_36C2A ; * 96597
+          :: DROP 4PICK %%<0?2CHS 6PICK %%<0?2CHS BINT9 PICK %%<0?2CHS ; * 96597
           :: #1=case                             * 965C9
-            :: 3PICK OBJ_36C2A 6PICK OBJ_36C2A 8PICK OBJ_36C2A ; * 965D3
-            3PICK OBJ_36C2A 5PICK OBJ_36C2A 7PICK OBJ_36C2A ; * 965FB
+            :: 3PICK %%<0?2CHS 6PICK %%<0?2CHS 8PICK %%<0?2CHS ; * 965D3
+            3PICK %%<0?2CHS 5PICK %%<0?2CHS 7PICK %%<0?2CHS ; * 965FB
           8ROLL DROP 7ROLL ~%%0>=;?SEMI;%%CHS 7ROLL ~%%0>=;?SEMI;%%CHS 7ROLL * 9661E
           SWAP BINT9 PICK PUT%%EL SWAP 7PICK PUT%%EL %%0 7PICK 3GETLAM #+ * 96641
           PUT%%EL 7UNROLL BINT9 PICK 3UNROLL 6PICK 1GETLAM 11GETLAM EVAL * 96678
@@ -39,7 +41,8 @@ ROMP_0C2_040:
 
 * ROMPTR 0C2 041
 * refs (1): 90007
-ROMP_0C2_041:
+* Convergence test while chasing upwards: sets a small off-diagonal element to 0
+SVDConvUp:
         :: ROT 3PICK PULL%%EL %%ABS %%1E-13 %%* SWAP 4PICK 3GETLAM #1-+ * 966CD
           PULL%%EL %%ABS ROT %%<= case           * 96704
           :: %%0 4PICK 3GETLAM #1-+ PUT%%EL 3UNROLL TRUE ; * 9671D
@@ -52,7 +55,8 @@ ROMP_0C2_041:
 
 * ROMPTR 0C2 042
 * refs (1): 90007
-ROMP_0C2_042:
+* Convergence test while chasing downwards: sets a small off-diagonal element to 0
+SVDConvDown:
         :: ROTOVER PULL%%EL %%ABS %%1E-13 %%* SWAP3PICK 3GETLAM #+ PULL%%EL * 96849
           %%ABS ROT %%<= case                    * 9687B
           :: %%0 3PICK 3GETLAM #+ PUT%%EL 3UNROLL TRUE ; * 9688F
@@ -65,7 +69,8 @@ ROMP_0C2_042:
 
 * ROMPTR 0C2 043
 * refs (1): 90007
-ROMP_0C2_043:
+* Chooses the shift, or 0 when a zero-shift sweep is safe for accuracy
+SVDShift:
         :: 8GETLAM %%/ 3GETLAM UNCOERCE%% %%* %% 1E-2 %%<= case %%0 * 969B6
           7GETLAM ITE                            * 969FD
           :: 6GETLAM PULL%%EL %%ABS OVER 5GETLAM #1- PULL%%EL SWAP 5GETLAM * 96A07
@@ -84,9 +89,10 @@ ROMP_0C2_043:
 
 * ROMPTR 0C2 044
 * refs (1): 90007
-ROMP_0C2_044:
+* One shifted sweep from the top of the block down
+SVDSweepDown:
         :: 6GETLAM DUP 3GETLAM #+ 4ROLL 3PICK PULL%%EL DUP %%ABS 6PICK %%- * 96BC9
-          6ROLL 3PICK %%/ ROT OBJ_37AC2 %%+ %%* SWAP3PICK PULL%%EL ROTSWAP * 96C05
+          6ROLL 3PICK %%/ ROT %%SGN1 %%+ %%* SWAP3PICK PULL%%EL ROTSWAP * 96C05
           BEGIN 9GETLAM EVAL 4ROLLSWAP 6PICK 6GETLAM #> ITE * 96C37
           :: 5PICK #1- PUT%%EL ; DROP            * 96C5F
           5PICK PULL%%EL SWAP 5PICK PULL%%EL DUPUNROT 6PICK %%* 4PICK 6PICK * 96C7D
@@ -104,9 +110,10 @@ ROMP_0C2_044:
 
 * ROMPTR 0C2 045
 * refs (1): 90007
-ROMP_0C2_045:
+* One shifted sweep from the bottom of the block up
+SVDSweepUp:
         :: 5GETLAM DUP 3GETLAM #1-+ 4ROLL 3PICK PULL%%EL DUP %%ABS 6PICK %%- * 96EB7
-          6ROLL 3PICK %%/ ROT OBJ_37AC2 %%+ %%* SWAP3PICK PULL%%EL ROTSWAP * 96EF3
+          6ROLL 3PICK %%/ ROT %%SGN1 %%+ %%* SWAP3PICK PULL%%EL ROTSWAP * 96EF3
           BEGIN 9GETLAM EVAL 4ROLLSWAP 6PICK 5GETLAM #< ITE * 96F25
           :: 5PICK #1+ PUT%%EL ; DROP            * 96F4D
           5PICK PULL%%EL SWAP 5PICK PULL%%EL DUPUNROT 6PICK %%* 4PICK 6PICK * 96F6B
@@ -125,7 +132,8 @@ ROMP_0C2_045:
 
 * ROMPTR 0C2 046
 * refs (1): 90007
-ROMP_0C2_046:
+* One zero-shift sweep from the top of the block down
+SVDZeroDown:
         :: %%1 %%1 %%0 6GETLAM DUP 3GETLAM #+ BEGIN 6ROLL OVER PULL%%EL SWAP * 971B4
           4PICK PULL%%EL 8ROLL %%*ROT 9GETLAM EVAL 4ROLL 7ROLL 7PICK 6GETLAM * 971F5
           #> ITE                                 * 97227
@@ -137,7 +145,8 @@ ROMP_0C2_046:
 
 * ROMPTR 0C2 047
 * refs (1): 90007
-ROMP_0C2_047:
+* One zero-shift sweep from the bottom of the block up
+SVDZeroUp:
         :: %%1 %%1 %%0 5GETLAM DUP 3GETLAM #1-+ BEGIN 6ROLL OVER PULL%%EL * 97321
           SWAP 4PICK PULL%%EL 8ROLL %%*ROT 9GETLAM EVAL 4ROLL 7ROLL 7PICK * 9735D
           5GETLAM #< ITE                         * 9738F
@@ -150,7 +159,8 @@ ROMP_0C2_047:
 
 * ROMPTR 0C2 048
 * refs (1): 90007
-ROMP_0C2_048:
+* Applies a plane rotation to two adjacent columns of the singular vectors; skipped when it is the identity or vectors are not wanted
+RotateCols:
         :: CkATTNQUIT 5PICK case 5DROP           * 9749D
           4PICK %%1 EQUAL 4PICK %%0= ANDcase 5DROP * 974B6
           5ROLL 3UNROLL ZERO_DO DUPUNROT PULL%%EL SWAP3PICK #1+ PULL%%EL * 974D9
@@ -160,7 +170,8 @@ ROMP_0C2_048:
 
 * ROMPTR 0C2 049
 * refs (1): 90007
-ROMP_0C2_049:
+* Applies a plane rotation to two adjacent rows of the singular vectors; skipped when it is the identity or vectors are not wanted
+RotateRows:
         :: CkATTNQUIT 5PICK case 5DROP           * 9757E
           4PICK %%1 EQUAL 4PICK %%0= ANDcase 5DROP * 97597
           5ROLL SWAPROT #1- OVER #* #1+SWAP ZERO_DO DUPUNROT PULL%%EL * 975BA
@@ -170,7 +181,8 @@ ROMP_0C2_049:
 
 * ROMPTR 0C2 04A
 * refs (1): 90007
-ROMP_0C2_04A:
+* Makes the singular values positive, changing the sign of vectors to match, and sorts them in decreasing order
+SVDSort:
         :: 3GETLAM #1+_ONE_DO INDEX@ DUPUNROT PULL%%EL DUP %%0>= ITE * 97673
           DROPSWAPDROP                           * 976A0
           :: %%CHS 3PICK PUT%%EL 4PICK case SWAPDROP * 976A5
@@ -183,56 +195,59 @@ ROMP_0C2_04A:
           NextInArray 2OVER #= ITE               * 9779A
           :: 4UNROLL 2DROP ;                     * 977AE
           :: 4PICK PULL%%EL 4PICK PUT%%EL SWAP 4PICK PUT%%EL 5UNROLL 3PICK * 977C2
-            ?SKIP OBJ_375A7                      * 977F4
+            ?SKIP SWAPCOLS                       * 977F4
             ROT 5UNROLL 3PICK ?SKIP SWAPCOLUMNS  * 977FE
             DROP SWAP 4UNROLL ;                  * 97817
           #1- DUP#1= UNTIL DROP ;                * 9782B
 
 * ROMPTR 0C2 04B
 * refs (1): 90007
-ROMP_0C2_04B:
-        :: ONEONE ONEONE ONEONE ONEONE RESOROMP ROMPTR 0C2 049 RESOROMP * 97844
-          ROMPTR 0C2 048 RESOROMP ROMPTR 0C2 03E BINT1 RESOROMP * 97872
-          ROMPTR 0C2 03D RESOROMP ROMPTR 0C2 03C RESOROMP ROMPTR 0C2 008 * 97897
-          RESOROMP ROMPTR 0C2 03B BINT17 ROLL BINT18 ROLL BINT18 ' NULLLAM * 978C2
-          CACHE 3GETLAM 2GETLAM OVER 1PUTLAM #MIN 3PUTLAM ; * 978F5
+* Binds the locals of the SVD code, with the steps as resolved ROM pointers
+SVDBind:
+        :: ONEONE ONEONE ONEONE ONEONE RESOROMP XLIB RotateRows RESOROMP * 97844
+          XLIB RotateCols RESOROMP XLIB GivensRot BINT1 RESOROMP * 97872
+          XLIB HouseApplyRow RESOROMP XLIB BidiagCol RESOROMP * 97897
+          XLIB HouseApply RESOROMP XLIB BidiagRow BINT17 ROLL BINT18 ROLL * 978B7
+          BINT18 ' NULLLAM CACHE 3GETLAM 2GETLAM OVER 1PUTLAM #MIN 3PUTLAM ; * 978E6
 
 * ROMPTR 0C2 04C
 * refs (1): 90007
+* [A] -> %: TRACE
 TRACE~1:
         :: sqmat(ar)? %%0 BINT1 ROT #1+_ONE_DO ROTOVER PULLLONGEL 4ROLL L%+ * 9791D
           ROT ISTOP@ #+ NextInArray DROPSWAPDROP ToNorm(nb) ; * 9794F
 
 * ROMPTR 0C2 04D
 * refs (1): 90007
+* [A] -> %: COND: the 1-norm condition number, estimated from the LU factors. Error if the matrix is zero
 COND~1:
-        :: sqmat(ar)? OVER OBJ_36912 3UNROLL 3PICK %%0= case SETIVLERR * 97972
+        :: sqmat(ar)? OVER ArryNorm% 3UNROLL 3PICK %%0= case SETIVLERR * 97972
           DUP#1= case                            * 9799F
           :: 3DROP %1 ;                          * 979A9
-          SWAP ROMPTR 0C2 059 SWAP OBJ_7CD79 ROT OBJ_7CEA5 4ROLL 3UNROLL * 979BD
-          ROMPTR 0C2 052 =0?(nb) IT OBJ_5203A    * 979EB
-          RESOROMP ROMPTR 0C2 04F RESOROMP ROMPTR 0C2 058 BINT4 BINT1 %%0 * 97A05
-          2GETLAM 1GETABND                       * 97A34
+          SWAP XLIB TinyPivot SWAP OBJ_7CD79 ROT LUFactor 4ROLL 3UNROLL * 979BD
+          ROMPTR 0C2 052 =0?(nb) IT ?InfRes      * 979EB
+          RESOROMP XLIB COND~2 RESOROMP XLIB COND~3 BINT4 BINT1 %%0 2GETLAM * 97A05
+          1GETABND                               * 97A39
           { NULLLAM NULLLAM NULLLAM NULLLAM NULLLAM NULLLAM NULLLAM } BIND * 97A3E
-          2GETLAM BINT1 {}N OVER OBJ_37A4F 2GETLAM UNCOERCE%% L%/ MAKEARRY * 97A70
-          BINT1 OBJ_7D11B ROTDROP COND~5 3PUTLAM 6GETLAM EVAL 2GETLAM * 97A9D
+          2GETLAM BINT1 {}N OVER ArryLOne 2GETLAM UNCOERCE%% L%/ MAKEARRY * 97A70
+          BINT1 LUBackSub ROTDROP COND~5 3PUTLAM 6GETLAM EVAL 2GETLAM * 97A9D
           7GETLAM EVAL 4PUTLAM BEGIN 5GETLAM #1-DUP 5PUTLAM #0= case * 97AC5
           ROMPTR 0C2 04E                         * 97AF2
-          DUP OBJ_37A0E OVER OBJ_37A4F 4GETLAM 4ROLL 2GETLAM #1+_ONE_DO * 97AFD
+          DUP ArryLZero OVER ArryLOne 4GETLAM 4ROLL 2GETLAM #1+_ONE_DO * 97AFD
           INDEX@ 3PICK OVER#= ITE 4PICK 5PICK    * 97B25
-          SWAP PUT%%EL NextInArray 4UNROLL3DROP BINT1 OBJ_7D11B ROTDROP * 97B43
+          SWAP PUT%%EL NextInArray 4UNROLL3DROP BINT1 LUBackSub ROTDROP * 97B43
           COND~5 3GETLAM OVER 3PUTLAM %%<= case ROMPTR 0C2 04E * 97B66
           6GETLAM EVAL 2GETLAM 7GETLAM EVAL 4GETLAM 2DUP#= case2drop * 97B8F
           ROMPTR 0C2 04E                         * 97BB7
-          OVER 4PUTLAM ROTSWAP PULL%%EL OBJ_37D69 %%>% SWAPROT PULL%%EL * 97BC2
-          %%ABS %%>% ROT %= UNTIL                * 97BEA
+          OVER 4PUTLAM ROTSWAP PULL%%EL L%RE %%>% SWAPROT PULL%%EL %%ABS * 97BC2
+          %%>% ROT %= UNTIL                      * 97BEF
 
 * ROMPTR 0C2 04E
 * refs (1): 90007
 ROMP_0C2_04E:
-          :: RDROP 2GETLAM #1- UNCOERCE%% OVER OBJ_37A4F OVER L%* 2GETLAM * 97C03
+          :: RDROP 2GETLAM #1- UNCOERCE%% OVER ArryLOne OVER L%* 2GETLAM * 97C03
             #1+_ONE_DO ROT 3PICK3PICK L%/ INDEX@ PUT%%EL ROT 1+(rr) ROT * 97C35
-            B%NEG NextInArray 2DROP BINT1 OBJ_7D11B ROTROT2DROP COND~5 * 97C62
+            B%NEG NextInArray 2DROP BINT1 LUBackSub ROTROT2DROP COND~5 * 97C62
             %% 6.66666666666667E-1 %%* 2GETLAM UNCOERCE%% %%/ 3GETLAM ABND * 97C85
             2DUP %%> ITE DROPSWAPDROP ROTROT2DROP * 97CBD
             %%* %%>% ;                           * 97CD6
@@ -240,6 +255,7 @@ ROMP_0C2_04E:
 
 * ROMPTR 0C2 04F
 * refs (1): 90007
+* Finds the element of largest absolute value in a vector
 COND~2:
         :: BINT1 %%0 ROT #1+_ONE_DO ROT INDEX@ PULL%%EL %%ABS ROT 2DUP %%> * 97CEA
           ITE                                    * 97D26
@@ -249,28 +265,31 @@ COND~2:
 
 * ROMPTR 0C2 050
 * refs (1): 90007
+* [A] -> [L] [U] [P]: LU, by Crout with partial pivoting
 LU~1:
-        :: sqmat(ar)? SWAP CKREF OBJ_7CD7E ROT OBJ_7CEA5 2DROP OBJ_7CDE2 DUP * 97D6C
-          TOTEMPOB DUP LU~2 OVER OBJ_379F0 2SWAP BINT1 2GETLAM #1+_ONE_DO * 97D9E
+        :: sqmat(ar)? SWAP CKREF Arry>Ext ROT LUFactor 2DROP ExtArry> DUP * 97D6C
+          TOTEMPOB DUP LU~2 OVER ArryZero 2SWAP BINT1 2GETLAM #1+_ONE_DO * 97D9E
           2GETLAM #1+_ONE_DO JINDEX@ INDEX@ 2DUP#< ITE * 97DCB
           :: 2DROP ROT 4PICK 3PICK PUTEL 3UNROLL ; * 97DE9
           :: #= ITE 5PICK 4PICK                  * 97E11
             ROTSWAP 3PICK PUTEL SWAP ;           * 97E2A
           #1+ NextInArray LOOP DROP ROTDROPROTDROP DUP%0CON @idn!(ar) * 97E43
-          2GETLAM ONE_DO INDEX@ 1GETLAM OBJ_36FDB 2DUP#= ?SKIP SWAPROWS * 97E66
+          2GETLAM ONE_DO INDEX@ 1GETLAM HXS3@ 2DUP#= ?SKIP SWAPROWS * 97E66
           2DROP NextInArray ABND ;               * 97E8E
 
 * ROMPTR 0C2 051
 * refs (1): 90007
+* [A] -> det: sizes 1 and 2 directly, larger ones from LU
 MATDET~1:
         :: sqmat(ar)? DUP#1= case                * 97EA2
           :: PULLEL SWAPDROP ;                   * 97EB6
           DUP #2= case MATDET~2                  * 97ECA
-          SWAP ROMPTR 0C2 059 SWAP OBJ_7CD79 ROT OBJ_7CEA5 ABND ROTDROP * 97EDE
+          SWAP XLIB TinyPivot SWAP OBJ_7CD79 ROT LUFactor ABND ROTDROP * 97EDE
           ROMPTR 0C2 052 ToNorm(nb) ;            * 97F0C
 
 * ROMPTR 0C2 052
 * refs (1): 90007
+* Probably: after the LU factoring, gives the product of the diagonal for DET and the singularity test
 ROMP_0C2_052:
         :: OBJ_37898 DUPTYPEEREL? case           * 97F21
           :: SWAP ROMPTR 0C2 05A ;               * 97F35
@@ -279,49 +298,54 @@ ROMP_0C2_052:
 
 * ROMPTR 0C2 053
 * refs (1): 90007
-ROMP_0C2_053:
-        :: OBJ_36AD3 SWAP OBJ_36B14 ROMPTR 0C2 054 ; * 97FB4
+* [B] [A] -> [X]: solves A*X = B by LU
+MatDiv:
+        :: OBJ_36AD3 SWAP OBJ_36B14 XLIB LUSolve%% ; * 97FB4
 
 * ROMPTR 0C2 054
 * refs (1): 90007
-ROMP_0C2_054:
-        :: SWAP ROMPTR 0C2 059 SWAP OBJ_7CD79 5ROLL OBJ_7CEA5 4ROLL 3UNROLL * 97FD8
-          ROMPTR 0C2 052 =0?(nb) IT OBJ_5203A    * 9800B
-          SWAP OBJ_7CD7E ROTSWAP 4ROLL OBJ_7D0CB ABND OBJ_7CDE2 ; * 98025
+* [B] [A] -> [X] with both in extended form; a singular matrix goes to ?InfRes
+LUSolve%%:
+        :: SWAP XLIB TinyPivot SWAP OBJ_7CD79 5ROLL LUFactor 4ROLL 3UNROLL * 97FD8
+          ROMPTR 0C2 052 =0?(nb) IT ?InfRes      * 9800B
+          SWAP Arry>Ext ROTSWAP 4ROLL LUSolve ABND ExtArry> ; * 98025
 
 * ROMPTR 0C2 055
 * refs (1): 90007
+* [A] -> [INV(A)]
 MATINV~1:
-        :: sqmat(ar)? SWAP CKREF ROMPTR 0C2 056 ; * 9804D
+        :: sqmat(ar)? SWAP CKREF XLIB LUInverse ; * 9804D
 
 * ROMPTR 0C2 056
 * refs (1): 90007
-ROMP_0C2_056:
-        :: ROMPTR 0C2 059 SWAP OBJ_7CD7E 4ROLL OBJ_7CEA5 5ROLL 3UNROLL * 98071
-          ROMPTR 0C2 052 =0?(nb) IT OBJ_5203A    * 9809F
-          ROMPTR 0C2 057 ABND OBJ_7CDE2 ;        * 980B9
+* [A] -> [INV(A)] by LU; a singular matrix goes to ?InfRes
+LUInverse:
+        :: XLIB TinyPivot SWAP Arry>Ext 4ROLL LUFactor 5ROLL 3UNROLL * 98071
+          ROMPTR 0C2 052 =0?(nb) IT ?InfRes      * 9809F
+          XLIB LUInvert ABND ExtArry> ;          * 980B9
 
 * ROMPTR 0C2 057
 * refs (1): 90007
-ROMP_0C2_057:
+* Inverts in place from the LU factors, undoing the row swaps
+LUInvert:
         :: ONESWAP 2GETLAM #1+_ONE_DO INDEX@ 1GETLAM TRUE OBJ_7D3CB 3PICK * 980D3
           BINT1 4ROLL INDEX@ #1+_ONE_DO JINDEX@ INDEX@#- DUP#0= ITE * 98100
-          :: DROPDUP OBJ_37A4F ;                 * 98128
-          :: 2OVER ROT OBJ_7C855 B%NEG ;         * 9813C
+          :: DROPDUP ArryLOne ;                  * 98128
+          :: 2OVER ROT Dot%%1Arr B%NEG ;         * 9813C
           5PICK L%/ 4PICK PUT%%EL ROT#1+ ROT 2GETLAM #+#1+ ROT NextInArray * 9815A
           4UNROLL3DROP 2GETLAM ROT#+SWAP LOOP SWAPDROP 2GETLAM DUP#1= * 9818C
           caseDROP DUP#1-                        * 981AF
           #* SWAP 2GETLAM ONE_DO OVERDUP ROT 2GETLAM INDEX@#- #1+_ONE_DO * 981B9
-          OVER 4PICK 2GETLAM #+ INDEX@ #1- OBJ_7C855 SWAP 4PICK PULL%%EL ROT * 981E6
+          OVER 4PICK 2GETLAM #+ INDEX@ #1- Dot%%1Arr SWAP 4PICK PULL%%EL ROT * 981E6
           L%+ B%NEG 4PICK PUT%%EL 2GETLAM 4ROLLOVER #- 4ROLLROT #-#1- ROT * 9821D
           NextInArray ROTROT2DROP SWAP 2GETLAM #-#1- SWAP LOOP SWAPDROP * 9824F
           ONESWAP 2GETLAM ONE_DO INDEX@ 3PICKOVER #+ 3UNROLL ZERO_DO OVER * 98277
-          2GETLAM 5PICK OVER #+SWAP JINDEX@ #- OBJ_7C855 SWAP 4PICK PULL%%EL * 982A4
+          2GETLAM 5PICK OVER #+SWAP JINDEX@ #- Dot%%1Arr SWAP 4PICK PULL%%EL * 982A4
           ROT L%+ 4PICK PUT%%EL ROT#1+UNROT NextInArray SWAPDROP 2GETLAM * 982D6
           3PICKOVER #+ 3UNROLL #1+ INDEX@ #1+ DO 3PICK3PICK 2GETLAM INDEX@ * 982FE
-          #1-- OBJ_7C855 4PICK PUT%%EL SWAP 2GETLAM #+#1+ SWAP ROT#1+UNROT * 98330
+          #1-- Dot%%1Arr 4PICK PUT%%EL SWAP 2GETLAM #+#1+ SWAP ROT#1+UNROT * 98330
           NextInArray SWAPDROP LOOP SWAPDROP 2GETLAM BEGIN #1- DUP#0<> WHILE * 9835D
-          :: 1GETLAM OBJ_36FDB 2DUP#= ?SKIP OBJ_375A7 * 9838A
+          :: 1GETLAM HXS3@ 2DUP#= ?SKIP SWAPCOLS * 9838A
             DROP CkATTNQUIT ;                    * 983A8
           REPEAT DROP ;                          * 983B7
 
@@ -331,16 +355,17 @@ COND~3:
         :: 2GETLAM #1+_ONE_DO INDEX@ PULL%%EL COND~4 INDEX@ PUT%%EL * 983C6
           NextInArray                            * 983EE
           :: 2GETLAM DUP #1= caseDROP #1+        * 983F3
-            BINT2 DO INDEX@ BINT1 INDEX@ #1- OBJ_7CAA4 SWAP INDEX@ PULL%%EL * 98411
-            ROT L%- INDEX@ PUT%%EL LOOP ;        * 98443
+            BINT2 DO INDEX@ BINT1 INDEX@ #1- Dot%%2Stride SWAP INDEX@ * 98411
+            PULL%%EL ROT L%- INDEX@ PUT%%EL LOOP ; * 9843E
           2GETLAM DUP#1+ #* 2GETLAM 2SWAP 2GETLAM ZERO_DO SWAP 2GETLAM * 98461
           INDEX@#- 1GETLAM TRUE OBJ_7D3CB L%CONJ SWAPROT 5PICK 5PICK #1+ * 9848E
-          INDEX@ OBJ_7CAA4 SWAP 5PICK PULL%%EL ROT L%- 4ROLL L%/ 4PICK * 984BB
+          INDEX@ Dot%%2Stride SWAP 5PICK PULL%%EL ROT L%- 4ROLL L%/ 4PICK * 984BB
           PUT%%EL 4ROLL 2GETLAM #-#1- 4ROLL #1- 2SWAP LOOP ROTDROPROTDROP ; * 984ED
 
 * ROMPTR 0C2 059
 * refs (1): 90007
-ROMP_0C2_059:
+* [A] -> %%: the value to stand in for a zero pivot: 0 under flag -54, otherwise a tiny number from the matrix's largest exponent
+TinyPivot:
         :: BINT54 TestSysFlag case %%0           * 9851F  flag -54: Tiny element → 0 / Use tiny element
           CODE                                   * 98538  220 nibbles
             GOSBVL  SAVPTR                       * 98542
@@ -354,18 +379,18 @@ ROMP_0C2_059:
             R0=A                                 * 9855D
             LC(5)   DOREAL                       * 98560
             ?D=C    A                            * 98567
-            GOYES   ROMP_0C2_059.L1              * 9856A
+            GOYES   TinyPivot.L1                 * 9856A
             A=A+A   A                            * 9856C
-ROMP_0C2_059.L1:
+TinyPivot.L1:
             C=R0                                 * 9856E
             D=C     A                            * 98571
             LC(5)   #0004F                       * 98573
             ?D<C    A                            * 9857A
-            GOYES   ROMP_0C2_059.L2              * 9857D
+            GOYES   TinyPivot.L2                 * 9857D
             A=0     W                            * 9857F
             B=0     W                            * 98582
-            GOTO    ROMP_0C2_059.L9              * 98585
-ROMP_0C2_059.L2:
+            GOTO    TinyPivot.L9                 * 98585
+TinyPivot.L2:
             C=A     A                            * 98589
             GOSBVL  PUTCMPEL.L6                  * 9858B
             C=B     A                            * 98592
@@ -374,56 +399,56 @@ ROMP_0C2_059.L2:
             RSTK=C                               * 98599
             LC(5)   #99999                       * 9859B
             D=C     A                            * 985A2
-ROMP_0C2_059.loop3:
+TinyPivot.loop3:
             A=DAT1  W                            * 985A4
             ?A=0    M                            * 985A8
-            GOYES   ROMP_0C2_059.L6              * 985AB
+            GOYES   TinyPivot.L6                 * 985AB
             GOSBVL  SPLITA                       * 985AD
             P=      0                            * 985B4
             LC(5)   #50000                       * 985B6
             C=C+A   A                            * 985BD
             P=      13                           * 985BF
-ROMP_0C2_059.loop4:
+TinyPivot.loop4:
             ?B=0    WP                           * 985C1
-            GOYES   ROMP_0C2_059.L5              * 985C4
+            GOYES   TinyPivot.L5                 * 985C4
             P=P-1                                * 985C6
             C=C-1   A                            * 985C8
-            GONC    ROMP_0C2_059.loop4           * 985CA
-ROMP_0C2_059.L5:
+            GONC    TinyPivot.loop4              * 985CA
+TinyPivot.L5:
             ?D<=C   A                            * 985CD
-            GOYES   ROMP_0C2_059.L6              * 985D0
+            GOYES   TinyPivot.L6                 * 985D0
             D=C     A                            * 985D2
-ROMP_0C2_059.L6:
+TinyPivot.L6:
             SETHEX                               * 985D4
             D1=D1+  16                           * 985D6
             C=RSTK                               * 985D9
             C=C-1   A                            * 985DB
             RSTK=C                               * 985DD
-            GONC    ROMP_0C2_059.loop3           * 985DF
+            GONC    TinyPivot.loop3              * 985DF
             SETDEC                               * 985E2
             P=      0                            * 985E4
             C=D     A                            * 985E6
             C=C+1   A                            * 985E8
-            GOC     ROMP_0C2_059.L8              * 985EA
+            GOC     TinyPivot.L8                 * 985EA
             LC(5)   #50000                       * 985ED
             D=D-C   A                            * 985F4
             A=R0                                 * 985F6
             SETHEX                               * 985F9
             A=A-1   A                            * 985FB
             C=0     A                            * 985FD
-ROMP_0C2_059.loop7:
+TinyPivot.loop7:
             SETDEC                               * 985FF
             C=C+D   A                            * 98601
             SETHEX                               * 98603
             A=A-1   A                            * 98605
-            GONC    ROMP_0C2_059.loop7           * 98607
-ROMP_0C2_059.L8:
+            GONC    TinyPivot.loop7              * 98607
+TinyPivot.L8:
             A=0     W                            * 9860A
             B=0     W                            * 9860D
             P=      14                           * 98610
             B=B+1   P                            * 98612
             A=C     A                            * 98615
-ROMP_0C2_059.L9:
+TinyPivot.L9:
             GOVLNG  OBJ_37898.L6                 * 98617
           ENDCODE                                * 9861E
         ;                                        * 9861E
@@ -433,7 +458,7 @@ ROMP_0C2_059.L9:
 ROMP_0C2_05A:
         CODE                                     * 98623  127 nibbles
           HST=0   3                              * 9862D
-          GOSBVL  SUB_2A0B1                      * 98630
+          GOSBVL  POP2%%                         * 98630
           ?D#0    M                              * 98637
           GOYES   ROMP_0C2_05A.L2                * 9863A
 ROMP_0C2_05A.loop1:
@@ -476,15 +501,16 @@ ROMP_0C2_05A.L4:
 
 * ROMPTR 0C2 05B
 * refs (1): 90007
+* [A] -> [A']: RREF: Gauss-Jordan with partial pivoting, zeroing elements too small to be significant
 RREF~1:
         :: BINT1 OVER MDIMS NOTcase doerr501     * 986AC
-          RESOROMP ROMPTR 0C2 05C RESOROMP ROMPTR 0C2 05E 2NULLLAM{} BIND * 986CA
-          DUP #8* !MAKEHXS 4NULLLAM{} BIND CKREF OBJ_7CD7E 1GETLAM OBJ_7D28D * 986F4
-          ONESWAP 2GETLAM #1+_ONE_DO BINT54 TestSysFlag ITE %%0 * 98721  flag -54: Tiny element → 0 / Use tiny element
+          RESOROMP XLIB RREF~2 RESOROMP XLIB RREF~4 2NULLLAM{} BIND DUP #8* * 986CA
+          !MAKEHXS 4NULLLAM{} BIND CKREF Arry>Ext 1GETLAM LUPivot ONESWAP * 986FE
+          2GETLAM #1+_ONE_DO BINT54 TestSysFlag ITE %%0 * 98726  flag -54: Tiny element → 0 / Use tiny element
           :: 1GETLAM 2GETLAM INDEX@ 6GETLAM EVAL ; * 98744
           4GETLAM #1- #3* 5PICK TYPERARRY? ?SKIP #2* * 98767
           UNCOERCE%% %%* SWAP 4GETLAM 3GETLAM #> ITE %%0 * 9878A
-          :: 4GETLAM INDEX@ OBJ_376C1 2DUP#= ?SKIP SWAPCOLUMNS * 987B2
+          :: 4GETLAM INDEX@ PivotRow 2DUP#= ?SKIP SWAPCOLUMNS * 987B2
             2DROP 3PICK PULL%%EL ;               * 987D5
           DUP B%ABS ROT 4GETLAM #1=?SKIP         * 987E9
           :: INDEX@ SWAP 4GETLAM ONE_DO 7GETLAM EVAL 2GETLAM ROT#+SWAP * 98802
@@ -496,9 +522,9 @@ RREF~1:
           :: SWAPDROP 4GETLAM #1+ 4PUTLAM 2GETLAM ROT#+SWAP ; * 988AC
           :: SWAP =0?(nb) ?SEMI                  * 988D4
             %%0 3PICK PUT%%EL ;                  * 988E8
-          SWAP#1+SWAP NextInArray RESOROMP ROMPTR 0C2 05D 6PUTLAM SWAPDROP * 988FC
+          SWAP#1+SWAP NextInArray RESOROMP XLIB RREF~3 6PUTLAM SWAPDROP * 988FC
           BINT1 DUPUNROT 4PUTLAM 2GETLAM #1+_ONE_DO 6GETLAM EVAL SWAP#1+SWAP * 98920
-          NextInArray SWAPDROP ABND ABND OBJ_7CDE2 ; * 98948
+          NextInArray SWAPDROP ABND ABND ExtArry> ; * 98948
 
 * ROMPTR 0C2 05C
 * refs (1): 90007
@@ -586,81 +612,81 @@ LIB0C2.link:
         CON(5)  DOHSTR                           * 98BF8  link table of library 0C2
         LENGTH                                   * 98BFD  length, to #98DDD
         REL(5)  SRAD~1                           * 98C02  000 
-        REL(5)  ROMP_0C2_001                     * 98C07  001 
+        REL(5)  VecMaxAbs                        * 98C07  001 
         REL(5)  EGVL~1                           * 98C0C  002 
-        REL(5)  ROMP_0C2_003                     * 98C11  003 
+        REL(5)  EigenVals                        * 98C11  003 
         REL(5)  EGV~1                            * 98C16  004 
         REL(5)  SCHUR~1                          * 98C1B  005 
-        REL(5)  ROMP_0C2_006                     * 98C20  006 
-        REL(5)  ROMP_0C2_007                     * 98C25  007 
-        REL(5)  ROMP_0C2_008                     * 98C2A  008 
-        REL(5)  ROMP_0C2_009                     * 98C2F  009 
-        REL(5)  ROMP_0C2_00A                     * 98C34  00A 
-        REL(5)  ROMP_0C2_00B                     * 98C39  00B 
-        REL(5)  ROMP_0C2_00C                     * 98C3E  00C 
-        REL(5)  ROMP_0C2_00D                     * 98C43  00D 
-        REL(5)  ROMP_0C2_00E                     * 98C48  00E 
-        REL(5)  ROMP_0C2_00F                     * 98C4D  00F 
-        REL(5)  ROMP_0C2_010                     * 98C52  010 
-        REL(5)  ROMP_0C2_011                     * 98C57  011 
-        REL(5)  ROMP_0C2_012                     * 98C5C  012 
-        REL(5)  ROMP_0C2_013                     * 98C61  013 
-        REL(5)  ROMP_0C2_014                     * 98C66  014 
+        REL(5)  Hessenberg                       * 98C20  006 
+        REL(5)  HessReflect                      * 98C25  007 
+        REL(5)  HouseApply                       * 98C2A  008 
+        REL(5)  QRRealSchur                      * 98C2F  009 
+        REL(5)  QRIsolated                       * 98C34  00A 
+        REL(5)  QRSweepReal                      * 98C39  00B 
+        REL(5)  QRFindSmall                      * 98C3E  00C 
+        REL(5)  QRShiftReal                      * 98C43  00D 
+        REL(5)  QRReflect3                       * 98C48  00E 
+        REL(5)  QRApply3                         * 98C4D  00F 
+        REL(5)  QRReflect2                       * 98C52  010 
+        REL(5)  QRApply2                         * 98C57  011 
+        REL(5)  QRDeflate2                       * 98C5C  012 
+        REL(5)  QRRotate2                        * 98C61  013 
+        REL(5)  QRStd2x2                         * 98C66  014 
         REL(5)  EGV~2                            * 98C6B  015 
-        REL(5)  ROMP_0C2_016                     * 98C70  016 
-        REL(5)  ROMP_0C2_017                     * 98C75  017 
+        REL(5)  EigvecReal                       * 98C70  016 
+        REL(5)  EigvecRow                        * 98C75  017 
         REL(5)  EGV~3                            * 98C7A  018 
         REL(5)  EGV~4                            * 98C7F  019 
-        REL(5)  ROMP_0C2_01A                     * 98C84  01A 
-        REL(5)  ROMP_0C2_01B                     * 98C89  01B 
-        REL(5)  ROMP_0C2_01C                     * 98C8E  01C 
+        REL(5)  QRCmplxSchur                     * 98C84  01A 
+        REL(5)  QRSweepCmplx                     * 98C89  01B 
+        REL(5)  QRShiftCmplx                     * 98C8E  01C 
         REL(5)  EGV~5                            * 98C93  01D 
-        REL(5)  ROMP_0C2_01E                     * 98C98  01E 
-        REL(5)  ROMP_0C2_01F                     * 98C9D  01F 
-        REL(5)  ROMP_0C2_020                     * 98CA2  020 
-        REL(5)  ROMP_0C2_021                     * 98CA7  021 
-        REL(5)  ROMP_0C2_022                     * 98CAC  022 
+        REL(5)  EigenBind                        * 98C98  01E 
+        REL(5)  BalancePermute                   * 98C9D  01F 
+        REL(5)  BalanceUndo                      * 98CA2  020 
+        REL(5)  BalanceScale                     * 98CA7  021 
+        REL(5)  LSQSolve                         * 98CAC  022 
         REL(5)  QR~1                             * 98CB1  023 
         REL(5)  LQ~1                             * 98CB6  024 
-        REL(5)  ROMP_0C2_025                     * 98CBB  025 
-        REL(5)  ROMP_0C2_026                     * 98CC0  026 
-        REL(5)  ROMP_0C2_027                     * 98CC5  027 
-        REL(5)  ROMP_0C2_028                     * 98CCA  028 
-        REL(5)  ROMP_0C2_029                     * 98CCF  029 
-        REL(5)  ROMP_0C2_02A                     * 98CD4  02A 
-        REL(5)  ROMP_0C2_02B                     * 98CD9  02B 
-        REL(5)  ROMP_0C2_02C                     * 98CDE  02C 
-        REL(5)  ROMP_0C2_02D                     * 98CE3  02D 
-        REL(5)  ROMP_0C2_02E                     * 98CE8  02E 
-        REL(5)  ROMP_0C2_02F                     * 98CED  02F 
-        REL(5)  ROMP_0C2_030                     * 98CF2  030 
-        REL(5)  ROMP_0C2_031                     * 98CF7  031 
-        REL(5)  ROMP_0C2_032                     * 98CFC  032 
-        REL(5)  ROMP_0C2_033                     * 98D01  033 
+        REL(5)  QRFactor                         * 98CBB  025 
+        REL(5)  QRPivoted                        * 98CC0  026 
+        REL(5)  QRHouse                          * 98CC5  027 
+        REL(5)  QRApplyToB                       * 98CCA  028 
+        REL(5)  QRCopyDiag                       * 98CCF  029 
+        REL(5)  LSQReduceWide                    * 98CD4  02A 
+        REL(5)  LSQExpandWide                    * 98CD9  02B 
+        REL(5)  LSQBackSub                       * 98CDE  02C 
+        REL(5)  QRRankEst                        * 98CE3  02D 
+        REL(5)  QRRankScale                      * 98CE8  02E 
+        REL(5)  QRRankMin                        * 98CED  02F 
+        REL(5)  QRRankMax                        * 98CF2  030 
+        REL(5)  Array>%%                         * 98CF7  031 
+        REL(5)  %%>Array                         * 98CFC  032 
+        REL(5)  %%Identity                       * 98D01  033 
         REL(5)  SNRM~1                           * 98D06  034 
-        REL(5)  ROMP_0C2_035                     * 98D0B  035 
+        REL(5)  SingVals                         * 98D0B  035 
         REL(5)  RANK~1                           * 98D10  036 
         REL(5)  SVL~1                            * 98D15  037 
         REL(5)  SVD~1                            * 98D1A  038 
-        REL(5)  ROMP_0C2_039                     * 98D1F  039 
-        REL(5)  ROMP_0C2_03A                     * 98D24  03A 
-        REL(5)  ROMP_0C2_03B                     * 98D29  03B 
-        REL(5)  ROMP_0C2_03C                     * 98D2E  03C 
-        REL(5)  ROMP_0C2_03D                     * 98D33  03D 
-        REL(5)  ROMP_0C2_03E                     * 98D38  03E 
-        REL(5)  ROMP_0C2_03F                     * 98D3D  03F 
-        REL(5)  ROMP_0C2_040                     * 98D42  040 
-        REL(5)  ROMP_0C2_041                     * 98D47  041 
-        REL(5)  ROMP_0C2_042                     * 98D4C  042 
-        REL(5)  ROMP_0C2_043                     * 98D51  043 
-        REL(5)  ROMP_0C2_044                     * 98D56  044 
-        REL(5)  ROMP_0C2_045                     * 98D5B  045 
-        REL(5)  ROMP_0C2_046                     * 98D60  046 
-        REL(5)  ROMP_0C2_047                     * 98D65  047 
-        REL(5)  ROMP_0C2_048                     * 98D6A  048 
-        REL(5)  ROMP_0C2_049                     * 98D6F  049 
-        REL(5)  ROMP_0C2_04A                     * 98D74  04A 
-        REL(5)  ROMP_0C2_04B                     * 98D79  04B 
+        REL(5)  BidiagTall                       * 98D1F  039 
+        REL(5)  BidiagWide                       * 98D24  03A 
+        REL(5)  BidiagRow                        * 98D29  03B 
+        REL(5)  BidiagCol                        * 98D2E  03C 
+        REL(5)  HouseApplyRow                    * 98D33  03D 
+        REL(5)  GivensRot                        * 98D38  03E 
+        REL(5)  SVDIterate                       * 98D3D  03F 
+        REL(5)  SVD2x2                           * 98D42  040 
+        REL(5)  SVDConvUp                        * 98D47  041 
+        REL(5)  SVDConvDown                      * 98D4C  042 
+        REL(5)  SVDShift                         * 98D51  043 
+        REL(5)  SVDSweepDown                     * 98D56  044 
+        REL(5)  SVDSweepUp                       * 98D5B  045 
+        REL(5)  SVDZeroDown                      * 98D60  046 
+        REL(5)  SVDZeroUp                        * 98D65  047 
+        REL(5)  RotateCols                       * 98D6A  048 
+        REL(5)  RotateRows                       * 98D6F  049 
+        REL(5)  SVDSort                          * 98D74  04A 
+        REL(5)  SVDBind                          * 98D79  04B 
         REL(5)  TRACE~1                          * 98D7E  04C 
         REL(5)  COND~1                           * 98D83  04D 
         REL(5)  ROMP_0C2_04E                     * 98D88  04E 
@@ -668,13 +694,13 @@ LIB0C2.link:
         REL(5)  LU~1                             * 98D92  050 
         REL(5)  MATDET~1                         * 98D97  051 
         REL(5)  ROMP_0C2_052                     * 98D9C  052 
-        REL(5)  ROMP_0C2_053                     * 98DA1  053 
-        REL(5)  ROMP_0C2_054                     * 98DA6  054 
+        REL(5)  MatDiv                           * 98DA1  053 
+        REL(5)  LUSolve%%                        * 98DA6  054 
         REL(5)  MATINV~1                         * 98DAB  055 
-        REL(5)  ROMP_0C2_056                     * 98DB0  056 
-        REL(5)  ROMP_0C2_057                     * 98DB5  057 
+        REL(5)  LUInverse                        * 98DB0  056 
+        REL(5)  LUInvert                         * 98DB5  057 
         REL(5)  COND~3                           * 98DBA  058 
-        REL(5)  ROMP_0C2_059                     * 98DBF  059 
+        REL(5)  TinyPivot                        * 98DBF  059 
         REL(5)  ROMP_0C2_05A                     * 98DC4  05A 
         REL(5)  RREF~1                           * 98DC9  05B 
         REL(5)  RREF~2                           * 98DCE  05C 

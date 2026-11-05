@@ -1,12 +1,13 @@
-* HP 48GX ROM revision R, #C0000-#C31BD: Library part 0AB
+* HP 48GX ROM revision R, #C0000-#C31BD: 48G user commands (3D plot setup, ANIMATE, matrix, list, TVM, INFORM, ...) with their dispatch tables, then hash and link tables
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: →ROW →DIAG →COL ΣLIST ΠLIST ΔLIST rpm lbmol gmol dB ZVOL ZFACTOR
+* Most referenced: MSOLVR →ROW →DIAG →COL ΣLIST ΠLIST ΔLIST rpm lbmol gmol dB ZVOL
 
         ORG     #C0000
 
         LENGTH                                   * C0000  library object without its prolog (at the window's start): length, to #C31BE
         CON(2)  0                                * C0005  no title
 
+* Library 0AB: User commands added by the 48G: 3D plot setup, matrix commands, lists, ANIMATE, INFORM and CHOOSE, RKF and RRK, TVM, Equation Library, utilities
 LIB0AB:
         CON(3)  #0AB                             * C0007  library number
         REL(5)  LIB0AB.hash                      * C000A  hash table
@@ -22,7 +23,7 @@ LIB0AB:
         RPL
 XVOL:
         :: CK2&Dispatch                          * C0025
-          BINT17 ROMPTR 0B5 081                  * C002F  real real
+          BINT17 XLIB VparXvol!                  * C002F  real real
         ;                                        * C003F
 
 * ROMPTR 0AB 001
@@ -32,7 +33,7 @@ XVOL:
         CON(3)  #001                             * C0048  command
 YVOL:
         :: CK2&Dispatch                          * C004B
-          BINT17 ROMPTR 0B5 083                  * C0055  real real
+          BINT17 XLIB VparYvol!                  * C0055  real real
         ;                                        * C0065
 
 * ROMPTR 0AB 002
@@ -42,7 +43,7 @@ YVOL:
         CON(3)  #002                             * C006E  command
 ZVOL:
         :: CK2&Dispatch                          * C0071
-          BINT17 ROMPTR 0B5 085                  * C007B  real real
+          BINT17 XLIB VparZvol!                  * C007B  real real
         ;                                        * C008B
 
 * ROMPTR 0AB 003
@@ -52,7 +53,7 @@ ZVOL:
         CON(3)  #003                             * C0094  command
 XXRNG:
         :: CK2&Dispatch                          * C0097
-          BINT17 ROMPTR 0B5 089                  * C00A1  real real
+          BINT17 XLIB VparXXrng!                 * C00A1  real real
         ;                                        * C00B1
 
 * ROMPTR 0AB 004
@@ -62,7 +63,7 @@ XXRNG:
         CON(3)  #004                             * C00BA  command
 YYRNG:
         :: CK2&Dispatch                          * C00BD
-          BINT17 ROMPTR 0B5 08B                  * C00C7  real real
+          BINT17 XLIB VparYYrng!                 * C00C7  real real
         ;                                        * C00D7
 
 * ROMPTR 0AB 005
@@ -72,7 +73,7 @@ YYRNG:
         CON(3)  #005                             * C00E0  command
 EYEPT:
         :: CK3&Dispatch                          * C00E3
-          # 111 ROMPTR 0B5 087                   * C00ED  real real real
+          # 111 XLIB VparEye!                    * C00ED  real real real
         ;                                        * C0102
 
 * ROMPTR 0AB 006
@@ -82,7 +83,7 @@ EYEPT:
         CON(3)  #006                             * C010B  command
 NUMX:
         :: CK1&Dispatch                          * C010E
-          BINT1 ROMPTR 0B5 07D                   * C0118  real
+          BINT1 XLIB VparNumX!                   * C0118  real
         ;                                        * C0128
 
 * ROMPTR 0AB 007
@@ -92,7 +93,7 @@ NUMX:
         CON(3)  #007                             * C0131  command
 NUMY:
         :: CK1&Dispatch                          * C0134
-          BINT1 ROMPTR 0B5 07F                   * C013E  real
+          BINT1 XLIB VparNumY!                   * C013E  real
         ;                                        * C014E
 
 * ROMPTR 0AB 008
@@ -101,15 +102,16 @@ NUMY:
         CON(3)  #0AB                             * C0154  library
         CON(3)  #008                             * C0157  command
 WIREFRAME:
-        :: CK0 ' ROMPTR 0AB 008 PUTPTYPE ;       * C015A  WIREFRAME
+        :: CK0 ' XLIB WIREFRAME PUTPTYPE ;       * C015A
 
-        { TRUE ROMPTR 0F1 002 NOP FALSE          * C017E
-          { OBJ_47209 OBJ_457BC OBJ_45BB6        * C019D
+* Plot-type record of WIREFRAME, read by PTYPE>PINFO. The other 3D types and DIFFEQ follow it, each after its command
+        { TRUE XLIB WireDraw NOP FALSE           * C017E
+          { ShowCoordX OBJ_457BC OBJ_45BB6       * C019D
             {                                    * C01B1
-              :: ROMPTR 0F1 028 ROMPTR 0F1 02D ; NOP } * C01B6
-            :: ROMPTR 0F1 02C ROMPTR 0F1 02D ; } * C01E0
-          FALSE NOP NOP %1 FALSE FALSE FALSE OBJ_570E5 OBJ_45AEB OBJ_45B8D * C0205
-          ROMPTR 0F1 026 }                       * C0237
+              :: XLIB PlotIOShow ROMPTR 0F1 02D ; NOP } * C01B6
+            :: XLIB PlotIOStack ROMPTR 0F1 02D ; } * C01E0
+          FALSE NOP NOP %1 FALSE FALSE FALSE WirePictStart OBJ_45AEB * C0205
+          OBJ_45B8D XLIB Plot3DMenu }            * C0232
 
 * ROMPTR 0AB 009
 * refs (1): C0007
@@ -117,15 +119,15 @@ WIREFRAME:
         CON(3)  #0AB                             * C0248  library
         CON(3)  #009                             * C024B  command
 PARSURFACE:
-        :: CK0 ' ROMPTR 0AB 009 PUTPTYPE ;       * C024E  PARSURFACE
+        :: CK0 ' XLIB PARSURFACE PUTPTYPE ;      * C024E
 
-        { TRUE ROMPTR 0F1 010 NOP FALSE          * C0272
-          { OBJ_47209 OBJ_4590E OBJ_45BB6        * C0291
+        { TRUE XLIB ParSurfDraw NOP FALSE        * C0272
+          { ShowCoordX OBJ_4590E OBJ_45BB6       * C0291
             {                                    * C02A5
-              :: ROMPTR 0F1 028 ROMPTR 0F1 031 ; NOP } * C02AA
-            :: ROMPTR 0F1 02C ROMPTR 0F1 031 ; } * C02D4
-          FALSE NOP NOP %1 FALSE FALSE FALSE OBJ_5712B OBJ_45A1B OBJ_45006 * C02F9
-          ROMPTR 0F1 026 }                       * C032B
+              :: XLIB PlotIOShow XLIB PlotEvalSurf ; NOP } * C02AA
+            :: XLIB PlotIOStack XLIB PlotEvalSurf ; } * C02D4
+          FALSE NOP NOP %1 FALSE FALSE FALSE ParsurfPictStart OBJ_45A1B * C02F9
+          OBJ_45006 XLIB Plot3DMenu }            * C0326
 
 * ROMPTR 0AB 00A
 * refs (1): C0007
@@ -133,15 +135,15 @@ PARSURFACE:
         CON(3)  #0AB                             * C033C  library
         CON(3)  #00A                             * C033F  command
 GRIDMAP:
-        :: CK0 ' ROMPTR 0AB 00A PUTPTYPE ;       * C0342  GRIDMAP
+        :: CK0 ' XLIB GRIDMAP PUTPTYPE ;         * C0342
 
-        { TRUE ROMPTR 0F1 00C NOP FALSE          * C0366
-          { OBJ_47209 OBJ_4590E OBJ_45BB6        * C0385
+        { TRUE XLIB GridDraw NOP FALSE           * C0366
+          { ShowCoordX OBJ_4590E OBJ_45BB6       * C0385
             {                                    * C0399
-              :: ROMPTR 0F1 028 ROMPTR 0F1 02E ; NOP } * C039E
-            :: ROMPTR 0F1 02C ROMPTR 0F1 02E ; } * C03C8
-          FALSE NOP NOP %1 FALSE FALSE FALSE OBJ_57108 OBJ_45986 OBJ_459E3 * C03ED
-          ROMPTR 0F1 026 }                       * C041F
+              :: XLIB PlotIOShow ROMPTR 0F1 02E ; NOP } * C039E
+            :: XLIB PlotIOStack ROMPTR 0F1 02E ; } * C03C8
+          FALSE NOP NOP %1 FALSE FALSE FALSE GridPictStart OBJ_45986 * C03ED
+          OBJ_459E3 XLIB Plot3DMenu }            * C041A
 
 * ROMPTR 0AB 00B
 * refs (1): C0007
@@ -149,15 +151,15 @@ GRIDMAP:
         CON(3)  #0AB                             * C0430  library
         CON(3)  #00B                             * C0433  command
 YSLICE:
-        :: CK0 ' ROMPTR 0AB 00B PUTPTYPE ;       * C0436  YSLICE
+        :: CK0 ' XLIB YSLICE PUTPTYPE ;          * C0436
 
-        { TRUE ROMPTR 0F1 013 NOP FALSE          * C045A
-          { OBJ_47209 OBJ_462C6 OBJ_45BB6        * C0479
+        { TRUE XLIB YSliceDraw NOP FALSE         * C045A
+          { ShowCoordX OBJ_462C6 OBJ_45BB6       * C0479
             {                                    * C048D
-              :: ROMPTR 0F1 028 ROMPTR 0F1 02F ; NOP } * C0492
-            :: ROMPTR 0F1 02C ROMPTR 0F1 02F ; } * C04BC
-          FALSE NOP NOP %1 FALSE FALSE FALSE OBJ_45C5D OBJ_45C80 OBJ_45CAE * C04E1
-          ROMPTR 0F1 026 }                       * C0513
+              :: XLIB PlotIOShow ROMPTR 0F1 02F ; NOP } * C0492
+            :: XLIB PlotIOStack ROMPTR 0F1 02F ; } * C04BC
+          FALSE NOP NOP %1 FALSE FALSE FALSE YSlicePictStart OBJ_45C80 * C04E1
+          OBJ_45CAE XLIB Plot3DMenu }            * C050E
 
 * ROMPTR 0AB 00C
 * refs (1): C0007
@@ -165,15 +167,15 @@ YSLICE:
         CON(3)  #0AB                             * C0524  library
         CON(3)  #00C                             * C0527  command
 SLOPEFIELD:
-        :: CK0 ' ROMPTR 0AB 00C PUTPTYPE ;       * C052A  SLOPEFIELD
+        :: CK0 ' XLIB SLOPEFIELD PUTPTYPE ;      * C052A
 
-        { TRUE ROMPTR 0F1 019 NOP TRUE           * C054E
-          { OBJ_47209 OBJ_4620E OBJ_45BB6        * C056D
+        { TRUE XLIB SlopeDraw NOP TRUE           * C054E
+          { ShowCoordX OBJ_4620E OBJ_45BB6       * C056D
             {                                    * C0581
-              :: ROMPTR 0F1 028 ROMPTR 0F1 030 ; NOP } * C0586
-            :: ROMPTR 0F1 02C ROMPTR 0F1 030 ; } * C05B0
-          FALSE NOP NOP %1 FALSE FALSE FALSE OBJ_45C3A OBJ_45A59 OBJ_44FF2 * C05D5
-          ROMPTR 0F1 026 }                       * C0607
+              :: XLIB PlotIOShow XLIB PlotEvalEQ ; NOP } * C0586
+            :: XLIB PlotIOStack XLIB PlotEvalEQ ; } * C05B0
+          FALSE NOP NOP %1 FALSE FALSE FALSE SlopePictStart OBJ_45A59 * C05D5
+          OBJ_44FF2 XLIB Plot3DMenu }            * C0602
 
 * ROMPTR 0AB 00D
 * refs (1): C0007
@@ -181,15 +183,15 @@ SLOPEFIELD:
         CON(3)  #0AB                             * C0618  library
         CON(3)  #00D                             * C061B  command
 PCONTOUR:
-        :: CK0 ' ROMPTR 0AB 00D PUTPTYPE ;       * C061E  PCONTOUR
+        :: CK0 ' XLIB PCONTOUR PUTPTYPE ;        * C061E
 
-        { TRUE ROMPTR 0F1 020 NOP TRUE           * C0642
-          { OBJ_47209 OBJ_4620E OBJ_45BB6        * C0661
+        { TRUE XLIB PContourDraw NOP TRUE        * C0642
+          { ShowCoordX OBJ_4620E OBJ_45BB6       * C0661
             {                                    * C0675
-              :: ROMPTR 0F1 028 ROMPTR 0F1 032 ; NOP } * C067A
-            :: ROMPTR 0F1 02C ROMPTR 0F1 032 ; } * C06A4
-          FALSE NOP NOP %1 FALSE FALSE FALSE OBJ_5714E OBJ_45A59 OBJ_44FF2 * C06C9
-          ROMPTR 0F1 026 }                       * C06FB
+              :: XLIB PlotIOShow XLIB PlotEvalOldEq ; NOP } * C067A
+            :: XLIB PlotIOStack XLIB PlotEvalOldEq ; } * C06A4
+          FALSE NOP NOP %1 FALSE FALSE FALSE PcontourPictStart OBJ_45A59 * C06C9
+          OBJ_44FF2 XLIB Plot3DMenu }            * C06F6
 
 * ROMPTR 0AB 00E
 * refs (1): C0007
@@ -197,15 +199,15 @@ PCONTOUR:
         CON(3)  #0AB                             * C070C  library
         CON(3)  #00E                             * C070F  command
 DIFFEQ:
-        :: CK0 ' ROMPTR 0AB 00E PUTPTYPE ;       * C0712  DIFFEQ
+        :: CK0 ' XLIB DIFFEQ PUTPTYPE ;          * C0712
 
-        { TRUE ROMPTR 0B5 07A NOP TRUE NULL{} FALSE ~';PlotEval * C0736
+        { TRUE XLIB DeqDraw NOP TRUE NULL{} FALSE ~';PlotEval * C0736
           :: BINT31 TestSysFlag ITE              * C0764  flag -31: Connect points / Plot points only
-            :: ' OBJ_4CE0B ;                     * C0778
+            :: ' PlotFcnDot ;                    * C0778
             :: ' PlotFcnPt ;                     * C078C
           ;                                      * C07A0
-          %0_2A2B4 FALSE FALSE FALSE OBJ_73211 OBJ_73270 ROMPTR 0F1 03F * C07A5
-          OBJ_73594 NOP }                        * C07CE
+          %0_2A2B4 FALSE FALSE FALSE OBJ_73211 OBJ_73270 XLIB PlotEnvAbort * C07A5
+          PictMenuBare NOP }                     * C07CE
 
 * ROMPTR 0AB 00F
 * refs (1): C0007
@@ -226,9 +228,9 @@ LIB0AB.config:
         CON(3)  #010                             * C0829  command
 ATICK:
         :: CK1&Dispatch                          * C082C
-          BINT1 ROMPTR 0E8 03F                   * C0836  real
-          BINT11 ROMPTR 0E8 03F                  * C0846  binary
-          BINT5 ROMPTR 0E8 03F                   * C0856  list
+          BINT1 XLIB ATICK~1                     * C0836  real
+          BINT11 XLIB ATICK~1                    * C0846  binary
+          BINT5 XLIB ATICK~1                     * C0856  list
         ;                                        * C0866
 
 * ROMPTR 0AB 011
@@ -237,7 +239,7 @@ ATICK:
         CON(3)  #0AB                             * C086C  library
         CON(3)  #011                             * C086F  command
 TEACH:
-        :: CK0 ROMPTR 0E8 02D ;                  * C0872
+        :: CK0 XLIB TEACH~1 ;                    * C0872
 
 * ROMPTR 0AB 012
 * refs (1): C0007
@@ -245,7 +247,7 @@ TEACH:
         CON(3)  #0AB                             * C088D  library
         CON(3)  #012                             * C0890  command
 CLTEACH:
-        :: CK0 ROMPTR 0E8 02C ;                  * C0893
+        :: CK0 XLIB DoCLTEACH ;                  * C0893
 
 * ROMPTR 0AB 013
 * refs (1): C0007
@@ -277,7 +279,7 @@ SPHERE:
         CON(3)  #0AB                             * C0922  library
         CON(3)  #016                             * C0925  command
 MERGE1:
-        :: CK0 BINT1 OBJ_0B40C ;                 * C0928
+        :: CK0 BINT1 MergeCard ;                 * C0928
 
 * ROMPTR 0AB 017
 * refs (1): C0007
@@ -304,7 +306,7 @@ FREE1:
 ANIMATE:
         :: CK1&Dispatch                          * C09C2
           BINT1                                  * C09CC  real
-          :: CKNNOLASTWD MINUSONE SWAP %.1 ZEROZERO FALSE ROMPTR 0AB 019 ; * C09D1
+          :: CKNNOLASTWD MINUSONE SWAP %.1 ZEROZERO FALSE XLIB AnimateBind ; * C09D1
           BINT5                                  * C0A04  list
           :: INNERCOMP BINT4 #= ?SKIP ARGNUMERR  * C0A09
             CKREAL COERCE DUP#0= IT #1-          * C0A27
@@ -313,21 +315,24 @@ ANIMATE:
 
 * ROMPTR 0AB 019
 * refs (1): C0007
-ROMP_0AB_019:
+* grobs.. n reps delay x y flag -> ...: full-screen animation: shows PICT, binds LAM 'SaveAnim to TRUE and runs AnimateRun
+AnimateBind:
             :: CHECKPICT TOGDISP TURNMENUOFF TRUE * C0A86
-              { LAM 'SaveAnim } BIND ROMPTR 0AB 01B ABND ; * C0A9F
+              { LAM 'SaveAnim } BIND XLIB AnimateRun ABND ; * C0A9F
           ;                                      * C0ADC
         ;                                        * C0AE1
 
 * ROMPTR 0AB 01A
 * refs (1): C0007
 * slots of 0AB 018 (derivative, inverse, ...: used by the symbolic code)
-ROMP_0AB_01A:
+* grobs.. %n -> ...: animation with ANIMATE's defaults. Library 0F1's YSLICE drawing uses it with LAM 'SaveAnim already bound
+AnimateDefault:
         :: MINUSONE SWAP COERCE %.1 ZEROZERO FALSE * C0AE6  slot 0
 
 * ROMPTR 0AB 01B
 * refs (1): C0007
-ANIMATE~1:
+* Local variables, from 6GETLAM down: repeats, frame count, delay, x, y, list-form flag. Repeats -1 (#FFFFF) runs until ATTN
+AnimateRun:
           ::                                     * C0B09
             { NULLLAM NULLLAM NULLLAM NULLLAM NULLLAM NULLLAM } BIND ERRSET * C0B0E
             :: 6GETLAM ZERO_DO 5GETLAM ZERO_DO GBUFF 5GETLAM INDEX@ #- #1+ * C0B40
@@ -337,6 +342,7 @@ ANIMATE~1:
             ERRTRAP                              * C0BC2
             :: ERROR@ #0= ?SEMI                  * C0BC7
               ERRJMP ;                           * C0BDB
+* Afterwards: if LAM 'SaveAnim is bound to FALSE the frames are dropped. Otherwise the frames and the count stay, and the list form returns its option list
             :: 5GETLAM ' LAM 'SaveAnim undo NOTcase UNCOERCE * C0BE5
               NOTcase NDROP                      * C0C1C
               UNCOERCE 1GETLAM NOT?SEMI          * C0C26
@@ -354,7 +360,7 @@ ANIMATE~1:
         CON(3)  #01C                             * C0C9A  command
 LININ:
         :: CK2&Dispatch                          * C0C9D
-          SYMSYM ROMPTR 0AB 01D                  * C0CA7  name|local|algebraic name|local|algebraic
+          SYMSYM XLIB LININ~1                    * C0CA7  name|local|algebraic name|local|algebraic
           BINT26                                 * C0CB7  real name|local|algebraic
           :: DROP %1 ;                           * C0CBC
           BINT42                                 * C0CD0  complex name|local|algebraic
@@ -365,7 +371,7 @@ LININ:
 
         HXS 01426350                             * C0D07
 
-        { OBJ_5A333 #2= }                        * C0D19
+        { ∫Args #2= }                            * C0D19
 
 * ROMPTR 0AB 01D
 * refs (1): C0007
@@ -383,13 +389,13 @@ LININ~1:
         CON(3)  #01E                             * C0DAE  command
 LIBEVAL:
         :: CK1&Dispatch                          * C0DB1
-          BINT11 ROMPTR 0AB 01F                  * C0DBB  binary
+          BINT11 XLIB LIBEVAL~1                  * C0DBB  binary
         ;                                        * C0DCB
 
 * ROMPTR 0AB 01F
 * refs (1): C0007
 LIBEVAL~1:
-        :: DUP LENHXS BINT6 #<case ROMPTR 0E7 007 * C0DD0
+        :: DUP LENHXS BINT6 #<case XLIB BadValueErr * C0DD0
           DUP BINT4 BINT6 SUBHXS HXS># SWAP BINT1 BINT3 SUBHXS HXS># * C0DF4
           #>ROMPTR COLA_EVAL ;                   * C0E26
 
@@ -399,7 +405,7 @@ LIBEVAL~1:
         CON(3)  #0AB                             * C0E36  library
         CON(3)  #020                             * C0E39  command
 CONLIB:
-        :: CK0 ROMPTR 0E1 000 ;                  * C0E3C
+        :: CK0 XLIB CONLIB~1 ;                   * C0E3C
 
 * slots of 0AB 020 (derivative, inverse, ...: used by the symbolic code)
         CON(2)  #01                              * C0E56  end of the slots: property byte (meaning not yet known)
@@ -411,12 +417,12 @@ CONLIB:
         CON(3)  #021                             * C0E5C  command
 CONST:
         :: CK1&Dispatch                          * C0E5F
-          BINT10 ROMPTR 0E1 008                  * C0E69  name|local|algebraic
+          BINT10 XLIB CONST~1                    * C0E69  name|local|algebraic
         ;                                        * C0E79
 
         HXS 014350                               * C0E7E
 
-        ROMPTR 0E7 011                           * C0E8E  ~UTVUNS1Arg
+        XLIB ~UTVUNS1Arg                         * C0E8E
 
 * ROMPTR 0AB 022
 * refs (1): C0007
@@ -424,7 +430,7 @@ CONST:
         CON(3)  #0AB                             * C0E9A  library
         CON(3)  #022                             * C0E9D  command
 EQNLIB:
-        :: CK0 ROMPTR 0E3 00C ;                  * C0EA0
+        :: CK0 XLIB EQNLIB~1 ;                   * C0EA0
 
 * ROMPTR 0AB 023
 * refs (1): C0007
@@ -433,7 +439,7 @@ EQNLIB:
         CON(3)  #023                             * C0EBE  command
 SOLVEQN:
         :: CK3&Dispatch                          * C0EC1
-          3REAL ROMPTR 0E3 06C                   * C0ECB  real real real
+          3REAL XLIB SOLVEQN~1                   * C0ECB  real real real
         ;                                        * C0EDB
 
 * ROMPTR 0AB 025
@@ -443,7 +449,7 @@ SOLVEQN:
         CON(3)  #025                             * C0EE4  command
 FFT:
         :: CK1&Dispatch                          * C0EE7
-          BINT4 ROMPTR 0C4 000                   * C0EF1  array
+          BINT4 XLIB FFT~1                       * C0EF1  array
         ;                                        * C0F01
 
 * ROMPTR 0AB 026
@@ -453,7 +459,7 @@ FFT:
         CON(3)  #026                             * C0F0A  command
 IFFT:
         :: CK1&Dispatch                          * C0F0D
-          BINT4 ROMPTR 0C4 002                   * C0F17  array
+          BINT4 XLIB IFFT~1                      * C0F17  array
         ;                                        * C0F27
 
 * ROMPTR 0AB 027
@@ -463,7 +469,7 @@ IFFT:
         CON(3)  #027                             * C0F30  command
 NDIST:
         :: CK3&Dispatch                          * C0F33
-          3REAL ROMPTR 0C4 005                   * C0F3D  real real real
+          3REAL XLIB NDIST~1                     * C0F3D  real real real
         ;                                        * C0F4D
 
 * ROMPTR 0AB 028
@@ -472,7 +478,7 @@ NDIST:
         CON(3)  #0AB                             * C0F53  library
         CON(3)  #028                             * C0F56  command
 PSDEV:
-        :: CK0 ROMPTR 0C4 006 ;                  * C0F59
+        :: CK0 XLIB ~BINT0;StatPerColumn;ColumnPSDEV ; * C0F59
 
 * ROMPTR 0AB 029
 * refs (1): C0007
@@ -480,7 +486,7 @@ PSDEV:
         CON(3)  #0AB                             * C0F74  library
         CON(3)  #029                             * C0F77  command
 PVAR:
-        :: CK0 ROMPTR 0C4 007 ;                  * C0F7A
+        :: CK0 XLIB ~BINT0;StatPerColumn;ColumnPVAR ; * C0F7A
 
 * ROMPTR 0AB 02A
 * refs (1): C0007
@@ -488,7 +494,7 @@ PVAR:
         CON(3)  #0AB                             * C0F95  library
         CON(3)  #02A                             * C0F98  command
 PCOV:
-        :: CK0 ROMPTR 0C4 008 ;                  * C0F9B
+        :: CK0 XLIB PCOV~1 ;                     * C0F9B
 
 * ROMPTR 0AB 02B
 * refs (1): C0007
@@ -497,8 +503,8 @@ PCOV:
         CON(3)  #02B                             * C0FB9  command
 RKF:
         :: CK3&Dispatch                          * C0FBC
-          # 511 ROMPTR 0C1 00E                   * C0FC6  list real real
-          # 551 ROMPTR 0C1 00E                   * C0FDB  list list real
+          # 511 XLIB DoRKF                       * C0FC6  list real real
+          # 551 XLIB DoRKF                       * C0FDB  list list real
         ;                                        * C0FF0
 
 * ROMPTR 0AB 02C
@@ -508,7 +514,7 @@ RKF:
         CON(3)  #02C                             * C0FF9  command
 RKFSTEP:
         :: CK3&Dispatch                          * C0FFC
-          # 511 ROMPTR 0C1 00A                   * C1006  list real real
+          # 511 XLIB RKFSTEP~1                   * C1006  list real real
         ;                                        * C101B
 
 * ROMPTR 0AB 02D
@@ -518,7 +524,7 @@ RKFSTEP:
         CON(3)  #02D                             * C1024  command
 RKFERR:
         :: CK2&Dispatch                          * C1027
-          # 51 ROMPTR 0C1 005                    * C1031  list real
+          # 51 XLIB RKFERR~1                     * C1031  list real
         ;                                        * C1046
 
 * ROMPTR 0AB 02E
@@ -528,8 +534,8 @@ RKFERR:
         CON(3)  #02E                             * C104F  command
 RRK:
         :: CK3&Dispatch                          * C1052
-          # 511 ROMPTR 0C1 01D                   * C105C  list real real
-          # 551 ROMPTR 0C1 01D                   * C1071  list list real
+          # 511 XLIB DoRRK                       * C105C  list real real
+          # 551 XLIB DoRRK                       * C1071  list list real
         ;                                        * C1086
 
 * ROMPTR 0AB 02F
@@ -539,7 +545,7 @@ RRK:
         CON(3)  #02F                             * C108F  command
 RRKSTEP:
         :: CK4&Dispatch                          * C1092
-          # 5111 ROMPTR 0C1 018                  * C109C  list real real real
+          # 5111 XLIB RRKSTEP~1                  * C109C  list real real real
         ;                                        * C10B1
 
 * ROMPTR 0AB 030
@@ -549,7 +555,7 @@ RRKSTEP:
         CON(3)  #030                             * C10BA  command
 RSBERR:
         :: CK2&Dispatch                          * C10BD
-          # 51 ROMPTR 0C1 013                    * C10C7  list real
+          # 51 XLIB RSBERR~1                     * C10C7  list real
         ;                                        * C10DC
 
 * ROMPTR 0AB 031
@@ -559,7 +565,7 @@ RSBERR:
         CON(3)  #031                             * C10E5  command
 COND:
         :: CK1&Dispatch                          * C10E8
-          BINT4 ROMPTR 0C2 04D                   * C10F2  array
+          BINT4 XLIB COND~1                      * C10F2  array
         ;                                        * C1102
 
 * ROMPTR 0AB 032 TRACE
@@ -569,7 +575,7 @@ COND:
         CON(3)  #032                             * C110B  command
 TRACE_C110E:
         :: CK1&Dispatch                          * C110E
-          BINT4 ROMPTR 0C2 04C                   * C1118  array
+          BINT4 XLIB TRACE~1                     * C1118  array
         ;                                        * C1128
 
 * ROMPTR 0AB 033
@@ -579,7 +585,7 @@ TRACE_C110E:
         CON(3)  #033                             * C1131  command
 SRAD:
         :: CK1&Dispatch                          * C1134
-          BINT4 ROMPTR 0C2 000                   * C113E  array
+          BINT4 XLIB SRAD~1                      * C113E  array
         ;                                        * C114E
 
 * ROMPTR 0AB 034
@@ -589,7 +595,7 @@ SRAD:
         CON(3)  #034                             * C1157  command
 SNRM:
         :: CK1&Dispatch                          * C115A
-          BINT4 ROMPTR 0C2 034                   * C1164  array
+          BINT4 XLIB SNRM~1                      * C1164  array
         ;                                        * C1174
 
 * ROMPTR 0AB 035
@@ -599,7 +605,7 @@ SNRM:
         CON(3)  #035                             * C117D  command
 RANK:
         :: CK1&Dispatch                          * C1180
-          BINT4 ROMPTR 0C2 036                   * C118A  array
+          BINT4 XLIB RANK~1                      * C118A  array
         ;                                        * C119A
 
 * ROMPTR 0AB 036
@@ -609,7 +615,7 @@ RANK:
         CON(3)  #036                             * C11A3  command
 LSQ:
         :: CK2&Dispatch                          * C11A6
-          # 44 ROMPTR 0C2 022                    * C11B0  array array
+          # 44 XLIB LSQSolve                     * C11B0  array array
         ;                                        * C11C5
 
 * ROMPTR 0AB 037
@@ -619,7 +625,7 @@ LSQ:
         CON(3)  #037                             * C11CE  command
 EGV:
         :: CK1&Dispatch                          * C11D1
-          BINT4 ROMPTR 0C2 004                   * C11DB  array
+          BINT4 XLIB EGV~1                       * C11DB  array
         ;                                        * C11EB
 
 * ROMPTR 0AB 038
@@ -629,7 +635,7 @@ EGV:
         CON(3)  #038                             * C11F4  command
 EGVL:
         :: CK1&Dispatch                          * C11F7
-          BINT4 ROMPTR 0C2 002                   * C1201  array
+          BINT4 XLIB EGVL~1                      * C1201  array
         ;                                        * C1211
 
 * ROMPTR 0AB 039
@@ -639,7 +645,7 @@ EGVL:
         CON(3)  #039                             * C121A  command
 SVD:
         :: CK1&Dispatch                          * C121D
-          BINT4 ROMPTR 0C2 038                   * C1227  array
+          BINT4 XLIB SVD~1                       * C1227  array
         ;                                        * C1237
 
 * ROMPTR 0AB 03A
@@ -649,7 +655,7 @@ SVD:
         CON(3)  #03A                             * C1240  command
 SVL:
         :: CK1&Dispatch                          * C1243
-          BINT4 ROMPTR 0C2 037                   * C124D  array
+          BINT4 XLIB SVL~1                       * C124D  array
         ;                                        * C125D
 
 * ROMPTR 0AB 03B
@@ -659,7 +665,7 @@ SVL:
         CON(3)  #03B                             * C1266  command
 LU:
         :: CK1&Dispatch                          * C1269
-          BINT4 ROMPTR 0C2 050                   * C1273  array
+          BINT4 XLIB LU~1                        * C1273  array
         ;                                        * C1283
 
 * ROMPTR 0AB 03C
@@ -669,7 +675,7 @@ LU:
         CON(3)  #03C                             * C128C  command
 QR:
         :: CK1&Dispatch                          * C128F
-          BINT4 ROMPTR 0C2 023                   * C1299  array
+          BINT4 XLIB QR~1                        * C1299  array
         ;                                        * C12A9
 
 * ROMPTR 0AB 03D
@@ -679,7 +685,7 @@ QR:
         CON(3)  #03D                             * C12B2  command
 LQ:
         :: CK1&Dispatch                          * C12B5
-          BINT4 ROMPTR 0C2 024                   * C12BF  array
+          BINT4 XLIB LQ~1                        * C12BF  array
         ;                                        * C12CF
 
 * ROMPTR 0AB 03E
@@ -689,7 +695,7 @@ LQ:
         CON(3)  #03E                             * C12D8  command
 SCHUR:
         :: CK1&Dispatch                          * C12DB
-          BINT4 ROMPTR 0C2 005                   * C12E5  array
+          BINT4 XLIB SCHUR~1                     * C12E5  array
         ;                                        * C12F5
 
 * ROMPTR 0AB 03F
@@ -699,7 +705,7 @@ SCHUR:
         CON(3)  #03F                             * C12FE  command
 RREF:
         :: CK1&Dispatch                          * C1301
-          BINT4 ROMPTR 0C2 05B                   * C130B  array
+          BINT4 XLIB RREF~1                      * C130B  array
         ;                                        * C131B
 
 * ROMPTR 0AB 040
@@ -709,8 +715,8 @@ RREF:
         CON(3)  #040                             * C1324  command
 RANM:
         :: CK1&Dispatch                          * C1327
-          BINT4 ROMPTR 0C3 000                   * C1331  array
-          BINT5 ROMPTR 0AB 051                   * C1341  list
+          BINT4 XLIB DoRANM                      * C1331  array
+          BINT5 XLIB RANM~1                      * C1341  list
         ;                                        * C1351
 
 * ROMPTR 0AB 041
@@ -720,7 +726,7 @@ RANM:
         CON(3)  #041                             * C135A  command
 →ROW:
         :: CK1&Dispatch                          * C135D
-          BINT4 ROMPTR 0C3 012                   * C1367  array
+          BINT4 XLIB DoROW>                      * C1367  array
         ;                                        * C1377
 
 * ROMPTR 0AB 042
@@ -729,7 +735,7 @@ RANM:
         CON(3)  #0AB                             * C137D  library
         CON(3)  #042                             * C1380  command
 ROW→:
-        :: CKN ROMPTR 0C3 015 ;                  * C1383
+        :: CKN XLIB DoROW-> ;                    * C1383
 
 * ROMPTR 0AB 043
 * refs (1): C0007
@@ -738,7 +744,7 @@ ROW→:
         CON(3)  #043                             * C13A1  command
 →COL:
         :: CK1&Dispatch                          * C13A4
-          BINT4 ROMPTR 0C3 014                   * C13AE  array
+          BINT4 XLIB →COL~1                      * C13AE  array
         ;                                        * C13BE
 
 * ROMPTR 0AB 044
@@ -747,7 +753,7 @@ ROW→:
         CON(3)  #0AB                             * C13C4  library
         CON(3)  #044                             * C13C7  command
 COL→:
-        :: CKN ROMPTR 0C3 016 ;                  * C13CA
+        :: CKN XLIB COL→~1 ;                     * C13CA
 
 * ROMPTR 0AB 045
 * refs (1): C0007
@@ -756,7 +762,7 @@ COL→:
         CON(3)  #045                             * C13E8  command
 →DIAG:
         :: CK1&Dispatch                          * C13EB
-          BINT4 ROMPTR 0C3 017                   * C13F5  array
+          BINT4 XLIB →DIAG~1                     * C13F5  array
         ;                                        * C1405
 
 * ROMPTR 0AB 046
@@ -766,8 +772,8 @@ COL→:
         CON(3)  #046                             * C140E  command
 DIAG→:
         :: CK2&Dispatch                          * C1411
-          BINT69 ROMPTR 0AB 04F                  * C141B  array list
-          BINT65 ROMPTR 0AB 050                  * C142B  array real
+          BINT69 XLIB DIAG→~1                    * C141B  array list
+          BINT65 XLIB DIAG→~2                    * C142B  array real
         ;                                        * C143B
 
 * ROMPTR 0AB 047
@@ -777,7 +783,7 @@ DIAG→:
         CON(3)  #047                             * C1444  command
 ROW-:
         :: CK2&Dispatch                          * C1447
-          # 41 ROMPTR 0C3 007                    * C1451  array real
+          # 41 XLIB ROW-~1                       * C1451  array real
         ;                                        * C1466
 
 * ROMPTR 0AB 048
@@ -787,9 +793,9 @@ ROW-:
         CON(3)  #048                             * C146F  command
 ROW+:
         :: CK3&Dispatch                          * C1472
-          # 441 ROMPTR 0C3 00A                   * C147C  array array real
-          # 411 ROMPTR 0C3 00F                   * C1491  array real real
-          # 421 ROMPTR 0C3 010                   * C14A6  array complex real
+          # 441 XLIB ROW+~1                      * C147C  array array real
+          # 411 XLIB ArInsEl%                    * C1491  array real real
+          # 421 XLIB ArInsElC                    * C14A6  array complex real
         ;                                        * C14BB
 
 * ROMPTR 0AB 049
@@ -799,7 +805,7 @@ ROW+:
         CON(3)  #049                             * C14C4  command
 COL-:
         :: CK2&Dispatch                          * C14C7
-          # 41 ROMPTR 0C3 009                    * C14D1  array real
+          # 41 XLIB COL-~1                       * C14D1  array real
         ;                                        * C14E6
 
 * ROMPTR 0AB 04A
@@ -809,9 +815,9 @@ COL-:
         CON(3)  #04A                             * C14EF  command
 COL+:
         :: CK3&Dispatch                          * C14F2
-          # 441 ROMPTR 0C3 00D                   * C14FC  array array real
-          # 411 ROMPTR 0C3 00F                   * C1511  array real real
-          # 421 ROMPTR 0C3 010                   * C1526  array complex real
+          # 441 XLIB COL+~1                      * C14FC  array array real
+          # 411 XLIB ArInsEl%                    * C1511  array real real
+          # 421 XLIB ArInsElC                    * C1526  array complex real
         ;                                        * C153B
 
 * ROMPTR 0AB 04B
@@ -821,7 +827,7 @@ COL+:
         CON(3)  #04B                             * C1544  command
 RSWP:
         :: CK3&Dispatch                          * C1547
-          # 411 ROMPTR 0C3 002                   * C1551  array real real
+          # 411 XLIB RSWP~1                      * C1551  array real real
         ;                                        * C1566
 
 * ROMPTR 0AB 04C
@@ -831,7 +837,7 @@ RSWP:
         CON(3)  #04C                             * C156F  command
 CSWP:
         :: CK3&Dispatch                          * C1572
-          # 411 ROMPTR 0C3 004                   * C157C  array real real
+          # 411 XLIB CSWP~1                      * C157C  array real real
         ;                                        * C1591
 
 * ROMPTR 0AB 04D
@@ -841,8 +847,8 @@ CSWP:
         CON(3)  #04D                             * C159A  command
 RCI:
         :: CK3&Dispatch                          * C159D
-          # 411 ROMPTR 0C3 005                   * C15A7  array real real
-          # 421 ROMPTR 0C3 005                   * C15BC  array complex real
+          # 411 XLIB RCI~1                       * C15A7  array real real
+          # 421 XLIB RCI~1                       * C15BC  array complex real
         ;                                        * C15D1
 
 * ROMPTR 0AB 04E
@@ -852,26 +858,26 @@ RCI:
         CON(3)  #04E                             * C15DA  command
 RCIJ:
         :: CK4&Dispatch                          * C15DD
-          # 4111 ROMPTR 0C3 006                  * C15E7  array real real real
-          # 4211 ROMPTR 0C3 006                  * C15FC  array complex real real
+          # 4111 XLIB RCIJ~1                     * C15E7  array real real real
+          # 4211 XLIB RCIJ~1                     * C15FC  array complex real real
         ;                                        * C1611
 
 * ROMPTR 0AB 04F
 * refs (1): C0007
 DIAG→~1:
-        :: OBJ_1DFDF COERCE{}2 ROMPTR 0C3 018 ;  * C1616
+        :: ?{}>%Lev1 COERCE{}2 XLIB DoDIAG-> ;   * C1616
 
 * ROMPTR 0AB 050
 * refs (1): C0007
 DIAG→~2:
         :: COERCE DUP#0<> ?SKIP SETSIZEERR       * C1635
-          DUP TWO{}N ROMPTR 0C3 018 ;            * C164E
+          DUP TWO{}N XLIB DoDIAG-> ;             * C164E
 
 * ROMPTR 0AB 051
 * refs (1): C0007
 RANM~1:
         :: %0_2A2B4 %0_2A2B4 {}>%sBIND 1GETLAM ABND CK1NOLASTWD COERCE{}2 * C1668
-          %0_2A2B4 MAKEARRY ROMPTR 0C3 000 ;     * C1690
+          %0_2A2B4 MAKEARRY XLIB DoRANM ;        * C1690
 
 * ROMPTR 0AB 052
 * refs (1): C0007
@@ -880,7 +886,7 @@ RANM~1:
         CON(3)  #052                             * C16AE  command
 PROOT:
         :: CK1&Dispatch                          * C16B1
-          BINT4 ROMPTR 0C0 001                   * C16BB  array
+          BINT4 XLIB PROOTcore                   * C16BB  array
         ;                                        * C16CB
 
 * ROMPTR 0AB 053
@@ -890,7 +896,7 @@ PROOT:
         CON(3)  #053                             * C16D4  command
 PCOEF:
         :: CK1&Dispatch                          * C16D7
-          BINT4 ROMPTR 0C4 009                   * C16E1  array
+          BINT4 XLIB DoPCOEF                     * C16E1  array
         ;                                        * C16F1
 
 * ROMPTR 0AB 054
@@ -900,8 +906,8 @@ PCOEF:
         CON(3)  #054                             * C16FA  command
 PEVAL:
         :: CK2&Dispatch                          * C16FD
-          # 41 ROMPTR 0C4 00E                    * C1707  array real
-          # 42 ROMPTR 0C4 00E                    * C171C  array complex
+          # 41 XLIB PEVAL~1                      * C1707  array real
+          # 42 XLIB PEVAL~1                      * C171C  array complex
         ;                                        * C1731
 
 * ROMPTR 0AB 055
@@ -910,7 +916,7 @@ PEVAL:
         CON(3)  #0AB                             * C1737  library
         CON(3)  #055                             * C173A  command
 TVM:
-        :: CK0 ROMPTR 0E6 001 ;                  * C173D
+        :: CK0 XLIB TVM~1 ;                      * C173D
 
 * ROMPTR 0AB 056
 * refs (1): C0007
@@ -938,13 +944,13 @@ TVMEND:
         CON(3)  #058                             * C179D  command
 TVMROOT:
         :: CK1&Dispatch                          * C17A0
-          BINT6 ROMPTR 0E6 00C                   * C17AA  name
-          BINT10 ROMPTR 0E6 00B                  * C17BA  name|local|algebraic
+          BINT6 XLIB TVMSolve                    * C17AA  name
+          BINT10 XLIB TVMROOT~1                  * C17BA  name|local|algebraic
         ;                                        * C17CA
 
         HXS 014350                               * C17CF
 
-        ROMPTR 0E7 011                           * C17DF  ~UTVUNS1Arg
+        XLIB ~UTVUNS1Arg                         * C17DF
 
 * ROMPTR 0AB 059
 * refs (1): C0007
@@ -953,7 +959,7 @@ TVMROOT:
         CON(3)  #059                             * C17EE  command
 AMORT:
         :: CK1&Dispatch                          * C17F1
-          BINT1 ROMPTR 0E6 004                   * C17FB  real
+          BINT1 XLIB AMORTArgs                   * C17FB  real
         ;                                        * C180B
 
 * ROMPTR 0AB 05A
@@ -963,9 +969,9 @@ AMORT:
         CON(3)  #05A                             * C1814  command
 INFORM:
         :: CK5&Dispatch                          * C1817
-          # 35555 ROMPTR 0B1 01C                 * C1821  string list list list list
+          # 35555 XLIB INFORM~1                  * C1821  string list list list list
           # 35155                                * C1836  string list real list list
-          :: ROT ONE{}N 3UNROLL ROMPTR 0B1 01C ; * C1840
+          :: ROT ONE{}N 3UNROLL XLIB INFORM~1 ;  * C1840
         ;                                        * C1864
 
 * ROMPTR 0AB 05B
@@ -974,7 +980,7 @@ INFORM:
         CON(3)  #0AB                             * C186A  library
         CON(3)  #05B                             * C186D  command
 NOVAL:
-        :: CK0 ' ROMPTR 0AB 05B ;                * C1870  ~xNOVAL
+        :: CK0 ' XLIB NOVAL ;                    * C1870  ~xNOVAL
 
 * ROMPTR 0AB 05C
 * refs (1): C0007
@@ -983,7 +989,7 @@ NOVAL:
         CON(3)  #05C                             * C1893  command
 CHOOSE:
         :: CK3&Dispatch                          * C1896
-          # 351 ROMPTR 0B3 063                   * C18A0  string list real
+          # 351 XLIB sysCHOOSE                   * C18A0  string list real
         ;                                        * C18B5
 
 * ROMPTR 0AB 05D
@@ -993,8 +999,7 @@ CHOOSE:
         CON(3)  #05D                             * C18BE  command
 MSGBOX:
         :: CK1&Dispatch                          * C18C1
-          BINT3                                  * C18CB  string
-          ROMPTR 0B1 00E                         * C18D0  Ck&DoMsgBox
+          BINT3 XLIB Ck&DoMsgBox                 * C18CB  string
         ;                                        * C18DB
 
 * ROMPTR 0AB 05E
@@ -1004,8 +1009,8 @@ MSGBOX:
         CON(3)  #05E                             * C18E4  command
 XSEND:
         :: CK1&Dispatch                          * C18E7
-          BINT6 ROMPTR 0E8 040                   * C18F1  name
-          BINT7 ROMPTR 0E8 040                   * C1901  local
+          BINT6 XLIB XSEND~1                     * C18F1  name
+          BINT7 XLIB XSEND~1                     * C1901  local
         ;                                        * C1911
 
 * ROMPTR 0AB 05F
@@ -1015,8 +1020,8 @@ XSEND:
         CON(3)  #05F                             * C191A  command
 XRECV:
         :: CK1&Dispatch                          * C191D
-          BINT6 ROMPTR 0E8 041                   * C1927  name
-          BINT7 ROMPTR 0E8 041                   * C1937  local
+          BINT6 XLIB XRECV~1                     * C1927  name
+          BINT7 XLIB XRECV~1                     * C1937  local
         ;                                        * C1947
 
 * ROMPTR 0AB 060
@@ -1052,8 +1057,8 @@ TAIL:
         CON(3)  #062                             * C19DB  command
 SEQ:
         :: CK5&Dispatch                          * C19DE
-          # 6000 ROMPTR 0E8 000                  * C19E8  name any any any
-          # 7000 ROMPTR 0E8 000                  * C19FD  local any any any
+          # 6000 XLIB SEQ~1                      * C19E8  name any any any
+          # 7000 XLIB SEQ~1                      * C19FD  local any any any
         ;                                        * C1A12
 
 * ROMPTR 0AB 063
@@ -1063,15 +1068,15 @@ SEQ:
         CON(3)  #063                             * C1A1B  command
 DOSUBS:
         :: CK2&Dispatch                          * C1A1E
-          # 18 ROMPTR 0E8 002                    * C1A28  real program
-          # 10F ROMPTR 0E8 002                   * C1A3D  real romptr
-          # 58 ROMPTR 0E8 001                    * C1A52  list program
+          # 18 XLIB DOSUBS~2                     * C1A28  real program
+          # 10F XLIB DOSUBS~2                    * C1A3D  real romptr
+          # 58 XLIB DOSUBS~1                     * C1A52  list program
           # 50F                                  * C1A67  list romptr
-          :: ROMPTR 0E8 007 ROMPTR 0E8 003 ;     * C1A71
+          :: XLIB RomptrArgs XLIB DoSUBS ;       * C1A71
           # 6                                    * C1A91  name
-          :: ' ROMPTR 0AB 063 ROMPTR 0E8 005 ;   * C1A9B  DOSUBS
+          :: ' XLIB DOSUBS XLIB RclOrErr ;       * C1A9B
           # 7                                    * C1AC0  local
-          :: ' ROMPTR 0AB 063 ROMPTR 0E8 005 ;   * C1ACA  DOSUBS
+          :: ' XLIB DOSUBS XLIB RclOrErr ;       * C1ACA
         ;                                        * C1AEF
 
 * ROMPTR 0AB 064
@@ -1083,7 +1088,7 @@ DOSUBS:
         :: CK1&Dispatch                          * C1AFB
           BINT5                                  * C1B05  list
           :: '                                   * C1B0A
-            :: SWAP 'EvalNoCK:_sup x- ; BINT2 ROMPTR 0E8 003 ; * C1B14
+            :: SWAP 'EvalNoCK:_sup x- ; BINT2 XLIB DoSUBS ; * C1B14
         ;                                        * C1B42
 
 * slots of 0AB 064 (derivative, inverse, ...: used by the symbolic code)
@@ -1148,8 +1153,8 @@ STREAM:
 ΠLIST:
         :: CK1&Dispatch                          * C1CDF
           BINT5                                  * C1CE9  list
-          :: ROMPTR 0AB 069 >R ZERO_DO ?ATTNQUIT RSWAP 'R RSWAP * C1CEE
-            'EvalNoCK:_sup x* LOOP RDROP ;       * C1D1C
+          :: XLIB ΠLIST~1 >R ZERO_DO ?ATTNQUIT RSWAP 'R RSWAP 'EvalNoCK:_sup * C1CEE
+            x* LOOP RDROP ;                      * C1D21
         ;                                        * C1D35
 
 * ROMPTR 0AB 06B DOLIST
@@ -1159,12 +1164,12 @@ STREAM:
         CON(3)  #06B                             * C1D3E  command
 DOLIST_C1D41:
         :: CK2&Dispatch                          * C1D41
-          # 18 ROMPTR 0E8 00B                    * C1D4B  real program
-          # 50F ROMPTR 0E8 00A                   * C1D60  list romptr
-          # 10F ROMPTR 0E8 00B                   * C1D75  real romptr
-          # 58 ROMPTR 0E8 008                    * C1D8A  list program
-          # 6 ROMPTR 0E8 004                     * C1D9F  name
-          # 7 ROMPTR 0E8 004                     * C1DB4  local
+          # 18 XLIB DOLIST~4                     * C1D4B  real program
+          # 50F XLIB DOLIST~3                    * C1D60  list romptr
+          # 10F XLIB DOLIST~4                    * C1D75  real romptr
+          # 58 XLIB DOLIST~2                     * C1D8A  list program
+          # 6 XLIB DOLIST~1                      * C1D9F  name
+          # 7 XLIB DOLIST~1                      * C1DB4  local
           BINT0 SETTYPEERR                       * C1DC9  any
         ;                                        * C1DD3
 
@@ -1178,11 +1183,11 @@ DOLIST_C1D41:
         CON(3)  #06C                             * C1DDE  command
 ADD:
         :: CK2&Dispatch                          * C1DE1
-          BINT85 ROMPTR 0E8 015                  * C1DEB  list list
-          BINT80 ROMPTR 0E8 015                  * C1DFB  list any
-          BINT5 ROMPTR 0E8 015                   * C1E0B  list
+          BINT85 XLIB ADD~1                      * C1DEB  list list
+          BINT80 XLIB ADD~1                      * C1DFB  list any
+          BINT5 XLIB ADD~1                       * C1E0B  list
           BINT13                                 * C1E1B  tagged
-          :: STRIPTAGS 'EvalNoCK:_sup ROMPTR 0AB 06C ; * C1E20  ADD
+          :: STRIPTAGS 'EvalNoCK:_sup XLIB ADD ; * C1E20
           BINT0                                  * C1E3F  any
           :: 'EvalNoCK:_sup x+ ;                 * C1E44
         ;                                        * C1E58
@@ -1197,7 +1202,7 @@ ADD:
 REVLIST:
         :: CK1&Dispatch                          * C1E73
           BINT5                                  * C1E7D  list
-          :: ROMPTR 0E8 01C reversym ;           * C1E82
+          :: XLIB ListOp reversym ;              * C1E82
         ;                                        * C1E9C
 
 * ROMPTR 0AB 06E
@@ -1207,7 +1212,7 @@ REVLIST:
         CON(3)  #06E                             * C1EA5  command
 SORT:
         :: CK1&Dispatch                          * C1EA8
-          BINT5 ROMPTR 0E8 016                   * C1EB2  list
+          BINT5 XLIB SORT~1                      * C1EB2  list
         ;                                        * C1EC2
 
 * ROMPTR 0AB 06F
@@ -1215,8 +1220,9 @@ SORT:
         CON(1)  8                                * C1EC7  command header: flags (meaning not yet known)
         CON(3)  #0AB                             * C1EC8  library
         CON(3)  #06F                             * C1ECB  command
-ROMP_0AB_06F:
-        :: CK0 ROMPTR 0E4 012 DROP' ROMPTR 0E4 00C InitMenu ; * C1ECE  ~MESRclEqn
+* Multiple Equation Solver menu for the current set of equations. Link entries 024 and 06F are this object; the hash table names only 024
+MSOLVR:
+        :: CK0 XLIB ~MESRclEqn DROP' XLIB MESMenu InitMenu ; * C1ECE
 
 * ROMPTR 0AB 070
 * refs (1): C0007
@@ -1224,7 +1230,7 @@ ROMP_0AB_06F:
         CON(3)  #0AB                             * C1EFE  library
         CON(3)  #070                             * C1F01  command
 MINIT:
-        :: CK0 ROMPTR 0E4 04F ROMPTR 0E4 042 ;   * C1F04
+        :: CK0 XLIB MESNotInMROOT XLIB MINIT~1 ; * C1F04
 
 * ROMPTR 0AB 071
 * refs (1): C0007
@@ -1234,7 +1240,7 @@ MINIT:
 MITM:
         :: CK2&Dispatch                          * C1F30
           BINT53                                 * C1F3A  string list
-          :: ROMPTR 0E4 04F ROMPTR 0E4 043 ;     * C1F3F
+          :: XLIB MESNotInMROOT XLIB MITM~1 ;    * C1F3F
         ;                                        * C1F5F
 
 * ROMPTR 0AB 072
@@ -1244,9 +1250,9 @@ MITM:
         CON(3)  #072                             * C1F68  command
 MUSER:
         :: CK1&Dispatch                          * C1F6B
-          BINT6 ROMPTR 0E4 044                   * C1F75  name
-          BINT5 ROMPTR 0E4 046                   * C1F85  list
-          BINT3 ROMPTR 0E4 04A                   * C1F95  string
+          BINT6 XLIB MUSER~1                     * C1F75  name
+          BINT5 XLIB MUSER~2                     * C1F85  list
+          BINT3 XLIB MUSER~3                     * C1F95  string
         ;                                        * C1FA5
 
 * ROMPTR 0AB 073
@@ -1256,9 +1262,9 @@ MUSER:
         CON(3)  #073                             * C1FAE  command
 MCALC:
         :: CK1&Dispatch                          * C1FB1
-          BINT6 ROMPTR 0E4 045                   * C1FBB  name
-          BINT5 ROMPTR 0E4 047                   * C1FCB  list
-          BINT3 ROMPTR 0E4 04B                   * C1FDB  string
+          BINT6 XLIB MCALC~1                     * C1FBB  name
+          BINT5 XLIB MCALC~2                     * C1FCB  list
+          BINT3 XLIB MCALC~3                     * C1FDB  string
         ;                                        * C1FEB
 
 * ROMPTR 0AB 074
@@ -1268,8 +1274,8 @@ MCALC:
         CON(3)  #074                             * C1FF4  command
 MROOT:
         :: CK1&Dispatch                          * C1FF7
-          BINT6 ROMPTR 0E4 04D                   * C2001  name
-          BINT3 ROMPTR 0E4 04E                   * C2011  string
+          BINT6 XLIB MROOT~1                     * C2001  name
+          BINT3 XLIB MROOT~2                     * C2011  string
         ;                                        * C2021
 
 * ROMPTR 0AB 075
@@ -1278,7 +1284,7 @@ MROOT:
         CON(3)  #0AB                             * C2027  library
         CON(3)  #075                             * C202A  command
 MINEHUNT:
-        :: CK0 ROMPTR 0E7 033 ;                  * C202D
+        :: CK0 XLIB MINEHUNT~1 ;                 * C202D
 
 * slots of 0AB 075 (derivative, inverse, ...: used by the symbolic code)
         CON(2)  #00                              * C2047  end of the slots: property byte (meaning not yet known)
@@ -1290,15 +1296,15 @@ MINEHUNT:
         CON(3)  #076                             * C204D  command
 ZFACTOR:
         :: CK2&Dispatch                          * C2050
-          BINT17 ROMPTR 0E7 001                  * C205A  real real
-          BINT26 ROMPTR 0E7 015                  * C206A  real name|local|algebraic
-          SYMREAL ROMPTR 0E7 016                 * C207A  name|local|algebraic real
-          SYMSYM ROMPTR 0E7 017                  * C208A  name|local|algebraic name|local|algebraic
-          2EXT ROMPTR 0E7 000                    * C209A  unit unit
-          BINT30 ROMPTR 0E7 000                  * C20AA  real unit
-          EXTREAL ROMPTR 0E7 000                 * C20BA  unit real
-          EXTSYM ROMPTR 0E7 015                  * C20CA  unit name|local|algebraic
-          SYMEXT ROMPTR 0E7 016                  * C20DA  name|local|algebraic unit
+          BINT17 XLIB %ZFACTOR                   * C205A  real real
+          BINT26 XLIB ZFACTOR~2                  * C206A  real name|local|algebraic
+          SYMREAL XLIB ZFACTOR~3                 * C207A  name|local|algebraic real
+          SYMSYM XLIB ZFACTOR~4                  * C208A  name|local|algebraic name|local|algebraic
+          2EXT XLIB ZFACTOR~1                    * C209A  unit unit
+          BINT30 XLIB ZFACTOR~1                  * C20AA  real unit
+          EXTREAL XLIB ZFACTOR~1                 * C20BA  unit real
+          EXTSYM XLIB ZFACTOR~2                  * C20CA  unit name|local|algebraic
+          SYMEXT XLIB ZFACTOR~3                  * C20DA  name|local|algebraic unit
         ;                                        * C20EA
 
 * slots of 0AB 076 (derivative, inverse, ...: used by the symbolic code)
@@ -1311,15 +1317,15 @@ ZFACTOR:
         CON(3)  #077                             * C20F5  command
 FANNING:
         :: CK2&Dispatch                          * C20F8
-          BINT17 ROMPTR 0E7 004                  * C2102  real real
-          BINT26 ROMPTR 0E7 018                  * C2112  real name|local|algebraic
-          SYMREAL ROMPTR 0E7 019                 * C2122  name|local|algebraic real
-          SYMSYM ROMPTR 0E7 01A                  * C2132  name|local|algebraic name|local|algebraic
-          2EXT ROMPTR 0E7 003                    * C2142  unit unit
-          BINT30 ROMPTR 0E7 003                  * C2152  real unit
-          EXTREAL ROMPTR 0E7 003                 * C2162  unit real
-          EXTSYM ROMPTR 0E7 018                  * C2172  unit name|local|algebraic
-          SYMEXT ROMPTR 0E7 019                  * C2182  name|local|algebraic unit
+          BINT17 XLIB %FANNING                   * C2102  real real
+          BINT26 XLIB FANNING~1                  * C2112  real name|local|algebraic
+          SYMREAL XLIB FANNING~2                 * C2122  name|local|algebraic real
+          SYMSYM XLIB FANNING~3                  * C2132  name|local|algebraic name|local|algebraic
+          2EXT XLIB FANNINGUnits                 * C2142  unit unit
+          BINT30 XLIB FANNINGUnits               * C2152  real unit
+          EXTREAL XLIB FANNINGUnits              * C2162  unit real
+          EXTSYM XLIB FANNING~1                  * C2172  unit name|local|algebraic
+          SYMEXT XLIB FANNING~2                  * C2182  name|local|algebraic unit
         ;                                        * C2192
 
 * slots of 0AB 077 (derivative, inverse, ...: used by the symbolic code)
@@ -1332,15 +1338,15 @@ FANNING:
         CON(3)  #078                             * C219D  command
 DARCY:
         :: CK2&Dispatch                          * C21A0
-          BINT17 ROMPTR 0E7 009                  * C21AA  real real
-          BINT26 ROMPTR 0E7 01B                  * C21BA  real name|local|algebraic
-          SYMREAL ROMPTR 0E7 01C                 * C21CA  name|local|algebraic real
-          SYMSYM ROMPTR 0E7 01D                  * C21DA  name|local|algebraic name|local|algebraic
-          2EXT ROMPTR 0E7 008                    * C21EA  unit unit
-          BINT30 ROMPTR 0E7 008                  * C21FA  real unit
-          EXTREAL ROMPTR 0E7 008                 * C220A  unit real
-          EXTSYM ROMPTR 0E7 01B                  * C221A  unit name|local|algebraic
-          SYMEXT ROMPTR 0E7 01C                  * C222A  name|local|algebraic unit
+          BINT17 XLIB DARCY~2                    * C21AA  real real
+          BINT26 XLIB DARCY~3                    * C21BA  real name|local|algebraic
+          SYMREAL XLIB DARCY~4                   * C21CA  name|local|algebraic real
+          SYMSYM XLIB DARCY~5                    * C21DA  name|local|algebraic name|local|algebraic
+          2EXT XLIB DARCY~1                      * C21EA  unit unit
+          BINT30 XLIB DARCY~1                    * C21FA  real unit
+          EXTREAL XLIB DARCY~1                   * C220A  unit real
+          EXTSYM XLIB DARCY~3                    * C221A  unit name|local|algebraic
+          SYMEXT XLIB DARCY~4                    * C222A  name|local|algebraic unit
         ;                                        * C223A
 
 * slots of 0AB 078 (derivative, inverse, ...: used by the symbolic code)
@@ -1353,15 +1359,15 @@ DARCY:
         CON(3)  #079                             * C2245  command
 F0λ:
         :: CK2&Dispatch                          * C2248
-          BINT17 ROMPTR 0E7 00B                  * C2252  real real
-          BINT26 ROMPTR 0E7 01E                  * C2262  real name|local|algebraic
-          SYMREAL ROMPTR 0E7 01F                 * C2272  name|local|algebraic real
-          SYMSYM ROMPTR 0E7 020                  * C2282  name|local|algebraic name|local|algebraic
-          2EXT ROMPTR 0E7 00A                    * C2292  unit unit
-          BINT30 ROMPTR 0E7 00A                  * C22A2  real unit
-          EXTREAL ROMPTR 0E7 00A                 * C22B2  unit real
-          EXTSYM ROMPTR 0E7 01E                  * C22C2  unit name|local|algebraic
-          SYMEXT ROMPTR 0E7 01F                  * C22D2  name|local|algebraic unit
+          BINT17 XLIB %F0λ                       * C2252  real real
+          BINT26 XLIB F0λ~2                      * C2262  real name|local|algebraic
+          SYMREAL XLIB F0λ~3                     * C2272  name|local|algebraic real
+          SYMSYM XLIB F0λ~4                      * C2282  name|local|algebraic name|local|algebraic
+          2EXT XLIB F0λ~1                        * C2292  unit unit
+          BINT30 XLIB F0λ~1                      * C22A2  real unit
+          EXTREAL XLIB F0λ~1                     * C22B2  unit real
+          EXTSYM XLIB F0λ~2                      * C22C2  unit name|local|algebraic
+          SYMEXT XLIB F0λ~3                      * C22D2  name|local|algebraic unit
         ;                                        * C22E2
 
 * slots of 0AB 079 (derivative, inverse, ...: used by the symbolic code)
@@ -1374,9 +1380,9 @@ F0λ:
         CON(3)  #07A                             * C22ED  command
 SIDENS:
         :: CK1&Dispatch                          * C22F0
-          BINT1 ROMPTR 0E7 00C                   * C22FA  real
-          BINT10 ROMPTR 0E7 027                  * C230A  name|local|algebraic
-          BINT14 ROMPTR 0E7 00D                  * C231A  unit
+          BINT1 XLIB %SIDENS                     * C22FA  real
+          BINT10 XLIB SIDENS~2                   * C230A  name|local|algebraic
+          BINT14 XLIB SIDENS~1                   * C231A  unit
         ;                                        * C232A
 
 * slots of 0AB 07A (derivative, inverse, ...: used by the symbolic code)
@@ -1389,15 +1395,15 @@ SIDENS:
         CON(3)  #07B                             * C2335  command
 TDELTA:
         :: CK2&Dispatch                          * C2338
-          2EXT ROMPTR 0E7 00E                    * C2342  unit unit
-          EXTSYM ROMPTR 0E7 021                  * C2352  unit name|local|algebraic
-          SYMEXT ROMPTR 0E7 022                  * C2362  name|local|algebraic unit
-          SYMSYM ROMPTR 0E7 023                  * C2372  name|local|algebraic name|local|algebraic
-          BINT26 ROMPTR 0E7 021                  * C2382  real name|local|algebraic
-          SYMREAL ROMPTR 0E7 022                 * C2392  name|local|algebraic real
+          2EXT XLIB TDELTA~1                     * C2342  unit unit
+          EXTSYM XLIB TDELTA~2                   * C2352  unit name|local|algebraic
+          SYMEXT XLIB TDELTA~3                   * C2362  name|local|algebraic unit
+          SYMSYM XLIB TDELTA~4                   * C2372  name|local|algebraic name|local|algebraic
+          BINT26 XLIB TDELTA~2                   * C2382  real name|local|algebraic
+          SYMREAL XLIB TDELTA~3                  * C2392  name|local|algebraic real
           BINT17 %-                              * C23A2  real real
-          BINT30 ROMPTR 0E7 010                  * C23AC  real unit
-          EXTREAL ROMPTR 0E7 010                 * C23BC  unit real
+          BINT30 XLIB InconsUnitsErr             * C23AC  real unit
+          EXTREAL XLIB InconsUnitsErr            * C23BC  unit real
         ;                                        * C23CC
 
 * slots of 0AB 07B (derivative, inverse, ...: used by the symbolic code)
@@ -1410,15 +1416,15 @@ TDELTA:
         CON(3)  #07C                             * C23D7  command
 TINC:
         :: CK2&Dispatch                          * C23DA
-          2EXT ROMPTR 0E7 00F                    * C23E4  unit unit
-          EXTSYM ROMPTR 0E7 024                  * C23F4  unit name|local|algebraic
-          SYMSYM ROMPTR 0E7 026                  * C2404  name|local|algebraic name|local|algebraic
-          BINT26 ROMPTR 0E7 024                  * C2414  real name|local|algebraic
-          SYMREAL ROMPTR 0E7 025                 * C2424  name|local|algebraic real
-          SYMEXT ROMPTR 0E7 025                  * C2434  name|local|algebraic unit
+          2EXT XLIB TINC~1                       * C23E4  unit unit
+          EXTSYM XLIB TINC~2                     * C23F4  unit name|local|algebraic
+          SYMSYM XLIB TINC~4                     * C2404  name|local|algebraic name|local|algebraic
+          BINT26 XLIB TINC~2                     * C2414  real name|local|algebraic
+          SYMREAL XLIB TINC~3                    * C2424  name|local|algebraic real
+          SYMEXT XLIB TINC~3                     * C2434  name|local|algebraic unit
           BINT17 %+                              * C2444  real real
-          BINT30 ROMPTR 0E7 010                  * C244E  real unit
-          EXTREAL ROMPTR 0E7 010                 * C245E  unit real
+          BINT30 XLIB InconsUnitsErr             * C244E  real unit
+          EXTREAL XLIB InconsUnitsErr            * C245E  unit real
         ;                                        * C246E
         ROMPBODY 0AB 07D                         * C2473  gmol
 
@@ -1451,7 +1457,7 @@ dB:
         CON(3)  #0AB                             * C2529  library
         CON(3)  #081                             * C252C  command
 PINIT:
-        :: CK0 ROMPTR 0EA 070 ;                  * C252F
+        :: CK0 XLIB PINIT~1 ;                    * C252F
 
 LIB0AB.hash:
         CON(5)  DOHSTR                           * C2549  hash table of library 0AB
@@ -2114,9 +2120,9 @@ LIB0AB.link:
         REL(5)  MERGE1                           * C2FA2  016 MERGE1
         REL(5)  FREE1                            * C2FA7  017 FREE1
         REL(5)  ANIMATE                          * C2FAC  018 ANIMATE
-        REL(5)  ROMP_0AB_019                     * C2FB1  019 
-        REL(5)  ROMP_0AB_01A                     * C2FB6  01A 
-        REL(5)  ANIMATE~1                        * C2FBB  01B 
+        REL(5)  AnimateBind                      * C2FB1  019 
+        REL(5)  AnimateDefault                   * C2FB6  01A 
+        REL(5)  AnimateRun                       * C2FBB  01B 
         REL(5)  LININ                            * C2FC0  01C LININ
         REL(5)  LININ~1                          * C2FC5  01D 
         REL(5)  LIBEVAL                          * C2FCA  01E LIBEVAL
@@ -2125,7 +2131,7 @@ LIB0AB.link:
         REL(5)  CONST                            * C2FD9  021 CONST
         REL(5)  EQNLIB                           * C2FDE  022 EQNLIB
         REL(5)  SOLVEQN                          * C2FE3  023 SOLVEQN
-        REL(5)  ROMP_0AB_06F                     * C2FE8  024 
+        REL(5)  MSOLVR                           * C2FE8  024 
         REL(5)  FFT                              * C2FED  025 FFT
         REL(5)  IFFT                             * C2FF2  026 IFFT
         REL(5)  NDIST                            * C2FF7  027 NDIST
@@ -2200,7 +2206,7 @@ LIB0AB.link:
         REL(5)  ADD                              * C3150  06C ADD
         REL(5)  REVLIST                          * C3155  06D REVLIST
         REL(5)  SORT                             * C315A  06E SORT
-        REL(5)  ROMP_0AB_06F                     * C315F  06F 
+        REL(5)  MSOLVR                           * C315F  06F 
         REL(5)  MINIT                            * C3164  070 MINIT
         REL(5)  MITM                             * C3169  071 MITM
         REL(5)  MUSER                            * C316E  072 MUSER

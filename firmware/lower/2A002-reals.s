@@ -1,4 +1,4 @@
-* HP 48GX ROM revision R, #2A002-#2BFFF: Real number arithmetic
+* HP 48GX ROM revision R, #2A002-#2BFFF: Real number arithmetic: entries for each % and %% operation, stack access for the numbers, real constants, and the floating point core (add, multiply, divide, square root, rounding) on 15-digit numbers split across A:B and C:D
 * Addresses in the right-hand comments are those of the original ROM.
 * Most referenced: %0_2A2B4 %1 %%* %2 %%/ %%+ %* %%ABS %>%% %%0 %/ %%>%
 * Follows on from the previous file (at #2A002 in the original ROM).
@@ -63,7 +63,8 @@ POP1%%:
         RTNCC                                    * 2A0AF
 
 * refs (10): 2AEB7 34CC7 37228 3724C 37283 372C1 ...
-SUB_2A0B1:
+* -> : save the RPL registers and pop two long reals: level 2 to A:B, level 1 to C:D, in decimal mode
+POP2%%:
         CD0EX                                    * 2A0B1
         D0=(5)  INTRPPTR                         * 2A0B4
         DAT0=C  A                                * 2A0BB
@@ -101,24 +102,27 @@ SUB_2A0B1:
         DCEX    S                                * 2A123
         SETDEC                                   * 2A126
         RTNCC                                    * 2A128
-SUB_2A0B1.L1:
+
+* refs (1): 2AEC5
+* Check for a floating point exception after an operation: XM set means one happened. P = 3 is an infinite result: when flag -22 is set, sets flag -26 and gives MAXR, otherwise Infinite Result. Other cases give error #304.
+FltExc:
         ?XM=0                                    * 2A12A
         RTNYES                                   * 2A12D
         ?P=     3                                * 2A12F
-        GOYES   SUB_2A0B1.L3                     * 2A132
+        GOYES   FltExc.L2                        * 2A132
         P=      0                                * 2A134
         LC(5)   #00304                           * 2A136
-SUB_2A0B1.loop2:
+FltExc.loop1:
         GOTO    PACK.loop7                       * 2A13D
-SUB_2A0B1.L3:
+FltExc.L2:
         D0=(5)  #80848                           * 2A141
         A=DAT0  B                                * 2A148
         P=      0                                * 2A14B
         ?ABIT=1 1                                * 2A14D
-        GOYES   SUB_2A0B1.L4                     * 2A152
+        GOYES   FltExc.L3                        * 2A152
         LC(5)   infreserr                        * 2A154  "Infinite Result"
-        GONC    SUB_2A0B1.loop2                  * 2A15B
-SUB_2A0B1.L4:
+        GONC    FltExc.loop1                     * 2A15B
+FltExc.L3:
         D0=(5)  #80849                           * 2A15E
         A=DAT0  B                                * 2A165
         ABIT=1  1                                * 2A168
@@ -199,7 +203,7 @@ PUSH%.L8:
         GOSUB   SAVPTR~jump_11                   * 2A22E
         GONC    PUSH%.loop3                      * 2A232
 PUSH%.L9:
-        GOSUB   SUB_2A24B                        * 2A235
+        GOSUB   PUSH%%                           * 2A235
         GOTO    PUSH%LOOP.L1                     * 2A239
 
 * ( A -> %push ) Push A as %, <REF>GETPTRLOOP
@@ -212,27 +216,28 @@ PUSH%LOOP.L1:
         PC=(A)                                   * 2A247
 
 * refs (5): 0C2A1 0C4B3 2A235 3785E 37915
-SUB_2A24B:
+* x in A:B -> : push it as a new long real (SAVPTR already done); zero pushes the constant
+PUSH%%:
         SETHEX                                   * 2A24B
         P=      0                                * 2A24D
         ST=0    10                               * 2A24F
         ?B#0    M                                * 2A252
-        GOYES   SUB_2A24B.L1                     * 2A255
-        GOVLNG  CALCINTEG~14.loop2               * 2A257
-SUB_2A24B.L1:
+        GOYES   PUSH%%.L1                        * 2A255
+        GOVLNG  CALCINTEG~12.loop2               * 2A257
+PUSH%%.L1:
         R1=A                                     * 2A25E
         B=A     S                                * 2A261
         A=B     W                                * 2A264
         R0=A                                     * 2A267
-SUB_2A24B.loop2:
+PUSH%%.loop2:
         GOSBVL  ROOM                             * 2A26A
         A=C     A                                * 2A271
         LC(5)   #00025                           * 2A273
         ?C<=A   A                                * 2A27A
-        GOYES   SUB_2A24B.L3                     * 2A27D
+        GOYES   PUSH%%.L3                        * 2A27D
         GOSBVL  St10Gb                           * 2A27F
-        GOTO    SUB_2A24B.loop2                  * 2A286
-SUB_2A24B.L3:
+        GOTO    PUSH%%.loop2                     * 2A286
+PUSH%%.L3:
         LC(2)   #1A                              * 2A28A
         GOSBVL  CREATETEMP                       * 2A28E
         AD0EX                                    * 2A295
@@ -414,14 +419,14 @@ SUB_2A24B.L3:
         CON(5)  (*)+5                            * 2A5B0  primitive code object
         ASSEMBLE
         GOSUBL  POP1%%~jump                      * 2A5B5
-        GOLONG  SUB_2AEC5.L4                     * 2A5BB
+        GOLONG  GoFltExc.L4                      * 2A5BB
 
 * % -> %%
 * refs (86): 0FE58 0FF2F 0FFB1 10C5E 10CCC 1DDCE ...
 %>%%:
         CON(5)  (*)+5                            * 2A5C1  primitive code object
         GOSUBL  POP1%SPLITA~jump                 * 2A5C6
-        GOLONG  SUB_2AEC5.L2                     * 2A5CC
+        GOLONG  GoFltExc.L2                      * 2A5CC
         RPL
 
 * ->
@@ -462,12 +467,12 @@ PI/180:
 * %hms -> %
 * refs (1): 1BF4D
 %HMS>:
-        :: hm->(r);r=>rr %HMS>~1 ;               * 2A68C
+        :: hm->(r);r=>rr ~%%HMS>H;%%>% ;         * 2A68C
 
 * %hms1 %hms2 -> %hms
 * refs (2): 1BF6D 2A6D2
 %HMS+:
-        :: hm->(r);r=>rr SWAP hm->(r);r=>rr %%+ %HMS+~1 %%>% ; * 2A6A0
+        :: hm->(r);r=>rr SWAP hm->(r);r=>rr %%+ ~%%HMS>H;%%H>HMS %%>% ; * 2A6A0
 
 * %hms1 %hms2 -> %hms
 * refs (1): 1BF8D
@@ -599,7 +604,7 @@ PI/180:
         ASSEMBLE
         P=      1                                * 2A824
 %%<.L1:
-        GOSUB   SUB_2AEB7                        * 2A826
+        GOSUB   POP2%%~jump                      * 2A826
 %%<.L2:
         GOSUBL  TST15                            * 2A82A
         P=      0                                * 2A830
@@ -706,7 +711,7 @@ PI/180:
         CON(5)  (*)+5                            * 2A8F0  primitive code object
         GOSUB   POP1%%~jump                      * 2A8F5
         A=0     S                                * 2A8F9
-        GOTO    SUB_2AEC5.L2                     * 2A8FC
+        GOTO    GoFltExc.L2                      * 2A8FC
 
 * % -> %'
 * refs (51): 0E6D9 0F606 10905 1AA2E 1B6F9 22251 ...
@@ -715,7 +720,7 @@ PI/180:
         GOSUB   POP1%~jump                       * 2A905
         A=0     S                                * 2A909
 %ABS.L1:
-        GOTO    SUB_2AEC5.L7                     * 2A90C
+        GOTO    GoFltExc.L7                      * 2A90C
 
 * %% -> -%%
 * refs (44): 36BE4 36BFD 36C1B 36C39 36C43 37CE7 ...
@@ -723,7 +728,7 @@ PI/180:
         CON(5)  (*)+5                            * 2A910  primitive code object
         GOSUB   POP1%%~jump                      * 2A915
         A=-A-1  S                                * 2A919
-        GOTO    SUB_2AEC5.L2                     * 2A91C
+        GOTO    GoFltExc.L2                      * 2A91C
 
 * % -> -%
 * refs (28): 0F61F 1A9A4 2A6CD 37CDD 40085 400B2 ...
@@ -731,7 +736,7 @@ PI/180:
         CON(5)  (*)+5                            * 2A920  primitive code object
         GOSUB   POP1%~jump                       * 2A925
         A=-A-1  S                                * 2A929
-        GOTO    SUB_2AEC5.L7                     * 2A92C
+        GOTO    GoFltExc.L7                      * 2A92C
 
 * % -> %mant
 * refs (1): 1BEAB
@@ -740,20 +745,20 @@ PI/180:
         GOSUB   POP1%~jump                       * 2A935
         A=0     X                                * 2A939
         A=0     S                                * 2A93C
-        GOTO    SUB_2AEC5.L7                     * 2A93F
+        GOTO    GoFltExc.L7                      * 2A93F
 
 * %% %%' -> %%+%%'
 * refs (121): 0F4A2 0F4B6 0F501 0F6AC 2A6B4 2B241 ...
 %%+:
         CON(5)  (*)+5                            * 2A943  primitive code object
-        GOSUB   SUB_2AEB7                        * 2A948
+        GOSUB   POP2%%~jump                      * 2A948
         GONC    %>%%-.L2                         * 2A94C  always taken
 
 * %% %%' -> %%-%%'
 * refs (67): 0F470 0F4E3 0F77E 0FC4B 2B21E 2B40B ...
 %%-:
         CON(5)  (*)+5                            * 2A94F  primitive code object
-        GOSUB   SUB_2AEB7                        * 2A954
+        GOSUB   POP2%%~jump                      * 2A954
         GONC    %>%%-.L1                         * 2A958
 
 * % %' -> %%-%%'
@@ -768,7 +773,7 @@ PI/180:
 %>%%-.L2:
         HST=0   3                                * 2A967
         GOSUBL  RADDF                            * 2A96A
-        GOTO    SUB_2AEC5.L2                     * 2A970
+        GOTO    GoFltExc.L2                      * 2A970
 
 * % %' -> %+%'
 * refs (69): 0C672 10405 1AB76 20921 2EBD0 41610 ...
@@ -786,13 +791,13 @@ PI/180:
 %-.L1:
         HST=0   3                                * 2A98D
         GOSUBL  ADDF                             * 2A990
-        GOTO    SUB_2AEC5.L6                     * 2A996
+        GOTO    GoFltExc.L6                      * 2A996
 
 * %% %%' -> %%*%%'
 * refs (219): 0F3C1 0F45C 0F4E8 0F506 0FC5A 0FDC2 ...
 %%*:
         CON(5)  (*)+5                            * 2A99A  primitive code object
-        GOSUB   SUB_2AEB7                        * 2A99F
+        GOSUB   POP2%%~jump                      * 2A99F
         GONC    _*(2r);r=>rr.L1                  * 2A9A3  always taken
 
 * refs (10): 0FBBF 36A20 51A7B 51A85 51E41 51E4B ...
@@ -829,16 +834,16 @@ _*(2r);r=>rr.L2:
 %OF.L1:
         HST=0   3                                * 2A9DB
         GOSUBL  MULTF                            * 2A9DE
-        GOTO    SUB_2AEC5.L6                     * 2A9E4
+        GOTO    GoFltExc.L6                      * 2A9E4
 
 * %% %%' -> %%/%%'
 * refs (126): 0F3BC 0F466 0F498 0F4F2 0F72E 10C45 ...
 %%/:
         CON(5)  (*)+5                            * 2A9E8  primitive code object
-        GOSUB   SUB_2AEB7                        * 2A9ED
+        GOSUB   POP2%%~jump                      * 2A9ED
         HST=0   3                                * 2A9F1
         GOSUBL  DIVF                             * 2A9F4
-        GOTO    SUB_2AEC5.L1                     * 2A9FA
+        GOTO    GoFltExc.L1                      * 2A9FA
 
 * % %' -> %/%'
 * refs (77): 0F82D 109F5 1A256 1A2AB 1AF14 20FC8 ...
@@ -853,13 +858,14 @@ _*(2r);r=>rr.L2:
         CON(5)  (*)+5                            * 2AA0B  primitive code object
         GOSUB   Pop%ACSrSep~jump                 * 2AA10
         GOSUBL  XYEX                             * 2AA14
-        GOSUB   SUB_2AA25                        * 2AA1A
+        GOSUB   x*100                            * 2AA1A
 %T.L1:
         HST=0   3                                * 2AA1E
         GOTO    %CH.L1                           * 2AA21
 
 * refs (2): 2AA1A 2AA51
-SUB_2AA25:
+* x in A:B -> x*100: add 2 to the exponent unless x is zero
+x*100:
         ?B=0    M                                * 2AA25
         RTNYES                                   * 2AA28
         A=A+1   A                                * 2AA2A
@@ -876,18 +882,18 @@ SUB_2AA25:
         HST=0   3                                * 2AA42
         GOSUBL  ADDF                             * 2AA45
         GOSUBL  RCCD0                            * 2AA4B
-        GOSUB   SUB_2AA25                        * 2AA51
+        GOSUB   x*100                            * 2AA51
 %CH.L1:
         GOSUBL  DIVF                             * 2AA55
-        GOTO    SUB_2AEC5.L5                     * 2AA5B
+        GOTO    GoFltExc.L5                      * 2AA5B
 
 * %% %%' -> %%^%%'
 * refs (9): 10C68 52446 93647 C7D21 C912F C91FB ...
 %%^:
         CON(5)  (*)+5                            * 2AA5F  primitive code object
-        GOSUB   SUB_2AEB7                        * 2AA64
-        GOSUB   SUB_2AAC0                        * 2AA68
-        GOTO    SUB_2AEC5.L1                     * 2AA6C
+        GOSUB   POP2%%~jump                      * 2AA64
+        GOSUB   %^Core                           * 2AA68
+        GOTO    GoFltExc.L1                      * 2AA6C
 
 * % %' -> %^%'
 * refs (5): 0F8AA 1B133 4C036 4C078 CD57E
@@ -895,16 +901,16 @@ SUB_2AA25:
         CON(5)  (*)+5                            * 2AA70  primitive code object
         GOSUB   Pop%ACSrSep~jump                 * 2AA75
 %^.L1:
-        GOSUB   SUB_2AAC0                        * 2AA79
-        GOTO    SUB_2AEC5.L5                     * 2AA7D
+        GOSUB   %^Core                           * 2AA79
+        GOTO    GoFltExc.L5                      * 2AA7D
 
 * % %n -> %'
 * refs (2): 0F8A5 1B25B
 %NROOT:
         CON(5)  (*)+5                            * 2AA81  primitive code object
         GOSUB   Pop%ACSrSep~jump                 * 2AA86
-        GOSUB   SUB_2AAD5                        * 2AA8A
-        GOTO    SUB_2AEC5.L5                     * 2AA8E
+        GOSUB   %XROOTCore                       * 2AA8A
+        GOTO    GoFltExc.L5                      * 2AA8E
 
 * %% -> 1/%%
 * refs (2): 92017 95DBA
@@ -920,7 +926,7 @@ SUB_2AA25:
         GOSUB   POP1%SPLITA~jump                 * 2AAA3
 %>%%1/.L1:
         GOSUB   1/X15~jump                       * 2AAA7
-        GOTO    SUB_2AEC5.L1                     * 2AAAB
+        GOTO    GoFltExc.L1                      * 2AAAB
 
 * % -> 1/%
 * refs (9): 0F84B 10A6D 1B287 5A85A 8ACE3 8ADD0 ...
@@ -928,28 +934,30 @@ SUB_2AA25:
         CON(5)  (*)+5                            * 2AAAF  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2AAB4
         GOSUB   1/X15~jump                       * 2AAB8
-        GOTO    SUB_2AEC5.L5                     * 2AABC
+        GOTO    GoFltExc.L5                      * 2AABC
 
 * refs (2): 2AA68 2AA79
-SUB_2AAC0:
-        GOSUBL  SUB_2B6BC                        * 2AAC0
+* x^y on A:B and C:D, with an exception kept only when P = 14
+%^Core:
+        GOSUBL  aY^X                             * 2AAC0
         ?XM=0                                    * 2AAC6
-        GOYES   SUB_2AAC0.L1                     * 2AAC9
+        GOYES   %^Core.L1                        * 2AAC9
         ?P#     14                               * 2AACB
         RTNYES                                   * 2AACE
         XM=0                                     * 2AAD0
-SUB_2AAC0.L1:
+%^Core.L1:
         RTNCC                                    * 2AAD3
 
 * refs (1): 2AA8A
-SUB_2AAD5:
-        GOSUBL  SUB_2B6CE                        * 2AAD5
+* The y'th root on A:B and C:D, with an exception kept only when P = 14
+%XROOTCore:
+        GOSUBL  aXROOT                           * 2AAD5
         ?XM=0                                    * 2AADB
-        GOYES   SUB_2AAD5.L1                     * 2AADE
+        GOYES   %XROOTCore.L1                    * 2AADE
         ?P#     14                               * 2AAE0
         RTNYES                                   * 2AAE3
         XM=0                                     * 2AAE5
-SUB_2AAD5.L1:
+%XROOTCore.L1:
         RTNCC                                    * 2AAE8
 
 * %% -> SQRT%%
@@ -966,81 +974,81 @@ SUB_2AAD5.L1:
         D=D+D   XS                               * 2AAF9
         NIBHEX  3A3                              * 2AAFC  £
 %>%%SQRT.L1:
-        GOSUBL  SUB_2B9F3                        * 2AAFF
-        GOTO    SUB_2AEC5.L1                     * 2AB05
+        GOSUBL  SQRFchk                          * 2AAFF
+        GOTO    GoFltExc.L1                      * 2AB05
 
 * % -> SQRT%
 * refs (1): 1B409
 %SQRT:
         CON(5)  (*)+5                            * 2AB09  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2AB0E
-        GOSUBL  SUB_2B9F3                        * 2AB12
-        GOTO    SUB_2AEC5.L5                     * 2AB18
+        GOSUBL  SQRFchk                          * 2AB12
+        GOTO    GoFltExc.L5                      * 2AB18
 
 * %% -> e^%%
 * refs (7): 2B452 2CA99 2CB3E 2CBB6 521B1 52400 ...
 %%EXP:
         CON(5)  (*)+5                            * 2AB1C  primitive code object
         GOSUB   POP1%%~jump                      * 2AB21
-        GOSUBL  SUB_2B6AA                        * 2AB25
-        GOTO    SUB_2AEC5.L2                     * 2AB2B
+        GOSUBL  aEXP                             * 2AB25
+        GOTO    GoFltExc.L2                      * 2AB2B
 
 * % -> e^%
 * refs (4): 1B914 CCD00 CD3DF CD545
 %EXP:
         CON(5)  (*)+5                            * 2AB2F  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2AB34
-        GOSUBL  SUB_2B6AA                        * 2AB38
-        GOTO    SUB_2AEC5.L6                     * 2AB3E
+        GOSUBL  aEXP                             * 2AB38
+        GOTO    GoFltExc.L6                      * 2AB3E
 
 * % -> e^%-1
 * refs (1): 1BAD1
 %EXPM1:
         CON(5)  (*)+5                            * 2AB42  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2AB47
-        GOSUBL  SUB_2B6B3                        * 2AB4B
+        GOSUBL  aEXPM1                           * 2AB4B
         GOSUBL  RCAB0                            * 2AB51
-        GOTO    SUB_2AEC5.L6                     * 2AB57
+        GOTO    GoFltExc.L6                      * 2AB57
 
 * %% -> ln %%
 * refs (3): 2B434 2CBDE 52265
 %%LN:
         CON(5)  (*)+5                            * 2AB5B  primitive code object
         GOSUB   POP1%%~jump                      * 2AB60
-        GOSUBL  SUB_2B698                        * 2AB64
-        GOTO    SUB_2AEC5.L1                     * 2AB6A
+        GOSUBL  aLN                              * 2AB64
+        GOTO    GoFltExc.L1                      * 2AB6A
 
 * % -> LN%
 * refs (1): 1B9A9
 %LN:
         CON(5)  (*)+5                            * 2AB6E  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2AB73
-        GOSUBL  SUB_2B698                        * 2AB77
-        GOTO    SUB_2AEC5.L5                     * 2AB7D
+        GOSUBL  aLN                              * 2AB77
+        GOTO    GoFltExc.L5                      * 2AB7D
 
 * % -> LOG%
 * refs (2): 1BA20 CD0F1
 %LOG:
         CON(5)  (*)+5                            * 2AB81  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2AB86
-        GOSUBL  SUB_2B6A1                        * 2AB8A
-        GOTO    SUB_2AEC5.L5                     * 2AB90
+        GOSUBL  aLOG                             * 2AB8A
+        GOTO    GoFltExc.L5                      * 2AB90
 
 * %% -> %%ln(%%+1)
 * refs (3): 522B5 527B9 529D5
 %%LNP1:
         CON(5)  (*)+5                            * 2AB94  primitive code object
         GOSUB   POP1%%~jump                      * 2AB99
-        GOSUBL  SUB_2B68F                        * 2AB9D
-        GOTO    SUB_2AEC5.L1                     * 2ABA3
+        GOSUBL  aLNP1                            * 2AB9D
+        GOTO    GoFltExc.L1                      * 2ABA3
 
 * % -> LN(%+1)
 * refs (1): 1BA9B
 %LNP1:
         CON(5)  (*)+5                            * 2ABA7  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2ABAC
-        GOSUBL  SUB_2B68F                        * 2ABB0
-        GOTO    SUB_2AEC5.L5                     * 2ABB6
+        GOSUBL  aLNP1                            * 2ABB0
+        GOTO    GoFltExc.L5                      * 2ABB6
 
 * % -> 10^%
 * refs (1): 1BA4C
@@ -1062,7 +1070,7 @@ SUB_2AAD5.L1:
         CON(5)  (*)+5                            * 2ABDC  primitive code object
         GOSUB   Pop%ACSrSep~jump                 * 2ABE1
         GOSUBL  aMODF                            * 2ABE5
-        GOTO    SUB_2AEC5.L6                     * 2ABEB
+        GOTO    GoFltExc.L6                      * 2ABEB
 
 * % -> SIN%
 * refs (1): 1B4BB
@@ -1070,8 +1078,8 @@ SUB_2AAD5.L1:
         CON(5)  (*)+5                            * 2ABEF  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2ABF4
         GOSUB   GetAngleST                       * 2ABF8
-        GOSUBL  SUB_2B6E0                        * 2ABFC
-        GOTO    SUB_2AEC5.L6                     * 2AC02
+        GOSUBL  aSIN                             * 2ABFC
+        GOTO    GoFltExc.L6                      * 2AC02
 
 * %% -> %%sin
 * refs (1): 2B4D9
@@ -1098,8 +1106,8 @@ SUB_2AAD5.L1:
 %%SINRAD.L1:
         ST=0    4                                * 2AC33
 %%SINRAD.L2:
-        GOSUBL  SUB_2B6E0                        * 2AC36
-        GOTO    SUB_2AEC5.L2                     * 2AC3C
+        GOSUBL  aSIN                             * 2AC36
+        GOTO    GoFltExc.L2                      * 2AC3C
 
 * % -> COS%
 * refs (1): 1B514
@@ -1107,8 +1115,8 @@ SUB_2AAD5.L1:
         CON(5)  (*)+5                            * 2AC40  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2AC45
         GOSUB   GetAngleST                       * 2AC49
-        GOSUBL  SUB_2B6E9                        * 2AC4D
-        GOTO    SUB_2AEC5.L6                     * 2AC53
+        GOSUBL  aCOS                             * 2AC4D
+        GOTO    GoFltExc.L6                      * 2AC53
 
 * %% -> %%cos
 * refs (1): 2B4CF
@@ -1135,8 +1143,8 @@ SUB_2AAD5.L1:
 %%COSRAD.L1:
         ST=0    4                                * 2AC84
 %%COSRAD.L2:
-        GOSUBL  SUB_2B6E9                        * 2AC87
-        GOTO    SUB_2AEC5.L2                     * 2AC8D
+        GOSUBL  aCOS                             * 2AC87
+        GOTO    GoFltExc.L2                      * 2AC8D
 
 * % -> TAN%
 * refs (1): 1B56D
@@ -1144,8 +1152,8 @@ SUB_2AAD5.L1:
         CON(5)  (*)+5                            * 2AC91  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2AC96
         GOSUB   GetAngleST                       * 2AC9A
-        GOSUBL  SUB_2B6F2                        * 2AC9E
-        GOTO    SUB_2AEC5.L5                     * 2ACA4
+        GOSUBL  aTAN                             * 2AC9E
+        GOTO    GoFltExc.L5                      * 2ACA4
 
 * %%rad -> %%tan
 %%TANRAD:
@@ -1153,8 +1161,8 @@ SUB_2AAD5.L1:
         GOSUB   POP1%%~jump                      * 2ACAD
         ST=1    9                                * 2ACB1
         ST=0    4                                * 2ACB4
-        GOSUBL  SUB_2B6F2                        * 2ACB7
-        GOTO    SUB_2AEC5.L1                     * 2ACBD
+        GOSUBL  aTAN                             * 2ACB7
+        GOTO    GoFltExc.L1                      * 2ACBD
 
 * % -> ASIN%
 * refs (1): 1B712
@@ -1162,8 +1170,8 @@ SUB_2AAD5.L1:
         CON(5)  (*)+5                            * 2ACC1  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2ACC6
         GOSUB   GetAngleST                       * 2ACCA
-        GOSUBL  SUB_2B704                        * 2ACCE
-        GOTO    SUB_2AEC5.L5                     * 2ACD4
+        GOSUBL  aASIN                            * 2ACCE
+        GOTO    GoFltExc.L5                      * 2ACD4
 
 * %% -> %%rad
 * refs (2): 52A67 52A76
@@ -1172,8 +1180,8 @@ SUB_2AAD5.L1:
         GOSUB   POP1%%~jump                      * 2ACDD
         ST=1    9                                * 2ACE1
         ST=0    4                                * 2ACE4
-        GOSUBL  SUB_2B704                        * 2ACE7
-        GOTO    SUB_2AEC5.L1                     * 2ACED
+        GOSUBL  aASIN                            * 2ACE7
+        GOTO    GoFltExc.L1                      * 2ACED
 
 * % -> ACOS%
 * refs (1): 1B77F
@@ -1181,8 +1189,8 @@ SUB_2AAD5.L1:
         CON(5)  (*)+5                            * 2ACF1  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2ACF6
         GOSUB   GetAngleST                       * 2ACFA
-        GOSUBL  SUB_2B70D                        * 2ACFE
-        GOTO    SUB_2AEC5.L5                     * 2AD04
+        GOSUBL  aACOS                            * 2ACFE
+        GOTO    GoFltExc.L5                      * 2AD04
 
 * %% -> %%rad
 * refs (2): 52A5D 52A80
@@ -1191,8 +1199,8 @@ SUB_2AAD5.L1:
         GOSUB   POP1%%~jump                      * 2AD0D
         ST=1    9                                * 2AD11
         ST=0    4                                * 2AD14
-        GOSUBL  SUB_2B70D                        * 2AD17
-        GOTO    SUB_2AEC5.L1                     * 2AD1D
+        GOSUBL  aACOS                            * 2AD17
+        GOTO    GoFltExc.L1                      * 2AD1D
 
 * % -> ATAN%
 * refs (1): 1B7AB
@@ -1200,8 +1208,8 @@ SUB_2AAD5.L1:
         CON(5)  (*)+5                            * 2AD21  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2AD26
         GOSUB   GetAngleST                       * 2AD2A
-        GOSUBL  SUB_2B6FB                        * 2AD2E
-        GOTO    SUB_2AEC5.L6                     * 2AD34
+        GOSUBL  aATAN                            * 2AD2E
+        GOTO    GoFltExc.L6                      * 2AD34
 
 * %x %y -> %ang
 * refs (1): 1B317
@@ -1209,14 +1217,14 @@ SUB_2AAD5.L1:
         CON(5)  (*)+5                            * 2AD38  primitive code object
         GOSUB   Pop%ACSrSep~jump                 * 2AD3D
         GOSUB   GetAngleST                       * 2AD41
-        GOSUBL  SUB_2B6D7                        * 2AD45
-        GOTO    SUB_2AEC5.L6                     * 2AD4B
+        GOSUBL  aANGLE                           * 2AD45
+        GOTO    GoFltExc.L6                      * 2AD4B
 
 * %%x %%y -> %%ang
 * refs (1): 2B4A7
 %%ANGLE:
         CON(5)  (*)+5                            * 2AD4F  primitive code object
-        GOSUB   SUB_2AEB7                        * 2AD54
+        GOSUB   POP2%%~jump                      * 2AD54
         GONC    %>%%ANGLE.L1                     * 2AD58
 
 * %x %y -> %%ang
@@ -1234,7 +1242,7 @@ SUB_2AAD5.L1:
 * refs (3): 3795F 523EC 52455
 %%ANGLEDEG:
         CON(5)  (*)+5                            * 2AD6C  primitive code object
-        GOSUB   SUB_2AEB7                        * 2AD71
+        GOSUB   POP2%%~jump                      * 2AD71
 %%ANGLEDEG.L1:
         ST=0    9                                * 2AD75
         GOTO    %%ANGLERAD.L1                    * 2AD78
@@ -1243,87 +1251,87 @@ SUB_2AAD5.L1:
 * refs (4): 52206 522D8 523B5 5276E
 %%ANGLERAD:
         CON(5)  (*)+5                            * 2AD7C  primitive code object
-        GOSUB   SUB_2AEB7                        * 2AD81
+        GOSUB   POP2%%~jump                      * 2AD81
         ST=1    9                                * 2AD85
 %%ANGLERAD.L1:
         ST=0    4                                * 2AD88
 %%ANGLERAD.L2:
-        GOSUBL  SUB_2B6D7                        * 2AD8B
-        GOTO    SUB_2AEC5.L2                     * 2AD91
+        GOSUBL  aANGLE                           * 2AD8B
+        GOTO    GoFltExc.L2                      * 2AD91
 
 * %% -> %%sinh
 * refs (3): 52553 52594 525C6
 %%SINH:
         CON(5)  (*)+5                            * 2AD95  primitive code object
         GOSUB   POP1%%~jump                      * 2AD9A
-        GOSUBL  SUB_2B731                        * 2AD9E
+        GOSUBL  aCOSHSINH                        * 2AD9E
         GOSUBL  RCAB0                            * 2ADA4
-        GOTO    SUB_2AEC5.L2                     * 2ADAA
+        GOTO    GoFltExc.L2                      * 2ADAA
 
 * % -> SINH%
 * refs (1): 1B5C6
 %SINH:
         CON(5)  (*)+5                            * 2ADAE  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2ADB3
-        GOSUBL  SUB_2B731                        * 2ADB7
+        GOSUBL  aCOSHSINH                        * 2ADB7
         GOSUBL  RCAB0                            * 2ADBD
-        GOTO    SUB_2AEC5.L4                     * 2ADC3
+        GOTO    GoFltExc.L4                      * 2ADC3
 
 * %% -> %%cosh
 * refs (3): 5253F 52580 52611
 %%COSH:
         CON(5)  (*)+5                            * 2ADC7  primitive code object
         GOSUB   POP1%%~jump                      * 2ADCC
-        GOSUBL  SUB_2B731                        * 2ADD0
-        GOTO    SUB_2AEC5.L2                     * 2ADD6
+        GOSUBL  aCOSHSINH                        * 2ADD0
+        GOTO    GoFltExc.L2                      * 2ADD6
 
 * % -> COSH%
 * refs (1): 1B615
 %COSH:
         CON(5)  (*)+5                            * 2ADDA  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2ADDF
-        GOSUBL  SUB_2B731                        * 2ADE3
-        GOTO    SUB_2AEC5.L4                     * 2ADE9
+        GOSUBL  aCOSHSINH                        * 2ADE3
+        GOTO    GoFltExc.L4                      * 2ADE9
 
 * % -> TANH%
 * refs (1): 1B664
 %TANH:
         CON(5)  (*)+5                            * 2ADED  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2ADF2
-        GOSUBL  SUB_2B73A                        * 2ADF6
-        GOTO    SUB_2AEC5.L4                     * 2ADFC
+        GOSUBL  aTANH                            * 2ADF6
+        GOTO    GoFltExc.L4                      * 2ADFC
 
 * % -> ASINH%
 * refs (1): 1B7FA
 %ASINH:
         CON(5)  (*)+5                            * 2AE00  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2AE05
-        GOSUBL  SUB_2B743                        * 2AE09
-        GOTO    SUB_2AEC5.L4                     * 2AE0F
+        GOSUBL  aASINH                           * 2AE09
+        GOTO    GoFltExc.L4                      * 2AE0F
 
 * % -> ACOSH%
 * refs (1): 1B885
 %ACOSH:
         CON(5)  (*)+5                            * 2AE13  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2AE18
-        GOSUBL  SUB_2B74C                        * 2AE1C
-        GOTO    SUB_2AEC5.L3                     * 2AE22
+        GOSUBL  aACOSH                           * 2AE1C
+        GOTO    GoFltExc.L3                      * 2AE22
 
 * % -> ATANH%
 * refs (1): 1B8E8
 %ATANH:
         CON(5)  (*)+5                            * 2AE26  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2AE2B
-        GOSUBL  SUB_2B755                        * 2AE2F
-        GOTO    SUB_2AEC5.L3                     * 2AE35
+        GOSUBL  aATANH                           * 2AE2F
+        GOTO    GoFltExc.L3                      * 2AE35
 
 * % -> %expn
 * refs (5): 1BC54 45D5C 4C040 5A752 5A823
 %EXPONENT:
         CON(5)  (*)+5                            * 2AE39  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2AE3E
-        GOSUBL  SUB_2B686                        * 2AE42
-        GOTO    SUB_2AEC5.L5                     * 2AE48
+        GOSUBL  aXPON                            * 2AE42
+        GOTO    GoFltExc.L5                      * 2AE48
 
 * % -> %!
 * refs (1): 2B185
@@ -1331,15 +1339,15 @@ SUB_2AAD5.L1:
         CON(5)  (*)+5                            * 2AE4C  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2AE51
         HST=0   3                                * 2AE55
-        GOSUBL  SUB_2B716                        * 2AE58
-        GOTO    SUB_2AEC5.L6                     * 2AE5E
+        GOSUBL  aFACT                            * 2AE58
+        GOTO    GoFltExc.L6                      * 2AE5E
 
 * % %' -> COMB(%,%')
 * refs (1): 1C205
 %COMB:
         CON(5)  (*)+5                            * 2AE62  primitive code object
         GOSUB   Pop%ACSrSep~jump                 * 2AE67
-        GOSUBL  SUB_2B728                        * 2AE6B
+        GOSUBL  aCOMB                            * 2AE6B
         GOTO    %PERM.L1                         * 2AE71
 
 * % %' -> PERM(%,%')
@@ -1347,10 +1355,10 @@ SUB_2AAD5.L1:
 %PERM:
         CON(5)  (*)+5                            * 2AE75  primitive code object
         GOSUB   Pop%ACSrSep~jump                 * 2AE7A
-        GOSUBL  SUB_2B71F                        * 2AE7E
+        GOSUBL  aPERM                            * 2AE7E
 %PERM.L1:
         ?XM=0                                    * 2AE84
-        GOYES   SUB_2AEC5.L5                     * 2AE87
+        GOYES   GoFltExc.L5                      * 2AE87
 %PERM.L2:
         P=      0                                * 2AE89
         SETHEX                                   * 2AE8B
@@ -1374,30 +1382,31 @@ POP1%%~jump:
         GOVLNG  POP1%%                           * 2AEB0
 
 * refs (9): 2A826 2A948 2A954 2A99F 2A9ED 2AA64 ...
-SUB_2AEB7:
-        GOVLNG  SUB_2A0B1                        * 2AEB7
+POP2%%~jump:
+        GOVLNG  POP2%%                           * 2AEB7
 
 * refs (2): 2AAA7 2AAB8
 1/X15~jump:
         GOVLNG  1/X15                            * 2AEBE
 
 * refs (3): 2AECC 2AED7 2AEE5
-SUB_2AEC5:
-        GOVLNG  SUB_2A0B1.L1                     * 2AEC5
-SUB_2AEC5.L1:
-        GOSUB   SUB_2AEC5                        * 2AECC
-SUB_2AEC5.L2:
+* Long jump to FltExc. The labels below finish a function: check for an exception, then push a long real, PACK and push, or PACKSB and push.
+GoFltExc:
+        GOVLNG  FltExc                           * 2AEC5
+GoFltExc.L1:
+        GOSUB   GoFltExc                         * 2AECC
+GoFltExc.L2:
         GOVLNG  PUSH%.L9                         * 2AED0
-SUB_2AEC5.L3:
-        GOSUB   SUB_2AEC5                        * 2AED7
-SUB_2AEC5.L4:
+GoFltExc.L3:
+        GOSUB   GoFltExc                         * 2AED7
+GoFltExc.L4:
         GOSUBL  PACK                             * 2AEDB
-        GOTO    SUB_2AEC5.L7                     * 2AEE1
-SUB_2AEC5.L5:
-        GOSUB   SUB_2AEC5                        * 2AEE5
-SUB_2AEC5.L6:
+        GOTO    GoFltExc.L7                      * 2AEE1
+GoFltExc.L5:
+        GOSUB   GoFltExc                         * 2AEE5
+GoFltExc.L6:
         GOSUBL  PACKSB                           * 2AEE9
-SUB_2AEC5.L7:
+GoFltExc.L7:
         GOVLNG  PUSH%LOOP                        * 2AEEF
 
 * refs (11): 2ABF8 2AC0F 2AC49 2AC60 2AC9A 2ACCA ...
@@ -1424,23 +1433,23 @@ GetAngleST.L1:
 %%H>HMS:
         CON(5)  (*)+5                            * 2AF27  primitive code object
         GOSBVL  %%H>HMS~1                        * 2AF2C
-        GOTO    SUB_2AEC5.L1                     * 2AF33
+        GOTO    GoFltExc.L1                      * 2AF33
         BSS     3                                * 2AF37  zeros
 
 * refs (3): 2A691 2A6A5 2A6AF
 hm->(r);r=>rr:
         CON(5)  (*)+5                            * 2AF3A  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2AF3F
-        GOSUBL  SUB_2B779                        * 2AF43
-        GOTO    SUB_2AEC5.L1                     * 2AF49
+        GOSUBL  aHMS>                            * 2AF43
+        GOTO    GoFltExc.L1                      * 2AF49
 
 * % -> %frac
 * refs (17): 0FD18 1BBB2 4160B 41D60 5A7C4 B6D21 ...
 %FP:
         CON(5)  (*)+5                            * 2AF4D  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2AF52
-        GOSUBL  SUB_2B674                        * 2AF56
-        GOTO    SUB_2AEC5.L4                     * 2AF5C
+        GOSUBL  aFP                              * 2AF56
+        GOTO    GoFltExc.L4                      * 2AF5C
 
 * % -> %int
 * refs (29): 0FD04 1A8A5 1BB7C 2B11B 2B1A3 2EC16 ...
@@ -1448,31 +1457,31 @@ hm->(r);r=>rr:
         CON(5)  (*)+5                            * 2AF60  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2AF65
         GOSUBL  CLRFRC                           * 2AF69
-        GOTO    SUB_2AEC5.L4                     * 2AF6F
+        GOTO    GoFltExc.L4                      * 2AF6F
 
 * % -> %minint >=%
 * refs (3): 0FD40 1BC1E 4C949
 %CEIL:
         CON(5)  (*)+5                            * 2AF73  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2AF78
-        GOSUBL  SUB_2B75E                        * 2AF7C
-        GOTO    SUB_2AEC5.L4                     * 2AF82
+        GOSUBL  aCEIL                            * 2AF7C
+        GOTO    GoFltExc.L4                      * 2AF82
 
 * % -> %maxint <=%
 * refs (3): 0FD2C 1BBE8 CBB72
 %FLOOR:
         CON(5)  (*)+5                            * 2AF86  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2AF8B
-        GOSUBL  SUB_2B767                        * 2AF8F
-        GOTO    SUB_2AEC5.L4                     * 2AF95
+        GOSUBL  aFLOOR                           * 2AF8F
+        GOTO    GoFltExc.L4                      * 2AF95
 
 * %% -> %%maxint
 * refs (1): 2B223
 %%FLOOR:
         CON(5)  (*)+5                            * 2AF99  primitive code object
         GOSUB   POP1%%~jump                      * 2AF9E
-        GOSUBL  SUB_2B767                        * 2AFA2
-        GOTO    SUB_2AEC5.L2                     * 2AFA8
+        GOSUBL  aFLOOR                           * 2AFA2
+        GOTO    GoFltExc.L2                      * 2AFA8
 
 * % %' -> %rem
 * refs (1): 0E6DE
@@ -1482,7 +1491,7 @@ hm->(r);r=>rr:
         ST=0    1                                * 2AFB5
         P=      0                                * 2AFB8
         LC(2)   #01                              * 2AFBA
-        GOTO    OBJ_2B55D.L2                     * 2AFBE
+        GOTO    %TRNC#.L2                        * 2AFBE
 
 * -> %random
 * refs (4): 1C1C3 CBB63 CBB77 CE211
@@ -1522,7 +1531,7 @@ hm->(r);r=>rr:
         GONC    %RAN.loop4                       * 2B03A
 %RAN.L5:
         A=B     M                                * 2B03D
-        GOTO    SUB_2AEC5.L7                     * 2B040
+        GOTO    GoFltExc.L7                      * 2B040
         RPL
 
 * %seed ->
@@ -1583,7 +1592,7 @@ DORANDOMIZE.L2:
 * refs (1): 2B12F
 %FACT~1:
         :: DUP %0>= case %NFACT                  * 2B171
-          OBJ_5203A DROP %-MAXREAL ;             * 2B18A
+          ?InfRes DROP %-MAXREAL ;               * 2B18A
 
 * refs (1): 2B158
 %FACT~2:
@@ -1678,39 +1687,42 @@ fact(rr)~1:
 * % %places -> %'
 * refs (4): 0FD7C 1BD64 4FD86 4FD9A
 RNDXY:
-        :: OBJ_2B590 OBJ_2B551 ;                 * 2B529
+        :: %Places>Code %RND# ;                  * 2B529
 
 * % %places -> %'
 * refs (2): 0FD9F 1BDE0
 TRCXY:
-        :: OBJ_2B590 OBJ_2B55D ;                 * 2B53D
+        :: %Places>Code %TRNC# ;                 * 2B53D
 
 * refs (6): 0CC6A 2B533 35E36 35ECC 4535D 45560
-OBJ_2B551:
+* % #code -> %': round to the digits given by a code from %Places>Code
+%RND#:
         CON(5)  (*)+5                            * 2B551  primitive code object
         ASSEMBLE
         ST=0    1                                * 2B556
-        GOTO    OBJ_2B55D.L1                     * 2B559
+        GOTO    %TRNC#.L1                        * 2B559
 
 * refs (3): 2B547 35EB3 35F21
-OBJ_2B55D:
+* % #code -> %': as %RND#, truncating
+%TRNC#:
         CON(5)  (*)+5                            * 2B55D  primitive code object
         ST=1    1                                * 2B562
-OBJ_2B55D.L1:
+%TRNC#.L1:
         GOSBVL  POP#                             * 2B565
         C=A     A                                * 2B56C
         RSTK=C                                   * 2B56E
         GOSUB   POP1%SPLITA~jump                 * 2B570
         C=RSTK                                   * 2B574
-OBJ_2B55D.L2:
+%TRNC#.L2:
         HST=0   3                                * 2B576
         GOSBVL  CCSB1                            * 2B579
         ST=1    2                                * 2B580
         GOSBVL  RNDC[B]                          * 2B583
-        GOLONG  SUB_2AEC5.L4                     * 2B58A
+        GOLONG  GoFltExc.L4                      * 2B58A
 
 * refs (4): 2B52E 2B542 35E45 35EDB
-OBJ_2B590:
+* %places -> #code: FIX places 0..11, significant digits for negative numbers, and 12 for the current display format (read from the flags)
+%Places>Code:
         CON(5)  (*)+5                            * 2B590  primitive code object
         GOSUB   POP1%SPLITA~jump                 * 2B595
         GOSBVL  CCSB1                            * 2B599
@@ -1721,11 +1733,11 @@ OBJ_2B590:
         GOSBVL  RNDC[B]                          * 2B5AC
         P=      14                               * 2B5B3
         ?B#0    P                                * 2B5B5
-        GOYES   OBJ_2B590.L1                     * 2B5B8
+        GOYES   %Places>Code.L1                  * 2B5B8
         P=      0                                * 2B5BA
         LC(2)   #01                              * 2B5BC
-        GOTO    OBJ_2B590.L7                     * 2B5C0
-OBJ_2B590.L1:
+        GOTO    %Places>Code.L7                  * 2B5C0
+%Places>Code.L1:
         C=0     W                                * 2B5C4
         P=      13                               * 2B5C7
         LC(2)   #12                              * 2B5C9
@@ -1734,28 +1746,28 @@ OBJ_2B590.L1:
         C=A     S                                * 2B5D2
         P=      3                                * 2B5D5
         ?A=0    S                                * 2B5D7
-        GOYES   OBJ_2B590.L2                     * 2B5DA
+        GOYES   %Places>Code.L2                  * 2B5DA
         P=      6                                * 2B5DC
-OBJ_2B590.L2:
+%Places>Code.L2:
         GOSBVL  TST15                            * 2B5DE
-        GOC     OBJ_2B590.L3                     * 2B5E5
+        GOC     %Places>Code.L3                  * 2B5E5
         GOSBVL  XYEX                             * 2B5E8
-OBJ_2B590.L3:
+%Places>Code.L3:
         ?A=0    S                                * 2B5EF
-        GOYES   OBJ_2B590.L4                     * 2B5F2
+        GOYES   %Places>Code.L4                  * 2B5F2
         GOSBVL  RADD1                            * 2B5F4
         P=      14                               * 2B5FB
         ?B#0    P                                * 2B5FD
-        GOYES   OBJ_2B590.L4                     * 2B600
+        GOYES   %Places>Code.L4                  * 2B600
         P=      0                                * 2B602
         LC(2)   #02                              * 2B604
-        GOTO    OBJ_2B590.L7                     * 2B608
-OBJ_2B590.L4:
+        GOTO    %Places>Code.L7                  * 2B608
+%Places>Code.L4:
         C=0     W                                * 2B60C
         P=      13                               * 2B60F
         LC(2)   #12                              * 2B611
         ?B#C    W                                * 2B615
-        GOYES   OBJ_2B590.L5                     * 2B618
+        GOYES   %Places>Code.L5                  * 2B618
         C=0     A                                * 2B61A
         D0=(5)  #8084E                           * 2B61C
         C=DAT0  1                                * 2B623
@@ -1764,32 +1776,33 @@ OBJ_2B590.L4:
         C=DAT0  1                                * 2B630
         CBIT=0  3                                * 2B634
         CBIT=0  2                                * 2B639
-        GONC    OBJ_2B590.L7                     * 2B63E
-OBJ_2B590.L5:
+        GONC    %Places>Code.L7                  * 2B63E
+%Places>Code.L5:
         C=B     W                                * 2B641
         CSL     W                                * 2B644
         CSLC                                     * 2B647
         A=A-1   A                                * 2B64A
-        GOC     OBJ_2B590.L6                     * 2B64C
+        GOC     %Places>Code.L6                  * 2B64C
         CSLC                                     * 2B64F
         P=      9                                * 2B652
         C+P+1                                    * 2B654
-OBJ_2B590.L6:
+%Places>Code.L6:
         CSL     A                                * 2B657
         P=      0                                * 2B659
         LC(1)   #1                               * 2B65B
         ?A=0    S                                * 2B65E
-        GOYES   OBJ_2B590.L7                     * 2B661
+        GOYES   %Places>Code.L7                  * 2B661
         LC(1)   #2                               * 2B663
-OBJ_2B590.L7:
+%Places>Code.L7:
         R0=C                                     * 2B666
         P=      0                                * 2B669
         SETHEX                                   * 2B66B
         GOVLNG  PUSH#LOOP                        * 2B66D
 
 * refs (1): 2AF56
-SUB_2B674:
-        GOVLNG  SUB_78A3A                        * 2B674
+* Long jump: fractional part of x in A:B
+aFP:
+        GOVLNG  FP15                             * 2B674
         BSS     2                                * 2B67B  zeros
 
 * refs (1): 2ABE5
@@ -1798,133 +1811,159 @@ aMODF:
         BSS     2                                * 2B684  zeros
 
 * refs (1): 2AE42
-SUB_2B686:
-        GOVLNG  SUB_78D1D.L4                     * 2B686
+* Long jump: exponent of x in A:B
+aXPON:
+        GOVLNG  XPON15                           * 2B686
         BSS     2                                * 2B68D  zeros
 
 * refs (2): 2AB9D 2ABB0
-SUB_2B68F:
-        GOVLNG  SUB_78D96.L4                     * 2B68F
+* Long jump: LN(1+x)
+aLNP1:
+        GOVLNG  LNP115                           * 2B68F
         BSS     2                                * 2B696  zeros
 
 * refs (4): 2AB64 2AB77 872C6 885E5
-SUB_2B698:
-        GOVLNG  SUB_78DE9.L3                     * 2B698
+* Long jump: LN(x)
+aLN:
+        GOVLNG  LN15                             * 2B698
         BSS     2                                * 2B69F  zeros
 
 * refs (2): 2AB8A 935F5
-SUB_2B6A1:
-        GOVLNG  SUB_78F86.L34                    * 2B6A1
+* Long jump: LOG(x)
+aLOG:
+        GOVLNG  LOG15                            * 2B6A1
         BSS     2                                * 2B6A8  zeros
 
 * refs (4): 2AB25 2AB38 872D5 885F8
-SUB_2B6AA:
-        GOVLNG  SUB_78F86.L5                     * 2B6AA
+* Long jump: e^x
+aEXP:
+        GOVLNG  EXP15                            * 2B6AA
         BSS     2                                * 2B6B1  zeros
 
 * refs (1): 2AB4B
-SUB_2B6B3:
-        GOVLNG  SUB_78F86.L6                     * 2B6B3
+* Long jump: e^x - 1
+aEXPM1:
+        GOVLNG  EXPM115                          * 2B6B3
         BSS     2                                * 2B6BA  zeros
 
 * refs (2): 2AAC0 9030A
-SUB_2B6BC:
-        GOVLNG  SUB_792C8.L5                     * 2B6BC
+* Long jump: y^x
+aY^X:
+        GOVLNG  Pow15                            * 2B6BC
         NIBHEX  008DDA39700                      * 2B6C3  .Ø.ε.
 
 * refs (1): 2AAD5
-SUB_2B6CE:
-        GOVLNG  SUB_792C8.L26                    * 2B6CE
+* Long jump: y'th root of x
+aXROOT:
+        GOVLNG  XRoot15                          * 2B6CE
         BSS     2                                * 2B6D5  zeros
 
 * refs (2): 2AD45 2AD8B
-SUB_2B6D7:
-        GOVLNG  SUB_79510.L1                     * 2B6D7
+* Long jump: the angle of the point (x, y)
+aANGLE:
+        GOVLNG  Angle15                          * 2B6D7
         BSS     2                                * 2B6DE  zeros
 
 * refs (2): 2ABFC 2AC36
-SUB_2B6E0:
-        GOVLNG  SUB_79639.L1                     * 2B6E0
+* Long jump: SIN(x)
+aSIN:
+        GOVLNG  SIN15                            * 2B6E0
         BSS     2                                * 2B6E7  zeros
 
 * refs (3): 2AC4D 2AC87 CB385
-SUB_2B6E9:
-        GOVLNG  SUB_79639.L2                     * 2B6E9
+* Long jump: COS(x)
+aCOS:
+        GOVLNG  COS15                            * 2B6E9
         BSS     2                                * 2B6F0  zeros
 
 * refs (3): 10E20 2AC9E 2ACB7
-SUB_2B6F2:
-        GOVLNG  SUB_79639.L4                     * 2B6F2
+* Long jump: TAN(x)
+aTAN:
+        GOVLNG  TAN15                            * 2B6F2
         BSS     2                                * 2B6F9  zeros
 
 * refs (1): 2AD2E
-SUB_2B6FB:
-        GOVLNG  SUB_79AE6.L2                     * 2B6FB
+* Long jump: ATAN(x)
+aATAN:
+        GOVLNG  ATAN15                           * 2B6FB
         BSS     2                                * 2B702  zeros
 
 * refs (2): 2ACCE 2ACE7
-SUB_2B704:
-        GOVLNG  SUB_79AE6.L3                     * 2B704
+* Long jump: ASIN(x)
+aASIN:
+        GOVLNG  ASIN15                           * 2B704
         BSS     2                                * 2B70B  zeros
 
 * refs (2): 2ACFE 2AD17
-SUB_2B70D:
-        GOVLNG  SUB_79AE6.L4                     * 2B70D
+* Long jump: ACOS(x)
+aACOS:
+        GOVLNG  ACOS15                           * 2B70D
         BSS     2                                * 2B714  zeros
 
 * refs (1): 2AE58
-SUB_2B716:
-        GOVLNG  SUB_78AE4.L1                     * 2B716
+* Long jump: x!
+aFACT:
+        GOVLNG  FACT15                           * 2B716
         BSS     2                                * 2B71D  zeros
 
 * refs (1): 2AE7E
-SUB_2B71F:
-        GOVLNG  SUB_78BB9.L2                     * 2B71F
+* Long jump: PERM(x, y)
+aPERM:
+        GOVLNG  PERM15                           * 2B71F
         BSS     2                                * 2B726  zeros
 
 * refs (1): 2AE6B
-SUB_2B728:
-        GOVLNG  SUB_78BB9.L3                     * 2B728
+* Long jump: COMB(x, y)
+aCOMB:
+        GOVLNG  COMB15                           * 2B728
         BSS     2                                * 2B72F  zeros
 
 * refs (4): 2AD9E 2ADB7 2ADD0 2ADE3
-SUB_2B731:
-        GOVLNG  STAB2~jump_5.L1                  * 2B731
+* Long jump: x in A:B -> COSH(x) in A:B, SINH(x) in R0:R1
+aCOSHSINH:
+        GOVLNG  SINHCOSH15                       * 2B731
         BSS     2                                * 2B738  zeros
 
 * refs (1): 2ADF6
-SUB_2B73A:
-        GOVLNG  RADDF~jump_4.L1                  * 2B73A
+* Long jump: TANH(x)
+aTANH:
+        GOVLNG  TANH15                           * 2B73A
         BSS     2                                * 2B741  zeros
 
 * refs (1): 2AE09
-SUB_2B743:
-        GOVLNG  SUB_79DEA.L1                     * 2B743
+* Long jump: ASINH(x)
+aASINH:
+        GOVLNG  ASINH15                          * 2B743
         BSS     2                                * 2B74A  zeros
 
 * refs (1): 2AE1C
-SUB_2B74C:
-        GOVLNG  SUB_79DEA.L2                     * 2B74C
+* Long jump: ACOSH(x)
+aACOSH:
+        GOVLNG  ACOSH15                          * 2B74C
         BSS     2                                * 2B753  zeros
 
 * refs (1): 2AE2F
-SUB_2B755:
-        GOVLNG  SUB_79E60.L1                     * 2B755
+* Long jump: ATANH(x)
+aATANH:
+        GOVLNG  ATANH15                          * 2B755
         BSS     2                                * 2B75C  zeros
 
 * refs (1): 2AF7C
-SUB_2B75E:
-        GOVLNG  SUB_79F58.L2                     * 2B75E
+* Long jump: CEIL(x)
+aCEIL:
+        GOVLNG  CEIL15                           * 2B75E
         BSS     2                                * 2B765  zeros
 
 * refs (3): 2AF8F 2AFA2 93611
-SUB_2B767:
-        GOVLNG  RADD1~jump_2.L1                  * 2B767
+* Long jump: FLOOR(x)
+aFLOOR:
+        GOVLNG  FLOOR15                          * 2B767
         NIBHEX  008D1EE9700                      * 2B76E  .Øá■.
 
 * refs (1): 2AF43
-SUB_2B779:
-        GOVLNG  SUB_79F51                        * 2B779
+* Long jump: H.MS format to hours
+aHMS>:
+        GOVLNG  HMS>H15                          * 2B779
         BSS     9                                * 2B780  zeros
 
 * refs (8): 2AEBE 787D3 794AE 79832 7992C 79C18 ...
@@ -1932,19 +1971,21 @@ SUB_2B779:
         HST=0   3                                * 2B789
 
 * refs (1): 79115
-SUB_2B78C:
+* x = 1/x: 1/X15 without its clearing of HST bit 3
+1/X15a:
         C=0     W                                * 2B78C
         D=0     W                                * 2B78F
         P=      14                               * 2B792
         D=D+1   P                                * 2B794
 
 * refs (2): 79C07 79DEA
-SUB_2B797:
+* y/x, the result in A:B: swaps x and y and divides
+Y/X:
         BCEX    W                                * 2B797
         DCEX    W                                * 2B79A
         BCEX    W                                * 2B79D
         CAEX    W                                * 2B7A0
-        GOTO    SUB_2B96E.L1                     * 2B7A3
+        GOTO    DIVFchk.L1                       * 2B7A3
 
 * x=x-1 see <REF>RADDF
 * refs (12): 7884F 78C37 79125 7926B 79FB5 88095 ...
@@ -1961,12 +2002,13 @@ RADD1.L1:
         P=      14                               * 2B7B3
         D=0     W                                * 2B7B5
         D=D+1   P                                * 2B7B8
-        GONC    SUB_2B7BE.L1                     * 2B7BB
+        GONC    RADDFchk.L1                      * 2B7BB
 
 * refs (1): 346DC
-SUB_2B7BE:
+* x = x + y with rounding, handling infinities and NaNs first (RADDF itself doesn't). P = 3 selects the operation in the shared code at SQRF.L11.
+RADDFchk:
         XM=0                                     * 2B7BE
-SUB_2B7BE.L1:
+RADDFchk.L1:
         SB=0                                     * 2B7C1
         P=      3                                * 2B7C4
         GOTO    SQRF.L11                         * 2B7C6
@@ -2120,7 +2162,8 @@ ADDF.L21:
         GOTO    MULTF.L5                         * 2B911
 
 * refs (3): 7927C 7937F 79917
-SUB_2B915:
+* x = x * y, handling infinities and NaNs first (P = 1)
+MULTFchk:
         HST=0   3                                * 2B915
         P=      1                                * 2B918
         GOTO    SQRF.L11                         * 2B91A
@@ -2161,12 +2204,13 @@ MULTF.L5:
         A=A+1   A                                * 2B963
         BSR     W                                * 2B965
 MULTF.L6:
-        GOLONG  SUB_2BC62.L2                     * 2B968
+        GOLONG  SplitNormA.L2                    * 2B968
 
 * refs (1): 79560
-SUB_2B96E:
+* x = x / y, handling infinities and NaNs first (P = 2)
+DIVFchk:
         HST=0   3                                * 2B96E
-SUB_2B96E.L1:
+DIVFchk.L1:
         P=      2                                * 2B971
         GOTO    SQRF.L11                         * 2B973
 
@@ -2176,24 +2220,25 @@ DIVF:
         BCEX    W                                * 2B977
 
 * refs (1): 798DF
-SUB_2B97A:
+* DIVF after its first step, for callers with B and C already exchanged: checks for 0/0 and division by zero
+DIVF1:
         C=0     S                                * 2B97A
         D=0     S                                * 2B97D
         ?D#0    W                                * 2B980
-        GOYES   SUB_2B97A.L4                     * 2B983
+        GOYES   DIVF1.L4                         * 2B983
         ?C#0    W                                * 2B985
-        GOYES   SUB_2B97A.L1                     * 2B988
+        GOYES   DIVF1.L1                         * 2B988
         P=      0                                * 2B98A
         LC(2)   #07                              * 2B98C
         GOTO    SQRF.loop21                      * 2B990
-SUB_2B97A.L1:
+DIVF1.L1:
         A=A-B   S                                * 2B994
-        GONC    SUB_2B97A.L2                     * 2B997
+        GONC    DIVF1.L2                         * 2B997
         A=-A    S                                * 2B99A
-SUB_2B97A.L2:
+DIVF1.L2:
         P=      0                                * 2B99D
         LC(2)   #08                              * 2B99F
-SUB_2B97A.L3:
+DIVF1.L3:
         A=0     A                                * 2B9A3
         A=C     B                                * 2B9A5
         LC(3)   #F00                             * 2B9A8
@@ -2202,36 +2247,37 @@ SUB_2B97A.L3:
         B=-B-1  M                                * 2B9B2
         P=      3                                * 2B9B5
         RTNSXM                                   * 2B9B7
-SUB_2B97A.L4:
+DIVF1.L4:
         A=A-B   A                                * 2B9B9
         A=A-B   S                                * 2B9BB
-        GONC    SUB_2B97A.L5                     * 2B9BE
+        GONC    DIVF1.L5                         * 2B9BE
         A=-A    S                                * 2B9C1
-SUB_2B97A.L5:
+DIVF1.L5:
         ?D<=C   W                                * 2B9C4
-        GOYES   SUB_2B97A.L6                     * 2B9C7
+        GOYES   DIVF1.L6                         * 2B9C7
         CSL     W                                * 2B9C9
         A=A-1   A                                * 2B9CC
-SUB_2B97A.L6:
+DIVF1.L6:
         P=      14                               * 2B9CE
         B=0     W                                * 2B9D0
         ?C=0    W                                * 2B9D3
-        GOYES   SUB_2B97A.L9                     * 2B9D6
+        GOYES   DIVF1.L9                         * 2B9D6
         B=B-1   P                                * 2B9D8
-SUB_2B97A.loop7:
+DIVF1.loop7:
         B=B+1   P                                * 2B9DB
-SUB_2B97A.loop8:
+DIVF1.loop8:
         C=C-D   W                                * 2B9DE
-        GONC    SUB_2B97A.loop7                  * 2B9E1
+        GONC    DIVF1.loop7                      * 2B9E1
         C=C+D   W                                * 2B9E4
         CSL     W                                * 2B9E7
         P=P-1                                    * 2B9EA
-        GONC    SUB_2B97A.loop8                  * 2B9EC
-SUB_2B97A.L9:
+        GONC    DIVF1.loop8                      * 2B9EC
+DIVF1.L9:
         GOTO    SQRF.L9                          * 2B9EF
 
 * refs (4): 2AAFF 2AB12 2CD90 79925
-SUB_2B9F3:
+* SQRT(x), handling infinities and NaNs first
+SQRFchk:
         HST=0   3                                * 2B9F3
         SETHEX                                   * 2B9F6
         A=A+1   XS                               * 2B9F8
@@ -2352,13 +2398,13 @@ SQRF.L17:
         ?C=A    XS                               * 2BB01
         GOYES   SQRF.L20                         * 2BB04
         ?C#0    B                                * 2BB06
-        GOYES   SQRF.L24                         * 2BB09
+        GOYES   SQRF.loop24                      * 2BB09
         ?P=     2                                * 2BB0B
         GOYES   SQRF.L18                         * 2BB0E
         ?P=     0                                * 2BB10
-        GOYES   SQRF.L24                         * 2BB13
+        GOYES   SQRF.loop24                      * 2BB13
         ?P=     3                                * 2BB15
-        GOYES   SQRF.L24                         * 2BB18
+        GOYES   SQRF.loop24                      * 2BB18
         ?B=0    W                                * 2BB1A
         GOYES   SQRF.loop16                      * 2BB1D
         A=C     A                                * 2BB1F
@@ -2395,7 +2441,7 @@ SQRF.L22:
 SQRF.L23:
         ?A#0    B                                * 2BB66
         GOYES   SQRF.L25                         * 2BB69
-SQRF.L24:
+SQRF.loop24:
         GOVLNG  XYEX                             * 2BB6B
 SQRF.L25:
         DCEX    W                                * 2BB72
@@ -2407,7 +2453,7 @@ SQRF.L25:
         GOYES   SQRF.L26                         * 2BB82
 SQRF.L26:
         DCEX    W                                * 2BB84
-        GOC     SQRF.L24                         * 2BB87  never taken
+        GOC     SQRF.loop24                      * 2BB87
         RTN                                      * 2BB8A
 SQRF.L27:
         B=0     W                                * 2BB8C
@@ -2452,7 +2498,7 @@ DIV2.L3:
 
 * refs (7): 0CE21 0EEF7 2AF69 78811 79361 79D86 ...
 CLRFRC:
-        GOSUB   SUB_2BBFC                        * 2BBE2
+        GOSUB   FracPosChk                       * 2BBE2
         ?P=     15                               * 2BBE6
         RTNYES                                   * 2BBE9
         ?B=0    WP                               * 2BBEB
@@ -2465,42 +2511,44 @@ CLRFRC.L1:
         RTNCC                                    * 2BBFA
 
 * refs (6): 2BBE2 35242 78A4F 793E2 794C1 79EEF
-SUB_2BBFC:
+* As FracPos; infinities and NaNs give P = 15
+FracPosChk:
         SETHEX                                   * 2BBFC
         A=A+1   XS                               * 2BBFE
         A=A-1   XS                               * 2BC01
         SETDEC                                   * 2BC04
-        GOC     SUB_2BC09.L4                     * 2BC06
+        GOC     FracPos.L4                       * 2BC06
 
 * refs (1): 78D31
-SUB_2BC09:
+* A.A = exponent, B = mantissa -> P = top nibble of the fraction in the mantissa: 14 when all of it is fraction, 15 when none is. A zero mantissa has its exponent cleared first.
+FracPos:
         SETDEC                                   * 2BC09
         P=      14                               * 2BC0B
         ?B#0    P                                * 2BC0D
-        GOYES   SUB_2BC09.L1                     * 2BC10
+        GOYES   FracPos.L1                       * 2BC10
         A=0     A                                * 2BC12
-SUB_2BC09.L1:
+FracPos.L1:
         P=      0                                * 2BC14
         C=0     A                                * 2BC16
         LC(2)   #13                              * 2BC18
         C=C-A   A                                * 2BC1C
-        GOC     SUB_2BC09.L3                     * 2BC1E
+        GOC     FracPos.L3                       * 2BC1E
         P=      1                                * 2BC21
         ?C=0    P                                * 2BC23
-        GOYES   SUB_2BC09.L2                     * 2BC26
+        GOYES   FracPos.L2                       * 2BC26
         P=      9                                * 2BC28
         C+P+1                                    * 2BC2A
-SUB_2BC09.L2:
+FracPos.L2:
         P=C     0                                * 2BC2D
         RTN                                      * 2BC31
-SUB_2BC09.L3:
+FracPos.L3:
         C=C+1   A                                * 2BC33
-        GOC     SUB_2BC09.L4                     * 2BC35
+        GOC     FracPos.L4                       * 2BC35
         LC(5)   #50000                           * 2BC38
         P=      14                               * 2BC3F
         ?C<=A   A                                * 2BC41
         RTNYES                                   * 2BC44
-SUB_2BC09.L4:
+FracPos.L4:
         P=      15                               * 2BC46
         RTN                                      * 2BC48
 
@@ -2519,31 +2567,32 @@ SPLITA.L1:
         B=0     X                                * 2BC5F
 
 * refs (2): 791F3 79319
-SUB_2BC62:
+* x in A:B, just split: a special value (XS = F) keeps only its mark; a denormalized number is shifted up until its top digit isn't zero
+SplitNormA:
         SETHEX                                   * 2BC62
         A=A+1   XS                               * 2BC64
         A=A-1   XS                               * 2BC67
         SETDEC                                   * 2BC6A
-        GONC    SUB_2BC62.L1                     * 2BC6C
+        GONC    SplitNormA.L1                    * 2BC6C
         A=0     M                                * 2BC6F
         B=A     XS                               * 2BC72
         RTNSC                                    * 2BC75
-SUB_2BC62.L1:
+SplitNormA.L1:
         B=C     S                                * 2BC77
         CPEX    15                               * 2BC7A
-SUB_2BC62.L2:
+SplitNormA.L2:
         P=      14                               * 2BC7E
         ?B=0    WP                               * 2BC80
-        GOYES   SUB_2BC62.L4                     * 2BC83
-SUB_2BC62.loop3:
+        GOYES   SplitNormA.L4                    * 2BC83
+SplitNormA.loop3:
         ?B#0    P                                * 2BC85
-        GOYES   SUB_2BC62.L5                     * 2BC88
+        GOYES   SplitNormA.L5                    * 2BC88
         A=A-1   A                                * 2BC8A
         BSL     WP                               * 2BC8C
-        GOTO    SUB_2BC62.loop3                  * 2BC8F
-SUB_2BC62.L4:
+        GOTO    SplitNormA.loop3                 * 2BC8F
+SplitNormA.L4:
         A=0     A                                * 2BC93
-SUB_2BC62.L5:
+SplitNormA.L5:
         P=      0                                * 2BC95
         CPEX    15                               * 2BC97
         BCEX    S                                * 2BC9B
@@ -2559,50 +2608,53 @@ SPLTAC:
         C=D     A                                * 2BCAA
 
 * refs (7): 232D0 232F9 2CFED 344FB 535AE 78556 ...
-SUB_2BCAC:
+* ( C -> y ): convert % to %% in C:D
+SPLITC:
         SETDEC                                   * 2BCAC
         DCEX    M                                * 2BCAE
         D=C     X                                * 2BCB1
         C=C+C   XS                               * 2BCB4
         C=0     A                                * 2BCB7
-        GONC    SUB_2BCAC.L1                     * 2BCB9
+        GONC    SPLITC.L1                        * 2BCB9
         C=C-1   A                                * 2BCBC
-SUB_2BCAC.L1:
+SPLITC.L1:
         C=D     X                                * 2BCBE
         D=0     X                                * 2BCC1
 
 * refs (1): 79326
-SUB_2BCC4:
+* As SplitNormA for y in C:D
+SplitNormC:
         SETHEX                                   * 2BCC4
         C=C+1   XS                               * 2BCC6
         C=C-1   XS                               * 2BCC9
         SETDEC                                   * 2BCCC
-        GONC    SUB_2BCC4.L1                     * 2BCCE
+        GONC    SplitNormC.L1                    * 2BCCE
         C=0     M                                * 2BCD1
         D=C     XS                               * 2BCD4
         RTNSC                                    * 2BCD7
-SUB_2BCC4.L1:
+SplitNormC.L1:
         D=C     S                                * 2BCD9
         CPEX    15                               * 2BCDC
         P=      14                               * 2BCE0
         ?D=0    WP                               * 2BCE2
-        GOYES   SUB_2BCC4.L3                     * 2BCE5
-SUB_2BCC4.loop2:
+        GOYES   SplitNormC.L3                    * 2BCE5
+SplitNormC.loop2:
         ?D#0    P                                * 2BCE7
-        GOYES   SUB_2BCC4.L4                     * 2BCEA
+        GOYES   SplitNormC.L4                    * 2BCEA
         C=C-1   A                                * 2BCEC
         DSL     WP                               * 2BCEE
-        GOTO    SUB_2BCC4.loop2                  * 2BCF1
-SUB_2BCC4.L3:
+        GOTO    SplitNormC.loop2                 * 2BCF1
+SplitNormC.L3:
         C=0     A                                * 2BCF5
-SUB_2BCC4.L4:
+SplitNormC.L4:
         P=      0                                * 2BCF7
         CPEX    15                               * 2BCF9
         DCEX    S                                * 2BCFD
         RTNCC                                    * 2BD00
 
 * refs (3): 2BD8A 34675 7962B
-SUB_2BD02:
+* -> carry set when A.XS = F: x is an infinity or NaN
+SpecA?:
         SETHEX                                   * 2BD02
         A=A+1   XS                               * 2BD04
         A=A-1   XS                               * 2BD07
@@ -2610,7 +2662,8 @@ SUB_2BD02:
         RTN                                      * 2BD0C
 
 * refs (3): 2BDDB 792EE 79351
-SUB_2BD0E:
+* -> carry set when C.XS = F: y is an infinity or NaN
+SpecC?:
         SETHEX                                   * 2BD0E
         C=C+1   XS                               * 2BD10
         C=C-1   XS                               * 2BD13
@@ -2618,7 +2671,8 @@ SUB_2BD0E:
         RTN                                      * 2BD18
 
 * refs (3): 2BD57 2BD60 2BD6B
-SUB_2BD1A:
+* Add 5 to A.XS and C.XS, so that signed exponents compare as unsigned numbers
+BiasExps:
         BCEX    XS                               * 2BD1A
         P=      5                                * 2BD1D
         CPEX    2                                * 2BD1F
@@ -2647,16 +2701,16 @@ Y<=X.L1:
         RTNYES                                   * 2BD52
         GONC    Y<=X.L3                          * 2BD54
 Y<=X.L2:
-        GOSUB   SUB_2BD1A                        * 2BD57
+        GOSUB   BiasExps                         * 2BD57
         ?C<A    X                                * 2BD5B
         GOYES   Y<=X.L4                          * 2BD5E
-        GOSUB   SUB_2BD1A                        * 2BD60
+        GOSUB   BiasExps                         * 2BD60
 Y<=X.L3:
         ?A=0    S                                * 2BD64
         RTNYES                                   * 2BD67
         RTN                                      * 2BD69
 Y<=X.L4:
-        GOSUB   SUB_2BD1A                        * 2BD6B
+        GOSUB   BiasExps                         * 2BD6B
 Y<=X.L5:
         ?A#0    S                                * 2BD6F
         RTNYES                                   * 2BD72
@@ -2670,7 +2724,7 @@ TST15:
         GOSUB   A+5P4                            * 2BD80
         GOSUB   A+5P_2BE40                       * 2BD84
         P=      8                                * 2BD88
-        GOSUBL  SUB_2BD02                        * 2BD8A
+        GOSUBL  SpecA?                           * 2BD8A
         GONC    TST15.L5                         * 2BD90
         BCEX    W                                * 2BD93
         ?A#0    B                                * 2BD96
@@ -2702,7 +2756,7 @@ TST15.L4:
         D=0     S                                * 2BDD6
         RTN                                      * 2BDD9
 TST15.L5:
-        GOSUBL  SUB_2BD0E                        * 2BDDB
+        GOSUBL  SpecC?                           * 2BDDB
         BCEX    W                                * 2BDE1
         GONC    TST15.L8                         * 2BDE4
         ?B#0    B                                * 2BDE7
@@ -2901,7 +2955,7 @@ RNDC[B]:
         SETDEC                                   * 2BF0B
         P=C     0                                * 2BF0D
 RNDC[B].L1:
-        GOSUB   SUB_2BF83                        * 2BF11
+        GOSUB   RndStep                          * 2BF11
 
 * refs (1): 2BF73
 XYEX~jump:
@@ -2913,6 +2967,7 @@ XYEX~jump.L2:
         C=P     15                               * 2BF22
 
 * refs (1): 98699
+* Probably: rounds x in A:B to the number of digits in C.S, for a denormalized result
 SUB_2BF26:
         P=      14                               * 2BF26
         ?B#0    P                                * 2BF28
@@ -2950,7 +3005,7 @@ SUB_2BF26.L6:
         C=C-1   A                                * 2BF6A
         GONC    SUB_2BF26.loop5                  * 2BF6C
 SUB_2BF26.L7:
-        GOSUB   SUB_2BF83                        * 2BF6F
+        GOSUB   RndStep                          * 2BF6F
         GOSUB   XYEX~jump                        * 2BF73
         ?ST=1   7                                * 2BF77
         GOYES   SUB_2BF26.loop4                  * 2BF7A
@@ -2958,53 +3013,55 @@ SUB_2BF26.L7:
         RTNCC                                    * 2BF7F
 
 * refs (2): 37791 93DA3
-SUB_2BF81:
+* As RndStep at P = 2, leaving 12 digits
+Rnd12:
         P=      2                                * 2BF81
 
 * refs (2): 2BF11 2BF6F
-SUB_2BF83:
+* x in A:B, P = lowest digit kept less one -> C:D = x truncated, or plus one in the last place kept. ST1 set truncates. ST7 set if the digits dropped weren't all zero. Rounds half up; SB counts as a dropped digit.
+RndStep:
         ST=0    7                                * 2BF83
         C=B     W                                * 2BF86
         C=0     S                                * 2BF89
         ?C#0    WP                               * 2BF8C
-        GOYES   SUB_2BF83.L1                     * 2BF8F
+        GOYES   RndStep.L1                       * 2BF8F
         ?SB=0                                    * 2BF91
-        GOYES   SUB_2BF83.loop5                  * 2BF94
-SUB_2BF83.L1:
+        GOYES   RndStep.loop5                    * 2BF94
+RndStep.L1:
         ST=1    7                                * 2BF96
         ?ST=1   1                                * 2BF99
-        GOYES   SUB_2BF83.L2                     * 2BF9C
+        GOYES   RndStep.L2                       * 2BF9C
         C=C+C   WP                               * 2BF9E
-        GOC     SUB_2BF83.L3                     * 2BFA1
-SUB_2BF83.L2:
+        GOC     RndStep.L3                       * 2BFA1
+RndStep.L2:
         C=0     WP                               * 2BFA4
-        GOTO    SUB_2BF83.loop5                  * 2BFA7
-SUB_2BF83.L3:
+        GOTO    RndStep.loop5                    * 2BFA7
+RndStep.L3:
         ?C#0    WP                               * 2BFAB
-        GOYES   SUB_2BF83.loop4                  * 2BFAE
+        GOYES   RndStep.loop4                    * 2BFAE
         ?SB=0                                    * 2BFB0
-        GOYES   SUB_2BF83.L7                     * 2BFB3
-SUB_2BF83.loop4:
+        GOYES   RndStep.L7                       * 2BFB3
+RndStep.loop4:
         C=0     WP                               * 2BFB5
         C=-C-1  WP                               * 2BFB8
-SUB_2BF83.loop5:
+RndStep.loop5:
         P=      14                               * 2BFBB
         D=C     W                                * 2BFBD
         C=A     W                                * 2BFC0
         D=D+1   WP                               * 2BFC3
-        GONC    SUB_2BF83.L6                     * 2BFC6
+        GONC    RndStep.L6                       * 2BFC6
         C=C+1   A                                * 2BFC9
         D=D+1   P                                * 2BFCB
-SUB_2BF83.L6:
+RndStep.L6:
         P=      0                                * 2BFCE
         D=0     P                                * 2BFD0
         RTNCC                                    * 2BFD3
-SUB_2BF83.L7:
+RndStep.L7:
         D=C     W                                * 2BFD5
         DSRB                                     * 2BFD8
         ?D=0    P                                * 2BFDB
-        GOYES   SUB_2BF83.loop5                  * 2BFDE
-        GONC    SUB_2BF83.loop4                  * 2BFE0
+        GOYES   RndStep.loop5                    * 2BFDE
+        GONC    RndStep.loop4                    * 2BFE0
 
 * refs (9): 37343 7D44C 7D580 7D7C1 87C29 89232 ...
 GETAB1:

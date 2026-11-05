@@ -1,4 +1,4 @@
-* HP 48GX ROM revision R, #63029-#660FB: Control structures and stack utilities
+* HP 48GX ROM revision R, #63029-#660FB: RPL utility words, list and string search, built-in integers and dispatch codes, tokens and characters, then the first EquationWriter routines
 * Addresses in the right-hand comments are those of the original ROM.
 * Most referenced: MINUSONE CHR_D #<>case 1GETABND ZEROZERO TWO{}N #=casedrpfls DUPLENCOMP SWAP3PICK BINT131 caseTRUE ONEONE
 * Follows on from the previous file (at #63029 in the original ROM).
@@ -1057,8 +1057,8 @@ SaveVarRes:
 * ->
 * refs (1): 6404B
 SetHiddenRes:
-        :: OBJ_0B997 ?SKIP                       * 640BE
-          :: OBJ_0BA40 OBJ_0B997 DROP ;          * 640CD
+        :: HiddenDir? ?SKIP                      * 640BE
+          :: MakeHiddenDir HiddenDir? DROP ;     * 640CD
           DUP CONTEXT! STOPSIGN! ;               * 640E6
 
 * ->
@@ -1095,7 +1095,7 @@ Embedded?.L1:
 * -> #
 * refs (4): 43667 436BC D519E D526F
 UStackDepth:
-        :: OBJ_113C2 #5- BINT5 #/ SWAPDROP ;     * 6416D
+        :: DEPTHSAVE@ #5- BINT5 #/ SWAPDROP ;    * 6416D
 
 * # ->
 * refs (1): 23407
@@ -1142,21 +1142,22 @@ ZEROZERO:
         C=C+1   A                                * 64212
 #ZERO#ONE.L1:
         D=D-1   A                                * 64214
-        GOC     SUB_64236.L1                     * 64216
+        GOC     PushBINT.L1                      * 64216
         D=D-1   A                                * 64219
-        GOC     SUB_64236.L1                     * 6421B
+        GOC     PushBINT.L1                      * 6421B
 #ZERO#ONE.L2:
         RSTK=C                                   * 6421E
-        GOSUB   SUB_64236                        * 64220
+        GOSUB   PushBINT                         * 64220
         C=RSTK                                   * 64224
         A=C     A                                * 64226
-        GOSUB   SUB_64236                        * 64228
+        GOSUB   PushBINT                         * 64228
         A=DAT0  A                                * 6422C
         D0=D0+  5                                * 6422F
         PC=(A)                                   * 64232
 
 * refs (2): 64220 64228
-SUB_64236:
+* A.A = n -> : push built-in integer n, whose address is BINT0 + 10*n, at D1. No memory check
+PushBINT:
         A=A+A   A                                * 64236
         C=A     A                                * 64238
         A=A+A   A                                * 6423A
@@ -1167,16 +1168,16 @@ SUB_64236:
         D1=D1-  5                                * 64249
         DAT1=A  A                                * 6424C
         RTN                                      * 6424F
-SUB_64236.L1:
+PushBINT.L1:
         R0=A.F  A                                * 64251
         RSTK=C                                   * 64257
         GOSBVL  SafGarbD-1                       * 64259
         D=D-1   A                                * 64260
-        GOC     SUB_64236.L2                     * 64262
+        GOC     PushBINT.L2                      * 64262
         C=RSTK                                   * 64265
         A=R0.F  A                                * 64267
         GOTO    #ZERO#ONE.L2                     * 6426D
-SUB_64236.L2:
+PushBINT.L2:
         D=0     A                                * 64271
         GOVLNG  DOMEMERR                         * 64273
 
@@ -1470,6 +1471,7 @@ POS$REV.L11:
         PC=(A)                                   * 64723
 
 * refs (2): 645FB 64616
+* Helper of POS$: DOCHAR at A: take the character out of a character object
 SUB_64727:
         D0=A                                     * 64727
         A=DAT0  A                                * 6472A
@@ -1610,7 +1612,7 @@ NEXTCOMPOB.L4:
           LA(5)   #00005                         * 6490A
           ?C>A    A                              * 64914
           GOYES   >LASTRAM-WORD.L2               * 64917
-          GOSBVL  SUB_12D68                      * 64919
+          GOSBVL  GCorMemErr                     * 64919
           GOTO    >LASTRAM-WORD.loop1            * 64920
 >LASTRAM-WORD.L2:
           R0=C                                   * 64924
@@ -1746,7 +1748,7 @@ NEXTCOMPOB.L4:
           D0=C                                   * 64AA2
           D0=D0-  5                              * 64AA5
           C=D     A                              * 64AA8
-          GOSBVL  SUB_0686E                      * 64AAA
+          GOSBVL  AdjRefs2                       * 64AAA
           D1=(5)  INITEN                         * 64AB1
           C=R0.F  S                              * 64AB8
           DAT1=C  S                              * 64ABE
@@ -2090,7 +2092,8 @@ SYMREAL:
         # A1                                     * 64D74  161
 
 * refs (8): 1A928 1ABFD 1AD81 1AE8E 1AF91 1B07D ...
-OBJ_64D7E:
+* # A2: dispatch code of a symbolic in level 2 and a complex number in level 1
+SYMCMP:
         # A2                                     * 64D7E  162
 
 * 165d A5h
@@ -3484,7 +3487,7 @@ Symb>HBuff:
 
 * refs (1): 68425
 OBJ_65A06:
-        :: OBJ_67ABC SWAP #2/ SWAP #2/ ;         * 65A06
+        :: EqwBoxWH@ SWAP #2/ SWAP #2/ ;         * 65A06
 
 * refs (1): 683F8
 OBJ_65A29:
@@ -3497,62 +3500,63 @@ OBJ_65A29:
 
 * refs (2): 68402 6D1D6
 OBJ_65A38:
-        :: DUP GOTO OBJ_6E11D.L1 ;               * 65A38
+        :: DUP GOTO EqwAddRParen.L1 ;            * 65A38
 
 * refs (1): 1F1F7
 OBJ_65A51:
         :: SKIP OBJ_65C90 OBJ_6CFA1 3DROP BINT10 ROLL #1+ 10UNROLL * 65A51
-          EqwFontWidth OBJ_68183 #3+ OBJ_65B0A 2DUPHALF OBJ_6D8DC Push3Zeros * 65A7E
-          EqwBoxCount#2+ EqwCurBox@ OBJ_6D9C2 BINT5 OBJ_65B0A DUP OBJ_44CA0 * 65AA1
-          BINT6 ROT OBJ_6DA4E EqwNewBox EqwBoxCount #9+ EqwBoxCount#2+ * 65AC4
+          EqwFontWidth #5* #3+ OBJ_65B0A 2DUPHALF OBJ_6D8DC Push3Zeros * 65A7E
+          EqwBoxCount#2+ EqwCurBox@ ONEZERO BINT5 OBJ_65B0A DUP OBJ_44CA0 * 65AA1
+          BINT6 ROT EqwLeafGeom EqwNewBox EqwBoxCount #9+ EqwBoxCount#2+ * 65AC4
           EqwBoxCount EqwBoxCount#3+ EqwBoxCount#1- MINUSONE ZEROZERO * 65AE7
           NULLPAINT EqwFontWidth                 * 65B00
 
 * refs (2): 65A8D 65AB5
 OBJ_65B0A:
-          :: OBJ_6E0C0 #2* EqwFontHeight #+ ; 2DUPHALF OBJ_6D990 EqwNewBox * 65B0A
-          Push3Zeros EqwBoxCount #8+ EqwBoxCount Push3Zeros OBJ_6E0C0 * 65B37
+          :: EqwFontH-1 #2* EqwFontHeight #+ ; 2DUPHALF OBJ_6D990 EqwNewBox * 65B0A
+          Push3Zeros EqwBoxCount #8+ EqwBoxCount Push3Zeros EqwFontH-1 * 65B37
           EqwFontHeight #+ EqwFontWidth OBJ_6DC51 EqwNewBox EqwBoxCount #6+ * 65B55
-          EqwBoxCount#2+ DUP #3- BINT0 EqwCurBox@ OBJ_6D39D EqwFontWidth #3* * 65B78
-          #1+ EqwFontHeight OBJ_6DCA6 EqwNewBox Push3Zeros EqwBoxCount#2+ * 65BA0
-          EqwBoxCount                            * 65BBE
+          EqwBoxCount#2+ DUP #3- BINT0 EqwCurBox@ EqwPlainArgs EqwFontWidth * 65B78
+          #3* #1+ EqwFontHeight OBJ_6DCA6 EqwNewBox Push3Zeros * 65B9B
+          EqwBoxCount#2+ EqwBoxCount             * 65BB9
 
 * refs (1): 65BFA
 OBJ_65BC3:
           :: Push3Zeros EqwFontHeight BINT2 OBJ_6DC51 EqwNewBox ; ZEROZERO * 65BC3
           EqwBoxCount EqwBoxCount#2+ EqwBoxCount#1- OBJ_65BC3 OBJ_6D451 * 65BEB
-          DUP#2+ OVER #2- BINT0 OBJ_6D136 ZEROZERO EqwBoxCount#1+ DUP#2+ * 65C04
-          OVER #3- BINT9 OBJ_6D136 OBJ_6D9F9 ZEROOVER #4- BINT0 OBJ_6D136 * 65C2C
-          OBJ_6D4CE EqwBoxCount #6- BINT0 OBJ_6DCE7 BINT3 BINT0 OBJ_6DD23 * 65C59
-          EqwNewLeafBox OBJ_6D5EB ;              * 65C81
+          DUP#2+ OVER #2- BINT0 EqwCellArgs0 ZEROZERO EqwBoxCount#1+ DUP#2+ * 65C04
+          OVER #3- BINT9 EqwCellArgs0 OBJ_6D9F9 ZEROOVER #4- BINT0 * 65C2C
+          EqwCellArgs0 EqwNew3 EqwBoxCount #6- BINT0 OVER#1- BINT3 BINT0 * 65C54
+          OBJ_6DD23 EqwNewLeafBox EqwCurNew ;    * 65C7C
 
 * refs (1): 65A5B
 OBJ_65C90:
-        :: SKIP OBJ_65E0E OBJ_6FD85 OBJ_6DFDE OBJ_6FDB6 OBJ_65D0A OBJ_6FDC6 * 65C90
-          OBJ_65DAA BINT7 OBJ_6E433 OBJ_67E0C EqwBoxLast@ EqwBoxSecond@ * 65CB8
+        :: SKIP OBJ_65E0E EqwIf2 EqwSmaller EqwIf4 OBJ_65D0A EqwIf6 * 65C90
+          OBJ_65DAA BINT7 #<>RDROP EqwFrm5@ EqwBoxLast@ EqwBoxSecond@ * 65CB8
           EqwBoxNext@ EqwBoxNext@ DUP            * 65CD6
 
 d:
-          $ "d" OBJ_6CB70 EqwBoxObj! #1+ EqwCurBox! ; * 65CE5
+          $ "d" EqwTextGrob EqwBoxObj! #1+ EqwCurBox! ; * 65CE5
 
 * refs (1): 65CAE
 OBJ_65D0A:
-        :: OBJ_67E0C                             * 65D0A
+        :: EqwFrm5@                              * 65D0A
 
 * refs (12): 4B8E6 65CD1 65E4F 65EAE 66200 66359 ...
 * #b -> #c: the second child (first child's next sibling)
 EqwBoxSecond@:
           :: EqwBoxFirst@ EqwBoxNext@ ; EqwDupBoxFirst@ Push3Zeros 4PICK * 65D14
-          DUP#1- BINT5 OBJ_6D136 EqwNewBox EqwBoxCount OVER EqwBoxNext@ * 65D37
-          OBJ_67AD5 OBJ_67C09 SWAP EqwBoxCount EqwBoxFirst! DUP EqwBoxCount * 65D5A
-          EqwBoxPrev! OBJ_6E00B OBJ_6F42D OBJ_6DFDE OBJ_44DFE EqwBoxCount * 65D7D
-          EqwCurBox! OBJ_6E4F6 ;                 * 65D9B
+          DUP#1- BINT5 EqwCellArgs0 EqwNewBox EqwBoxCount OVER EqwBoxNext@ * 65D37
+          EqwBoxRefX@ EqwBoxRefX! SWAP EqwBoxCount EqwBoxFirst! DUP * 65D5A
+          EqwBoxCount EqwBoxPrev! EqwLarger EqwBlankCell EqwSmaller * 65D78
+          OBJ_44DFE EqwBoxCount EqwCurBox! EqwRelayoutCur ; * 65D91
 
 * refs (1): 65CB8
 OBJ_65DAA:
-        :: OBJ_6E00B OBJ_67E0C EqwBoxLast@ ZEROZERO 3PICK EqwBoxFirst@ * 65DAA
-          OBJ_67987 2DUP EqwBoxCount#1+ EqwBoxPrev! EqwBoxCount#1+ * 65DCD
-          EqwBoxNext! 5ROLL BINT7 OBJ_6D136 EqwNewBox EqwBoxCount EqwCurBox! ; * 65DE6
+        :: EqwLarger EqwFrm5@ EqwBoxLast@ ZEROZERO 3PICK EqwBoxFirst@ * 65DAA
+          EqwDupBoxNext@ 2DUP EqwBoxCount#1+ EqwBoxPrev! EqwBoxCount#1+ * 65DCD
+          EqwBoxNext! 5ROLL BINT7 EqwCellArgs0 EqwNewBox EqwBoxCount * 65DE6
+          EqwCurBox! ;                           * 65E04
 
 * refs (1): 65C9A
 OBJ_65E0E:
@@ -3562,30 +3566,31 @@ OBJ_65E0E:
 OBJ_65E13:
           :: 7GETLAM NOTcase OBJ_6F46E           * 65E13
             RDROP 2DROP ;                        * 65E27
-          OBJ_67E34 BINT3 #=casedrop             * 65E36
-          :: OBJ_67E64 EqwBoxSecond@ DUP#1+ DUPUNROT EqwBoxFirst! BINT0 * 65E45
+          EqwDupFrmN1@ BINT3 #=casedrop          * 65E36
+          :: EqwFrmN5@ EqwBoxSecond@ DUP#1+ DUPUNROT EqwBoxFirst! BINT0 * 65E45
             EqwBoxPrev! ;                        * 65E68
           #5= case                               * 65E72
-          :: OBJ_6F36A #1+ DUP#1+ 2DUP EqwBoxNext! SWAP EqwBoxPrev! ; * 65E7C
-          OBJ_6F36A EqwBoxSecond@ EqwBoxNext@ EqwBoxNext@ DUP EqwFontHeight * 65EA9
+          :: EqwFrmLast@ #1+ DUP#1+ 2DUP EqwBoxNext! SWAP EqwBoxPrev! ; * 65E7C
+          EqwFrmLast@ EqwBoxSecond@ EqwBoxNext@ EqwBoxNext@ DUP * 65EA9
+          EqwFontHeight                          * 65EC2
 
 * refs (2): 66179 663DB
 OBJ_65EC7:
-          :: EqwFontWidth MAKEGROB OBJ_44DFE ; EqwBoxNext@ OBJ_6F42D * 65EC7
+          :: EqwFontWidth MAKEGROB OBJ_44DFE ; EqwBoxNext@ EqwBlankCell * 65EC7
           EqwBoxObj! ;                           * 65EEA
 
 OBJ_65EF4:
         :: SKIP OBJ_661A6 EqwBoxCount #9+ EqwBoxCount#1+ OBJ_6CFB5 3DROP * 65EF4
-          BINT16 EqwFontWidth #2* #+ BINT18 OBJ_6E0C0 #2* #+ BINT9 * 65F1C
-          EqwFontWidth #2/ #+ BINT9 OBJ_6E0C0 #+ OBJ_6D909 BINT15 ROLL * 65F49
-          OBJ_68283 EqwBoxCount #4+ DUP#2- BINT0 3PICK #3+ EqwCurBox@ * 65F76
-          OBJ_6D39D EqwFontHeight BINT8 #=ITE BINT16 BINT18 OBJ_6E0C0 #2* * 65F9E
-          BINT18 #+ 2DUPHALF OBJ_6D990 Push3Zeros EqwBoxCount#3+ DUP#2- * 65FC6
-          BINT7 BINT6 OBJ_6DD23 OBJ_6D9F9 DUP#2+ OBJ_6DCE7 BINT1 ZEROZERO * 65FE9
-          OBJ_66F11 BINT16 BINT18 OBJ_6DA4E OBJ_6D4CE EqwBoxCount#3+ DUP#1- * 66011
-          DUP#2- ZEROOVER #2- OBJ_6D39D OBJ_6E0D2 #3* OBJ_6E0C0 OBJ_6DCA6 * 66034
-          Push3Zeros EqwBoxCount#3+ DUP#2- BINT3 OBJ_6DD19 OBJ_6D9F9 BINT0 * 6605C
-          OBJ_6DCE7 BINT0 OBJ_6DD19 OBJ_6D4CE EqwBoxCount#2+ DUP EqwBoxCount * 6607F
-          #5- EqwBoxCount#3+ EqwCurBox@ OBJ_6D39D OBJ_6C85F 2DUPHALF * 660A2
-          OBJ_6D990 EqwNewBox OBJ_6D451 BINT0 OBJ_6DAE9 EqwBoxCount#1- BINT0 * 660C0
-          OBJ_6F199 OBJ_6DAE9 OBJ_6D5EB #4- ;    * 660E3
+          BINT16 EqwFontWidth #2* #+ BINT18 EqwFontH-1 #2* #+ BINT9 * 65F1C
+          EqwFontWidth #2/ #+ BINT9 EqwFontH-1 #+ OBJ_6D909 BINT15 ROLL * 65F49
+          EqwBoxRefillAll EqwBoxCount #4+ DUP#2- BINT0 3PICK #3+ EqwCurBox@ * 65F76
+          EqwPlainArgs EqwFontHeight BINT8 #=ITE BINT16 BINT18 EqwFontH-1 * 65F9E
+          #2* BINT18 #+ 2DUPHALF OBJ_6D990 Push3Zeros EqwBoxCount#3+ DUP#2- * 65FC1
+          BINT7 BINT6 OBJ_6DD23 OBJ_6D9F9 DUP#2+ OVER#1- BINT1 ZEROZERO * 65FE9
+          OBJ_66F11 BINT16 BINT18 EqwLeafGeom EqwNew3 EqwBoxCount#3+ DUP#1- * 66011
+          DUP#2- ZEROOVER #2- EqwPlainArgs EqwFontW-1 #3* EqwFontH-1 * 66034
+          OBJ_6DCA6 Push3Zeros EqwBoxCount#3+ DUP#2- BINT3 OBJ_6DD19 * 66057
+          OBJ_6D9F9 BINT0 OVER#1- BINT0 OBJ_6DD19 EqwNew3 EqwBoxCount#2+ DUP * 66075
+          EqwBoxCount #5- EqwBoxCount#3+ EqwCurBox@ EqwPlainArgs EqwCharSize * 6609D
+          2DUPHALF OBJ_6D990 EqwNewBox OBJ_6D451 BINT0 EqwCellBox * 660BB
+          EqwBoxCount#1- BINT0 OBJ_6F199 EqwCellBox EqwCurNew #4- ; * 660D9

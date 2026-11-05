@@ -1,4 +1,4 @@
-* HP 48GX ROM revision R, #2E0A9-#2FFFF: Serial I/O and Kermit
+* HP 48GX ROM revision R, #2E0A9-#2FFFF: Serial I/O and Kermit: receiving packets, send and get commands, IOPAR and PRTPAR, packet encoding and decoding
 * Addresses in the right-hand comments are those of the original ROM.
 * Most referenced: GetIOPAR FalseFalse GetKermPkt# dup;#nm? GetStrLenStk %IP># 6->list;StoInIPAR KERMOPEN SetIOPARerr IOCheckReal GETNAME BUILDKPACKET
 * Follows on from the previous file (at #2E0A9 in the original ROM).
@@ -14,7 +14,7 @@ SENDERROR:
 
 * refs (4): 2E0BD 2E0EA 2F9D4 2FEAB
 SENDPKT:
-        :: BUILDKPACKET OBJ_30E44 ;              * 2E0F4
+        :: BUILDKPACKET KermSendRaw ;            * 2E0F4
 
 * refs (6): 2D4C2 2D5A0 2E0F9 2E949 2F248 2F36A
 BUILDKPACKET:
@@ -118,7 +118,7 @@ BUILDKPACKET.L3:
             AR1EX                                * 2E244
             D1=A                                 * 2E247
             A=C     A                            * 2E24A
-            GOSUB   SUB_2E4FE                    * 2E24C
+            GOSUB   KermCheck                    * 2E24C
             P=      5                            * 2E250
             A=C     WP                           * 2E252
             C=R1                                 * 2E255
@@ -144,26 +144,28 @@ BUILDKPACKET.L3:
         ;                                        * 2E28C
 
 * refs (2): 2E2DC 2E487
-OBJ_2E291:
+* -> #: the block check type (1-3) from the eighth character of the parameters in KP
+KermChkType:
         :: GETKP BINT8 SUB$1# BINT48 #- ;        * 2E291
 
 * refs (4): 2DAD1 2F4CA 2F993 30842
-OBJ_2E2B4:
-        :: GETKP BINT2 SUB$1# BINT32 #- #10* StimeXmit(s) OBJ_2E291 * 2E2B4
+* -> $data #seq chr TRUE / #err FALSE: reads a packet from the serial port, waiting for the timeout given in KP. Checks length and block check. ON aborts
+KermRecvPkt:
+        :: GETKP BINT2 SUB$1# BINT32 #- #10* StimeXmit(s) KermChkType * 2E2B4
           CODE                                   * 2E2E1  362 nibbles
             GOSBVL  SAVPTR                       * 2E2EB
             GOSBVL  POP#                         * 2E2F2
             R1=A                                 * 2E2F9
             ST=0    10                           * 2E2FC
-OBJ_2E2B4.L1:
-            GOSBVL  SUB_311D1                    * 2E2FF
+KermRecvPkt.L1:
+            GOSBVL  IOGetByte                    * 2E2FF
             GONC    Push#FLoop.loop2             * 2E306
-OBJ_2E2B4.L2:
+KermRecvPkt.L2:
             R0=C                                 * 2E309
             GOSBVL  GETPTR                       * 2E30C
             D=D+1   A                            * 2E313
             D1=D1+  5                            * 2E315
-OBJ_2E2B4.L3:
+KermRecvPkt.L3:
             GOSBVL  SAVPTR                       * 2E318
 
 * <REF>GETPTR , Push R0 as #, Do FALSE
@@ -178,10 +180,10 @@ Push#FLoop.loop1:
 Push#FLoop.loop2:
             LC(2)   #01                          * 2E336
             ?C#A    B                            * 2E33A
-            GOYES   OBJ_2E2B4.L1                 * 2E33D
-            GOSBVL  SUB_311D1                    * 2E33F
+            GOYES   KermRecvPkt.L1               * 2E33D
+            GOSBVL  IOGetByte                    * 2E33F
 Push#FLoop.loop3:
-            GOC     OBJ_2E2B4.L2                 * 2E346
+            GOC     KermRecvPkt.L2               * 2E346
             R2=A                                 * 2E349
             LC(2)   #20                          * 2E34C
             A=A-C   B                            * 2E350
@@ -204,7 +206,7 @@ Push#FLoop.loop4:
             C=C-1   A                            * 2E382
             GOC     Push#FLoop.L7                * 2E384
             R3=C                                 * 2E387
-            GOSBVL  SUB_311D1                    * 2E38A
+            GOSBVL  IOGetByte                    * 2E38A
             GOC     Push#FLoop.loop3             * 2E391
             LC(2)   #20                          * 2E394
             ?C>A    B                            * 2E398
@@ -234,9 +236,9 @@ Push#FLoop.L7:
 Push#FLoop.L8:
             LC(5)   #00C07                       * 2E3DB
 Push#FLoop.loop9:
-            GOTO    OBJ_2E2B4.L2                 * 2E3E2
+            GOTO    KermRecvPkt.L2               * 2E3E2
 Push#FLoop.L10:
-            GOSUB   SUB_2E4FE                    * 2E3E6
+            GOSUB   KermCheck                    * 2E3E6
             A=R1                                 * 2E3EA
             A=A+A   A                            * 2E3ED
             A=A-1   A                            * 2E3EF
@@ -265,7 +267,7 @@ Push#FLoop.L11:
             GOSBVL  GETPTR                       * 2E433
             C=R3                                 * 2E43A
             DAT1=C  A                            * 2E43D
-            GOVLNG  MDIMS.L1                     * 2E440
+            GOVLNG  KermRecvPkt~1                * 2E440
 
 * refs (1): 2E3A3
 SUB_2E447:
@@ -279,7 +281,8 @@ SUB_2E447:
           NOTcase                                * 2E455
           :: ~ATTNERR;#=casedrop;ABORT FALSE     * 2E45A
           ;                                      * 2E469
-          FLUSHRSBUF #>CHR ROT BINT4 OVERLEN$ OBJ_2E291 #- SUB$ 3UNROLL TRUE ; * 2E46E
+          FLUSHRSBUF #>CHR ROT BINT4 OVERLEN$ KermChkType #- SUB$ 3UNROLL * 2E46E
+          TRUE ;                                 * 2E49B
 
 * refs (3): 2E45F 2EE5B 30E5D
 ~ATTNERR;#=casedrop;ABORT:
@@ -287,8 +290,9 @@ SUB_2E447:
         ;                                        * 2E4B9
 
 * refs (4): 2DF3D 2F4E3 2F6CD 2F8C6
-OBJ_2E4BE:
-        :: DUP OBJ_2EFA0 SENDERROR FALSE ;       * 2E4BE
+* #err -> #err FALSE: sends the error's text in an E packet
+KermSendErr:
+        :: DUP KermErrMsg SENDERROR FALSE ;      * 2E4BE
 
 * $ -> $'
 * refs (6): 2DCB1 2DD01 2DDD8 2F18A 2F88A 2FCD1
@@ -302,20 +306,21 @@ CRLF$:
         ASSEMBLE
 
 * refs (2): 2E24C 2E3E6
-SUB_2E4FE:
+* A.A = bytes, D1 = data -> the Kermit block check of the type in KP. Type 3 uses the hardware CRC register at #00104
+KermCheck:
         B=0     A                                * 2E4FE
         C=0     A                                * 2E500
         D0=(5)  #00104                           * 2E502
         ST=0    15                               * 2E509
         DAT0=C  4                                * 2E50C
-        GOTO    SUB_2E4FE.L2                     * 2E510
-SUB_2E4FE.loop1:
+        GOTO    KermCheck.L2                     * 2E510
+KermCheck.loop1:
         C=DAT1  B                                * 2E514
         D1=D1+  2                                * 2E517
         B=B+C   A                                * 2E51A
-SUB_2E4FE.L2:
+KermCheck.L2:
         A=A-1   A                                * 2E51C
-        GONC    SUB_2E4FE.loop1                  * 2E51E
+        GONC    KermCheck.loop1                  * 2E51E
         A=0     W                                * 2E521
         A=DAT0  4                                * 2E524
         GOSBVL  AllowIntr                        * 2E528
@@ -323,9 +328,9 @@ SUB_2E4FE.L2:
         C=C-1   A                                * 2E532
         C=C-1   A                                * 2E534
         C=C-1   A                                * 2E536
-        GOC     SUB_2E4FE.L3                     * 2E538
+        GOC     KermCheck.L3                     * 2E538
         C=C-1   A                                * 2E53B
-        GOC     SUB_2E4FE.L4                     * 2E53D
+        GOC     KermCheck.L4                     * 2E53D
         C=0     A                                * 2E540
         C=C+1   A                                * 2E542
         R1=C                                     * 2E544
@@ -335,15 +340,15 @@ SUB_2E4FE.L2:
         CSRB                                     * 2E54F
         B=B+C   A                                * 2E552
         P=      15                               * 2E554
-        GOTO    SUB_2E4FE.L5                     * 2E556
-SUB_2E4FE.L3:
+        GOTO    KermCheck.L5                     * 2E556
+KermCheck.L3:
         C=B     A                                * 2E55A
         B=B+B   A                                * 2E55C
         B=B+B   A                                * 2E55E
         B=C     B                                * 2E560
         P=      14                               * 2E563
-        GOTO    SUB_2E4FE.L5                     * 2E565
-SUB_2E4FE.L4:
+        GOTO    KermCheck.L5                     * 2E565
+KermCheck.L4:
         B=A     A                                * 2E569
         ASL     M                                * 2E56B
         P=      3                                * 2E56E
@@ -352,9 +357,9 @@ SUB_2E4FE.L4:
         A=B     B                                * 2E576
         B=A     W                                * 2E579
         P=      13                               * 2E57C
-SUB_2E4FE.L5:
+KermCheck.L5:
         C=0     W                                * 2E57E
-SUB_2E4FE.loop6:
+KermCheck.loop6:
         CSL     W                                * 2E581
         CSL     W                                * 2E584
         CPEX    15                               * 2E587
@@ -366,7 +371,7 @@ SUB_2E4FE.loop6:
         BSR     W                                * 2E59D
         P=C     15                               * 2E5A0
         P=P+1                                    * 2E5A4
-        GONC    SUB_2E4FE.loop6                  * 2E5A6
+        GONC    KermCheck.loop6                  * 2E5A6
         RTN                                      * 2E5A9
         RPL
 
@@ -376,20 +381,21 @@ SENDNAME:
         :: ONE{}N SENDLIST ;                     * 2E5AB
 
 * refs (2): 2E60F 2E646
-OBJ_2E5BF:
-        :: DUP@ NOTcase OBJ_2E7C2                * 2E5BF
-          ' LAMOBJ STO DROP OBJ_2F0DB NOTcase OBJ_2EFC8 * 2E5D3
+* id -> ...: recalls the variable, keeps it in LAMOBJ and sends it as a file. Undefined name errors if it does not exist
+KermSendVar:
+        :: DUP@ NOTcase ErrUndefName             * 2E5BF
+          ' LAMOBJ STO DROP KermSendObj NOTcase KermFailOut * 2E5D3
         ;                                        * 2E5F6
 
 * refs (2): 2E736 2E740
 SENDLIST~1:
-        :: DUP nm=>st 'LAMLNAMESTO OBJ_2E5BF ;   * 2E5FB
+        :: DUP nm=>st 'LAMLNAMESTO KermSendVar ; * 2E5FB
 
 * refs (1): 2E74A
 SENDLIST~list:
         :: INNERCOMP #2<> caseSIZEERR nm=>st!    * 2E619
           'LAMLNAMESTO dup;#nm? case SETTYPEERR  * 2E632
-          OBJ_2E5BF ;                            * 2E646
+          KermSendVar ;                          * 2E646
 
 * refs (3): 2D81B 2E62D 2E8AC
 nm=>st!:
@@ -398,20 +404,21 @@ nm=>st!:
           SETTYPEERR ;                           * 2E66E
 
 * refs (2): 2E722 2E83A
-OBJ_2E678:
+* {} ->: runs the next object in the caller's stream for each element of the list, then skips that object
+KermDoList:
         :: BEGIN INNERDUP #0<> WHILE             * 2E678
           :: #1-{}N SWAP 3@REVAL ; REPEAT DROP COLASKIP ; * 2E691
 
 * refs (2): 2E6F0 85596
 InitIOEnv:
-        :: OBJ_2D37C BINT0                       * 2E6BE
+        :: KermInitPar BINT0                     * 2E6BE
           { LAMKP LAMPKNO } BIND ;               * 2E6CD
 
 * {} ->
 * refs (4): 21F13 2E5B5 B8115 B8B29
 SENDLIST:
         :: InitIOEnv BINT0 NULL$ CHR_F ERRSET    * 2E6EB
-          :: KERMOPEN CHOOSE_INIT SendSetup NOTcaseFALSE OBJ_2E678 * 2E709
+          :: KERMOPEN CHOOSE_INIT SendSetup NOTcaseFALSE KermDoList * 2E709
             :: CK&DISPATCH1                      * 2E727
               BINT6 SENDLIST~1                   * 2E731  name
               BINT7 SENDLIST~1                   * 2E73B  local
@@ -421,13 +428,15 @@ SENDLIST:
           ERRTRAP                                * 2E75E
 
 * refs (3): 2D91F 2E98A 8560F
-OBJ_2E763:
+* Error handler of the Kermit commands: tells the other side with an E packet, then raises the error again
+KermErrOut:
           :: DropSysErr$ SENDERROR               * 2E763
 
 * refs (3): 2EE88 2EEB5 855D3
-OBJ_2E772:
+* Allows the printer and display again, then raises the current error
+KermErrJmp:
             :: AllowPrlcdCl ERRJMP ; ;           * 2E772
-          AllowPrlcdCl NOTcase OBJ_2EFC8         * 2E78B
+          AllowPrlcdCl NOTcase KermFailOut       * 2E78B
           ABND ;                                 * 2E79A
 
 * refs (11): 2DFDC 2E637 2E655 2E817 2FDFD 31962 ...
@@ -435,7 +444,8 @@ dup;#nm?:
         :: DUPTYPEIDNT? OVER TYPELAM? ORNOT ;    * 2E7A4
 
 * refs (1): 2E5CE
-OBJ_2E7C2:
+* id ->: raises "Undefined Local Name" for a local name, "Undefined Name" for a global one
+ErrUndefName:
         :: TYPELAM? # 3                          * 2E7C2
 
 * refs (1): 2E00E
@@ -455,7 +465,7 @@ kget({2nm}):
 
 * refs (2): 21F51 B8AAD
 kget(li):
-        :: OBJ_2E678                             * 2E835
+        :: KermDoList                            * 2E835
           :: CK&DISPATCH1                        * 2E83F
             BINT6 GETNAME                        * 2E849  name
             BINT3 GETNAME                        * 2E853  string
@@ -486,7 +496,7 @@ _R_:
 DOPKT:
         :: BINT0                                 * 2E8D1
 kget(nm,st)~1:
-          OBJ_2D37C BINT0                        * 2E8DB
+          KermInitPar BINT0                      * 2E8DB
           { LAMKP LAMPKNO } BIND ERRSET          * 2E8E5
           :: ZEROFALSE                           * 2E903
             { LAMLNAME LAMKMODE LAMKRM } BIND EXCHINITPK SWAP ENCODE1PKT * 2E90D
@@ -494,7 +504,7 @@ kget(nm,st)~1:
             :: ABND AllowPrlcdCl DOPKT~2 ;       * 2E958
             NOTcase ERROROUT                     * 2E971
             DOPKT~1 ;                            * 2E97B
-          ERRTRAP OBJ_2E763 ABND ;               * 2E985
+          ERRTRAP KermErrOut ABND ;              * 2E985
 
 * refs (4): 2EAB0 B8BF7 B8C06 B8C1F
 ResetIOPAR&->:
@@ -640,11 +650,12 @@ DOTRANSIO:
 
 * refs (2): 21FFB 223EC
 DOCKSM:
-        :: OBJ_2ED74 NcaseSIZEERR GetIOPAR       * 2ED4C
+        :: IO%1to3? NcaseSIZEERR GetIOPAR        * 2ED4C
           7ROLL ROTDROPSWAP 6->list;StoInIPAR ;  * 2ED60
 
 * refs (3): 2ED51 30B58 B84EA
-OBJ_2ED74:
+* % -> %' flag: %' is the integer part without sign, flag TRUE when it is 1, 2 or 3 (checksum type, transfer format)
+IO%1to3?:
         :: %IP %ABS DUP %4 %< OVER %0<> AND ;    * 2ED74
 
 * -> $
@@ -681,7 +692,8 @@ DOSBRK:
         :: OpenIO DOSBRK~1 OpenIO_324C8 ;        * 2EE18
 
 * refs (1): 2EE60
-OBJ_2EE31:
+* # ->: stores the number as the last error, for ERRN and ERRM after a failed XMIT or SRECV
+IOErr!:
         CON(5)  (*)+5                            * 2EE31  primitive code object
         ASSEMBLE
         GOSBVL  POP#                             * 2EE36
@@ -690,25 +702,26 @@ OBJ_2EE31:
         RPL
 
 * refs (2): 2EE8D 2EEBA
-OBJ_2EE47:
+* TRUE / #err FALSE -> %: 1 when the transfer worked. On failure saves the error and gives 0. ATTN aborts
+IOResult%:
         :: OpenIO_324C8 case %1                  * 2EE47
-          ~ATTNERR;#=casedrop;ABORT OBJ_2EE31    * 2EE5B
+          ~ATTNERR;#=casedrop;ABORT IOErr!       * 2EE5B
           %0_2A2B4 ;                             * 2EE65
 
 * $ ->
 * refs (1): 21E84
 DOXMIT:
-        :: OpenIO ERRSET PUTSERIAL ERRTRAP OBJ_2E772 OBJ_2EE47 ; * 2EE6F
+        :: OpenIO ERRSET PUTSERIAL ERRTRAP KermErrJmp IOResult% ; * 2EE6F
 
 * % ->
 * refs (1): 21EA4
 DOSRECV:
-        :: %IP># OpenIO ERRSET GETSERIAL ERRTRAP OBJ_2E772 OBJ_2EE47 ; * 2EE97
+        :: %IP># OpenIO ERRSET GETSERIAL ERRTRAP KermErrJmp IOResult% ; * 2EE97
 
 * refs (2): 2E718 2EF32
 SendSetup:
         :: 4UNROLL FALSE                         * 2EEC4
-          { LAMLNAME LAMOBJ LAMPACKET LAMKRM } BIND CHR_S SWAP OBJ_2D4B3 * 2EED3
+          { LAMLNAME LAMOBJ LAMPACKET LAMKRM } BIND CHR_S SWAP KermSendInit * 2EED3
           NOTcase false;Lpop                     * 2EF05
           'LamKPSto TRUE ;                       * 2EF0F
 
@@ -718,7 +731,7 @@ DOSERVER~6:
 
 * refs (1): 855E7
 XEQIOBACKUP~2:
-          :: SendSetup NOTcaseFALSE OBJ_2F0DB    * 2EF2D
+          :: SendSetup NOTcaseFALSE KermSendObj  * 2EF2D
             NOTcaseFALSE SENDEOT                 * 2EF41
             case                                 * 2EF4B
 
@@ -733,37 +746,43 @@ false;Lpop:
           :: DropSysObs ERROR@ FalseFalse ; ;    * 2EF82
 
 * refs (5): 2DC07 2DCFC 2DDD3 2DF6A 2E4C8
-OBJ_2EFA0:
+* #err -> $: the error's text; number 0 counts as ATTN, "Interrupted"
+KermErrMsg:
         :: DUP#0=IT                              * 2EFA0
           :: DROP ATTNERR ; GETTHEMESG ;         * 2EFAA
 
 * refs (3): 2E5F1 2E795 85637
-OBJ_2EFC8:
+* ... flag ->: FALSE raises the error number on the stack; TRUE looks at the packet that failed, showing an E packet's text, and raises "Transfer Failed"
+KermFailOut:
         :: NOTcase ERROROUT                      * 2EFC8
 
 * refs (2): 2D8BB 2D8DE
 TRPACKETFAIL:
           :: CHR_E EQUAL IT                      * 2EFD7
-            :: DROP DECODE OBJ_30E6C OBJ_2F01D ; * 2EFEB
+            :: DROP DECODE KERMERRM! KermShowErr ; * 2EFEB
             XFERFAIL ERROROUT ;                  * 2F009
         ;                                        * 2F018
 
 * refs (3): 2DC11 2DFA5 2EFFF
-OBJ_2F01D:
+* $ ->: beeps and shows an error in the status area for 3 seconds. ON quits
+KermShowErr:
         :: ERRBEEP KDispStatus2 %3 dowait ?ATTNQUIT ; * 2F01D
 
 * refs (1): 2F095
-OBJ_2F040:
+* Writes "Packet #" on row 2 and clears LAMKRM
+KermShowPkt:
         ::                                       * 2F040
 
 * refs (2): 2F1DF 2F4F7
-OBJ_2F045:
+* -> $: the text "Packet #"
+KermPacket$:
           :: # C10 JstGetTHEMESG ; KDispRow2 FALSE' LAMKRM STO ; * 2F045  "Packet #"
 
 * refs (2): 2F266 2FA38
-OBJ_2F077:
+* Shows the current packet number after "Packet #", unless I/O messages are off (flag -39). Rewrites the row first if a retry message is on it
+KermDispPkt#:
         :: BINT39 TestSysFlag ?SEMI              * 2F077  flag -39: Show I/O messages / No I/O messages
-          LAMKRM IT OBJ_2F040                    * 2F08B
+          LAMKRM IT KermShowPkt                  * 2F08B
           LAMPKNO #>$ $>GROB HARDBUFF LAMKML # 8 GROB! ; * 2F09A
 
 * refs (1): 2F25C
@@ -771,21 +790,22 @@ Lpop;q:
         :: ABND RDROP ;                          * 2F0C7
 
 * refs (2): 2E5E7 2EF3C
-OBJ_2F0DB:
+* -> flag: sends the object in LAMOBJ under the name LAMLNAME, showing "Sending ". The header and format depend on the translation settings
+KermSendObj:
         ::                                       * 2F0DB
 
 <COD>:
           # C0D JstGetTHEMESG LAMLNAME &$ KDispStatus2 LAMLNAME LAMPACKET * 2F0E0  "Sending "
           FalseFalse LAMOBJ LAMPACKET CHR_X EQUAL ITE NULL$TEMP * 2F108
-          :: XEQTYPE COERCE BINT16 #< OBJ_30771 ANDITE * 2F12B
+          :: XEQTYPE COERCE BINT16 #< ASCIIXfer? ANDITE * 2F12B
             :: DUPTYPECSTR? IT DECOMP$           * 2F14E
 
 * refs (1): 2F3FB
 _%%HP:_:
               $ "%%HP:" HeadIOString !append$ CHR_; >T$ APNDCRLF ; * 2F162
             :: ?>ROMPTR ROTDROP TRUE 3UNROLL VERSTRING ; ; * 2F194
-          SWAP' LAMOBJ STO NULL{} SWAP THREE{}N BINT0 OBJ_2F045 DUP 5UNROLL * 2F1BC
-          LEN$ BINT6 #*                          * 2F1EE
+          SWAP' LAMOBJ STO NULL{} SWAP THREE{}N BINT0 KermPacket$ DUP * 2F1BC
+          5UNROLL LEN$ BINT6 #*                  * 2F1E9
           { NULLLAM LAMKLIST LAMOPOS             * 2F1FD
 
 * refs (2): 2F0AE 2F50B
@@ -793,12 +813,12 @@ LAMKML:
             LAM 'KML }                           * 2F211
           BIND KDispRow2 SWAP ENCODE1PKT GetKermPkt# ROT BEGIN BUILDKPACKET * 2F225
           SEND_PACKET DUP NOTcase Lpop;q         * 2F24D
-          2DROP OBJ_2F077 LAMOPOS MINUSONE #<> WHILE * 2F261
-          :: LAMOBJ LAMKLIST INCOMPDROP OBJ_2FD03 ITE * 2F27F
+          2DROP KermDispPkt# LAMOPOS MINUSONE #<> WHILE * 2F261
+          :: LAMOBJ LAMKLIST INCOMPDROP KermPktFull? ITE * 2F27F
 
 drop(4);rot:
             :: 4ROLL DROPROT ;                   * 2F29D
-            :: ROT NOTcase OBJ_2FC04             * 2F2B1
+            :: ROT NOTcase KermNextBlock         * 2F2B1
               ROTDROP TRUE ;                     * 2F2C5
             UNROTDUP GETKP ENCODE ITE            * 2F2D4
 
@@ -812,18 +832,18 @@ drop(2-4);<FFFFF>:
 
 * refs (5): 2D64F 2F731 2F862 2FA47 2FA83
 IncrLAMPKNO:
-        :: LAMPKNO #1+ OBJ_2DAB3 ;               * 2F383
+        :: LAMPKNO #1+ 'LamPKNOSto ;             * 2F383
 
 * refs (12): 2D596 2D63B 2D6E5 2E0B3 2F239 2F342 ...
 GetKermPkt#:
         :: LAMPKNO # 40 #/ DROP ;                * 2F39C
 
 * refs (1): 2F556
-OBJ_2F3BF:
-        :: LAMLNAME BINT0 EQUAL caseFALSE OBJ_3073A * 2F3BF
+KermRecvData~1:
+        :: LAMLNAME BINT0 EQUAL caseFALSE HeaderMatch? * 2F3BF
           caseFALSE HeadIOString                 * 2F3DD
           ' LAMKMODE STO DUP _%%HP:_ BINT1 POS$ DUP#0= casedrop * 2F3E7
-          :: OBJ_30771 NOTcaseFALSE NULL$TEMP    * 2F414
+          :: ASCIIXfer? NOTcaseFALSE NULL$TEMP   * 2F414
             TRUE ;                               * 2F428
           #5+ LAST$ DUP tok; BINT1 POS$ 2DUP #1+LAST$ 3UNROLL 1_#1-SUB$ TRUE ; * 2F432
 
@@ -832,37 +852,38 @@ OBJ_2F3BF:
         LAM 'KEOF                                * 2F46E
 
 * refs (3): 2F597 2F5D3 2F5E2
-OBJ_2F47F:
+KermRecvData~2:
         :: LAMKMODE OBJ_30477 DROP ABND ;        * 2F47F
 
 * refs (2): 2F5A1 2F614
-OBJ_2F49D:
-        :: # 86 #>CHR >T$ OVER !append$ OBJ_30E6C DROP OBJ_2E2B4 ITE 3DROP * 2F49D
+KermRecvData~3:
+        :: # 86 #>CHR >T$ OVER !append$ KERMERRM! DROP KermRecvPkt ITE 3DROP * 2F49D
           DROP                                   * 2F4D9
-          #SyntaxErr OBJ_2E4BE FALSE ;           * 2F4DE
+          #SyntaxErr KermSendErr FALSE ;         * 2F4DE
 
 * refs (1): 2F916
-OBJ_2F4F2:
-        :: OBJ_2F045 DUPLEN$ #6*                 * 2F4F2
+* Shows "Packet #", binds the column for the number (LAMKML) and reads the first data packet
+KermRecvData:
+        :: KermPacket$ DUPLEN$ #6*               * 2F4F2
 
 {Π'KML}:
-          { LAMKML } BIND KDispRow2 OBJ_2F9ED NOTcase * 2F506
+          { LAMKML } BIND KDispRow2 KermNextData NOTcase * 2F506
           :: ROTDROP FALSE ;                     * 2F529
           NOTcase                                * 2F53D
 
 * ob ob' -> T
 2DROPTRUE:
           :: 2DROP TRUE ;                        * 2F542
-          OBJ_2F3BF case                         * 2F556
+          KermRecvData~1 case                    * 2F556
           :: ROT BINT0                           * 2F560
             { LAMKPTRN Π'KEOF } BIND OBJ_30477 NOTcase * 2F56F
-            :: OBJ_2F47F NULL$TEMP OBJ_2F49D ;   * 2F592
-            KINVISLF ' LAMKPTRN STO ERRSET OBJ_258DA ERRTRAP * 2F5AB
-            :: OBJ_2F47F ERRJMP ; OBJ_2F47F NOTcaseFALSE NOTcase * 2F5CE
-            :: LEN$ #- 2DUP LAST$ 3UNROLL 1_#1-SUB$ OBJ_2F49D ; * 2F5F1
+            :: KermRecvData~2 NULL$TEMP KermRecvData~3 ; * 2F592
+            KINVISLF ' LAMKPTRN STO ERRSET ParseIO ERRTRAP * 2F5AB
+            :: KermRecvData~2 ERRJMP ; KermRecvData~2 NOTcaseFALSE NOTcase * 2F5CE
+            :: LEN$ #- 2DUP LAST$ 3UNROLL 1_#1-SUB$ KermRecvData~3 ; * 2F5F1
             NOTcaseTRUE OBJ_2F68C                * 2F61E
             Lpop;true ;                          * 2F628
-          BEGIN !!append$ OBJ_2F9ED NOTcase RDROPFALSE * 2F632
+          BEGIN !!append$ KermNextData NOTcase RDROPFALSE * 2F632
           NOT_UNTIL ABND NOTcase DROPTRUE        * 2F64B
           OBJ_30607 LAMLNAME BINT0 EQUAL ITE     * 2F65F
 
@@ -872,54 +893,57 @@ DOPKT~2:
 
 * refs (1): 2F623
 OBJ_2F68C:
-          :: LAMLNAME OBJ_2157E ;                * 2F68C
+          :: LAMLNAME xSTONoCK ;                 * 2F68C
           TRUE ;                                 * 2F6A0
 
 * refs (2): 2F803 2FB2D
-OBJ_2F6AA:
-        :: DROPSWAPDROP MAXRETRY OBJ_2D7AD NOTcasedrop * 2F6AA
-          :: XFERFAIL OBJ_2E4BE ;                * 2F6C3
+* #seq x $ -> flag: no usable packet. While retries remain (MAXRETRY), acknowledges again with an empty ACK and returns TRUE; else sends "Transfer Failed" to the other side and returns FALSE
+KermRecvRetry:
+        :: DROPSWAPDROP MAXRETRY KermRetry? NOTcasedrop * 2F6AA
+          :: XFERFAIL KermSendErr ;              * 2F6C3
           SENDNULLACK TRUE ;                     * 2F6D7
 
 * refs (2): 2F740 2F9F2
-OBJ_2F6E6:
+* Binds LAMRETRY to MAXRETRY
+KermBindRetry:
         :: MAXRETRY                              * 2F6E6
 
 {Π'RETRY}:
           { LAMRETRY } BIND ;                    * 2F6F0
 
 * refs (3): 2D8C5 2DF24 2F83F
-OBJ_2F709:
+* -> flag flag: receives a file, from the F packet to the B (end of transmission) packet, acknowledging each packet
+KermRecvFile:
         :: ACK_INIT NOTcase                      * 2F709
           :: SENDNAK FalseFalse ;                * 2F718
           GetKermPkt# IncrLAMPKNO SENDACK 'LamKPSto * 2F72C
-OBJ_2F709.loop1:
-          OBJ_2F6E6                              * 2F740
-OBJ_2F709.loop2:
+KermRecvFile.loop1:
+          KermBindRetry                          * 2F740
+KermRecvFile.loop2:
           RecvNextPkt NOTcaseFALSE OVER          * 2F745
           GetKermPkt# #=case                     * 2F754
-          :: ABND DUP CHR_F EQUAL ?GOTO OBJ_2F709.L3 DUP CHR_B EQUALcase * 2F75E
+          :: ABND DUP CHR_F EQUAL ?GOTO KermRecvFile.L3 DUP CHR_B EQUALcase * 2F75E
             :: DROPSWAPDROP SENDNULLACK TRUE ;   * 2F790
             LAMLNAME TYPECSTR? case TrueFalse    * 2F7A9
-            DUP CHR_X EQUAL ?GOTO OBJ_2F709.L3 TrueFalse ; * 2F7BD
-          OBJ_2F957 case                         * 2F7E0
+            DUP CHR_X EQUAL ?GOTO KermRecvFile.L3 TrueFalse ; * 2F7BD
+          KermPrevPkt? case                      * 2F7E0
           :: DUP CHR_Z EQUALcase                 * 2F7EA
-            :: OBJ_2F6AA ?GOTO OBJ_2F709.loop2 Lpop;2false ; * 2F7FE
+            :: KermRecvRetry ?GOTO KermRecvFile.loop2 Lpop;2false ; * 2F7FE
             ABND DUP CHR_S EQUALcasedrp          * 2F81C
-            :: OBJ_2DAB3 COLA OBJ_2F709          * 2F830
+            :: 'LamPKNOSto COLA KermRecvFile     * 2F830
             ;                                    * 2F844
             TrueFalse ;                          * 2F849
           COLA Lpop;true;false                   * 2F853
-OBJ_2F709.L3:
+KermRecvFile.L3:
           DROP IncrLAMPKNO SWAP DECODE LAMLNAME TYPECSTR? NOTcase * 2F85D
-          :: ZEROSWAP APNDCRLF GOTO OBJ_2F709.L4 ; * 2F880
-          LAMLNAME DUPNULL$? NOT?SWAPDROP OBJ_2FDDF NOTcase * 2F89E
-          :: DROP OBJ_672DC OBJ_2E4BE FALSE ;    * 2F8B7
+          :: ZEROSWAP APNDCRLF GOTO KermRecvFile.L4 ; * 2F880
+          LAMLNAME DUPNULL$? NOT?SWAPDROP KermRecvFile~1 NOTcase * 2F89E
+          :: DROP OBJ_672DC KermSendErr FALSE ;  * 2F8B7
           NULL$TEMP                              * 2F8D5
-OBJ_2F709.L4:
+KermRecvFile.L4:
           SWAPDUP 'LAMLNAMESTO ID>$ DUP # C0E JstGetTHEMESG !insert$ * 2F8DA  "Receiving "
-          KDispStatus2 ENCODE1PKT ROT SENDACK OBJ_2F4F2 NULL$ 'LAMLNAMESTO * 2F902
-          ?GOTO OBJ_2F709.loop1 NOTcase          * 2F925
+          KDispStatus2 ENCODE1PKT ROT SENDACK KermRecvData NULL$ * 2F902
+          'LAMLNAMESTO ?GOTO KermRecvFile.loop1 NOTcase * 2F920
 
 * -> F F
 * refs (15): 0AAB7 2461D 2D5D7 2D726 2EB05 2EF91 ...
@@ -928,25 +952,27 @@ FalseFalse:
           INCOMPDROP TrueFalse ;                 * 2F948
 
 * refs (3): 2D65E 2F7E0 2FAE7
-OBJ_2F957:
+* #seq x -> #seq x flag: TRUE when #seq is the sequence number of the previous packet, modulo 64: the other side did not see our reply
+KermPrevPkt?:
         :: OVER LAMPKNO #1- # 40 #/ DROP #= ;    * 2F957
 
 * refs (3): 2D893 2F745 2F9F7
 RecvNextPkt:
-        :: BEGIN OBJ_2E2B4 NOT_WHILE             * 2F989
-          :: MAXRETRY OBJ_2D7AD NOTcase          * 2F99D
+        :: BEGIN KermRecvPkt NOT_WHILE           * 2F989
+          :: MAXRETRY KermRetry? NOTcase         * 2F99D
             :: 2RDROP Lpop;2false ;              * 2F9B1
             DROPNULL$ GetKermPkt# CHR_N SENDPKT ; * 2F9C5
           REPEAT TRUE ;                          * 2F9DE
 
 * refs (3): 2F51F 2F63C 2FB8C
-OBJ_2F9ED:
-        :: OBJ_2F6E6                             * 2F9ED
-OBJ_2F9ED.L1:
+* -> ...: reads the next packet of a file, retrying as needed. D carries data, Z ends the file. Acknowledges with SENDNULLACK
+KermNextData:
+        :: KermBindRetry                         * 2F9ED
+KermNextData.L1:
           RecvNextPkt NOTcaseFALSE OVER          * 2F9F7
           GetKermPkt# #=case                     * 2FA06
           :: ABND DUP CHR_D EQUALcasedrp         * 2FA10
-            :: SWAP DECODE OBJ_2F077 SWAPDUP SENDNULLACK IncrLAMPKNO DROP * 2FA29
+            :: SWAP DECODE KermDispPkt# SWAPDUP SENDNULLACK IncrLAMPKNO DROP * 2FA29
               TrueTrue ;                         * 2FA51
             DUP CHR_Z EQUALcasedrp               * 2FA5B
             :: DROP DECODE GetKermPkt# SENDNULLACK IncrLAMPKNO CAR$ CHR_D * 2FA6A
@@ -957,39 +983,43 @@ OBJ_2F9ED.L1:
 * refs (2): 2FB4B 2FB5A
 3->list;true;false:
             :: THREE{}N TrueFalse ; ;            * 2FACE
-          OBJ_2F957 case                         * 2FAE7
+          KermPrevPkt? case                      * 2FAE7
           :: DUP CHR_D EQUAL OVER CHR_F EQUALOR OVER CHR_X EQUALOR case * 2FAF1
-            :: OBJ_2F6AA ?GOTO OBJ_2F9ED.L1 Lpop;2false ; * 2FB28
+            :: KermRecvRetry ?GOTO KermNextData.L1 Lpop;2false ; * 2FB28
             ABND 3->list;true;false ;            * 2FB46
           ABND 3->list;true;false ;              * 2FB55
 
 * refs (1): 26257
-OBJ_2FB64:
+* For the parser reading a file as it arrives: the next piece of text from the packets, with Π'KEOF marking the end. Called from #26257
+KermParseChunk:
         :: Π'KEOF TYPEBINT? NOTcase              * 2FB64
           :: Π'KEOF failed ;                     * 2FB78
-          OBJ_2F9ED NOTcaseFALSE case            * 2FB8C
+          KermNextData NOTcaseFALSE case         * 2FB8C
           :: LAMKPTRN !insert$ KINVISLF ' LAMKPTRN STO TrueTrue ; * 2FB9B
           LAMKPTRN NULL$? NOTcase                * 2FBC8
           :: ' Π'KEOF STO LAMKPTRN TrueTrue ;    * 2FBD7
           failed ;                               * 2FBFA
 
 * refs (1): 2F2C0
-OBJ_2FC04:
+* Builds the next data packet's text from the object being sent: binary chunks for binary mode, the decompiled text otherwise
+KermNextBlock:
         :: 4GETLAM case                          * 2FC04
           :: SWAPINCOMP DUP#0= NOT?DROP          * 2FC13
-            CKREF ROT OBJ_2FD26 SWAP4ROLL !insert$ SWAPROT ONE{}N 3UNROLL ; * 2FC27
+            CKREF ROT KermObjChunk SWAP4ROLL !insert$ SWAPROT ONE{}N 3UNROLL ; * 2FC27
           3PICK TYPECSTR? case                   * 2FC54
           :: NULL$ ' LAMOBJ STO ROT KVISLF !append$ TRUE ; * 2FC63
-          BEGIN 3PICK ROT savefmt1 ERRSET OBJ_16A0E ERRTRAP ederr rstfmt1 * 2FC95
-          3UNROLL KVISLF !append$ APNDCRLF OBJ_2FD03 3PICK NULLCOMP? OR * 2FCC2
+          BEGIN 3PICK ROT savefmt1 ERRSET DclLine19 ERRTRAP ederr rstfmt1 * 2FC95
+          3UNROLL KVISLF !append$ APNDCRLF KermPktFull? 3PICK NULLCOMP? OR * 2FCC2
           UNTIL ROTDROP OVER NULLCOMP? ;         * 2FCEA
 
 * refs (2): 2F293 2FCD6
-OBJ_2FD03:
+* $ -> $ flag: TRUE when the text is longer than the packet size in KP
+KermPktFull?:
         :: DUPLEN$ LAMKP CAR$ CHR># #> ;         * 2FD03
 
 * refs (1): 2FC31
-OBJ_2FD26:
+* ob #pos -> $: copies up to #B6 nibbles (91 bytes) of a binary object from offset #pos into a new string and advances #pos in place
+KermObjChunk:
         CON(5)  (*)+5                            * 2FD26  primitive code object
         ASSEMBLE
         GOSBVL  SAVPTR                           * 2FD2B
@@ -1013,26 +1043,27 @@ OBJ_2FD26:
         AD0EX                                    * 2FD67
         A=A-C   A                                * 2FD6A
         C=0     A                                * 2FD6C
-        GOC     OBJ_2FD26.L1                     * 2FD6E
+        GOC     KermObjChunk.L1                  * 2FD6E
         LC(2)   #B6                              * 2FD71
         ST=0    2                                * 2FD75
         A=A-C   A                                * 2FD78
-        GONC    OBJ_2FD26.L2                     * 2FD7A
+        GONC    KermObjChunk.L2                  * 2FD7A
         C=C+A   A                                * 2FD7D
-OBJ_2FD26.L1:
+KermObjChunk.L1:
         ST=1    2                                * 2FD7F
-OBJ_2FD26.L2:
-        GOSUB   SUB_2FD9F                        * 2FD82
+KermObjChunk.L2:
+        GOSUB   KermObjCopy                      * 2FD82
         GOSBVL  GETPTR                           * 2FD86
         A=R0                                     * 2FD8D
         DAT1=A  A                                * 2FD90
         ?ST=1   2                                * 2FD93
-        GOYES   OBJ_2FD26.L3                     * 2FD96
-OBJ_2FD26.L3:
+        GOYES   KermObjChunk.L3                  * 2FD96
+KermObjChunk.L3:
         GOVLNG  PushT/FLoop                      * 2FD98
 
 * refs (1): 2FD82
-SUB_2FD9F:
+* C.A = nibbles, R3 = offset, D1 = object -> new string with those nibbles
+KermObjCopy:
         R1=C                                     * 2FD9F
         C=C+1   A                                * 2FDA2
         CSRB.F  A                                * 2FDA4
@@ -1055,18 +1086,18 @@ SUB_2FD9F:
         RPL
 
 * refs (1): 2F8AD
-OBJ_2FDDF:
+KermRecvFile~1:
         :: ZEROSWAP DUP                          * 2FDDF
-OBJ_2FDDF.loop1:
+KermRecvFile~1.loop1:
           palparse NOTcase 5DROPFALSE            * 2FDEE
           dup;#nm? case                          * 2FDFD
-          :: ROM-WORD? ?GOTO OBJ_2FDDF.L2 2DROPFALSE ; * 2FE07
+          :: ROM-WORD? ?GOTO KermRecvFile~1.L2 2DROPFALSE ; * 2FE07
           dup;RclInVars(gn)? NOTcase XYZ>ZTRUE   * 2FE25
           DROP BINT36 TestSysFlag case XYZ>ZTRUE * 2FE34  flag -36: RECV renames / RECV overwrites
           DROP                                   * 2FE4D
-OBJ_2FDDF.L2:
+KermRecvFile~1.L2:
           SWAP#1+SWAP DUP DPRADIX? ITE CHR_. CHR_, * 2FE52
-          >T$ 3PICK #>$ &$ GOTO OBJ_2FDDF.loop1 ; * 2FE70
+          >T$ 3PICK #>$ &$ GOTO KermRecvFile~1.loop1 ; * 2FE70
         BSS     14                               * 2FE93  zeros
 
 * refs (4): 2DE5A 2F736 2F911 2FEBF
@@ -1101,12 +1132,12 @@ KVIS~1:
 KVIS~1.L1:
         GOSBVL  POP#                             * 2FF05
         GOSBVL  SAVPTR                           * 2FF0C
-        GOSUB   SUB_2FF8C                        * 2FF13
+        GOSUB   KVISMode                         * 2FF13
         GOC     KVIS~1.L2                        * 2FF17
         A=C     A                                * 2FF1A
         GONC    KVIS~1.L7                        * 2FF1C
 KVIS~1.L2:
-        GOSUB   SUB_2FFBD                        * 2FF1F
+        GOSUB   KVISStr                          * 2FF1F
         R1=C                                     * 2FF23
         B=C     A                                * 2FF26
         D=0     A                                * 2FF28
@@ -1148,14 +1179,15 @@ KVIS~1.L7:
         GOVLNG  GPOverWrALp                      * 2FF85
 
 * refs (2): 2FF13 30197
-SUB_2FF8C:
+* A.A = translation mode (0-3), C=DAT1 reads the string -> D1 = its object; carry clear for mode 0, no translation; otherwise ST1 set for mode 2 and up, ST2 for mode 3
+KVISMode:
         C=DAT1  A                                * 2FF8C
         D1=C                                     * 2FF8F
         D1=D1+  5                                * 2FF92
         A=A-1   A                                * 2FF95
-        GONC    SUB_2FF8C.L1                     * 2FF97
+        GONC    KVISMode.L1                      * 2FF97
         RTNCC                                    * 2FF9A
-SUB_2FF8C.L1:
+KVISMode.L1:
         ST=0    1                                * 2FF9C
         ST=0    2                                * 2FF9F
         A=A-1   A                                * 2FFA2
@@ -1182,7 +1214,8 @@ GetStrLen:
         D1=D1+  5                                * 2FFBA
 
 * refs (2): 2FF1F 301A7
-SUB_2FFBD:
+* D1 = string -> C.A = its length in bytes, D1 = its body
+KVISStr:
         C=DAT1  A                                * 2FFBD
         C=C-CON A,5                              * 2FFC0
         CSRB.F  A                                * 2FFC6

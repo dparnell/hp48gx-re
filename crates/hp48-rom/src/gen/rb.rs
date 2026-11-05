@@ -15,32 +15,32 @@ pub(crate) fn code_B70F7(r: &mut Run) {
             }
             // #B70FE:
             0xB70FE..=0xB70FE => {
-                branch!(r, at, 0xB7105, 9, r.cpu.call(0x0D8B7)); // GOSBVL SUB_0D8B7
+                branch!(r, at, 0xB7105, 9, r.cpu.call(0x0D8B7)); // GOSBVL ClkFlags>ST
             }
             // #B7105:
             0xB7105..=0xB7105 => {
-                branch!(r, at, 0xB710C, 9, r.cpu.call(0x0D36C)); // GOSBVL SUB_0D36C
+                branch!(r, at, 0xB710C, 9, r.cpu.call(0x0D36C)); // GOSBVL %>YMD
             }
             // #B710C:
             0xB710C..=0xB7111 => {
                 op!(r, at, 0xB710C..0xB710E, 4, r.cpu.dec = false); // SETHEX
                 op!(r, at, 0xB710E..0xB7111, 5, r.cpu.st_set(1, false)); // ST=0 1
-                branch!(r, at, 0xB7114, 5, r.cpu.jump_if(Cond::NoCarry, 0xB7117)); // GONC ROMP_0B5_0AA.L1
+                branch!(r, at, 0xB7114, 5, r.cpu.jump_if(Cond::NoCarry, 0xB7117)); // GONC TimYear%.L1
             }
             // #B7114:
             0xB7114..=0xB7114 => {
                 op!(r, at, 0xB7114..0xB7117, 5, r.cpu.st_set(1, true)); // ST=1 1
                 at = 0xB7117;
             }
-            // ROMP_0B5_0AA.L1:
+            // TimYear%.L1:
             0xB7117..=0xB7117 => {
                 branch!(r, at, 0xB711E, 9, r.cpu.call(0x067D2)); // GOSBVL GETPTR
             }
             // #B711E:
             0xB711E..=0xB711E => {
-                branch!(r, at, 0xB7123, 7, r.cpu.st_test(1, true, Some(0xB7123))); // ?ST=1 1 / GOYES ROMP_0B5_0AA.L2
+                branch!(r, at, 0xB7123, 7, r.cpu.st_test(1, true, Some(0xB7123))); // ?ST=1 1 / GOYES TimYear%.L2
             }
-            // ROMP_0B5_0AA.L2:
+            // TimYear%.L2:
             0xB7123..=0xB7123 => {
                 jump!(r, at, 9, r.cpu.pc = 0x620D9); // GOVLNG PushT/FLoop
             }
@@ -107,7 +107,7 @@ pub(crate) fn code_B8694(r: &mut Run) {
             }
             // #B86AE:
             0xB86AE..=0xB86AE => {
-                branch!(r, at, 0xB86B3, 7, r.cpu.test(Test::Regs(Cmp::Lt, R::C, R::A), Field::A, Some(0xB86E5))); // ?C<A A / GOYES ROMP_0B5_110.L3
+                branch!(r, at, 0xB86B3, 7, r.cpu.test(Test::Regs(Cmp::Lt, R::C, R::A), Field::A, Some(0xB86E5))); // ?C<A A / GOYES SrvDir.L3
             }
             // #B86B3:
             0xB86B3..=0xB86C3 => {
@@ -121,13 +121,13 @@ pub(crate) fn code_B8694(r: &mut Run) {
                 op!(r, at, 0xB86C3..0xB86C6, 5, r.cpu.st_set(4, false)); // ST=0 4
                 at = 0xB86C6;
             }
-            // ROMP_0B5_110.loop1:
+            // SrvDir.loop1:
             0xB86C6..=0xB86C6 => {
-                branch!(r, at, 0xB86CA, 6, r.cpu.call(0xB86EE)); // GOSUB SUB_B86EE
+                branch!(r, at, 0xB86CA, 6, r.cpu.call(0xB86EE)); // GOSUB DirScanChar
             }
             // #B86CA:
             0xB86CA..=0xB86CA => {
-                branch!(r, at, 0xB86CD, 5, r.cpu.jump_if(Cond::Carry, 0xB86C6)); // GOC ROMP_0B5_110.loop1
+                branch!(r, at, 0xB86CD, 5, r.cpu.jump_if(Cond::Carry, 0xB86C6)); // GOC SrvDir.loop1
             }
             // #B86CD:
             0xB86CD..=0xB86CF => {
@@ -135,13 +135,13 @@ pub(crate) fn code_B8694(r: &mut Run) {
                 op!(r, at, 0xB86CF..0xB86D2, 5, r.cpu.scratch(ScratchOp::ToScratch, R::C, 0, Field::W)); // R0=C
                 at = 0xB86D2;
             }
-            // ROMP_0B5_110.loop2:
+            // SrvDir.loop2:
             0xB86D2..=0xB86D2 => {
-                branch!(r, at, 0xB86D6, 6, r.cpu.call(0xB86EE)); // GOSUB SUB_B86EE
+                branch!(r, at, 0xB86D6, 6, r.cpu.call(0xB86EE)); // GOSUB DirScanChar
             }
             // #B86D6:
             0xB86D6..=0xB86D6 => {
-                branch!(r, at, 0xB86D9, 5, r.cpu.jump_if(Cond::NoCarry, 0xB86D2)); // GONC ROMP_0B5_110.loop2
+                branch!(r, at, 0xB86D9, 5, r.cpu.jump_if(Cond::NoCarry, 0xB86D2)); // GONC SrvDir.loop2
             }
             // #B86D9:
             0xB86D9..=0xB86DE => {
@@ -149,7 +149,7 @@ pub(crate) fn code_B8694(r: &mut Run) {
                 op!(r, at, 0xB86DB..0xB86DE, 5, r.cpu.scratch(ScratchOp::ToScratch, R::C, 1, Field::W)); // R1=C
                 jump!(r, at, 9, r.cpu.pc = 0x03F14); // GOVLNG Push2#Loop
             }
-            // ROMP_0B5_110.L3:
+            // SrvDir.L3:
             0xB86E5..=0xB86E7 => {
                 op!(r, at, 0xB86E5..0xB86E7, 4, r.cpu.zero(R::A, Field::A)); // A=0 A
                 jump!(r, at, 9, r.cpu.pc = 0x0357C); // GOVLNG PUSH#ALOOP
@@ -162,14 +162,15 @@ pub(crate) fn code_B8694(r: &mut Run) {
     }
 }
 
-// SUB_B86EE: firmware/upper/B7B7D-lib0B5.s:382
-pub(crate) fn SUB_B86EE(r: &mut Run) {
+// Steps through one character at D1. Carry set on a blank, tab or newline, else clear. Ends the scan (pushes #0) at end of text, or at a blank straight after a newline, the end of the listing
+// DirScanChar: firmware/upper/B7B7D-lib0B5.s:425
+pub(crate) fn DirScanChar(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
             0xB86EE..=0xB86F0 => {
                 op!(r, at, 0xB86EE..0xB86F0, 4, r.cpu.dec(R::D, Field::A)); // D=D-1 A
-                branch!(r, at, 0xB86F3, 5, r.cpu.jump_if(Cond::Carry, 0xB86E5)); // GOC ROMP_0B5_110.L3
+                branch!(r, at, 0xB86F3, 5, r.cpu.jump_if(Cond::Carry, 0xB86E5)); // GOC SrvDir.L3
             }
             // #B86F3:
             0xB86F3..=0xB86FF => {
@@ -177,12 +178,12 @@ pub(crate) fn SUB_B86EE(r: &mut Run) {
                 io!(r, at, 0xB86F5..0xB86F8, 16, r.cpu.load(1, R::A, Field::B, r.hw)); // A=DAT1 B
                 op!(r, at, 0xB86F8..0xB86FB, 5, r.cpu.d_add(1, 2)); // D1=D1+ 2
                 op!(r, at, 0xB86FB..0xB86FF, 6, r.cpu.load_const(R::C, 2, 0x20)); // LC(2) #20
-                branch!(r, at, 0xB8704, 7, r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::B, Some(0xB871C))); // ?C=A B / GOYES SUB_B86EE.L1
+                branch!(r, at, 0xB8704, 7, r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::B, Some(0xB871C))); // ?C=A B / GOYES DirScanChar.L1
             }
             // #B8704:
             0xB8704..=0xB8708 => {
                 op!(r, at, 0xB8704..0xB8708, 6, r.cpu.load_const(R::C, 2, 0x9)); // LC(2) #09
-                branch!(r, at, 0xB870D, 7, r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::B, Some(0xB871C))); // ?C=A B / GOYES SUB_B86EE.L1
+                branch!(r, at, 0xB870D, 7, r.cpu.test(Test::Regs(Cmp::Eq, R::C, R::A), Field::B, Some(0xB871C))); // ?C=A B / GOYES DirScanChar.L1
             }
             // #B870D:
             0xB870D..=0xB8712 => {
@@ -195,9 +196,9 @@ pub(crate) fn SUB_B86EE(r: &mut Run) {
                 op!(r, at, 0xB8717..0xB871A, 5, r.cpu.st_set(4, false)); // ST=0 4
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::ClearCarry)); // RTNCC
             }
-            // SUB_B86EE.L1:
+            // DirScanChar.L1:
             0xB871C..=0xB871C => {
-                branch!(r, at, 0xB8721, 7, r.cpu.st_test(4, true, Some(0xB86E5))); // ?ST=1 4 / GOYES ROMP_0B5_110.L3
+                branch!(r, at, 0xB8721, 7, r.cpu.st_test(4, true, Some(0xB86E5))); // ?ST=1 4 / GOYES SrvDir.L3
             }
             // #B8721:
             0xB8721..=0xB8721 => {
@@ -212,8 +213,9 @@ pub(crate) fn SUB_B86EE(r: &mut Run) {
 }
 
 // ROMPTR 0B5 139
-// ROMP_0B5_139: firmware/upper/B7B7D-lib0B5.s:642
-pub(crate) fn ROMP_0B5_139(r: &mut Run) {
+// -> #digits: flags -45 to -48, read as one nibble
+// ModeDigits#: firmware/upper/B7B7D-lib0B5.s:706
+pub(crate) fn ModeDigits_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
         match at {
@@ -259,7 +261,7 @@ pub const ROUTINES: &[(u32, u32, Block, &str)] = &[
     (0xB70F7, 0xB7129, code_B70F7, "code_B70F7"),
     (0xB7194, 0xB71C8, code_B7194, "code_B7194"),
     (0xB8694, 0xB86ED, code_B8694, "code_B8694"),
-    (0xB86EE, 0xB8722, SUB_B86EE, "SUB_B86EE"),
-    (0xB8FBB, 0xB8FD5, ROMP_0B5_139, "ROMP_0B5_139"),
+    (0xB86EE, 0xB8722, DirScanChar, "DirScanChar"),
+    (0xB8FBB, 0xB8FD5, ModeDigits_, "ModeDigits_"),
     (0xB9829, 0xB983F, code_B9829, "code_B9829"),
 ];

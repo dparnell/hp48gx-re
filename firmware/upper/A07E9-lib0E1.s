@@ -1,5 +1,6 @@
-* HP 48GX ROM revision R, #A07E9-#A2436: Library part 0E1
+* HP 48GX ROM revision R, #A07E9-#A2436: Library 0E1: the Constants Library: browser, tables of 39 constants, and CONST
 * Addresses in the right-hand comments are those of the original ROM.
+* Most referenced: ConstValue ConstSI ConstNames ConstMessages ConstENGL
 * Follows on from the previous file (at #A07E9 in the original ROM).
         ENDLENGTH                                * A07E9
 
@@ -7,35 +8,36 @@
         LENGTH                                   * A07EE  length, to #A2430
         CON(2)  0                                * A07F3  title length
 
+* Library 0E1: The Constants Library: CONLIB's browser, CONST, and the tables of names, SI and English values and descriptions
 LIB0E1:
         CON(3)  #0E1                             * A07F5  library number
         REL(5)  LIB0E1.hash                      * A07F8  hash table
-        REL(5)  ROMP_0E1_00B                     * A07FD  message table
+        REL(5)  ConstMessages                    * A07FD  message table
         REL(5)  LIB0E1.link                      * A0802  link table
         CON(5)  0                                * A0807  config
         RPL
 
 * ROMPTR 0E1 000
 * refs (1): A07F5
+* CONLIB: browses the constants, with local CLFlag: TRUE to show values, FALSE to show descriptions
 CONLIB~1:
         :: RECLAIMDISP POLSaveUI ERRSET          * A080C
           :: ClrDA1IsStat FALSE                  * A0820
-            { LAM CLFlag } BIND ROMPTR 0E1 001 # E128 JstGetTHEMESG TOTEMPOB * A082F  "CONSTANTS LIBRARY"
-            ROMPTR 0E1 002 ONEONE ROMPTR 0E1 005 RESOROMP ROMPTR 0E1 003 * A0870
-            NULL{} ROMPTR 0E0 010 ABND ClrDAsOK ; * A089B  ~BRbrowse
+            { LAM CLFlag } BIND XLIB CONLIB~2 # E128 JstGetTHEMESG TOTEMPOB * A082F  "CONSTANTS LIBRARY"
+            XLIB CONLIB~3 ONEONE XLIB ConstNames RESOROMP XLIB CONLIB~4 * A0870
+            NULL{} XLIB ~BRbrowse ABND ClrDAsOK ; * A089B
           ERRTRAP POLResUI&Err POLRestoreUI ;    * A08BA
 
 * ROMPTR 0E1 001
 * refs (1): A07F5
+* The browser's menu: SI ENGL UNITS VALUE →STK QUIT. Flags: user flag 60 clear for SI, set for English; user flag 61 set to leave out units
 CONLIB~2:
         {                                        * A08CE
           {                                      * A08D3
             :: TakeOver $ "SI" BINT60 TestUserFlag NOT Box/StdLabel ; * A08D8
             :: TakeOver BINT60 TestUserFlag case * A0909
               :: BINT60 ClrUserFlag LAM CLFlag IT * A0922
-                :: ROMPTR 0E0 049                * A0949  BRinverse
-                  ROMPTR 0E0 045                 * A0959  BRDispItems
-                  ROMPTR 0E0 049 ;               * A0964  BRinverse
+                :: XLIB BRinverse XLIB BRDispItems XLIB BRinverse ; * A0949
                 DispMenu ;                       * A0974
             ;                                    * A097E
           }                                      * A0983
@@ -43,9 +45,7 @@ CONLIB~2:
             :: TakeOver $ "ENGL" BINT60 TestUserFlag Box/StdLabel ; * A098D
             :: TakeOver BINT60 TestUserFlag NOTcase * A09BD
               :: BINT60 SetUserFlag LAM CLFlag IT * A09D6
-                :: ROMPTR 0E0 049                * A09FD  BRinverse
-                  ROMPTR 0E0 045                 * A0A0D  BRDispItems
-                  ROMPTR 0E0 049 ;               * A0A18  BRinverse
+                :: XLIB BRinverse XLIB BRDispItems XLIB BRinverse ; * A09FD
                 DispMenu ;                       * A0A28
             ;                                    * A0A32
           }                                      * A0A37
@@ -53,36 +53,34 @@ CONLIB~2:
             :: TakeOver $ "UNITS" BINT61 TestUserFlag NOT Box/StdLabel ; * A0A41
             :: TakeOver BINT61 DUP UserITE ClrUserFlag SetUserFlag * A0A78
               LAM CLFlag IT                      * A0A9B
-              :: ROMPTR 0E0 049                  * A0AB3  BRinverse
-                ROMPTR 0E0 045                   * A0AC3  BRDispItems
-                ROMPTR 0E0 049 ;                 * A0ACE  BRinverse
+              :: XLIB BRinverse XLIB BRDispItems XLIB BRinverse ; * A0AB3
               DispMenu ;                         * A0ADE
           }                                      * A0AE8
           {                                      * A0AED
             :: TakeOver $ "VALUE" LAM CLFlag Box/StdLabel ; * A0AF2
             :: TakeOver LAM CLFlag ITE FALSE TRUE * A0B2D
-              ' LAM CLFlag STO ROMPTR 0E0 049    * A0B59  BRinverse
-              ROMPTR 0E0 045                     * A0B81  BRDispItems
-              ROMPTR 0E0 049 DispMenu ;          * A0B8C  BRinverse
+              ' LAM CLFlag STO XLIB BRinverse XLIB BRDispItems * A0B59
+              XLIB BRinverse DispMenu ;          * A0B8C
           }                                      * A0BA1
           { $ "→STK"                             * A0BA6
-            :: TakeOver ROMPTR 0E1 004 AtUserStack ; } * A0BBD
+            :: TakeOver XLIB CONLIB~5 AtUserStack ; } * A0BBD
           { $ "QUIT"                             * A0BE1
-            :: TakeOver ROMPTR 0E0 013 ; }       * A0BF8  BRdone
+            :: TakeOver XLIB BRdone ; }          * A0BF8
         }                                        * A0C17
 
 * ROMPTR 0E1 002
 * refs (1): A07F5
+* ENTER and ON actions of the browser
 CONLIB~3:
-        { ROMPTR 0E0 052                         * A0C1C  BRViewItem
-          ROMPTR 0E0 013 }                       * A0C2C  BRdone
+        { XLIB BRViewItem XLIB BRdone }          * A0C1C
 
 * ROMPTR 0E1 003
 * refs (1): A07F5
+* #i list -> $: the browser's text: "name: value" or "name: description". With i = 0 gives the number of constants
 CONLIB~4:
         :: DUP#0= case2drop # 27                 * A0C3C
           DUPUNROT NTHCOMPDROP $ ": " &$ SWAP LAM CLFlag ITE * A0C55
-          :: ROMPTR 0E1 009 DUPTYPEEXT? ITE      * A0C8F
+          :: XLIB ConstValue DUPTYPEEXT? ITE     * A0C8F
             :: DO>STR BINT2 OVERLEN$ #1- SUB$ ; DO>STR * A0CA9
           ;                                      * A0CD1
           :: # E100 #+ JstGetTHEMESG ;           * A0CD6
@@ -90,13 +88,15 @@ CONLIB~4:
 
 * ROMPTR 0E1 004
 * refs (1): A07F5
+* -> :name:value: →STK: the current constant, tagged
 CONLIB~5:
-        :: ROMPTR 0E0 017 DUP ROMPTR 0E1 009 ROMPTR 0E1 005 ROT NTHCOMPDROP * A0CFE  ~BRRclCurRow
-          >TAG ;                                 * A0D33
+        :: XLIB ~BRRclCurRow DUP XLIB ConstValue XLIB ConstNames ROT * A0CFE
+          NTHCOMPDROP >TAG ;                     * A0D2E
 
 * ROMPTR 0E1 005
 * refs (1): A07F5
-ROMP_0E1_005:
+* List of the constants' names, in table order
+ConstNames:
         { $ "NA" $ "k" $ "Vm" $ "R" $ "StdT" $ "StdP" $ "σ" $ "c" $ "ε0" * A0D3D
           $ "µ0" $ "g" $ "G" $ "h" $ "hbar" $ "q" $ "me" $ "qme" $ "mp" * A0DC0
           $ "mpme" $ "α" $ "Ø" $ "F" $ "R∞" $ "a0" $ "µB" $ "µN" $ "λ0" * A0E3C
@@ -105,7 +105,8 @@ ROMP_0E1_005:
 
 * ROMPTR 0E1 006
 * refs (1): A07F5
-ROMP_0E1_006:
+* English values. The character D in a slot means the constant has no English form, and the SI value is used
+ConstENGL:
         { CHR_D                                  * A0F77
           UNIT % 7.270063E-27 $ "Btu" $ "°R" um/ umEND ; * A0F81
           UNIT % 3.590394E2 $ "ft" %3 um^ $ "lbmol" um/ umEND ; * A0FC8
@@ -129,7 +130,8 @@ ROMP_0E1_006:
 
 * ROMPTR 0E1 007
 * refs (1): A07F5
-ROMP_0E1_007:
+* SI values, as unit objects or plain reals
+ConstSI:
         {                                        * A1419
           UNIT % 6.0221367E23 tok1 $ "gmol" um/ umEND ; * A141E
           UNIT % 1.380658E-23 $ "J" $ "K" um/ umEND ; * A145E
@@ -172,22 +174,24 @@ ROMP_0E1_007:
 
 * ROMPTR 0E1 008
 * refs (1): A07F5
+* 'name' -> value: CONST. A user variable called constname overrides the table. Error "Undefined Constant" for an unknown name
 CONST~1:
-        :: EDITDECOMP$ BINT2 OVERLEN$ #1- SUB$ DUP ROMPTR 0E1 005 NTHOF DUP * A1CCE
-          #0=case ROMPTR 0E1 00A                 * A1D06
+        :: EDITDECOMP$ BINT2 OVERLEN$ #1- SUB$ DUP XLIB ConstNames NTHOF DUP * A1CCE
+          #0=case XLIB CONST~2                   * A1D06
           SWAP $ "const" SWAP&$ $>ID SAFE@ ITE   * A1D16
           :: SWAPDROP DUPTYPEEXT? BINT61 TestUserFlag AND ?CARCOMP ; * A1D43
-          ROMPTR 0E1 009                         * A1D6B
+          XLIB ConstValue                        * A1D6B
         ;                                        * A1D76
 
 * ROMPTR 0E1 009
 * refs (1): A07F5
-ROMP_0E1_009:
+* #i -> value: constant i by flags: SI or English (user flag 60), units or not (user flag 61). Without units, angl (32) follows the angle mode: 180 in degrees, pi in radians, 200 in grads
+ConstValue:
         :: DUP BINT60 UserITE                    * A1D7B
-          :: ROMPTR 0E1 006 OVER NTHCOMPDROP DUPTYPECHAR? IT * A1D8F
-            :: ROMPTR 0E1 007 ROT NTHCOMPDROP ;  * A1DB3
+          :: XLIB ConstENGL OVER NTHCOMPDROP DUPTYPECHAR? IT * A1D8F
+            :: XLIB ConstSI ROT NTHCOMPDROP ;    * A1DB3
             SWAPDROP ;                           * A1DD2
-          :: ROMPTR 0E1 007 SWAP NTHCOMPDROP ; BINT61 UserITE * A1DDC
+          :: XLIB ConstSI SWAP NTHCOMPDROP ; BINT61 UserITE * A1DDC
           :: DUPTYPEEXT? ?CARCOMP SWAP # 20 #= IT * A1E05
             :: BINT17 SysITE                     * A1E2D  flag -17: angle mode
               :: DROP %PI ;                      * A1E3C
@@ -200,12 +204,14 @@ ROMP_0E1_009:
 
 * ROMPTR 0E1 00A
 * refs (1): A07F5
+* Error "Undefined Constant"
 CONST~2:
         :: # E129 ERROROUT ;                     * A1EA1  "Undefined Constant"
 
 * ROMPTR 0E1 00B
 * refs (1): A07F5
-ROMP_0E1_00B:
+* Message table of library 0E1: the descriptions of the constants, then two more strings
+ConstMessages:
         CON(5)  DOARRY                           * A1EBA  array 41
         LENGTH                                   * A1EBF  length, to #A2382
         CON(5)  DOCSTR                           * A1EC4  element type
@@ -286,13 +292,13 @@ LIB0E1.link:
         REL(5)  CONLIB~3                         * A23FA  002 
         REL(5)  CONLIB~4                         * A23FF  003 
         REL(5)  CONLIB~5                         * A2404  004 
-        REL(5)  ROMP_0E1_005                     * A2409  005 
-        REL(5)  ROMP_0E1_006                     * A240E  006 
-        REL(5)  ROMP_0E1_007                     * A2413  007 
+        REL(5)  ConstNames                       * A2409  005 
+        REL(5)  ConstENGL                        * A240E  006 
+        REL(5)  ConstSI                          * A2413  007 
         REL(5)  CONST~1                          * A2418  008 
-        REL(5)  ROMP_0E1_009                     * A241D  009 
+        REL(5)  ConstValue                       * A241D  009 
         REL(5)  CONST~2                          * A2422  00A 
-        REL(5)  ROMP_0E1_00B                     * A2427  00B 
+        REL(5)  ConstMessages                    * A2427  00B 
         ENDLENGTH                                * A242C
         BSS     4                                * A242C  zeros
         ENDLENGTH                                * A2430

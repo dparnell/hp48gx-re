@@ -1,6 +1,6 @@
-* HP 48GX ROM revision R, #33012-#34005: I/O and printing
+* HP 48GX ROM revision R, #33012-#34005: Numeric root finder: the engine of ROOT and the solver (library 00A), bracket search and secant steps
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: NUMSOLVE {<E>} Code_33E7F 7NULLLAM{}
+* Most referenced: RootEvalF RootVal>Var RootExtremum RootBadGuess RootZero RootExit NUMSOLVE RootSignRev RootEvalErr RootConstant {<E>} Code_33E7F
 * Follows on from the previous file (at #33012 in the original ROM).
         RPL
 
@@ -20,117 +20,110 @@ NUMSOLVE:
 7NULLLAM{}:
           { NULLLAM NULLLAM NULLLAM NULLLAM NULLLAM NULLLAM NULLLAM } BIND * 3306C
           4GETLAM DUPTYPELIST? ?SKIP ONE{}N      * 3309E
-          DUPNULLCOMP? ?GOTO NUMSOLVE~47.L1 DUPDUP {}>%sBIND 2GETLAM * 330B2
+          DUPNULLCOMP? ?GOTO RootEvalF~1.L1 DUPDUP {}>%sBIND 2GETLAM * 330B2
           1ABNDSWAP DUPTYPEEXT? ITE              * 330D0
           :: 5GETLAM XEQSTOID ; DROP             * 330DF
-          DUPLENCOMP NUMSOLVE~45 ?GOTO NUMSOLVE~47.L1 INNERCOMP DUP#1= IT * 330F8
+          DUPLENCOMP NUMSOLVE~25 ?GOTO RootEvalF~1.L1 INNERCOMP DUP#1= IT * 330F8
           OVERSWAP                               * 3311B
           #3= NOT?GOTO NUMSOLVE~2 NUMSOLVE~1 ROT NUMSOLVE~1 3UNROLL * 33120
-          NUMSOLVE~1 SWAP NUMSOLVE~28 NUMSOLVE~29 NUMSOLVE~27 NUMSOLVE~3 * 33143
-          BINT35 NUMSOLVE~21 BINT53 NUMSOLVE~21 NUMSOLVE~12 NUMSOLVE~35 * 33161
-          BINT2 OBJ_3437C ?GOTO 7NULLLAM{}.L1 BINT18 NUMSOLVE~21 GOTO * 3317F
-          NUMSOLVE~2.L1                          * 331A2
+          NUMSOLVE~1 SWAP RootX4! RootX5! RootX3! RootEvalF BINT35 RootCopy * 33143
+          BINT53 RootCopy NUMSOLVE~5 RootInitState BINT2 RootSlotSet? ?GOTO * 3316B
+          7NULLLAM{}.L1 BINT18 RootCopy GOTO NUMSOLVE~2.L1 * 3318E
 7NULLLAM{}.L1:
-          NUMSOLVE~3 NUMSOLVE~12 OBJ_347AE BINT67 NUMSOLVE~21 NUMSOLVE~27 * 331A7
-          NUMSOLVE~3 NUMSOLVE~12 NUMSOLVE~23 ?GOTO 7NULLLAM{}.L2 BINT83 * 331C5
-          NUMSOLVE~21 GOTO NUMSOLVE~2.loop2      * 331E3
+          RootEvalF NUMSOLVE~5 RootX4 BINT67 RootCopy RootX3! RootEvalF * 331A7
+          NUMSOLVE~5 RootSet3? ?GOTO 7NULLLAM{}.L2 BINT83 RootCopy GOTO * 331CA
+          NUMSOLVE~2.loop2                       * 331ED
 7NULLLAM{}.L2:
-          BINT4 OBJ_3437C ?GOTO 7NULLLAM{}.L3 OBJ_347F7 NUMSOLVE~32 * 331F2
-          NUMSOLVE~38 NOT?GOTO NUMSOLVE~2.loop4 BINT101 NUMSOLVE~21 BINT83 * 33210
-          NUMSOLVE~21 BINT1 NUMSOLVE~21 BINT18 NUMSOLVE~21 BINT36 * 3322E
-          NUMSOLVE~21 GOTO NUMSOLVE~2.L28        * 3324C
+          BINT4 RootSlotSet? ?GOTO 7NULLLAM{}.L3 RootF2 RootF3 NUMSOLVE~18 * 331F2
+          NOT?GOTO NUMSOLVE~2.loop4 BINT101 RootCopy BINT83 RootCopy BINT1 * 33215
+          RootCopy BINT18 RootCopy BINT36 RootCopy GOTO NUMSOLVE~2.L28 * 33238
 7NULLLAM{}.L3:
-          OBJ_347F7 OBJ_34817 %<> ?GOTO 7NULLLAM{}.L4 OBJ_34817 NUMSOLVE~32 * 3325B
-          %<> ?GOTO NUMSOLVE~2.L15 GOTO NUMSOLVE~2.loop4 * 3327E
+          RootF2 RootF4 %<> ?GOTO 7NULLLAM{}.L4 RootF4 RootF3 %<> ?GOTO * 3325B
+          NUMSOLVE~2.L15 GOTO NUMSOLVE~2.loop4   * 33288
 7NULLLAM{}.L4:
-          OBJ_347F7 OBJ_34817 NUMSOLVE~38 ?GOTO NUMSOLVE~2.loop20 OBJ_347F7 * 33297
-          %ABS OBJ_34817 %ABS %> ?GOTO NUMSOLVE~2.L15 NUMSOLVE~32 OBJ_34817 * 332B5
-          2DUP NUMSOLVE~38 ?GOTO NUMSOLVE~2.L19 %ABS SWAP %ABS %> ?GOTO * 332DD
-          7NULLLAM{}.L5 NUMSOLVE~34 GOTO NUMSOLVE~2.L11 * 3330A
+          RootF2 RootF4 NUMSOLVE~18 ?GOTO NUMSOLVE~2.loop20 RootF2 %ABS * 33297
+          RootF4 %ABS %> ?GOTO NUMSOLVE~2.L15 RootF3 RootF4 2DUP NUMSOLVE~18 * 332BA
+          ?GOTO NUMSOLVE~2.L19 %ABS SWAP %ABS %> ?GOTO 7NULLLAM{}.L5 * 332E7
+          RootFlipDir GOTO NUMSOLVE~2.L11        * 3330F
 7NULLLAM{}.L5:
-          OBJ_347F7 %ABS NUMSOLVE~32 %ABS %>= ?GOTO NUMSOLVE~2.loop10 * 3331E
-          NUMSOLVE~34 GOTO NUMSOLVE~2.L11 DUP NUMSOLVE~36 * 33341
+          RootF2 %ABS RootF3 %ABS %>= ?GOTO NUMSOLVE~2.loop10 RootFlipDir * 3331E
+          GOTO NUMSOLVE~2.L11 DUP RootNudge      * 33346
 NUMSOLVE~2:
-          2DUP %= IT NUMSOLVE~36                 * 3335A
-          %MAXorder SWAP NUMSOLVE~28 NUMSOLVE~27 NUMSOLVE~35 * 3336E
+          2DUP %= IT RootNudge                   * 3335A
+          %MAXorder SWAP RootX4! RootX3! RootInitState * 3336E
 NUMSOLVE~2.L1:
-          NUMSOLVE~3 BINT35 NUMSOLVE~21 BINT52 NUMSOLVE~21 NUMSOLVE~3 BINT67 * 33387
-          NUMSOLVE~21 NUMSOLVE~12 BINT2 OBJ_3437C ?GOTO NUMSOLVE~2.loop2 * 333AA
-          BINT4 OBJ_3437C NOT?GOTO OBJ_33CBA NUMSOLVE~34 * 333C8
+          RootEvalF BINT35 RootCopy BINT52 RootCopy RootEvalF BINT67 * 33387
+          RootCopy NUMSOLVE~5 BINT2 RootSlotSet? ?GOTO NUMSOLVE~2.loop2 * 333AA
+          BINT4 RootSlotSet? NOT?GOTO RootBadGuess RootFlipDir * 333C8
 NUMSOLVE~2.loop2:
-          BINT4 OBJ_3437C ?GOTO NUMSOLVE~2.L5 NUMSOLVE~9 BINT84 NUMSOLVE~21 * 333E1
-          BINT36 NUMSOLVE~24 NOT?GOTO NUMSOLVE~2.L3 NUMSOLVE~27 NUMSOLVE~3 * 33404
-          NUMSOLVE~13 BINT67 NUMSOLVE~21 GOTO NUMSOLVE~2.loop2 * 33422
+          BINT4 RootSlotSet? ?GOTO NUMSOLVE~2.L5 RootShow24 BINT84 RootCopy * 333E1
+          BINT36 NUMSOLVE~14 NOT?GOTO NUMSOLVE~2.L3 RootX3! RootEvalF * 33404
+          NUMSOLVE~6 BINT67 RootCopy GOTO NUMSOLVE~2.loop2 * 33422
 NUMSOLVE~2.L3:
-          DROP BINT101 NUMSOLVE~21 BINT33 NUMSOLVE~25 NOT?GOTO OBJ_33CBA * 3343B
-          NUMSOLVE~27 NUMSOLVE~3 NUMSOLVE~13 BINT66 NUMSOLVE~21 BINT35 * 3345E
-          NUMSOLVE~21 NUMSOLVE~34 NUMSOLVE~23 ?GOTO NUMSOLVE~2.L5 NUMSOLVE~9 * 3347C
-          GOTO OBJ_33CBA                         * 3349A
+          DROP BINT101 RootCopy BINT33 NUMSOLVE~15 NOT?GOTO RootBadGuess * 3343B
+          RootX3! RootEvalF NUMSOLVE~6 BINT66 RootCopy BINT35 RootCopy * 3345E
+          RootFlipDir RootSet3? ?GOTO NUMSOLVE~2.L5 RootShow24 GOTO * 33481
+          RootBadGuess                           * 3349F
 NUMSOLVE~2.loop4:
-          BINT67 NUMSOLVE~21 NUMSOLVE~22 IT NUMSOLVE~34 * 334A4
+          BINT67 RootCopy NUMSOLVE~13 IT RootFlipDir * 334A4
 NUMSOLVE~2.L5:
-          OBJ_34817 OBJ_347F7 %<> ?GOTO NUMSOLVE~2.L9 NUMSOLVE~9 * 334BD
+          RootF4 RootF2 %<> ?GOTO NUMSOLVE~2.L9 RootShow24 * 334BD
 NUMSOLVE~2.loop6:
-          OBJ_347AE OBJ_3478E NUMSOLVE~43 BINT4 BINT5 OBJ_344C7 ?GOTO * 334DB
+          RootX4 RootX2 NUMSOLVE~23 BINT4 BINT5 OBJ_344C7 ?GOTO * 334DB
           NUMSOLVE~2.L8 DROP                     * 334FE
 NUMSOLVE~2.loop7:
-          BINT69 NUMSOLVE~24 ?GOTO NUMSOLVE~2.L8 DROP NUMSOLVE~22 NOT?GOTO * 33508
-          OBJ_33CCE BINT101 NUMSOLVE~21 NUMSOLVE~34 GOTO NUMSOLVE~2.loop6 * 3352B
+          BINT69 NUMSOLVE~14 ?GOTO NUMSOLVE~2.L8 DROP NUMSOLVE~13 NOT?GOTO * 33508
+          RootConstant BINT101 RootCopy RootFlipDir GOTO NUMSOLVE~2.loop6 * 3352B
 NUMSOLVE~2.L8:
-          NUMSOLVE~27 NUMSOLVE~3 NUMSOLVE~14 NUMSOLVE~23 ?GOTO * 33549
-          NUMSOLVE~2.loop4 BINT83 NUMSOLVE~21 NUMSOLVE~8 GOTO * 33562
-          NUMSOLVE~2.loop7                       * 3357B
+          RootX3! RootEvalF NUMSOLVE~7 RootSet3? ?GOTO NUMSOLVE~2.loop4 * 33549
+          BINT83 RootCopy RootShow25 GOTO NUMSOLVE~2.loop7 * 33567
 NUMSOLVE~2.L9:
-          OBJ_34817 OBJ_347F7 OVER %ABS OVER %ABS %< ?SKIP NUMSOLVE~34 * 33580
-          NUMSOLVE~38 ?GOTO NUMSOLVE~2.loop20 GOTO NUMSOLVE~2.L11 * 335AD
+          RootF4 RootF2 OVER %ABS OVER %ABS %< ?SKIP RootFlipDir * 33580
+          NUMSOLVE~18 ?GOTO NUMSOLVE~2.loop20 GOTO NUMSOLVE~2.L11 * 335AD
 NUMSOLVE~2.loop10:
-          BINT36 NUMSOLVE~21 BINT67 NUMSOLVE~21  * 335C6
+          BINT36 RootCopy BINT67 RootCopy        * 335C6
 NUMSOLVE~2.L11:
-          NUMSOLVE~9 BINT7 4PUTLAM BINT18 NUMSOLVE~21 OBJ_347AE OBJ_3478E * 335DA
-          OBJ_347F7 OBJ_34817 NUMSOLVE~42 BINT4 BINT5 OBJ_344C7 ?GOTO * 335FD
-          NUMSOLVE~2.loop12 #5= ?GOTO NUMSOLVE~2.L14 BINT69 NUMSOLVE~25 * 33620
-          NOT?GOTO OBJ_33C7E                     * 3363E
+          RootShow24 BINT7 4PUTLAM BINT18 RootCopy RootX4 RootX2 RootF2 * 335DA
+          RootF4 NUMSOLVE~22 BINT4 BINT5 OBJ_344C7 ?GOTO NUMSOLVE~2.loop12 * 33602
+          #5= ?GOTO NUMSOLVE~2.L14 BINT69 NUMSOLVE~15 NOT?GOTO RootExtremum * 33625
 NUMSOLVE~2.loop12:
-          %0_2A2B4 BINT4 BINT5 NUMSOLVE~44 NUMSOLVE~27 NUMSOLVE~3 * 33648
-          NUMSOLVE~15                            * 33666
+          %0_2A2B4 BINT4 BINT5 NUMSOLVE~24 RootX3! RootEvalF NUMSOLVE~8 * 33648
 NUMSOLVE~2.loop13:
-          NUMSOLVE~23 ?GOTO NUMSOLVE~2.L16 BINT83 NUMSOLVE~21 NUMSOLVE~8 * 3366B
+          RootSet3? ?GOTO NUMSOLVE~2.L16 BINT83 RootCopy RootShow25 * 3366B
 NUMSOLVE~2.L14:
-          BINT69 NUMSOLVE~24 ?GOTO NUMSOLVE~2.loop12 DROP GOTO OBJ_33C7E * 33689
+          BINT69 NUMSOLVE~14 ?GOTO NUMSOLVE~2.loop12 DROP GOTO RootExtremum * 33689
 NUMSOLVE~2.L15:
           BINT7 4PUTLAM                          * 336AC
 NUMSOLVE~2.L16:
-          NUMSOLVE~32 OBJ_34817 2DUP NUMSOLVE~38 ?GOTO NUMSOLVE~2.L19 %ABS * 336B6
-          SWAP %ABS %>= ?GOTO NUMSOLVE~2.loop10 4GETLAM #1- DUP#0= ?GOTO * 336D9
-          NUMSOLVE~46.L1 4PUTLAM BINT83 NUMSOLVE~21 NUMSOLVE~8 NUMSOLVE~34 * 33706
-          NUMSOLVE~7 NUMSOLVE~34 3UNROLL 5ROLL SWAP OBJ_347AE %>%% 6UNROLL * 33724
-          NUMSOLVE~40 BINT1 BINT5 OBJ_344C7 NOT?GOTO NUMSOLVE~46.L1 DUP * 3374C
-          OBJ_347AE %= ?GOTO NUMSOLVE~2.L18 DUP OBJ_347AE 1GETLAM ITE %< %> * 3376F
-          ?GOTO NUMSOLVE~2.loop17 BINT36 NUMSOLVE~21 BINT69 NUMSOLVE~21 * 337A1
-          NUMSOLVE~34                            * 337BF
+          RootF3 RootF4 2DUP NUMSOLVE~18 ?GOTO NUMSOLVE~2.L19 %ABS SWAP %ABS * 336B6
+          %>= ?GOTO NUMSOLVE~2.loop10 4GETLAM #1- DUP#0= ?GOTO RootExit.L1 * 336E3
+          4PUTLAM BINT83 RootCopy RootShow25 RootFlipDir NUMSOLVE~4 * 3370B
+          RootFlipDir 3UNROLL 5ROLL SWAP RootX4 %>%% 6UNROLL NUMSOLVE~20 * 33729
+          BINT1 BINT5 OBJ_344C7 NOT?GOTO RootExit.L1 DUP RootX4 %= ?GOTO * 33751
+          NUMSOLVE~2.L18 DUP RootX4 1GETLAM ITE %< %> * 3377E
+          ?GOTO NUMSOLVE~2.loop17 BINT36 RootCopy BINT69 RootCopy * 337A1
+          RootFlipDir                            * 337BF
 NUMSOLVE~2.loop17:
-          NUMSOLVE~27 NUMSOLVE~3 NUMSOLVE~16 GOTO NUMSOLVE~2.loop13 * 337C4
+          RootX3! RootEvalF NUMSOLVE~9 GOTO NUMSOLVE~2.loop13 * 337C4
 NUMSOLVE~2.L18:
-          DROP BINT69 NUMSOLVE~25 ?GOTO NUMSOLVE~2.loop17 GOTO OBJ_33C7E * 337DD
+          DROP BINT69 NUMSOLVE~15 ?GOTO NUMSOLVE~2.loop17 GOTO RootExtremum * 337DD
 NUMSOLVE~2.L19:
-          2DROP BINT36 NUMSOLVE~21 BINT67 NUMSOLVE~21 * 33800
+          2DROP BINT36 RootCopy BINT67 RootCopy  * 33800
 NUMSOLVE~2.loop20:
-          BINT1 NUMSOLVE~21 BINT101 NUMSOLVE~21  * 33819
+          BINT1 RootCopy BINT101 RootCopy        * 33819
 NUMSOLVE~2.loop21:
-          NUMSOLVE~9 BINT36 NUMSOLVE~24 NOT?GOTO NUMSOLVE~2.L35 NUMSOLVE~26 * 3382D
-          ?GOTO NUMSOLVE~2.L26 BINT1 OBJ_3437C ?GOTO NUMSOLVE~2.L22 DROP * 3384B
-          OBJ_347AE OBJ_3478E OBJ_347F7 OBJ_34817 NUMSOLVE~41 GOTO * 3386E
-          NUMSOLVE~2.L25                         * 3388C
+          RootShow24 BINT36 NUMSOLVE~14 NOT?GOTO NUMSOLVE~2.L35 NUMSOLVE~16 * 3382D
+          ?GOTO NUMSOLVE~2.L26 BINT1 RootSlotSet? ?GOTO NUMSOLVE~2.L22 DROP * 3384B
+          RootX4 RootX2 RootF2 RootF4 NUMSOLVE~21 GOTO NUMSOLVE~2.L25 * 3386E
 NUMSOLVE~2.L22:
-          NUMSOLVE~7 OBJ_34817 OVER NUMSOLVE~37 ITE * 33891
-          :: OVER 4PICK %%- 6ROLL %%+ OBJ_34817 %>%% OBJ_347AE ; * 338AA
-          :: 5ROLL 3PICK %%- 4PICK %%+ OBJ_347F7 %>%% OBJ_3478E ; * 338DC
-          %>%% 7PICK 5PICK 4ROLL 5ROLL NUMSOLVE~39 5UNROLL OBJ_347E7 * 3390E
-          OBJ_347F7 2DUP %= ?GOTO NUMSOLVE~2.L23 %ABS SWAP %ABS %> ?SKIP * 33936
-          NUMSOLVE~6                             * 33968
+          NUMSOLVE~4 RootF4 OVER NUMSOLVE~17 ITE * 33891
+          :: OVER 4PICK %%- 6ROLL %%+ RootF4 %>%% RootX4 ; * 338AA
+          :: 5ROLL 3PICK %%- 4PICK %%+ RootF2 %>%% RootX2 ; * 338DC
+          %>%% 7PICK 5PICK 4ROLL 5ROLL NUMSOLVE~19 5UNROLL RootF1 RootF2 * 3390E
+          2DUP %= ?GOTO NUMSOLVE~2.L23 %ABS SWAP %ABS %> ?SKIP NUMSOLVE~3 * 3393B
           DUP %%0= ?GOTO NUMSOLVE~2.L24 OVER %%ABS 4PICK %%ABS %%< ITE * 3396D
-          :: ROTDROP OBJ_3478E ;                 * 3399F
-          :: SWAPDROP OBJ_347AE ;                * 339B3
+          :: ROTDROP RootX2 ;                    * 3399F
+          :: SWAPDROP RootX4 ;                   * 339B3
           %>%% 4UNROLL %%/ %%* %%+ OBJ_34C49 3PICKOVER %>%%- %%ABS 3PICK * 339C7
           5ROLL %>%%- %%ABS %%>= NOT?SWAPDROP GOTO NUMSOLVE~2.L25 * 339F9
 NUMSOLVE~2.L23:
@@ -139,126 +132,137 @@ NUMSOLVE~2.L24:
           4DROP SWAPDROP                         * 33A21
 NUMSOLVE~2.L25:
           BINT2 BINT4 OBJ_344C7 ?GOTO NUMSOLVE~2.L26 BINT2 #=ITE BINT36 * 33A2B
-          BINT66 NUMSOLVE~25 DROP                * 33A53
+          BINT66 NUMSOLVE~15 DROP                * 33A53
 NUMSOLVE~2.L26:
-          %0_2A2B4 BINT2 BINT4 NUMSOLVE~44 NUMSOLVE~27 NUMSOLVE~3 * 33A62
-          NUMSOLVE~17 NUMSOLVE~23 NOT?GOTO NUMSOLVE~2.L27 NUMSOLVE~32 * 33A80
-          OBJ_34817 NUMSOLVE~38 ?SKIP NUMSOLVE~34 * 33A99
-          BINT1 NUMSOLVE~21 BINT18 NUMSOLVE~21 BINT35 NUMSOLVE~21 GOTO * 33AAD
+          %0_2A2B4 BINT2 BINT4 NUMSOLVE~24 RootX3! RootEvalF NUMSOLVE~10 * 33A62
+          RootSet3? NOT?GOTO NUMSOLVE~2.L27 RootF3 RootF4 NUMSOLVE~18 ?SKIP * 33A85
+          RootFlipDir                            * 33AA8
+          BINT1 RootCopy BINT18 RootCopy BINT35 RootCopy GOTO * 33AAD
           NUMSOLVE~2.loop21                      * 33AD0
 NUMSOLVE~2.L27:
-          BINT101 NUMSOLVE~21 BINT84 NUMSOLVE~21 BINT67 NUMSOLVE~21 BINT1 * 33AD5
-          NUMSOLVE~21 BINT18 NUMSOLVE~21 BINT35 NUMSOLVE~21 * 33AF8
+          BINT101 RootCopy BINT84 RootCopy BINT67 RootCopy BINT1 RootCopy * 33AD5
+          BINT18 RootCopy BINT35 RootCopy        * 33AFD
 NUMSOLVE~2.L28:
           FALSE 4PUTLAM                          * 33B11
 NUMSOLVE~2.loop29:
-          NUMSOLVE~10 BINT69 NUMSOLVE~24 ?GOTO NUMSOLVE~2.L30 DROP 4GETLAM * 33B1B
-          ?GOTO NUMSOLVE~2.L34 TRUE 4PUTLAM NUMSOLVE~34 GOTO * 33B3E
+          RootShow15 BINT69 NUMSOLVE~14 ?GOTO NUMSOLVE~2.L30 DROP 4GETLAM * 33B1B
+          ?GOTO NUMSOLVE~2.L34 TRUE 4PUTLAM RootFlipDir GOTO * 33B3E
           NUMSOLVE~2.loop29                      * 33B5C
 NUMSOLVE~2.L30:
-          NUMSOLVE~27 NUMSOLVE~3 NUMSOLVE~18 NUMSOLVE~23 NOT?GOTO * 33B61
-          NUMSOLVE~2.L31 NUMSOLVE~32 NUMSOLVE~33 NUMSOLVE~38 NOT?GOTO * 33B7A
-          NUMSOLVE~2.L32 BINT20 NUMSOLVE~21 BINT35 NUMSOLVE~21 BINT69 * 33B93
-          NUMSOLVE~21 BINT86 NUMSOLVE~21 GOTO NUMSOLVE~2.loop20 * 33BB1
+          RootX3! RootEvalF NUMSOLVE~11 RootSet3? NOT?GOTO NUMSOLVE~2.L31 * 33B61
+          RootF3 RootF5 NUMSOLVE~18 NOT?GOTO NUMSOLVE~2.L32 BINT20 RootCopy * 33B7F
+          BINT35 RootCopy BINT69 RootCopy BINT86 RootCopy GOTO * 33BA2
+          NUMSOLVE~2.loop20                      * 33BC5
 NUMSOLVE~2.L31:
           BINT67 GOTO NUMSOLVE~2.L33             * 33BCA
 NUMSOLVE~2.L32:
-          BINT101 NUMSOLVE~21 BINT83             * 33BD9
+          BINT101 RootCopy BINT83                * 33BD9
 NUMSOLVE~2.L33:
-          NUMSOLVE~21 4GETLAM ?SKIP NUMSOLVE~34  * 33BE8
+          RootCopy 4GETLAM ?SKIP RootFlipDir     * 33BE8
           GOTO NUMSOLVE~2.loop29                 * 33BFC
 NUMSOLVE~2.L34:
-          OBJ_33C24 BINT1 BINT5 GOTO OBJ_33C24.L1 * 33C06
+          RootSignRev BINT1 BINT5 GOTO RootSignRev.L1 * 33C06
 NUMSOLVE~2.L35:
           DROP                                   * 33C1F
 
 * refs (1): 33C06
-OBJ_33C24:
+* Ends with "Sign Reversal": takes the slot of slots 2 and 4 with the smaller |f|
+RootSignRev:
           # A05 BINT2 BINT4                      * 33C24
-OBJ_33C24.L1:
-          NUMSOLVE~20 DROP OBJ_34771             * 33C38
-NUMSOLVE~46:
-          OBJ_33DAA OVER 4UNROLL XEQSTOID 7GETLAM ABND ?SKIP FLUSHKEYS * 33C47
+RootSignRev.L1:
+          RootBetter DROP RootX#                 * 33C38
+
+* refs (2): 33C92 33DA0
+* Stores the answer in the unknown, leaves the locals, and returns TRUE with the message number
+RootExit:
+          RootVal>Var OVER 4UNROLL XEQSTOID 7GETLAM ABND ?SKIP FLUSHKEYS * 33C47
           COLA TRUE                              * 33C6F
-NUMSOLVE~46.L1:
+RootExit.L1:
           DROP                                   * 33C79
 
 * refs (3): 33643 336A7 337FB
-OBJ_33C7E:
-          # A06 OBJ_347AE GOTO NUMSOLVE~46       * 33C7E
-NUMSOLVE~47:
-          RDROP # 12F GOTO OBJ_33CCE.L2 RDROP    * 33C97
-NUMSOLVE~47.L1:
+* Ends with "Extremum" at x in slot 4
+RootExtremum:
+          # A06 RootX4 GOTO RootExit             * 33C7E
+RootEvalF~1:
+          RDROP # 12F GOTO RootConstant.L2 RDROP * 33C97
+RootEvalF~1.L1:
           DROP                                   * 33CB5
 
 * refs (3): 333D7 33459 3349F
-OBJ_33CBA:
-          # A01 GOTO OBJ_33CCE.L1                * 33CBA
+* Ends with "Bad Guess(es)", restoring the variable's old value
+RootBadGuess:
+          # A01 GOTO RootConstant.L1             * 33CBA
 
 * refs (1): 3352B
-OBJ_33CCE:
+* Ends with "Constant?", restoring the variable's old value
+RootConstant:
           # A02                                  * 33CCE  2562
-OBJ_33CCE.L1:
+RootConstant.L1:
           4GETLAM 5GETLAM XEQSTOID               * 33CD8
-OBJ_33CCE.L2:
+RootConstant.L2:
           7GETLAM ABND ?SKIP FLUSHKEYS           * 33CE7
           FALSE ;                                * 33CFB
 
 * refs (12): 3315C 331A7 331C5 33387 333A0 3341D ...
-NUMSOLVE~3:
-        :: NUMSOLVE~31 OBJ_33DAA XEQSTOID 6GETLAM ERRSET CRUNCH ERRTRAP * 33D05
-          NUMSOLVE~4 0LASTOWDOB! CK1NOLASTWD DUPTYPEREAL? ?GOTO * 33D2D
-          NUMSOLVE~3.L1 DUP TYPECMP? ?GOTO NUMSOLVE~5 DUPTYPEEXT? NOT?GOTO * 33D46
-          NUMSOLVE~47 U>nbr                      * 33D69
-NUMSOLVE~3.L1:
-          DUP NUMSOLVE~30 %0<> ?SEMI             * 33D73
+* -> %: stores the x in slot 3 in the unknown and evaluates the function. An error, a complex result or a zero marks a bad point, handled by RootEvalErr and the caller
+RootEvalF:
+        :: RootX3 RootVal>Var XEQSTOID 6GETLAM ERRSET CRUNCH ERRTRAP * 33D05
+          RootEvalErr 0LASTOWDOB! CK1NOLASTWD DUPTYPEREAL? ?GOTO * 33D2D
+          RootEvalF.L1 DUP TYPECMP? ?GOTO RootEvalF~2 DUPTYPEEXT? NOT?GOTO * 33D46
+          RootEvalF~1 U>nbr                      * 33D69
+RootEvalF.L1:
+          DUP RootF3! %0<> ?SEMI                 * 33D73
           RDROP                                  * 33D87
 
 * refs (2): 48B93 49C2C
-OBJ_33D8C:
-          # A04 NUMSOLVE~31 GOTO NUMSOLVE~46 ;   * 33D8C
+* Ends with "Zero" at x in slot 3. The plotter's ROOT also comes here
+RootZero:
+          # A04 RootX3 GOTO RootExit ;           * 33D8C
 
 * refs (3): 33C47 33D0F 342BB
-OBJ_33DAA:
+* % -> ob id: pairs a result with the unknown in 5GETLAM, giving it the units of the variable's old value
+RootVal>Var:
         :: 5GETLAM dup;RclInVars(gn)? NOT?SEMI   * 33DAA
           DUPTYPEEXT? NOTcaseDROP ROT            * 33DBE
           Unbr>U SWAP ;                          * 33DCD
 
 * refs (1): 33D2D
-NUMSOLVE~4:
+* Error trap of RootEvalF: "Undefined Name", the #3xx and #Bxx errors and ATTN only mean a bad point; others are raised again
+RootEvalErr:
         :: RDROP 0LASTOWDOB!                     * 33DDC
           CODE                                   * 33DEB  93 nibbles
             CD0EX                                * 33DF5
             D0=(5)  ERROR                        * 33DF8
             A=DAT0  A                            * 33DFF
             ?A=0    A                            * 33E02
-            GOYES   NUMSOLVE~4.L2                * 33E05
+            GOYES   RootEvalErr.L2               * 33E05
             RSTK=C                               * 33E07
             LC(5)   #00203                       * 33E09
             ?C=A    A                            * 33E10
-            GOYES   NUMSOLVE~4.L1                * 33E13
+            GOYES   RootEvalErr.L1               * 33E13
             LC(3)   #300                         * 33E15
             ?C=A    XS                           * 33E1A
-            GOYES   NUMSOLVE~4.L1                * 33E1D
+            GOYES   RootEvalErr.L1               * 33E1D
             LC(3)   #B00                         * 33E1F
             ?C=A    XS                           * 33E24
-            GOYES   NUMSOLVE~4.L1                * 33E27
+            GOYES   RootEvalErr.L1               * 33E27
             LC(5)   ERRJMP                       * 33E29
             A=C     A                            * 33E30
             PC=(A)                               * 33E32
-NUMSOLVE~4.L1:
+RootEvalErr.L1:
             A=0     A                            * 33E36
             C=RSTK                               * 33E38
-            GOC     NUMSOLVE~4.L3                * 33E3A
-NUMSOLVE~4.L2:
+            GOC     RootEvalErr.L3               * 33E3A
+RootEvalErr.L2:
             D0=(5)  ATTNFLG                      * 33E3D
             A=A+1   A                            * 33E44
-NUMSOLVE~4.L3:
+RootEvalErr.L3:
             DAT0=A  A                            * 33E46
             D0=C                                 * 33E49
-            GOLONG  NUMSOLVE~29.L3               * 33E4C
+            GOLONG  RootX5!.L3                   * 33E4C
           ENDCODE                                * 33E52
-NUMSOLVE~5:
+RootEvalF~2:
           DEPTH 3GETLAM 2DUP#> ITE #- BINT2      * 33E52
           NDROP CK0NOLASTWD                      * 33E70
 * The Very Big List names this address [code], but it is a pointer inside an object; the name is not used
@@ -275,20 +279,19 @@ Code_33E7F:
             C=0     S                            * 33E9D
             LC(3)   #F00                         * 33EA0
             DAT1=C  W                            * 33EA5
-            GOTO    NUMSOLVE~21.L1               * 33EA9
+            GOTO    RootCopy.L1                  * 33EA9
           ENDCODE                                * 33EAD
         ;                                        * 33EAD
 
 * refs (1): 33968
-NUMSOLVE~6:
-        :: 4DROP OBJ_347E7 %>%%1/ OBJ_347F7 %>%%1/ OBJ_34817 %>%%1/ 2DUP %%- * 33EB2
-          OBJ_3478E OBJ_347AE %>%%- DUP OBJ_3477E OBJ_347AE %>%%- %%/ OVER * 33EE4
-          OBJ_3478E OBJ_3477E %>%%- %%/ 6ROLL 7PICK %%- %%* 6ROLL 6ROLL %%- * 33F11
-          3PICK %%*ROT 3PICK 6ROLL %%- %%* ;     * 33F48
+NUMSOLVE~3:
+        :: 4DROP RootF1 %>%%1/ RootF2 %>%%1/ RootF4 %>%%1/ 2DUP %%- RootX2 * 33EB2
+          RootX4 %>%%- DUP RootX1 RootX4 %>%%- %%/ OVER RootX2 RootX1 %>%%- * 33EE9
+          %%/ 6ROLL 7PICK %%- %%* 6ROLL 6ROLL %%- 3PICK %%*ROT 3PICK 6ROLL * 33F20
+          %%- %%* ;                              * 33F5C
 
 * refs (2): 33724 33891
-NUMSOLVE~7:
-        :: OBJ_347F7 OBJ_34817 %>%%- OBJ_3478E OBJ_347AE %>%%- DUP OBJ_3477E * 33F6B
-          OBJ_347AE %>%%- %%/ OVER OBJ_3478E OBJ_3477E %>%%- %%/ OBJ_347F7 * 33F98
-          OBJ_347E7 %>%%- %%* OVER OBJ_347E7 OBJ_34817 %>%%- %%*ROT 3PICK * 33FC5
-          6PICK %%- %%* ;                        * 33FF2
+NUMSOLVE~4:
+        :: RootF2 RootF4 %>%%- RootX2 RootX4 %>%%- DUP RootX1 RootX4 %>%%- * 33F6B
+          %%/ OVER RootX2 RootX1 %>%%- %%/ RootF2 RootF1 %>%%- %%* OVER * 33FA2
+          RootF1 RootF4 %>%%- %%*ROT 3PICK 6PICK %%- %%* ; * 33FD9

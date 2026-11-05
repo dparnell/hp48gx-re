@@ -1,31 +1,35 @@
-* HP 48GX ROM revision R, #CA95B-#CADC3: Library part 0C1
+* HP 48GX ROM revision R, #CA95B-#CADC3: RRK command, argument check for the Rosenbrock commands, angle factors for units, library tables
 * Addresses in the right-hand comments are those of the original ROM.
+* Most referenced: UnitAngleFix Unit>AngleMode RRKBindList DoRRK1 DoRRK %DEGPERANG
 * Follows on from the previous file (at #CA95B in the original ROM).
         RPL
 
 * ROMPTR 0C1 01D
 * refs (1): C78DB
-ROMP_0C1_01D:
-        :: DEPTH #3- 4PICK ROMPTR 0C1 01F ROTDROP ERRSET ROMPTR 0C1 01E * CA95B
-          ERRTRAP ROMPTR 0C1 014 1PUTLAM 7GETLAM RESETDEPTH 6GETLAM 1GETABND * CA98F
+* RRK: {list} xtol xTfinal -> {list} xtol, where xtol may be {xtol xh}. As DoRKF, with the choice of method.
+DoRRK:
+        :: DEPTH #3- 4PICK XLIB RRKBindList ROTDROP ERRSET XLIB DoRRK1 * CA95B
+          ERRTRAP XLIB RRKTrap 1PUTLAM 7GETLAM RESETDEPTH 6GETLAM 1GETABND * CA98F
           ATTNFLGCLR ;                           * CA9B8
 
 * ROMPTR 0C1 01E
 * refs (1): C78DB
-ROMP_0C1_01E:
-        :: ROMPTR 0C1 010 case ABND              * CA9C2
+* Stepping loop of RRK: repeats RRKorRKF until T reaches the final T.
+DoRRK1:
+        :: XLIB DEStepArgs case ABND             * CA9C2
           %0_2A2B4 %0_2A2B4 %0_2A2B4 %0_2A2B4 %0_2A2B4 %0_2A2B4 8ROLL * CA9DC
-          8NULLLAM{} BIND LAM 'W RCLCRUNCH>%ARRY ROMPTR 0C1 01A 5PUTLAM * CA9FF
-          4PUTLAM 3PUTLAM RESOROMP ROMPTR 0C1 00D 6PUTLAM 2GETLAM 8GETLAM * CAA29
-          11GETLAM RESOROMP ROMPTR 0C1 01B 11PUTLAM OVER %%0> 12PUTLAM BEGIN * CAA52
+          8NULLLAM{} BIND LAM 'W RCLCRUNCH>%ARRY XLIB RRKStepSel 5PUTLAM * CA9FF
+          4PUTLAM 3PUTLAM RESOROMP XLIB DEStepCtl 6PUTLAM 2GETLAM 8GETLAM * CAA29
+          11GETLAM RESOROMP XLIB RRKorRKF 11PUTLAM OVER %%0> 12PUTLAM BEGIN * CAA52
           10GETLAM 12GETLAM ITE OBJ_7CE00 OBJ_7CE32 * CAA80
-          SWAP 11GETLAM EVAL SWAP LAM 'T OBJ_36DDF 10GETLAM OVER 12GETLAM * CAA99
-          ITE %<= %>=                            * CAACC
+          SWAP 11GETLAM EVAL SWAP LAM 'T @%_HERE 10GETLAM OVER 12GETLAM ITE * CAA99
+          %<= %>=                                * CAAD1
           UNTIL 3DROP 1GETABND ABND ;            * CAADB
 
 * ROMPTR 0C1 01F
 * refs (1): C78DB
-ROMP_0C1_01F:
+* {T W F FW FT ...} x -> : checks that the list has at least five elements, of which the first two are names, and binds them as the locals T, W, F, FW and FT above two unnamed ones.
+RRKBindList:
         :: DUPLENCOMP BINT5 #< case2drop SETSIZEERR * CAAF4
           DUPINCOMP BINT5 #- NDROP               * CAB12
           { NULLLAM NULLLAM LAM 'T LAM 'W LAM 'F LAM 'FW LAM 'FT } BIND * CAB26
@@ -35,12 +39,14 @@ ROMP_0C1_01F:
 
 * ROMPTR 0C1 020
 * refs (1): C78DB
-ROMP_0C1_020:
+* dims dims' -> %%: for unit conversion when two dimension arrays differ. They may differ only in element 8, the angle, else Inconsistent Units. The result is %DEGPERANG, or its reciprocal, or its power, for that difference, so plain numbers and angles convert in the current mode.
+UnitAngleFix:
         ::                                       * CABA7
 
 * ROMPTR 0C1 021
 * refs (1): C78DB
-UMSIN~4:
+* -> %: degrees in one unit of the current angle mode: 1, 57.2957795130823 for radians, or .9 for grads.
+%DEGPERANG:
           CODE                                   * CABAC  73 nibbles
             GOSBVL  SAVPTR                       * CABB6
             GOSBVL  GetAngleST                   * CABBD
@@ -50,30 +56,31 @@ UMSIN~4:
             P=      14                           * CABCC
             LC(1)   #9                           * CABCE
             ?ST=1   4                            * CABD1
-            GOYES   UMSIN~4.L1                   * CABD4
+            GOYES   %DEGPERANG.L1                * CABD4
             A=A+1   A                            * CABD6
             LC(1)   #1                           * CABD8
             ?ST=0   9                            * CABDB
-            GOYES   UMSIN~4.L1                   * CABDE
+            GOYES   %DEGPERANG.L1                * CABDE
             A=A+1   A                            * CABE0
             P=      0                            * CABE2
             LC(15)  #572957795130823             * CABE4
-UMSIN~4.L1:
+%DEGPERANG.L1:
             B=C     W                            * CABF5
             GOVLNG  PUSH%.L9                     * CABF8
           ENDCODE                                * CABFF
           SWAPROT OBJ_0F756 BINT8 PULLEREALEL SWAP %0_2A2B4 BINT8 PUTREALEL * CABFF
-          OBJ_3835E EQUALNOTcase CONSTUNITERR    * CAC27
+          UDimNone EQUALNOTcase CONSTUNITERR     * CAC27
           %%1 EQUALcasedrop %%*                  * CAC36
           %%-1 EQUALcasedrop %%/                 * CAC45
           %%^ %%* ;                              * CAC54
 
 * ROMPTR 0C1 022
 * refs (1): C78DB
-UMSIN~2:
-        :: UMSIN~3 OBJ_0FBFB case2DROP DROP      * CAC63
-          OBJ_3835E EQUALNOTcase CONSTUNITERR    * CAC7C
-          ROMPTR 0C1 021 %%* ;                   * CAC8B
+* %% dims -> %%: scales a value for a trigonometric function of a unit. An angle unit passes as it is; any other must be dimensionless, else Inconsistent Units, and is multiplied by %DEGPERANG.
+Unit>AngleMode:
+        :: UDimAngle SameDims? case2DROP DROP    * CAC63
+          UDimNone EQUALNOTcase CONSTUNITERR     * CAC7C
+          XLIB %DEGPERANG %%* ;                  * CAC8B
 
 LIB0C1.hash:
         CON(5)  DOHSTR                           * CACA0  hash table of library 0C1
@@ -102,41 +109,41 @@ LIB0C1.hash.L1:
 LIB0C1.link:
         CON(5)  DOHSTR                           * CAD04  link table of library 0C1
         LENGTH                                   * CAD09  length, to #CADBD
-        REL(5)  ROMP_0C1_000                     * CAD0E  000 
-        REL(5)  ROMP_0C1_001                     * CAD13  001 
-        REL(5)  ROMP_0C1_002                     * CAD18  002 
-        REL(5)  ROMP_0C1_003                     * CAD1D  003 
-        REL(5)  ROMP_0C1_004                     * CAD22  004 
+        REL(5)  DEPlotRKF                        * CAD0E  000 
+        REL(5)  DEPlotRKF1                       * CAD13  001 
+        REL(5)  DEPlotInit                       * CAD18  002 
+        REL(5)  DEPlotRRK                        * CAD1D  003 
+        REL(5)  DEPlotRRK1                       * CAD22  004 
         REL(5)  RKFERR~1                         * CAD27  005 
-        REL(5)  ROMP_0C1_006                     * CAD2C  006 
+        REL(5)  RKFTrap                          * CAD2C  006 
         REL(5)  RKFERR~2                         * CAD31  007 
-        REL(5)  ROMP_0C1_008                     * CAD36  008 
-        REL(5)  ROMP_0C1_009                     * CAD3B  009 
+        REL(5)  RKFStep%                         * CAD36  008 
+        REL(5)  RKFStep[]                        * CAD3B  009 
         REL(5)  RKFSTEP~1                        * CAD40  00A 
         REL(5)  RKFSTEP~2                        * CAD45  00B 
-        REL(5)  ROMP_0C1_00C                     * CAD4A  00C 
-        REL(5)  ROMP_0C1_00D                     * CAD4F  00D 
-        REL(5)  ROMP_0C1_00E                     * CAD54  00E 
-        REL(5)  ROMP_0C1_00F                     * CAD59  00F 
-        REL(5)  ROMP_0C1_010                     * CAD5E  010 
-        REL(5)  ROMP_0C1_011                     * CAD63  011 
-        REL(5)  ROMP_0C1_012                     * CAD68  012 
+        REL(5)  RKFStepSel                       * CAD4A  00C 
+        REL(5)  DEStepCtl                        * CAD4F  00D 
+        REL(5)  DoRKF                            * CAD54  00E 
+        REL(5)  DoRKF1                           * CAD59  00F 
+        REL(5)  DEStepArgs                       * CAD5E  010 
+        REL(5)  RKFBindList                      * CAD63  011 
+        REL(5)  DETolArg                         * CAD68  012 
         REL(5)  RSBERR~1                         * CAD6D  013 
-        REL(5)  ROMP_0C1_014                     * CAD72  014 
+        REL(5)  RRKTrap                          * CAD72  014 
         REL(5)  RSBERR~2                         * CAD77  015 
-        REL(5)  ROMP_0C1_016                     * CAD7C  016 
-        REL(5)  ROMP_0C1_017                     * CAD81  017 
+        REL(5)  RRKStep%                         * CAD7C  016 
+        REL(5)  RRKStep[]                        * CAD81  017 
         REL(5)  RRKSTEP~1                        * CAD86  018 
         REL(5)  RRKSTEP~2                        * CAD8B  019 
-        REL(5)  ROMP_0C1_01A                     * CAD90  01A 
-        REL(5)  ROMP_0C1_01B                     * CAD95  01B 
-        REL(5)  ROMP_0C1_01C                     * CAD9A  01C 
-        REL(5)  ROMP_0C1_01D                     * CAD9F  01D 
-        REL(5)  ROMP_0C1_01E                     * CADA4  01E 
-        REL(5)  ROMP_0C1_01F                     * CADA9  01F 
-        REL(5)  ROMP_0C1_020                     * CADAE  020 
-        REL(5)  UMSIN~4                          * CADB3  021 
-        REL(5)  UMSIN~2                          * CADB8  022 
+        REL(5)  RRKStepSel                       * CAD90  01A 
+        REL(5)  RRKorRKF                         * CAD95  01B 
+        REL(5)  RRKAccept                        * CAD9A  01C 
+        REL(5)  DoRRK                            * CAD9F  01D 
+        REL(5)  DoRRK1                           * CADA4  01E 
+        REL(5)  RRKBindList                      * CADA9  01F 
+        REL(5)  UnitAngleFix                     * CADAE  020 
+        REL(5)  %DEGPERANG                       * CADB3  021 
+        REL(5)  Unit>AngleMode                   * CADB8  022 
         ENDLENGTH                                * CADBD
         ENDLENGTH                                * CADBD
 

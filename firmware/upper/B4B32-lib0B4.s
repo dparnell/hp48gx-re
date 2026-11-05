@@ -1,4 +1,4 @@
-* HP 48GX ROM revision R, #B4B32-#B4B38: Library part 0B4
+* HP 48GX ROM revision R, #B4B32-#B4B38: End of library 0B4's link table; the length field in front of library 0B5
 * Addresses in the right-hand comments are those of the original ROM.
 * Follows on from the previous file (at #B4B32 in the original ROM).
         ENDLENGTH                                * B4B32

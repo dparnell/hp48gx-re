@@ -6,9 +6,9 @@
 
 * refs (1): 41012
 StartMenu~2:
-        :: OVER' ROMPTR 0A9 000 EQUAL IT         * 40002
+        :: OVER' XLIB MnuLast EQUAL IT           * 40002
           :: 2DROP LastMenuDef@ LastMenuRow@ ;   * 40021
-          StartMenu~7 ;                          * 4003A
+          DoMenuExitAct ;                        * 4003A
 
 * refs (1): 401CA
 StdMenuKeyNS~any:
@@ -18,38 +18,39 @@ StdMenuKeyNS~any:
 * refs (1): 40215
 StdMenuKeyLS~any:
         :: DUPTYPEBINT? NOTcase DropBadKey       * 4006C
-          UNCOERCE %CHS OBJ_4015C xSF ;          * 40080
+          UNCOERCE %CHS KeyOb2Seco xSF ;         * 40080
 
 * refs (1): 40260
 StdRightShift~any:
         :: DUPTYPEBINT?                          * 40099
 * The Very Big List names this address RightShift3, but it is a pointer inside an object; the name is not used
           NOTcase DropBadKey                     * 400A3
-          UNCOERCE %CHS OBJ_4015C xCF ;          * 400AD
+          UNCOERCE %CHS KeyOb2Seco xCF ;         * 400AD
 
 * refs (1): 401C0
 StdMenuKeyNS~tagged:
         :: OBJ_4013E NOTcasedrop DoKeyOb         * 400C6
           PrgmEntry? case DoKeyOb                * 400DA
-          OBJ_4015C xEVAL ;                      * 400E9
+          KeyOb2Seco xEVAL ;                     * 400E9
 
 * refs (1): 4020B
 StdMenuKeyLS~tagged:
         :: OBJ_4013E NOTcasedrop DoBadKey        * 400F8
-          OBJ_4015C xSTO ;                       * 4010C
+          KeyOb2Seco xSTO ;                      * 4010C
 
 * refs (1): 40256
 StdRightShift~tagged:
         :: OBJ_4013E NOTcasedrop DoBadKey        * 4011B
-          OBJ_4015C xRCL ;                       * 4012F
+          KeyOb2Seco xRCL ;                      * 4012F
 
 * refs (3): 400CB 400FD 40120
 OBJ_4013E:
         :: DUP TAG> SWAPDROP OBJ_3F0CA ;         * 4013E
 
 * refs (8): 4008A 400B7 400E9 4010C 4012F 40300 ...
-OBJ_4015C:
-        :: 'R 2Ob>Seco PrgmEntry? NOTcase OBJ_408F0 * 4015C
+* ob ->: makes a secondary of ob and the next object; runs it, or in program entry adds it to the command line
+KeyOb2Seco:
+        :: 'R 2Ob>Seco PrgmEntry? NOTcase KeyObExec * 4015C
           PutInComLine!!(_) ;                    * 4017A
 
 * refs (70): 3EFFA C5542 C558C C55D8 C5620 C5668 ...
@@ -93,37 +94,38 @@ StdRightShift:
 
 * refs (1): 401AC
 StdMenuKeyNS~list:
-        :: BINT1 OBJ_402CE ;                     * 40292
+        :: BINT1 MenuKeyElt ;                    * 40292
 
 * refs (1): 401E3
 StdMenuKeyLS~list:
-        :: BINT2 OBJ_402CE ;                     * 402A6
+        :: BINT2 MenuKeyElt ;                    * 402A6
 
 * refs (1): 4022E
 StdRightShift~list:
-        :: BINT3 OBJ_402CE ;                     * 402BA
+        :: BINT3 MenuKeyElt ;                    * 402BA
 
 * refs (3): 4029C 402B0 402C4
-OBJ_402CE:
+* {} #n ->: runs element #n of the action list of a key, or beeps when it has none
+MenuKeyElt:
         :: NTHELCOMP ITE DoKeyOb DoBadKey        * 402CE
         ;                                        * 402E7
 
 * refs (1): 401B6
 StdMenuKeyNS~unit:
         :: ImmedEntry? NOTcase DoKeyOb           * 402EC
-          OBJ_4015C x* ;                         * 40300
+          KeyOb2Seco x* ;                        * 40300
 
 * refs (1): 40201
 StdMenuKeyLS~unit:
-        :: OBJ_4015C xCONVERT ;                  * 4030F
+        :: KeyOb2Seco xCONVERT ;                 * 4030F
 
 * refs (1): 4024C
 StdRightShift~unit:
-        :: OBJ_4015C x/ ;                        * 40323
+        :: KeyOb2Seco x/ ;                       * 40323
 
 * refs (4): 155A9 40238 40242 9E7C9
 DoNameKeyRS:
-        :: OBJ_4040E xRCL ;                      * 40337
+        :: KeyQuoteSto xRCL ;                    * 40337
         BSS     5                                * 4034B  zeros
 
 * refs (3): 154F0 155D6 9E55D
@@ -135,12 +137,13 @@ DoNameKeyLRS:
 * refs (2): 401ED 401F7
 StdMenuKeyLS~1:
         :: PrgmEntry? NOTcase                    * 403DC
-          :: OBJ_4040E ROMP_0A1_00D ;            * 403EB
-          OBJ_4040E xSTO ;                       * 403FF
+          :: KeyQuoteSto KeyN_STO ;              * 403EB
+          KeyQuoteSto xSTO ;                     * 403FF
 
 * refs (3): 4033C 403F0 403FF
-OBJ_4040E:
-        :: ' x' SWAP ' xENDTIC 'R BINT4 ::N PrgmEntry? NOTcase OBJ_408F0 * 4040E
+* ob ->: builds 'name' and the command after the call, and runs it or adds it to the command line. For the shifted variable keys
+KeyQuoteSto:
+        :: ' x' SWAP ' xENDTIC 'R BINT4 ::N PrgmEntry? NOTcase KeyObExec * 4040E
           PutInComLine!!(_) ;                    * 4044A
 
 * ob ->
@@ -154,7 +157,7 @@ DoKeyOb:
           BINT8 DoKeyOb~program                  * 40490  program
           BINT15 DoKeyOb~romptr                  * 4049A  romptr
           BINT9 DoKeyOb~algebraic                * 404A4  algebraic
-          BINT0 OBJ_405E4                        * 404AE  any
+          BINT0 KeyObAlgEntry                    * 404AE  any
         ;                                        * 404B8
 
 * refs (1): 40481
@@ -163,13 +166,13 @@ DoKeyOb~string:
 
 * refs (1): 4048B
 DoKeyOb~unit:
-        :: ImmedEntry? case OBJ_408F0            * 404D1
-          ->StrUnit(uo) OBJ_42CE2 SetDA1NoCh ;   * 404E5
+        :: ImmedEntry? case KeyObExec            * 404D1
+          ->StrUnit(uo) AddInComLine! SetDA1NoCh ; * 404E5
 
 * refs (1): 40495
 DoKeyOb~program:
         :: SystemLevel? case EVAL                * 404F9
-          PrgmEntry? caseDrpBadKy OBJ_408F0      * 4050D
+          PrgmEntry? caseDrpBadKy KeyObExec      * 4050D
         ;                                        * 4051C
 
 * refs (1): 4049F
@@ -179,39 +182,42 @@ DoKeyOb~romptr:
 
 * refs (1): 40468
 DoKeyOb~1:
-        :: DUP OBJ_2699F case PutInComLine!!(_)  * 4053F
+        :: DUP Lib700? case PutInComLine!!(_)    * 4053F
           AlgEntry? case DoKeyOb~2               * 40558
-          OBJ_4058F ;                            * 40567
+          KeyObOrProg ;                          * 40567
 
 * refs (1): 40562
 DoKeyOb~2:
-        :: ?OKINALG case OBJ_40639               * 40571
-          OBJ_4058F ;                            * 40585
+        :: ?OKINALG case AlgKeyInsert            * 40571
+          KeyObOrProg ;                          * 40585
 
 * refs (2): 40567 40585
-OBJ_4058F:
+* ob ->: adds to the command line in program entry, else runs it
+KeyObOrProg:
         :: PrgmEntry? case PutInComLine!!(_)     * 4058F
-          OBJ_408F0 ;                            * 405A3
+          KeyObExec ;                            * 405A3
 
 * refs (1): 404A9
 DoKeyOb~algebraic:
-        :: AlgEntry? NOTcase OBJ_405E4           * 405AD
-          OBJ_408C3 BINT2 OVERLEN$ #1-SUB$ OBJ_42CE2 SetDA1NoCh ; * 405C1
+        :: AlgEntry? NOTcase KeyObAlgEntry       * 405AD
+          KeyOb>$ BINT2 OVERLEN$ #1-SUB$ AddInComLine! SetDA1NoCh ; * 405C1
 
 * refs (2): 404B3 405BC
-OBJ_405E4:
-        :: ?OKINALG AlgEntry? ANDcase OBJ_40639  * 405E4
-          PrgmEntry? NOTcase OBJ_408F0           * 405FD
+* ob ->: as KeyObOrProg, but in algebraic entry a function goes in the algebraic
+KeyObAlgEntry:
+        :: ?OKINALG AlgEntry? ANDcase AlgKeyInsert * 405E4
+          PrgmEntry? NOTcase KeyObExec           * 405FD
           PutInComLine!!(_) ;                    * 4060C
 
 * refs (5): 4017A 4044A 40553 4059E 4060C
 PutInComLine!!(_):
-        :: ?ClrAlg OBJ_4072E OBJ_408C3 Echo$Key OBJ_4072E ; * 40616
+        :: ?ClrAlg EchoSpaceSep KeyOb>$ Echo$Key EchoSpaceSep ; * 40616
 
 * refs (2): 40580 405F8
-OBJ_40639:
-        :: SetDA1NoCh OBJ_26BED NOTcase          * 40639
-          :: OBJ_408C3 OBJ_42CE2 ;               * 4064D
+* ob ->: puts a command in an algebraic, with parentheses if it takes arguments, and spaces if it is an infix word
+AlgKeyInsert:
+        :: SetDA1NoCh FnInfo NOTcase             * 40639
+          :: KeyOb>$ AddInComLine! ;             * 4064D
           DROP OBJ_26E61 5UNROLL 3DROP ->StrOp(_) OVER IT * 40661
 
 _()_;+(2st):
@@ -222,12 +228,13 @@ _()_;+(2st):
           :: OVER ?SEMI                          * 406D4
             DUPDUP $_XYZ OBJ_3516C 4UNROLL3DROP NOT?SEMI * 406E3
             CHR_Space >T$ ;                      * 406FC
-          OBJ_42CE2 NextChrInComLine=space? IT DelCursChr * 4070B
+          AddInComLine! NextChrInComLine=space? IT DelCursChr * 4070B
           NOT?SEMI                               * 4071F
           LCursor ;                              * 40724
 
 * refs (4): 40620 4062F 43ECC 43ED6
-OBJ_4072E:
+* In insert mode, adds a space unless one is at the cursor or the cursor is at the start of the row
+EchoSpaceSep:
         :: INSERT? NOT?SEMI                      * 4072E
           OnTheFirstCol? ?SEMI                   * 4073D
           PrevChrInComLine CHR_Space EQUAL ?SEMI * 40747
@@ -312,7 +319,8 @@ ImmedEntry?:
         :: PrgmEntry? AlgEntry? ORNOT ;          * 408AA
 
 * refs (5): 3EF00 405C1 40625 40652 43E5E
-OBJ_408C3:
+* ob -> $: the text of an object for the command line
+KeyOb>$:
         :: CK&DISPATCH0                          * 408C3
           BINT6 DECOMP$                          * 408CD  name
           BINT7 DECOMP$                          * 408D7  local
@@ -320,28 +328,32 @@ OBJ_408C3:
         ;                                        * 408EB
 
 * refs (7): 40175 40445 404E0 40517 405A3 40607 ...
-OBJ_408F0:
-        :: KeyOb! CacheStack EditLExists? case OBJ_4091D * 408F0
-          InitEdModes OBJ_409B2 ;                * 4090E
+* ob ->: runs a key object, entering a command line first if there is one
+KeyObExec:
+        :: KeyOb! CacheStack EditLExists? case KeyObParse * 408F0
+          InitEdModes KeyObEval ;                * 4090E
 
 * refs (1): 40909
-OBJ_4091D:
-        :: cursorblink- OBJ_40A4C NOTcase OBJ_4098A * 4091D
+* With a command line open: parses and runs it first, unless Custom ENTER is on
+KeyObParse:
+        :: cursorblink- CustomEnter? NOTcase KeyObParse2 * 4091D
           '                                      * 40936
 
 àENTER:
-          ID αENTER DRPExitAtLOOP NOTcase OBJ_4098A * 4093B
-          EDITLINE$ DUP SaveLastEdit InitEd&Modes SWAP OBJ_23439 AtUserStack * 4095D
-          OBJ_409B2 ;                            * 40980
+          ID αENTER DRPExitAtLOOP NOTcase KeyObParse2 * 4093B
+          EDITLINE$ DUP SaveLastEdit InitEd&Modes SWAP EvalKeepKey * 4095D
+          AtUserStack KeyObEval ;                * 4097B
 
 * refs (2): 40931 40958
-OBJ_4098A:
-        :: OBJ_40ABB NOTcase KeyOb0              * 4098A
-          OBJ_23439 AtUserStack OBJ_409B2 ;      * 4099E
+* Parses the line; on success, runs what it held, then KeyObEval
+KeyObParse2:
+        :: ParseOrFail NOTcase KeyOb0            * 4098A
+          EvalKeepKey AtUserStack KeyObEval ;    * 4099E
 
 * refs (3): 40913 40980 409A8
-OBJ_409B2:
-        :: KeyOb@ EVAL AtUserStack KeyOb@ KeyOb0 OBJ_40A4C NOTcaseDROP ' * 409B2
+* Runs the key object kept by KeyOb!, then updates the stack for UNDO
+KeyObEval:
+        :: KeyOb@ EVAL AtUserStack KeyOb@ KeyOb0 CustomEnter? NOTcaseDROP ' * 409B2
 
 áENTER:
           ID ßENTER DRPExitAtLOOP NOTcaseDROP SWAP * 409DF
@@ -354,7 +366,8 @@ OBJ_409B2:
           SWAP EVAL AtUserStack ;                * 40A38
 
 * refs (2): 40927 409D0
-OBJ_40A4C:
+* -> flag: TRUE when flags -62 and -63 are both set: user keys on, and Custom ENTER on
+CustomEnter?:
         :: BINT63 TestSysFlag BINT62 TestSysFlag AND ; * 40A4C  flag -63: Custom ENTER off / Custom ENTER on  flag -62: User keys off / User keys on
 
 * ob ->
@@ -385,7 +398,8 @@ KeyOb0:
         RPL
 
 * refs (2): 4098F 8E01C
-OBJ_40ABB:
+* $ -> ob TRUE / FALSE: parses text; a syntax error shows the bad spot in the command line
+ParseOrFail:
         :: Parse.1 caseTRUE ParseFail            * 40ABB
           FALSE ;                                * 40ACF
 
@@ -404,13 +418,13 @@ ParseFail:
 * ob $parsed #pos $' ->
 * refs (2): 40B33 D69C4
 DispBadToken:
-        :: SWAPROT EditString SetCursPos(s) TOADISP OBJ_3A030 LEN$ OBJ_4426D * 40B56
-          #MIN ROWNUM SWAP CURSOR_OFF OVER #-SWAP DispBadToken~1 DROP * 40B7E
-          SetDA2bTemp SetDA2bEdit ;              * 40BA6
+        :: SWAPROT EditString SetCursPos(s) TOADISP DispEditRows LEN$ * 40B56
+          #EdLastCol #MIN ROWNUM SWAP CURSOR_OFF OVER #-SWAP DispBadToken~1 * 40B79
+          DROP SetDA2bTemp SetDA2bEdit ;         * 40BA1
 
 * refs (1): 3B587
 EnterComLine:
-        :: 'NOP OBJ_408F0 ;                      * 40BB5
+        :: 'NOP KeyObExec ;                      * 40BB5
 
 * ->
 * refs (48): 15039 1505C 15882 2230C 2232A 22348 ...
@@ -461,7 +475,7 @@ GetLastEdit.loop3:
         DAT1=A  A                                * 40C5A
         GOVLNG  PushTLoop                        * 40C5D
 GetLastEdit.L4:
-        GOSBVL  SUB_12D68                        * 40C64
+        GOSBVL  GCorMemErr                       * 40C64
         GOTO    GetLastEdit.loop3                * 40C6B
         NIBHEX  8DAA560                          * 40C6F  Øªe
         RPL
@@ -489,16 +503,17 @@ CMDSTO:
         C=RSTK                                   * 40CB9
         D=D+1   A                                * 40CBB
         D1=D1+  5                                * 40CBD
-        GONC    OBJ_40CC3.L1                     * 40CC0  always taken
+        GONC    ClrHistLevel.L1                  * 40CC0  always taken
 
 * refs (3): 4439E 8D2DB D9A86
-OBJ_40CC3:
+* Resets the nibble HISTORYLEVEL at #8087A
+ClrHistLevel:
         CON(5)  (*)+5                            * 40CC3  primitive code object
         LC(5)   HISTORYLEVEL                     * 40CC8
         CD0EX                                    * 40CCF
         LA(1)   #0                               * 40CD2
         DAT0=A  1                                * 40CD8
-OBJ_40CC3.L1:
+ClrHistLevel.L1:
         D0=C                                     * 40CDC
         A=DAT0  A                                * 40CDF
         D0=D0+  5                                * 40CE2
@@ -510,7 +525,7 @@ OBJ_40CC3.L1:
 CacheStack:
         :: UNDO_ON? NOT?SEMI                     * 40CE9
           SuspendOK? NOT?SEMI                    * 40CF8
-          OBJ_14E6D IT ABND                      * 40D02
+          SavStkEnv? IT ABND                     * 40D02
           SAVESTACK ERRSET ERRSET ;              * 40D11
 
 * ->
@@ -529,11 +544,11 @@ InvUserMo:
 
 * refs (1): 3D96A
 SetUserMo:
-        :: BINT62 SetSysFlag SetUserMo~1 ;       * 40D61  flag -62: User keys off / User keys on
+        :: BINT62 SetSysFlag Set1USR ;           * 40D61  flag -62: User keys off / User keys on
 
 * refs (1): 3FCA0
 QuitUserMo:
-        :: BINT62 ClrSysFlag OBJ_3FFCA ;         * 40D7A  flag -62: User keys off / User keys on
+        :: BINT62 ClrSysFlag Clr1USR ;           * 40D7A  flag -62: User keys off / User keys on
 
 * -> :: <ob1> <rest> ; -> :: <rest> ;
 * refs (12): 3B369 3B437 3B496 3B4EB 3B57D 3B596 ...
@@ -549,7 +564,7 @@ DoMenuKey:
 * ->
 * refs (2): 3E02B 3E084
 DoDelim:
-        :: TakeOver ?SetEditRoll SetDA3NoCh 'R OBJ_42B02 ; * 40DD4
+        :: TakeOver ?SetEditRoll SetDA3NoCh 'R Echo1Char ; * 40DD4
 
 * ->
 * refs (8): 3AA3C 3B3D7 3BB3C 3D9EF 3DA7E 3DB6F ...
@@ -557,7 +572,8 @@ DoDelims:
         :: TakeOver ?SetEditRoll SetDA3NoCh 'R AddInComLine(st) LCursor ; * 40DF7
 
 * refs (2): 3B3E1 3E08E
-OBJ_40E1F:
+* Turns on algebraic entry unless it already is
+?SetAlgEntry:
         :: AlgEntry? case SetDA1NoCh             * 40E1F
           SetAlgEntry ;                          * 40E33
 
@@ -615,12 +631,12 @@ VERYVERYSLOW:
 XEQStoKey:
         :: 2DUP EQUALcase SETCIRCERR             * 40F22
           dup;RclInVars(gn)? NOTcase xSTO        * 40F36
-          OVER 2SWAP OBJ_2157E xDROP2 ;          * 40F45
+          OVER 2SWAP xSTONoCK xDROP2 ;           * 40F45
 
 * refs (1): 3D90D
-OBJ_40F5E:
+KeyLS_EEX~name:
         :: dup;RclInVars(gn)? NOTcase xDROP      * 40F5E
-          SWAPDUP OBJ_2181B xDROP2 ;             * 40F72
+          SWAPDUP xPURGENoCK xDROP2 ;            * 40F72
 
 * menu ->
 * refs (29): 0C915 0C9D6 15357 21180 211D0 3BE6D ...
@@ -638,16 +654,16 @@ DoMenuPos(li,s):
 * menu #n ->
 * refs (9): 387EB 38A96 38BB8 40FC2 40FDB 4138C ...
 StartMenu:
-        :: OBJ_41826 StartMenu~2 MenuRow! DUP StartMenu~5 StartMenu~4 * 41008
+        :: SetMenuBuild StartMenu~2 MenuRow! DUP StoMenuDef StartMenu~4 * 41008
           StartMenu~3 NoClock ' SetDA12NoCh MenuRowAct! ' >MENU LabelDef! ' * 4102B
           StdMenuKeyNS MenuKeyNS! ' StdMenuKeyLS MenuKeyLS! ' StdRightShift * 41058
-          MenuKeyRS! ' review ReviewKey! 'NOP OBJ_419A4 ' SaveLastMenu * 4107B
-          MenuExitAct! BINT0 OBJ_41A04 StartMenu~1 StartMenu~6 SetThisRow ; * 410A3
+          MenuKeyRS! ' review ReviewKey! 'NOP StoTrackAct ' SaveLastMenu * 4107B
+          MenuExitAct! BINT0 LastContext! StartMenu~1 StoMenuData SetThisRow ; * 410A3
 
 * ->
 * refs (7): 17C26 38697 3A9FB 3B225 410BC D8DC3 ...
 SetThisRow:
-        :: OBJ_41826 SetThisRow~1 INNERCOMP OBJ_410E9 LoadTouchTbl ; * 410C6
+        :: SetMenuBuild DoMenuData INNERCOMP OBJ_410E9 LoadTouchTbl ; * 410C6
 
 * refs (4): 3F438 3F660 3F6F6 410DA
 OBJ_410E9:
@@ -665,46 +681,51 @@ CheckMenuRow:
 * MenuKey1 .. MenuKeyN #n ->
 * refs (7): 3F43D 3F5E8 3F665 3F700 3F737 3F7AA ...
 LoadTouchTbl:
-        :: NullMenuKey NullMenuKey 2DUP 2DUP 7ROLL NDROP OBJ_41826 BINT7 * 41175
-          ONE_DO OBJ_3A6AE BINT7 INDEX@#- DUPUNROT OBJ_04A4C OBJ_04A57 LOOP * 411A2
-          OBJ_41815 ;                            * 411CA
+        :: NullMenuKey NullMenuKey 2DUP 2DUP 7ROLL NDROP SetMenuBuild BINT7 * 41175
+          ONE_DO RomKeyLabel BINT7 INDEX@#- DUPUNROT SETDF SETPROC LOOP * 411A2
+          ClrMenuBuild ;                         * 411CA
 
 * refs (2): 3A6BD 3A6EB
-OBJ_411D4:
-        :: DUP DUPTYPELIST? NOTcase OBJ_4121F    * 411D4
+* ob -> ob label: from a menu key object or { label action }: the label. Bad keys for a list without an action
+MenuKeyParts:
+        :: DUP DUPTYPELIST? NOTcase MenuLabelOb  * 411D4
           BINT2 NTHELCOMP ?SKIP 'DoBadKey        * 411ED
-          SWAPONE NTHELCOMP case OBJ_4121F       * 41201
+          SWAPONE NTHELCOMP case MenuLabelOb     * 41201
           NULL$ ;                                * 41215
 
 * refs (3): 411E8 41210 412DD
-OBJ_4121F:
+* ob -> label: the label of a menu object, by type: names, strings and bints stay, characters become strings
+MenuLabelOb:
         :: CK&DISPATCH0                          * 4121F
           BINT6 NOP                              * 41229  name
           BINT3 NOP                              * 41233  string
           BINT31 NOP                             * 4123D  bint
           BINT111 CHR>$                          * 41247  char
-          BINT8 OBJ_41292                        * 41251  program
-          BINT15 OBJ_412AB                       * 4125B  romptr
-          BINT12 OBJ_412EC                       * 41265  grob
+          BINT8 MenuLabelProg                    * 41251  program
+          BINT15 MenuLabelRomp                   * 4125B  romptr
+          BINT12 MenuLabelGrob                   * 41265  grob
           BINT14 ->StrUnit(uo)                   * 4126F  unit
-          BINT13 OBJ_3F0A7                       * 41279  tagged
-          BINT0 OBJ_41355                        * 41283  any
+          BINT13 TagLabel                        * 41279  tagged
+          BINT0 MenuOb>$                         * 41283  any
         ;                                        * 4128D
 
 * refs (1): 41256
-OBJ_41292:
+* program -> label: system programs stay; a user program shows its text
+MenuLabelProg:
         :: SystemLevel? ?SEMI                    * 41292
-          OBJ_41355 ;                            * 412A1
+          MenuOb>$ ;                             * 412A1
 
 * refs (1): 41260
-OBJ_412AB:
+* romptr -> label: the name of a named command, else the label of the object it points at
+MenuLabelRomp:
         :: DUP ROMPTRDECOMP case                 * 412AB
           :: ID>$ SWAPDROP ;                     * 412BF
-          ROMPTR@ case OBJ_4121F                 * 412D3
+          ROMPTR@ case MenuLabelOb               * 412D3
           NULL$ ;                                * 412E2
 
 * refs (1): 4126A
-OBJ_412EC:
+* grob -> label: a grob of the size of a menu label stays; others show as text
+MenuLabelGrob:
         :: DUP GROBDIM NullMenuLbl GROBDIM ROT #= 3UNROLL #= AND ?SEMI * 412EC
           ->str1(go) ;                           * 41323
 
@@ -713,8 +734,9 @@ OBJ_412EC:
         :: UNIT>$ DUP CHR_UndScore BINT1 POS$ #1+LAST$ ; * 4132D
 
 * refs (3): 3F0BB 41288 412A1
-OBJ_41355:
-        :: DUPTYPEREAL? case OBJ_35264           * 41355
+* ob -> $: the text of a label from any object; for a real, as a%>$Alg gives it
+MenuOb>$:
+        :: DUPTYPEREAL? case a%>$Alg             * 41355
           DECOMP$ ;                              * 41369
 
 * refs (4): 17BD1 38606 3880E 3886D
@@ -727,8 +749,8 @@ SaveLastMenu:
         :: MenuRow@ LastMenuRow! MenuDef@ LastMenuDef! ; * 4139B
 
 * refs (1): 3C402
-OBJ_413B9:
-        :: ' OBJ_4A5EF ReviewKey! ;              * 413B9
+~';ReviewEq;ReviewKey!:
+        :: ' ReviewEq ReviewKey! ;               * 413B9
 
 * refs (1): 41085
 review:
@@ -740,8 +762,8 @@ review:
 >Review$:
         :: CK&DISPATCH1                          * 41422
           BINT3 SWAPDROP                         * 4142C  string
-          BINT6 OBJ_41495                        * 41436  name
-          BINT7 OBJ_41495                        * 41440  local
+          BINT6 ReviewVar$                       * 41436  name
+          BINT7 ReviewVar$                       * 41440  local
           BINT8 >Review$~program                 * 4144A  program
           BINT5 >Review$~list                    * 41454  list
           BINT14                                 * 4145E  unit
@@ -751,7 +773,8 @@ review:
         ;                                        * 41490
 
 * refs (3): 3FBA1 4143B 41445
-OBJ_41495:
+* id -> $: "name: value" for REVIEW, or the word for undefined
+ReviewVar$:
         :: SWAPDROP DUPSAFE@ ITE ->StkStr22! $_Undefined * 41495
           SWAP ID>$                              * 414B3
 
@@ -768,7 +791,7 @@ $_::
 
 * refs (1): 41459
 >Review$~list:
-        :: OBJ_3EFC8 casedrop OBJ_41552          * 41520
+        :: MenuHasKeyOb? casedrop OBJ_41552      * 41520
           CARCOMP DUPTYPELIST? casedrop OBJ_41552 * 41534
           >Review$ ;                             * 41548
 
@@ -803,14 +826,14 @@ NumCurMenu:
 * refs (1): 3BE40
 GetMenu%~1~program:
         :: DUPTWO NTHELCOMP NOTcasedrop %0_2A2B4 * 41642
-          PTR EQ: OBJ_3F4C4 NOTcasedrop %0_2A2B4 * 4165B
+          PTR EQ: LibCmdsMenu NOTcasedrop %0_2A2B4 * 4165B
           CARCOMP ;                              * 4166F
 
 * %mnu.pg   -> %0        ->
 * refs (3): 2116C 211AA 9DEEF
 InitMenu%:
         :: %100 %* COERCE BINT100 #/ BINT255d OVER#< ITE * 41679
-          :: UNCOERCE ' OBJ_3F4C4 2Ob>Seco ;     * 416A6
+          :: UNCOERCE ' LibCmdsMenu 2Ob>Seco ;   * 416A6
           :: SYMSYMB SWAP #>ROMPTR ;             * 416C4
           SWAP DUP#0=ITE DROPONE                 * 416DD
           :: #1- #6* #1+ ; ERRSET DoMenuPos(li,s) ERRTRAP * 416EC
@@ -822,27 +845,28 @@ InitMenu%:
 * ->
 * refs (4): 15205 3BE9A 3BEE0 3C338
 InitTrack::
-        :: 'R OBJ_419A4 CONTEXT@ OBJ_41A04 InitTrack:~1 ; * 41741
+        :: 'R StoTrackAct CONTEXT@ LastContext! SetTrackFlag ; * 41741
 
 * refs (2): 1857C 185B8
 OBJ_41764:
-        :: OBJ_41A14 Embedded? NOT?SEMI          * 41764
-          BINT0 OBJ_41A04 ;                      * 41778
+        :: LastContext@ Embedded? NOT?SEMI       * 41764
+          BINT0 LastContext! ;                   * 41778
 
 * refs (1): 38688
 SysMenuCheck~1:
-        :: CONTEXT@ OBJ_41A14 EQcase DROP        * 41787
-          OBJ_41A04 SysMenuCheck~4 ;             * 417A0
+        :: CONTEXT@ LastContext@ EQcase DROP     * 41787
+          LastContext! DoTrackAct ;              * 417A0
 
 * refs (1): 4102B
 StartMenu~3:
         CON(5)  (*)+5                            * 417AF  primitive code object
         ASSEMBLE
         LC(3)   #402                             * 417B4
-        GOVLNG  OBJ_539D8.L2                     * 417B9
+        GOVLNG  ClrISF20B.L2                     * 417B9
 
 * refs (1): 4175A
-InitTrack:~1:
+* Sets internal flag #402
+SetTrackFlag:
         CON(5)  (*)+5                            * 417C0  primitive code object
         LC(3)   #402                             * 417C5
         GOVLNG  SetISysFlag                      * 417CA
@@ -851,13 +875,13 @@ InitTrack:~1:
 SysMenuCheck~2:
         CON(5)  (*)+5                            * 417D1  primitive code object
         LC(3)   #402                             * 417D6
-        GOVLNG  OBJ_539D8.L1                     * 417DB
+        GOVLNG  ClrISF20B.L1                     * 417DB
 
 * refs (1): 41026
 StartMenu~4:
         CON(5)  (*)+5                            * 417E2  primitive code object
         LC(3)   #804                             * 417E7
-        GOVLNG  OBJ_539D8.L2                     * 417EC
+        GOVLNG  ClrISF20B.L2                     * 417EC
 
 * ->
 * refs (4): 3BEF9 3D411 3D44D 3F6B0
@@ -870,221 +894,235 @@ SetRebuild:
 SysMenuCheck~3:
         CON(5)  (*)+5                            * 41804  primitive code object
         LC(3)   #804                             * 41809
-        GOVLNG  OBJ_539D8.L1                     * 4180E
+        GOVLNG  ClrISF20B.L1                     * 4180E
 
 * refs (2): 3A6A4 411CA
-OBJ_41815:
+* Clears internal flag #802: menu building has ended
+ClrMenuBuild:
         CON(5)  (*)+5                            * 41815  primitive code object
         LC(3)   #802                             * 4181A
-        GOVLNG  OBJ_539D8.L2                     * 4181F
+        GOVLNG  ClrISF20B.L2                     * 4181F
 
 * refs (4): 3A659 4100D 410CB 41198
-OBJ_41826:
+* Sets internal flag #802: a menu is being built. An error in that state makes RestartMenu rebuild it
+SetMenuBuild:
         CON(5)  (*)+5                            * 41826  primitive code object
         LC(3)   #802                             * 4182B
         GOVLNG  SetISysFlag                      * 41830
 
 * refs (2): 387C8 38B59
-OBJ_41837:
+* -> flag: TRUE during a menu build
+MenuBuild?:
         CON(5)  (*)+5                            * 41837  primitive code object
         LC(3)   #802                             * 4183C
-        GOVLNG  OBJ_539D8.L1                     * 41841
+        GOVLNG  ClrISF20B.L1                     * 41841
 
 * #n ->
 * refs (7): 3A654 3A9F6 3B220 3BEEF 3F72D 41017 ...
 MenuRow!:
         CON(5)  (*)+5                            * 41848  primitive code object
         LC(5)   MenuRow                          * 4184D
-        GOVLNG  OBJ_11495.L3                     * 41854
+        GOVLNG  PADCOUNT!.L3                     * 41854
 
 * -> #n
 * refs (14): 389F3 38A25 3A64A 3A9EC 3F7B9 3F809 ...
 MenuRow@:
         CON(5)  (*)+5                            * 4185B  primitive code object
         LC(5)   MenuRow                          * 41860
-        GOVLNG  OBJ_11495.L1                     * 41867
+        GOVLNG  PADCOUNT!.L1                     * 41867
 
 * #n ->
 * refs (5): 387F0 38AD7 38BBD 40FEF 413A5
 LastMenuRow!:
         CON(5)  (*)+5                            * 4186E  primitive code object
         LC(5)   LastMenuRow                      * 41873
-        GOVLNG  OBJ_11495.L3                     * 4187A
+        GOVLNG  PADCOUNT!.L3                     * 4187A
 
 * -> #n
 * refs (5): 387D7 389D5 38A1B 40030 40FAE
 LastMenuRow@:
         CON(5)  (*)+5                            * 41881  primitive code object
         LC(5)   LastMenuRow                      * 41886
-        GOVLNG  OBJ_11495.L1                     * 4188D
+        GOVLNG  PADCOUNT!.L1                     * 4188D
 
 * refs (1): 41021
-StartMenu~5:
+* ob ->: stores the menu definition
+StoMenuDef:
         CON(5)  (*)+5                            * 41894  primitive code object
         LC(5)   MenuDef                          * 41899
-        GOTO    OBJ_41A14.L1                     * 418A0
+        GOTO    LastContext@.L1                  * 418A0
 
 * -> menu
 * refs (10): 389EE 38A20 3A62C 3BE27 3BEA9 40F9F ...
 MenuDef@:
         CON(5)  (*)+5                            * 418A4  primitive code object
         LC(5)   MenuDef                          * 418A9
-        GOTO    OBJ_41A14.L2                     * 418B0
+        GOTO    LastContext@.L2                  * 418B0
 
 * refs (1): 410B7
-StartMenu~6:
+* ob ->: stores the menu data
+StoMenuData:
         CON(5)  (*)+5                            * 418B4  primitive code object
         LC(5)   MenuData                         * 418B9
-        GOTO    OBJ_41A14.L1                     * 418C0
+        GOTO    LastContext@.L1                  * 418C0
 
 * refs (1): 410D0
-SetThisRow~1:
+* Runs the menu data
+DoMenuData:
         CON(5)  (*)+5                            * 418C4  primitive code object
         LC(5)   MenuData                         * 418C9
-        GOTO    OBJ_41A14.L3                     * 418D0
+        GOTO    LastContext@.L3                  * 418D0
 
 * ob ->
 * refs (3): 3C380 4103F 4A307
 MenuRowAct!:
         CON(5)  (*)+5                            * 418D4  primitive code object
         LC(5)   MenuRowAct                       * 418D9
-        GOTO    OBJ_41A14.L1                     * 418E0
+        GOTO    LastContext@.L1                  * 418E0
 
 * refs (2): 3AA00 3B22A
-OBJ_418E4:
+* Runs the action for changing row
+DoMenuRowAct:
         CON(5)  (*)+5                            * 418E4  primitive code object
         LC(5)   MenuRowAct                       * 418E9
-        GOTO    OBJ_41A14.L3                     * 418F0
+        GOTO    LastContext@.L3                  * 418F0
 
 * ob ->
 * refs (5): 151E2 3D45C 3F063 4104E 9DCEC
 LabelDef!:
         CON(5)  (*)+5                            * 418F4  primitive code object
         LC(5)   LabelDef                         * 418F9
-        GOTO    OBJ_41A14.L1                     * 41900
+        GOTO    LastContext@.L1                  * 41900
 
 * #col ob ->
 * refs (2): 3A24C 3A2D3
 DoLabel:
         CON(5)  (*)+5                            * 41904  primitive code object
         LC(5)   LabelDef                         * 41909
-        GOTO    OBJ_41A14.L3                     * 41910
+        GOTO    LastContext@.L3                  * 41910
 
 * og -> ob
 * refs (6): 151B5 3EF37 3F013 4105D 4A316 9DD01
 MenuKeyNS!:
         CON(5)  (*)+5                            * 41914  primitive code object
         LC(5)   MenuKeyNS                        * 41919
-        GOTO    OBJ_41A14.L1                     * 41920
+        GOTO    LastContext@.L1                  * 41920
 
 * -> ob
 * refs (1): 3EFCD
 MenuKeyNS@:
         CON(5)  (*)+5                            * 41924  primitive code object
         LC(5)   MenuKeyNS                        * 41929
-        GOTO    OBJ_41A14.L2                     * 41930
+        GOTO    LastContext@.L2                  * 41930
 
 * #n ->
 * refs (7): 3B261 3B27A 3B293 3B2AC 3B2C5 3B2DE ...
 DoMenuKeyNS:
         CON(5)  (*)+5                            * 41934  primitive code object
         LC(5)   MenuKeyNS                        * 41939
-        GOTO    OBJ_41A14.L3                     * 41940
+        GOTO    LastContext@.L3                  * 41940
 
 * ob -> ob
 * refs (7): 151C4 3C395 3EF5A 3F027 4106C 4A325 ...
 MenuKeyLS!:
         CON(5)  (*)+5                            * 41944  primitive code object
         LC(5)   MenuKeyLS                        * 41949
-        GOTO    OBJ_41A14.L1                     * 41950
+        GOTO    LastContext@.L1                  * 41950
 
 * refs (7): 3D6D7 3D6F0 3D709 3D722 3D73B 3D754 ...
-OBJ_41954:
+* Runs the left-shift action of the menu
+DoMenuKeyLS:
         CON(5)  (*)+5                            * 41954  primitive code object
         LC(5)   MenuKeyLS                        * 41959
-        GOTO    OBJ_41A14.L3                     * 41960
+        GOTO    LastContext@.L3                  * 41960
 
 * ob -> ob
 * refs (6): 151D3 3EF7D 3F02C 4107B 4A334 9DD2B
 MenuKeyRS!:
         CON(5)  (*)+5                            * 41964  primitive code object
         LC(5)   MenuKeyRS                        * 41969
-        GOTO    OBJ_41A14.L1                     * 41970
+        GOTO    LastContext@.L1                  * 41970
 
 * refs (8): 3DD13 3DD2C 3DD45 3DD5E 3DD77 3DD90 ...
-OBJ_41974:
+* Runs the right-shift action of the menu
+DoMenuKeyRS:
         CON(5)  (*)+5                            * 41974  primitive code object
         LC(5)   MenuKeyRS                        * 41979
-        GOTO    OBJ_41A14.L3                     * 41980
+        GOTO    LastContext@.L3                  * 41980
 
 * ob ->
 * refs (7): 151F1 3FB6E 4108A 413C8 4A2F3 9DCD7 ...
 ReviewKey!:
         CON(5)  (*)+5                            * 41984  primitive code object
         LC(5)   ReviewKey                        * 41989
-        GOTO    OBJ_41A14.L1                     * 41990
+        GOTO    LastContext@.L1                  * 41990
 
 * refs (3): 3DEC2 4A2CB C53DD
 LocalReview:
         CON(5)  (*)+5                            * 41994  primitive code object
         LC(5)   ReviewKey                        * 41999
-        GOTO    OBJ_41A14.L3                     * 419A0
+        GOTO    LastContext@.L3                  * 419A0
 
 * refs (2): 41094 4174B
-OBJ_419A4:
+* ob ->: stores the action to run when tracking the context
+StoTrackAct:
         CON(5)  (*)+5                            * 419A4  primitive code object
         LC(5)   TrackAct                         * 419A9
-        GOTO    OBJ_41A14.L1                     * 419B0
+        GOTO    LastContext@.L1                  * 419B0
 
 * refs (1): 417A5
-SysMenuCheck~4:
+* Runs the tracking action
+DoTrackAct:
         CON(5)  (*)+5                            * 419B4  primitive code object
         LC(5)   TrackAct                         * 419B9
-        GOTO    OBJ_41A14.L3                     * 419C0
+        GOTO    LastContext@.L3                  * 419C0
 
 * ob ->
 * refs (3): 3BD00 3EC8F 410A3
 MenuExitAct!:
         CON(5)  (*)+5                            * 419C4  primitive code object
         LC(5)   MenuExitAct                      * 419C9
-        GOTO    OBJ_41A14.L1                     * 419D0
+        GOTO    LastContext@.L1                  * 419D0
 
 * refs (1): 4003A
-StartMenu~7:
+* Runs the exit action of the menu
+DoMenuExitAct:
         CON(5)  (*)+5                            * 419D4  primitive code object
         LC(5)   MenuExitAct                      * 419D9
-        GOTO    OBJ_41A14.L3                     * 419E0
+        GOTO    LastContext@.L3                  * 419E0
 
 * menu ->
 * refs (5): 387F5 38ADC 38BC2 40FE5 413AF
 LastMenuDef!:
         CON(5)  (*)+5                            * 419E4  primitive code object
         LC(5)   LastMenuDef                      * 419E9
-        GOTO    OBJ_41A14.L1                     * 419F0
+        GOTO    LastContext@.L1                  * 419F0
 
 * -> menu
 * refs (5): 387D2 389D0 38A16 4002B 40FA9
 LastMenuDef@:
         CON(5)  (*)+5                            * 419F4  primitive code object
         LC(5)   LastMenuDef                      * 419F9
-        GOTO    OBJ_41A14.L2                     * 41A00
+        GOTO    LastContext@.L2                  * 41A00
 
 * refs (4): 410AD 41755 4177D 417A0
-OBJ_41A04:
+* ob ->: stores the context of the last menu
+LastContext!:
         CON(5)  (*)+5                            * 41A04  primitive code object
         LC(5)   LastContext                      * 41A09
-        GOTO    OBJ_41A14.L1                     * 41A10
+        GOTO    LastContext@.L1                  * 41A10
 
 * refs (2): 41769 41791
-OBJ_41A14:
+* -> ob: the context of the last menu
+LastContext@:
         CON(5)  (*)+5                            * 41A14  primitive code object
         LC(5)   LastContext                      * 41A19
-        GOTO    OBJ_41A14.L2                     * 41A20
-OBJ_41A14.L1:
+        GOTO    LastContext@.L2                  * 41A20
+LastContext@.L1:
         GOVLNG  CONTEXT!.L1                      * 41A24
-OBJ_41A14.L2:
+LastContext@.L2:
         GOVLNG  SysPtr@                          * 41A2B
-OBJ_41A14.L3:
+LastContext@.L3:
         GOVLNG  PC=((C))                         * 41A32
         RPL
 

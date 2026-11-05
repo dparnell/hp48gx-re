@@ -1,7 +1,9 @@
-* HP 48GX ROM revision R, #CADC4-#CBACD: Library part 0C4
+* HP 48GX ROM revision R, #CADC4-#CBACD: FFT and IFFT in machine code, then NDIST, the population statistics, PCOEF and PEVAL
 * Addresses in the right-hand comments are those of the original ROM.
+* Most referenced: PEVALClamp FFTPass D<<LOG2 BitRev #POW2? #LOG2 #2^ Roots>Symb Poly>Symb PCOEFReal PCOEFCpx FFTPrep
 * Follows on from the previous file (at #CADC4 in the original ROM).
 
+* Library 0C4: Signal and polynomial maths: FFT and IFFT, NDIST, PSDEV, PVAR, PCOV, PCOEF, PEVAL and the symbolic results of the polynomial solver.
 LIB0C4:
         CON(3)  #0C4                             * CADC4  library number
         REL(5)  LIB0C4.hash                      * CADC7  hash table
@@ -12,23 +14,27 @@ LIB0C4:
 
 * ROMPTR 0C4 000
 * refs (1): CADC4
+* FFT: [] -> []: prepares the array, transforms it forwards and rounds the result to a normal array.
 FFT~1:
-        :: ROMPTR 0C4 001 FALSE ROMPTR 0C4 004 ROMPTR 0C2 032 ; * CADDB
+        :: XLIB FFTPrep FALSE XLIB DoFFT XLIB %%>Array ; * CADDB
 
 * ROMPTR 0C4 001
 * refs (1): CADC4
-ROMP_0C4_001:
-        :: ROMPTR 0C4 003 DUP DIMLIMITS ((0,0)) MAKEARRY OBJ_7CDBF SWAPDROP * CAE0B
-          # 6A !MAKEHXS ;                        * CAE39
+* [] -> [C] hxs: checks the dimensions, makes a complex copy of the array and a 106-nibble work area in a hex string.
+FFTPrep:
+        :: XLIB FFTChkDims DUP DIMLIMITS ((0,0)) MAKEARRY ArryCopyExt * CAE0B
+          SWAPDROP # 6A !MAKEHXS ;               * CAE34
 
 * ROMPTR 0C4 002
 * refs (1): CADC4
+* IFFT: [] -> []: as FFT, with the inverse flag TRUE.
 IFFT~1:
-        :: ROMPTR 0C4 001 TRUE ROMPTR 0C4 004 ROMPTR 0C2 032 ; * CAE4D
+        :: XLIB FFTPrep TRUE XLIB DoFFT XLIB %%>Array ; * CAE4D
 
 * ROMPTR 0C4 003
 * refs (1): CADC4
-ROMP_0C4_003:
+* [] -> []: errors unless every dimension of the array is a power of 2 (works for a vector or a matrix).
+FFTChkDims:
         CODE                                     * CAE7D  89 nibbles
           C=DAT1  A                              * CAE87
           CD1EX                                  * CAE8A
@@ -36,33 +42,34 @@ ROMP_0C4_003:
           D1=D1+  15                             * CAE8F
           A=DAT1  A                              * CAE92
           A=A-1   A                              * CAE95
-          GOSUB   SUB_CAEC5                      * CAE97
-          GOC     ROMP_0C4_003.L2                * CAE9B
+          GOSUB   #POW2?                         * CAE97
+          GOC     FFTChkDims.L2                  * CAE9B
           A=A-1   A                              * CAE9E
-          GOC     ROMP_0C4_003.L1                * CAEA0
-          GOSUB   SUB_CAEC5                      * CAEA3
-          GOC     ROMP_0C4_003.L2                * CAEA7
-ROMP_0C4_003.L1:
+          GOC     FFTChkDims.L1                  * CAEA0
+          GOSUB   #POW2?                         * CAEA3
+          GOC     FFTChkDims.L2                  * CAEA7
+FFTChkDims.L1:
           C=RSTK                                 * CAEAA
           D1=C                                   * CAEAC
           A=DAT0  A                              * CAEAF
           D0=D0+  5                              * CAEB2
           PC=(A)                                 * CAEB5
-ROMP_0C4_003.L2:
+FFTChkDims.L2:
           C=RSTK                                 * CAEB9
           D1=C                                   * CAEBB
-          GOSBVL  SUB_370B4                      * CAEBE
+          GOSBVL  ErrBadDim                      * CAEBE
 
 * refs (2): CAE97 CAEA3
-SUB_CAEC5:
+* D1 -> the next dimension field of an array, after advancing by 5 -> carry set if that dimension is not a power of 2. Clobbers C.
+#POW2?:
           D1=D1+  5                              * CAEC5
           C=0     W                              * CAEC8
           C=DAT1  A                              * CAECB
-SUB_CAEC5.loop1:
+#POW2?.loop1:
           SB=0                                   * CAECE
           CSRB                                   * CAED1
           ?SB=0                                  * CAED4
-          GOYES   SUB_CAEC5.loop1                * CAED7
+          GOYES   #POW2?.loop1                   * CAED7
           ?C#0    A                              * CAED9
           RTNYES                                 * CAEDC
           RTNCC                                  * CAEDE
@@ -70,13 +77,14 @@ SUB_CAEC5.loop1:
 
 * ROMPTR 0C4 004
 * refs (1): CADC4
-ROMP_0C4_004:
+* [C] hxs flag -> [C]: transforms the complex array in place, using the hex string for its variables. flag is TRUE for the inverse. For a matrix it runs the row transforms and then the column transforms.
+DoFFT:
         CODE                                     * CAEE0  1382 nibbles
           ST=1    3                              * CAEEA
           GOSBVL  popflag                        * CAEED
-          GOC     ROMP_0C4_004.L1                * CAEF4
+          GOC     DoFFT.L1                       * CAEF4
           ST=0    3                              * CAEF7
-ROMP_0C4_004.L1:
+DoFFT.L1:
           D1=D1+  5                              * CAEFA
           D=D+1   A                              * CAEFD
           GOSBVL  SAVPTR                         * CAEFF
@@ -95,28 +103,28 @@ ROMP_0C4_004.L1:
           D1=D1+  5                              * CAF2A
           A=A-1   A                              * CAF2D
           ?A=0    A                              * CAF2F
-          GOYES   ROMP_0C4_004.L2                * CAF32
+          GOYES   DoFFT.L2                       * CAF32
           D=C     A                              * CAF34
           C=DAT1  A                              * CAF36
           D1=D1+  5                              * CAF39
-          GOTO    ROMP_0C4_004.L3                * CAF3C
-ROMP_0C4_004.L2:
+          GOTO    DoFFT.L3                       * CAF3C
+DoFFT.L2:
           D=0     A                              * CAF40
           D=D+1   A                              * CAF42
-ROMP_0C4_004.L3:
+DoFFT.L3:
           DCEX    A                              * CAF44
           D0=D0+  6                              * CAF46
           DAT0=C  A                              * CAF49
-          GOSUB   SUB_CB049                      * CAF4C
+          GOSUB   #LOG2                          * CAF4C
           D0=D0+  5                              * CAF50
           DAT0=A  1                              * CAF53
           C=D     A                              * CAF57
           D0=D0-  11                             * CAF59
           DAT0=C  A                              * CAF5C
-          GOSUB   SUB_CB049                      * CAF5F
+          GOSUB   #LOG2                          * CAF5F
           CD1EX                                  * CAF63
           ?A=0    A                              * CAF66
-          GOYES   ROMP_0C4_004.L5                * CAF69
+          GOYES   DoFFT.L5                       * CAF69
           RSTK=C                                 * CAF6B
           GOSBVL  CSLW5                          * CAF6D
           C=RSTK                                 * CAF74
@@ -128,13 +136,13 @@ ROMP_0C4_004.L3:
           DAT0=C  A                              * CAF8A
           D0=D0+  5                              * CAF8D
           C=0     A                              * CAF90
-ROMP_0C4_004.loop4:
+DoFFT.loop4:
           C=C+1   A                              * CAF92
           DAT0=C  A                              * CAF94
-          GOSUB   SUB_CB05C                      * CAF97
+          GOSUB   FFTPass                        * CAF97
           D0=D0-  12                             * CAF9B
           C=DAT0  A                              * CAF9E
-          GOSBVL  SUB_3769A                      * CAFA1
+          GOSBVL  C*42>D                         * CAFA1
           C=R4                                   * CAFA8
           C=C+D   A                              * CAFAB
           R4=C                                   * CAFAD
@@ -143,17 +151,17 @@ ROMP_0C4_004.loop4:
           D0=D0+  11                             * CAFB6
           C=DAT0  A                              * CAFB9
           ?C#A    A                              * CAFBC
-          GOYES   ROMP_0C4_004.loop4             * CAFBF
+          GOYES   DoFFT.loop4                    * CAFBF
           C=R4                                   * CAFC1
           GOSBVL  CSRW5                          * CAFC4
           D0=D0-  16                             * CAFCB
           D0=D0-  1                              * CAFCE
-ROMP_0C4_004.L5:
+DoFFT.L5:
           R4=C                                   * CAFD1
           D0=D0+  11                             * CAFD4
           A=DAT0  S                              * CAFD7
           ?A=0    S                              * CAFDB
-          GOYES   ROMP_0C4_004.L7                * CAFDE
+          GOYES   DoFFT.L7                       * CAFDE
           D0=D0-  6                              * CAFE0
           DAT0=A  S                              * CAFE3
           D0=D0+  1                              * CAFE7
@@ -166,16 +174,16 @@ ROMP_0C4_004.L5:
           DCEX    A                              * CAFFA
           D0=D0+  6                              * CAFFC
           DAT0=C  A                              * CAFFF
-          GOSBVL  SUB_3769A                      * CB002
+          GOSBVL  C*42>D                         * CB002
           C=D     A                              * CB009
           D0=D0+  6                              * CB00B
           DAT0=C  A                              * CB00E
           D0=D0+  5                              * CB011
           C=0     A                              * CB014
-ROMP_0C4_004.loop6:
+DoFFT.loop6:
           C=C+1   A                              * CB016
           DAT0=C  A                              * CB018
-          GOSUB   SUB_CB05C                      * CB01B
+          GOSUB   FFTPass                        * CB01B
           C=R4                                   * CB01F
           CD0EX                                  * CB022
           GOSUB   SUB_CB3E5                      * CB025
@@ -186,29 +194,31 @@ ROMP_0C4_004.loop6:
           D0=D0+  11                             * CB035
           C=DAT0  A                              * CB038
           ?C#A    A                              * CB03B
-          GOYES   ROMP_0C4_004.loop6             * CB03E
-ROMP_0C4_004.L7:
+          GOYES   DoFFT.loop6                    * CB03E
+DoFFT.L7:
           P=      0                              * CB040
           GOVLNG  GETPTRLOOP                     * CB042
 
 * refs (2): CAF4C CAF5F
-SUB_CB049:
+* C.A = a power of 2 -> A.A = its logarithm base 2. Clobbers C.
+#LOG2:
           A=0     A                              * CB049
           A=A-1   A                              * CB04B
-SUB_CB049.loop1:
+#LOG2.loop1:
           A=A+1   A                              * CB04D
           SB=0                                   * CB04F
           CSRB                                   * CB052
           ?SB=0                                  * CB055
-          GOYES   SUB_CB049.loop1                * CB058
+          GOYES   #LOG2.loop1                    * CB058
           RTN                                    * CB05A
 
 * refs (2): CAF97 CB01B
-SUB_CB05C:
+* One radix-2 pass set over a vector or over all rows or columns. Works out the angle step 360/n, with its sign taken from the inverse flag, reorders the elements by bit reversal, and then does the butterflies, polling ATTN once for each.
+FFTPass:
           D0=D0-  16                             * CB05C
           D0=D0-  1                              * CB05F
           A=DAT0  A                              * CB062
-          GOSBVL  SUB_7A0AA                      * CB065
+          GOSBVL  Hex>15                         * CB065
           C=0     W                              * CB06C
           D=0     W                              * CB06F
           P=      13                             * CB072
@@ -219,9 +229,9 @@ SUB_CB05C:
           GOSBVL  XYEX                           * CB081
           GOSBVL  DIVF                           * CB088
           ?ST=0   3                              * CB08F
-          GOYES   SUB_CB05C.L1                   * CB092
+          GOYES   FFTPass.L1                     * CB092
           A=-A-1  S                              * CB094
-SUB_CB05C.L1:
+FFTPass.L1:
           D0=D0+  16                             * CB097
           D0=D0+  16                             * CB09A
           D0=D0+  11                             * CB09D
@@ -230,7 +240,7 @@ SUB_CB05C.L1:
           D0=D0-  16                             * CB0A6
           D0=D0-  6                              * CB0A9
           C=0     S                              * CB0AC
-SUB_CB05C.loop2:
+FFTPass.loop2:
           DAT0=C  S                              * CB0AF
           D0=D0-  16                             * CB0B3
           D0=D0-  16                             * CB0B6
@@ -238,7 +248,7 @@ SUB_CB05C.loop2:
           A=DAT0  S                              * CB0BC
           A=A-1   S                              * CB0C0
           C=A-C   S                              * CB0C3
-          GOSUB   SUB_CB363                      * CB0C6
+          GOSUB   #2^                            * CB0C6
           D0=D0+  16                             * CB0CA
           D0=D0+  1                              * CB0CD
           DAT0=C  A                              * CB0D0
@@ -247,7 +257,7 @@ SUB_CB05C.loop2:
           DAT0=C  A                              * CB0D9
           D0=D0+  5                              * CB0DC
           C=0     A                              * CB0DF
-SUB_CB05C.loop3:
+FFTPass.loop3:
           C=C+1   A                              * CB0E1
           DAT0=C  A                              * CB0E3
           D0=D0-  16                             * CB0E6
@@ -255,8 +265,8 @@ SUB_CB05C.loop3:
           A=DAT0  S                              * CB0EC
           C=C-1   A                              * CB0F0
           C=C+C   A                              * CB0F2
-          GOSUB   SUB_CB346                      * CB0F4
-          GOSBVL  SUB_7A0AA                      * CB0F8
+          GOSUB   BitRev                         * CB0F4
+          GOSBVL  Hex>15                         * CB0F8
           D0=D0+  16                             * CB0FF
           D0=D0+  16                             * CB102
           D0=D0+  6                              * CB105
@@ -275,7 +285,7 @@ SUB_CB05C.loop3:
           SETHEX                                 * CB132
           GOSUB   SUB_CB3D4                      * CB134
           C=0     A                              * CB138
-SUB_CB05C.loop4:
+FFTPass.loop4:
           C=C+1   A                              * CB13A
           DAT0=C  A                              * CB13C
           GOSBVL  CkATTNcode                     * CB13F
@@ -285,7 +295,7 @@ SUB_CB05C.loop4:
           D=C     A                              * CB14F
           D0=D0+  10                             * CB151
           C=DAT0  A                              * CB154
-          GOSUB   SUB_CB372                      * CB157
+          GOSUB   D<<LOG2                        * CB157
           D0=D0+  5                              * CB15B
           C=DAT0  A                              * CB15E
           C=C+D   A                              * CB161
@@ -348,29 +358,29 @@ SUB_CB05C.loop4:
           D0=D0+  15                             * CB23C
           C=DAT0  A                              * CB23F
           ?C=A    A                              * CB242
-          GOYES   SUB_CB05C.L5                   * CB245
-          GOTO    SUB_CB05C.loop4                * CB247
-SUB_CB05C.L5:
+          GOYES   FFTPass.L5                     * CB245
+          GOTO    FFTPass.loop4                  * CB247
+FFTPass.L5:
           D0=D0-  16                             * CB24B
           D0=D0-  9                              * CB24E
           C=DAT0  A                              * CB251
           D=C     A                              * CB254
           C=A     A                              * CB256
-          GOSUB   SUB_CB372                      * CB258
+          GOSUB   D<<LOG2                        * CB258
           D0=D0+  15                             * CB25C
           C=DAT0  A                              * CB25F
           C=C+D   A                              * CB262
           DAT0=C  A                              * CB264
           D0=D0+  15                             * CB267
           C=DAT0  S                              * CB26A
-          GOSUB   SUB_CB363                      * CB26E
+          GOSUB   #2^                            * CB26E
           D0=D0-  10                             * CB272
           A=DAT0  A                              * CB275
           ?C=A    A                              * CB278
-          GOYES   SUB_CB05C.L6                   * CB27B
+          GOYES   FFTPass.L6                     * CB27B
           C=A     A                              * CB27D
-          GOTO    SUB_CB05C.loop3                * CB27F
-SUB_CB05C.L6:
+          GOTO    FFTPass.loop3                  * CB27F
+FFTPass.L6:
           D0=D0-  16                             * CB283
           D0=D0-  11                             * CB286
           A=DAT0  S                              * CB289
@@ -380,9 +390,9 @@ SUB_CB05C.L6:
           C=DAT0  S                              * CB296
           C=C+1   S                              * CB29A
           ?C=A    S                              * CB29D
-          GOYES   SUB_CB05C.L7                   * CB2A0
-          GOTO    SUB_CB05C.loop2                * CB2A2
-SUB_CB05C.L7:
+          GOYES   FFTPass.L7                     * CB2A0
+          GOTO    FFTPass.loop2                  * CB2A2
+FFTPass.L7:
           GOSUB   SUB_CB3DA                      * CB2A6
           C=DAT0  A                              * CB2AA
           R0=C                                   * CB2AD
@@ -393,12 +403,12 @@ SUB_CB05C.L7:
           D1=C                                   * CB2BD
           B=0     A                              * CB2C0
           D0=D0+  7                              * CB2C2
-SUB_CB05C.loop8:
+FFTPass.loop8:
           A=R1                                   * CB2C5
           C=B     A                              * CB2C8
-          GOSUB   SUB_CB346                      * CB2CA
+          GOSUB   BitRev                         * CB2CA
           ?A>=B   A                              * CB2CE
-          GOYES   SUB_CB05C.L9                   * CB2D1
+          GOYES   FFTPass.L9                     * CB2D1
           C=B     A                              * CB2D3
           C=C-A   A                              * CB2D5
           D=C     A                              * CB2D7
@@ -416,7 +426,7 @@ SUB_CB05C.loop8:
           GOSUB   SUB_CB3C9                      * CB2FC
           C=RSTK                                 * CB300
           D0=C                                   * CB302
-SUB_CB05C.L9:
+FFTPass.L9:
           C=DAT0  A                              * CB305
           AD1EX                                  * CB308
           A=A+C   A                              * CB30B
@@ -424,7 +434,7 @@ SUB_CB05C.L9:
           B=B+1   A                              * CB310
           C=R0                                   * CB312
           ?B#C    A                              * CB315
-          GOYES   SUB_CB05C.loop8                * CB318
+          GOYES   FFTPass.loop8                  * CB318
           RTN                                    * CB31A
 
 * refs (2): CB2F4 CB2F8
@@ -444,46 +454,50 @@ SUB_CB31C:
           RTN                                    * CB344
 
 * refs (2): CB0F4 CB2CA
-SUB_CB346:
+* C.A, A.S = bit count -> A.A = those bits of C in reverse order. Finds the partner of an element in the FFT's reordering.
+BitRev:
           A=0     A                              * CB346
-          GOTO    SUB_CB346.L2                   * CB348
-SUB_CB346.loop1:
+          GOTO    BitRev.L2                      * CB348
+BitRev.loop1:
           A=A+A   A                              * CB34C
           SB=0                                   * CB34E
           CSRB                                   * CB351
           ?SB=0                                  * CB354
-          GOYES   SUB_CB346.L2                   * CB357
+          GOYES   BitRev.L2                      * CB357
           A=A+1   A                              * CB359
-SUB_CB346.L2:
+BitRev.L2:
           A=A-1   S                              * CB35B
-          GONC    SUB_CB346.loop1                * CB35E
+          GONC    BitRev.loop1                   * CB35E
           RTN                                    * CB361
 
 * refs (2): CB0C6 CB26E
-SUB_CB363:
+* C.S = n -> C.A = 2^n.
+#2^:
           C=0     A                              * CB363
           C=C+1   A                              * CB365
-SUB_CB363.loop1:
+#2^.loop1:
           C=C-1   S                              * CB367
           RTNC                                   * CB36A
           C=C+C   A                              * CB36D
-          GONC    SUB_CB363.loop1                * CB36F
+          GONC    #2^.loop1                      * CB36F
 
 * refs (2): CB157 CB258
-SUB_CB372:
+* C.A = a power of 2, D.A -> D.A multiplied by C.A, with shifts. Clobbers C.
+D<<LOG2:
           SB=0                                   * CB372
-SUB_CB372.loop1:
+D<<LOG2.loop1:
           CSRB                                   * CB375
           ?SB=0                                  * CB378
-          GOYES   SUB_CB372.L2                   * CB37B
+          GOYES   D<<LOG2.L2                     * CB37B
           RTN                                    * CB37D
-SUB_CB372.L2:
+D<<LOG2.L2:
           D=D+D   A                              * CB37F
-          GOTO    SUB_CB372.loop1                * CB381
+          GOTO    D<<LOG2.loop1                  * CB381
 
 * refs (1): CB117
+* Probably: the sine or cosine of the angle for a butterfly, using aCOS.
 SUB_CB385:
-          GOSBVL  SUB_2B6E9                      * CB385
+          GOSBVL  aCOS                           * CB385
           GOSBVL  EXAB0                          * CB38C
           ?ST=0   11                             * CB393
           GOYES   SUB_CB385.L1                   * CB396
@@ -587,6 +601,7 @@ SUB_CB439:
 
 * ROMPTR 0C4 005
 * refs (1): CADC4
+* NDIST: mean variance x -> density of the normal distribution at x, exp(-(x-m)^2/(2v))/sqrt(2*pi*v). A variance that is not positive is an error.
 NDIST~1:
         :: OVER %0> NOTcase SETSIZEERR           * CB450
           ROT %>%%- DUP %%* SWAP %>%% SWAP OVER %%/ %% -5E-1 %%* %%EXP SWAP * CB469
@@ -594,25 +609,29 @@ NDIST~1:
 
 * ROMPTR 0C4 006
 * refs (1): CADC4
-PSDEV~1:
-        :: BINT0 OBJ_2C5EE OBJ_2CD27 ;           * CB4F2
+* PSDEV: population standard deviation of the columns of the statistics matrix.
+~BINT0;StatPerColumn;ColumnPSDEV:
+        :: BINT0 StatPerColumn ColumnPSDEV ;     * CB4F2
 
 * ROMPTR 0C4 007
 * refs (1): CADC4
-PVAR~1:
-        :: BINT0 OBJ_2C5EE OBJ_2CD1B ;           * CB50B
+* PVAR: population variance of the columns of the statistics matrix.
+~BINT0;StatPerColumn;ColumnPVAR:
+        :: BINT0 StatPerColumn ColumnPVAR ;      * CB50B
 
 * ROMPTR 0C4 008
 * refs (1): CADC4
+* PCOV: population covariance of the two columns XCOL and YCOL of the statistics matrix.
 PCOV~1:
-        :: RclXYCol&äDAT DUP4UNROLL 3PICKOVER PwrLogFIT? OBJ_2CDA5 * CB524
-          3PICK3PICK PwrExpFIT? OBJ_2CDA5 PwrLogFIT? PwrExpFIT? OBJ_2CE7C * CB542
-          SWAP OBJ_2CC92 %>%% %%/>% ;            * CB560
+        :: RclXYCol&äDAT DUP4UNROLL 3PICKOVER PwrLogFIT? StatColMean * CB524
+          3PICK3PICK PwrExpFIT? StatColMean PwrLogFIT? PwrExpFIT? StatColsSP * CB542
+          SWAP StatRows %>%% %%/>% ;             * CB560
 
 * ROMPTR 0C4 009
 * refs (1): CADC4
-ROMP_0C4_009:
-        :: DUP ARSIZE RESOROMP ROMPTR 0C4 00B RESOROMP ROMPTR 0C4 00A 3PICK * CB579
+* [roots] -> [coefficients]: PCOEF. Starts from the polynomial 1 and multiplies in one root at a time. Takes a complex root and its conjugate next to it together, with PCOEFCpx, so that their product stays real.
+DoPCOEF:
+        :: DUP ARSIZE RESOROMP XLIB PCOEFCpx RESOROMP XLIB PCOEFReal 3PICK * CB579
           3NULLLAM{} BIND #1+ DUP BINT1 {}N 3PICK TYPERARRY? ITE %%0 ((0,0)) * CB5AD
           MAKEARRY %%1 3PICK PUT%%EL 3UNROLL ONE_DO INDEX@ PULLLONGEL * CB5E4
           :: DUPTYPEEREL? case 2GETLAM           * CB60C
@@ -620,18 +639,20 @@ ROMP_0C4_009:
             SWAP INDEX@ #1+ PULLLONGEL C%%CONJ ROT DUPUNROT EQUAL ITE * CB634
             3GETLAM 2GETLAM                      * CB661
           ;                                      * CB66B
-          EVAL LOOP ABND DROP ROMPTR 0C2 032 ;   * CB670
+          EVAL LOOP ABND DROP XLIB %%>Array ;    * CB670
 
 * ROMPTR 0C4 00A
 * refs (1): CADC4
-ROMP_0C4_00A:
+* Multiplies the coefficient array in place by (x-r) for one real root.
+PCOEFReal:
         :: B%NEG %%0 4ROLL ISTOP@ DUP INDEX@ #- DO SWAP 3PICK L%* SWAP * CB694
           INDEX@ #1+ PULL%%EL DUPUNROT 4ROLL L%+ INDEX@ PUT%%EL NextInArray * CB6D5
           3UNROLL L%* ISTOP@ PUT%%EL SWAP ;      * CB702
 
 * ROMPTR 0C4 00B
 * refs (1): CADC4
-ROMP_0C4_00B:
+* Multiplies the coefficient array in place by the quadratic of a complex root and its conjugate.
+PCOEFCpx:
         :: C%%>%% OVER %%SQR SWAP DUP %%+ ((0,0)) ((0,0)) 6ROLL 1GETLAM DUP * CB720
           INDEX@ #- DO INDEX@ #2+ PULL%%EL SWAP 4ROLL 6PICK C%%C*R 4PICK * CB75C
           6PICK C%%C*R C%%C-C 3PICK C%%C+C INDEX@ PUT%%EL NextInArray ROT * CB793
@@ -640,7 +661,8 @@ ROMP_0C4_00B:
 
 * ROMPTR 0C4 00C
 * refs (1): CADC4
-ROMP_0C4_00C:
+* [coefficients] id -> symb: writes a polynomial in id as an expression, in the form c1*X^n+...+cn. Used by the polynomial solver's SYMB key. Clears numeric mode while building it, then restores it.
+Poly>Symb:
         :: NOTNUM? SWAP CLRNUM %0_2A2B4 4ROLL ONE_DO_ARRY INDEX@ PULLEL * CB81A
           ROTSWAP 4PICK ISTOP@ INDEX@ #-#1- UNCOERCE x^ x* x+ SWAP * CB847
           NextInArray DROPSWAPDROP SWAP ?SKIP SETNUM * CB879
@@ -648,16 +670,19 @@ ROMP_0C4_00C:
 
 * ROMPTR 0C4 00D
 * refs (1): CADC4
-ROMP_0C4_00D:
+* [roots] id -> symb: writes the product (X-r1)*(X-r2)*... Used by the polynomial solver's SYMB key. Clears numeric mode while building it, then restores it.
+Roots>Symb:
         :: NOTNUM? SWAP CLRNUM %1 4ROLL ONE_DO_ARRY INDEX@ PULLEL 4PICKSWAP * CB897
           x- ROTSWAP x* SWAP NextInArray DROPSWAPDROP SWAP ?SKIP SETNUM * CB8C9
         ;                                        * CB8F6
 
 * ROMPTR 0C4 00E
 * refs (1): CADC4
+* PEVAL: [coefficients] x -> value, by Horner's rule in extended precision.
 PEVAL~1:
         :: F%>L% SWAP %%0 OVERARSIZE #1+_ONE_DO 3PICK L%* SWAP INDEX@ * CB8FB
           PULLLONGEL ROT L%+                     * CB92D
+* Limits the running value after each Horner step: one whose exponent is beyond +-10000 is clamped there, so the extended arithmetic can't overflow. Handles real and complex values.
           CODE                                   * CB93C  180 nibbles
             C=DAT1  A                            * CB946
             CD1EX                                * CB949
@@ -667,16 +692,16 @@ PEVAL~1:
             ?C#A    A                            * CB959
             GOYES   PEVAL~1.L1                   * CB95C
             GOSBVL  POP1%%                       * CB95E
-            GOSUB   SUB_CB9CE                    * CB965
+            GOSUB   PEVALClamp                   * CB965
             GOC     PEVAL~1.L2                   * CB969
             GOVLNG  PUSH%.L9                     * CB96C
 PEVAL~1.L1:
             GOSBVL  POPC%%                       * CB973
             GOSBVL  STCD0                        * CB97A
-            GOSUB   SUB_CB9CE                    * CB981
+            GOSUB   PEVALClamp                   * CB981
             GONC    PEVAL~1.L3                   * CB985
             GOSBVL  EXAB0                        * CB988
-            GOSUB   SUB_CB9CE                    * CB98F
+            GOSUB   PEVALClamp                   * CB98F
             GONC    PEVAL~1.L4                   * CB993
 PEVAL~1.L2:
             SETHEX                               * CB996
@@ -688,23 +713,24 @@ PEVAL~1.L2:
             PC=(A)                               * CB9AA
 PEVAL~1.L3:
             GOSBVL  EXAB0                        * CB9AE
-            GOSUB   SUB_CB9CE                    * CB9B5
+            GOSUB   PEVALClamp                   * CB9B5
 PEVAL~1.L4:
             GOSBVL  RCCD0                        * CB9B9
             GOSBVL  XYEX                         * CB9C0
             GOVLNG  C%%CHS.L2                    * CB9C7
 
 * refs (4): CB965 CB981 CB98F CB9B5
-SUB_CB9CE:
+* A.A = exponent of an extended real -> carry set if it lies within +-10000, else clear with A.A clamped.
+PEVALClamp:
             LC(5)   #50000                       * CB9CE
             ?C<=A   A                            * CB9D5
-            GOYES   SUB_CB9CE.L1                 * CB9D8
+            GOYES   PEVALClamp.L1                * CB9D8
             LC(5)   #10000                       * CB9DA
             ?C>A    A                            * CB9E1
             RTNYES                               * CB9E4
             A=C     A                            * CB9E6
             RTNCC                                * CB9E8
-SUB_CB9CE.L1:
+PEVALClamp.L1:
             LC(5)   #90000                       * CB9EA
             ?C<A    A                            * CB9F1
             RTNYES                               * CB9F4
@@ -741,19 +767,19 @@ LIB0C4.link:
         CON(5)  DOHSTR                           * CBA72  link table of library 0C4
         LENGTH                                   * CBA77  length, to #CBAC7
         REL(5)  FFT~1                            * CBA7C  000 
-        REL(5)  ROMP_0C4_001                     * CBA81  001 
+        REL(5)  FFTPrep                          * CBA81  001 
         REL(5)  IFFT~1                           * CBA86  002 
-        REL(5)  ROMP_0C4_003                     * CBA8B  003 
-        REL(5)  ROMP_0C4_004                     * CBA90  004 
+        REL(5)  FFTChkDims                       * CBA8B  003 
+        REL(5)  DoFFT                            * CBA90  004 
         REL(5)  NDIST~1                          * CBA95  005 
-        REL(5)  PSDEV~1                          * CBA9A  006 
-        REL(5)  PVAR~1                           * CBA9F  007 
+        REL(5)  ~BINT0;StatPerColumn;ColumnPSDEV * CBA9A  006 
+        REL(5)  ~BINT0;StatPerColumn;ColumnPVAR  * CBA9F  007 
         REL(5)  PCOV~1                           * CBAA4  008 
-        REL(5)  ROMP_0C4_009                     * CBAA9  009 
-        REL(5)  ROMP_0C4_00A                     * CBAAE  00A 
-        REL(5)  ROMP_0C4_00B                     * CBAB3  00B 
-        REL(5)  ROMP_0C4_00C                     * CBAB8  00C 
-        REL(5)  ROMP_0C4_00D                     * CBABD  00D 
+        REL(5)  DoPCOEF                          * CBAA9  009 
+        REL(5)  PCOEFReal                        * CBAAE  00A 
+        REL(5)  PCOEFCpx                         * CBAB3  00B 
+        REL(5)  Poly>Symb                        * CBAB8  00C 
+        REL(5)  Roots>Symb                       * CBABD  00D 
         REL(5)  PEVAL~1                          * CBAC2  00E 
         ENDLENGTH                                * CBAC7
         ENDLENGTH                                * CBAC7

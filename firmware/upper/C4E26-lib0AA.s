@@ -1,7 +1,9 @@
-* HP 48GX ROM revision R, #C4E26-#C5331: Library part 0AA
+* HP 48GX ROM revision R, #C4E26-#C5331: Key lists of the PLOT, STAT and I/O menus
 * Addresses in the right-hand comments are those of the original ROM.
+* Most referenced: MnuKeysVPAR MnuKeysSTATPTYPE MnuKeysSIGPAR2 MnuKeysSIGPAR MnuKeysPTYPE MnuKeysPRTPAR MnuKeysPPAR MnuKeysPLOT MnuKeysMODL2 MnuKeysMODL MnuKeysIOPAR MnuKeys3DPTYPE
 * Follows on from the previous file (at #C4E26 in the original ROM).
 
+* Library 0AA: Key lists behind the PLOT, PTYPE, PPAR, 3D, VPAR, STAT, MODL, IOPAR and PRTPAR menus of library 0A7, which have no menu number of their own
 LIB0AA:
         CON(3)  #0AA                             * C4E26  library number
         REL(5)  LIB0AA.hash                      * C4E29  hash table
@@ -11,29 +13,31 @@ LIB0AA:
 
 * ROMPTR 0AA 000
 * refs (1): C4E26
-ROMP_0AA_000:
+* Keys of the PLOT menu
+MnuKeysPLOT:
         CON(5)  DOARRY                           * C4E3D  array 12
         LENGTH                                   * C4E42  length, to #C4E9E
         CON(5)  DOROMP                           * C4E47  element type
         CON(5)  1                                * C4E4C  dimensions
         CON(5)  12                               * C4E51
-        ROMPBODY 0A8 049                         * C4E56  key "PTYPE"
-        ROMPBODY 0A8 04A                         * C4E5C  key "PPAR"
-        ROMPBODY 0A8 001                         * C4E62
+        ROMPBODY 0A8 049                         * C4E56  MKeyPTYPE
+        ROMPBODY 0A8 04A                         * C4E5C  MKeyPPAR
+        ROMPBODY 0A8 001                         * C4E62  MKeyEQ
         ROMPBODY 002 0C5                         * C4E68  ERASE
         ROMPBODY 002 0C1                         * C4E6E  DRAX
-        ROMPBODY 0A8 04B                         * C4E74
-        ROMPBODY 0A8 04C                         * C4E7A  key "3D"
-        ROMPBODY 0A8 04D                         * C4E80  key "STAT"
-        ROMPBODY 0A8 04E                         * C4E86  key "FLAG"
+        ROMPBODY 0A8 04B                         * C4E74  MKeyDRAW
+        ROMPBODY 0A8 04C                         * C4E7A  MKey3D
+        ROMPBODY 0A8 04D                         * C4E80  MKeySTAT
+        ROMPBODY 0A8 04E                         * C4E86  MKeyFLAG2
         ROMPBODY 002 0C9                         * C4E8C  LABEL
         ROMPBODY 002 0C0                         * C4E92  AUTO
-        ROMPBODY 0A8 004                         * C4E98  key "INFO"
+        ROMPBODY 0A8 004                         * C4E98  MKeyINFO
         ENDLENGTH                                * C4E9E
 
 * ROMPTR 0AA 001
 * refs (1): C4E26
-ROMP_0AA_001:
+* Keys of the PTYPE menu
+MnuKeysPTYPE:
         CON(5)  DOARRY                           * C4E9E  array 12
         LENGTH                                   * C4EA3  length, to #C4EFF
         CON(5)  DOROMP                           * C4EA8  element type
@@ -45,17 +49,18 @@ ROMP_0AA_001:
         ROMPBODY 002 0DF                         * C4EC9  PARAMETRIC
         ROMPBODY 002 0E0                         * C4ECF  TRUTH
         ROMPBODY 0AB 00E                         * C4ED5  DIFFEQ
-        ROMPBODY 0A8 000                         * C4EDB
-        ROMPBODY 0A8 000                         * C4EE1
-        ROMPBODY 0A8 000                         * C4EE7
-        ROMPBODY 0A8 000                         * C4EED
-        ROMPBODY 0A8 000                         * C4EF3
-        ROMPBODY 0A8 051                         * C4EF9  key "PLOT"
+        ROMPBODY 0A8 000                         * C4EDB  MKeyBlank
+        ROMPBODY 0A8 000                         * C4EE1  MKeyBlank
+        ROMPBODY 0A8 000                         * C4EE7  MKeyBlank
+        ROMPBODY 0A8 000                         * C4EED  MKeyBlank
+        ROMPBODY 0A8 000                         * C4EF3  MKeyBlank
+        ROMPBODY 0A8 051                         * C4EF9  MKeyPLOT3
         ENDLENGTH                                * C4EFF
 
 * ROMPTR 0AA 002
 * refs (1): C4E26
-ROMP_0AA_002:
+* Keys of the PPAR menu
+MnuKeysPPAR:
         CON(5)  DOARRY                           * C4EFF  array 18
         LENGTH                                   * C4F04  length, to #C4F84
         CON(5)  DOROMP                           * C4F09  element type
@@ -66,24 +71,25 @@ ROMP_0AA_002:
         ROMPBODY 002 0DA                         * C4F24  XRNG
         ROMPBODY 002 0DB                         * C4F2A  YRNG
         ROMPBODY 002 0BC                         * C4F30  RES
-        ROMPBODY 0A8 052                         * C4F36  key "RESET"
+        ROMPBODY 0A8 052                         * C4F36  MKeyRESETPPAR
         ROMPBODY 002 0BB                         * C4F3C  CENTR
         ROMPBODY 002 0C2                         * C4F42  SCALE
         ROMPBODY 002 0BE                         * C4F48  *W
         ROMPBODY 002 0BD                         * C4F4E  *H
         ROMPBODY 002 0BA                         * C4F54  AXES
         ROMPBODY 0AB 010                         * C4F5A  ATICK
-        ROMPBODY 0A8 053                         * C4F60
-        ROMPBODY 0A8 004                         * C4F66  key "INFO"
-        ROMPBODY 0A8 000                         * C4F6C
-        ROMPBODY 0A8 000                         * C4F72
-        ROMPBODY 0A8 000                         * C4F78
-        ROMPBODY 0A8 04F                         * C4F7E  key "PLOT"
+        ROMPBODY 0A8 053                         * C4F60  MKeyIDPPAR
+        ROMPBODY 0A8 004                         * C4F66  MKeyINFO
+        ROMPBODY 0A8 000                         * C4F6C  MKeyBlank
+        ROMPBODY 0A8 000                         * C4F72  MKeyBlank
+        ROMPBODY 0A8 000                         * C4F78  MKeyBlank
+        ROMPBODY 0A8 04F                         * C4F7E  MKeyPLOT
         ENDLENGTH                                * C4F84
 
 * ROMPTR 0AA 003
 * refs (1): C4E26
-ROMP_0AA_003:
+* Keys of the 3D PTYPE menu
+MnuKeys3DPTYPE:
         CON(5)  DOARRY                           * C4F84  array 12
         LENGTH                                   * C4F89  length, to #C4FE5
         CON(5)  DOROMP                           * C4F8E  element type
@@ -95,17 +101,18 @@ ROMP_0AA_003:
         ROMPBODY 0AB 00D                         * C4FAF  PCONTOUR
         ROMPBODY 0AB 00A                         * C4FB5  GRIDMAP
         ROMPBODY 0AB 009                         * C4FBB  PARSURFACE
-        ROMPBODY 0A8 000                         * C4FC1
-        ROMPBODY 0A8 000                         * C4FC7
-        ROMPBODY 0A8 000                         * C4FCD
-        ROMPBODY 0A8 000                         * C4FD3
-        ROMPBODY 0A8 000                         * C4FD9
-        ROMPBODY 0A8 056                         * C4FDF  key "3D"
+        ROMPBODY 0A8 000                         * C4FC1  MKeyBlank
+        ROMPBODY 0A8 000                         * C4FC7  MKeyBlank
+        ROMPBODY 0A8 000                         * C4FCD  MKeyBlank
+        ROMPBODY 0A8 000                         * C4FD3  MKeyBlank
+        ROMPBODY 0A8 000                         * C4FD9  MKeyBlank
+        ROMPBODY 0A8 056                         * C4FDF  MKey3D2
         ENDLENGTH                                * C4FE5
 
 * ROMPTR 0AA 004
 * refs (1): C4E26
-ROMP_0AA_004:
+* Keys of the VPAR menu
+MnuKeysVPAR:
         CON(5)  DOARRY                           * C4FE5  array 18
         LENGTH                                   * C4FEA  length, to #C506A
         CON(5)  DOROMP                           * C4FEF  element type
@@ -116,24 +123,25 @@ ROMP_0AA_004:
         ROMPBODY 0AB 002                         * C500A  ZVOL
         ROMPBODY 0AB 003                         * C5010  XXRNG
         ROMPBODY 0AB 004                         * C5016  YYRNG
-        ROMPBODY 0A8 004                         * C501C  key "INFO"
+        ROMPBODY 0A8 004                         * C501C  MKeyINFO
         ROMPBODY 0AB 005                         * C5022  EYEPT
         ROMPBODY 0AB 006                         * C5028  NUMX
         ROMPBODY 0AB 007                         * C502E  NUMY
-        ROMPBODY 0A8 057                         * C5034
-        ROMPBODY 0A8 058                         * C503A  key "RESET"
-        ROMPBODY 0A8 004                         * C5040  key "INFO"
-        ROMPBODY 0A8 000                         * C5046
-        ROMPBODY 0A8 000                         * C504C
-        ROMPBODY 0A8 000                         * C5052
-        ROMPBODY 0A8 000                         * C5058
-        ROMPBODY 0A8 000                         * C505E
-        ROMPBODY 0A8 04C                         * C5064  key "3D"
+        ROMPBODY 0A8 057                         * C5034  MKeyIDVPAR
+        ROMPBODY 0A8 058                         * C503A  MKeyRESETVPAR
+        ROMPBODY 0A8 004                         * C5040  MKeyINFO
+        ROMPBODY 0A8 000                         * C5046  MKeyBlank
+        ROMPBODY 0A8 000                         * C504C  MKeyBlank
+        ROMPBODY 0A8 000                         * C5052  MKeyBlank
+        ROMPBODY 0A8 000                         * C5058  MKeyBlank
+        ROMPBODY 0A8 000                         * C505E  MKeyBlank
+        ROMPBODY 0A8 04C                         * C5064  MKey3D
         ENDLENGTH                                * C506A
 
 * ROMPTR 0AA 005
 * refs (1): C4E26
-ROMP_0AA_005:
+* Keys of the STAT PTYPE menu
+MnuKeysSTATPTYPE:
         CON(5)  DOARRY                           * C506A  array 6
         LENGTH                                   * C506F  length, to #C50A7
         CON(5)  DOROMP                           * C5074  element type
@@ -142,14 +150,15 @@ ROMP_0AA_005:
         ROMPBODY 002 0E3                         * C5083  BAR
         ROMPBODY 002 0E2                         * C5089  HISTOGRAM
         ROMPBODY 002 0E1                         * C508F  SCATTER
-        ROMPBODY 0A8 000                         * C5095
-        ROMPBODY 0A8 000                         * C509B
-        ROMPBODY 0A8 05C                         * C50A1  key "STAT"
+        ROMPBODY 0A8 000                         * C5095  MKeyBlank
+        ROMPBODY 0A8 000                         * C509B  MKeyBlank
+        ROMPBODY 0A8 05C                         * C50A1  MKeySTAT2
         ENDLENGTH                                * C50A7
 
 * ROMPTR 0AA 006
 * refs (1): C4E26
-ROMP_0AA_006:
+* Keys of the ΣPAR menu
+MnuKeysSIGPAR:
         CON(5)  DOARRY                           * C50A7  array 12
         LENGTH                                   * C50AC  length, to #C5108
         CON(5)  DOROMP                           * C50B1  element type
@@ -157,21 +166,22 @@ ROMP_0AA_006:
         CON(5)  12                               * C50BB
         ROMPBODY 002 132                         * C50C0  XCOL
         ROMPBODY 002 133                         * C50C6  YCOL
-        ROMPBODY 0A8 05D                         * C50CC  key "MODL"
-        ROMPBODY 0A8 002                         * C50D2
-        ROMPBODY 0A8 05E                         * C50D8  key "RESET"
-        ROMPBODY 0A8 004                         * C50DE  key "INFO"
-        ROMPBODY 0A8 000                         * C50E4
-        ROMPBODY 0A8 000                         * C50EA
-        ROMPBODY 0A8 000                         * C50F0
-        ROMPBODY 0A8 000                         * C50F6
-        ROMPBODY 0A8 000                         * C50FC
-        ROMPBODY 0A8 04D                         * C5102  key "STAT"
+        ROMPBODY 0A8 05D                         * C50CC  MKeyMODL
+        ROMPBODY 0A8 002                         * C50D2  MKeyIDSIGPAR
+        ROMPBODY 0A8 05E                         * C50D8  MKeyRESETSIGPAR
+        ROMPBODY 0A8 004                         * C50DE  MKeyINFO
+        ROMPBODY 0A8 000                         * C50E4  MKeyBlank
+        ROMPBODY 0A8 000                         * C50EA  MKeyBlank
+        ROMPBODY 0A8 000                         * C50F0  MKeyBlank
+        ROMPBODY 0A8 000                         * C50F6  MKeyBlank
+        ROMPBODY 0A8 000                         * C50FC  MKeyBlank
+        ROMPBODY 0A8 04D                         * C5102  MKeySTAT
         ENDLENGTH                                * C5108
 
 * ROMPTR 0AA 007
 * refs (1): C4E26
-ROMP_0AA_007:
+* Keys of the MODL menu
+MnuKeysMODL:
         CON(5)  DOARRY                           * C5108  array 6
         LENGTH                                   * C510D  length, to #C5145
         CON(5)  DOROMP                           * C5112  element type
@@ -182,12 +192,13 @@ ROMP_0AA_007:
         ROMPBODY 002 141                         * C512D  EXPFIT
         ROMPBODY 002 142                         * C5133  PWRFIT
         ROMPBODY 002 143                         * C5139  BESTFIT
-        ROMPBODY 0A8 05F                         * C513F  key "ΣPAR"
+        ROMPBODY 0A8 05F                         * C513F  MKeySIGPAR2
         ENDLENGTH                                * C5145
 
 * ROMPTR 0AA 008
 * refs (1): C4E26
-ROMP_0AA_008:
+* Keys of the ΣPAR menu
+MnuKeysSIGPAR2:
         CON(5)  DOARRY                           * C5145  array 12
         LENGTH                                   * C514A  length, to #C51A6
         CON(5)  DOROMP                           * C514F  element type
@@ -195,21 +206,22 @@ ROMP_0AA_008:
         CON(5)  12                               * C5159
         ROMPBODY 002 132                         * C515E  XCOL
         ROMPBODY 002 133                         * C5164  YCOL
-        ROMPBODY 0A8 071                         * C516A  key "MODL"
-        ROMPBODY 0A8 002                         * C5170
-        ROMPBODY 0A8 05E                         * C5176  key "RESET"
-        ROMPBODY 0A8 004                         * C517C  key "INFO"
-        ROMPBODY 0A8 000                         * C5182
-        ROMPBODY 0A8 000                         * C5188
-        ROMPBODY 0A8 000                         * C518E
-        ROMPBODY 0A8 000                         * C5194
-        ROMPBODY 0A8 000                         * C519A
-        ROMPBODY 0A8 06B                         * C51A0  key "STAT"
+        ROMPBODY 0A8 071                         * C516A  MKeyMODL2
+        ROMPBODY 0A8 002                         * C5170  MKeyIDSIGPAR
+        ROMPBODY 0A8 05E                         * C5176  MKeyRESETSIGPAR
+        ROMPBODY 0A8 004                         * C517C  MKeyINFO
+        ROMPBODY 0A8 000                         * C5182  MKeyBlank
+        ROMPBODY 0A8 000                         * C5188  MKeyBlank
+        ROMPBODY 0A8 000                         * C518E  MKeyBlank
+        ROMPBODY 0A8 000                         * C5194  MKeyBlank
+        ROMPBODY 0A8 000                         * C519A  MKeyBlank
+        ROMPBODY 0A8 06B                         * C51A0  MKeySTAT3
         ENDLENGTH                                * C51A6
 
 * ROMPTR 0AA 009
 * refs (1): C4E26
-ROMP_0AA_009:
+* Keys of the MODL menu
+MnuKeysMODL2:
         CON(5)  DOARRY                           * C51A6  array 6
         LENGTH                                   * C51AB  length, to #C51E3
         CON(5)  DOROMP                           * C51B0  element type
@@ -220,34 +232,36 @@ ROMP_0AA_009:
         ROMPBODY 002 141                         * C51CB  EXPFIT
         ROMPBODY 002 142                         * C51D1  PWRFIT
         ROMPBODY 002 143                         * C51D7  BESTFIT
-        ROMPBODY 0A8 072                         * C51DD  key "ΣPAR"
+        ROMPBODY 0A8 072                         * C51DD  MKeySIGPAR4
         ENDLENGTH                                * C51E3
 
 * ROMPTR 0AA 00A
 * refs (1): C4E26
-ROMP_0AA_00A:
+* Keys of the IOPAR menu
+MnuKeysIOPAR:
         CON(5)  DOARRY                           * C51E3  array 12
         LENGTH                                   * C51E8  length, to #C5244
         CON(5)  DOROMP                           * C51ED  element type
         CON(5)  1                                * C51F2  dimensions
         CON(5)  12                               * C51F7
-        ROMPBODY 0A8 079                         * C51FC  key "IR"
-        ROMPBODY 0A8 07A                         * C5202  key "ASCII"
+        ROMPBODY 0A8 079                         * C51FC  MKeyIR
+        ROMPBODY 0A8 07A                         * C5202  MKeyASCII
         ROMPBODY 002 172                         * C5208  BAUD
         ROMPBODY 002 173                         * C520E  PARITY
         ROMPBODY 002 171                         * C5214  CKSM
         ROMPBODY 002 174                         * C521A  TRANSIO
-        ROMPBODY 0A8 07B                         * C5220
-        ROMPBODY 0A8 07C                         * C5226  key "RESET"
-        ROMPBODY 0A8 004                         * C522C  key "INFO"
-        ROMPBODY 0A8 000                         * C5232
-        ROMPBODY 0A8 000                         * C5238
-        ROMPBODY 0A8 077                         * C523E  key "I/O"
+        ROMPBODY 0A8 07B                         * C5220  MKeyIDIOPAR
+        ROMPBODY 0A8 07C                         * C5226  MKeyRESETIOPAR
+        ROMPBODY 0A8 004                         * C522C  MKeyINFO
+        ROMPBODY 0A8 000                         * C5232  MKeyBlank
+        ROMPBODY 0A8 000                         * C5238  MKeyBlank
+        ROMPBODY 0A8 077                         * C523E  MKeyIO
         ENDLENGTH                                * C5244
 
 * ROMPTR 0AA 00B
 * refs (1): C4E26
-ROMP_0AA_00B:
+* Keys of the PRTPAR menu
+MnuKeysPRTPAR:
         CON(5)  DOARRY                           * C5244  array 6
         LENGTH                                   * C5249  length, to #C5281
         CON(5)  DOROMP                           * C524E  element type
@@ -255,10 +269,10 @@ ROMP_0AA_00B:
         CON(5)  6                                * C5258
         ROMPBODY 002 0F5                         * C525D  DELAY
         ROMPBODY 002 0EF                         * C5263  OLDPRT
-        ROMPBODY 0A8 07E                         * C5269
-        ROMPBODY 0A8 07F                         * C526F  key "RESET"
-        ROMPBODY 0A8 004                         * C5275  key "INFO"
-        ROMPBODY 0A8 075                         * C527B  key "PRINT"
+        ROMPBODY 0A8 07E                         * C5269  MKeyIDPRTPAR
+        ROMPBODY 0A8 07F                         * C526F  MKeyRESETPRTPAR
+        ROMPBODY 0A8 004                         * C5275  MKeyINFO
+        ROMPBODY 0A8 075                         * C527B  MKeyPRINT
         ENDLENGTH                                * C5281
 
 LIB0AA.hash:
@@ -288,18 +302,18 @@ LIB0AA.hash.L1:
 LIB0AA.link:
         CON(5)  DOHSTR                           * C52E5  link table of library 0AA
         LENGTH                                   * C52EA  length, to #C532B
-        REL(5)  ROMP_0AA_000                     * C52EF  000 
-        REL(5)  ROMP_0AA_001                     * C52F4  001 
-        REL(5)  ROMP_0AA_002                     * C52F9  002 
-        REL(5)  ROMP_0AA_003                     * C52FE  003 
-        REL(5)  ROMP_0AA_004                     * C5303  004 
-        REL(5)  ROMP_0AA_005                     * C5308  005 
-        REL(5)  ROMP_0AA_006                     * C530D  006 
-        REL(5)  ROMP_0AA_007                     * C5312  007 
-        REL(5)  ROMP_0AA_008                     * C5317  008 
-        REL(5)  ROMP_0AA_009                     * C531C  009 
-        REL(5)  ROMP_0AA_00A                     * C5321  00A 
-        REL(5)  ROMP_0AA_00B                     * C5326  00B 
+        REL(5)  MnuKeysPLOT                      * C52EF  000 
+        REL(5)  MnuKeysPTYPE                     * C52F4  001 
+        REL(5)  MnuKeysPPAR                      * C52F9  002 
+        REL(5)  MnuKeys3DPTYPE                   * C52FE  003 
+        REL(5)  MnuKeysVPAR                      * C5303  004 
+        REL(5)  MnuKeysSTATPTYPE                 * C5308  005 
+        REL(5)  MnuKeysSIGPAR                    * C530D  006 
+        REL(5)  MnuKeysMODL                      * C5312  007 
+        REL(5)  MnuKeysSIGPAR2                   * C5317  008 
+        REL(5)  MnuKeysMODL2                     * C531C  009 
+        REL(5)  MnuKeysIOPAR                     * C5321  00A 
+        REL(5)  MnuKeysPRTPAR                    * C5326  00B 
         ENDLENGTH                                * C532B
         ENDLENGTH                                * C532B
 

@@ -1,24 +1,26 @@
-* HP 48GX ROM revision R, #4400C-#46006: Command line editor
+* HP 48GX ROM revision R, #4400C-#46006: Command line editor: end of the interactive stack, edit buffer access, MatrixWriter key table, EquationWriter glue, AXES arguments, DRAX, and the PICTURE keys of the 3D plots
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: EDITPARTS InitEd&Modes DECOMP&$ NoEditLine? CURSOR_END? ENTRWISE@ EditString InitEdLine RowElt# InitEdModes GetElt EDITLINE$
+* Most referenced: EDITPARTS InitEd&Modes DECOMP&$ NoEditLine? CURSOR_END? ENTRWISE@ EditString InitEdLine ?NEWMARK \StkChanged RowElt# InitEdModes
 * Follows on from the previous file (at #4400C in the original ROM).
         RPL
 
 * refs (1): 43DFA
 \KEEP:
         :: TakeOver DEPTH UNCOERCE CKNNOLASTWD DROP 3GETLAM DEPTH #1- OVER#- * 4400C
-          OVER#2+UNROL psh #1+NDROP OBJ_440CF SetDA13NoCh ; * 4403E
+          OVER#2+UNROL psh #1+NDROP \StkChanged SetDA13NoCh ; * 4403E
 
 * refs (1): 43DA4
 \->LIST:
-        :: OBJ_4409D {}N OBJ_440CF SetDA13NoCh ; * 4405C
+        :: \#LEVEL {}N \StkChanged SetDA13NoCh ; * 4405C
 
 * refs (1): 438C9
-OBJ_4407A:
-        :: ComLine?:(bip;q) OBJ_4409D ROLLDROP OBJ_440CF SetDA13NoCh ; * 4407A
+* -> : interactive stack, the backspace key: remove the pointed level from the stack
+\DROP:
+        :: ComLine?:(bip;q) \#LEVEL ROLLDROP \StkChanged SetDA13NoCh ; * 4407A
 
 * refs (7): 43F71 43F8A 43FA3 43FDA 43FF3 44061 ...
-OBJ_4409D:
+* -> ... #level: interactive stack: take over the key, save last arguments as for a command taking the pointed level (lam 3)
+\#LEVEL:
         :: TakeOver 3GETLAM UNCOERCE CKNNOLASTWD ; * 4409D
 
 * refs (5): 43F7B 43F94 43FAD 43FCB 43FE4
@@ -26,12 +28,14 @@ OBJ_4409D:
         :: AtUserStack SetDA13NoCh ;             * 440BB
 
 * refs (8): 43EF9 43F1C 43F3F 43F62 43FFD 4404D ...
-OBJ_440CF:
+* -> : interactive stack: after the stack changed, go back to the user stack; quit if it is empty (lam 1 TRUE); otherwise keep the pointer (lam 3) within the depth and fix the row
+\StkChanged:
         :: AtUserStack DEPTH BINT0 #=casedrop ~TRUE;1PUTLAM * 440CF
-          DUP 3GETLAM #<ITE 3PUTLAM DROP OBJ_44110 ; * 440ED
+          DUP 3GETLAM #<ITE 3PUTLAM DROP \FixRow ; * 440ED
 
 * refs (4): 43C07 43C75 43C9D 44106
-OBJ_44110:
+* -> : interactive stack: keep the pointer's screen row (lam 2, 1 to 4) possible for the pointed level and the levels above it
+\FixRow:
         :: ~DEPTH;4GETLAM;#- 3GETLAM #- BINT3 #MIN #1+ BINT5 3GETLAM BINT4 * 44110
           #MIN #- 2GETLAM ROT #MIN #MAX 2PUTLAM ; * 44142
 
@@ -49,26 +53,31 @@ pick(s)?:
           TRUE ;                                 * 441B5
 
 * refs (3): 43829 43AC7 43B94
-OBJ_441BF:
-        :: OBJ_44223 OBJ_441E7 ;                 * 441BF
+* -> : interactive stack: draw the pointer ▶ after the level number on the pointer's row
+\ShowPointer:
+        :: \PointerGrob \MarkRow ;               * 441BF
 
 * refs (2): 43A54 43B21
-OBJ_441D3:
-        :: OBJ_4423E OBJ_441E7 ;                 * 441D3
+* -> : interactive stack: put the plain : back on the pointer's row
+\ShowColon:
+        :: \ColonGrob \MarkRow ;                 * 441D3
 
 * refs (2): 441C9 441DD
-OBJ_441E7:
+* grob -> : interactive stack: draw grob in HARDBUFF just after the level number (x = 6*digits) on row lam 2 (y = 6+10*row)
+\MarkRow:
         :: HARDBUFF 3GETLAM #>$ LEN$ #6* BINT6 2GETLAM #10* #+ GROB! ; * 441E7
 
 * refs (1): 441C4
-OBJ_44223:
+* -> grob: the big-font ▶
+\PointerGrob:
         ::                                       * 44223
 
 _chr(134)_:
           $ "▶" $>BIGGROB ;                      * 44228
 
 * refs (1): 441D8
-OBJ_4423E:
+* -> grob: the big-font :
+\ColonGrob:
         ::                                       * 4423E
 
 _:__44243:
@@ -79,7 +88,8 @@ _:__44243:
         :: TRUE 1PUTLAM ;                        * 44259
 
 * refs (3): 40B79 4261F 426CE
-OBJ_4426D:
+* 21: the last character column of the command line (22 columns, counted from 0)
+#EdLastCol:
         # 15                                     * 4426D  21
 
 * ->
@@ -90,7 +100,7 @@ InitEd&Modes:
 * ->
 * refs (9): 40AE8 42F6C 43246 4427C D5F60 D62AF ...
 InitEdLine:
-        :: InitEdLine~1 OBJ_4434F InitEdLine~2 ; * 4428B
+        :: InitEdLine~1 EdCursorHome InitEdLine~2 ; * 4428B
 
 * refs (1): 44290
 InitEdLine~1:
@@ -140,7 +150,8 @@ InitEdLine~1.L2:
         GOVLNG  GETPTRLOOP                       * 44348
 
 * refs (2): 44295 443D5
-OBJ_4434F:
+* -> : put the editor at the start of the line: FIRSTCHAR, CURSOR and CURSOROFFSET 0, CURSORPART and TOPLINE 1
+EdCursorHome:
         CON(5)  (*)+5                            * 4434F  primitive code object
         AD0EX                                    * 44354
         C=0     A                                * 44357
@@ -161,7 +172,7 @@ OBJ_4434F:
 * ->
 * refs (8): 1A765 4090E 40B1F 40DB1 431C9 4369E ...
 InitEdModes:
-        :: InitEdModes~1 OBJ_40CC3 ;             * 44394
+        :: InitEdModes~1 ClrHistLevel ;          * 44394
 
 * refs (1): 44399
 InitEdModes~1:
@@ -170,7 +181,7 @@ InitEdModes~1:
 * $ ->
 * refs (10): 40B60 42F71 43250 8F0F5 D5F6A D62B4 ...
 EditString:
-        :: ~ChkNoChr0!(st);Echo$NoChr00 OBJ_4434F ; * 443CB
+        :: ~ChkNoChr0!(st);Echo$NoChr00 EdCursorHome ; * 443CB
 
 * refs (6): 3E68E 3E6A2 3F288 4278C 44473 4448C
 NextChrInComLine:
@@ -216,13 +227,14 @@ NextChrInComLine=space?:
         :: NextChrInComLine CHR_Space EQUAL ;    * 4446E
 
 * refs (2): 43345 444AA
-OBJ_44487:
+* -> chr flag: the next character of the command line; TRUE if it is the 0 that ends the line
+NextChr=0?:
         :: NextChrInComLine DUP CHR_00 EQUAL ;   * 44487
 
 * -> flag
 * refs (13): 3B4FF 3B690 3DEF4 3E559 3E6BB 3F27E ...
 CURSOR_END?:
-        :: OBJ_44487 SWAP CHR_Newline EQUALOR ;  * 444A5
+        :: NextChr=0? SWAP CHR_Newline EQUALOR ; * 444A5
 
 * refs (7): 3EF0A 40E10 42BC5 42CB0 42CD8 42CF1 ...
 AddInComLine(st):
@@ -257,7 +269,7 @@ Char>Edit.L2:
         GOSBVL  ROOM                             * 44514
         ?B<C    A                                * 4451B
         GOYES   Char>Edit.L3                     * 4451E
-        GOSBVL  SUB_12D68                        * 44520
+        GOSBVL  GCorMemErr                       * 44520
         ?ST=0   1                                * 44527
         GOYES   AddInComLine(st).L1              * 4452A
         GONC    Char>Edit.loop1                  * 4452C
@@ -287,9 +299,9 @@ Char>Edit.L4:
         GOC     Char>Edit.L6                     * 4457B
         LC(2)   #0A                              * 4457E
 Char>Edit.loop5:
-        GOSUB   SUB_44616                        * 44582
+        GOSUB   EdChr=C?                         * 44582
         GOC     Char>Edit.L6                     * 44586
-        GOSUB   SUB_44603                        * 44589
+        GOSUB   EdMoveChr                        * 44589
         GONC    Char>Edit.loop5                  * 4458D
 Char>Edit.L6:
         ?ST=0   1                                * 44590
@@ -299,8 +311,8 @@ Char>Edit.L6:
         A=DAT0  B                                * 4459A
         ?A#0    B                                * 4459D
         GOYES   Char>Edit.L7                     * 445A0
-        GOSUB   SUB_44603                        * 445A2
-        GONC    SUB_44616.L1                     * 445A6
+        GOSUB   EdMoveChr                        * 445A2
+        GONC    EdChr=C?.L1                      * 445A6
 Char>Edit.L7:
         A=B     A                                * 445A9
         A=A+A   A                                * 445AB
@@ -332,13 +344,14 @@ Char>Edit.L7:
         C=RSTK                                   * 445F7
         CD1EX                                    * 445F9
 Char>Edit.loop8:
-        GOSUB   SUB_44603                        * 445FC
+        GOSUB   EdMoveChr                        * 445FC
         GONC    Char>Edit.loop8                  * 44600
 
 * refs (3): 44589 445A2 445FC
-SUB_44603:
+* B.A = characters left, D1 -> source, D0 -> buffer: copy one character, going down the buffer (the edit line is held backwards under TEMPENV); carry set and leaves through the fixup when B runs out
+EdMoveChr:
         B=B-1   A                                * 44603
-        GOC     SUB_44616.L1                     * 44605
+        GOC     EdChr=C?.L1                      * 44605
         A=DAT1  B                                * 44608
         D1=D1+  2                                * 4460B
         DAT0=A  B                                * 4460E
@@ -346,28 +359,29 @@ SUB_44603:
         RTN                                      * 44614
 
 * refs (2): 44582 44631
-SUB_44616:
+* C.B = character, D0 -> edit buffer: carry set if the byte there is C or the terminating 0. Falls through at .L1 to the end of Char>Edit: fix CURSOROFFSET and FIRSTCHAR, flag a redraw, adjust memory
+EdChr=C?:
         A=DAT0  B                                * 44616
         ?C=A    B                                * 44619
         RTNYES                                   * 4461C
         ?A=0    B                                * 4461E
         RTNYES                                   * 44621
         RTN                                      * 44623
-SUB_44616.L1:
+EdChr=C?.L1:
         C=0     A                                * 44625
         LC(2)   #15                              * 44627
         B=C     A                                * 4462B
         LC(2)   #0A                              * 4462D
-        GOSUB   SUB_44616                        * 44631
-        GOC     SUB_44616.L2                     * 44635
+        GOSUB   EdChr=C?                         * 44631
+        GOC     EdChr=C?.L2                      * 44635
         B=B-1   A                                * 44638
-SUB_44616.L2:
+EdChr=C?.L2:
         D0=(5)  CURSOROFFSET                     * 4463A
         C=0     A                                * 44641
         C=DAT0  B                                * 44643
         C=C+D   A                                * 44646
         ?B>=C   A                                * 44648
-        GOYES   SUB_44616.L3                     * 4464B
+        GOYES   EdChr=C?.L3                      * 4464B
         A=B     A                                * 4464D
         DAT0=A  B                                * 4464F
         C=C-A   A                                * 44652
@@ -375,10 +389,10 @@ SUB_44616.L2:
         A=DAT0  A                                * 4465B
         A=A+C   A                                * 4465E
         DAT0=A  A                                * 44660
-        GONC    SUB_44616.L4                     * 44663
-SUB_44616.L3:
+        GONC    EdChr=C?.L4                      * 44663
+EdChr=C?.L3:
         DAT0=C  B                                * 44666
-SUB_44616.L4:
+EdChr=C?.L4:
         LC(3)   #10A                             * 44669
         GOSBVL  setflag                          * 4466E
         GOSBVL  ADJMEM                           * 44675
@@ -390,7 +404,7 @@ EDITLINE$:
         CON(5)  (*)+5                            * 44683  primitive code object
         GOSBVL  SAVPTR                           * 44688
 EDITLINE$.loop1:
-        GOSUB   SUB_446E7                        * 4468F
+        GOSUB   EdLineSize                       * 4468F
         R1=A                                     * 44693
         R2=C                                     * 44696
         GOSBVL  MAKE$N                           * 44699
@@ -414,19 +428,20 @@ EDITLINE$.L3:
         A=R0                                     * 446D2
         GOVLNG  GPOverWrALp.L1                   * 446D5
 EDITLINE$.L4:
-        GOSBVL  SUB_12D68                        * 446DC
+        GOSBVL  GCorMemErr                       * 446DC
         GOTO    EDITLINE$.loop1                  * 446E3
 
 * refs (2): 4468F 4471D
-SUB_446E7:
+* -> D0 at the first byte above the line's end 0, A.A = TEMPENV, C.A = nibbles in the edit line. The line is stored backwards below TEMPENV and starts with a 0 byte at its low end
+EdLineSize:
         D0=(5)  TEMPENV                          * 446E7
         A=DAT0  A                                * 446EE
         D0=A                                     * 446F1
-SUB_446E7.loop1:
+EdLineSize.loop1:
         D0=D0-  2                                * 446F4
         C=DAT0  B                                * 446F7
         ?C#0    B                                * 446FA
-        GOYES   SUB_446E7.loop1                  * 446FD
+        GOYES   EdLineSize.loop1                 * 446FD
         D0=D0+  2                                * 446FF
         LC(6)   #000000                          * 44702
         CD0EX                                    * 4470A
@@ -437,7 +452,7 @@ SUB_446E7.loop1:
 SizeOfComLine:
         CON(5)  (*)+5                            * 44711  primitive code object
         GOSBVL  SAVPTR                           * 44716
-        GOSUB   SUB_446E7                        * 4471D
+        GOSUB   EdLineSize                       * 4471D
         CSRB.F  A                                * 44721
         R0=C                                     * 44726
 SizeOfComLine.L1:
@@ -447,12 +462,13 @@ SizeOfComLine.L1:
 EDITPARTS:
         CON(5)  (*)+5                            * 44730  primitive code object
         GOSBVL  SAVPTR                           * 44735
-        GOSUB   SUB_44747                        * 4473C
+        GOSUB   EdParts                          * 4473C
         R0=A                                     * 44740
         GOTO    SizeOfComLine.L1                 * 44743
 
 * refs (2): 39F93 4473C
-SUB_44747:
+* -> A.A = lines in the command line (CR_COUNT+1), 0 if there is no edit line (bit 0 of SysNib10 clear); carry set if none
+EdParts:
         D0=(5)  SysNib10                         * 44747
         A=0     A                                * 4474E
         A=DAT0  1                                * 44750
@@ -460,14 +476,15 @@ SUB_44747:
         A=A&C   B                                * 44757
         ?A=0    B                                * 4475B
         RTNYES                                   * 4475E
-        GOSUB   SUB_44772                        * 44760
+        GOSUB   EdFirstByte                      * 44760
         D0=(5)  CR_COUNT                         * 44764
         A=DAT0  A                                * 4476B
         A=A+1   A                                * 4476E
         RTN                                      * 44770
 
 * refs (3): 42AA9 44760 44794
-SUB_44772:
+* -> A.B = first character of the edit line (the byte just under TEMPENV); 0 when the line is empty. D0 points at it
+EdFirstByte:
         D0=(5)  TEMPENV                          * 44772
         C=DAT0  A                                * 44779
         C=C-1   A                                * 4477C
@@ -482,7 +499,7 @@ InputLAttn~1:
         CON(5)  (*)+5                            * 4478A  primitive code object
         CD0EX                                    * 4478F
         RSTK=C                                   * 44792
-        GOSUB   SUB_44772                        * 44794
+        GOSUB   EdFirstByte                      * 44794
         C=RSTK                                   * 44798
         D0=C                                     * 4479A
         ?A=0    B                                * 4479D
@@ -491,7 +508,8 @@ InputLAttn~1.L1:
         GOVLNG  PushT/FLoop                      * 447A2
 
 * refs (1): 44842
-SUB_447A9:
+* A.A = line number from 1 -> B.A, R0, C.A, A.A: scan the backwards edit buffer past the line feeds to line n and to its end, giving its start and length relative to the visible text; ST2 set if the line starts before FIRSTCHAR
+EdFindLine:
         GOSBVL  SAVPTR                           * 447A9
         B=A     A                                * 447B0
         D0=(5)  TEMPENV                          * 447B2
@@ -499,28 +517,28 @@ SUB_447A9:
         D0=A                                     * 447BC
         B=B-1   A                                * 447BF
         B=B-1   A                                * 447C1
-        GOC     SUB_447A9.L2                     * 447C3
+        GOC     EdFindLine.L2                    * 447C3
         LC(2)   #0A                              * 447C6
-SUB_447A9.loop1:
+EdFindLine.loop1:
         D0=D0-  2                                * 447CA
         A=DAT0  B                                * 447CD
         ?C#A    B                                * 447D0
-        GOYES   SUB_447A9.loop1                  * 447D3
+        GOYES   EdFindLine.loop1                 * 447D3
         B=B-1   A                                * 447D5
-        GONC    SUB_447A9.loop1                  * 447D7
-SUB_447A9.L2:
+        GONC    EdFindLine.loop1                 * 447D7
+EdFindLine.L2:
         CD0EX                                    * 447DA
         RSTK=C                                   * 447DD
         D0=C                                     * 447DF
         LC(2)   #0A                              * 447E2
-SUB_447A9.loop3:
+EdFindLine.loop3:
         D0=D0-  2                                * 447E6
         A=DAT0  B                                * 447E9
         ?A=0    B                                * 447EC
-        GOYES   SUB_447A9.L4                     * 447EF
+        GOYES   EdFindLine.L4                    * 447EF
         ?C#A    B                                * 447F1
-        GOYES   SUB_447A9.loop3                  * 447F4
-SUB_447A9.L4:
+        GOYES   EdFindLine.loop3                 * 447F4
+EdFindLine.L4:
         C=0     W                                * 447F6
         C=RSTK                                   * 447F9
         B=C     A                                * 447FB
@@ -532,26 +550,27 @@ SUB_447A9.L4:
         A=A+A   A                                * 4480F
         ST=0    2                                * 44811
         ?C<=A   A                                * 44814
-        GOYES   SUB_447A9.L5                     * 44817
+        GOYES   EdFindLine.L5                    * 44817
         C=C-A   A                                * 44819
         B=B-A   A                                * 4481B
         A=B     A                                * 4481D
         R0=A                                     * 4481F
         RTN                                      * 44822
-SUB_447A9.L5:
+EdFindLine.L5:
         A=C     A                                * 44824
         C=0     A                                * 44826
         ST=1    2                                * 44828
         RTN                                      * 4482B
 
 * refs (5): 424F3 42511 42534 42683 426B0
+* Probably: #pos -> #start #len flag: the extent of the line holding the cursor (see EdFindLine)
 OBJ_4482D:
         CON(5)  (*)+5                            * 4482D  primitive code object
         LC(5)   CURSORPART                       * 44832
         CD0EX                                    * 44839
         A=DAT0  A                                * 4483C
         D0=C                                     * 4483F
-        GOSUB   SUB_447A9                        * 44842
+        GOSUB   EdFindLine                       * 44842
         CSRB.F  A                                * 44846
         ?ST=0   2                                * 4484B
         GOYES   OBJ_4482D.L1                     * 4484E
@@ -583,7 +602,7 @@ NoEditLine?:
 
 * refs (3): 40B83 42971 42B48
 ROWNUM:
-        :: LINESOFSTACK CurrentRow OBJ_113F2 #1-- #+ ; * 4489E
+        :: LINESOFSTACK CurrentRow TOPLINE@ #1-- #+ ; * 4489E
 
 * chr -> chr'
 * refs (2): 42AF3 6BE84
@@ -596,65 +615,73 @@ ROWNUM:
           #>CHR ;                                * 4493E
 
 * refs (1): 8D363
-OBJ_44948:
-        :: BINT1 #=casedrop OBJ_44999            * 44948
-          BINT2 #=casedrop OBJ_44AAC             * 4495C
-          BINT3 #=casedrop OBJ_44AD0             * 4496B
-          BINT4 #=casedrop ROMPTR 0EA 007        * 4497A
+* #key #plane -> ob TRUE | FALSE: MatrixWriter: the hard key handler (POLKeyUI); plane 1 plain, 2 left shift, 3 right shift, 4 alpha
+MWKeyDef:
+        :: BINT1 #=casedrop MWKeys               * 44948
+          BINT2 #=casedrop MWLSKeys              * 4495C
+          BINT3 #=casedrop MWRSKeys              * 4496B
+          BINT4 #=casedrop XLIB MWKeyHook        * 4497A
           2DROPFALSE ;                           * 4498F
 
 * refs (1): 44957
-OBJ_44999:
+* #key -> ob TRUE | FALSE: MatrixWriter: unshifted keys, with a smaller set while the command line is open (EditExstCase)
+MWKeys:
         :: EditExstCase                          * 44999
-          :: BINT25 ?CaseKeyDef ROMPTR 0EA 028 BINT45 ?CaseKeyDef * 449A3
-            ROMPTR 0EA 000 BINT13 ?CaseKeyDef ROMPTR 0EA 063 DROPFALSE ; * 449C7
-          BINT11 ?CaseKeyDef ROMPTR 0EA 055 BINT16 ?CaseKeyDef * 449F1
-          ROMPTR 0EA 037 BINT17 ?CaseKeyDef ROMPTR 0EA 026 BINT18 * 44A10
-          ?CaseKeyDef ROMPTR 0EA 01D BINT25 ?CaseKeyDef ROMPTR 0EA 033 * 44A35
-          BINT29 ?CaseKeyDef DoBadKey BINT45 ?CaseKeyDef ROMPTR 0EA 002 * 44A5A
-          BINT13 ?CaseKeyDef ROMPTR 0EA 063 BINT26 ?CaseKeyDef DoBadKey * 44A7E
-          DROPFALSE ;                            * 44AA2
+          :: BINT25 ?CaseKeyDef XLIB MWEnter BINT45 ?CaseKeyDef * 449A3
+            XLIB MWCancelLine BINT13 ?CaseKeyDef * 449C7
+            XLIB ~TakeOver;KeyN_QUOTE;SetDA1NoCh DROPFALSE ; * 449DC
+          BINT11 ?CaseKeyDef XLIB MWKeyUp BINT16 ?CaseKeyDef XLIB MWKeyLeft * 449F1
+          BINT17 ?CaseKeyDef XLIB MWKeyDown BINT18 ?CaseKeyDef * 44A1B
+          XLIB MWKeyRight BINT25 ?CaseKeyDef XLIB MWEnterDone BINT29 * 44A3A
+          ?CaseKeyDef DoBadKey BINT45 ?CaseKeyDef XLIB MWCancel BINT13 * 44A5F
+          ?CaseKeyDef XLIB ~TakeOver;KeyN_QUOTE;SetDA1NoCh BINT26 * 44A83
+          ?CaseKeyDef DoBadKey DROPFALSE ;       * 44A98
 
 * refs (1): 44966
-OBJ_44AAC:
-        :: BINT26 ?CaseKeyDef ROMPTR 0EA 066 DROPFALSE ; * 44AAC
+* #key -> ob TRUE | FALSE: MatrixWriter: left-shifted keys: only +/-
+MWLSKeys:
+        :: BINT26 ?CaseKeyDef XLIB ~TakeOver;ShowEditMenu DROPFALSE ; * 44AAC
 
 * refs (1): 44975
-OBJ_44AD0:
+* #key -> ob TRUE | FALSE: MatrixWriter: right-shifted keys, with a smaller set while the command line is open
+MWRSKeys:
         :: EditExstCase                          * 44AD0
-          :: BINT25 ?CaseKeyDef ROMPTR 0EA 065 BINT39 ?CaseKeyDef * 44ADA
-            ROMPTR 0EA 064 OBJ_463B4 ;           * 44AFE
-          BINT11 ?CaseKeyDef ROMPTR 0EA 019 BINT16 ?CaseKeyDef * 44B13
-          ROMPTR 0EA 01B BINT17 ?CaseKeyDef ROMPTR 0EA 01A BINT18 * 44B32
-          ?CaseKeyDef ROMPTR 0EA 01C BINT25 ?CaseKeyDef ROMPTR 0EA 065 * 44B57
-          BINT39 ?CaseKeyDef ROMPTR 0EA 064 OBJ_463B4 ; * 44B7C
+          :: BINT25 ?CaseKeyDef XLIB MWMenuFirst BINT39 ?CaseKeyDef * 44ADA
+            XLIB ~TakeOver;KeyRS_MUL;SetDA1NoCh MWRSKeyOK ; * 44AFE
+          BINT11 ?CaseKeyDef XLIB MWKeyFirstRow BINT16 ?CaseKeyDef * 44B13
+          XLIB MWKeyFirstCol BINT17 ?CaseKeyDef XLIB MWKeyLastRow BINT18 * 44B32
+          ?CaseKeyDef XLIB MWKeyLastCol BINT25 ?CaseKeyDef XLIB MWMenuFirst * 44B57
+          BINT39 ?CaseKeyDef XLIB ~TakeOver;KeyRS_MUL;SetDA1NoCh MWRSKeyOK ; * 44B7C
 
 * refs (7): 8DA69 8DB7F 8DF3D 8E730 8ED7A 8F1D1 ...
-OBJ_44B9B:
+* -> #: the MatrixWriter's column width (COLWIDTH, one byte)
+COLWIDTH@:
         CON(5)  (*)+5                            * 44B9B  primitive code object
         ASSEMBLE
         LC(5)   COLWIDTH                         * 44BA0
-        GOTO    OBJ_44BCB.L2                     * 44BA7
+        GOTO    ENTRWISE!.L2                     * 44BA7
 
 * refs (3): 8ED8E 8F218 8F560
-OBJ_44BAB:
+* # -> : set the MatrixWriter's column width
+COLWIDTH!:
         CON(5)  (*)+5                            * 44BAB  primitive code object
         LC(5)   COLWIDTH                         * 44BB0
-        GOTO    OBJ_44BCB.L1                     * 44BB7
+        GOTO    ENTRWISE!.L1                     * 44BB7
 
 * refs (12): 8E28B 8E314 8E681 8E6A9 8E77B 8E790 ...
 * -> #: the MatrixWriter's entry direction (ENTRWISE, #80916)
 ENTRWISE@:
         CON(5)  (*)+5                            * 44BBB  primitive code object
         LC(5)   ENTRWISE                         * 44BC0
-        GOTO    OBJ_44BCB.L2                     * 44BC7
+        GOTO    ENTRWISE!.L2                     * 44BC7
 
 * refs (2): 8EC7D 8ECB5
-OBJ_44BCB:
+* # -> : set the MatrixWriter's entry direction
+ENTRWISE!:
         CON(5)  (*)+5                            * 44BCB  primitive code object
         LC(5)   ENTRWISE                         * 44BD0
         NOP4                                     * 44BD7
-OBJ_44BCB.L1:
+ENTRWISE!.L1:
         RSTK=C                                   * 44BDB
         GOSBVL  POP#                             * 44BDD
         C=RSTK                                   * 44BE4
@@ -664,7 +691,7 @@ OBJ_44BCB.L1:
         A=DAT0  A                                * 44BEF
         D0=D0+  5                                * 44BF2
         PC=(A)                                   * 44BF5
-OBJ_44BCB.L2:
+ENTRWISE!.L2:
         CD1EX                                    * 44BF9
         A=0     A                                * 44BFC
         A=DAT1  B                                * 44BFE
@@ -676,7 +703,7 @@ OBJ_44BCB.L2:
 * -> []/[[]]
 * refs (3): 3DF63 B4DA0 D75DD
 DoNewMatrix:
-        ROMPTR 0EA 006                           * 44C31
+        XLIB DoNewMatrix~1                       * 44C31
 
 * refs (2): 683FD 6AAC8
 OBJ_44C3C:
@@ -684,8 +711,8 @@ OBJ_44C3C:
 
 * refs (2): 4B909 6D05A
 OBJ_44C4B:
-          :: OBJ_6FDC6 OBJ_66F91 BINT6 MAKEGROB OBJ_671BF ; OBJ_44DB3 * 44C4B
-          OBJ_67AE2 #1+ OBJ_67C16 ;              * 44C73
+          :: EqwIf6 OBJ_66F91 BINT6 MAKEGROB EqwLParenGrob ; OBJ_44DB3 * 44C4B
+          EqwBoxRefY@ #1+ EqwBoxRefY! ;          * 44C73
 
 * refs (1): 68411
 OBJ_44C87:
@@ -693,11 +720,11 @@ OBJ_44C87:
 
 * refs (2): 44C41 44CCD
 OBJ_44C8C:
-          :: OBJ_67987 OBJ_67AAA ;               * 44C8C
+          :: EqwDupBoxNext@ EqwDupBoxH@ ;        * 44C8C
 
 * refs (1): 65ABF
 OBJ_44CA0:
-          :: BINT6 MAKEGROB OBJ_670EE ; GOTO OBJ_44CD2.L1 ; * 44CA0
+          :: BINT6 MAKEGROB EqwIntegralGrob ; GOTO OBJ_44CD2.L1 ; * 44CA0
 
 * refs (1): 68416
 OBJ_44CC8:
@@ -705,45 +732,45 @@ OBJ_44CC8:
 
 * refs (2): 666BF 6D792
 OBJ_44CD2:
-          :: BINT4 MAKEGROB OBJ_6715D ;          * 44CD2
+          :: BINT4 MAKEGROB EqwRadicalGrob ;     * 44CD2
 OBJ_44CD2.L1:
           OBJ_44DB3 OBJ_44D9A ;                  * 44CEB
 
 * refs (1): 68407
 OBJ_44CFA:
-        :: OBJ_67987 DUP#0= ?SKIP OBJ_67A9D      * 44CFA
-          3PICK EqwBoxFirst@ OBJ_67A9D #MAX      * 44D13
+        :: EqwDupBoxNext@ DUP#0= ?SKIP EqwBoxW@  * 44CFA
+          3PICK EqwBoxFirst@ EqwBoxW@ #MAX       * 44D13
 OBJ_44CFA.L1:
-          #2+ DUP OBJ_66FF1 OBJ_44DB3 #2/ OBJ_67C09 ; * 44D27
+          #2+ DUP EqwBarGrob OBJ_44DB3 #2/ EqwBoxRefX! ; * 44D27
 
 * refs (1): 6840C
 OBJ_44D4A:
-        :: OBJ_67987 OBJ_67A9D GOTO OBJ_44CFA.L1 ; * 44D4A
+        :: EqwDupBoxNext@ EqwBoxW@ GOTO OBJ_44CFA.L1 ; * 44D4A
 
 * refs (1): 68420
 OBJ_44D68:
-        :: OVER EqwBoxLast@ OBJ_67AAA            * 44D68
+        :: OVER EqwBoxLast@ EqwDupBoxH@          * 44D68
 
 * refs (1): 6DB8E
-OBJ_44D7C:
-          :: BINT2 MAKEGROB OBJ_67193 ; OBJ_44DB3 * 44D7C
+EqwWhere~1:
+          :: BINT2 MAKEGROB EqwVBarGrob ; OBJ_44DB3 * 44D7C
 
 * refs (4): 44CF0 666C9 6D325 6DB57
 OBJ_44D9A:
-          :: OBJ_67AE2 OBJ_67C16 ; ;             * 44D9A
+          :: EqwBoxRefY@ EqwBoxRefY! ; ;         * 44D9A
 
 * refs (5): 44C6E 44CEB 44D36 44D95 666C4
 OBJ_44DB3:
-        :: 3PICKSWAP OVERDUP OBJ_67AEF 2DUP#+ #0=ITE 3DROP * 44DB3
+        :: 3PICKSWAP OVERDUP EqwDupBoxXY@ 2DUP#+ #0=ITE 3DROP * 44DB3
 
 * refs (1): 66E75
-OBJ_44DD6:
-          :: OBJ_6AD1B GROB!ZERO 3DROP ; DUPZERO OBJ_66D26 SWAP * 44DD6
+EqwMoveBox~1:
+          :: EqwInvertBox GROB!ZERO 3DROP ; DUPZERO EqwBoxX0Y! SWAP * 44DD6
 
 * refs (8): 65D91 65ED6 661CE 69A22 6D203 6E145 ...
 OBJ_44DFE:
-          :: OBJ_6CF3D 2DUPHALF 6PICK 3UNROLL OBJ_67C23 4PICK 3UNROLL * 44DFE
-            OBJ_6CE8E EqwBoxObj! ;               * 44E26
+          :: EqwGrobWH 2DUPHALF 6PICK 3UNROLL EqwBoxRef! 4PICK 3UNROLL * 44DFE
+            EqwBoxWH! EqwBoxObj! ;               * 44E26
           SWAP ;                                 * 44E35
 
 * refs (2): 6D1FE 6FAF5
@@ -756,29 +783,29 @@ OBJ_44E3F:
 
 * refs (1): 8D344
 BindMatVars:
-        ROMPTR 0EA 00D                           * 44F42
+        XLIB BindMatVars~1                       * 44F42
 
 * refs (1): 5711C
-OBJ_44F4D:
-        :: OBJ_57216 FALSE ROMPTR 0F1 00E ;      * 44F4D
+GridPictStart~1:
+        :: Plot3DBind FALSE XLIB GridSurfSetup ; * 44F4D
 
 * refs (1): 5713F
-OBJ_44F6C:
-        :: ROMPTR 0F1 011 DOSTOE OBJ_57216 TRUE ROMPTR 0F1 00E ; * 44F6C
+ParsurfPictStart~1:
+        :: XLIB ParSurfEq DOSTOE Plot3DBind TRUE XLIB GridSurfSetup ; * 44F6C
 
 * refs (1): 45C4E
-OBJ_44F9B:
-        :: ROMPTR 0F1 01A                        * 44F9B
+SlopePictStart~1:
+        :: XLIB SlopeVPAR                        * 44F9B
 
 * refs (1): 458DF
-OBJ_44FAB:
-          :: ROMPTR 0F1 003 BIND ROMPTR 0F1 01C ROMPTR 0F1 01D ; ; * 44FAB
+PcontourPictStart~2:
+          :: XLIB Plot3DLams BIND XLIB SlopeSetup XLIB SlopeRun ; ; * 44FAB
         BSS     7                                * 44FE0  zeros
 
 * [] -> []'
 * refs (2): 42DEB B4D9B
 DoOldMatrix:
-        ROMPTR 0EA 00F                           * 44FE7
+        XLIB DoOldMatrix~1                       * 44FE7
 
 * refs (2): C0602 C06F6
 OBJ_44FF2:
@@ -791,16 +818,17 @@ OBJ_45006:
 
 * refs (1): 8D84E
 InitOldMat:
-        ROMPTR 0EA 010                           * 45023
+        XLIB InitOldMat~1                        * 45023
 
 * refs (4): 4B053 B6026 B60B2 B6286
-OBJ_4502E:
+* arg -> {}: AXES: check the argument (a centre, or a list of centre, tick spacing and labels) and build PPAR's axes field, keeping the parts not given
+AXES>List:
         :: INNERCOMP                             * 4502E
           :: BINT1 #=casedrop                    * 45038
             :: DUPTYPECMP? case                  * 45047
               :: BINT5 PPAR(s);dup;li? NOTcaseDROP CDRCOMP * 45056
                 SWAP >HCOMP ;                    * 4506F
-              DUP OBJ_4C64D NcaseTYPEERR BINT5   * 4507E
+              DUP AxTick? NcaseTYPEERR BINT5     * 4507E
               PPAR(s);dup;li? NOTcase            * 45092
               :: SWAP TWO{}N ;                   * 4509C
               ZEROSWAP INNERCOMP DUP ZERO_DO     * 450B0
@@ -808,7 +836,7 @@ OBJ_4502E:
                 DUPTYPECSTR? case psh1&rev       * 450DD
                 DROP ;                           * 450EC
               LOOP DROP DUP #2+ ROLL 3UNROLL #1+ reversym {}N ; * 450F6
-            BINT2 #=casedrop OBJ_46527           * 45128
+            BINT2 #=casedrop AXES>List~1         * 45128
             BINT3 #=casedrop                     * 45137
             :: DUPTYPECSTR? NcaseTYPEERR OVER    * 45141
               TYPECSTR? NcaseTYPEERR 3PICK       * 45155
@@ -817,7 +845,7 @@ OBJ_4502E:
             BINT4 #= NcaseTYPEERR DUPTYPECSTR?   * 4517D
             NcaseTYPEERR OVER                    * 45191
             TYPECSTR? NcaseTYPEERR 3PICK         * 4519B
-            OBJ_4C64D NcaseTYPEERR 4PICK         * 451AA
+            AxTick? NcaseTYPEERR 4PICK           * 451AA
             TYPECMP? NcaseTYPEERR BINT4          * 451B9
             {}N ;                                * 451C8
           BINT3 PutBackPPAR(_,s) ;               * 451D2
@@ -833,8 +861,7 @@ drax~1:
               6ROLL 4UNROLL DUP %>%% 10GETLAM %%* BINT10 PICK GETXMIN %- ROT * 452A4
               %MOD GETXMIN %+ %>%% 10GETLAM %%* 6GETLAM %%+ GETXMAX %>%% * 452DB
               10GETLAM %%* 6GETLAM %%+ SWAP BEGIN 2DUP %%>= drax~2 WHILE * 4530D
-              :: 8PICK OVER %%>% # 2A01 OBJ_2B551 COERCE 6PICK drax~4 3PICK * 4533F
-                %%+ ;                            * 45376
+              :: 8PICK OVER %%>% # 2A01 %RND# COERCE 6PICK drax~4 3PICK %%+ ; * 4533F
               REPEAT 4DROP ;                     * 45380
             :: DUP#0= case2drop 4ROLLSWAP        * 4538F
               4PICK 2DUP #> case                 * 453A3
@@ -849,8 +876,8 @@ drax~1:
           :: DUP%0= case 7DROP                   * 454BB
             DUP %>%% 9GETLAM %%* 7PICK GETYMIN %- ROT %MOD GETYMIN %+ %>%% * 454CF
             9GETLAM %%* 5GETLAM SWAP %%- BEGIN DUP %%0>= drax~2 WHILE * 4550B
-            :: 4PICK 4PICK 3PICK %%>% # 2A01 OBJ_2B551 COERCE drax~5 DROP * 4553D
-              OVER %%- ;                         * 45574
+            :: 4PICK 4PICK 3PICK %%>% # 2A01 %RND# COERCE drax~5 DROP OVER * 4553D
+              %%- ;                              * 45579
             REPEAT BINT8 NDROP ;                 * 45583
           DUP#0=case 7DROP                       * 45597
           DUP 5PICK #> case 7DROP                * 455A1
@@ -866,15 +893,17 @@ drax~2:
 * #len -> $
 * refs (4): 8E767 AE482 B99F7 D09FD
 Blank$:
-        ROMPTR 0EA 027                           * 45676
+        XLIB Blank$~1                            * 45676
 
 * refs (2): 46B01 4D8B2
-OBJ_45681:
+* -> pict: PICTURE PICT→ key: copy PICT to the stack, and count one more object to leave behind (lam 'SAVEDDEPTH)
+PictKeyPICT>:
         :: TakeOver CROSSMARKOFF GBUFF TOTEMPOB CK0NOLASTWD Π'SAVEDDEPTH #1+ * 45681
           ' Π'SAVEDDEPTH STO CROSSMARKON ;       * 456A9
 
 * refs (6): 0C95B 0C960 0C965 0C96A 46B40 47FE0
-OBJ_456C2:
+* { "" bad key }: an empty menu key
+{GRAPH\BLANK}:
         { NULL$                                  * 456C2
           :: CHECKMENU DoBadKey ; }              * 456CC
 
@@ -884,21 +913,23 @@ OBJ_456C2:
 
 * refs (1): 3E7AB
 {GRAPH\SUä}~1:
-        :: CHECKMENU OBJ_4579E CROSSMARKOFF ~8GETLAM;7GETLAM ORDERXY# #1+ * 456F9
+        :: CHECKMENU ?NEWMARK CROSSMARKOFF ~8GETLAM;7GETLAM ORDERXY# #1+ * 456F9
           SWAP#1+SWAP GBUFF 5UNROLL SUBGROB CK0NOLASTWD Π'SAVEDDEPTH #1+ ' * 4571C
           Π'SAVEDDEPTH STO CROSSMARKON ;         * 45744
 
 * refs (1): 3E7CA
-{GRAPH\DEL}~1:
-        :: CHECKMENU OBJ_4EBD1 ;                 * 45758
+~CHECKMENU;PictKeyDEL:
+        :: CHECKMENU PictKeyDEL ;                * 45758
 
 * refs (2): 46AA4 4D80D
-OBJ_4576C:
+* -> : PICTURE ERASE key: clear all of PICT
+PictKeyERASE:
         :: TakeOver CROSSMARKOFF GBUFF ZEROZERO GBUFFGROBDIM SWAP * 4576C
           GROB!ZERODRP CROSSMARKON ;             * 4578F
 
 * refs (9): 45703 477E5 4E3ED 4E564 4E5F0 4E63B ...
-OBJ_4579E:
+* -> : with no mark set, set one and leave the caller: commands that work between mark and cursor take the first press to set the mark
+?NEWMARK:
         :: CURRENTMARK? ?SEMI                    * 4579E
           RDROP NEWMARK ;                        * 457AD
 
@@ -914,35 +945,36 @@ OBJ_457BC:
 
 Π'Ystp:
           LAM 'Ystp 7ROLL                        * 457FB
-          :: OBJ_45BE8                           * 45811
+          :: #SKIPOBS                            * 45811
             :: 4DROP RDROP ;                     * 4581B
             :: 4ROLL %CHS 4UNROLL ;              * 4582F
             :: 3DROP %- RDROP ; %CHS DUP ROT 'EvalNoCK:_sup xSTO+ * 45848
             'EvalNoCK:_sup xSTO+ DROP ;          * 4587A
 
 * refs (2): 4597C 462BC
-OBJ_4588E:
-          :: OBJ_46955 ?SKIP OBJ_46C7A           * 4588E
-            DUPTYPECMP? NOTcasedrop OBJ_46C7A    * 458A2
-            DUP ~BINT25;PUTLAM C%>% OBJ_46C43 ;  * 458B1
+* %x -> : trace: move the cursor to the point for x, or report "undefined" if EQ doesn't give a value there. The value is kept in lam 25
+TraceFcnTo:
+          :: PlotEvalAt ?SKIP TraceUndef         * 4588E
+            DUPTYPECMP? NOTcasedrop TraceUndef   * 458A2
+            DUP ~BINT25;PUTLAM C%>% TraceCursorTo ; * 458B1
         ;                                        * 458CA
 
 * refs (1): 57162
-OBJ_458CF:
-        :: ROMPTR 0F1 021 OBJ_44FAB ;            * 458CF
+PcontourPictStart~1:
+        :: XLIB PContourEq PcontourPictStart~2 ; * 458CF
 
 * refs (1): 45C71
-OBJ_458E9:
-        :: OBJ_57216 ROMPTR 0F1 014 ROMPTR 0F1 016 ; * 458E9
+YSlicePictStart~1:
+        :: Plot3DBind XLIB YSliceSetup XLIB YSliceFrames ; * 458E9
 
 * refs (2): C029B C038F
 OBJ_4590E:
         :: 15GETLAM DUP 21GETLAM 4ROLL           * 4590E
-          :: OBJ_45BE8                           * 45927
+          :: #SKIPOBS                            * 45927
             :: DROP RDROP ; %CHS                 * 45931
             :: %- RDROP ; %CHS                   * 4594A
             :: %- RDROP ; ;                      * 45963
-          OBJ_4588E ;                            * 4597C
+          TraceFcnTo ;                           * 4597C
 
 * refs (1): C0415
 OBJ_45986:
@@ -959,7 +991,7 @@ OBJ_45995:
 Π'PPAR:
               LAM 'PPAR undo casedrop NOP        * 4599F
               RDROP ;                            * 459BF
-            ROMPTR 0F1 00F ;                     * 459C9
+            XLIB GridRestore ;                   * 459C9
           ABND ;                                 * 459D9
 
 * refs (1): C041A
@@ -968,7 +1000,7 @@ OBJ_459E3:
 
 * refs (3): 44FF7 4500B 45CB3
 OBJ_459E8:
-          :: ERRSET ROMPTR 0F1 03F ERRTRAP COLA ~'R;EVAL;ERRJMP * 459E8
+          :: ERRSET XLIB PlotEnvAbort ERRTRAP COLA ~'R;EVAL;ERRJMP * 459E8
           ;                                      * 45A0C
           OBJ_45990 ;                            * 45A11
 
@@ -978,7 +1010,7 @@ OBJ_45A1B:
 
 * refs (1): 45010
 OBJ_45A25:
-          :: OBJ_45995 ROMPTR 0F1 00F ROMPTR 0F1 012 ; ABND ABND ; * 45A25
+          :: OBJ_45995 XLIB GridRestore XLIB ParSurfRestore ; ABND ABND ; * 45A25
 
 * refs (2): C05FD C06F1
 OBJ_45A59:
@@ -986,12 +1018,12 @@ OBJ_45A59:
 
 * refs (1): 44FFC
 OBJ_45A63:
-          :: OBJ_45995 ROMPTR 0F1 01E ROMPTR 0F1 01F ; ABND ABND ; * 45A63
+          :: OBJ_45995 XLIB SlopePurge XLIB SlopeRestore ; ABND ABND ; * 45A63
         FILLTO  #45AE0                           * 45A97  73 zero nibbles: the next entry stays at #45AE0
 
 * refs (3): 8D308 8D3C8 8E463
 GetMat/Vec:
-        ROMPTR 0EA 034                           * 45AE0
+        XLIB GetMat/Vec~1                        * 45AE0
 
 * refs (1): C022D
 OBJ_45AEB:
@@ -1001,7 +1033,7 @@ OBJ_45AEB:
 OBJ_45AF0:
           :: GraphicExit DUP NOTcase             * 45AF0
             :: RDROP ;                           * 45B04
-            ROMPTR 0F1 040 '                     * 45B13
+            XLIB PlotEnvExit '                   * 45B13
 
 'Nx:
             LAM 'Nx undo caseDROP RDROP          * 45B23
@@ -1013,12 +1045,12 @@ OBJ_45B44:
 
 'Ystp:
             LAM 'Ystp undo NOT?SEMI              * 45B4E
-            DROP ROMPTR 0F1 007 ;                * 45B69
+            DROP XLIB Plot3DRestore ;            * 45B69
           ABND ABND ;                            * 45B7E
 
 * refs (1): C0232
 OBJ_45B8D:
-        :: ERRSET ROMPTR 0F1 03F ERRTRAP OBJ_45B44 ERRJMP ; * 45B8D
+        :: ERRSET XLIB PlotEnvAbort ERRTRAP OBJ_45B44 ERRJMP ; * 45B8D
 
 * refs (6): C01AC C02A0 C0394 C0488 C057C C0670
 OBJ_45BB6:
@@ -1026,7 +1058,8 @@ OBJ_45BB6:
           TRUE ;                                 * 45BDE
 
 * refs (3): 45816 4592C 46258
-OBJ_45BE8:
+* #n -> : skip n objects of the runstream (0 skips none). 3D-plot key handlers use it to pick the code for a key from the #n before them
+#SKIPOBS:
         CON(5)  (*)+5                            * 45BE8  primitive code object
         ASSEMBLE
         A=B     A                                * 45BED
@@ -1034,12 +1067,12 @@ OBJ_45BE8:
         GOSBVL  POP#                             * 45BF5
         B=A     A                                * 45BFC
         B=B-1   A                                * 45BFE
-        GOC     OBJ_45BE8.L2                     * 45C00
-OBJ_45BE8.loop1:
+        GOC     #SKIPOBS.L2                      * 45C00
+#SKIPOBS.loop1:
         GOSBVL  SKIPOB                           * 45C03
         B=B-1   A                                * 45C0A
-        GONC    OBJ_45BE8.loop1                  * 45C0C
-OBJ_45BE8.L2:
+        GONC    #SKIPOBS.loop1                   * 45C0C
+#SKIPOBS.L2:
         A=R0.F  A                                * 45C0F
         B=A     A                                * 45C15
         A=DAT0  A                                * 45C17
@@ -1050,17 +1083,19 @@ OBJ_45BE8.L2:
 
 * refs (8): 8E374 8E6F9 8EEF6 8F044 8F14F 8F18B ...
 RowElt#:
-        ROMPTR 0EA 038                           * 45C2F
+        XLIB RowElt#~1                           * 45C2F
 
 * refs (1): C05F8
-OBJ_45C3A:
+* -> : SLOPEFIELD: element 13 of the plot info, run on entering PICTURE
+SlopePictStart:
         :: OBJ_73230                             * 45C3A
-          :: OBJ_57171 OBJ_44F9B ; ;             * 45C44
+          :: Pict3DPrep SlopePictStart~1 ; ;     * 45C44
 
 * refs (1): C0504
-OBJ_45C5D:
+* -> : YSLICE: element 13 of the plot info, run on entering PICTURE
+YSlicePictStart:
         :: OBJ_73230                             * 45C5D
-          :: OBJ_57171 OBJ_458E9 ; ;             * 45C67
+          :: Pict3DPrep YSlicePictStart~1 ; ;    * 45C67
 
 * refs (1): C0509
 OBJ_45C80:
@@ -1068,7 +1103,7 @@ OBJ_45C80:
 
 * refs (1): 45CB8
 OBJ_45C8A:
-          :: OBJ_45995 ROMPTR 0F1 015 ; ABND ;   * 45C8A
+          :: OBJ_45995 XLIB YSliceRestore ; ABND ; * 45C8A
 
 * refs (1): C050E
 OBJ_45CAE:
@@ -1081,31 +1116,34 @@ OBJ_45CAE:
 
 * refs (7): 8DD84 8DDAE 8E71C 8EEE2 8F02B 8F140 ...
 GetElt:
-        ROMPTR 0EA 03D                           * 45D1F
+        XLIB ~RowElt#;PULLEL;SWAPDROP            * 45D1F
 
 * refs (1): 4612A
-OBJ_45D2A:
+* % #width -> $: format a number in at most #width characters, using SCI with as many digits as fit if the plain form is too long
+%>$Fit:
         :: OVER %0= case2drop tok0               * 45D2A
           2DUPSWAP %0< IT #1-                    * 45D43
-          3PICK %EXPONENT DUPUNROT %ABSCOERCE DUPUNROT OVER#< case OBJ_45DF2 * 45D57
+          3PICK %EXPONENT DUPUNROT %ABSCOERCE DUPUNROT OVER#< case %>$Fit~1 * 45D57
           #3- ROT %0< IT #1-                     * 45D7F
-          SWAP OBJ_45E33 #- SWAPDROP BINT12 OVER#< IT DROPZERO * 45D98
+          SWAP #Digits #- SWAPDROP BINT12 OVER#< IT DROPZERO * 45D98
           savefmt1 ERRSET                        * 45DC0
           :: DOSCI ->StkStr22! ; ERRTRAP ederr rstfmt1 ; * 45DCA
 
 * refs (1): 45D7A
-OBJ_45DF2:
+%>$Fit~1:
         :: 3DROP SWAP EDITDECOMP$ DUPLEN$ 3PICK #> NOTcase SWAPDROP * 45DF2
           BINT1 ROT SUB$ ;                       * 45E1F
 
 * refs (1): 45D9D
-OBJ_45E33:
+* # -> #: decimal digits of a number below 1000: 1, 2 or 3
+#Digits:
         :: BINT10 OVER#> casedrop BINT1          * 45E33
           BINT100 OVER#> casedrop BINT2          * 45E4C
           DROP BINT3 ;                           * 45E60
 
 * refs (1): 46134
-OBJ_45E6F:
+* $ #width -> $': pad with spaces on the left to #width
+PadLeft$:
         :: OVER LEN$ 2DUP#> NOTcase2DROP #-      * 45E6F
           14SPACES$ BINT1 ROT SUB$ SWAP !!append$ ; * 45E8D
 
@@ -1115,20 +1153,22 @@ DECOMP&$:
         :: EDITDECOMP$ &$ ;                      * 45EB0
 
 * refs (2): B6349 C6A04
-OBJ_45EC4:
+* -> : make sure the plot parameters exist (rebuild them as FUNCTION if they are bad) and reset PICT to the default size
+ResetPICT:
         :: AtUserStack ERRSET GETPTYPE ERRTRAP   * 45EC4
           :: ERRORCLR DropSysObs 'IDFUNCTION ; MAKEPVARS DROP PUTPTYPE * 45EDD
           ZEROZERO MAKEPICT# ;                   * 45F05
 
 * refs (1): 3C491
-OBJ_45F14:
+* -> : PLOT menu review: Indep, Depnd, Xrng, Yrng and Res on rows 3 to 7
+ReviewPlot:
         :: Chk&BreakPPAR $ "Indep: " 6ROLL DECOMP&$ DISPROW3 $ "Depnd: " * 45F14
           SWAP DECOMP&$ DISPROW4 2DROP 3UNROLL DUPTYPECMP? NOT?INVPPAR C%>% * 45F5D
           ROT DUPTYPECMP? NOT?INVPPAR C%>% 4ROLLROT * 45F85
 
 _Xrng:_:
-          $ "Xrng:" OBJ_4A834 DISPROW5           * 45F9E
+          $ "Xrng:" Range$ DISPROW5              * 45F9E
 
 _Yrng:_:
-          $ "Yrng:" OBJ_4A834 DISPROW6 $ "Res: " SWAP DECOMP&$ DISPROW7 * 45FBC
+          $ "Yrng:" Range$ DISPROW6 $ "Res: " SWAP DECOMP&$ DISPROW7 * 45FBC
           SetDA2OKTemp ;                         * 45FFD

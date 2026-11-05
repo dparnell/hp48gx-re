@@ -1,12 +1,14 @@
-* HP 48GX ROM revision R, #F3F3C-#F6FB7: Library part 0E2
+* HP 48GX ROM revision R, #F3F3C-#F6FB7: Equation Library: equations of Waves, shared variable lists, the names of all variables, first pictures
 * Addresses in the right-hand comments are those of the original ROM.
+* Most referenced: EqVarsSolid EqVarsSlope EqVarsMoment EqVarsDeflect EqVarNames EqSubWaves EqPicVoltageDivider EqPicSimpleBeam EqPicSeriesAndParallelR EqPicSeriesAndParallelL EqPicSeriesAndParallelC EqPicRLTransient
 * Follows on from the previous file (at #F3F3C in the original ROM).
         RPL
 
 * ROMPTR 0E2 024
 * refs (1): E3857
-ROMP_0E2_024:
-        { ROMPTR 0E2 012 # 3                     * F3F3C
+* The subject Waves: its text, the number of equation sets and one list for each set of the equations, the variables and the picture.
+EqSubWaves:
+        { XLIB EqTextWaves # 3                   * F3F3C
           {                                      * F3F56
             {                                    * F3F5B
               { BINT3 BINT4                      * F3F60
@@ -14,14 +16,14 @@ ROMP_0E2_024:
                   EQ$ "ω=2*π*f" }                * F3FC6
                 { CHR_D CHR_D EQ$ "k=CONST(twoπ)/λ" EQ$ "ω=CONST(twoπ)*f" } } * F3FE1
               { $ "ë/.m\7F\0E:\0Dc" # 4 # 9 $ "\18\15\160\18\18\17\18M" } * F402C  variables ym ω f k λ x t y v
-              ROMPTR 0E2 02A }                   * F4082
+              XLIB EqNoPic }                     * F4082
             {                                    * F4092
               { BINT3 BINT4                      * F4097
                 { EQ$ "s=sm*COS(k*x-ω*t)" EQ$ "v=λ*f" EQ$ "k=(2*π)/λ" * F40A6
                   EQ$ "ω=2*π*f" }                * F40FD
                 { CHR_D CHR_D EQ$ "k=CONST(twoπ)/λ" EQ$ "ω=CONST(twoπ)*f" } } * F4118
               { $ "í/.m\7F\0E:ìc" # D # 9 $ "\18\15\160\02\18\17\18\09" } * F4163  variables sm ω f k λ x t s v
-              ROMPTR 0E2 02A }                   * F41B9
+              XLIB EqNoPic }                     * F41B9
             {                                    * F41C9
               { BINT3 BINT4                      * F41CE
                 { EQ$ "v=√(B/ρ)" EQ$ "I=1/2*ρ*v*ω^2*sm^2" * F41DD
@@ -31,35 +33,40 @@ ROMP_0E2_024:
                   EQ$ "ß=10*LOG(UBASE(I/CONST(I0)))" EQ$ "ω=CONST(twoπ)*f" } * F42B8
               }                                  * F4301
               { $ "í/.↑\1Eîc\04©" # 16 # 8 $ "\18\15\16\033\0912" } * F4306  variables sm ω f B ρ - v I ß
-              ROMPTR 0E2 02A }                   * F435A
+              XLIB EqNoPic }                     * F435A
           }                                      * F436A
         }                                        * F436F
 
 * ROMPTR 0E2 025
 * refs (1): E3857
-ROMP_0E2_025:
+* Variable list for the deflection sets: a string of numbers into EqVarNames, with 238 variable names, the first description in the subject's text table, the number of variables, and a string of unit numbers.
+EqVarsDeflect:
         { $ "\08\05\04îîî\11\0A\0B\10\0Fî\0E\0D" # 1D # A * F4374  variables L E I - - - a P c M w - x y
           $ "\02\03\04\02\05\02\06\07\02\18" }   * F43B3
 
 * ROMPTR 0E2 026
 * refs (1): E3857
-ROMP_0E2_026:
+* As EqVarsDeflect, for the slope sets.
+EqVarsSlope:
         { $ "\08\05\04îîî\11\0A\0B\10\0Fî\0E\12" # 27 # A * F43D6  variables L E I - - - a P c M w - x θ
           $ "\02\03\04\02\05\02\06\07\02)" }     * F4415
 
 * ROMPTR 0E2 027
 * refs (1): E3857
-ROMP_0E2_027:
+* As EqVarsDeflect, for the moment and shear sets.
+EqVarsMoment:
         { $ "\08\11\0A\0B\10\0F\0E\13" # 31 # 8 $ "\02\02\05\02\06\07\02\06" } * F4438  variables L a P c M w x Mx
 
 * ROMPTR 0E2 028
 * refs (1): E3857
-ROMP_0E2_028:
+* As EqVarsDeflect, shared by the solid geometry sets.
+EqVarsSolid:
         { $ "\06B\14\03îîd¯®?§" # 5 # 9 $ "\18\18#\11\08$$\18$" } * F448A  variables r h V A - - m Ixx Izz d Id
 
 * ROMPTR 0E2 029
 * refs (1): E3857
-ROMP_0E2_029:
+* Array of the names of all 238 variables of the Equation Library. A variable list holds one byte number for each.
+EqVarNames:
         CON(5)  DOARRY                           * F44E4  array 238
         LENGTH                                   * F44E9  length, to #F4AA9
         CON(5)  DOIDNT                           * F44EE  element type
@@ -307,96 +314,110 @@ ROMP_0E2_029:
 
 * ROMPTR 0E2 02A
 * refs (1): E3857
-~NULL{}:
+* Marks an equation set with no picture.
+EqNoPic:
         :: NULL{} ;                              * F4AA9
 
 * ROMPTR 0E2 02B
 * refs (1): E3857
-ROMP_0E2_02B:
+* { #x #y grob }: position and packed picture for the cantilever beam sets.
+EqPicCantilever:
         { BINT32 BINT3                           * F4AB8
           PCGROB  "images/F4AC7-packed.png"      * F4AC7  72 x 49, packed
         }                                        * F4DCA
 
 * ROMPTR 0E2 02C
 * refs (1): E3857
-ROMP_0E2_02C:
+* { #x #y grob }: position and packed picture for the simple beam sets.
+EqPicSimpleBeam:
         { BINT32 BINT3                           * F4DCF
           PCGROB  "images/F4DDE-packed.png"      * F4DDE  72 x 49, packed
         }                                        * F50C8
 
 * ROMPTR 0E2 02D
 * refs (1): E3857
-ROMP_0E2_02D:
+* { #x #y grob }: position and packed picture for the set Elastic Buckling.
+EqPicElasticBuckling:
         { BINT8 BINT2                            * F50CD
           PCGROB  "images/F50DC-packed.png"      * F50DC  104 x 52, packed
         }                                        * F559E
 
 * ROMPTR 0E2 02E
 * refs (1): E3857
-ROMP_0E2_02E:
+* { #x #y grob }: position and packed picture for the set Eccentric Columns.
+EqPicEccentricColumns:
         { BINT48 BINT5                           * F55A3
           PCGROB  "images/F55B2-packed.png"      * F55B2  32 x 49, packed
         }                                        * F5745
 
 * ROMPTR 0E2 02F
 * refs (1): E3857
-ROMP_0E2_02F:
+* { #x #y grob }: position and packed picture for the set Voltage Divider.
+EqPicVoltageDivider:
         { BINT32 BINT8                           * F574A
           PCGROB  "images/F5759-packed.png"      * F5759  64 x 38, packed
         }                                        * F5931
 
 * ROMPTR 0E2 030
 * refs (1): E3857
-ROMP_0E2_030:
+* { #x #y grob }: position and packed picture for the set Current Divider.
+EqPicCurrentDivider:
         { BINT32 BINT9                           * F5936
           PCGROB  "images/F5945-packed.png"      * F5945  72 x 37, packed
         }                                        * F5B6E
 
 * ROMPTR 0E2 031
 * refs (1): E3857
-ROMP_0E2_031:
+* { #x #y grob }: position and packed picture for the set Series and Parallel R.
+EqPicSeriesAndParallelR:
         { BINT8 BINT5                            * F5B73
           PCGROB  "images/F5B82-packed.png"      * F5B82  120 x 45, packed
         }                                        * F5EED
 
 * ROMPTR 0E2 032
 * refs (1): E3857
-ROMP_0E2_032:
+* { #x #y grob }: position and packed picture for the set Series and Parallel C.
+EqPicSeriesAndParallelC:
         { BINT8 BINT3                            * F5EF2
           PCGROB  "images/F5F01-packed.png"      * F5F01  120 x 49, packed
         }                                        * F628B
 
 * ROMPTR 0E2 033
 * refs (1): E3857
-ROMP_0E2_033:
+* { #x #y grob }: position and packed picture for the set Series and Parallel L.
+EqPicSeriesAndParallelL:
         { BINT8 BINT4                            * F6290
           PCGROB  "images/F629F-packed.png"      * F629F  120 x 45, packed
         }                                        * F65F9
 
 * ROMPTR 0E2 034
 * refs (1): E3857
-ROMP_0E2_034:
+* { #x #y grob }: position and packed picture for the set RLC Current Delay.
+EqPicRLCCurrentDelay:
         { BINT16 BINT10                          * F65FE
           PCGROB  "images/F660D-packed.png"      * F660D  104 x 36, packed
         }                                        * F6916
 
 * ROMPTR 0E2 035
 * refs (1): E3857
-ROMP_0E2_035:
+* { #x #y grob }: position and packed picture for the set RC Transient.
+EqPicRCTransient:
         { BINT8 BINT8                            * F691B
           PCGROB  "images/F692A-packed.png"      * F692A  96 x 38, packed
         }                                        * F6B90
 
 * ROMPTR 0E2 036
 * refs (1): E3857
-ROMP_0E2_036:
+* { #x #y grob }: position and packed picture for the set RL Transient.
+EqPicRLTransient:
         { BINT16 BINT8                           * F6B95
           PCGROB  "images/F6BA4-packed.png"      * F6BA4  88 x 38, packed
         }                                        * F6DAE
 
 * ROMPTR 0E2 037
 * refs (1): E3857
-ROMP_0E2_037:
+* { #x #y grob }: position and packed picture for the set Plate Capacitor.
+EqPicPlateCapacitor:
         { BINT24 BINT6                           * F6DB3
           PCGROB  "images/F6DC2-packed.png"      * F6DC2  72 x 44, packed
         }                                        * F6FB3

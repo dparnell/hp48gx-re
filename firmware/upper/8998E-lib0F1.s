@@ -1,6 +1,6 @@
-* HP 48GX ROM revision R, #8998E-#8C9F5: Library part 0F1
+* HP 48GX ROM revision R, #8998E-#8C9F5: Library 0F1: drawing of WIREFRAME, GRIDMAP, PARSURFACE, YSLICE, SLOPEFIELD and PCONTOUR plots, VPAR reading, trace input and output tags, then the FUNCTION and CONIC plot types
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: FUNCTION CONIC
+* Most referenced: PlotEvalEQ YSliceShowY YSliceSetup YSliceRestore YSliceNoFrames YSliceFrames YSliceDraw WireSetup WirePt WireNext WireInit WireDraw
 * Follows on from the previous file (at #8998E in the original ROM).
         ENDLENGTH                                * 8998E
         ENDLENGTH                                * 8998E
@@ -9,6 +9,7 @@
         LENGTH                                   * 89993  length, to #8D27C
         CON(2)  0                                * 89998  title length
 
+* Library 0F1: Plot types: the FUNCTION..BAR commands with their information lists, the drawing code of the 3D and field plots (WIREFRAME, PARSURFACE, GRIDMAP, YSLICE, SLOPEFIELD, PCONTOUR), and VPAR handling
 LIB0F1:
         CON(3)  #0F1                             * 8999A  library number
         REL(5)  LIB0F1.hash                      * 8999D  hash table
@@ -133,57 +134,57 @@ H0F1.PARAMETRIC.L1:
 LIB0F1.link:
         CON(5)  DOHSTR                           * 89BC7  link table of library 0F1
         LENGTH                                   * 89BCC  length, to #89D1B
-        REL(5)  ROMP_0F1_000                     * 89BD1  000 
-        REL(5)  ROMP_0F1_001                     * 89BD6  001 
-        REL(5)  ROMP_0F1_002                     * 89BDB  002 
-        REL(5)  ROMP_0F1_003                     * 89BE0  003 
-        REL(5)  ROMP_0F1_004                     * 89BE5  004 
-        REL(5)  ROMP_0F1_005                     * 89BEA  005 
-        REL(5)  ROMP_0F1_006                     * 89BEF  006 
-        REL(5)  ROMP_0F1_007                     * 89BF4  007 
-        REL(5)  ROMP_0F1_008                     * 89BF9  008 
-        REL(5)  ROMP_0F1_009                     * 89BFE  009 
-        REL(5)  ROMP_0F1_00A                     * 89C03  00A 
-        REL(5)  ROMP_0F1_00B                     * 89C08  00B 
-        REL(5)  ROMP_0F1_00C                     * 89C0D  00C 
-        REL(5)  ROMP_0F1_00D                     * 89C12  00D 
-        REL(5)  ROMP_0F1_00E                     * 89C17  00E 
-        REL(5)  ROMP_0F1_00F                     * 89C1C  00F 
-        REL(5)  ROMP_0F1_010                     * 89C21  010 
-        REL(5)  ROMP_0F1_011                     * 89C26  011 
-        REL(5)  ROMP_0F1_012                     * 89C2B  012 
-        REL(5)  ROMP_0F1_013                     * 89C30  013 
-        REL(5)  ROMP_0F1_014                     * 89C35  014 
-        REL(5)  ROMP_0F1_015                     * 89C3A  015 
-        REL(5)  ROMP_0F1_016                     * 89C3F  016 
-        REL(5)  ROMP_0F1_017                     * 89C44  017 
-        REL(5)  ROMP_0F1_018                     * 89C49  018 
-        REL(5)  ROMP_0F1_019                     * 89C4E  019 
-        REL(5)  ROMP_0F1_01A                     * 89C53  01A 
-        REL(5)  ROMP_0F1_01B                     * 89C58  01B 
-        REL(5)  ROMP_0F1_01C                     * 89C5D  01C 
-        REL(5)  ROMP_0F1_01D                     * 89C62  01D 
-        REL(5)  ROMP_0F1_01E                     * 89C67  01E 
-        REL(5)  ROMP_0F1_01F                     * 89C6C  01F 
-        REL(5)  ROMP_0F1_020                     * 89C71  020 
-        REL(5)  ROMP_0F1_021                     * 89C76  021 
-        REL(5)  ROMP_0F1_022                     * 89C7B  022 
-        REL(5)  ROMP_0F1_023                     * 89C80  023 
-        REL(5)  ROMP_0F1_024                     * 89C85  024 
-        REL(5)  ROMP_0F1_025                     * 89C8A  025 
-        REL(5)  ROMP_0F1_026                     * 89C8F  026 
-        REL(5)  ROMP_0F1_027                     * 89C94  027 
-        REL(5)  ROMP_0F1_028                     * 89C99  028 
-        REL(5)  ROMP_0F1_029                     * 89C9E  029 
+        REL(5)  VPARProject                      * 89BD1  000 
+        REL(5)  VPARBounds                       * 89BD6  001 
+        REL(5)  WireDraw                         * 89BDB  002 
+        REL(5)  Plot3DLams                       * 89BE0  003 
+        REL(5)  WireSetup                        * 89BE5  004 
+        REL(5)  WireInit                         * 89BEA  005 
+        REL(5)  Plot3DBegin                      * 89BEF  006 
+        REL(5)  Plot3DRestore                    * 89BF4  007 
+        REL(5)  WirePt                           * 89BF9  008 
+        REL(5)  WireNext                         * 89BFE  009 
+        REL(5)  RclVPAR                          * 89C03  00A 
+        REL(5)  Plot3DVars                       * 89C08  00B 
+        REL(5)  GridDraw                         * 89C0D  00C 
+        REL(5)  GridSurfDraw                     * 89C12  00D 
+        REL(5)  GridSurfSetup                    * 89C17  00E 
+        REL(5)  GridRestore                      * 89C1C  00F 
+        REL(5)  ParSurfDraw                      * 89C21  010 
+        REL(5)  ParSurfEq                        * 89C26  011 
+        REL(5)  ParSurfRestore                   * 89C2B  012 
+        REL(5)  YSliceDraw                       * 89C30  013 
+        REL(5)  YSliceSetup                      * 89C35  014 
+        REL(5)  YSliceRestore                    * 89C3A  015 
+        REL(5)  YSliceFrames                     * 89C3F  016 
+        REL(5)  YSliceNoFrames                   * 89C44  017 
+        REL(5)  YSliceShowY                      * 89C49  018 
+        REL(5)  SlopeDraw                        * 89C4E  019 
+        REL(5)  SlopeVPAR                        * 89C53  01A 
+        REL(5)  SlopeFieldDraw                   * 89C58  01B 
+        REL(5)  SlopeSetup                       * 89C5D  01C 
+        REL(5)  SlopeRun                         * 89C62  01D 
+        REL(5)  SlopePurge                       * 89C67  01E 
+        REL(5)  SlopeRestore                     * 89C6C  01F 
+        REL(5)  PContourDraw                     * 89C71  020 
+        REL(5)  PContourEq                       * 89C76  021 
+        REL(5)  PContourQuote                    * 89C7B  022 
+        REL(5)  SlopeSeg                         * 89C80  023 
+        REL(5)  LamN@                            * 89C85  024 
+        REL(5)  LamN!                            * 89C8A  025 
+        REL(5)  Plot3DMenu                       * 89C8F  026 
+        REL(5)  PlotEvalChk                      * 89C94  027 
+        REL(5)  PlotIOShow                       * 89C99  028 
+        REL(5)  PlotTagOutput                    * 89C9E  029 
         REL(5)  ROMP_0F1_02A                     * 89CA3  02A 
-        REL(5)  ROMP_0F1_02B                     * 89CA8  02B 
-        REL(5)  ROMP_0F1_02C                     * 89CAD  02C 
-        REL(5)  ROMP_0F1_030                     * 89CB2  02D 
-        REL(5)  ROMP_0F1_030                     * 89CB7  02E 
-        REL(5)  ROMP_0F1_030                     * 89CBC  02F 
-        REL(5)  ROMP_0F1_030                     * 89CC1  030 
-        REL(5)  ROMP_0F1_031                     * 89CC6  031 
-        REL(5)  ROMP_0F1_032                     * 89CCB  032 
+        REL(5)  PlotTagInput                     * 89CA8  02B 
+        REL(5)  PlotIOStack                      * 89CAD  02C 
+        REL(5)  PlotEvalEQ                       * 89CB2  02D 
+        REL(5)  PlotEvalEQ                       * 89CB7  02E 
+        REL(5)  PlotEvalEQ                       * 89CBC  02F 
+        REL(5)  PlotEvalEQ                       * 89CC1  030 
+        REL(5)  PlotEvalSurf                     * 89CC6  031 
+        REL(5)  PlotEvalOldEq                    * 89CCB  032 
         REL(5)  FUNCTION                         * 89CD0  033 FUNCTION
         REL(5)  CONIC                            * 89CD5  034 CONIC
         REL(5)  POLAR_8C9FD                      * 89CDA  035 POLAR
@@ -195,16 +196,17 @@ LIB0F1.link:
         REL(5)  PTYPE>PINFO~1                    * 89CF8  03B 
         REL(5)  ChkPut('PPAR',li,s)~1            * 89CFD  03C 
         REL(5)  CHECKPVARS~3                     * 89D02  03D 
-        REL(5)  ROMP_0F1_03E                     * 89D07  03E 
-        REL(5)  ROMP_0F1_03F                     * 89D0C  03F 
-        REL(5)  ROMP_0F1_040                     * 89D11  040 
+        REL(5)  PlotEnvOK                        * 89D07  03E 
+        REL(5)  PlotEnvAbort                     * 89D0C  03F 
+        REL(5)  PlotEnvExit                      * 89D11  040 
         REL(5)  EXPR>~1~romptr~1                 * 89D16  041 
         ENDLENGTH                                * 89D1B
         RPL
 
 * ROMPTR 0F1 000
 * refs (1): 8999A
-ROMP_0F1_000:
+* %min %max %x %y -> %min' %max': projects a point on the view plane through the eye (Ue, Ye) and widens the running range by it. On the eye's own plane it gives +-MAXR
+VPARProject:
         :: SWAP LAM 'Ue %- SWAP LAM 'Ye %- DUP %0= ITE * 89D1B
           :: DROP %SGN %MAXREAL %* ;             * 89D5D
           :: %/ LAM 'Ue %+ ;                     * 89D7B
@@ -212,23 +214,27 @@ ROMP_0F1_000:
 
 * ROMPTR 0F1 001
 * refs (1): 8999A
-ROMP_0F1_001:
-        :: ROMPTR 0F1 00A BINT15 NDUP 5PICK 5PICK ' NULLLAM BINT15 NDUPN ' * 89DC4
+* -> VPAR values, xmin xmax ymin ymax: reads VPAR and projects the view volume's corners to find the plot range
+VPARBounds:
+        :: XLIB RclVPAR BINT15 NDUP 5PICK 5PICK ' NULLLAM BINT15 NDUPN ' * 89DC4
           LAM 'Ue ' LAM 'Ye ROT #2+ {}N BIND %MAXREAL DUP %CHS 17GETLAM * 89E01
-          15GETLAM ROMPTR 0F1 000 17GETLAM 14GETLAM ROMPTR 0F1 000 16GETLAM * 89E48
-          15GETLAM ROMPTR 0F1 000 16GETLAM 14GETLAM ROMPTR 0F1 000 5GETLAM * 89E72
-          2PUTLAM %MAXREAL DUP %CHS 13GETLAM 15GETLAM ROMPTR 0F1 000 * 89E9C
-          13GETLAM 14GETLAM ROMPTR 0F1 000 12GETLAM 15GETLAM ROMPTR 0F1 000 * 89EC5
-          12GETLAM 14GETLAM ROMPTR 0F1 000 ABND ; * 89EEF
+          15GETLAM XLIB VPARProject 17GETLAM 14GETLAM XLIB VPARProject * 89E48
+          16GETLAM 15GETLAM XLIB VPARProject 16GETLAM 14GETLAM * 89E6D
+          XLIB VPARProject 5GETLAM 2PUTLAM %MAXREAL DUP %CHS 13GETLAM * 89E8C
+          15GETLAM XLIB VPARProject 13GETLAM 14GETLAM XLIB VPARProject * 89EB5
+          12GETLAM 15GETLAM XLIB VPARProject 12GETLAM 14GETLAM * 89EDA
+          XLIB VPARProject ABND ;                * 89EF9
 
 * ROMPTR 0F1 002
 * refs (1): 8999A
-ROMP_0F1_002:
-        :: ROMPTR 0F1 001 ROMPTR 0F1 00B         * 89F0E
+* Draws a WIREFRAME plot: the entry named in its plot-type list
+WireDraw:
+        :: XLIB VPARBounds XLIB Plot3DVars       * 89F0E
 
 * ROMPTR 0F1 003
 * refs (1): 8999A
-ROMP_0F1_003:
+* The local names bound for a VPAR-based plot: the 15 VPAR values, the 4 ranges, and the saved EQ, variables and PPAR
+Plot3DLams:
           { LAM 'Xleft LAM 'Xright LAM 'Ynear LAM 'Yfar LAM 'Zlow LAM 'Zhigh * 89F29
             LAM 'XXleft LAM 'XXright LAM 'YYlow LAM 'YYhigh LAM 'Xe LAM 'Ye * 89F9E
             LAM 'Ze LAM 'Nx LAM 'Ny LAM 'xmin LAM 'xmax LAM 'ymin LAM 'ymax * 8A00C
@@ -239,7 +245,8 @@ ROMP_0F1_003:
 
 * ROMPTR 0F1 004
 * refs (1): 8999A
-ROMP_0F1_004:
+* -> : sets up a WIREFRAME as a parametric plot: PTYPE PARAMETRIC with variable 'XV, and EQ replaced by the perspective projection of the point as a complex number
+WireSetup:
             :: 'IDPARAMETER PUTPTYPE LAM 'xmin LAM 'xmax xrng(2r) LAM 'ymin * 8A103
               LAM 'ymax yrng(2r) ' ID 'XV %0_2A2B4 LAM 'Nx %1- BINT3 {}N * 8A14A
               PUTINDEPLIST LAM 'Xright LAM 'Xleft %- LAM 'Nx %1- %/ ' ID 'XV * 8A193
@@ -249,28 +256,30 @@ ROMP_0F1_004:
               top& LAM 'Ze                       * 8A2A8
               { x- LAM 'u x/ x+ } INNERCOMP 6PICK 3UNROLL #2+ top& * 8A2BA
               PTR addt2: C%i x* Cr x+ DUP DOSTOE ; * 8A2F7
-            SINNER RESOROMP ROMPTR 0F1 008 SWAP#1+ SYMBN RESOROMP * 8A31F
-            ROMPTR 0F1 009 ' PlotEval BINT2 ::N  * 8A343
+            SINNER RESOROMP XLIB WirePt SWAP#1+ SYMBN RESOROMP XLIB WireNext * 8A31F
+            ' PlotEval BINT2 ::N                 * 8A34E
 
 * ROMPTR 0F1 005
 * refs (1): 8999A
-ROMP_0F1_005:
+* Binds the WIREFRAME line state: the y step, the array of the previous line's points (csbar) and its index
+WireInit:
             :: %1 res(r) LAM 'Yfar LAM 'dependvar CREATE LAM 'Yfar * 8A362
               LAM 'Ynear OVER %- LAM 'Ny %1- %/ SWAP LAM 'Ye %- LAM 'Nx * 8A3B3
               COERCE DUP BINT1 {}N C%0 MAKEARRY BINT1 TRUE BINT0 * 8A40B
               { LAM 'Ystp LAM 'u LAM 'cssz LAM 'csbar LAM 'csindex * 8A438
                 LAM 'fscsbar LAM 'oldpt }        * 8A494
               BIND ;                             * 8A4C3
-            ' OBJ_4C3E6 %1                       * 8A4CD
+            ' PlotParamLine %1                   * 8A4CD
 
 * ROMPTR 0F1 006
 * refs (1): 8999A
-ROMP_0F1_006:
+* %res ... -> : common start of drawing: shows PICT, runs PLOTPREP and keeps the drawing routines in the plot environment's locals
+Plot3DBegin:
             :: GDISPCENTER TURNMENUOFF PLOTPREP 18GETLAM #4- 18PUTLAM 3DROP * 8A4DC
               4PUTLAM 3PUTLAM ' 15GETLAM ' GETXPOS ' 1PUTLAM ' ' 6ROLL 6ROLL * 8A504
               BINT1 3GETLAM BINT8 ::N 2PUTLAM ;  * 8A540
-            OBJ_4C314 ERRSET                     * 8A55E
-            :: LAM 'Ny COERCE BINT0 DO BINT1 OBJ_4A96E DROP OBJ_4C12A * 8A568
+            MakeIndep ERRSET                     * 8A55E
+            :: LAM 'Ny COERCE BINT0 DO BINT1 LastPtArrays DROP PlotLoop * 8A568
               15GETLAM 17GETLAM NEWINDEP LAM 'Ystp LAM 'dependvar * 8A59D
               'EvalNoCK:_sup xSTO+ LAM 'Ystp ' LAM 'u 'EvalNoCK:_sup xSTO+ * 8A5D8
               FALSE ' LAM 'fscsbar STO LOOP ;    * 8A60D
@@ -282,21 +291,23 @@ ROMP_0F1_006:
 
 * ROMPTR 0F1 007
 * refs (1): 8999A
-ROMP_0F1_007:
+* Purges the temporary variables and restores EQ and PPAR after a plot
+Plot3DRestore:
           :: LAM 'indepvar ?PURGE_HERE LAM 'dependvar ?PURGE_HERE LAM 'oldeq * 8A692
             DOSTOE LAM 'PPAR ' ID PPAR STOAPPLDATA ; * 8A6E8
           ABND ;                                 * 8A71C
 
 * ROMPTR 0F1 008
 * refs (1): 8999A
-ROMP_0F1_008:
+* ob -> C%: a point of the current WIREFRAME line. Stores it in csbar and joins it to the same point of the previous line, except on the first line
+WirePt:
         :: CK1NOLASTWD                           * 8A726
           :: CK&DISPATCH0                        * 8A730
             BINT2 NOP                            * 8A73A  complex
             BINT1                                * 8A744  real
             :: %0_2A2B4 %>C% ;                   * 8A749
             BINT10                               * 8A75D  name|local|algebraic
-            :: RDROP cknumdsptch1 NOP ROMPTR 0F1 008 ; * 8A762
+            :: RDROP cknumdsptch1 NOP XLIB WirePt ; * 8A762
           ;                                      * 8A786
           LAM 'csindex LAM 'fscsbar ?SKIP        * 8A78B
           :: LAM 'oldpt DUP                      * 8A7BE
@@ -308,7 +319,8 @@ ROMP_0F1_008:
 
 * ROMPTR 0F1 009
 * refs (1): 8999A
-ROMP_0F1_009:
+* Advances csindex in csbar, wrapping at the end, and keeps the old point in oldpt; a slot holding the "no point" complex marks a gap
+WireNext:
         :: LAM 'csbar                            * 8A845
           CON(5)  DOCMP                          * 8A85D  DOCMP
           NIBHEX  FFF0000000000000FFF0000000000000 * 8A862  not a canonical number (a zero mantissa with exponent FFF), so written as nibbles
@@ -318,9 +330,10 @@ ROMP_0F1_009:
 
 * ROMPTR 0F1 00A
 * refs (1): 8999A
-ROMP_0F1_00A:
+* -> 15 reals: recalls VPAR, or makes the default one. Checks for a list of 15 reals, orders the five low/high pairs, keeps the eye at least 1 in front of the view volume, and makes Nx and Ny at least 2
+RclVPAR:
         :: ' ID VPAR RclPlotVar? NOTcase         * 8A93C
-          :: ROMPTR 0B5 08E INCOMPDROP ;         * 8A95F
+          :: XLIB VparDefaults INCOMPDROP ;      * 8A95F
           DUPTYPELIST? NOTcase SETTYPEERR        * 8A979
           INNERCOMP BINT15 #= NOTcase SETSIZEERR * 8A988
           BINT15 BINT0 DO BINT15 ROLL DUPTYPEREAL? NOTcase SETTYPEERR * 8A9A1
@@ -333,30 +346,34 @@ ROMP_0F1_00A:
 
 * ROMPTR 0F1 00B
 * refs (1): 8999A
-ROMP_0F1_00B:
+* Checks PPAR and EQ for a 3D plot (Nonexistent EQ otherwise) and gets the independent and dependent variable names, using the equation's variables when they are the same
+Plot3DVars:
         :: CHECKPVARS DUP BINT3 NTHCOMPDROP DUPTYPELIST? ?CARCOMP OVER BINT7 * 8AAB4
           NTHCOMPDROP DUPTYPELIST? ?CARCOMP 'EQ SAFE@_HERE ?SKIP NOEQERR * 8AAE1
           2DUP EQUAL 4PICK 3PICK EQUALOR ?SKIP   * 8AB04
           :: DROP DORCLE ;                       * 8AB22
-          DUPDUP EqList? ?CARCOMP OBJ_49B7D 5UNROLL 5UNROLL ROT %1 4PICK * 8AB36
+          DUPDUP EqList? ?CARCOMP EqRHS 5UNROLL 5UNROLL ROT %1 4PICK * 8AB36
           SAFE@_HERE NOT?SEMI                    * 8AB63
           DUPTYPEEXT? NOTcaseDROP UM>U           * 8AB6D
         ;                                        * 8AB7C
 
 * ROMPTR 0F1 00C
 * refs (1): 8999A
-ROMP_0F1_00C:
+* Draws a GRIDMAP plot
+GridDraw:
         :: FALSE                                 * 8AB81
 
 * ROMPTR 0F1 00D
 * refs (1): 8999A
-ROMP_0F1_00D:
-          :: OBJ_57216 ERRSET                    * 8AB8B
+* flag -> : draws GRIDMAP (FALSE) or PARSURFACE (TRUE), under an error trap that restores the settings
+GridSurfDraw:
+          :: Plot3DBind ERRSET                   * 8AB8B
             ::                                   * 8AB9A
 
 * ROMPTR 0F1 00E
 * refs (1): 8999A
-ROMP_0F1_00E:
+* flag -> : picks the range, then makes one parametric plot of 'TTT that visits every grid point: the expressions built here turn 'TTT into the x and y of the grid
+GridSurfSetup:
               :: ITE                             * 8AB9F
                 :: LAM 'xmin LAM 'xmax LAM 'ymin LAM 'ymax ; * 8ABA9
                 :: LAM 'Xleft LAM 'Xright LAM 'Ynear LAM 'Yfar ; * 8ABF7
@@ -383,12 +400,12 @@ ROMP_0F1_00E:
                 SYMBOL x* xFP x+ x* x+ x* x+ ; 2SINNERtop& top& %.5 LAM 'dy * 8B0E8
                 LAM 'Ny %1- %/ %* SWAP#1+ Cr x- ' LAM 'ymin STO LAM 'nxny * 8B131
                 %1- %1/ ABND DUP res(r) ' ID 'TTT %0_2A2B4 %1 BINT3 {}N * 8B188
-                PUTINDEPLIST DORCLE ' PlotEval ' OBJ_4C3E6 4ROLL * 8B1C9
-                ROMPTR 0F1 006 OBJ_4C314 DORCLE ; * 8B1EC
+                PUTINDEPLIST DORCLE ' PlotEval ' PlotParamLine 4ROLL * 8B1C9
+                XLIB Plot3DBegin MakeIndep DORCLE ; * 8B1EC
               DROP ERRSET                        * 8B206
-              :: BINT1 OBJ_4A96E DROP OBJ_4C12A 15GETLAM 17GETLAM NEWINDEP * 8B210
+              :: BINT1 LastPtArrays DROP PlotLoop 15GETLAM 17GETLAM NEWINDEP * 8B210
                 LAM 'xmin LAM 'indepvar STO LAM 'ymin LAM 'dependvar STO * 8B238
-                ~BINT1;ClrLastPt OBJ_4C12A ;     * 8B298
+                ~BINT1;ClrLastPt PlotLoop ;      * 8B298
               ERRTRAP                            * 8B2A7
               :: ERROR@ #0= ?SEMI                * 8B2AC
                 PurgePlotVars ERRJMP ;           * 8B2C0
@@ -397,7 +414,8 @@ ROMP_0F1_00E:
 
 * ROMPTR 0F1 00F
 * refs (1): 8999A
-ROMP_0F1_00F:
+* Purges the temporary variables and restores EQ and PPAR after GRIDMAP or PARSURFACE
+GridRestore:
             :: LAM 'indepvar ?PURGE_HERE LAM 'dependvar ?PURGE_HERE * 8B2F7
               LAM 'oldeq DOSTOE LAM 'PPAR ' ID PPAR STOAPPLDATA ; * 8B33A
             ABND ;                               * 8B381
@@ -405,13 +423,15 @@ ROMP_0F1_00F:
 
 * ROMPTR 0F1 010
 * refs (1): 8999A
-ROMP_0F1_010:
+* Draws a PARSURFACE plot
+ParSurfDraw:
         ::                                       * 8B390
 
 * ROMPTR 0F1 011
 * refs (1): 8999A
-ROMP_0F1_011:
-          :: ROMPTR 0B5 086 DORCLE DUP TYPELIST? ?SKIP SETTYPEERR * 8B395
+* -> ob: takes EQ as a list of three expressions and makes the complex projection of the surface point onto the view plane
+ParSurfEq:
+          :: XLIB VparEye@ DORCLE DUP TYPELIST? ?SKIP SETTYPEERR * 8B395
             DUP INNERCOMP #3= ?SKIP ARGNUMERR    * 8B3BE
             BINT3 nmetasyms                      * 8B3D7
             { LAM 'xe LAM 'ye LAM 'ze LAM 'eeq LAM 'xp LAM 'yp LAM 'zp } * 8B3E1
@@ -420,35 +440,38 @@ ROMP_0F1_011:
             meta* LAM 'xp SINNER top& LAM 'xe SWAP#1+ meta- LAM 'yp SINNER * 8B4CF
             top& LAM 'ye SWAP#1+ meta- meta/ LAM 'xe SWAP#1+ meta+ Cr x+ ; * 8B514
           ERRSET                                 * 8B55B
-          :: DOSTOE TRUE ROMPTR 0F1 00D ; ERRTRAP ~'R;EVAL;ERRJMP * 8B560
+          :: DOSTOE TRUE XLIB GridSurfDraw ; ERRTRAP ~'R;EVAL;ERRJMP * 8B560
 
 * ROMPTR 0F1 012
 * refs (1): 8999A
-ROMP_0F1_012:
+* Restores EQ after PARSURFACE
+ParSurfRestore:
           :: LAM 'eeq DOSTOE ; ABND ;            * 8B589
 
 * ROMPTR 0F1 013
 * refs (1): 8999A
-ROMP_0F1_013:
-        :: OBJ_57216 ERRSET                      * 8B5B1
+* Draws a YSLICE plot: one FUNCTION plot per y value, keeping each frame
+YSliceDraw:
+        :: Plot3DBind ERRSET                     * 8B5B1
           ::                                     * 8B5C0
 
 * ROMPTR 0F1 014
 * refs (1): 8999A
-ROMP_0F1_014:
+* -> : sets up a slice as a FUNCTION plot and binds the array of frames ('Ystp and the Ny locals after it)
+YSliceSetup:
             :: 'IDFUNCTION PUTPTYPE LAM 'Xleft LAM 'Xright xrng(2r) * 8B5C5
               LAM 'Zlow LAM 'Zhigh yrng(2r) LAM 'indepvar PUTINDEP * 8B601
               LAM 'Xright LAM 'Xleft %- LAM 'Nx %1- %/ res(r) LAM 'EQ DUP * 8B648
               DOSTOE ' PlotEval LAM 'Yfar LAM 'Ynear OVER %- LAM 'Ny %1- %/ * 8B6A3
               SWAP LAM 'dependvar CREATE LAM 'Ny COERCE NULLHXS SWAP NDUPN * 8B6F7
               get1 ' NULLLAM 3PICK NDUPN ' LAM '#ny ' LAM 'Ystp ROT #2+ * 8B73D
-              DOBIND ' PlotFcnPt %0_2A2B4 ROMPTR 0F1 006 GETRES GetRes * 8B78A
-              4PUTLAM OBJ_4C314 DORCLE ;         * 8B7B3
+              DOBIND ' PlotFcnPt %0_2A2B4 XLIB Plot3DBegin GETRES GetRes * 8B78A
+              4PUTLAM MakeIndep DORCLE ;         * 8B7B3
             DROP ERRSET                          * 8B7C7
             :: LAM '#ny #2+ BINT1 ' LAM '#ny STOLAM BINT2 DO DOERASE BINT1 * 8B7D1
-              OBJ_4A96E DROP OBJ_4C12A GBUFF TOTEMPOB INDEX@ ' LAM 'Ystp * 8B81C
-              ROMPTR 0F1 025 INDEX@ ' LAM '#ny STOLAM 15GETLAM 17GETLAM * 8B850
-              NEWINDEP LAM 'Ystp LAM 'dependvar 'EvalNoCK:_sup xSTO+ LOOP ; * 8B883
+              LastPtArrays DROP PlotLoop GBUFF TOTEMPOB INDEX@ ' LAM 'Ystp * 8B81C
+              XLIB LamN! INDEX@ ' LAM '#ny STOLAM 15GETLAM 17GETLAM NEWINDEP * 8B850
+              LAM 'Ystp LAM 'dependvar 'EvalNoCK:_sup xSTO+ LOOP ; * 8B888
             ERRTRAP                              * 8B8C8
             :: ERROR@ BINT2 #< ?SEMI             * 8B8CD
               PurgePlotVars ERRJMP ;             * 8B8E6
@@ -460,81 +483,89 @@ ROMP_0F1_014:
 
 * ROMPTR 0F1 015
 * refs (1): 8999A
-ROMP_0F1_015:
+* Purges the y variable and restores EQ and PPAR after YSLICE
+YSliceRestore:
           :: LAM 'dependvar ?PURGE_HERE LAM 'oldeq DOSTOE LAM 'PPAR ' * 8B98B
             ID PPAR STOAPPLDATA ;                * 8B9DE
-          ABND ROMPTR 0AB 01A ;                  * 8B9F7
+          ABND XLIB AnimateDefault ;             * 8B9F7
 
 * ROMPTR 0F1 016
 * refs (1): 8999A
-ROMP_0F1_016:
-        :: BINT18 PICK DUP dvarlsBIND #0=case ROMPTR 0F1 017 * 8BA0C
-          DEPTH DUP 1GETLAM #< casedrop ROMPTR 0F1 017 * 8BA35
+* Takes the frames left on the stack by an earlier YSLICE back into the locals, when the stack holds them, so that the plot need not be drawn again
+YSliceFrames:
+        :: BINT18 PICK DUP dvarlsBIND #0=case XLIB YSliceNoFrames * 8BA0C
+          DEPTH DUP 1GETLAM #< casedrop XLIB YSliceNoFrames * 8BA35
           1GETLAM #- #1+ DUP 1PUTLAM PICK DUPTYPEREAL? NOTcasedrop * 8BA59
-          ROMPTR 0F1 017                         * 8BA81
+          XLIB YSliceNoFrames                    * 8BA81
           COERCE LAM '#ny #MIN BINT19 PICK #1- #MIN BINT0 #=casedrop * 8BA8C
-          ROMPTR 0F1 017                         * 8BAC3
+          XLIB YSliceNoFrames                    * 8BAC3
           DUP ' LAM '#ny STOLAM TRUE SWAP #2+ BINT2 DO INDEX@ 1GETLAM #+PICK * 8BACE
-          DUPTYPEGROB? ROTAND SWAP INDEX@ ' LAM 'Ystp ROMPTR 0F1 025 LOOP * 8BB14
-          ITE                                    * 8BB4E
+          DUPTYPEGROB? ROTAND SWAP INDEX@ ' LAM 'Ystp XLIB LamN! LOOP ITE * 8BB14
           :: GBUFF 1GETABND LAM '#ny #+ #1+PICK ZEROZERO ChkRepl(2go,2s) * 8BB53
             DROP CROSS_HAIRS ;                   * 8BB85
 
 * ROMPTR 0F1 017
 * refs (1): 8999A
-ROMP_0F1_017:
+* -> : no frames to take back: clears the count
+YSliceNoFrames:
           :: BINT0 ' LAM '#ny STOLAM ABND ;      * 8BB94
         ;                                        * 8BBC1
 
 * ROMPTR 0F1 018
 * refs (1): 8999A
-ROMP_0F1_018:
+* -> : shows the frame for the value of the y variable
+YSliceShowY:
         :: LAM 'dependvar DRPExitAtLOOP NOT?SEMI * 8BBC6
           DUPTYPEREAL? NOTcase DROP              * 8BBF0
           LAM 'Ynear %- LAM 'Ystp %ABS %/ DUP %0< caseDROP COERCE * 8BBFF
           #1+ OVER #3= ITE #1+ #1-               * 8BC46
           LAM '#ny #MIN DUP#0= caseDROP #1+      * 8BC64
-          ' LAM 'Ystp ROMPTR 0F1 024 DROP GBUFF SWAP ZEROZERO * 8BC87
-          ChkRepl(2go,2s) DROP CROSS_HAIRS ;     * 8BCBC
+          ' LAM 'Ystp XLIB LamN@ DROP GBUFF SWAP ZEROZERO ChkRepl(2go,2s) * 8BC87
+          DROP CROSS_HAIRS ;                     * 8BCC1
 
 * ROMPTR 0F1 019
 * refs (1): 8999A
-ROMP_0F1_019:
+* Draws a SLOPEFIELD plot
+SlopeDraw:
         ::                                       * 8BCD0
 
 * ROMPTR 0F1 01A
 * refs (1): 8999A
-ROMP_0F1_01A:
-          :: ROMPTR 0F1 001 BINT4 ZERO_DO BINT19 PICK LOOP yrng(2r) xrng(2r) * 8BCD5
-            ROMPTR 0F1 00B ;                     * 8BD08
+* Reads VPAR for a SLOPEFIELD plot: range from the volume, and the ranges set from it
+SlopeVPAR:
+          :: XLIB VPARBounds BINT4 ZERO_DO BINT19 PICK LOOP yrng(2r) * 8BCD5
+            xrng(2r) XLIB Plot3DVars ;           * 8BD03
 
 * ROMPTR 0F1 01B
 * refs (1): 8999A
-ROMP_0F1_01B:
-          :: ROMPTR 0F1 003 BIND ERRSET          * 8BD18
+* Draws a field of short segments, for SLOPEFIELD and PCONTOUR
+SlopeFieldDraw:
+          :: XLIB Plot3DLams BIND ERRSET         * 8BD18
             ::                                   * 8BD32
 
 * ROMPTR 0F1 01C
 * refs (1): 8999A
-ROMP_0F1_01C:
+* Sets the plot ranges, the variables and the grid steps hstp, vstp and the largest half-segment hofs, vofs (0.4 of a cell)
+SlopeSetup:
               :: LAM 'Xleft LAM 'Xright xrng(2r) LAM 'Ynear LAM 'Yfar * 8BD37
                 yrng(2r) LAM 'indepvar PUTINDEP LAM 'dependvar depnd(gn) * 8BD8D
-                LAM 'EQ DUP DOSTOE ' PlotEval RESOROMP ROMPTR 0F1 023 % 4E-1 * 8BDD0
+                LAM 'EQ DUP DOSTOE ' PlotEval RESOROMP XLIB SlopeSeg % 4E-1 * 8BDD0
                 LAM 'Xright LAM 'Xleft %- LAM 'Nx %/ DUP res(r) OVER OVER %* * 8BE16
                 LAM 'Yfar LAM 'Ynear %- LAM 'Ny %/ 4ROLL OVER %* * 8BE6E
                 { LAM 'hstp LAM 'hofs LAM 'vstp LAM 'vofs } BIND LAM 'hstp * 8BEB8
-                ROMPTR 0F1 006 LAM 'Yfar LAM 'vstp %.5 %* %- LAM 'dependvar * 8BF1C
-                CREATE ;                         * 8BF73
+                XLIB Plot3DBegin LAM 'Yfar LAM 'vstp %.5 %* %- * 8BF1C
+                LAM 'dependvar CREATE ;          * 8BF58
               ERRSET                             * 8BF7D
               ::                                 * 8BF82
 
 * ROMPTR 0F1 01D
 * refs (1): 8999A
-ROMP_0F1_01D:
-                :: 17GETLAM LAM 'hstp %.5 %* %+ 17PUTLAM OBJ_4C314 * 8BF87
+* Evaluates EQ at every grid point, column by column
+SlopeRun:
+                :: 17GETLAM LAM 'hstp %.5 %* %+ 17PUTLAM MakeIndep * 8BF87
                   LAM 'indepvar LAM 'dependvar ' xi ' x* ' x+ BINT5 ::N ; * 8BFBB
                 DROP ERRSET                      * 8C01C
-                :: LAM 'Ny COERCE BINT0 DO OBJ_4C12A 15GETLAM 17GETLAM * 8C026
+                :: LAM 'Ny COERCE BINT0 DO PlotLoop 15GETLAM 17GETLAM * 8C026
                   NEWINDEP LAM 'dependvar LAM 'vstp 'EvalNoCK:_sup xSTO- * 8C056
                   LOOP ;                         * 8C091
                 ERRTRAP                          * 8C09B
@@ -545,25 +576,29 @@ ROMP_0F1_01D:
 
 * ROMPTR 0F1 01E
 * refs (1): 8999A
-ROMP_0F1_01E:
+* Purges the dependent variable after a field plot
+SlopePurge:
               :: LAM 'dependvar ?PURGE_HERE ; ABND ABND ABND ; * 8C0E1
             ERRTRAP ~'R;EVAL;ERRJMP              * 8C11F
 
 * ROMPTR 0F1 01F
 * refs (1): 8999A
-ROMP_0F1_01F:
+* Restores EQ and PPAR after a field plot
+SlopeRestore:
             :: LAM 'oldeq DOSTOE LAM 'PPAR ' ID PPAR STOAPPLDATA ; ABND ; * 8C129
         ;                                        * 8C17F
 
 * ROMPTR 0F1 020
 * refs (1): 8999A
-ROMP_0F1_020:
+* Draws a PCONTOUR plot: a slope field of the curves of constant EQ
+PContourDraw:
         ::                                       * 8C184
 
 * ROMPTR 0F1 021
 * refs (1): 8999A
-ROMP_0F1_021:
-          :: ROMPTR 0F1 001 ROMPTR 0F1 00B       * 8C189
+* Makes the program << DERIV DERIV -> dx dy 'IFTE(dy==0,MAXR,-dx/dy)' >>: the slope of the level curve through a point
+PContourEq:
+          :: XLIB VPARBounds XLIB Plot3DVars     * 8C189
             { x<< DERIV DERIV xALG-> LAM 'dx LAM 'dy * 8C1A4
               SYMBOL LAM 'dy %0_2A2B4 x==        * 8C1D7
                 SYMBOL xMAXR ;                   * 8C1F3
@@ -573,14 +608,16 @@ ROMP_0F1_021:
 
 * ROMPTR 0F1 022
 * refs (1): 8999A
-ROMP_0F1_022:
+* ob -> a secondary that gives 'ob' in quotes, for PContourEq
+PContourQuote:
             :: ' x' SWAP ' xENDTIC BINT3 ::N ; BINT10 UNROLL BINT15 PICK * 8C276
-            ROMPTR 0F1 022 BINT8 UNROLL #4+ ::N BINT5 UNROLL ; * 8C2B7
-          ROMPTR 0F1 01B ;                       * 8C2E5
+            XLIB PContourQuote BINT8 UNROLL #4+ ::N BINT5 UNROLL ; * 8C2B7
+          XLIB SlopeFieldDraw ;                  * 8C2E5
 
 * ROMPTR 0F1 023
 * refs (1): 8999A
-ROMP_0F1_023:
+* % -> : draws one segment of the given slope, centred on the current point and clipped to hofs and vofs
+SlopeSeg:
         :: DROP DUPTYPEREAL? NOTcase DROP        * 8C2F5
           DUP LAM 'hofs %* %ABS LAM 'vofs %> ITE * 8C30E
           :: LAM 'vofs DUP ROT %/ SWAP ;         * 8C349
@@ -590,7 +627,8 @@ ROMP_0F1_023:
 
 * ROMPTR 0F1 024
 * refs (1): 8999A
-ROMP_0F1_024:
+* #n lam -> ob TRUE | FALSE: recalls the local bound n places after lam, without searching by name
+LamN@:
         CODE                                     * 8C40D  148 nibbles
           GOSBVL  SAVPTR                         * 8C417
           C=DAT1  A                              * 8C41E
@@ -605,14 +643,14 @@ ROMP_0F1_024:
           CD1EX                                  * 8C43C
           R0=C.F  A                              * 8C43F
           GOSBVL  LrclR0A                        * 8C445
-          GONC    ROMP_0F1_024.L1                * 8C44C
+          GONC    LamN@.L1                       * 8C44C
           GOSBVL  GETPTR                         * 8C44F
           D1=D1+  10                             * 8C456
           D=D+CON A,2                            * 8C459
           LC(5)   FALSE                          * 8C45F
           A=C     A                              * 8C466
           PC=(A)                                 * 8C468
-ROMP_0F1_024.L1:
+LamN@.L1:
           A=R3.F  A                              * 8C46C
           A=A+A   A                              * 8C472
           C=A     A                              * 8C474
@@ -636,7 +674,8 @@ ROMP_0F1_024.L1:
 
 * ROMPTR 0F1 025
 * refs (1): 8999A
-ROMP_0F1_025:
+* ob #n lam -> : stores into the local bound n places after lam
+LamN!:
         CODE                                     * 8C4AB  134 nibbles
           D1=D1+  15                             * 8C4B5
           D=D+CON A,3                            * 8C4B8
@@ -657,10 +696,10 @@ ROMP_0F1_025:
           CD1EX                                  * 8C4F2
           R0=C.F  A                              * 8C4F5
           GOSBVL  LrclR0A                        * 8C4FB
-          GONC    ROMP_0F1_025.L1                * 8C502
+          GONC    LamN!.L1                       * 8C502
           GOSBVL  GETPTR                         * 8C505
           GOVLNG  DoErrULN                       * 8C50C
-ROMP_0F1_025.L1:
+LamN!.L1:
           A=R3.F  A                              * 8C513
           A=A+A   A                              * 8C519
           C=A     A                              * 8C51B
@@ -677,24 +716,28 @@ ROMP_0F1_025.L1:
 
 * ROMPTR 0F1 026
 * refs (1): 8999A
-ROMP_0F1_026:
+* -> { }: the menu keys of the 3D plots
+Plot3DMenu:
         :: NoExitAction                          * 8C53B
           { OBJ_73503 OBJ_73365 OBJ_73388 OBJ_73503 OBJ_73447 OBJ_73495 } ; * 8C545
 
 * ROMPTR 0F1 027
 * refs (1): 8999A
-ROMP_0F1_027:
+* ob -> ob': evaluates with EVALCRUNCH and gives an error if nothing comes back
+PlotEvalChk:
         :: DEPTH dvarlsBIND EVALCRUNCH DEPTH 1GETABND #< case Message60E * 8C572
         ;                                        * 8C59F
 
 * ROMPTR 0F1 028
 * refs (1): 8999A
-ROMP_0F1_028:
+* Runs the next object in the caller's stream, tags the result as output (or the variables as "INPUT") and shows it in the top of the display. Used by a 3D plot's trace keys
+PlotIOShow:
         :: 'R 16GETLAM #1= ITE                   * 8C5A4
 
 * ROMPTR 0F1 029
 * refs (1): 8999A
-ROMP_0F1_029:
+* ob -> :OUTPUT:value: evaluates the point
+PlotTagOutput:
           :: EVAL $ "OUTPUT" >TAG ;              * 8C5BD
 
 * ROMPTR 0F1 02A
@@ -704,59 +747,65 @@ ROMP_0F1_02A:
 
 * ROMPTR 0F1 02B
 * refs (1): 8999A
-ROMP_0F1_02B:
-            :: DROP LAM 'dependvar ROMPTR 0F1 027 dvarlsBIND LAM 'indepvar * 8C5F6
-              ROMPTR 0F1 027 1GETABND BINT2 {}N $ "INPUT" >TAG ; * 8C644
+* ob -> :INPUT:{ x y }: evaluates the two variables
+PlotTagInput:
+            :: DROP LAM 'dependvar XLIB PlotEvalChk dvarlsBIND LAM 'indepvar * 8C5F6
+              XLIB PlotEvalChk 1GETABND BINT2 {}N $ "INPUT" >TAG ; * 8C644
           ;                                      * 8C67C
-          BINT130 SWAP BINT32 OBJ_4686A CLEARMENU HARDBUFF2 BINT0 BINT2 * 8C681
+          BINT130 SWAP BINT32 %>CoordGrob CLEARMENU HARDBUFF2 BINT0 BINT2 * 8C681
           GROB! RDROP ;                          * 8C6A9
 
 * ROMPTR 0F1 02C
 * refs (1): 8999A
-ROMP_0F1_02C:
-        :: 'R 16GETLAM #1= ITE ROMPTR 0F1 029 ROMPTR 0F1 02B * 8C6B8
+* As PlotIOShow, leaving the tagged object on the stack
+PlotIOStack:
+        :: 'R 16GETLAM #1= ITE XLIB PlotTagOutput XLIB PlotTagInput * 8C6B8
         ;                                        * 8C6E7
 
 * ROMPTR 0F1 030
 * refs (4): 8999A 8999A 8999A 8999A
-ROMP_0F1_030:
-        :: LAM 'EQ ROMPTR 0F1 027 ;              * 8C6EC
+* -> ob: evaluates EQ
+PlotEvalEQ:
+        :: LAM 'EQ XLIB PlotEvalChk ;            * 8C6EC
 
 * ROMPTR 0F1 031
 * refs (1): 8999A
-ROMP_0F1_031:
-        :: LAM 'eeq BINT3 NTHCOMPDROP ROMPTR 0F1 027 DUPDUP OBJ_56FD1 BIND * 8C70E
-          LAM 'eeq BINT2 NTHCOMPDROP ROMPTR 0F1 027 2PUTLAM LAM 'eeq CARCOMP * 8C746
-          ROMPTR 0F1 027 2GETLAM 1GETABND BINT3 {}N ; * 8C783
+* -> { x y z }: evaluates the three expressions of a PARSURFACE equation
+PlotEvalSurf:
+        :: LAM 'eeq BINT3 NTHCOMPDROP XLIB PlotEvalChk DUPDUP {'dv,'op,'nm} * 8C70E
+          BIND LAM 'eeq BINT2 NTHCOMPDROP XLIB PlotEvalChk 2PUTLAM LAM 'eeq * 8C741
+          CARCOMP XLIB PlotEvalChk 2GETLAM 1GETABND BINT3 {}N ; * 8C77E
 
 * ROMPTR 0F1 032
 * refs (1): 8999A
-ROMP_0F1_032:
+* -> ob: evaluates the saved equation's right side, for PCONTOUR
+PlotEvalOldEq:
         :: LAM 'oldeq DUP EqList? IT CARCOMP     * 8C7A7
           DUP ALGeq? IT GETRHS                   * 8C7D3
-          ROMPTR 0F1 027 ;                       * 8C7E7
+          XLIB PlotEvalChk ;                     * 8C7E7
 
 * ROMPTR 0F1 033
 * refs (1): 8999A
         CON(1)  12                               * 8C7F7  command header: flags (meaning not yet known)
         CON(3)  #0F1                             * 8C7F8  library
         CON(3)  #033                             * 8C7FB  command
+* The object after a plot-type command is its information list, read through PTYPE>PINFO: drawing routine, axis setup, trace entries, evaluator, point plotter, step, and the environment routines
 FUNCTION:
         :: CK0 'IDFUNCTION PUTPTYPE ;            * 8C7FE
 
-        { FALSE OBJ_4BA5D NOP TRUE               * 8C817
-          { OBJ_47116 OBJ_73BEF OBJ_737F1        * 8C830
+        { FALSE DrawFunction NOP TRUE            * 8C817
+          { ShowCoordsXY OBJ_73BEF OBJ_737F1     * 8C830
             { OBJ_73DE8 OBJ_73A8F }              * 8C844
             :: BINT25 GETLAM PTR NULL:: EQUALcasedrop Message60E * 8C858
               15GETLAM SWAP %>C% ;               * 8C876
           }                                      * 8C88A
           TRUE ~';PlotEval                       * 8C88F
           :: BINT31 TestSysFlag ITE              * 8C899  flag -31: Connect points / Plot points only
-            :: ' OBJ_4CE0B ;                     * 8C8AD
+            :: ' PlotFcnDot ;                    * 8C8AD
             :: ' PlotFcnPt ;                     * 8C8C1
           ;                                      * 8C8D5
           :: %%1 10GETLAM %%/>% ; FALSE FALSE TRUE OBJ_73211 OBJ_73270 * 8C8DA
-          ROMPTR 0F1 03F OBJ_732E5 }             * 8C90C
+          XLIB PlotEnvAbort PictMenu }           * 8C90C
 
 * ROMPTR 0F1 034
 * refs (1): 8999A
@@ -766,10 +815,10 @@ FUNCTION:
 CONIC:
         :: CK0 'IDCONIC PUTPTYPE ;               * 8C928
 
-        { FALSE OBJ_4BC83 NOP TRUE NULL{} FALSE ~';PlotEval * 8C941
+        { FALSE DrawConic NOP TRUE NULL{} FALSE ~';PlotEval * 8C941
           :: BINT31 TestSysFlag ITE              * 8C969  flag -31: Connect points / Plot points only
-            :: ' OBJ_4CE0B ;                     * 8C97D
+            :: ' PlotFcnDot ;                    * 8C97D
             :: ' PlotFcnPt ;                     * 8C991
           ;                                      * 8C9A5
           :: %%1 10GETLAM %%/>% ; FALSE FALSE TRUE OBJ_73211 OBJ_73270 * 8C9AA
-          ROMPTR 0F1 03F OBJ_73594 OBJ_48E0A }   * 8C9DC
+          XLIB PlotEnvAbort PictMenuBare AutoScaleSq } * 8C9DC

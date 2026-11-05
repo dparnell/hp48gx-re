@@ -1,6 +1,6 @@
-* HP 48GX ROM revision R, #2C000-#2E0A8: not yet identified
+* HP 48GX ROM revision R, #2C000-#2E0A8: Probability tails (UTPN and friends), statistics (ΣDAT, ΣPAR, column sums and fits) in library 006, and the start of Kermit in library 00C: sending, server loop
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: 1+(rr) ChkReakäPAR PwrExpFIT? LAMLNAME PwrLogFIT? LAMPKNO rclä PUTAB0 LAMKRM LAMKP GETCD0 STATGETXCOL
+* Most referenced: 1+(rr) ChkReakäPAR PwrExpFIT? LAMLNAME PwrLogFIT? LAMPKNO StatColArgs StatPopA rclä StatPerColumn StatColMean PUTAB0
 * Follows on from the previous file (at #2C000 in the original ROM).
         D0=D0+  5                                * 2C000
         B=A     A                                * 2C003
@@ -63,6 +63,7 @@ PutAB%1:
         LENGTH                                   * 2C081  library object without its prolog (its place is the end of the link table before): length, to #2D33B
         CON(2)  0                                * 2C086  no title
 
+* Library 006: Statistics: no commands of its own, only the message table for the Σ errors #601-#606
 LIB006:
         CON(3)  #006                             * 2C088  library number
         CON(5)  0                                * 2C08B  hash table
@@ -79,8 +80,8 @@ utpn(3r):
             %0_2A2B4 ;                           * 2C0E0
           ROT %>%%- SWAP %>%%SQRT %%/            * 2C0EA
           CODE                                   * 2C103  28 nibbles
-            GOSBVL  utpn(3r)~1                   * 2C10D
-            GOSBVL  SUB_77EBC                    * 2C114
+            GOSBVL  UtpnX%%                      * 2C10D
+            GOSBVL  Utpn                         * 2C114
 utpn(3r).L1:
             GOSBVL  PACK                         * 2C11B
             GOVLNG  PUSH%LOOP                    * 2C122
@@ -88,11 +89,12 @@ utpn(3r).L1:
         ;                                        * 2C129
 
 * refs (1): 20029
-utpn(2r):
+* The real-real case of UTPC (the list's name utpn(2r) is wrong: xUTPC dispatches here)
+utpc(2r):
         :: SWAP %0_2A2B4                         * 2C12E
           CODE                                   * 2C13D  18 nibbles
-            GOSBVL  SUB_77E62                    * 2C147
-            GOSBVL  utpn(2r)~1                   * 2C14E
+            GOSBVL  UtpArgs                      * 2C147
+            GOSBVL  UtpcCore                     * 2C14E
             GOTO    utpn(3r).L1                  * 2C155
           ENDCODE                                * 2C159
         ;                                        * 2C159
@@ -101,8 +103,8 @@ utpn(2r):
 utpf(3r):
         :: 3UNROLL                               * 2C15E
           CODE                                   * 2C168  18 nibbles
-            GOSBVL  SUB_77E62                    * 2C172
-            GOSBVL  utpf(3r)~1                   * 2C179
+            GOSBVL  UtpArgs                      * 2C172
+            GOSBVL  UtpfCore                     * 2C179
             GOTO    utpn(3r).L1                  * 2C180
           ENDCODE                                * 2C184
         ;                                        * 2C184
@@ -111,8 +113,8 @@ utpf(3r):
 utpt(2r):
         :: SWAP %0_2A2B4                         * 2C189
           CODE                                   * 2C198  18 nibbles
-            GOSBVL  SUB_77E62                    * 2C1A2
-            GOSBVL  SUB_78077                    * 2C1A9
+            GOSBVL  UtpArgs                      * 2C1A2
+            GOSBVL  UtptCore                     * 2C1A9
             GOTO    utpn(3r).L1                  * 2C1B0
           ENDCODE                                * 2C1B4
         ;                                        * 2C1B4
@@ -164,11 +166,11 @@ Exist@äDAT?:
 * refs (3): 1FD50 2C2CA 4B779
 rclä!:
         :: Exist@äDAT? ?SEMI                     * 2C2AC
-          rclä!~1 ;                              * 2C2BB
+          ErrNoStatDat ;                         * 2C2BB
 
 * refs (8): 200CE 2C428 2C5F8 2C7EC 2C9F9 48E32 ...
 rclä:
-        :: rclä! OBJ_2D252 ;                     * 2C2C5
+        :: rclä! ChkStatArray ;                  * 2C2C5
 
 * refs (1): 1FD70
 ä+(r):
@@ -176,7 +178,7 @@ rclä:
 
 Stoä(r):
           :: ONEONE TWO{}N SWAP MAKEARRY Sto@ä ; * 2C2E8
-          OBJ_2D252 MDIMSDROP SWAPDROP UNCOERCE XEQ>VECTOR xSIGMA+ ; * 2C30B
+          ChkStatArray MDIMSDROP SWAPDROP UNCOERCE XEQ>VECTOR xSIGMA+ ; * 2C30B
 
 * refs (3): 1FD7A B57A2 B7D6A
 å-:
@@ -184,7 +186,7 @@ Stoä(r):
           BINT1 OVER TWO{}N %0_2A2B4 MAKEARRY Sto@ä STATRCL DROPSWAP BINT0 * 2C35B
           GOTO å-.L2                             * 2C388
 å-.L1:
-          OBJ_2D252 OVER MDIMS ?SKIP ONESWAP     * 2C392
+          ChkStatArray OVER MDIMS ?SKIP ONESWAP  * 2C392
           3PICK MDIMSDROP 3PICK #<> caseSIZEERR ROT#+ * 2C3AB
           SWAP TWO{}N @rdm(ar,ls) OVERARSIZE OVERARSIZE OVER#- * 2C3C9
 å-.L2:
@@ -236,41 +238,43 @@ nulv(s):
 * refs (4): 1FDB0 48EBE 48EE6 B7F68
 STATN:
         :: STATRCL NOTcase %0_2A2B4              * 2C535
-          OBJ_2D252 OBJ_2CC92 ;                  * 2C549
+          ChkStatArray StatRows ;                * 2C549
 
 * -> %
 * refs (1): 1FE88
 STATSMAX:
-        :: BINT0 OBJ_2C5EE ColumnMAX ;           * 2C558
+        :: BINT0 StatPerColumn ColumnMAX ;       * 2C558
 
 * -> % -> []
 * refs (1): 1FEA3
 STATMEAN:
-        :: BINT0 OBJ_2C5EE ColumnMEAN ;          * 2C571
+        :: BINT0 StatPerColumn ColumnMEAN ;      * 2C571
 
 * -> %
 * refs (1): 1FEBE
 STATSMIN:
-        :: BINT0 OBJ_2C5EE ColumnMIN ;           * 2C58A
+        :: BINT0 StatPerColumn ColumnMIN ;       * 2C58A
 
 * -> % -> []
 * refs (1): 1FED9
 STATSTDEV:
-        :: BINT1 OBJ_2C5EE ColumnTDEV ;          * 2C5A3
+        :: BINT1 StatPerColumn ColumnTDEV ;      * 2C5A3
 
 * -> % -> []
 * refs (1): 1FEF4
 STATTOT:
-        :: BINT0 OBJ_2C5EE ColumnTOT ;           * 2C5BC
+        :: BINT0 StatPerColumn ColumnTOT ;       * 2C5BC
 
 * -> % -> []
 * refs (1): 1FF0F
 STATVAR:
-        :: BINT1 OBJ_2C5EE ColumnVAR ;           * 2C5D5
+        :: BINT1 StatPerColumn ColumnVAR ;       * 2C5D5
 
 * refs (8): 2C562 2C57B 2C594 2C5AD 2C5C6 2C5DF ...
-OBJ_2C5EE:
-        :: 'R rclä DUP MDIMSDROP SWAP 5ROLL #>?SKIP OBJ_2D2D7 DUPONE #=case * 2C5EE
+* #min -> % / [%]: takes the next object in the caller's stream, a column routine (#col [] -> %), and runs it on every column of ΣDAT. ΣDAT must have more than #min rows, else "Insufficient Σ Data". One column gives a real, several give a vector
+StatPerColumn:
+        :: 'R rclä DUP MDIMSDROP SWAP 5ROLL #>?SKIP ErrInsufStat DUPONE * 2C5EE
+          #=case                                 * 2C620
           :: SWAPROT EVAL ;                      * 2C625
           nulv(s) SWAP #1+_ONE_DO INDEX@ 3PICK 5PICK EVAL INDEX@ PUTREALEL * 2C639
           LOOP ROTROT2DROP ;                     * 2C666
@@ -313,77 +317,79 @@ ChkReakäPAR:
 ResetäPAR:
           ::                                     * 2C742
             { %1 %2 %0_2A2B4 %0_2A2B4 xLINFIT } DUP' äPAR XEQSTOID ; * 2C747
-          DUPTYPELIST? NOTcase OBJ_2D2E7         * 2C77E
-          INNERCOMP BINT5 EQ NOTcase OBJ_2D2E7   * 2C78D
-          DUP ChkReakäPAR~2 matchob? NOTcase OBJ_2D2E7 * 2C7A6
+          DUPTYPELIST? NOTcase ErrBadStatPar     * 2C77E
+          INNERCOMP BINT5 EQ NOTcase ErrBadStatPar * 2C78D
+          DUP ChkReakäPAR~2 matchob? NOTcase ErrBadStatPar * 2C7A6
           CK&DISPATCH0                           * 2C7BF
           ChkReakäPAR~1 NOP                      * 2C7C4  real real real real program
-          BINT0 OBJ_2D2E7                        * 2C7CE  any
+          BINT0 ErrBadStatPar                    * 2C7CE  any
         ;                                        * 2C7D8
 
 * refs (1): 2C7C4
+* Argument types for the check of ΣPAR: real real real real program
 ChkReakäPAR~1:
         # 11118                                  * 2C7DD  69912
 
 * refs (6): 2C814 2C841 2C9C7 2CA12 4C8D6 CB529
 RclXYCol&äDAT:
-        :: rclä ChkReakäPAR 3DROP COERCE2 ROT OBJ_2CF08 ; * 2C7E7
+        :: rclä ChkReakäPAR 3DROP COERCE2 ROT ChkStatCols ; * 2C7E7
 
 * refs (1): 2C8EB
 RclXYCol&äDAT!:
-        :: RclXYCol&äDAT DUP OBJ_2CC92 %1 %= case OBJ_2D2D7 * 2C80F
+        :: RclXYCol&äDAT DUP StatRows %1 %= case ErrInsufStat * 2C80F
         ;                                        * 2C837
 
 * -> %
 * refs (3): 1FDCB 4A1C7 B7EEB
 STATCORR:
-        :: RclXYCol&äDAT 2DUP PwrExpFIT? OBJ_2CDA5 BINT3 NDUP PwrExpFIT? * 2C83C
-          OBJ_2CDFA 5UNROLL 4ROLLROT 2DUP PwrLogFIT? OBJ_2CDA5 BINT3 NDUP * 2C864
-          PwrLogFIT? OBJ_2CDFA 6UNROLL 4ROLL 5ROLL 4UNROLL PwrLogFIT? * 2C88C
-          PwrExpFIT? OBJ_2CE7C 3UNROLL %%* DUP %%0= case2drop %1 * 2C8AF
+        :: RclXYCol&äDAT 2DUP PwrExpFIT? StatColMean BINT3 NDUP PwrExpFIT? * 2C83C
+          StatColSS 5UNROLL 4ROLLROT 2DUP PwrLogFIT? StatColMean BINT3 NDUP * 2C864
+          PwrLogFIT? StatColSS 6UNROLL 4ROLL 5ROLL 4UNROLL PwrLogFIT? * 2C88C
+          PwrExpFIT? StatColsSP 3UNROLL %%* DUP %%0= case2drop %1 * 2C8AF
           %%SQRT %%/>% ;                         * 2C8D7
 
 * -> %
 * refs (2): 1FDE6 B7EF0
 STATCOV:
-        :: RclXYCol&äDAT! DUP4UNROLL 3PICKOVER PwrLogFIT? OBJ_2CDA5 * 2C8E6
-          3PICK3PICK PwrExpFIT? OBJ_2CDA5 PwrLogFIT? PwrExpFIT? OBJ_2CE7C * 2C904
-          SWAP OBJ_2CC92 %1 %>%%- %%/>% ;        * 2C922
+        :: RclXYCol&äDAT! DUP4UNROLL 3PICKOVER PwrLogFIT? StatColMean * 2C8E6
+          3PICK3PICK PwrExpFIT? StatColMean PwrLogFIT? PwrExpFIT? StatColsSP * 2C904
+          SWAP StatRows %1 %>%%- %%/>% ;         * 2C922
 
 * -> %
 * refs (2): 1FE01 B7F1D
 STATX:
-        :: STATGETXCOL OBJ_2C9EF ColumnTOT ;     * 2C940
+        :: STATGETXCOL StatColArgs ColumnTOT ;   * 2C940
 
 * -> %
 * refs (2): 1FE1C B7F2C
 STATY:
-        :: STATGETYCOL OBJ_2C9EF ColumnTOT ;     * 2C959
+        :: STATGETYCOL StatColArgs ColumnTOT ;   * 2C959
 
 * -> %
 * refs (2): 1FE37 B7F3B
 STATXX:
-        :: STATGETXCOL OBJ_2C9EF %%0 FALSE OBJ_2CDFA %%>% ; * 2C972
+        :: STATGETXCOL StatColArgs %%0 FALSE StatColSS %%>% ; * 2C972
 
 * -> %
 * refs (2): 1FE52 B7F4A
 STATYY:
-        :: STATGETYCOL OBJ_2C9EF %%0 FALSE OBJ_2CDFA %%>% ; * 2C99A
+        :: STATGETYCOL StatColArgs %%0 FALSE StatColSS %%>% ; * 2C99A
 
 * -> %
 * refs (2): 1FE6D B7F59
 STATXY:
-        :: RclXYCol&äDAT %%0 DUP FALSE DUP OBJ_2CE7C %%>% ; * 2C9C2
+        :: RclXYCol&äDAT %%0 DUP FALSE DUP StatColsSP %%>% ; * 2C9C2
 
 * refs (10): 2C94A 2C963 2C97C 2C9A4 B7E1E B7E37 ...
-OBJ_2C9EF:
-        :: COERCEDUP rclä OBJ_2CF08 SWAPDROP ;   * 2C9EF
+* % -> #col []: the column number as a bint and ΣDAT, checked that the column exists. For ΣX, ΣY, ΣX2 and ΣY2
+StatColArgs:
+        :: COERCEDUP rclä ChkStatCols SWAPDROP ; * 2C9EF
 
 * refs (4): 1FF2A 48BC0 4A20D AF85F
 STATLR:
-        :: RclXYCol&äDAT 3PICKOVER PwrLogFIT? OBJ_2CDA5 3PICK3PICK * 2CA0D
-          PwrExpFIT? OBJ_2CDA5 BINT5 NDUP PwrLogFIT? PwrExpFIT? OBJ_2CE7C * 2CA2B
-          6PICK 5ROLL 5PICK PwrLogFIT? OBJ_2CDFA DUP %%0= case OBJ_2D2D7 * 2CA4E
+        :: RclXYCol&äDAT 3PICKOVER PwrLogFIT? StatColMean 3PICK3PICK * 2CA0D
+          PwrExpFIT? StatColMean BINT5 NDUP PwrLogFIT? PwrExpFIT? StatColsSP * 2CA2B
+          6PICK 5ROLL 5PICK PwrLogFIT? StatColSS DUP %%0= case ErrInsufStat * 2CA4E
           %%/ SWAPROT 3PICK %%-* PwrExpFIT? IT %%EXP * 2CA7B
           %%>% SWAP %%>% 2SWAP 2DROP ChkReakäPAR ROTROT2DROP 4PICKSWAP 6PICK * 2CA9E
           3UNROLL                                * 2CACB
@@ -395,8 +401,8 @@ STATLR:
 STATPREDY:
         ::                                       * 2CADA
 * The Very Big List names this address predx(r), but it is a pointer inside an object; the name is not used
-          ChkReakäPAR DROP ROTDROP ROTDROP ROT %>%% PwrLogFIT? IT OBJ_2CBC5 * 2CADF
-          SWAP %>%% %%*SWAP %>%% PwrExpFIT? IT OBJ_2CBC5 * 2CB0C
+          ChkReakäPAR DROP ROTDROP ROTDROP ROT %>%% PwrLogFIT? IT StatLN * 2CADF
+          SWAP %>%% %%*SWAP %>%% PwrExpFIT? IT StatLN * 2CB0C
           %%+ PwrExpFIT? IT %%EXP                * 2CB2F
           %%>% ;                                 * 2CB43
 
@@ -405,20 +411,22 @@ STATPREDY:
 STATPREDX:
         ::                                       * 2CB4D
 * The Very Big List names this address PwrExpFIT?, but it is a pointer inside an object; the name is not used
-          ChkReakäPAR DROP ROTDROP ROTDROP ROT %>%% PwrExpFIT? IT OBJ_2CBC5 * 2CB52
-          ROT %>%% PwrExpFIT? IT OBJ_2CBC5       * 2CB7F
+          ChkReakäPAR DROP ROTDROP ROTDROP ROT %>%% PwrExpFIT? IT StatLN * 2CB52
+          ROT %>%% PwrExpFIT? IT StatLN          * 2CB7F
           %%- SWAP %>%% %%/ PwrLogFIT? IT %%EXP  * 2CB98
           %%>% ;                                 * 2CBBB
 
 * refs (4): 2CB07 2CB2A 2CB7A 2CB93
-OBJ_2CBC5:
-        :: DUP %%0> ?SKIP OBJ_2CBE8              * 2CBC5
+* %% -> %%': ln, with the statistics errors for values that are not positive
+StatLN:
+        :: DUP %%0> ?SKIP StatLnErr              * 2CBC5
           %%LN ;                                 * 2CBDE
 
 * refs (1): 2CBD9
-OBJ_2CBE8:
-        :: %%0< ?SKIP OBJ_2D307                  * 2CBE8
-          OBJ_2D2F7 ;                            * 2CBFC
+* %% ->: raises "Invalid Σ Data LN(Neg)" for a negative value, "Invalid Σ Data LN(0)" for zero
+StatLnErr:
+        :: %%0< ?SKIP ErrStatLn0                 * 2CBE8
+          ErrStatLnNeg ;                         * 2CBFC
 
 * refs (14): 2C84B 2C85F 2C8AF 2C909 2C918 2CA2B ...
 * -> flag: TRUE when the statistics model (in ΣPAR) is PWRFIT or EXPFIT, the models that fit ln(y). The VBL puts this name one object off, at #2CB52
@@ -437,7 +445,8 @@ PwrLogFIT?:
           OR ;                                   * 2CC88
 
 * refs (4): 2C54E 2C81E 2C927 CB565
-OBJ_2CC92:
+* [] -> %: the number of rows of an array (N for ΣDAT). The label after the header, maxcols(s,ra), is the Very Big List's and is wrong: it reads the first dimension
+StatRows:
         CON(5)  (*)+5                            * 2CC92  primitive code object
         ASSEMBLE
 
@@ -451,19 +460,19 @@ maxcols(s,ra):
         D0=D0+  15                               * 2CCA6
         D0=D0+  5                                * 2CCA9
         A=DAT0  A                                * 2CCAC
-        GOSBVL  SUB_7A08B                        * 2CCAF
-        GOTO    OBJ_2CD27.L6                     * 2CCB6
+        GOSBVL  Hex>%%                           * 2CCAF
+        GOTO    ColumnPSDEV.L6                   * 2CCB6
 
 * refs (3): 2C567 4957D B7EA5
 ColumnMAX:
         CON(5)  (*)+5                            * 2CCBA  primitive code object
         ST=1    3                                * 2CCBF
 ColumnMAX.L1:
-        GOSUB   SUB_2CF2D                        * 2CCC2
+        GOSUB   StatPopCol                       * 2CCC2
         SETDEC                                   * 2CCC6
-        GOSUB   SUB_2CFC0                        * 2CCC8
+        GOSUB   StatColExtreme                   * 2CCC8
         A=B     M                                * 2CCCC
-        GOTO    OBJ_2CD27.L6                     * 2CCCF
+        GOTO    ColumnPSDEV.L6                   * 2CCCF
 
 * refs (3): 2C599 49573 B7EBE
 ColumnMIN:
@@ -476,14 +485,14 @@ ColumnTOT:
         CON(5)  (*)+5                            * 2CCDF  primitive code object
         ST=0    3                                * 2CCE4
         ST=0    4                                * 2CCE7
-        GOTO    OBJ_2CD27.L2                     * 2CCEA
+        GOTO    ColumnPSDEV.L2                   * 2CCEA
 
 * refs (2): 2C580 B7E23
 ColumnMEAN:
         CON(5)  (*)+5                            * 2CCEE  primitive code object
         ST=1    3                                * 2CCF3
         ST=0    4                                * 2CCF6
-        GOTO    OBJ_2CD27.L2                     * 2CCF9
+        GOTO    ColumnPSDEV.L2                   * 2CCF9
 
 * refs (2): 2C5E4 B7E6E
 ColumnVAR:
@@ -498,114 +507,118 @@ ColumnTDEV:
 ColumnTDEV.L1:
         ST=1    4                                * 2CD11
         ST=0    1                                * 2CD14
-        GOTO    OBJ_2CD27.L2                     * 2CD17
+        GOTO    ColumnPSDEV.L2                   * 2CD17
 
 * refs (2): B7E73 CB51A
-OBJ_2CD1B:
+* #col [] -> %: population variance of a column. Flags for the code at ColumnPSDEV: ST3 take the root, ST4 two passes (sum, then squared deviations), ST1 divide by N rather than N-1
+ColumnPVAR:
         CON(5)  (*)+5                            * 2CD1B  primitive code object
         ST=0    3                                * 2CD20
-        GOTO    OBJ_2CD27.L1                     * 2CD23
+        GOTO    ColumnPSDEV.L1                   * 2CD23
 
 * refs (2): B7E4B CB501
-OBJ_2CD27:
+* #col [] -> %: population standard deviation of a column. The column routines share this code; the entry they use sets the flags
+ColumnPSDEV:
         CON(5)  (*)+5                            * 2CD27  primitive code object
         ST=1    3                                * 2CD2C
-OBJ_2CD27.L1:
+ColumnPSDEV.L1:
         ST=1    4                                * 2CD2F
         ST=1    1                                * 2CD32
-OBJ_2CD27.L2:
-        GOSUB   SUB_2CF2D                        * 2CD35
+ColumnPSDEV.L2:
+        GOSUB   StatPopCol                       * 2CD35
         R3=A                                     * 2CD39
         DCEX    A                                * 2CD3C
         R2=C                                     * 2CD3E
         C=D     A                                * 2CD41
         ST=0    2                                * 2CD43
-        GOSUB   SUB_2D019                        * 2CD46
+        GOSUB   StatSumCol                       * 2CD46
         ?ST=1   4                                * 2CD4A
-        GOYES   OBJ_2CD27.L3                     * 2CD4D
+        GOYES   ColumnPSDEV.L3                   * 2CD4D
         ?ST=0   3                                * 2CD4F
-        GOYES   OBJ_2CD27.L5                     * 2CD52
-OBJ_2CD27.L3:
+        GOYES   ColumnPSDEV.L5                   * 2CD52
+ColumnPSDEV.L3:
         RSTK=C                                   * 2CD54
         A=R2                                     * 2CD56
-        GOSUB   SUB_2CE52                        * 2CD59
+        GOSUB   StatDivN                         * 2CD59
         C=RSTK                                   * 2CD5D
         ?ST=0   4                                * 2CD5F
-        GOYES   OBJ_2CD27.L5                     * 2CD62
+        GOYES   ColumnPSDEV.L5                   * 2CD62
         GOSBVL  EXAB2                            * 2CD64
         ABEX    A                                * 2CD6B
         BCEX    A                                * 2CD6D
         RSTK=C                                   * 2CD6F
         C=B     A                                * 2CD71
         ST=0    2                                * 2CD73
-        GOSUB   SUB_2D0B0                        * 2CD76
+        GOSUB   StatSumDevSq                     * 2CD76
         C=RSTK                                   * 2CD7A
         A=C     A                                * 2CD7C
         SETHEX                                   * 2CD7E
         ?ST=1   1                                * 2CD80
-        GOYES   OBJ_2CD27.L4                     * 2CD83
+        GOYES   ColumnPSDEV.L4                   * 2CD83
         A=A-1   A                                * 2CD85
-OBJ_2CD27.L4:
-        GOSUB   SUB_2CE52                        * 2CD87
+ColumnPSDEV.L4:
+        GOSUB   StatDivN                         * 2CD87
         ?ST=0   3                                * 2CD8B
-        GOYES   OBJ_2CD27.L5                     * 2CD8E
-        GOSBVL  SUB_2B9F3                        * 2CD90
-OBJ_2CD27.L5:
+        GOYES   ColumnPSDEV.L5                   * 2CD8E
+        GOSBVL  SQRFchk                          * 2CD90
+ColumnPSDEV.L5:
         GOSBVL  PACK                             * 2CD97
-OBJ_2CD27.L6:
+ColumnPSDEV.L6:
         GOVLNG  PUSH%LOOP                        * 2CD9E
 
 * refs (8): 2C850 2C87D 2C8FF 2C90E 2CA21 2CA30 ...
-OBJ_2CDA5:
+* #col [] flag -> %%: mean of a column in extended precision, of ln(x) when flag is TRUE
+StatColMean:
         CON(5)  (*)+5                            * 2CDA5  primitive code object
-        GOSUB   SUB_2CEE8                        * 2CDAA
+        GOSUB   StatPopA                         * 2CDAA
         R0=A                                     * 2CDAE
-        GOSUB   SUB_2CF2D                        * 2CDB1
+        GOSUB   StatPopCol                       * 2CDB1
         AR0EX                                    * 2CDB5
         B=A     A                                * 2CDB8
-        GOSUB   SUB_2CEFC                        * 2CDBA
+        GOSUB   StatTRUE                         * 2CDBA
         ST=0    2                                * 2CDBE
         ?A#B    A                                * 2CDC1
-        GOYES   OBJ_2CDA5.L1                     * 2CDC4
+        GOYES   StatColMean.L1                   * 2CDC4
         ST=1    2                                * 2CDC6
-OBJ_2CDA5.L1:
+StatColMean.L1:
         A=R0                                     * 2CDC9
         DCEX    A                                * 2CDCC
         RSTK=C                                   * 2CDCE
         C=D     A                                * 2CDD0
-        GOSUB   SUB_2D019                        * 2CDD2
+        GOSUB   StatSumCol                       * 2CDD2
         C=RSTK                                   * 2CDD6
-        GONC    OBJ_2CDA5.L3                     * 2CDD8
-OBJ_2CDA5.L2:
+        GONC    StatColMean.L3                   * 2CDD8
+StatColMean.L2:
         C=D     A                                * 2CDDB
         A=C     A                                * 2CDDD
         P=      0                                * 2CDDF
         SETHEX                                   * 2CDE1
         GOSUB   GETPTR~jump_6                    * 2CDE3
         C=A     A                                * 2CDE7
-        GOTO    OBJ_2D307.L1                     * 2CDE9
-OBJ_2CDA5.L3:
+        GOTO    ErrStatLn0.L1                    * 2CDE9
+StatColMean.L3:
         A=C     A                                * 2CDED
-        GOSUB   SUB_2CE52                        * 2CDEF
-OBJ_2CDA5.L4:
+        GOSUB   StatDivN                         * 2CDEF
+StatColMean.L4:
         GOVLNG  PUSH%.L9                         * 2CDF3
 
 * refs (5): 2C864 2C891 2C98B 2C9B3 2CA62
-OBJ_2CDFA:
+* #col [] %%m flag -> %%: sum of (x-m)^2 over a column, with ln(x) for x when flag is TRUE. With m = 0 this is ΣX2
+StatColSS:
         CON(5)  (*)+5                            * 2CDFA  primitive code object
-        GOSUB   SUB_2CEE8                        * 2CDFF
+        GOSUB   StatPopA                         * 2CDFF
         R0=A                                     * 2CE03
-        GOSUB   SUB_2CEE8                        * 2CE06
+        GOSUB   StatPopA                         * 2CE06
         R3=A                                     * 2CE0A
-        GOSUB   SUB_2CF2D                        * 2CE0D
+        GOSUB   StatPopCol                       * 2CE0D
         A=R0                                     * 2CE11
         B=A     A                                * 2CE14
-        GOSUB   SUB_2CEFC                        * 2CE16
+        GOSUB   StatTRUE                         * 2CE16
         ST=0    2                                * 2CE1A
         ?A#B    A                                * 2CE1D
-        GOYES   OBJ_2CDFA.L1                     * 2CE20
+        GOYES   StatColSS.L1                     * 2CE20
         ST=1    2                                * 2CE22
-OBJ_2CDFA.L1:
+StatColSS.L1:
         A=R3                                     * 2CE25
         D1=A                                     * 2CE28
         D1=D1+  10                               * 2CE2B
@@ -616,14 +629,15 @@ OBJ_2CDFA.L1:
         GOSBVL  STAB2                            * 2CE3B
         AD0EX                                    * 2CE42
         SETDEC                                   * 2CE45
-        GOSUB   SUB_2D0B0                        * 2CE47
-OBJ_2CDFA.L2:
-        GONC    OBJ_2CDA5.L4                     * 2CE4B
-        GOTO    OBJ_2CDA5.L2                     * 2CE4E
+        GOSUB   StatSumDevSq                     * 2CE47
+StatColSS.L2:
+        GONC    StatColMean.L4                   * 2CE4B
+        GOTO    StatColMean.L2                   * 2CE4E
 
 * refs (3): 2CD59 2CD87 2CDEF
-SUB_2CE52:
-        GOSBVL  SUB_7A0AA                        * 2CE52
+* A.A = n, the 15-digit sum in the math registers -> sum/n
+StatDivN:
+        GOSBVL  Hex>15                           * 2CE52
         GOSBVL  RCCD0                            * 2CE59
         GOSBVL  XYEX                             * 2CE60
         GOVLNG  DIVF                             * 2CE67
@@ -637,81 +651,88 @@ SAVPTR~jump_12:
         GOVLNG  SAVPTR                           * 2CE75
 
 * refs (5): 2C8B4 2C91D 2C9E0 2CA49 CB55B
-OBJ_2CE7C:
+* #x #y [] %%mx %%my flagx flagy -> %%: sum of (x-mx)(y-my) over two columns, with ln taken of a column whose flag is TRUE. With zero means this is ΣXY
+StatColsSP:
         CON(5)  (*)+5                            * 2CE7C  primitive code object
-        GOSUB   SUB_2CEE8                        * 2CE81
+        GOSUB   StatPopA                         * 2CE81
         R0=A                                     * 2CE85
-        GOSUB   SUB_2CEE8                        * 2CE88
+        GOSUB   StatPopA                         * 2CE88
         R1=A                                     * 2CE8C
-        GOSUB   SUB_2CEE8                        * 2CE8F
+        GOSUB   StatPopA                         * 2CE8F
         GOSBVL  ASLW5                            * 2CE93
-        GOSUB   SUB_2CEE8                        * 2CE9A
+        GOSUB   StatPopA                         * 2CE9A
         GOSBVL  ASLW5                            * 2CE9E
         R2=A                                     * 2CEA5
-        GOSUB   SUB_2CF8B                        * 2CEA8
+        GOSUB   StatPop2Cols                     * 2CEA8
         A=R0                                     * 2CEAC
         B=A     A                                * 2CEAF
-        GOSUB   SUB_2CEFC                        * 2CEB1
+        GOSUB   StatTRUE                         * 2CEB1
         ST=0    1                                * 2CEB5
         ?A#B    A                                * 2CEB8
-        GOYES   OBJ_2CE7C.L1                     * 2CEBB
+        GOYES   StatColsSP.L1                    * 2CEBB
         ST=1    1                                * 2CEBD
-OBJ_2CE7C.L1:
+StatColsSP.L1:
         A=R1                                     * 2CEC0
         B=A     A                                * 2CEC3
-        GOSUB   SUB_2CEFC                        * 2CEC5
+        GOSUB   StatTRUE                         * 2CEC5
         ST=0    0                                * 2CEC9
         ?A#B    A                                * 2CECC
-        GOYES   OBJ_2CE7C.L2                     * 2CECF
+        GOYES   StatColsSP.L2                    * 2CECF
         ST=1    0                                * 2CED1
-OBJ_2CE7C.L2:
+StatColsSP.L2:
         A=R2                                     * 2CED4
         A=R4.F  A                                * 2CED7
         R4=A                                     * 2CEDD
-        GOSUB   SUB_2D131                        * 2CEE0
-        GOTO    OBJ_2CDFA.L2                     * 2CEE4
+        GOSUB   StatSumProd                      * 2CEE0
+        GOTO    StatColSS.L2                     * 2CEE4
 
 * refs (9): 2CDAA 2CDFF 2CE06 2CE81 2CE88 2CE8F ...
-SUB_2CEE8:
+* A.A = next object on the stack; one more free stack word in D
+StatPopA:
         A=DAT1  A                                * 2CEE8
         D1=D1+  5                                * 2CEEB
         D=D+1   A                                * 2CEEE
         RTN                                      * 2CEF0
 
 * refs (2): 2CF31 2CF8F
-SUB_2CEF2:
+* C.A = next object on the stack; one more free stack word in D
+StatPopC:
         C=DAT1  A                                * 2CEF2
         D1=D1+  5                                * 2CEF5
         D=D+1   A                                * 2CEF8
         RTN                                      * 2CEFA
 
 * refs (4): 2CDBA 2CE16 2CEB1 2CEC5
-SUB_2CEFC:
+* A.A = TRUE, for comparing a flag object just popped
+StatTRUE:
         LA(5)   TRUE                             * 2CEFC
         RTN                                      * 2CF06
 
 * refs (5): 2C805 2C9FE 48E55 48EA0 4D9ED
-OBJ_2CF08:
+* #x #y [] -> #x #y []: raises "Invalid ΣPAR" if either column is zero or beyond the width of the array
+ChkStatCols:
         CON(5)  (*)+5                            * 2CF08  primitive code object
-        GOSUB   SUB_2CF8B                        * 2CF0D
-        GOC     OBJ_2CF08.L1                     * 2CF11
+        GOSUB   StatPop2Cols                     * 2CF0D
+        GOC     ChkStatCols.L1                   * 2CF11
         GOSUB   GETPTR~jump_6                    * 2CF14
         D1=D1-  15                               * 2CF18
         D=D-1   A                                * 2CF1B
         D=D-1   A                                * 2CF1D
         D=D-1   A                                * 2CF1F
-        GOTO    OBJ_2D252.L3                     * 2CF21
-OBJ_2CF08.L1:
+        GOTO    ChkStatArray.L3                  * 2CF21
+ChkStatCols.L1:
         GOSUB   GETPTR~jump_6                    * 2CF25
-        GOTO    OBJ_2D2E7.L1                     * 2CF29
+        GOTO    ErrBadStatPar.L1                 * 2CF29
 
 * refs (4): 2CCC2 2CD35 2CDB1 2CE0D
-SUB_2CF2D:
-        GOSUB   SUB_2CEE8                        * 2CF2D
+* Pops [] into A.A, then goes on into StatColPtr
+StatPopCol:
+        GOSUB   StatPopA                         * 2CF2D
 
 * refs (1): 2CF96
-SUB_2CF31:
-        GOSUB   SUB_2CEF2                        * 2CF31
+* A.A = array; pops #col -> D0 and A.A = first element of the column, C.A = row length in nibbles, D.A = rows, R4 = end of the array (FFFFF if it wraps); carry set if the column is 0 or too big. Saves the RPL pointers
+StatColPtr:
+        GOSUB   StatPopC                         * 2CF31
         R4=C                                     * 2CF35
         GOSUB   SAVPTR~jump_12                   * 2CF38
         D0=A                                     * 2CF3C
@@ -720,10 +741,10 @@ SUB_2CF31:
         D0=A                                     * 2CF45
         C=DAT0  A                                * 2CF48
         A=A+C   A                                * 2CF4B
-        GONC    SUB_2CF31.L1                     * 2CF4D
+        GONC    StatColPtr.L1                    * 2CF4D
         A=0     A                                * 2CF50
         A=A-1   A                                * 2CF52
-SUB_2CF31.L1:
+StatColPtr.L1:
         AR4EX                                    * 2CF54
         D1=A                                     * 2CF57
         D1=D1+  5                                * 2CF5A
@@ -747,11 +768,12 @@ SUB_2CF31.L1:
         RTNCC                                    * 2CF89
 
 * refs (2): 2CEA8 2CF0D
-SUB_2CF8B:
-        GOSUB   SUB_2CEE8                        * 2CF8B
-        GOSUB   SUB_2CEF2                        * 2CF8F
+* Pops [] #y #x -> D0 = first element of column x, D1 of column y, the rest as StatColPtr. Carry set if either column is out of range
+StatPop2Cols:
+        GOSUB   StatPopA                         * 2CF8B
+        GOSUB   StatPopC                         * 2CF8F
         R3=C                                     * 2CF93
-        GOSUB   SUB_2CF31                        * 2CF96
+        GOSUB   StatColPtr                       * 2CF96
         RTNC                                     * 2CF9A
         A=A-B   A                                * 2CF9D
         B=A     A                                * 2CF9F
@@ -769,11 +791,12 @@ SUB_2CF8B:
         RTN                                      * 2CFBE
 
 * refs (1): 2CCC8
-SUB_2CFC0:
+* D0 = first element, C.A = row length, R4 = end -> maximum (ST3 set) or minimum of the column in A
+StatColExtreme:
         RSTK=C                                   * 2CFC0
         A=DAT0  W                                * 2CFC2
         GOSUB   SPLITA~jump                      * 2CFC6
-SUB_2CFC0.loop1:
+StatColExtreme.loop1:
         CD0EX                                    * 2CFCA
         D=C     A                                * 2CFCD
         C=RSTK                                   * 2CFCF
@@ -782,56 +805,57 @@ SUB_2CFC0.loop1:
         SETDEC                                   * 2CFD5
         RSTK=C                                   * 2CFD7
         C=R4                                     * 2CFD9
-        GOC     SUB_2CFC0.L3                     * 2CFDC
+        GOC     StatColExtreme.L3                * 2CFDC
         ?D>=C   A                                * 2CFDF
-        GOYES   SUB_2CFC0.L3                     * 2CFE2
+        GOYES   StatColExtreme.L3                * 2CFE2
         C=D     A                                * 2CFE4
         D0=C                                     * 2CFE6
         C=DAT0  W                                * 2CFE9
-        GOSBVL  SUB_2BCAC                        * 2CFED
+        GOSBVL  SPLITC                           * 2CFED
         P=      6                                * 2CFF4
         ?ST=1   3                                * 2CFF6
-        GOYES   SUB_2CFC0.L2                     * 2CFF9
+        GOYES   StatColExtreme.L2                * 2CFF9
         P=      3                                * 2CFFB
-SUB_2CFC0.L2:
+StatColExtreme.L2:
         GOSBVL  TST15                            * 2CFFD
-        GOC     SUB_2CFC0.loop1                  * 2D004
+        GOC     StatColExtreme.loop1             * 2D004
         A=C     W                                * 2D007
         C=D     W                                * 2D00A
         B=C     W                                * 2D00D
-        GONC    SUB_2CFC0.loop1                  * 2D010
-SUB_2CFC0.L3:
+        GONC    StatColExtreme.loop1             * 2D010
+StatColExtreme.L3:
         C=RSTK                                   * 2D013
         P=      0                                * 2D015
         RTN                                      * 2D017
 
 * refs (2): 2CD46 2CDD2
-SUB_2D019:
+* A.A = first element, C.A = row length, R4 = end -> sum of the column in R0/R1 form, of ln(x) when ST2 is set. Carry set and C.A = error number on a bad logarithm
+StatSumCol:
         D1=A                                     * 2D019
         HST=0   3                                * 2D01C
         A=0     W                                * 2D01F
         R0=A                                     * 2D022
         R1=A                                     * 2D025
-SUB_2D019.loop1:
+StatSumCol.loop1:
         RSTK=C                                   * 2D028
-        GOSUB   SUB_2D080                        * 2D02A
+        GOSUB   StatReadElt                      * 2D02A
         ?ST=0   2                                * 2D02E
-        GOYES   SUB_2D019.L3                     * 2D031
-        GOSUB   SUB_2D08B                        * 2D033
-        GONC    SUB_2D019.L2                     * 2D037
+        GOYES   StatSumCol.L3                    * 2D031
+        GOSUB   StatChkLn                        * 2D033
+        GONC    StatSumCol.L2                    * 2D037
         C=RSTK                                   * 2D03A
         C=D     A                                * 2D03C
         RTNSC                                    * 2D03E
-SUB_2D019.L2:
+StatSumCol.L2:
         C=R0                                     * 2D040
         RSTK=C                                   * 2D043
         R4=C.F  S                                * 2D045
-        GOSBVL  SUB_78DE9.L3                     * 2D04B
+        GOSBVL  LN15                             * 2D04B
         C=R4                                     * 2D052
         C=RSTK                                   * 2D055
         R0=C                                     * 2D057
-SUB_2D019.L3:
-        GOSBVL  SUB_7A076                        * 2D05A
+StatSumCol.L3:
+        GOSBVL  Acc15                            * 2D05A
         C=RSTK                                   * 2D061
         AD1EX                                    * 2D063
         SETHEX                                   * 2D066
@@ -840,14 +864,15 @@ SUB_2D019.L3:
         D1=A                                     * 2D06C
         B=A     A                                * 2D06F
         A=R4                                     * 2D071
-        GOC     SUB_2D019.L4                     * 2D074
+        GOC     StatSumCol.L4                    * 2D074
         ?A>B    A                                * 2D077
-        GOYES   SUB_2D019.loop1                  * 2D07A
-SUB_2D019.L4:
-        GOTO    SUB_2D131.L5                     * 2D07C
+        GOYES   StatSumCol.loop1                 * 2D07A
+StatSumCol.L4:
+        GOTO    StatSumProd.L5                   * 2D07C
 
 * refs (3): 2D02A 2D0C1 2D1AF
-SUB_2D080:
+* Reads the real at D1 and splits it for 15-digit arithmetic
+StatReadElt:
         A=DAT1  W                                * 2D080
 
 * refs (2): 2CFC6 2D148
@@ -855,58 +880,60 @@ SPLITA~jump:
         GOVLNG  SPLITA                           * 2D084
 
 * refs (4): 2D033 2D0CA 2D151 2D1B8
-SUB_2D08B:
+* Split real in A/B -> carry clear if positive; else carry set and D.A = #605 (negative) or #606 (zero)
+StatChkLn:
         P=      14                               * 2D08B
         C=0     A                                * 2D08D
         ?B=0    P                                * 2D08F
-        GOYES   SUB_2D08B.L2                     * 2D092
+        GOYES   StatChkLn.L2                     * 2D092
         ?A#0    S                                * 2D094
-        GOYES   SUB_2D08B.L1                     * 2D097
+        GOYES   StatChkLn.L1                     * 2D097
         RTNCC                                    * 2D099
-SUB_2D08B.L1:
+StatChkLn.L1:
         P=      0                                * 2D09B
         LC(3)   #605                             * 2D09D
-        GOC     SUB_2D08B.L3                     * 2D0A2
-SUB_2D08B.L2:
+        GOC     StatChkLn.L3                     * 2D0A2
+StatChkLn.L2:
         P=      0                                * 2D0A5
         LC(3)   #606                             * 2D0A7
-SUB_2D08B.L3:
+StatChkLn.L3:
         D=C     A                                * 2D0AC
         RTNSC                                    * 2D0AE
 
 * refs (2): 2CD76 2CE47
-SUB_2D0B0:
+* As StatSumCol, summing (x-m)^2 with m in the saved math registers
+StatSumDevSq:
         D1=A                                     * 2D0B0
         A=0     W                                * 2D0B3
         R0=A                                     * 2D0B6
         R1=A                                     * 2D0B9
         HST=0   3                                * 2D0BC
-SUB_2D0B0.loop1:
+StatSumDevSq.loop1:
         RSTK=C                                   * 2D0BF
-        GOSUB   SUB_2D080                        * 2D0C1
+        GOSUB   StatReadElt                      * 2D0C1
         ?ST=0   2                                * 2D0C5
-        GOYES   SUB_2D0B0.L3                     * 2D0C8
-        GOSUB   SUB_2D08B                        * 2D0CA
-        GONC    SUB_2D0B0.L2                     * 2D0CE
+        GOYES   StatSumDevSq.L3                  * 2D0C8
+        GOSUB   StatChkLn                        * 2D0CA
+        GONC    StatSumDevSq.L2                  * 2D0CE
         C=RSTK                                   * 2D0D1
         C=D     A                                * 2D0D3
         RTNSC                                    * 2D0D5
-SUB_2D0B0.L2:
+StatSumDevSq.L2:
         C=R0                                     * 2D0D7
         RSTK=C                                   * 2D0DA
         R4=C.F  S                                * 2D0DC
-        GOSBVL  SUB_78DE9.L3                     * 2D0E2
+        GOSBVL  LN15                             * 2D0E2
         C=R4                                     * 2D0E9
         C=RSTK                                   * 2D0EC
         R0=C                                     * 2D0EE
-SUB_2D0B0.L3:
+StatSumDevSq.L3:
         GOSBVL  RCCD2                            * 2D0F1
         C=-C-1  S                                * 2D0F8
         GOSBVL  RADDF                            * 2D0FB
         C=B     W                                * 2D102
         D=C     W                                * 2D105
         C=A     W                                * 2D108
-        GOSBVL  SUB_7A06F                        * 2D10B
+        GOSBVL  MulAcc15                         * 2D10B
         C=RSTK                                   * 2D112
         AD1EX                                    * 2D114
         SETHEX                                   * 2D117
@@ -915,33 +942,34 @@ SUB_2D0B0.L3:
         D1=A                                     * 2D11D
         B=A     A                                * 2D120
         A=R4                                     * 2D122
-        GOC     SUB_2D0B0.L4                     * 2D125
+        GOC     StatSumDevSq.L4                  * 2D125
         ?A>B    A                                * 2D128
-        GOYES   SUB_2D0B0.loop1                  * 2D12B
-SUB_2D0B0.L4:
-        GOTO    SUB_2D131.L5                     * 2D12D
+        GOYES   StatSumDevSq.loop1               * 2D12B
+StatSumDevSq.L4:
+        GOTO    StatSumProd.L5                   * 2D12D
 
 * refs (1): 2CEE0
-SUB_2D131:
+* D0, D1 = columns, means by the pointers packed in R4 -> sum of (x-mx)(y-my); ST0 and ST1 take the ln of x and y
+StatSumProd:
         A=0     W                                * 2D131
         R0=A                                     * 2D134
         R1=A                                     * 2D137
         HST=0   3                                * 2D13A
-SUB_2D131.loop1:
+StatSumProd.loop1:
         RSTK=C                                   * 2D13D
         A=DAT0  W                                * 2D13F
         CD0EX                                    * 2D143
         RSTK=C                                   * 2D146
         GOSUB   SPLITA~jump                      * 2D148
         ?ST=0   0                                * 2D14C
-        GOYES   SUB_2D131.L2                     * 2D14F
-        GOSUB   SUB_2D08B                        * 2D151
-        GONC    SUB_2D131.L2                     * 2D155
+        GOYES   StatSumProd.L2                   * 2D14F
+        GOSUB   StatChkLn                        * 2D151
+        GONC    StatSumProd.L2                   * 2D155
         C=RSTK                                   * 2D158
         C=RSTK                                   * 2D15A
         C=D     A                                * 2D15C
         RTNSC                                    * 2D15E
-SUB_2D131.L2:
+StatSumProd.L2:
         C=R4                                     * 2D160
         P=      15                               * 2D163
         C=P     15                               * 2D165
@@ -963,16 +991,16 @@ SUB_2D131.L2:
         GOSBVL  SUB_79FD2                        * 2D19A
         GOSBVL  AllowIntr                        * 2D1A1
         GOSBVL  STAB2                            * 2D1A8
-        GOSUB   SUB_2D080                        * 2D1AF
+        GOSUB   StatReadElt                      * 2D1AF
         ?ST=0   1                                * 2D1B3
-        GOYES   SUB_2D131.L3                     * 2D1B6
-        GOSUB   SUB_2D08B                        * 2D1B8
-        GONC    SUB_2D131.L3                     * 2D1BC
+        GOYES   StatSumProd.L3                   * 2D1B6
+        GOSUB   StatChkLn                        * 2D1B8
+        GONC    StatSumProd.L3                   * 2D1BC
         C=RSTK                                   * 2D1BF
         C=RSTK                                   * 2D1C1
         C=D     A                                * 2D1C3
         RTNSC                                    * 2D1C5
-SUB_2D131.L3:
+StatSumProd.L3:
         C=R4                                     * 2D1C7
         CSL     W                                * 2D1CA
         CSLC                                     * 2D1CD
@@ -1002,16 +1030,16 @@ SUB_2D131.L3:
         GOSUB   ChkäData(_)                      * 2D21F
         D1=A                                     * 2D223
         ?B#0    A                                * 2D226
-        GOYES   SUB_2D131.L4                     * 2D229
-SUB_2D131.L4:
+        GOYES   StatSumProd.L4                   * 2D229
+StatSumProd.L4:
         B=A     A                                * 2D22B
         A=R4                                     * 2D22D
         SETDEC                                   * 2D230
-        GOC     SUB_2D131.L5                     * 2D232  never taken
+        GOC     StatSumProd.L5                   * 2D232
         ?A<=B   A                                * 2D235
-        GOYES   SUB_2D131.L5                     * 2D238
-        GOTO    SUB_2D131.loop1                  * 2D23A
-SUB_2D131.L5:
+        GOYES   StatSumProd.L5                   * 2D238
+        GOTO    StatSumProd.loop1                * 2D23A
+StatSumProd.L5:
         GOSBVL  RCAB0                            * 2D23E
         P=      0                                * 2D245
         RTNCC                                    * 2D247
@@ -1024,7 +1052,8 @@ ChkäData(_):
         RTN                                      * 2D250
 
 * refs (6): 2C2CF 2C30B 2C392 2C549 B5783 B7D4B
-OBJ_2D252:
+* [] -> []: raises "Invalid Σ Data" unless the object is a real array with at most two dimensions and no zero dimension
+ChkStatArray:
         CON(5)  (*)+5                            * 2D252  primitive code object
         A=DAT1  A                                * 2D257
         CD0EX                                    * 2D25A
@@ -1033,69 +1062,74 @@ OBJ_2D252:
         A=DAT0  A                                * 2D262
         LC(5)   DOARRY                           * 2D265
         ?C#A    A                                * 2D26C
-        GOYES   OBJ_2D252.loop1                  * 2D26F
+        GOYES   ChkStatArray.loop1               * 2D26F
         D0=D0+  10                               * 2D271
         A=DAT0  A                                * 2D274
         LC(5)   DOREAL                           * 2D277
         ?C#A    A                                * 2D27E
-        GOYES   OBJ_2D252.loop1                  * 2D281
+        GOYES   ChkStatArray.loop1               * 2D281
         D0=D0+  5                                * 2D283
         A=DAT0  A                                * 2D286
         A=A-1   A                                * 2D289
         A=A-1   A                                * 2D28B
         A=A-1   A                                * 2D28D
-        GONC    OBJ_2D252.loop1                  * 2D28F
+        GONC    ChkStatArray.loop1               * 2D28F
         D0=D0+  5                                * 2D292
         A=DAT0  A                                * 2D295
         ?A#0    A                                * 2D298
-        GOYES   OBJ_2D252.L2                     * 2D29B
-OBJ_2D252.loop1:
+        GOYES   ChkStatArray.L2                  * 2D29B
+ChkStatArray.loop1:
         C=RSTK                                   * 2D29D
         D0=C                                     * 2D29F
         LC(5)   #00601                           * 2D2A2
-        GOTO    OBJ_2D307.L1                     * 2D2A9
-OBJ_2D252.L2:
+        GOTO    ErrStatLn0.L1                    * 2D2A9
+ChkStatArray.L2:
         D0=D0+  5                                * 2D2AD
         A=DAT0  A                                * 2D2B0
         ?A=0    A                                * 2D2B3
-        GOYES   OBJ_2D252.loop1                  * 2D2B6
+        GOYES   ChkStatArray.loop1               * 2D2B6
         C=RSTK                                   * 2D2B8
         D0=C                                     * 2D2BA
-OBJ_2D252.L3:
+ChkStatArray.L3:
         A=DAT0  A                                * 2D2BD
         D0=D0+  5                                * 2D2C0
         PC=(A)                                   * 2D2C3
 
 * refs (1): 2C2BB
-rclä!~1:
+* Raises "Nonexistent ΣDAT"
+ErrNoStatDat:
         CON(5)  (*)+5                            * 2D2C7  primitive code object
         LC(5)   #00602                           * 2D2CC
-        GOTO    OBJ_2D307.L1                     * 2D2D3
+        GOTO    ErrStatLn0.L1                    * 2D2D3
 
 * refs (3): 2C616 2C832 2CA76
-OBJ_2D2D7:
+* Raises "Insufficient Σ Data"
+ErrInsufStat:
         CON(5)  (*)+5                            * 2D2D7  primitive code object
         LC(5)   #00603                           * 2D2DC
-        GOTO    OBJ_2D307.L1                     * 2D2E3
+        GOTO    ErrStatLn0.L1                    * 2D2E3
 
 * refs (5): 2C788 2C7A1 2C7BA 2C7D3 4CA3C
-OBJ_2D2E7:
+* Raises "Invalid ΣPAR"
+ErrBadStatPar:
         CON(5)  (*)+5                            * 2D2E7  primitive code object
-OBJ_2D2E7.L1:
+ErrBadStatPar.L1:
         LC(5)   #00604                           * 2D2EC  error number
-        GOTO    OBJ_2D307.L1                     * 2D2F3
+        GOTO    ErrStatLn0.L1                    * 2D2F3
 
 * refs (1): 2CBFC
-OBJ_2D2F7:
+* Raises "Invalid Σ Data LN(Neg)"
+ErrStatLnNeg:
         CON(5)  (*)+5                            * 2D2F7  primitive code object
         LC(5)   #00605                           * 2D2FC
-        GOTO    OBJ_2D307.L1                     * 2D303
+        GOTO    ErrStatLn0.L1                    * 2D303
 
 * refs (1): 2CBF7
-OBJ_2D307:
+* Raises "Invalid Σ Data LN(0)". Its tail is the common exit for these errors: C.A = number
+ErrStatLn0:
         CON(5)  (*)+5                            * 2D307  primitive code object
         LC(5)   #00606                           * 2D30C
-OBJ_2D307.L1:
+ErrStatLn0.L1:
         A=C     A                                * 2D313
         GOVLNG  Errjmp                           * 2D315
         BSS     31                               * 2D31C
@@ -1104,6 +1138,7 @@ OBJ_2D307.L1:
         LENGTH                                   * 2D33B  library object without its prolog (its place is the end of the link table before): length, to #32F59
         CON(2)  0                                * 2D340  no title
 
+* Library 00C: Serial I/O, Kermit and printing
 LIB00C:
         CON(3)  #00C                             * 2D342  library number
         CON(5)  0                                * 2D345  hash table
@@ -1114,10 +1149,11 @@ LIB00C:
 
 * refs (1): 2D342
 LIB00C.config:
-        :: CLOSEUART ClrServMode OBJ_11387 OBJ_5394C OpenIO_324C8 ; * 2D359
+        :: CLOSEUART ClrServMode ClrIOAnn ClrISF803 OpenIO_324C8 ; * 2D359
 
 * refs (7): 2D82F 2DA04 2DA90 2E6C3 2E8DB 307FB ...
-OBJ_2D37C:
+* The calculator's Send-Init parameters as they go in an S or I packet: maximum packet 80, timeout 5 s, no padding, CR ends a packet, # quotes control characters, no 8th-bit quoting, block check type 1. Each number is the value plus 32
+KermInitPar:
         $ "p% @-# 1"                             * 2D37C
 
 * refs (5): 2D5E6 2D85C 2F6B4 2F6EB 2F9A2
@@ -1185,17 +1221,18 @@ LAMMaxR:
         LAM 'MaxR                                * 2D4A2
 
 * refs (2): 2D52B 2EF00
-OBJ_2D4B3:
+* chr $par -> ... flag: sends an S or I packet with parameters $par, with "Connecting" on the display, and waits for the other side's reply
+KermSendInit:
         :: DUPZERO 4ROLL BUILDKPACKET Connecting JstGetTHEMESG KDispStatus2 * 2D4B3
           SWAP                                   * 2D4D6
 
 {local''}:
           { NULLLAM } BIND SEND_PACKET NOTcase false;Lpop * 2D4DB
-          1ABNDSWAP OBJ_3088E DUP NOTcaseFALSE ; * 2D4FE
+          1ABNDSWAP KermMergePar DUP NOTcaseFALSE ; * 2D4FE
 
 * refs (1): 2E92B
 EXCHINITPK:
-        :: KERMOPEN CHR_I CHOOSE_INIT OBJ_2D4B3 BINT0 OBJ_2DAB3 case * 2D517
+        :: KERMOPEN CHR_I CHOOSE_INIT KermSendInit BINT0 'LamPKNOSto case * 2D517
           ::                                     * 2D53F
             CODE                                 * 2D544  32 nibbles
               A=DAT1  A                          * 2D54E
@@ -1238,18 +1275,20 @@ SENDEOT~1.L1:
             :: OVER GetKermPkt# #=case           * 2D631
 
 * refs (1): 2D6DB
-OBJ_2D645:
+* The packet has been acknowledged: next sequence number, leave the local variables, TRUE
+KermAckOK:
               :: 2DROP IncrLAMPKNO Lpop;true ;   * 2D645
-              OBJ_2F957 case                     * 2D65E
+              KermPrevPkt? case                  * 2D65E
 
 * refs (1): 2D6EF
-OBJ_2D668:
-              :: 3DROP LAMMaxR OBJ_2D7AD ?GOTO SENDEOT~1.L1 XFERFAIL * 2D668
+* No usable reply: tries again from the top of the send loop while retries remain, else "Transfer Failed"
+KermResend:
+              :: 3DROP LAMMaxR KermRetry? ?GOTO SENDEOT~1.L1 XFERFAIL * 2D668
                 Lpop;2false ;                    * 2D68B
               Lpop;true;false ;                  * 2D695
             DUP CHR_N EQUALcase                  * 2D69F
-            :: OVER LAMPKNO #1+ # 40 #/ DROP #=case OBJ_2D645 * 2D6AE
-              OVER GetKermPkt# #=case OBJ_2D668  * 2D6E0
+            :: OVER LAMPKNO #1+ # 40 #/ DROP #=case KermAckOK * 2D6AE
+              OVER GetKermPkt# #=case KermResend * 2D6E0
               Lpop;true;false ;                  * 2D6F4
 
 * refs (3): 2D695 2D6F4 2F858
@@ -1272,16 +1311,18 @@ KDispStatus2:
         ;                                        * 2D767
 
 * refs (2): 2D799 2D8B1
-OBJ_2D76C:
+* #seq chr #want chrwant -> #seq chr flag: TRUE when a received packet has the wanted type and sequence number
+KermPktIs?:
         :: 3PICK EQUAL SWAP4PICK #= AND ;        * 2D76C
 
 * refs (5): 2DB7B 2DB8A 2DBA8 2DBB7 2DBC6
 DOSERVER~2:
-        :: ZEROSWAP OBJ_2D76C COLA ?GOTO         * 2D78F
+        :: ZEROSWAP KermPktIs? COLA ?GOTO        * 2D78F
         ;                                        * 2D7A8
 
 * refs (4): 2D677 2F6B9 2F9A7 30851
-OBJ_2D7AD:
+* #max -> flag: counts down LAMRETRY. FALSE when none remain; otherwise shows "Retry #n" and sets LAMKRM, so that the row is rewritten later
+KermRetry?:
         :: LAMRETRY #1-DUP ' LAMRETRY STO #0=case DROPFALSE * 2D7AD
           Retry JstGetTHEMESG SWAP LAMRETRY #- #>$ &$ KDispRow2 TrueTrue ' * 2D7D5
           LAMKRM STO ;                           * 2D807
@@ -1289,7 +1330,7 @@ OBJ_2D7AD:
 * $/id/lam ->
 * refs (6): 21F71 21F7B 21F85 21FA5 B81D3 B8AC6
 DORECN:
-        :: nm=>st! Connecting JstGetTHEMESG KDispStatus2 OBJ_2D37C BINT0 * 2D816
+        :: nm=>st! Connecting JstGetTHEMESG KDispStatus2 KermInitPar BINT0 * 2D816
           { LAMKP LAMPKNO } BIND ERRSET          * 2D839
           :: MAXRETRY NULL$ FALSE                * 2D857
             { LAMLNAME LAMRETRY LAMKMODE LAMKRM } BIND KERMOPEN RecvNextPkt * 2D86B
@@ -1297,13 +1338,13 @@ DORECN:
 
 * refs (1): 2E97B
 DOPKT~1:
-            :: BINT0 CHR_S OBJ_2D76C NOTcase TRPACKETFAIL * 2D8A2
-              2DROP OBJ_2F709 case AllowPrlcdCl  * 2D8C0
+            :: BINT0 CHR_S KermPktIs? NOTcase TRPACKETFAIL * 2D8A2
+              2DROP KermRecvFile case AllowPrlcdCl * 2D8C0
               ABND case TRPACKETFAIL             * 2D8D4
               DUP #SyntaxErr #<>case ERROROUT    * 2D8E3
               JstGetTHEMESG Conc:RC(2st) EXITMSGSTO #EXITERR ERROROUT ; * 2D8F7
           ;                                      * 2D915
-          ERRTRAP OBJ_2E763 ABND ;               * 2D91A
+          ERRTRAP KermErrOut ABND ;              * 2D91A
 
 * refs (1): 2DDBA
 DOSERVER~3:
@@ -1323,7 +1364,7 @@ SetServMode:
 ClrServMode:
         CON(5)  (*)+5                            * 2D9B2  primitive code object
         LC(3)   #202                             * 2D9B7
-        GOVLNG  OBJ_539D8.L2                     * 2D9BC
+        GOVLNG  ClrISF20B.L2                     * 2D9BC
         RPL
 
 * refs (2): 2D9EB 2DAEA
@@ -1334,7 +1375,7 @@ DOSERVER~4:
 
 * refs (2): 21FDB AFE1B
 DOSERVER:
-        :: KERMOPEN CHOOSE_INIT OBJ_2D37C BINT0 TRUE * 2D9F5
+        :: KERMOPEN CHOOSE_INIT KermInitPar BINT0 TRUE * 2D9F5
           { LAMEXCHP LAMKP LAMPKNO nohalt } BIND ERRSET * 2DA13
           :: SetServMode                         * 2DA3B
 DOSERVER.L1:
@@ -1345,13 +1386,14 @@ KERMOPEN~1:
             :: BINT39 TestSysFlag COLA ?SKIP     * 2DA4A  flag -39: Show I/O messages / No I/O messages
             ;                                    * 2DA63
             :: CLEARVDISP CLEARMENU ; # C0C JstGetTHEMESG KDispStatus2 * 2DA68  "Awaiting Server Cmd."
-            OBJ_2D37C CHOOSE_INIT                * 2DA90
+            KermInitPar CHOOSE_INIT              * 2DA90
 KERMOPEN~1.L1:
             ' LAMEXCHP STO 'LamKPSto BINT0       * 2DA9A
 
 * refs (4): 2D535 2DB71 2F392 2F835
-OBJ_2DAB3:
-            :: ' LAMPKNO STO ; BEGIN OBJ_2E2B4 NOT_WHILE * 2DAB3
+* # ->: stores the packet count LAMPKNO
+'LamPKNOSto:
+            :: ' LAMPKNO STO ; BEGIN KermRecvPkt NOT_WHILE * 2DAB3
             :: DROP SENDNAK DOSERVER~4 ATTN? case * 2DADB
               :: ATTNFLGCLR 2RDROP ;             * 2DAF9
               ALARM? case                        * 2DB0D
@@ -1361,24 +1403,24 @@ OBJ_2DAB3:
               :: TurnOff ClrServMode KERMOPEN SetServMode ; * 2DB44
             ;                                    * 2DB62
             REPEAT                               * 2DB67
-OBJ_2DAB3.L1:
-            BINT0 OBJ_2DAB3 CHR_S DOSERVER~2 DropSysErr$.L5 CHR_I DOSERVER~2 * 2DB6C
-            DropSysErr$.L3 ROT DECODE 3UNROLL CHR_R DOSERVER~2 _:chr(10)_.L2 * 2DB8F
-            CHR_C DOSERVER~2 OBJ_2DCE8.L1 CHR_G DOSERVER~2 DropSysErr$.L4 * 2DBB2
-            DUP CHR_E EQUALcase                  * 2DBD0
-            :: 2DROP OBJ_30E6C GOTO _:chr(10)_.L1 ; * 2DBDF
+'LamPKNOSto.L1:
+            BINT0 'LamPKNOSto CHR_S DOSERVER~2 DropSysErr$.L5 CHR_I * 2DB6C
+            DOSERVER~2 DropSysErr$.L3 ROT DECODE 3UNROLL CHR_R DOSERVER~2 * 2DB8A
+            _:chr(10)_.L2 CHR_C DOSERVER~2 OBJ_2DCE8.L1 CHR_G DOSERVER~2 * 2DBAD
+            DropSysErr$.L4 DUP CHR_E EQUALcase   * 2DBCB
+            :: 2DROP KERMERRM! GOTO _:chr(10)_.L1 ; * 2DBDF
             3DROP                                * 2DBFD
-OBJ_2DAB3.L2:
+'LamPKNOSto.L2:
             InvalServCmd                         * 2DC02
-OBJ_2DAB3.L3:
-            OBJ_2EFA0 DUP OBJ_2F01D %2 dowait SENDERROR GOTO DOSERVER.L1 * 2DC07
-OBJ_2DAB3.L4:
+'LamPKNOSto.L3:
+            KermErrMsg DUP KermShowErr %2 dowait SENDERROR GOTO DOSERVER.L1 * 2DC07
+'LamPKNOSto.L4:
             DOSERVER~1 ERRSET                    * 2DC2F
 
 StringVarsBytes(st):
             :: DOVARS DUPLENCOMP DUP#0=ITE 2DROP * 2DC39
               :: #1+_ONE_DO DUPINDEX@ NTHCOMDDUP ID>$ APPEND_SPACE OVER * 2DC52
-                VARSIZE EDITDECOMP$ APPEND_SPACE 4ROLL XEQRCL OBJ_15CCF * 2DC75
+                VARSIZE EDITDECOMP$ APPEND_SPACE 4ROLL XEQRCL $+TypeName * 2DC75
                 APPEND_SPACE SWAP #>% EDITDECOMP$ !append$ !append$ APNDCRLF * 2DC93
                 ROT !insert$ SWAPLOOP DROP ;     * 2DCB6
             ;                                    * 2DCCF
@@ -1387,7 +1429,7 @@ StringVarsBytes(st):
 * refs (1): 2DDA1
 OBJ_2DCE8:
             :: ERRN DUP#0=case                   * 2DCE8
-              :: OBJ_2EFA0 APNDCRLF SENDERROR ERRJMP ; * 2DCF7
+              :: KermErrMsg APNDCRLF SENDERROR ERRJMP ; * 2DCF7
               GETTHEMESG REALSTRSTR JstGetTHEMESG APPEND_SPACE !insert$ * 2DD15
               NEWLINE$ !append$ ' LAMERRMSG STO ; * 2DD2E
 OBJ_2DCE8.L1:
@@ -1398,16 +1440,16 @@ OBJ_2DCE8.L1:
 
 * refs (2): 2DCD9 2E768
 DropSysErr$:
-            :: DropSysObs ERROR@ OBJ_2EFA0 APNDCRLF ; ABND KERMOPEN~1 * 2DDC4
+            :: DropSysObs ERROR@ KermErrMsg APNDCRLF ; ABND KERMOPEN~1 * 2DDC4
             :: TOADISP REDISPHBUFF ClrDAsOK ;    * 2DDEC
 DropSysErr$.L1:
             NULL$SWAP CHR_X DOSERVER~6 ClrServMode KERMOPEN SetServMode * 2DE05
 DropSysErr$.L2:
-            ?GOTO DOSERVER.L1 ?GOTO OBJ_2DAB3.L1 GOTO OBJ_2DAB3.L3 * 2DE23
+            ?GOTO DOSERVER.L1 ?GOTO 'LamPKNOSto.L1 GOTO 'LamPKNOSto.L3 * 2DE23
 DropSysErr$.L3:
-            2DROP ACK_INIT NOT?GOTO OBJ_2DAB3.L3 BINT0 SENDACK CHOOSE_INIT * 2DE41
+            2DROP ACK_INIT NOT?GOTO 'LamPKNOSto.L3 BINT0 SENDACK CHOOSE_INIT * 2DE41
             CODE                                 * 2DE64  32 nibbles
-              GOSUBL  SUB_3086F                  * 2DE6E
+              GOSUBL  KermParPtrs                * 2DE6E
               D0=D0+  2                          * 2DE74
               D1=D1+  2                          * 2DE77
               A=DAT1  B                          * 2DE7A
@@ -1420,12 +1462,12 @@ DropSysErr$.L3:
 DropSysErr$.L4:
             DROPSWAP CAR$ DUP CHR_F EQUAL OVER CHR_L EQUALOR casedrop * 2DE98
             SENDNULLACK                          * 2DEC5
-            CHR_D EQUAL ?GOTO OBJ_2DAB3.L4 DROP GOTO OBJ_2DAB3.L2 * 2DECA
+            CHR_D EQUAL ?GOTO 'LamPKNOSto.L4 DROP GOTO 'LamPKNOSto.L2 * 2DECA
 DropSysErr$.L5:
             2DROP NULL$ DUP FALSE                * 2DEED
-            { LAMLNAME LAMKMODE LAMKRM } BIND ERRSET OBJ_2F709 ERRTRAP * 2DF01
-            :: DropSysObs ERROR@ OBJ_2E4BE FALSE ; ABND ?GOTO DOSERVER.L1 * 2DF2E
-            ?GOTO OBJ_2DAB3.L1 DUP OBJ_2EFA0 SWAP #SyntaxErr #= IT * 2DF5B
+            { LAMLNAME LAMKMODE LAMKRM } BIND ERRSET KermRecvFile ERRTRAP * 2DF01
+            :: DropSysObs ERROR@ KermSendErr FALSE ; ABND ?GOTO DOSERVER.L1 * 2DF2E
+            ?GOTO 'LamPKNOSto.L1 DUP KermErrMsg SWAP #SyntaxErr #= IT * 2DF5B
 
 * refs (1): 2D8FC
 Conc:RC(2st):
@@ -1434,7 +1476,7 @@ Conc:RC(2st):
 _:chr(10)_:
               $ ":\0A" !append$ !insert$ ;       * 2DF88
 _:chr(10)_.L1:
-            OBJ_2F01D GOTO DOSERVER.L1           * 2DFA5
+            KermShowErr GOTO DOSERVER.L1         * 2DFA5
 _:chr(10)_.L2:
             2DROP DUP palparse NOTcase           * 2DFB4
             :: 4DROP OBJ_2DFE6 ;                 * 2DFC8
@@ -1442,9 +1484,9 @@ _:chr(10)_.L2:
 
 * refs (1): 2DFD2
 OBJ_2DFE6:
-            :: OBJ_672DC GOTO OBJ_2DAB3.L3 ;     * 2DFE6
+            :: OBJ_672DC GOTO 'LamPKNOSto.L3 ;   * 2DFE6
             DRPExitAtLOOP NOTcasedrop            * 2DFFF
-            :: DOSERVER~5 GOTO OBJ_2DAB3.L3 ;    * 2E009
+            :: DOSERVER~5 GOTO 'LamPKNOSto.L3 ;  * 2E009
             CHR_F DOSERVER~6 GOTO DropSysErr$.L2 ; * 2E022
           ERRTRAP                                * 2E03B
           :: ERROR@ DUP #0=?SEMI FLUSHKEYS ClrServMode GETTHEMESG SENDERROR * 2E040

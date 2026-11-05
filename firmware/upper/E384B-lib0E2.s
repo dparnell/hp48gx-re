@@ -1,5 +1,6 @@
-* HP 48GX ROM revision R, #E384B-#E6DA4: Library part 0E2
+* HP 48GX ROM revision R, #E384B-#E6DA4: Library header, subject names, text tables for Columns and Beams to Gases
 * Addresses in the right-hand comments are those of the original ROM.
+* Most referenced: EqTitle# EqTextGases EqTextForcesAndEnergy EqTextFluids EqTextElectricity EqTextColumnsAndBeams EqSubjects+2# EqSubjects# EqSubjectNames
 * Follows on from the previous file (at #E384B in the original ROM).
         ENDLENGTH                                * E384B
 
@@ -7,6 +8,7 @@
         LENGTH                                   * E3850  length, to #FF959
         CON(2)  0                                * E3855  title length
 
+* Library 0E2: The Equation Library's data: subjects, equation sets, descriptions of variables, default units in SI and English, and pictures. Its application is library 0E3.
 LIB0E2:
         CON(3)  #0E2                             * E3857  library number
         REL(5)  LIB0E2.hash                      * E385A  hash table
@@ -15,6 +17,7 @@ LIB0E2:
         CON(5)  0                                * E3869  config
         RPL
 
+* Run on attaching the library: makes the library's ROM part of the search path.
         :: # E2 TOSRRP ;                         * E386E
 
 LIB0E2.hash:
@@ -44,132 +47,136 @@ LIB0E2.hash.L1:
 LIB0E2.link:
         CON(5)  DOHSTR                           * E38EB  link table of library 0E2
         LENGTH                                   * E38F0  length, to #E3B07
-        REL(5)  ROMP_0E2_000                     * E38F5  000 
-        REL(5)  ROMP_0E2_001                     * E38FA  001 
-        REL(5)  ROMP_0E2_002                     * E38FF  002 
-        REL(5)  ROMP_0E2_003                     * E3904  003 
-        REL(5)  ROMP_0E2_004                     * E3909  004 
-        REL(5)  ROMP_0E2_005                     * E390E  005 
-        REL(5)  ROMP_0E2_006                     * E3913  006 
-        REL(5)  ROMP_0E2_007                     * E3918  007 
-        REL(5)  ROMP_0E2_008                     * E391D  008 
-        REL(5)  ROMP_0E2_009                     * E3922  009 
-        REL(5)  ROMP_0E2_00A                     * E3927  00A 
-        REL(5)  ROMP_0E2_00B                     * E392C  00B 
-        REL(5)  ROMP_0E2_00C                     * E3931  00C 
-        REL(5)  ROMP_0E2_00D                     * E3936  00D 
-        REL(5)  ROMP_0E2_00E                     * E393B  00E 
-        REL(5)  ROMP_0E2_00F                     * E3940  00F 
-        REL(5)  ROMP_0E2_010                     * E3945  010 
-        REL(5)  ROMP_0E2_011                     * E394A  011 
-        REL(5)  ROMP_0E2_012                     * E394F  012 
-        REL(5)  ROMP_0E2_013                     * E3954  013 
-        REL(5)  ROMP_0E2_014                     * E3959  014 
-        REL(5)  ROMP_0E2_015                     * E395E  015 
-        REL(5)  ROMP_0E2_016                     * E3963  016 
-        REL(5)  ROMP_0E2_017                     * E3968  017 
-        REL(5)  ROMP_0E2_018                     * E396D  018 
-        REL(5)  ROMP_0E2_019                     * E3972  019 
-        REL(5)  ROMP_0E2_01A                     * E3977  01A 
-        REL(5)  ROMP_0E2_01B                     * E397C  01B 
-        REL(5)  ROMP_0E2_01C                     * E3981  01C 
-        REL(5)  ROMP_0E2_01D                     * E3986  01D 
-        REL(5)  ROMP_0E2_01E                     * E398B  01E 
-        REL(5)  ROMP_0E2_01F                     * E3990  01F 
-        REL(5)  ROMP_0E2_020                     * E3995  020 
-        REL(5)  ROMP_0E2_021                     * E399A  021 
-        REL(5)  ROMP_0E2_022                     * E399F  022 
-        REL(5)  ROMP_0E2_023                     * E39A4  023 
-        REL(5)  ROMP_0E2_024                     * E39A9  024 
-        REL(5)  ROMP_0E2_025                     * E39AE  025 
-        REL(5)  ROMP_0E2_026                     * E39B3  026 
-        REL(5)  ROMP_0E2_027                     * E39B8  027 
-        REL(5)  ROMP_0E2_028                     * E39BD  028 
-        REL(5)  ROMP_0E2_029                     * E39C2  029 
-        REL(5)  ~NULL{}                          * E39C7  02A 
-        REL(5)  ROMP_0E2_02B                     * E39CC  02B 
-        REL(5)  ROMP_0E2_02C                     * E39D1  02C 
-        REL(5)  ROMP_0E2_02D                     * E39D6  02D 
-        REL(5)  ROMP_0E2_02E                     * E39DB  02E 
-        REL(5)  ROMP_0E2_02F                     * E39E0  02F 
-        REL(5)  ROMP_0E2_030                     * E39E5  030 
-        REL(5)  ROMP_0E2_031                     * E39EA  031 
-        REL(5)  ROMP_0E2_032                     * E39EF  032 
-        REL(5)  ROMP_0E2_033                     * E39F4  033 
-        REL(5)  ROMP_0E2_034                     * E39F9  034 
-        REL(5)  ROMP_0E2_035                     * E39FE  035 
-        REL(5)  ROMP_0E2_036                     * E3A03  036 
-        REL(5)  ROMP_0E2_037                     * E3A08  037 
-        REL(5)  ROMP_0E2_038                     * E3A0D  038 
-        REL(5)  ROMP_0E2_039                     * E3A12  039 
-        REL(5)  ROMP_0E2_03A                     * E3A17  03A 
-        REL(5)  ROMP_0E2_03B                     * E3A1C  03B 
-        REL(5)  ROMP_0E2_03C                     * E3A21  03C 
-        REL(5)  ROMP_0E2_03D                     * E3A26  03D 
-        REL(5)  ROMP_0E2_03E                     * E3A2B  03E 
-        REL(5)  ROMP_0E2_03F                     * E3A30  03F 
-        REL(5)  ROMP_0E2_040                     * E3A35  040 
-        REL(5)  ROMP_0E2_041                     * E3A3A  041 
-        REL(5)  ROMP_0E2_042                     * E3A3F  042 
-        REL(5)  ROMP_0E2_043                     * E3A44  043 
-        REL(5)  ROMP_0E2_044                     * E3A49  044 
-        REL(5)  ROMP_0E2_045                     * E3A4E  045 
-        REL(5)  ROMP_0E2_046                     * E3A53  046 
-        REL(5)  ROMP_0E2_047                     * E3A58  047 
-        REL(5)  ROMP_0E2_048                     * E3A5D  048 
-        REL(5)  ROMP_0E2_049                     * E3A62  049 
-        REL(5)  ROMP_0E2_04A                     * E3A67  04A 
-        REL(5)  ROMP_0E2_04B                     * E3A6C  04B 
-        REL(5)  ROMP_0E2_04C                     * E3A71  04C 
-        REL(5)  ROMP_0E2_04D                     * E3A76  04D 
-        REL(5)  ROMP_0E2_04E                     * E3A7B  04E 
-        REL(5)  ROMP_0E2_04F                     * E3A80  04F 
-        REL(5)  ROMP_0E2_050                     * E3A85  050 
-        REL(5)  ROMP_0E2_051                     * E3A8A  051 
-        REL(5)  ROMP_0E2_052                     * E3A8F  052 
-        REL(5)  ROMP_0E2_053                     * E3A94  053 
-        REL(5)  ROMP_0E2_054                     * E3A99  054 
-        REL(5)  ROMP_0E2_055                     * E3A9E  055 
-        REL(5)  ROMP_0E2_056                     * E3AA3  056 
-        REL(5)  ROMP_0E2_057                     * E3AA8  057 
-        REL(5)  ROMP_0E2_058                     * E3AAD  058 
-        REL(5)  ROMP_0E2_059                     * E3AB2  059 
-        REL(5)  ROMP_0E2_05A                     * E3AB7  05A 
-        REL(5)  ROMP_0E2_05B                     * E3ABC  05B 
-        REL(5)  ROMP_0E2_05C                     * E3AC1  05C 
-        REL(5)  ROMP_0E2_05D                     * E3AC6  05D 
-        REL(5)  ROMP_0E2_05E                     * E3ACB  05E 
-        REL(5)  ROMP_0E2_05F                     * E3AD0  05F 
-        REL(5)  ROMP_0E2_060                     * E3AD5  060 
-        REL(5)  ROMP_0E2_061                     * E3ADA  061 
-        REL(5)  ROMP_0E2_062                     * E3ADF  062 
-        REL(5)  ROMP_0E2_063                     * E3AE4  063 
-        REL(5)  ROMP_0E2_064                     * E3AE9  064 
-        REL(5)  ROMP_0E2_065                     * E3AEE  065 
-        REL(5)  ROMP_0E2_066                     * E3AF3  066 
-        REL(5)  ROMP_0E2_067                     * E3AF8  067 
-        REL(5)  ROMP_0E2_068                     * E3AFD  068 
-        REL(5)  ROMP_0E2_069                     * E3B02  069 
+        REL(5)  EqTitle#                         * E38F5  000 
+        REL(5)  EqSubjects#                      * E38FA  001 
+        REL(5)  EqSubjects+2#                    * E38FF  002 
+        REL(5)  EqSubjectNames                   * E3904  003 
+        REL(5)  EqTextColumnsAndBeams            * E3909  004 
+        REL(5)  EqTextElectricity                * E390E  005 
+        REL(5)  EqTextFluids                     * E3913  006 
+        REL(5)  EqTextForcesAndEnergy            * E3918  007 
+        REL(5)  EqTextGases                      * E391D  008 
+        REL(5)  EqTextHeatTransfer               * E3922  009 
+        REL(5)  EqTextMagnetism                  * E3927  00A 
+        REL(5)  EqTextMotion                     * E392C  00B 
+        REL(5)  EqTextOptics                     * E3931  00C 
+        REL(5)  EqTextOscillations               * E3936  00D 
+        REL(5)  EqTextPlaneGeometry              * E393B  00E 
+        REL(5)  EqTextSolidGeometry              * E3940  00F 
+        REL(5)  EqTextSolidStateDevices          * E3945  010 
+        REL(5)  EqTextStressAnalysis             * E394A  011 
+        REL(5)  EqTextWaves                      * E394F  012 
+        REL(5)  EqUnitsEng                       * E3954  013 
+        REL(5)  EqUnitsSI                        * E3959  014 
+        REL(5)  EqSubjects                       * E395E  015 
+        REL(5)  EqSubColumnsAndBeams             * E3963  016 
+        REL(5)  EqSubElectricity                 * E3968  017 
+        REL(5)  EqSubFluids                      * E396D  018 
+        REL(5)  EqSubForcesAndEnergy             * E3972  019 
+        REL(5)  EqSubGases                       * E3977  01A 
+        REL(5)  EqSubHeatTransfer                * E397C  01B 
+        REL(5)  EqSubMagnetism                   * E3981  01C 
+        REL(5)  EqSubMotion                      * E3986  01D 
+        REL(5)  EqSubOptics                      * E398B  01E 
+        REL(5)  EqSubOscillations                * E3990  01F 
+        REL(5)  EqSubPlaneGeometry               * E3995  020 
+        REL(5)  EqSubSolidGeometry               * E399A  021 
+        REL(5)  EqSubSolidStateDevices           * E399F  022 
+        REL(5)  EqSubStressAnalysis              * E39A4  023 
+        REL(5)  EqSubWaves                       * E39A9  024 
+        REL(5)  EqVarsDeflect                    * E39AE  025 
+        REL(5)  EqVarsSlope                      * E39B3  026 
+        REL(5)  EqVarsMoment                     * E39B8  027 
+        REL(5)  EqVarsSolid                      * E39BD  028 
+        REL(5)  EqVarNames                       * E39C2  029 
+        REL(5)  EqNoPic                          * E39C7  02A 
+        REL(5)  EqPicCantilever                  * E39CC  02B 
+        REL(5)  EqPicSimpleBeam                  * E39D1  02C 
+        REL(5)  EqPicElasticBuckling             * E39D6  02D 
+        REL(5)  EqPicEccentricColumns            * E39DB  02E 
+        REL(5)  EqPicVoltageDivider              * E39E0  02F 
+        REL(5)  EqPicCurrentDivider              * E39E5  030 
+        REL(5)  EqPicSeriesAndParallelR          * E39EA  031 
+        REL(5)  EqPicSeriesAndParallelC          * E39EF  032 
+        REL(5)  EqPicSeriesAndParallelL          * E39F4  033 
+        REL(5)  EqPicRLCCurrentDelay             * E39F9  034 
+        REL(5)  EqPicRCTransient                 * E39FE  035 
+        REL(5)  EqPicRLTransient                 * E3A03  036 
+        REL(5)  EqPicPlateCapacitor              * E3A08  037 
+        REL(5)  EqPicCylindricalCapacitor        * E3A0D  038 
+        REL(5)  EqPicSolenoidInductance          * E3A12  039 
+        REL(5)  EqPicToroidInductance            * E3A17  03A 
+        REL(5)  EqPicPressureAtDepth             * E3A1C  03B 
+        REL(5)  EqPicBernoulliEquation           * E3A21  03C 
+        REL(5)  EqPicFlowWithLosses              * E3A26  03D 
+        REL(5)  EqPicFlowInFullPipes             * E3A2B  03E 
+        REL(5)  EqPicHookeSLaw                   * E3A30  03F 
+        REL(5)  EqPic1DElasticCollisions         * E3A35  040 
+        REL(5)  EqPicIsentropicFlow              * E3A3A  041 
+        REL(5)  EqPicThermalExpansion            * E3A3F  042 
+        REL(5)  EqPicConduction                  * E3A44  043 
+        REL(5)  EqPicConvection                  * E3A49  044 
+        REL(5)  EqPicConductionConvection        * E3A4E  045 
+        REL(5)  EqPicBlackBodyRadiation          * E3A53  046 
+        REL(5)  EqPicStraightWire                * E3A58  047 
+        REL(5)  EqPicForceBetweenWires           * E3A5D  048 
+        REL(5)  EqPicBFieldInSolenoid            * E3A62  049 
+        REL(5)  EqPicBFieldInToroid              * E3A67  04A 
+        REL(5)  EqPicProjectileMotion            * E3A6C  04B 
+        REL(5)  EqPicLawOfRefraction             * E3A71  04C 
+        REL(5)  EqPicCriticalAngle               * E3A76  04D 
+        REL(5)  EqPicBrewsterSLaw                * E3A7B  04E 
+        REL(5)  EqPicSphericalReflection         * E3A80  04F 
+        REL(5)  EqPicSphericalRefraction         * E3A85  050 
+        REL(5)  EqPicThinLens                    * E3A8A  051 
+        REL(5)  EqPicSpring1                     * E3A8F  052 
+        REL(5)  EqPicSpring2                     * E3A94  053 
+        REL(5)  EqPicSpring3                     * E3A99  054 
+        REL(5)  EqPicSimplePendulum              * E3A9E  055 
+        REL(5)  EqPicConicalPendulum             * E3AA3  056 
+        REL(5)  EqPicTorsionalPendulum           * E3AA8  057 
+        REL(5)  EqPicCircle                      * E3AAD  058 
+        REL(5)  EqPicEllipse                     * E3AB2  059 
+        REL(5)  EqPicRectangle                   * E3AB7  05A 
+        REL(5)  EqPicRegularPolygon              * E3ABC  05B 
+        REL(5)  EqPicCircularRing                * E3AC1  05C 
+        REL(5)  EqPicTriangle                    * E3AC6  05D 
+        REL(5)  EqPicCone                        * E3ACB  05E 
+        REL(5)  EqPicCylinder                    * E3AD0  05F 
+        REL(5)  EqPicParallelepiped              * E3AD5  060 
+        REL(5)  EqPicSphere                      * E3ADA  061 
+        REL(5)  EqPicPNStepJunctions             * E3ADF  062 
+        REL(5)  EqPicNMOSTransistors             * E3AE4  063 
+        REL(5)  EqPicBipolarTransistors          * E3AE9  064 
+        REL(5)  EqPicJFETs                       * E3AEE  065 
+        REL(5)  EqPicNormalStress                * E3AF3  066 
+        REL(5)  EqPicShearStress                 * E3AF8  067 
+        REL(5)  EqPicStressOnAnElement           * E3AFD  068 
+        REL(5)  EqPicMohrSCircle                 * E3B02  069 
         ENDLENGTH                                * E3B07
 
 * ROMPTR 0E2 000
 * refs (1): E3857
-ROMP_0E2_000:
+* # 16: the entry of the text table that holds the title "EQUATION LIBRARY".
+EqTitle#:
         # 10                                     * E3B07  16
 
 * ROMPTR 0E2 001
 * refs (1): E3857
-ROMP_0E2_001:
+* # 15: the number of subjects.
+EqSubjects#:
         # F                                      * E3B11  15
 
 * ROMPTR 0E2 002
 * refs (1): E3857
-ROMP_0E2_002:
+* # 17.
+EqSubjects+2#:
         # 11                                     * E3B1B  17
 
 * ROMPTR 0E2 003
 * refs (1): E3857
-ROMP_0E2_003:
+* Array of strings: the names of the 15 subjects in catalog order, and the title of the application.
+EqSubjectNames:
         CON(5)  DOARRY                           * E3B25  array 16
         LENGTH                                   * E3B2A  length, to #E3D00
         CON(5)  DOCSTR                           * E3B2F  element type
@@ -195,7 +202,8 @@ ROMP_0E2_003:
 
 * ROMPTR 0E2 004
 * refs (1): E3857
-ROMP_0E2_004:
+* Text of the subject Columns and Beams: first the titles of its equation sets, then the descriptions of its variables.
+EqTextColumnsAndBeams:
         CON(5)  DOARRY                           * E3D00  array 69
         LENGTH                                   * E3D05  length, to #E45C6
         CON(5)  DOCSTR                           * E3D0A  element type
@@ -274,7 +282,8 @@ ROMP_0E2_004:
 
 * ROMPTR 0E2 005
 * refs (1): E3857
-ROMP_0E2_005:
+* Text of the subject Electricity: first the titles of its equation sets, then the descriptions of its variables.
+EqTextElectricity:
         CON(5)  DOARRY                           * E45C6  array 141
         LENGTH                                   * E45CB  length, to #E5636
         CON(5)  DOCSTR                           * E45D0  element type
@@ -425,7 +434,8 @@ ROMP_0E2_005:
 
 * ROMPTR 0E2 006
 * refs (1): E3857
-ROMP_0E2_006:
+* Text of the subject Fluids: first the titles of its equation sets, then the descriptions of its variables.
+EqTextFluids:
         CON(5)  DOARRY                           * E5636  array 59
         LENGTH                                   * E563B  length, to #E5D6C
         CON(5)  DOCSTR                           * E5640  element type
@@ -494,7 +504,8 @@ ROMP_0E2_006:
 
 * ROMPTR 0E2 007
 * refs (1): E3857
-ROMP_0E2_007:
+* Text of the subject Forces and Energy: first the titles of its equation sets, then the descriptions of its variables.
+EqTextForcesAndEnergy:
         CON(5)  DOARRY                           * E5D6C  array 66
         LENGTH                                   * E5D71  length, to #E6537
         CON(5)  DOCSTR                           * E5D76  element type
@@ -570,7 +581,8 @@ ROMP_0E2_007:
 
 * ROMPTR 0E2 008
 * refs (1): E3857
-ROMP_0E2_008:
+* Text of the subject Gases: first the titles of its equation sets, then the descriptions of its variables.
+EqTextGases:
         CON(5)  DOARRY                           * E6537  array 69
         LENGTH                                   * E653C  length, to #E6DA5
         CON(5)  DOCSTR                           * E6541  element type

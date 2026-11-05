@@ -56,7 +56,8 @@ Source format
 * RPL mode: `::` `;` `{` `}` `SYMBOL` `UNIT`, `# hex` (or `# expr` when the
   value is an address, e.g. `# DOREAL`), `% real`, `%% real`,
   `C% re im`, `C%% re im`, `CHR "c"` or `CHR #xx`, `$ "text"`, `HXS hex`,
-  `ID name`, `LAM name`, `TAG "text"`, `ROMPTR lib cmd`, `ACPTR expr expr`,
+  `ID name`, `LAM name`, `TAG "text"`, `ROMPTR lib cmd`, `XLIB name` (a ROMPTR by the
+  name given with `name XLIBNO lib cmd`), `ACPTR expr expr`,
   `GROB "png"`, `CODE` ... `ENDCODE` (Saturn lines in between). Any other
   token is a pointer to that symbol; `PTR expr` says so explicitly.
   `EQ$ "text"` is an Equation Library string, written expanded and packed
@@ -91,7 +92,7 @@ PROLOG = {
 SEMI = 0x0312B
 OPENERS = {"::": "DOCOL", "{": "DOLIST", "SYMBOL": "DOSYMB", "UNIT": "DOEXT"}
 RPL_WORDS = set(OPENERS) | {";", "}", "#", "%", "%%", "C%", "C%%", "CHR", "$", "HXS",
-                            "ID", "LAM", "TAG", "ROMPTR", "ACPTR", "GROB", "CODE",
+                            "ID", "LAM", "TAG", "ROMPTR", "XLIB", "ACPTR", "GROB", "CODE",
                             "ENDCODE", "PTR", "EQ$", "PCGROB", "PCGROBS", "GROBW"}
 DIRECTIVES = {"ORG", "INCLUDE", "ASSEMBLE", "RPL", "NIBHEX", "NIBASC", "ROMPBODY", "IDBODY", "%BODY", "%%BODY",
               "C%BODY", "C%%BODY", "UDIMS", "UFACT", "PATTERN", "BSS", "EQU",
@@ -102,7 +103,7 @@ KEYWORDS = RPL_WORDS | DIRECTIVES
 # (`:: DUP # 3F ROMPTR 0C2 000 ;`). Pointers and the rest take none.
 RPL_OPERANDS = {"#": 1, "%": 1, "%%": 1, "C%": 2, "C%%": 2, "CHR": 1, "$": 1, "HXS": 1, "ID": 1,
                 "EQ$": 1, "PCGROB": 1, "PCGROBS": 2, "GROBW": 2,
-                "LAM": 1, "TAG": 1, "ROMPTR": 2, "ACPTR": 2, "GROB": 1, "PTR": 1}
+                "LAM": 1, "TAG": 1, "ROMPTR": 2, "XLIB": 1, "ACPTR": 2, "GROB": 1, "PTR": 1}
 
 
 def rpl_objects(toks):
@@ -581,6 +582,7 @@ HEX = re.compile(r"[0-9A-Fa-f]+")
 class Assembler:
     def __init__(self):
         self.symbols = {}
+        self.xlib = {}          # command name -> library and command number
         self.mem = bytearray(ROM_SIZE)
         self.written = bytearray(ROM_SIZE)
         self.pass_ = 2
@@ -779,6 +781,11 @@ class Assembler:
             return p(pro) + digits(len(name), 2) + bytes_nibs(name)
         if op == "ROMPTR":
             return p("DOROMP") + digits(int(args[0], 16), 3) + digits(int(args[1], 16), 3)
+        if op == "XLIB":
+            if args[0] not in self.xlib:
+                raise AsmError("XLIB %s: no XLIBNO for it" % args[0])
+            lib, cmd = self.xlib[args[0]]
+            return p("DOROMP") + digits(lib, 3) + digits(cmd, 3)
         if op in ("PCGROB", "PCGROBS"):
             rows = png_read(self.root / unquote(args[0]))
             body = pc_pack(rows, args[1] if op == "PCGROBS" else None)
@@ -855,6 +862,9 @@ class Assembler:
             if not toks:
                 return
         op = toks[0]
+        if len(toks) == 4 and toks[1] == "XLIBNO":
+            self.xlib[op] = (int(toks[2], 16), int(toks[3], 16))
+            return
         if len(toks) >= 3 and toks[1] == "EQU":
             # evaluated again in pass 2, when later labels are known
             self.symbols[op] = self.value(toks[2], self.pc)

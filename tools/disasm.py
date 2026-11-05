@@ -198,6 +198,18 @@ class Generator:
                 self.ann_names[a] = name
             if comment:
                 self.notes[a].append(comment)
+        # What each source file and library holds, by file start and library
+        # number; these are our notes too.
+        self.region_notes = {}
+        for line in (DATA / "regions.txt").read_text(encoding="utf-8").splitlines():
+            if line.startswith("#") or not line.strip():
+                continue
+            key, text = line.split("	")[:2]
+            if key.startswith("LIB"):
+                hdr = next(l.hdr for l in self.s["libs"] if l.num == int(key[3:], 16))
+                self.notes[hdr].append("Library %s: %s" % (key[3:], text))
+            else:
+                self.region_notes[int(key, 16)] = text
         self.hints = {}                     # addr -> preferred generated name
         self.operands = {}                  # insn addr -> ("addr" or expression, note)
         for line in (DATA / "operands.txt").read_text(encoding="utf-8").splitlines():
@@ -1551,11 +1563,24 @@ class Generator:
                 self.label_for(a)
 
     def resolve_all(self):
+        self.xlib = {}          # names ROMPTRs are written by -> (library, command)
         for ln in self.lines:
             self.text(ln)       # gives every target its label
         self.name_locals()
         for ln in self.lines:
             ln.parts = [self.text(ln)]
+            self.name_romptr(ln)
+
+    def name_romptr(self, ln):
+        """A ROMPTR to a named command is written by the name: XLIB name."""
+        if not (ln.value and ln.value[0] == "romp") or not ln.parts[0].startswith("ROMPTR"):
+            return
+        name = self.label.get(self.romp_addr.get(ln.value[1]))
+        if name and not name.startswith("ROMP_"):
+            self.xlib[name] = ln.value[1]
+            ln.parts = ["%-8s%s" % ("XLIB", name)]
+            if self.clean(ln.comment) == name:
+                ln.comment = ""
 
     def name_locals(self):
         """Branch targets are named after the routine they are in: SKIPOB.L2,
@@ -1647,6 +1672,7 @@ class Generator:
         asm = sasm.Assembler()
         asm.root = SRC
         asm.symbols = dict(self.used)
+        asm.xlib = self.xlib
         for ln in self.lines:
             if not ln.verify or not ln.size:
                 continue
@@ -1912,7 +1938,8 @@ class Generator:
             # Fixed addresses: the start of the ROM and of each upper-ROM
             # window. Everything else flows on from the previous file.
             pinned = st == 0 or st in WINDOWS
-            res.append(("%s/%05X-%s.s" % ("lower" if st < LOWER_END else "upper", st, name), desc, chunk, pinned))
+            res.append(("%s/%05X-%s.s" % ("lower" if st < LOWER_END else "upper", st, name),
+                        self.region_notes.get(st, desc), chunk, pinned))
         return res
 
     def write(self):
@@ -1934,7 +1961,10 @@ class Generator:
         for name, a in list(sasm.PROLOG.items()) + [("SEMI", sasm.SEMI)]:
             if name not in self.used and a in self.label:
                 eq.append("%-24s EQU %s" % (name, self.label[a]))
-        (SRC / "equates.s").write_text("\n".join(eq) + "\n", encoding="utf-8", newline="\n")
+        eq.append("* Library commands: the names XLIB takes, with their library and command numbers.")
+        for name, (lib, cmd) in sorted(self.xlib.items(), key=lambda kv: kv[1]):
+            eq.append("%-24s XLIBNO %03X %03X" % (name, lib, cmd))
+        (SRC / "equates.s").write_text(hp_map("\n".join(eq)) + "\n", encoding="utf-8", newline="\n")
         return files
 
     def write_file(self, path, desc, blocks, pinned):

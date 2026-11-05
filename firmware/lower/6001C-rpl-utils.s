@@ -1,11 +1,11 @@
-* HP 48GX ROM revision R, #6001C-#63028: Control structures and stack utilities
+* HP 48GX ROM revision R, #6001C-#63028: End of the pattern matcher (match'), then the RPL utility words: stack shuffles, lams, case and test words, CACHE and DUMP, types, flags
 * Addresses in the right-hand comments are those of the original ROM.
 * Most referenced: case ITE NOTcase 3PICK IT 3UNROLL SWAPDROP 4PICK 1GETLAM ?SEMI 2GETLAM 4ROLL
 * Follows on from the previous file (at #6001C in the original ROM).
         RPL
 
 * refs (1): 5FFEF
-OBJ_6001C:
+MatPattern~5:
         :: nonopcase BINT0                       * 6001C
           REQcase xFCNAPPLY                      * 6002B
           :: OVER #3+PICK #2+ ; infarg? case     * 60035
@@ -15,12 +15,14 @@ over;pick(s+3);1+(s):
           argum ;                                * 60071
 
 * refs (3): 5FE1A 5FEA1 60161
-OBJ_6007B:
+* -> FALSE: the pattern failed: unbind and leave the caller
+MatPatFail:
         :: Π'ct Π'ep Π'pp ABND RDROP FALSE ;     * 6007B
 
 * refs (10): 5B325 5B384 5B3E8 5B442 5B555 5B5AF ...
-OBJ_600A3:
-        :: #1+DUP #1+SWAP BEGIN OVER PICK OBJ_5FF73 ITE OBJ_6029A DROP * 600A3
+* meta -> meta': replace each pattern variable in the result by what it matched
+MatSubst:
+        :: #1+DUP #1+SWAP BEGIN OVER PICK PatVar? ITE MatSubst~1 DROP * 600A3
           SWAP#1- DUPUNROT #2= UNTIL SWAPDROP#1- ; * 600D5
 
 * refs (7): 28BB9 28BDC 5FE79 60A04 60A36 73042 ...
@@ -28,21 +30,21 @@ OBJ_600A3:
         { }                                      * 600F3
 
 * refs (1): 5FE6F
-OBJ_600FD:
-        :: Π'ep OBJ_5FFD6 Π'ep OVER ' Π'ep STO SWAPOVER#- COLA OBJ_60254 * 600FD
+MatPattern~2:
+        :: Π'ep MatPattern~4 Π'ep OVER ' Π'ep STO SWAPOVER#- COLA MatBind * 600FD
         ;                                        * 60134
 
 * refs (1): 5FE7E
-OBJ_60139:
+MatPattern~3:
         :: Π'ep PICK                             * 60139
           :: idntlamcase DROP                    * 60148
-            DROPRDROP COLA OBJ_6007B             * 60157
+            DROPRDROP COLA MatPatFail            * 60157
           ;                                      * 60166
-          Π'ep DUP #1+ ' Π'ep STO BINT1 COLA OBJ_60254 * 6016B
+          Π'ep DUP #1+ ' Π'ep STO BINT1 COLA MatBind * 6016B
         ;                                        * 60198
 
 * refs (1): 5FE88
-OBJ_6019D:
+MatPattern~6:
         :: 2DUPSWAP INCOMPDROP OBJ_601B6 ;       * 6019D
 
 * refs (1): 601AC
@@ -58,32 +60,33 @@ OBJ_601B6:
         GOSBVL  SAVPTR                           * 601E2
         D1=D1+  5                                * 601E9
         A=R1.F  A                                * 601EC
-        GOSUB   SUB_60236                        * 601F2
+        GOSUB   Mul5A_2                          * 601F2
         CD1EX                                    * 601F6
         A=A+C   A                                * 601F9
         D0=A                                     * 601FB
         D1=C                                     * 601FE
         A=R2.F  A                                * 60201
-        GOSUB   SUB_60236                        * 60207
+        GOSUB   Mul5A_2                          * 60207
         CD1EX                                    * 6020B
         C=C+A   A                                * 6020E
         D1=C                                     * 60210
         C=R0.F  A                                * 60213
         GOSUBL  SUB_5FCA3                        * 60219
-        GONC    SUB_60236.L1                     * 6021F
+        GONC    Mul5A_2.L1                       * 6021F
         GOSBVL  GETPTR                           * 60222
         LC(5)   FALSE                            * 60229
         A=C     A                                * 60230
         PC=(A)                                   * 60232
 
 * refs (3): 601F2 60207 60389
-SUB_60236:
+* A.A = 5*A.A, as Mul5A
+Mul5A_2:
         C=A     A                                * 60236
         A=A+A   A                                * 60238
         A=A+A   A                                * 6023A
         A=A+C   A                                * 6023C
         RTN                                      * 6023E
-SUB_60236.L1:
+Mul5A_2.L1:
         GOSBVL  GETPTR                           * 60240
         LC(5)   TRUE                             * 60247
         A=C     A                                * 6024E
@@ -91,16 +94,17 @@ SUB_60236.L1:
         RPL
 
 * refs (2): 6012F 60193
-OBJ_60254:
-        :: TWO{}N Π'pp #1+ DUPUNROT #1+PICK STOLAM ' Π'pp STO OBJ_5FEFB * 60254
-          UNTIL OBJ_5FE2E ;                      * 6028B
+* ob #n -> flag: store the matched part (a list of pointer and length) in the next pattern variable's lam; see MatCt-1
+MatBind:
+        :: TWO{}N Π'pp #1+ DUPUNROT #1+PICK STOLAM ' Π'pp STO MatCt-1 UNTIL * 60254
+          MatPatOK ;                             * 60290
 
 * refs (1): 600CB
-OBJ_6029A:
-        :: undo DROP INCOMPDROP 4PICK OBJ_602BD ; * 6029A
+MatSubst~1:
+        :: undo DROP INCOMPDROP 4PICK MatSubst~2 ; * 6029A
 
 * refs (1): 602B3
-OBJ_602BD:
+MatSubst~2:
         CON(5)  (*)+5                            * 602BD  primitive code object
         ASSEMBLE
         GOSBVL  POP#                             * 602C2
@@ -113,19 +117,19 @@ OBJ_602BD:
         R3=A.F  A                                * 602F0
         C=R1.F  A                                * 602F6
         D=D-C   A                                * 602FC
-        GONC    OBJ_602BD.L1                     * 602FE
+        GONC    MatSubst~2.L1                    * 602FE
         GOSBVL  SAVPTR                           * 60301
         GOSBVL  GARBAGECOL                       * 60308
         GOSBVL  GETPTR                           * 6030F
         C=R1.F  A                                * 60316
         D=D-C   A                                * 6031C
-        GONC    OBJ_602BD.L1                     * 6031E
+        GONC    MatSubst~2.L1                    * 6031E
         GOVLNG  DOMEMERR                         * 60321
-OBJ_602BD.L1:
+MatSubst~2.L1:
         D=D+1   A                                * 60328
         GOSBVL  SAVPTR                           * 6032A
         C=R1.F  A                                * 60331
-        GOSUB   SUB_603BF                        * 60337
+        GOSUB   Mul5C                            * 60337
         R4=C.F  A                                * 6033B
         AD1EX                                    * 60341
         D0=A                                     * 60344
@@ -137,7 +141,7 @@ OBJ_602BD.L1:
         C=R0.F  A                                * 6035C
         C=C-1   A                                * 60362
         C=C-1   A                                * 60364
-        GOSUB   SUB_603BF                        * 60366
+        GOSUB   Mul5C                            * 60366
         GOSBVL  MOVEDOWN                         * 6036A
         C=R0.F  A                                * 60371
         A=R2.F  A                                * 60377
@@ -145,7 +149,7 @@ OBJ_602BD.L1:
         C=R3.F  A                                * 6037F
         A=A+1   A                                * 60385
         A=A+C   A                                * 60387
-        GOSUB   SUB_60236                        * 60389
+        GOSUB   Mul5A_2                          * 60389
         CD0EX                                    * 6038D
         C=C+A   A                                * 60390
         D0=C                                     * 60392
@@ -159,7 +163,8 @@ OBJ_602BD.L1:
         GOVLNG  PUSH#LOOP                        * 603B8
 
 * refs (2): 60337 60366
-SUB_603BF:
+* C.A = 5*C.A
+Mul5C:
         A=C     A                                * 603BF
         C=C+C   A                                * 603C1
         C=C+C   A                                * 603C3
@@ -178,35 +183,37 @@ match'(ex,li)~4:
 
 * refs (3): 60455 604F5 60590
 OBJ_60405:
-          :: OBJ_60487 Π'sur OBJ_6045F Π'sun AGAIN ; * 60405
-          DUPTWO Π'sur DUPTEMPENV OBJ_5FDB7 case OBJ_604AF * 60428
+          :: LAM-1' Π'sur LAM+1' Π'sun AGAIN ;   * 60405
+          DUPTWO Π'sur DUPTEMPENV MatPattern case OBJ_604AF * 60428
           3DROP ABND COLA OBJ_60405              * 60446
         ;                                        * 6045A
 
 * refs (2): 60414 606D0
-OBJ_6045F:
+* -> : add 1 to the lam named next in the runstream
+LAM+1':
         :: 'R DUP undo DROP #1+SWAP STOLAM ;     * 6045F
 
 * refs (1): 6040A
-OBJ_60487:
+* -> : subtract 1 from the lam named next in the runstream
+LAM-1':
         :: 'R DUP undo DROP #1-SWAP STOLAM ;     * 60487
 
 * refs (1): 60441
 OBJ_604AF:
-        :: ROTROT2DROP Π'sur #- ' Π'mlg STO OBJ_60E3C Π'ckd EVAL NOTcase * 604AF
+        :: ROTROT2DROP Π'sur #- ' Π'mlg STO LAMROMP@ Π'ckd EVAL NOTcase * 604AF
 
 * refs (1): 60522
 OBJ_604E6:
           :: ABND COLA OBJ_60405                 * 604E6
           ;                                      * 604FA
-          OBJ_60E3C Π'rhs EXPLODE OBJ_600A3 Π'sur Π'mlg OBJ_60DB5 OBJ_604E6 * 604FF
+          LAMROMP@ Π'rhs EXPLODE MatSubst Π'sur Π'mlg OBJ_60DB5 OBJ_604E6 * 604FF
           DUP 4PICK SWAP#- ' Π'mlg STO OBJ_5ED82 get1 Π'mlg #+OVER #2+UNROLL * 60527
           BINT0 ' Π'sun STO TRUE ' Π'reg STO ABND COLA OBJ_60405 * 6055E
         ;                                        * 60595
 
 * refs (1): 60A90
 match'(ex,li)~5:
-        :: Π'prd EXPLODE OBJ_600A3 IMPLODE symcomp ' Π'prp STO DUPTEMPENV * 6059A
+        :: Π'prd EXPLODE MatSubst IMPLODE symcomp ' Π'prp STO DUPTEMPENV * 6059A
           DUP#2+PICK OVER#+ #2+ ' NULLLAM CACHE Π'prp COMPEVAL CK1NOLASTWD ' * 605CC
           Π'prp STO ' NULLLAM DUMP ABND ABND DROP Π'prp DUPTYPEREAL? ITE * 605FE
           %0<> DROPFALSE                         * 60635
@@ -216,23 +223,23 @@ match'(ex,li)~5:
 match'(ex,li)~1:
         :: Π'sur Π'cts #1+ ' Π'sur STOLAM #1+ ' Π'cts STOLAM BEGIN Π'sur * 60644
           Π'cts #=case match'(ex,li)~4           * 60685
-          DUPTWO Π'sur DUPTEMPENV OBJ_5FDB7 case match'(ex,li)~2 * 60694
-          3DROP ABND COLA OBJ_606CB              * 606B2
+          DUPTWO Π'sur DUPTEMPENV MatPattern case match'(ex,li)~2 * 60694
+          3DROP ABND COLA ~LAM+1';Π'sur;AGAIN    * 606B2
         ;                                        * 606C6
 
 * refs (2): 606C1 6072A
-OBJ_606CB:
-        :: OBJ_6045F Π'sur AGAIN ;               * 606CB
+~LAM+1';Π'sur;AGAIN:
+        :: LAM+1' Π'sur AGAIN ;                  * 606CB
 
 * refs (1): 606AD
 match'(ex,li)~2:
-        :: ROTROT2DROP Π'sur #- ' Π'mlg STOLAM OBJ_60E3C Π'ckd EVAL NOTcase * 606E4
+        :: ROTROT2DROP Π'sur #- ' Π'mlg STOLAM LAMROMP@ Π'ckd EVAL NOTcase * 606E4
 
 * refs (1): 60757
 OBJ_6071B:
-          :: ABND COLA OBJ_606CB                 * 6071B
+          :: ABND COLA ~LAM+1';Π'sur;AGAIN       * 6071B
           ;                                      * 6072F
-          OBJ_60E3C Π'rhs EXPLODE OBJ_600A3 Π'sur Π'mlg OBJ_60DB5 OBJ_6071B * 60734
+          LAMROMP@ Π'rhs EXPLODE MatSubst Π'sur Π'mlg OBJ_60DB5 OBJ_6071B * 60734
           2DUP#+ ' Π'sur STOLAM DUP 4PICKSWAP #- ' Π'mlg STOLAM OBJ_5ED82 * 6075C
           get1 Π'mlg #+OVER #2+UNROLL Π'sur Π'mlg #+ ' Π'sur STOLAM Π'cts * 60793
           Π'mlg #+ ' Π'cts STOLAM TRUE ' Π'reg STOLAM ABND AGAIN ; * 607CA
@@ -295,12 +302,12 @@ OBJ_608C9:
 
 * refs (1): 60AA4
 match'(ex,li)~8:
-        :: dup pshzer BEGIN #1-SWAP OBJ_5FF73 ITE psh1& DROP * 6097D
+        :: dup pshzer BEGIN #1-SWAP PatVar? ITE psh1& DROP * 6097D
           #0=UNTIL DROP ;                        * 609AA
 
 * refs (2): 60AE0 60B08
 match'(ex,li)~9:
-        :: BEGIN pullrev OBJ_5FF73 ITE match'(ex,li)~10 DROP * 609B9
+        :: BEGIN pullrev PatVar? ITE match'(ex,li)~10 DROP * 609B9
           #0=UNTIL DROP ;                        * 609DC
 
 * refs (1): 609D2
@@ -331,7 +338,7 @@ match'(ex,li):
           ABND Π'reg ITE %1 %0_2A2B4             * 60B76
           ABND pshm1 IMPLODE SWAPDROPSWAP ;      * 60B8F
 
-        :: OBJ_5FF73 NOTcase EQUALNOTcase        * 60BA8
+        :: PatVar? NOTcase EQUALNOTcase          * 60BA8
           2DROP                                  * 60BBC
           COLASKIP ;                             * 60BC1
 
@@ -386,7 +393,8 @@ OBJ_60DB5:
           2DROP NDROP COLACOLA ;                 * 60E28
 
 * refs (4): 604D2 604FF 60707 60734
-OBJ_60E3C:
+* -> ob: the value of the lam named next in the runstream, a ROMPTR being resolved and stored back
+LAMROMP@:
         :: 'R DUP EVAL DUPTYPEROMP? NOTcase SWAPDROP * 60E3C
           ?ROMPTR@ DUPROT STOLAM ;               * 60E5F
 
@@ -757,11 +765,12 @@ DUP#1+PICK:
 * refs (7): 5AF83 5FE10 6026D 6AEDD 6C2B2 6C4AB ...
 #1+PICK:
         CON(5)  (*)+5                            * 611A3  primitive code object
-        GOSUB   SUB_611B0                        * 611A8
+        GOSUB   Peek#D1                          * 611A8
         GOTO    #2+PICK.L2                       * 611AC
 
 * refs (5): 611A8 611C3 611D7 611E6 618AD
-SUB_611B0:
+* -> A.A = the bint on stack level 1, D1 at its body; no pop
+Peek#D1:
         C=DAT1  A                                * 611B0
         CD1EX                                    * 611B3
         D1=D1+  5                                * 611B6
@@ -772,7 +781,7 @@ SUB_611B0:
 * refs (18): 10838 4CAE6 584BC 5852F 5AE02 5B0AA ...
 #2+PICK:
         CON(5)  (*)+5                            * 611BE  primitive code object
-        GOSUB   SUB_611B0                        * 611C3
+        GOSUB   Peek#D1                          * 611C3
 #2+PICK.L1:
         A=A+1   A                                * 611C7
 #2+PICK.L2:
@@ -784,7 +793,7 @@ SUB_611B0:
 * refs (17): 10B03 29674 5584B 57694 584E4 584EE ...
 #3+PICK:
         CON(5)  (*)+5                            * 611D2  primitive code object
-        GOSUB   SUB_611B0                        * 611D7
+        GOSUB   Peek#D1                          * 611D7
         A=A+1   A                                * 611DB
         GOTO    #2+PICK.L1                       * 611DD
 
@@ -792,7 +801,7 @@ SUB_611B0:
 * refs (4): 5B1B8 5F620 60DF1 D1DE1
 #4+PICK:
         CON(5)  (*)+5                            * 611E1  primitive code object
-        GOSUB   SUB_611B0                        * 611E6
+        GOSUB   Peek#D1                          * 611E6
         A=A+1   A                                * 611EA
         A=A+1   A                                * 611EC
         GOTO    #2+PICK.L1                       * 611EE
@@ -932,7 +941,7 @@ SUB_611B0:
 * refs (34): 05238 05242 0524C 052DA 05322 0982C ...
 get1:
         CON(5)  (*)+5                            * 61305  primitive code object
-        GOSUBL  SUB_62278                        * 6130A
+        GOSUBL  Peek#                            * 6130A
         A=A+1   A                                * 61310
         A=A+1   A                                * 61312
         GOTO    #+ROLL.L1                        * 61314
@@ -1528,7 +1537,7 @@ DUP#0=case:
 * refs (13): 16E85 2192C 4262E 69978 6AFF5 6B147 ...
 DUP#0=csedrp:
         CON(5)  (*)+5                            * 618A8  primitive code object
-        GOSUB   SUB_611B0                        * 618AD
+        GOSUB   Peek#D1                          * 618AD
         D1=C                                     * 618B1
         C=0     A                                * 618B4
         GOTO    EQcasedrop.L1                    * 618B6
@@ -2065,6 +2074,7 @@ SAVESTACK:
         GOTO    DUMP.L9                          * 61D82
 
 * refs (2): 61D0E 61D75
+* Part of SAVESTACK: copy the stack levels into the temporary environment
 SUB_61D86:
         R1=C                                     * 61D86
         ST=0    10                               * 61D89
@@ -2239,7 +2249,8 @@ DUMP.L9:
         GOVLNG  GETPTRLOOP                       * 61F88
 
 * refs (1): 3DE59
-OBJ_61F8F:
+* DUMP with SAVELAM as the name
+KeyRS_EVAL~1:
         CON(5)  (*)+5                            * 61F8F  primitive code object
         GOSBVL  SAVPTR                           * 61F94
         ST=0    1                                * 61F9B
@@ -2639,7 +2650,7 @@ TYPECARRY?:
 * refs (76): 09320 0B6AB 0E72E 106E4 108F6 127C0 ...
 DUP#0=:
         CON(5)  (*)+5                            * 62266  primitive code object
-        GOSUB   SUB_62278                        * 6226B
+        GOSUB   Peek#                            * 6226B
 DUP#0=.L1:
         ?A=0    A                                * 6226F
         GOYES   DUP#0=.L2                        * 62272
@@ -2647,7 +2658,8 @@ DUP#0=.L2:
         GOTO    PushT/FLoop                      * 62274
 
 * refs (5): 6130A 6226B 622CA 622D9 626FC
-SUB_62278:
+* -> A.A = the bint on stack level 1; D1 unchanged
+Peek#:
         C=DAT1  A                                * 62278
         CD1EX                                    * 6227B
         D1=D1+  5                                * 6227E
@@ -2693,7 +2705,7 @@ SUB_62278:
 * refs (28): 16EA3 25264 252D7 290C3 33111 3F7BE ...
 DUP#1=:
         CON(5)  (*)+5                            * 622C5  primitive code object
-        GOSUB   SUB_62278                        * 622CA
+        GOSUB   Peek#                            * 622CA
         A=A-1   A                                * 622CE
         GOTO    DUP#0=.L1                        * 622D0
 
@@ -2701,7 +2713,7 @@ DUP#1=:
 * refs (21): 1088D 1D31D 2B278 42F85 42FBC 42FEE ...
 DUP#0<>:
         CON(5)  (*)+5                            * 622D4  primitive code object
-        GOSUB   SUB_62278                        * 622D9
+        GOSUB   Peek#                            * 622D9
 DUP#0<>.L1:
         ?A#0    A                                * 622DD
         GOYES   DUP#0=.L2                        * 622E0
@@ -3084,7 +3096,7 @@ skipcola:
 * refs (21): 0E4E8 0E4F2 219AE 2D960 5AD0D 5D5BF ...
 DUP#2+:
         CON(5)  (*)+5                            * 626F7  primitive code object
-        GOSUB   SUB_62278                        * 626FC
+        GOSUB   Peek#                            * 626FC
         A=A+1   A                                * 62700
         A=A+1   A                                * 62702
 DUP#2+.L1:
@@ -3174,7 +3186,7 @@ DUPLEN$:
         CON(5)  (*)+5                            * 627BB  primitive code object
         A=DAT1  A                                * 627C0
         GOSUB   SAVPTR~jump_20                   * 627C3
-        GOSBVL  SUB_120CC                        * 627C7
+        GOSBVL  $>Body                           * 627C7
 DUPLEN$.L1:
         GOVLNG  PUSH#ALOOP                       * 627CE
 
@@ -3441,7 +3453,7 @@ SAFE@:
 
 * refs (1): 16E6C
 MACRODCMP:
-        :: DUP OBJ_2699F NOTcase                 * 62ABB
+        :: DUP Lib700? NOTcase                   * 62ABB
           :: PALPTRDCMP NOTcaseFALSE failed      * 62ACF
           ;                                      * 62AE3
           DUP MACRODCMP~1 SWAP PALPTRDCMP ROTSWAP TRUE ; * 62AE8

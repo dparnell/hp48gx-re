@@ -1,15 +1,16 @@
-* HP 48GX ROM revision R, #760C9-#78001: Hash table of library 002
+* HP 48GX ROM revision R, #760C9-#78001: End of the units table, hash tables of libraries 700 and 002, then, from #77E62, the probability functions UTPN, UTPF and UTPT (continued in the next file)
 * Addresses in the right-hand comments are those of the original ROM.
+* Most referenced: UtpnFrac UtpArgs Utpn UtpnX%%
 * Follows on from the previous file (at #760C9 in the original ROM).
         ENDLENGTH                                * 760C9
-U.arcmin.L1:
+D0=SITable~1:
         A=A+1   A                                * 760C9
         A=A+B   XS                               * 760CB
         BSR     A                                * 760CE
         RTNSXM                                   * 760D0
         BSS     1                                * 760D2  zeros
 
-* SI prefixes: the index of the last one (read by OBJ_0C2CD)
+* SI prefixes: the index of the last one (read by SIPrefix?)
         CON(2)  #15                              * 760D3  entry 0
 
 * SI prefixes: the character and its power of ten (two-digit ten's complement BCD)
@@ -58,7 +59,7 @@ U.arcmin.L1:
         NIBASC  "y"                              * 76129  entry 21
         CON(2)  #76                              * 7612B
 
-U.arcmin.L2:
+D0=SITable~1.L1:
         CON(5)  DOHSTR                           * 7612D  hash table of library 700
 * a branch also enters #76132, where the nibbles decode as addrslot
         LENGTH                                   * 76132  length, to #7633B
@@ -2431,7 +2432,8 @@ H002.PARAMETRIC.L1:
         ENDLENGTH                                * 77E62
 
 * refs (3): 2C147 2C172 2C1A2
-SUB_77E62:
+* % % % -> : the three reals, deepest first, go to temporaries 0-2 as 15-digit numbers
+UtpArgs:
         D1=D1+  15                               * 77E62
         D=D+1   A                                * 77E65
         D=D+1   A                                * 77E67
@@ -2441,7 +2443,7 @@ SUB_77E62:
         LC(5)   #00002                           * 77E79
         D=C     A                                * 77E80
         SETDEC                                   * 77E82
-SUB_77E62.loop1:
+UtpArgs.loop1:
         D1=D1-  5                                * 77E84
         C=DAT1  A                                * 77E87
         CD1EX                                    * 77E8A
@@ -2451,19 +2453,21 @@ SUB_77E62.loop1:
         GOSUB   SPLITA~jump~jump                 * 77E97
         GOSUBL  PUTAB0~jump                      * 77E9B
         D=D-1   A                                * 77EA1
-        GONC    SUB_77E62.loop1                  * 77EA3
+        GONC    UtpArgs.loop1                    * 77EA3
         RTN                                      * 77EA6
 
 * refs (1): 2C10D
-utpn(3r)~1:
+* %% -> : the number goes to temporary 0
+UtpnX%%:
         GOSBVL  POP1%%                           * 77EA8
         D0=(5)  IRAMBUFF                         * 77EAF
         GOLONG  PUTAB0~jump                      * 77EB6
 
 * refs (2): 2C114 7816F
-SUB_77EBC:
-        GOSUB   SUB_78591                        * 77EBC
-        GOSUB   SUB_7804A                        * 77EC0
+* tmp0 = standardised x -> upper tail of the normal distribution. Probably: a continued fraction past 2.32 (3.50 when x is negative), a series below that
+Utpn:
+        GOSUB   UtpAbsX                          * 77EBC
+        GOSUB   NormalPDF                        * 77EC0
         GOSUBL  STAB0~jump_3                     * 77EC4
         A=R4                                     * 77ECA
         C=0     W                                * 77ECD
@@ -2471,22 +2475,22 @@ SUB_77EBC:
         P=      12                               * 77ED3
         LC(3)   #232                             * 77ED5
         ?ST=0   0                                * 77EDA
-        GOYES   SUB_77EBC.L1                     * 77EDD
+        GOYES   Utpn.L1                          * 77EDD
         LC(3)   #350                             * 77EDF
-SUB_77EBC.L1:
+Utpn.L1:
         GOSUBL  SUB_788A7                        * 77EE4
-        GONC    SUB_77EBC.L2                     * 77EEA
-        GOTO    SUB_77F77.L2                     * 77EED
-SUB_77EBC.L2:
+        GONC    Utpn.L2                          * 77EEA
+        GOTO    UtpnFrac.L2                      * 77EED
+Utpn.L2:
         D1=D1+  1                                * 77EF1
-        GOSUB   SUB_78556.L1                     * 77EF4
-        GOSUB   SUB_78605                        * 77EF8
+        GOSUB   RCAB0Long                        * 77EF4
+        GOSUB   RCLCDtmp0%%                      * 77EF8
         GOSUBL  SUB_787E2.L1                     * 77EFC
         GOSUBL  SUB_7874D                        * 77F02
-        GOSUB   SUB_78591.L2                     * 77F08
-        GOSUB   SUB_7806A                        * 77F0C
+        GOSUB   RCLtmp0%%                        * 77F08
+        GOSUB   Sq15                             * 77F0C
         GOSUBL  EXAB0~jump                       * 77F10
-SUB_77EBC.loop3:
+Utpn.loop3:
         GOSUBL  EXAB0~jump                       * 77F16
         GOSUBL  EXAB2~jump                       * 77F1C
         GOSUB   SUB_786C3                        * 77F22
@@ -2506,57 +2510,58 @@ SUB_77EBC.loop3:
         C=RSTK                                   * 77F55
         CR0EX                                    * 77F57
         ?C#A    A                                * 77F5A
-        GOYES   SUB_77EBC.loop3                  * 77F5D
+        GOYES   Utpn.loop3                       * 77F5D
         C=D     W                                * 77F5F
         ?B#C    W                                * 77F62
-        GOYES   SUB_77EBC.loop3                  * 77F65
-        GOSUB   SUB_78524                        * 77F67
+        GOYES   Utpn.loop3                       * 77F65
+        GOSUB   LoadC.5                          * 77F67
         ?ST=1   0                                * 77F6B
-        GOYES   SUB_77EBC.L4                     * 77F6E
+        GOYES   Utpn.L4                          * 77F6E
         A=-A-1  S                                * 77F70
-SUB_77EBC.L4:
+Utpn.L4:
         GOTO    SUB_7853C.L1                     * 77F73
 
 * refs (3): 77FB5 77FC5 77FE0
-SUB_77F77:
-        GOSUB   SUB_78556.L1                     * 77F77
+* One step of the continued fraction
+UtpnFrac:
+        GOSUB   RCAB0Long                        * 77F77
         GOSUB   RCCD2~jump_3                     * 77F7B
-        GOSUB   SUB_78582.L1                     * 77F7F
-SUB_77F77.L1:
+        GOSUB   DIVFLong                         * 77F7F
+UtpnFrac.L1:
         ?ST=0   0                                * 77F83
         RTNYES                                   * 77F86
         GOLONG  SUB_78340.L4                     * 77F88
-SUB_77F77.L2:
+UtpnFrac.L2:
         A=0     W                                * 77F8E
         B=0     W                                * 77F91
-        GOSUB   SUB_78682                        * 77F94
-        GOSUBL  SUB_787F4                        * 77F98
+        GOSUB   STOtmp5%%                        * 77F94
+        GOSUBL  LoadC1                           * 77F98
         BCEX    M                                * 77F9E
-        GOSUB   SUB_78688                        * 77FA1
+        GOSUB   STOtmp6%%                        * 77FA1
         ?ST=1   0                                * 77FA5
-        GOYES   SUB_77F77.L3                     * 77FA8
+        GOYES   UtpnFrac.L3                      * 77FA8
         BCEX    M                                * 77FAA
-SUB_77F77.L3:
-        GOSUB   SUB_78676                        * 77FAD
-        GOSUB   SUB_7867C                        * 77FB1
-SUB_77F77.loop4:
-        GOSUB   SUB_77F77                        * 77FB5
-        GOSUB   SUB_7861D                        * 77FB9
+UtpnFrac.L3:
+        GOSUB   STOtmp3%%                        * 77FAD
+        GOSUB   STOtmp4%%                        * 77FB1
+UtpnFrac.loop4:
+        GOSUB   UtpnFrac                         * 77FB5
+        GOSUB   RCLCDtmp4%%                      * 77FB9
         P=      2                                * 77FBD
         GOSUBL  TST15~jump_2                     * 77FBF
-        GOC     SUB_77F77                        * 77FC5
-        GOSUB   SUB_78617                        * 77FC8
-        GOSUB   SUB_78676                        * 77FCC
+        GOC     UtpnFrac                         * 77FC5
+        GOSUB   RCLCDtmp3%%                      * 77FC8
+        GOSUB   STOtmp3%%                        * 77FCC
         GOSUB   XYEX~jump_2                      * 77FD0
-        GOSUB   SUB_7867C                        * 77FD4
+        GOSUB   STOtmp4%%                        * 77FD4
         P=      2                                * 77FD8
         GOSUBL  TST15~jump_2                     * 77FDA
-        GOC     SUB_77F77                        * 77FE0
+        GOC     UtpnFrac                         * 77FE0
         CD1EX                                    * 77FE3
         C=C+1   A                                * 77FE6
         GOSUB   SUB_786CA                        * 77FE8
-        GOSUB   SUB_785D0                        * 77FEC
+        GOSUB   RCLtmp5%%                        * 77FEC
         GOSUB   SUB_78772                        * 77FF0
         GOSUBL  EXAB0~jump                       * 77FF4
-        GOSUB   SUB_78682                        * 77FFA
-        GOSUB   SUB_78605                        * 77FFE
+        GOSUB   STOtmp5%%                        * 77FFA
+        GOSUB   RCLCDtmp0%%                      * 77FFE

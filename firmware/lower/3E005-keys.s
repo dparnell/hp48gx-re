@@ -1,23 +1,26 @@
-* HP 48GX ROM revision R, #3E005-#40001: Key handling
+* HP 48GX ROM revision R, #3E005-#40001: End of the right-shift keys, edit-line delete keys, unit and directory menu helpers, LIB and PORT menus, VAR menu, key to object lookup
 * Addresses in the right-hand comments are those of the original ROM.
-* Most referenced: DoBadKey DirLabel: ?CaseKeyDef NullMenuKey 'DoBadKeyT ?CaseRomptr@ NoExitAction Box/StdLabel ComLine?:(bip;q) Key>U/SKeyOb EvalNextChkPRG Box/StdLbl:
+* Most referenced: DoBadKey DirLabel: ?CaseKeyDef NullMenuKey 'DoBadKeyT ?CaseRomptr@ NoExitAction Box/StdLabel ComLine?:(bip;q) UnitMenuKeys Key>U/SKeyOb EvalNextChkPRG
 * Follows on from the previous file (at #3E005 in the original ROM).
         RPL
 
 * ROMPTR 0A3 01E
 * refs (1): 3DCED
-ROMP_0A3_01E:
-        ROMPTR 0B4 000                           * 3E005
+* The right-shift 7 key: runs ROMPTR 0B4 000
+KeyRS_7:
+        XLIB SolveApp                            * 3E005
 
 * ROMPTR 0A3 01F
 * refs (1): 3DCED
-ROMP_0A3_01F:
-        ROMPTR 0B4 045                           * 3E010
+* The right-shift 8 key: runs ROMPTR 0B4 045
+KeyRS_8:
+        XLIB PlotApp                             * 3E010
 
 * ROMPTR 0A3 020
 * refs (1): 3DCED
-ROMP_0A3_020:
-        ROMPTR 0B4 113                           * 3E01B
+* The right-shift 9 key: runs ROMPTR 0B4 113
+KeyRS_9:
+        XLIB SymbApp                             * 3E01B
 
 * ROMPTR 0A3 021
 * refs (1): 3DCED
@@ -26,48 +29,57 @@ ROMP_0A3_020:
 
 * ROMPTR 0A3 022
 * refs (1): 3DCED
-ROMP_0A3_022:
-        ROMPTR 0A1 022                           * 3E03F
+* The right-shift left-shift key: runs ROMPTR 0A1 022
+KeyRS_LS:
+        XLIB ~Modifier;RShiftOnly;SetDA123NoCh   * 3E03F
 
 * ROMPTR 0A3 023
 * refs (1): 3DCED
-ROMP_0A3_023:
-        ROMPTR 0B4 137                           * 3E04A
+* The right-shift 4 key: runs ROMPTR 0B4 137
+KeyRS_4:
+        XLIB TimeApp                             * 3E04A
 
 * ROMPTR 0A3 024
 * refs (1): 3DCED
-ROMP_0A3_024:
-        ROMPTR 0B4 175                           * 3E055
+* The right-shift 5 key: runs ROMPTR 0B4 175
+KeyRS_5:
+        XLIB StatApp                             * 3E055
 
 * ROMPTR 0A3 025
 * refs (1): 3DCED
-ROMP_0A3_025:
-        :: MenuMaker ROMPTR 0A9 02A DoMenuKey ;  * 3E060
+* The right-shift 6 key: opens the menu ROMPTR 0A9 02A
+KeyRS_6:
+        :: MenuMaker XLIB MnuUNITS DoMenuKey ;   * 3E060
 
 * ROMPTR 0A3 026
 * refs (3): 3DCED 6BCFE 8F5D9
-ROMP_0A3_026:
-        :: DoDelim CHR_UndScore OBJ_40E1F ;      * 3E07F
+* The right-shift * key
+KeyRS_MUL:
+        :: DoDelim CHR_UndScore ?SetAlgEntry ;   * 3E07F
 
 * ROMPTR 0A3 027
 * refs (1): 3DCED
-ROMP_0A3_027:
-        ROMPTR 0A2 022                           * 3E098
+* The right-shift right-shift key: runs ROMPTR 0A2 022
+KeyRS_RS:
+        XLIB ~Modifier;SetKeysNS;SetDA123NoCh    * 3E098
 
 * ROMPTR 0A3 028
 * refs (1): 3DCED
-ROMP_0A3_028:
-        ROMPTR 0B4 192                           * 3E0A3
+* The right-shift 1 key: runs ROMPTR 0B4 192
+KeyRS_1:
+        XLIB IOApp                               * 3E0A3
 
 * ROMPTR 0A3 029
 * refs (1): 3DCED
-ROMP_0A3_029:
-        :: MenuMaker ROMPTR 0A9 070 DoMenuKey ;  * 3E0AE
+* The right-shift 2 key: opens the menu ROMPTR 0A9 070
+KeyRS_2:
+        :: MenuMaker XLIB MnuLIBS DoMenuKey ;    * 3E0AE
 
 * ROMPTR 0A3 02A
 * refs (1): 3DCED
-ROMP_0A3_02A:
-        ROMPTR 0AB 022                           * 3E0CD  EQNLIB
+* The right-shift 3 key: EQNLIB
+KeyRS_3:
+        XLIB EQNLIB                              * 3E0CD
 
 * ROMPTR 0A3 02B
 * refs (2): 3DCED 6BAA1
@@ -81,13 +93,15 @@ ROMP_0A3_02A:
 
 * ROMPTR 0A3 02D
 * refs (1): 3DCED
-ROMP_0A3_02D:
-        ROMPTR 700 004                           * 3E10A  →
+* The right-shift 0 key: →
+KeyRS_0:
+        XLIB xALG->                              * 3E10A  →
 
 * ROMPTR 0A3 02E
 * refs (1): 3DCED
-ROMP_0A3_02E:
-        :: TakeOver OBJ_42B61 SetDA13NoCh ;      * 3E115
+* The right-shift . key
+KeyRS_DOT:
+        :: TakeOver EchoNewline SetDA13NoCh ;    * 3E115
 
 * ROMPTR 0A3 02F
 * refs (1): 3DCED
@@ -133,51 +147,51 @@ LIB0A3.link:
         LENGTH                                   * 3E1D0  length, to #3E2CA
         REL(5)  RightShift1                      * 3E1D5  000 
         REL(5)  RightShift2                      * 3E1DA  001 
-        REL(5)  ROMP_0A3_002                     * 3E1DF  002 
+        REL(5)  KeyRS_C                          * 3E1DF  002 
         REL(5)  RightShift4                      * 3E1E4  003 
         REL(5)  RightShift5                      * 3E1E9  004 
         REL(5)  RightShift6                      * 3E1EE  005 
-        REL(5)  ROMP_0A3_006                     * 3E1F3  006 
-        REL(5)  ROMP_0A3_007                     * 3E1F8  007 
-        REL(5)  ROMP_0A3_008                     * 3E1FD  008 
-        REL(5)  ROMP_0A3_009                     * 3E202  009 
-        REL(5)  ROMP_0A3_00A                     * 3E207  00A 
-        REL(5)  ROMP_0A3_00B                     * 3E20C  00B 
-        REL(5)  ROMP_0A3_00C                     * 3E211  00C 
-        REL(5)  ROMP_0A3_00D                     * 3E216  00D 
-        REL(5)  ROMP_0A3_00E                     * 3E21B  00E 
-        REL(5)  ROMP_0A3_00F                     * 3E220  00F 
-        REL(5)  ROMP_0A3_010                     * 3E225  010 
-        REL(5)  ROMP_0A3_011                     * 3E22A  011 
-        REL(5)  ROMP_0A3_012                     * 3E22F  012 
-        REL(5)  ROMP_0A3_013                     * 3E234  013 
-        REL(5)  ROMP_0A3_014                     * 3E239  014 
-        REL(5)  ROMP_0A3_015                     * 3E23E  015 
-        REL(5)  ROMP_0A3_016                     * 3E243  016 
-        REL(5)  ROMP_0A3_017                     * 3E248  017 
+        REL(5)  KeyRS_MTH                        * 3E1F3  006 
+        REL(5)  KeyRS_PRG                        * 3E1F8  007 
+        REL(5)  KeyRS_CST                        * 3E1FD  008 
+        REL(5)  KeyRS_VAR                        * 3E202  009 
+        REL(5)  KeyRS_UP                         * 3E207  00A 
+        REL(5)  KeyRS_NXT                        * 3E20C  00B 
+        REL(5)  KeyRS_QUOTE                      * 3E211  00C 
+        REL(5)  KeyRS_STO                        * 3E216  00D 
+        REL(5)  KeyRS_EVAL                       * 3E21B  00E 
+        REL(5)  KeyRS_LEFT                       * 3E220  00F 
+        REL(5)  KeyRS_DOWN                       * 3E225  010 
+        REL(5)  KeyRS_RIGHT                      * 3E22A  011 
+        REL(5)  KeyRS_SIN                        * 3E22F  012 
+        REL(5)  KeyRS_COS                        * 3E234  013 
+        REL(5)  KeyRS_TAN                        * 3E239  014 
+        REL(5)  KeyRS_SQRT                       * 3E23E  015 
+        REL(5)  KeyRS_POW                        * 3E243  016 
+        REL(5)  KeyRS_INV                        * 3E248  017 
         REL(5)  ~Do1st/2nd+:;xDUP;DoNewMatrix    * 3E24D  018 
-        REL(5)  ROMP_0A3_019                     * 3E252  019 
-        REL(5)  ROMP_0A3_01A                     * 3E257  01A 
-        REL(5)  ROMP_0A3_01B                     * 3E25C  01B 
-        REL(5)  ROMP_0A3_01C                     * 3E261  01C 
-        REL(5)  ROMP_0A3_01D                     * 3E266  01D 
-        REL(5)  ROMP_0A3_01E                     * 3E26B  01E 
-        REL(5)  ROMP_0A3_01F                     * 3E270  01F 
-        REL(5)  ROMP_0A3_020                     * 3E275  020 
+        REL(5)  KeyRS_NEG                        * 3E252  019 
+        REL(5)  KeyRS_EEX                        * 3E257  01A 
+        REL(5)  KeyRS_DEL                        * 3E25C  01B 
+        REL(5)  KeyRS_BKSP                       * 3E261  01C 
+        REL(5)  KeyRS_ALPHA                      * 3E266  01D 
+        REL(5)  KeyRS_7                          * 3E26B  01E 
+        REL(5)  KeyRS_8                          * 3E270  01F 
+        REL(5)  KeyRS_9                          * 3E275  020 
         REL(5)  ~DoDelim;CHR_#;?ClrAlg           * 3E27A  021 
-        REL(5)  ROMP_0A3_022                     * 3E27F  022 
-        REL(5)  ROMP_0A3_023                     * 3E284  023 
-        REL(5)  ROMP_0A3_024                     * 3E289  024 
-        REL(5)  ROMP_0A3_025                     * 3E28E  025 
-        REL(5)  ROMP_0A3_026                     * 3E293  026 
-        REL(5)  ROMP_0A3_027                     * 3E298  027 
-        REL(5)  ROMP_0A3_028                     * 3E29D  028 
-        REL(5)  ROMP_0A3_029                     * 3E2A2  029 
-        REL(5)  ROMP_0A3_02A                     * 3E2A7  02A 
+        REL(5)  KeyRS_LS                         * 3E27F  022 
+        REL(5)  KeyRS_4                          * 3E284  023 
+        REL(5)  KeyRS_5                          * 3E289  024 
+        REL(5)  KeyRS_6                          * 3E28E  025 
+        REL(5)  KeyRS_MUL                        * 3E293  026 
+        REL(5)  KeyRS_RS                         * 3E298  027 
+        REL(5)  KeyRS_1                          * 3E29D  028 
+        REL(5)  KeyRS_2                          * 3E2A2  029 
+        REL(5)  KeyRS_3                          * 3E2A7  02A 
         REL(5)  ~DoDelims;$_2DQ;?ClrAlg          * 3E2AC  02B 
         REL(5)  ~Modifier;TurnOff;SetDA123NoCh_2 * 3E2B1  02C 
-        REL(5)  ROMP_0A3_02D                     * 3E2B6  02D 
-        REL(5)  ROMP_0A3_02E                     * 3E2BB  02E 
+        REL(5)  KeyRS_0                          * 3E2B6  02D 
+        REL(5)  KeyRS_DOT                        * 3E2BB  02E 
         REL(5)  K_128_3E12E                      * 3E2C0  02F 
         REL(5)  ~DoDelims;$_::;?ClrAlgSetPr      * 3E2C5  030 
         ENDLENGTH                                * 3E2CA
@@ -192,8 +206,8 @@ LIB0A3.link:
 _<-SKIP_:
           $ "←SKIP"                              * 3E2E2
           :: NoComLine?:(bip;q) BegComLine?:(bip;q) Cursor&Disp * 3E2F6
-            :: BEGIN OBJ_3E634 AND WHILE <-Skip! REPEAT BEGIN OBJ_3E634 * 3E30A
-              NOTAND WHILE <-Skip! REPEAT ;      * 3E337
+            :: BEGIN EdAtWordStart? AND WHILE <-Skip! REPEAT BEGIN * 3E30A
+              EdAtWordStart? NOTAND WHILE <-Skip! REPEAT ; * 3E332
             SetDA123NoCh ;                       * 3E350
         }                                        * 3E35A
 
@@ -219,15 +233,17 @@ _<-DEL_:
           $ "←DEL"                               * 3E3E6
           {                                      * 3E3F8
             :: NoComLine?:(bip;q) BegComLine?:(bip;q) EDITPARTS BEGIN * 3E3FD
-              OBJ_3E634 AND WHILE                * 3E416
+              EdAtWordStart? AND WHILE           * 3E416
 
 <-del!:
-              :: <-Skip! DelCursChr ; REPEAT BEGIN OBJ_3E634 NOTAND WHILE * 3E425
+              :: <-Skip! DelCursChr ; REPEAT BEGIN EdAtWordStart? NOTAND * 3E425
+              WHILE                              * 3E44D
               :: <-Skip! DelCursChr ; REPEAT SetDA13NoCh OBJ_3E6D4 ; * 3E452
             DoBadKey                             * 3E47A
 
 * refs (1): 3DFA1
-OBJ_3E47F:
+* Right-shift backspace: deletes back to the start of the row
+EdDelToStart:
             :: NoComLine?:(bip;q) BEGIN OnTheFirstCol? NOT WHILE * 3E47F
 
 DelLeftChr:
@@ -249,7 +265,8 @@ _DEL->_:
             DoBadKey                             * 3E545
 
 * refs (1): 3DF8D
-OBJ_3E54A:
+* Right-shift DEL: deletes up to the end of the row
+EdDelToEnd:
             :: NoComLine?:(bip;q) BEGIN CURSOR_END? NOT WHILE DelCursChr * 3E54A
               REPEAT SetDA13NoCh ;               * 3E56D
           }                                      * 3E57C
@@ -273,7 +290,7 @@ IStackKey:
         {                                        * 3E5CD
 
 _^STK_:
-          $ "↑STK" OBJ_4365D }                   * 3E5D2
+          $ "↑STK" IStack }                      * 3E5D2
 
 * refs (9): 3DE95 3DF88 3DF9C 3E2FB 3E37D 3E402 ...
 NoComLine?:(bip;q):
@@ -286,7 +303,8 @@ ComLine?:(bip;q):
           DoBadKey RDROP ;                       * 3E625
 
 * refs (4): 3E314 3E332 3E416 3E443
-OBJ_3E634:
+* -> flag flag: the first is TRUE if the cursor is past the first position, the second if the character before it is a space or newline
+EdAtWordStart?:
         :: CURSOR@ #0<> PrevChrInComLine DUP CHR_Space EQUAL SWAP * 3E634
           CHR_Newline EQUALOR ;                  * 3E65C
 
@@ -326,7 +344,7 @@ ChkForMenu(_):
 
 _+/-_:
             $ "+/-" ~BINT32;TestSysFlag ;        * 3E751
-          {GRAPH\+/-}~1 }                        * 3E76B
+          ~CHECKMENU;PictKey+/- }                * 3E76B
 
 * refs (1): 46AD9
 {GRAPH\REPL}:
@@ -347,7 +365,7 @@ _SUä_:
         {                                        * 3E7B5
 
 _DEL_:
-          $ "DEL" {GRAPH\DEL}~1 }                * 3E7BA
+          $ "DEL" ~CHECKMENU;PictKeyDEL }        * 3E7BA
 
 * refs (1): 46A77
 {GRAPH\LABEL}:
@@ -457,7 +475,8 @@ DirLabel::
         :: TakeOver 'R MakeDirLabel ;            * 3ED6B
 
 * refs (2): 3D763 3DD9F
-OBJ_3ED84:
+* Toggles the system flag named by the bint after the call, and redraws the annunciators
+KeyTogFlag:
         :: TakeOver 'R TogSysFlag SetDA2bNoCh ;  * 3ED84
 
 * # ->
@@ -488,61 +507,68 @@ Echo2Macros:
 
 * refs (4): C594D C5B7A C5BEE C5E0C
 3NextInCmdLine:
-        :: TakeOver 'R'R 'R OBJ_3EEEC OBJ_3EEC9 UCursor ToTheEndOfRow ; * 3EE65
+        :: TakeOver 'R'R 'R CmdInsertOb OBJ_3EEC9 UCursor ToTheEndOfRow ; * 3EE65
 
 * refs (3): C596B C59E2 C5E2A
 4NextInCmdLine:
-        :: TakeOver 'R'R 'R'R OBJ_3EEEC OBJ_3EEEC OBJ_3EEC9 UCursor UCursor * 3EE92
-          ToTheEndOfRow ;                        * 3EEBF
+        :: TakeOver 'R'R 'R'R CmdInsertOb CmdInsertOb OBJ_3EEC9 UCursor * 3EE92
+          UCursor ToTheEndOfRow ;                * 3EEBA
 
 * refs (3): 3EE56 3EE7E 3EEB0
 OBJ_3EEC9:
-        :: ?ClrAlgSetPr SetDA3NoCh OBJ_3EEEC OBJ_3EEEC UCursor ; * 3EEC9
+        :: ?ClrAlgSetPr SetDA3NoCh CmdInsertOb CmdInsertOb UCursor ; * 3EEC9
 
 * refs (5): 3EE79 3EEA6 3EEAB 3EED8 3EEDD
-OBJ_3EEEC:
-        :: OnTheFirstCol? ?SKIP OBJ_42B61        * 3EEEC
-          OBJ_408C3 APPEND_SPACE AddInComLine(st) ; * 3EF00
+* ob ->: adds the text of an object to the command line on a new row
+CmdInsertOb:
+        :: OnTheFirstCol? ?SKIP EchoNewline      * 3EEEC
+          KeyOb>$ APPEND_SPACE AddInComLine(st) ; * 3EF00
 
 * refs (16): 3C93B 3CAA2 3CB85 3CD00 3CD69 3CE02 ...
-* Probably: install the soft-key handlers of a UNITS menu
-OBJ_3EF14:
+* Installs the three key actions of a unit menu, each working from the text of the unit on the key
+UnitMenuKeys:
         :: '                                     * 3EF14
-          :: OBJ_3F06D OBJ_3EF87 StdMenuKeyNS ; MenuKeyNS! ' * 3EF1E
-          :: OBJ_3F06D OBJ_3EF87 StdMenuKeyLS ; MenuKeyLS! ' * 3EF41
-          :: OBJ_3F06D OBJ_3EF87 StdRightShift ; MenuKeyRS! ; * 3EF64
+          :: ?EvalSysOb UnitLabel>Ob StdMenuKeyNS ; MenuKeyNS! ' * 3EF1E
+          :: ?EvalSysOb UnitLabel>Ob StdMenuKeyLS ; MenuKeyLS! ' * 3EF41
+          :: ?EvalSysOb UnitLabel>Ob StdRightShift ; MenuKeyRS! ; * 3EF64
 
 * refs (3): 3EF28 3EF4B 3EF6E
-OBJ_3EF87:
-        :: BINT0 OBJ_25F4E ROT BINT1 GetNextToken OBJ_28706 7DROP ; * 3EF87
+* $ -> ob: parses the text of a unit menu key
+UnitLabel>Ob:
+        :: BINT0 ClassTblAlg ROT BINT1 GetNextToken UnitExpr 7DROP ; * 3EF87
 
 * refs (4): 3D425 3D46B 3EFDC 3EFF5
-OBJ_3EFB4:
-        :: COLA OBJ_3F06D                        * 3EFB4
+* Applies ?EvalSysOb on behalf of the caller
+?EvalKeyOb:
+        :: COLA ?EvalSysOb                       * 3EFB4
         ;                                        * 3EFC3
 
 * refs (2): 41525 6BD7B
-OBJ_3EFC8:
-        :: MenuKeyNS@ CARCOMP PTR EQ: OBJ_3EFB4 ; * 3EFC8
+* -> flag: TRUE when the first object of the menu's unshifted action is ?EvalKeyOb, as in menus of keys that open submenus
+MenuHasKeyOb?:
+        :: MenuKeyNS@ CARCOMP PTR EQ: ?EvalKeyOb ; * 3EFC8
 
 * refs (5): 3BF17 3C0EE 3C26A 3C6B9 3D498
-OBJ_3EFE6:
+* Makes the unshifted action of a menu open the object on the key as a submenu
+SubMenuKeys:
         :: '                                     * 3EFE6
-          :: OBJ_3EFB4 InitMenuNoExit ; OnlyDefNoShift! ; * 3EFF0
+          :: ?EvalKeyOb InitMenuNoExit ; OnlyDefNoShift! ; * 3EFF0
 
 * refs (8): 3C459 3C4E3 3C56D 3C5F7 3C681 3D434 ...
 OnlyDefNoShift!:
         :: MenuKeyNS! ' DropBadKey DUP MenuKeyLS! MenuKeyRS! ; * 3F00E
 
 * refs (6): 3BF12 3C0E9 3C265 3C6B4 3D416 3D493
-OBJ_3F036:
+* Sets the label rule of a menu: a directory tab for a key with text, a plain label for an empty one
+DirLabelDef:
         :: '                                     * 3F036
           :: DUPNULL$? ITE MakeStdLabel MakeDirLabel * 3F040
             Grob>Menu ;                          * 3F059
           LabelDef! ;                            * 3F063
 
 * refs (4): 3EF23 3EF46 3EF69 3EFBE
-OBJ_3F06D:
+* ob -> ob: at system level, a secondary is run in place of the caller; anything else returns
+?EvalSysOb:
         :: DUPTYPECOL? NOT?SEMI                  * 3F06D
           SystemLevel? NOT?SEMI                  * 3F07C
           RDROP EVAL ;                           * 3F086
@@ -552,8 +578,9 @@ _LIST_:
         $ "LIST"                                 * 3F095
 
 * refs (1): 4127E
-OBJ_3F0A7:
-        :: TAG> OBJ_3F0CA case OBJ_41355         * 3F0A7
+* :tag: ob -> label: the label of a tagged menu object
+TagLabel:
+        :: TAG> OBJ_3F0CA case MenuOb>$          * 3F0A7
           SWAPDROP ;                             * 3F0C0
 
 * refs (2): 3F0B1 40152
@@ -620,8 +647,8 @@ SUB_3F13E.L2:
         FILLTO  #3F1E3                           * 3F181  98 zero nibbles: the next entry stays at #3F1E3
 
 * refs (1): 6AF23
-OBJ_3F1E3:
-        :: OBJ_26F50 {MenuRules} SWAP ITE &COMP SWAPDROP * 3F1E3
+EqwMenuRules~1:
+        :: CmdField8 {MenuRules} SWAP ITE &COMP SWAPDROP * 3F1E3
           ' NoExitAction 2Ob>Seco ;              * 3F206
 
 * refs (2): 3F1ED 6AF1E
@@ -630,16 +657,18 @@ OBJ_3F1E3:
           {RULES\+1-1} {RULES\COLCT} }           * 3F238
 
 * refs (7): 3AB8F 3ABA3 3ABB7 3BA95 3BAA9 3BABD ...
-OBJ_3F247:
-        :: TakeOver 'R ' 'FontGauge FIRST@LAM casedrop OBJ_6CAA3 * 3F247
-          NoEditLine? caseDrpBadKy OBJ_3B478     * 3F26F
+* Alpha shifted 7, 8 or 9: changes the accent on the letter at the cursor. The bint after the call is the accent, from 0 to 5
+KeyAccent:
+        :: TakeOver 'R ' 'FontGauge FIRST@LAM casedrop KeyAccent~2 * 3F247
+          NoEditLine? caseDrpBadKy KeyAccent~1   * 3F26F
           CURSOR_END? caseDrpBadKy NextChrInComLine * 3F27E
-          CHR># DUPUNROT OBJ_3F2D3 DUPUNROT #=case DropBadKey * 3F28D
+          CHR># DUPUNROT AccentChr DUPUNROT #=case DropBadKey * 3F28D
           #>CHR INSERT? REPLACE_MODE SWAP EchoChrKey IT INSERT_MODE * 3F2AB
         ;                                        * 3F2CE
 
 * refs (2): 3F297 6CAF8
-OBJ_3F2D3:
+* #chr #accent -> #chr': the same vowel (or N, Y) with the accent, by a table of the letters AEIOUYN
+AccentChr:
         CON(5)  (*)+5                            * 3F2D3  primitive code object
         ASSEMBLE
         GOSBVL  POP2#                            * 3F2D8
@@ -650,53 +679,53 @@ OBJ_3F2D3:
         LC(14)  #4E59554F494541                  * 3F2F1
         B=A     A                                * 3F301
         LA(2)   #20                              * 3F303
-        D1=(5)  OBJ_3F2D3.L7                     * 3F30A
+        D1=(5)  AccentChr.L7                     * 3F30A
         P=      6                                * 3F311
-OBJ_3F2D3.loop1:
+AccentChr.loop1:
         ?B=C    B                                * 3F313
-        GOYES   OBJ_3F2D3.L3                     * 3F316
+        GOYES   AccentChr.L3                     * 3F316
         C=C+A   B                                * 3F318
         ?B=C    B                                * 3F31B
-        GOYES   OBJ_3F2D3.L3                     * 3F31E
+        GOYES   AccentChr.L3                     * 3F31E
         CSRC                                     * 3F320
         CSRC                                     * 3F323
         D1=D1+  12                               * 3F326
         P=P-1                                    * 3F329
-        GONC    OBJ_3F2D3.loop1                  * 3F32B
+        GONC    AccentChr.loop1                  * 3F32B
         P=      0                                * 3F32E
         LC(6)   #435044                          * 3F330
         P=      2                                * 3F338
-OBJ_3F2D3.loop2:
+AccentChr.loop2:
         ?B=C    B                                * 3F33A
-        GOYES   OBJ_3F2D3.L6                     * 3F33D
+        GOYES   AccentChr.L6                     * 3F33D
         C=C+A   B                                * 3F33F
         ?B=C    B                                * 3F342
-        GOYES   OBJ_3F2D3.L6                     * 3F345
+        GOYES   AccentChr.L6                     * 3F345
         CSRC                                     * 3F347
         CSRC                                     * 3F34A
         D1=D1+  2                                * 3F34D
         P=P-1                                    * 3F350
-        GONC    OBJ_3F2D3.loop2                  * 3F352
+        GONC    AccentChr.loop2                  * 3F352
         C=0     A                                * 3F355
-        GOTO    OBJ_3F2D3.L5                     * 3F357
-OBJ_3F2D3.L3:
+        GOTO    AccentChr.L5                     * 3F357
+AccentChr.L3:
         AD1EX                                    * 3F35B
         C=R0.F  A                                * 3F35E
         A=A+C   A                                * 3F364
         D1=A                                     * 3F366
-OBJ_3F2D3.loop4:
+AccentChr.loop4:
         C=DAT1  B                                * 3F369
-OBJ_3F2D3.L5:
+AccentChr.L5:
         C=C+B   B                                * 3F36C
         R0=C.F  A                                * 3F36F
         P=      0                                * 3F375
         GOVLNG  PUSH#LOOP                        * 3F377
-OBJ_3F2D3.L6:
+AccentChr.L6:
         C=0     A                                * 3F37E
-        GOTO    OBJ_3F2D3.loop4                  * 3F380
+        GOTO    AccentChr.loop4                  * 3F380
 
-* Accents: for A E I O U Y N, what to add to the letter for each accented form, 0 for none (read by OBJ_3F2D3)
-OBJ_3F2D3.L7:
+* Accents: for A E I O U Y N, what to add to the letter for each accented form, 0 for none (read by AccentChr)
+AccentChr.L7:
         CON(2)  #7F                              * 3F384  entry 0
         CON(2)  #80                              * 3F386
         CON(2)  #81                              * 3F388
@@ -747,26 +776,29 @@ OBJ_3F2D3.L7:
         RPL
 
 * refs (1): 3D43E
-OBJ_3F3DE:
+* Menu rows of the LIB menu: walks the directory path for attached libraries
+LibMenuRows:
         :: CONTEXT@ DUP GetLibs(di) BEGIN get1 MYRAMROMPAIR WHILE * 3F3DE
-          :: 2DUPSWAP #3+ UNROLL GetLibs(di) top& ; REPEAT OBJ_3F447 RDROP * 3F406
-          OBJ_410E9 LoadTouchTbl ;               * 3F438
+          :: 2DUPSWAP #3+ UNROLL GetLibs(di) top& ; REPEAT LibMenuRows~1 * 3F406
+          RDROP OBJ_410E9 LoadTouchTbl ;         * 3F433
 
 * refs (1): 3F42E
-OBJ_3F447:
+LibMenuRows~1:
         :: DUP#0= ?SEMI                          * 3F447
           pshzer BEGIN SWAPDROP#1- #2- UNROTOVER NULL$ EQUAL ITE 2DROP * 3F456
           :: TWO{}N psh1&rev ;                   * 3F483
           #0=UNTIL DROP ;                        * 3F497
 
 * refs (1): 3D42A
-OBJ_3F4A6:
-        :: ' OBJ_3F4C4 2Ob>Seco InitMenu ;       * 3F4A6
+* lib ->: opens the commands of a library as a menu
+LibMenuOpen:
+        :: ' LibCmdsMenu 2Ob>Seco InitMenu ;     * 3F4A6
 
 * refs (3): 3F4B0 41660 416B5
-OBJ_3F4C4:
+* % -> ob: the menu definition for the commands of a library
+LibCmdsMenu:
         :: COERCEDUP NumEntryLin(s) DUP#0= case2drop NULL{} * 3F4C4
-          ' OBJ_3F589 BINT3 ::N ;                * 3F4E2
+          ' LibCmdRow BINT3 ::N ;                * 3F4E2
 
 * refs (1): 3F4CE
 NumEntryLin(s):
@@ -821,41 +853,49 @@ SUB_3F585:
         RPL
 
 * refs (1): 3F4E7
-OBJ_3F589:
+* Menu row of a library: a ROMPTR for each of the six keys
+LibCmdRow:
         :: 2RDROP CheckMenuRow DUP #5+ ROT #MIN SWAP#1- BINT0 4UNROLL BINT1 * 3F589
           3UNROLL DO OVER INDEX@ #>ROMPTR psh1&rev LOOP 2DROP LoadTouchTbl ; * 3F5C0
         BSS     5                                * 3F5F2  zeros
 
 * refs (1): 3D457
-OBJ_3F5F7:
+* The label of a port key: ":n:" as a directory tab
+PortLabel:
         :: DUPTYPECSTR? ITE MakeStdLabel         * 3F5F7
           :: #:>$ _:__253B8 SWAP &$ MakeDirLabel ; * 3F60B
           Grob>Menu ;                            * 3F62E
 
 * refs (1): 3D484
-OBJ_3F638:
-        :: BINT0 BINT1 BINT34 ONE_DO OBJ_3F66F LOOP RDROP OBJ_410E9 * 3F638
+* Menu rows of the PORTS menu: every port up to 33 that exists
+PortMenuRows:
+        :: BINT0 BINT1 BINT34 ONE_DO PortMenuOne LOOP RDROP OBJ_410E9 * 3F638
           LoadTouchTbl ;                         * 3F665
 
 * refs (1): 3F651
-OBJ_3F66F:
+* One pass of PortMenuRows: counts in port INDEX@ if it has anything
+PortMenuOne:
         :: INDEX@ DUP PORTSTATUS 2DROP case 3DROP * 3F66F
           DROP NOTcaseDROP SWAP#1+               * 3F692
         ;                                        * 3F6A1
 
 * refs (1): 3D470
-OBJ_3F6A6:
-        :: ' SetRebuild ' ' ROT ' OBJ_3F6E7 2Ob>Seco BINT3 ::N InitMenu ; * 3F6A6
+* Opens the backup objects of a port as a menu
+PortMenuOpen:
+        :: ' SetRebuild ' ' ROT ' PortVarRows 2Ob>Seco BINT3 ::N InitMenu ; * 3F6A6
 
 * refs (1): 3F6C9
-OBJ_3F6E7:
+* Menu rows of a port: the names of its backup objects
+PortVarRows:
         :: 2RDROP GetBVars OBJ_410E9 pvars(s,B) LoadTouchTbl ; * 3F6E7
 
 * refs (1): 3BF03
-OBJ_3F70A:
+* Menu rows of the VAR menu: the six visible variables, walking the current directory from the row
+VarMenuRows:
         :: RDROP CONTEXT@ LastNonNull NOTcase    * 3F70A
           :: BINT1 MenuRow! BINT0 LoadTouchTbl ; * 3F723
-          OBJ_3F7B4 DUP RAM-WORDNAME BINT1 ROT BINT6 ONE_DO PrevNonNull ITE * 3F741
+          VarMenuStart DUP RAM-WORDNAME BINT1 ROT BINT6 ONE_DO PrevNonNull * 3F741
+          ITE                                    * 3F769
           :: DUP RAM-WORDNAME SWAPROT #1+SWAP ;  * 3F76E
 
 * ob -> ob ob
@@ -864,7 +904,8 @@ DUPExitAtLOOP:
           LOOP DROP LoadTouchTbl ;               * 3F7A0
 
 * refs (2): 3F741 3F827
-OBJ_3F7B4:
+* ob -> ob ob: the first variable of the current menu row
+VarMenuStart:
         :: MenuRow@ DUP#1= caseDROP BINT1        * 3F7B4
           3PICK ROT ONE_DO PrevNonNull ITE SWAP#1+SWAP * 3F7CD
 
@@ -872,32 +913,34 @@ OBJ_3F7B4:
 ExitAtLOOPDUP:
           :: ExitAtLOOP DUP ;                    * 3F7EB
           LOOP OVER MenuRow@ #=case ROTROT2DROP  * 3F7FF
-          DROP CheckMenuRow 2DROP OBJ_3F7B4 ;    * 3F818
+          DROP CheckMenuRow 2DROP VarMenuStart ; * 3F818
 
 * refs (1): 3FCC8
 RclKeyP1(s):
         :: OBJ_3F8FE BINT1 over;=1(s);?:3+(s) over;=2(s);?:1+(s) * 3F831
-          over;=3(s);?:2+(s) OBJ_3F9DA ;         * 3F84A
+          over;=3(s);?:2+(s) Key>Ob&Reset ;      * 3F84A
 
 * refs (1): 3FCF5
 RclKeyP2(s):
-        :: OBJ_3F8FE BINT2 over;=1(s);?:3+(s) over;=3(s);?:1+(s) OBJ_3F9DA ; * 3F859
+        :: OBJ_3F8FE BINT2 over;=1(s);?:3+(s) over;=3(s);?:1+(s) * 3F859
+          Key>Ob&Reset ;                         * 3F872
 
 * refs (1): 3FD22
 RclKeyP3(s):
-        :: OBJ_3F8FE BINT3 over;=1(s);?:3+(s) OBJ_3F99E OBJ_3F9DA ; * 3F87C
+        :: OBJ_3F8FE BINT3 over;=1(s);?:3+(s) OBJ_3F99E Key>Ob&Reset ; * 3F87C
 
 * refs (1): 3FD4F
 RclKeyP4(s):
-        :: OBJ_3F8FE BINT4 over;=2(s);?:1+(s) over;=3(s);?:2+(s) OBJ_3F9DA ; * 3F89F
+        :: OBJ_3F8FE BINT4 over;=2(s);?:1+(s) over;=3(s);?:2+(s) * 3F89F
+          Key>Ob&Reset ;                         * 3F8B8
 
 * refs (1): 3FD7C
 RclKeyP5(s):
-        :: OBJ_3F8FE BINT5 over;=3(s);?:1+(s) OBJ_3F9DA ; * 3F8C2
+        :: OBJ_3F8FE BINT5 over;=3(s);?:1+(s) Key>Ob&Reset ; * 3F8C2
 
 * refs (1): 3FDA9
 RclKeyP6(s):
-        :: OBJ_3F8FE BINT6 OBJ_3F99E OBJ_3F9DA ; * 3F8E0
+        :: OBJ_3F8FE BINT6 OBJ_3F99E Key>Ob&Reset ; * 3F8E0
 
 * refs (6): 3F836 3F85E 3F881 3F8A4 3F8C7 3F8E5
 OBJ_3F8FE:
@@ -934,11 +977,13 @@ over;=3(s);?:1+(s):
         ;                                        * 3F9D5
 
 * refs (6): 3F84F 3F872 3F895 3F8B8 3F8D6 3F8F4
-OBJ_3F9DA:
-        :: SWAPDROP 2DUP OBJ_3F9FD 3UNROLL OBJ_3FC0F ; * 3F9DA
+* #kc #pl -> ob: the object for a key, then the shift and USER state are reset
+Key>Ob&Reset:
+        :: SWAPDROP 2DUP Key>AppKeyOb 3UNROLL KeyDoneUser ; * 3F9DA
 
 * refs (1): 3F9E9
-OBJ_3F9FD:
+* #kc #pl -> ob: the object for a key, through the application's key table first when in the parameterized outer loop
+Key>AppKeyOb:
         :: AppMode? NOTcase Key>U/SKeyOb         * 3F9FD
           2DUP AppKeys@ EVAL case ROTROT2DROP    * 3FA11
           NAppKeyOK? NOT case2drop 'DoBadKey     * 3FA2A
@@ -980,12 +1025,14 @@ Key>StdKeyOb:
         FILLTO  #3FB5A                           * 3FB38  34 zero nibbles: the next entry stays at #3FB5A
 
 * refs (1): 3C35C
-OBJ_3FB5A:
-        :: SolvMenuInit ' OBJ_3FB78 ReviewKey! ; * 3FB5A
+* Initializes the SOLVE menu and makes REVIEW show the TVM variables
+MenuTVMInit:
+        :: SolvMenuInit ' TVMReview ReviewKey! ; * 3FB5A
 
 * refs (1): 3FB69
-OBJ_3FB78:
-        :: ROMPTR 0E6 00A OBJ_7D966 INNERCOMP #1+ ONE_DO ONESWAP OBJ_41495 * 3FB78
+* REVIEW in the TVM menu: shows each variable with its value on its own row
+TVMReview:
+        :: XLIB TVMPrompt TvmVars INNERCOMP #1+ ONE_DO ONESWAP ReviewVar$ * 3FB78
           BINT8 INDEX@#- DISPN LOOP SetDA12Temp SetDA3NoCh ; * 3FBA6
 
 * refs (1): 3FA98
@@ -996,15 +1043,16 @@ OBJ_3FB78:
         ;                                        * 3FC0A
 
 * refs (1): 3F9F3
-OBJ_3FC0F:
+* #kc #pl ->: after a key: resets the shift state, and one-shot USER mode unless the key was a modifier or alpha
+KeyDoneUser:
         :: Lock? ITE àShiftOnly SetKeysNS        * 3FC0F
           1USR? NOTcase2DROP 2DUP                * 3FC28
-          ModifierKey? case OBJ_3FC7D            * 3FC37
-          OVER BINT30 #= OVER BINT2 #= ANDcase OBJ_3FC7D * 3FC46
+          ModifierKey? case KeyDoneUser~1        * 3FC37
+          OVER BINT30 #= OVER BINT2 #= ANDcase KeyDoneUser~1 * 3FC46
           2DROP ~QuitUserMo;SetDA1Bad ;          * 3FC6E
 
 * refs (2): 3FC41 3FC69
-OBJ_3FC7D:
+KeyDoneUser~1:
         :: ?Key>UKeyOb NOT?SEMI                  * 3FC7D
           DROP ~QuitUserMo;SetDA1Bad ;           * 3FC8C
 
@@ -1015,27 +1063,27 @@ OBJ_3FC7D:
 * ob ->
 * refs (5): 3DA0D 3FC23 3FEF3 40D43 CF6C9
 SetKeysNS:
-        :: ClrAlphaAnn ClrLeftAnn ClrRightAnn ' RclKeyP1(s) BINT7 OBJ_04A57 ; * 3FCAF
+        :: ClrAlphaAnn ClrLeftAnn ClrRightAnn ' RclKeyP1(s) BINT7 SETPROC ; * 3FCAF
 
 * refs (1): 3B75F
 RShiftOnly:
-        :: ClrAlphaAnn SetLeftAnn ClrRightAnn ' RclKeyP2(s) BINT7 OBJ_04A57 ; * 3FCDC
+        :: ClrAlphaAnn SetLeftAnn ClrRightAnn ' RclKeyP2(s) BINT7 SETPROC ; * 3FCDC
 
 * refs (2): 3B798 3DA9C
 LShiftOnly:
-        :: ClrAlphaAnn ClrLeftAnn SetRightAnn ' RclKeyP3(s) BINT7 OBJ_04A57 ; * 3FD09
+        :: ClrAlphaAnn ClrLeftAnn SetRightAnn ' RclKeyP3(s) BINT7 SETPROC ; * 3FD09
 
 * refs (4): 3AA2D 3BAE1 3FC1E 40D2F
 àShiftOnly:
-        :: SetAlphaAnn ClrLeftAnn ClrRightAnn ' RclKeyP4(s) BINT7 OBJ_04A57 ; * 3FD36
+        :: SetAlphaAnn ClrLeftAnn ClrRightAnn ' RclKeyP4(s) BINT7 SETPROC ; * 3FD36
 
 * refs (1): 3AFF0
 àLShiftOnly:
-        :: SetAlphaAnn SetLeftAnn ClrRightAnn ' RclKeyP5(s) BINT7 OBJ_04A57 ; * 3FD63
+        :: SetAlphaAnn SetLeftAnn ClrRightAnn ' RclKeyP5(s) BINT7 SETPROC ; * 3FD63
 
 * refs (1): 3B025
 àRShiftOnly:
-        :: SetAlphaAnn SetRightAnn ClrLeftAnn ' RclKeyP6(s) BINT7 OBJ_04A57 ; * 3FD90
+        :: SetAlphaAnn SetRightAnn ClrLeftAnn ' RclKeyP6(s) BINT7 SETPROC ; * 3FD90
 
 * ob ob' ->
 * refs (1): 4035F
@@ -1084,8 +1132,9 @@ ModifierKey?:
           BINT1 #= SWAP BINT4 #= OR ;            * 3FECB
 
 * refs (2): 385F7 3887C
-OBJ_3FEEE:
-        :: SetKeysNS OBJ_3FFCA KeyOb0 OBJ_424C7 ; * 3FEEE
+* No shift, no one-shot USER, no pending key object, no control alarm
+ResetKeyState:
+        :: SetKeysNS Clr1USR KeyOb0 ResetKeyState~1 ; * 3FEEE
 
 * Unreferenced NOPs between objects: padding
         CON(5)  NOP                              * 3FF0C  entry 0
@@ -1110,7 +1159,7 @@ NonUsrKeyOK?:
         CON(5)  (*)+5                            * 3FF75  primitive code object
         ASSEMBLE
         LC(3)   #40A                             * 3FF7A
-        GOVLNG  OBJ_539D8.L1                     * 3FF7F
+        GOVLNG  ClrISF20B.L1                     * 3FF7F
 
 * ->
 * refs (2): 41BAF 41F22
@@ -1124,24 +1173,26 @@ SetNUsrKeyOK:
 ClrNUsrKeyOK:
         CON(5)  (*)+5                            * 3FF97  primitive code object
         LC(3)   #40A                             * 3FF9C
-        GOVLNG  OBJ_539D8.L2                     * 3FFA1
+        GOVLNG  ClrISF20B.L2                     * 3FFA1
 
 * refs (3): 397CF 3D96F 3FC28
 1USR?:
         CON(5)  (*)+5                            * 3FFA8  primitive code object
         LC(3)   #106                             * 3FFAD
-        GOVLNG  OBJ_539D8.L1                     * 3FFB2
+        GOVLNG  ClrISF20B.L1                     * 3FFB2
 
 * refs (1): 40D70
-SetUserMo~1:
+* Turns on one-shot USER (internal flag #106)
+Set1USR:
         CON(5)  (*)+5                            * 3FFB9  primitive code object
         LC(3)   #106                             * 3FFBE
         GOVLNG  SetISysFlag                      * 3FFC3
 
 * refs (3): 3D979 3FEF8 40D89
-OBJ_3FFCA:
+* Turns off one-shot USER
+Clr1USR:
         CON(5)  (*)+5                            * 3FFCA  primitive code object
         LC(3)   #106                             * 3FFCF
-        GOVLNG  OBJ_539D8.L2                     * 3FFD4
-OBJ_3FFCA.L1:
+        GOVLNG  ClrISF20B.L2                     * 3FFD4
+Clr1USR.L1:
         FILLTO  #40002                           * 3FFDB  39 zero nibbles: the next entry stays at #40002
