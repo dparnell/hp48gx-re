@@ -13878,7 +13878,7 @@ pub(crate) fn CK_DISPATCH1_L1(r: &mut Run) {
             }
             // CK&DISPATCH1.L10:
             0x19036..=0x19036 => {
-                op!(r, at, 0x19036..0x1903D, 9, r.cpu.load_const(R::C, 5, 0x1916E)); // LC(5) #1916E
+                op!(r, at, 0x19036..0x1903D, 9, r.cpu.load_const(R::C, 5, 0x1916E)); // LC(5) CK&DISPATCH1.L22
                 at = 0x1903D;
             }
             // CK&DISPATCH1.L11:
@@ -14012,7 +14012,7 @@ pub(crate) fn CK_DISPATCH1_L1(r: &mut Run) {
 }
 
 // # #' -> #*#'
-// #*OVF: firmware/lower/1802E-dispatch.s:1383
+// #*OVF: firmware/lower/1802E-dispatch.s:1384
 pub(crate) fn __OVF(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14077,7 +14077,7 @@ pub(crate) fn __OVF(r: &mut Run) {
 }
 
 // ->
-// CKNFLOATS: firmware/lower/1802E-dispatch.s:1413
+// CKNFLOATS: firmware/lower/1802E-dispatch.s:1414
 pub(crate) fn CKNFLOATS(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14169,7 +14169,7 @@ pub(crate) fn CKNFLOATS(r: &mut Run) {
 }
 
 // F%..F% #n [%F] -> [F%]'
-// >ARRY: firmware/lower/1802E-dispatch.s:1459
+// >ARRY: firmware/lower/1802E-dispatch.s:1460
 pub(crate) fn _ARRY(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -14278,7 +14278,7 @@ pub(crate) fn _ARRY(r: &mut Run) {
 }
 
 // ob -> ob flag
-// NOTINHARDROM?: firmware/lower/1802E-dispatch.s:1532
+// NOTINHARDROM?: firmware/lower/1802E-dispatch.s:1533
 pub(crate) fn NOTINHARDROM_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {

@@ -1259,7 +1259,7 @@ CK&DISPATCH1.loop9:
         LC(5)   CK&DISPATCH1.L21+2               * 1902B
         GOTO    CK&DISPATCH1.L11                 * 19032
 CK&DISPATCH1.L10:
-        LC(5)   #1916E                           * 19036
+        LC(5)   CK&DISPATCH1.L22                 * 19036
 CK&DISPATCH1.L11:
         A=A+C   A                                * 1903D
         AD1EX                                    * 1903F
@@ -1360,6 +1360,7 @@ CK&DISPATCH1.L21:
         CON(5)  DOEXT                            * 19169  entry 13
 
 * Argument dispatch: the prolog for each extended type 0F-EF; read at #19017
+CK&DISPATCH1.L22:
         CON(5)  DOROMP                           * 1916E  entry 0
         CON(5)  DOBINT                           * 19173  entry 1
         CON(5)  DORRP                            * 19178  entry 2
