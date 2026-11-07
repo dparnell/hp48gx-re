@@ -556,6 +556,43 @@ mod tests {
         assert_eq!(text_rows(&mut m).len(), 2, "two stack levels are left");
     }
 
+    /// The text of the status area and messages on the hi-res display.
+    fn status_text(m: &mut hp48::Machine) -> Vec<String> {
+        m.sync_hires();
+        let text = |item: &Item| match &item.content {
+            Content::Text { text, .. } => Some(String::from_utf8_lossy(text).trim().to_string()),
+            _ => None,
+        };
+        m.hw.hires.on_lcd().filter_map(text).collect()
+    }
+
+    #[test]
+    fn the_status_area_is_sent_as_text() {
+        for natives in [false, true] {
+            let Some(mut m) = machine(natives) else { return };
+            enter_line(&mut m, "RAD 7");
+            let status = status_text(&mut m);
+            assert!(status.iter().any(|t| t == "RAD"), "{status:?}");
+            assert!(status.iter().any(|t| t.contains("HOME")), "{status:?}");
+        }
+    }
+
+    #[test]
+    fn a_warning_is_sent_as_text_and_gives_way_to_the_status_area() {
+        let Some(mut m) = machine(true) else { return };
+        enter_line(&mut m, "RAD 1 0");
+        tap_all(&mut m, &[Key::Div]);
+        let shown = status_text(&mut m);
+        assert!(shown.iter().any(|t| t.contains("Error")), "{shown:?}");
+        assert!(shown.iter().any(|t| t.contains("Infinite Result")), "{shown:?}");
+        assert!(!shown.iter().any(|t| t == "RAD"), "the message is over it: {shown:?}");
+        tap_all(&mut m, &[Key::On]);
+        m.run(CPU_HZ);
+        let shown = status_text(&mut m);
+        assert!(!shown.iter().any(|t| t.contains("Infinite Result")), "{shown:?}");
+        assert!(shown.iter().any(|t| t == "RAD"), "{shown:?}");
+    }
+
     #[test]
     fn clearing_the_lcd_removes_what_was_on_it() {
         let Some(mut m) = machine(true) else { return };

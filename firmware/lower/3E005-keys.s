@@ -459,6 +459,34 @@ HiEditDisp:
 HiDispChar:
         :: 2DUP DISPCHAR+PC BINT8 HiSend 2DROP ;
 
+* grob buffer #x #y -> : GROB!, and shows the grob on the display
+HiGROB!:
+        :: BINT9 HiSend GROB! ;
+
+* $ grob -> grob : tells the display which minifont text made the grob
+HiText:
+        :: BINT10 HiSend SWAPDROP ;
+
+* $ -> grob : $>grob, and tells the display which text made it
+Hi$>grob:
+        :: DUP $>grob HiText ;
+
+* $ #n -> flag grob : RIGHT$3x6, and tells the display which text made it
+HiRIGHT$3x6:
+        :: OVER SWAP RIGHT$3x6 ROT SWAP HiText ;
+
+* $ -> grob : $>GROB, and tells the display which text made it
+Hi$>GROB:
+        :: DUP $>GROB BINT11 HiSend SWAPDROP ;
+
+* $ -> : DISPROW1, and shows the row on the display
+HiDispRow1:
+        :: DUP DISPROW1 BINT0 BINT12 HiSend 2DROP ;
+
+* $ -> : DISPROW2, and shows the row on the display
+HiDispRow2:
+        :: DUP DISPROW2 BINT8 BINT12 HiSend 2DROP ;
+
 * #n -> : ScreenUpN, and moves the display's rows of text with it
 HiScreenUpN:
         :: BINT5 HiSend ScreenUpN ;

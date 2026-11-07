@@ -49,6 +49,14 @@ const SCROLL_DOWN: u8 = 6;
 const EDIT_ROW: u8 = 7;
 /// `chr #row`: a character has just been drawn before the cursor.
 const EDIT_CHAR: u8 = 8;
+/// `grob buffer #x #y`: a grob on the display.
+const DISPLAY: u8 = 9;
+/// `$ grob`: this text in the minifont made this grob.
+const MINI_TEXT: u8 = 10;
+/// `$ grob`: this text in the 8-line font made this grob.
+const SMALL_TEXT: u8 = 11;
+/// `$ #line`: a row of the 8-line font has just been drawn from this line.
+const SMALL_ROW: u8 = 12;
 
 /// RAM word with the address of stack level 1, after `SAVPTR`.
 const DSKTOP: u32 = 0x806F8;
@@ -66,6 +74,7 @@ const CURSORY: u32 = 0x808BE;
 /// First LCD line of each row of big text, and how tall a row is.
 const ROW_LINES: [usize; 4] = [16, 26, 36, 46];
 const ROW_HEIGHT: usize = 10;
+const SMALL_ROW_HEIGHT: usize = 8;
 /// How wide a character of the big font is.
 pub const CELL_WIDTH: usize = 6;
 /// The first LCD line of the menu.
@@ -86,6 +95,18 @@ pub enum Content {
     Row { text: Vec<u8> },
     /// A row of the edit line: text in the big font, a character to a cell.
     Edit { text: Vec<u8> },
+    /// Text that the ROM made into a grob: the status line, the path, the
+    /// clock and messages.
+    Text { text: Vec<u8>, font: Font },
+}
+
+/// The font of [`Content::Text`].
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Font {
+    /// The minifont: proportional, 6 lines tall.
+    Mini,
+    /// The 8-line font, on the same grid of cells as the big font.
+    Small,
 }
 
 impl Content {
@@ -154,8 +175,9 @@ impl Item {
 #[derive(Clone, Debug, Default)]
 pub struct Hires {
     pub items: Vec<Item>,
-    /// The text that made each label, by the [`hash`] of the label, plain
-    /// and inverted, as `MakeStdLabel` inverts what `MakeLabel` gives it.
+    /// The text that made each grob, by the [`hash`] of the grob. Labels are
+    /// there plain and inverted, as `MakeStdLabel` inverts what `MakeLabel`
+    /// gives it.
     labels: std::collections::HashMap<u64, Content>,
 }
 
@@ -177,6 +199,14 @@ impl Hires {
                 item.y = if up { item.y - ROW_HEIGHT } else { item.y + ROW_HEIGHT };
             }
         }
+    }
+
+    /// Remember what `rows` are made from.
+    fn remember(&mut self, rows: &[Vec<bool>], content: Content) {
+        if self.labels.len() >= LABELS {
+            self.labels.clear();
+        }
+        self.labels.insert(hash(rows), content);
     }
 
     /// Add an item, in place of what is at the same place.
@@ -274,12 +304,25 @@ pub(crate) fn command(hw: &mut Hardware, code: u8) {
             let (Some(rows), Some(text)) = (read_rows(hw, level(1)), read_text(hw, level(4))) else { return };
             let label = Content::Label { text, center: number(2), width: number(3) };
             let inverted: Vec<Vec<bool>> = rows.iter().map(|row| row.iter().map(|&on| !on).collect()).collect();
-            let labels = &mut hw.hires.labels;
-            if labels.len() >= LABELS {
-                labels.clear();
-            }
-            labels.insert(hash(&rows), label.clone());
-            labels.insert(hash(&inverted), label);
+            hw.hires.remember(&rows, label.clone());
+            hw.hires.remember(&inverted, label);
+        }
+        MINI_TEXT | SMALL_TEXT => {
+            let (Some(rows), Some(text)) = (read_rows(hw, level(1)), read_text(hw, level(2))) else { return };
+            let font = if code == MINI_TEXT { Font::Mini } else { Font::Small };
+            hw.hires.remember(&rows, Content::Text { text, font });
+        }
+        SMALL_ROW => {
+            let line = number(1);
+            let Some(text) = read_text(hw, level(2)) else { return };
+            let Some(rows) = read_area(hw, word(hw, ADISP), line, SMALL_ROW_HEIGHT, LCD_WIDTH) else { return };
+            hw.hires.show(0, line, rows, Content::Text { text, font: Font::Small });
+        }
+        DISPLAY => {
+            let Some(rows) = read_rows(hw, level(4)) else { return };
+            let content = hw.hires.labels.get(&hash(&rows)).cloned().unwrap_or(Content::Grob);
+            let (x, y) = (number(2), number(1));
+            hw.hires.show(x, y, rows, content);
         }
         MENU => {
             let Some(rows) = read_rows(hw, level(4)) else { return };

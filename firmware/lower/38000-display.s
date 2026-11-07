@@ -434,7 +434,7 @@ SysErrBody:
           ;                                      * 38773
           #CAlarmErr #=case SysErrorTrap~1       * 38778
           LastRomWd> ERROR@ ErrResetEdit ERRBEEP MakeMessage(proc,s) TOADISP * 38787
-          REDISPHBUFF DISPROW1 DISPROW2 SetDA1Temp ; * 387A5
+          REDISPHBUFF HiDispRow1 HiDispRow2 SetDA1Temp ; * 387A5
 
 * refs (3): 23402 3872D D49EA
 * After an error in the middle of building a menu: rebuilds the last menu, falling back to MTH if that fails too
@@ -1420,8 +1420,8 @@ DispAllStatus!:
 * $ #x #x1 #x2 ->
 * refs (7): 395EC 395F6 39600 3960A 39614 3961E ...
 Blank&GROB!:
-        :: 4ROLL $>grob 4UNROLL HARDBUFF 3UNROLL ZEROSWAP BINT6 GROB!ZERO * 39632
-          SWAP BINT0 GROB! ;                     * 3965F
+        :: 4ROLL Hi$>grob 4UNROLL HARDBUFF 3UNROLL ZEROSWAP BINT6 GROB!ZERO * 39632
+          SWAP BINT0 HiGROB! ;                   * 3965F
 
 * refs (1): 395E7
 AngleStatus:
@@ -1502,8 +1502,8 @@ _PRG_:
 * refs (1): 395C9
 DispDir?Time:
         :: DispTimeReq? DUP PathStatus 4ROLL ITE DispDir?Tim1 DispDir?Tim2 * 3988B
-          SWAP HARDBUFF BINT0 BINT7 GROB! HARDBUFF BINT4 ROT IT #2+ * 398B3
-          BINT7 GROB! ;                          * 398E5
+          SWAP HARDBUFF BINT0 BINT7 HiGROB! HARDBUFF BINT4 ROT IT #2+ * 398B3
+          BINT7 HiGROB! ;                        * 398E5
 
 * refs (1): 398A9
 DispDir?Tim1:
@@ -1522,9 +1522,9 @@ PathStatus:
           ~SWAP;ID>$ PathStatus~1                * 399C5
           4ROLL !append$ SPACE$ !insert$ 3UNROLL 3PICK LEN$ BINT63 #< AND * 399CF
           WHILE                                  * 39A01
-          :: MYRAMROMPAIR DROP ; REPEAT DROPSWAP RIGHT$3x6 OVER ITE * 39A06
+          :: MYRAMROMPAIR DROP ; REPEAT DROPSWAP HiRIGHT$3x6 OVER ITE * 39A06
           _chr(31)_ tok{                         * 39A33
-          $>grob ROT ;                           * 39A3D
+          Hi$>grob ROT ;                         * 39A3D
 
 * refs (1): 399C5
 ~SWAP;ID>$:
@@ -1538,7 +1538,7 @@ PathStatus~1:
 * Draws the date and time in the status area, at column 63 of row 7
 HdrClock:
         :: DATE Date>d$ APPEND_SPACE BINT42 TestSysFlag IT APPEND_SPACE * 39A83  flag -42: mm/dd/yy format / dd.mm.yy format
-          TOD TOD>t$ !append$ $>grob HARDBUFF BINT63 BINT7 GROB! ; * 39AAB
+          TOD TOD>t$ !append$ Hi$>grob HARDBUFF BINT63 BINT7 HiGROB! ; * 39AAB
 
 * refs (2): 048C7 048EA
 * Draws the clock if the status area shows status

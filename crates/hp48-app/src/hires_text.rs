@@ -6,8 +6,8 @@
 //! label's frame) is traced.
 
 use crate::{draw_fitted_text, LCD_BG, LCD_INK};
-use eframe::egui::{self, FontFamily, Pos2, Rect, Stroke};
-use hp48::hires::{Content, Cursor, Item, CELL_WIDTH as CELL};
+use eframe::egui::{self, Align, FontFamily, Pos2, Rect, Stroke};
+use hp48::hires::{Content, Cursor, Font, Item, CELL_WIDTH as CELL};
 use hp48::{LCD_HEIGHT, LCD_WIDTH};
 
 /// The characters on a row of the big font, and its capitals' height.
@@ -15,6 +15,13 @@ const ROW_CHARS: usize = 22;
 const ROW_CAP: f32 = 7.0;
 /// Where the big font's capitals are centred, below the top of a row.
 const ROW_MIDDLE: f32 = 4.5;
+/// The same for the 8-line font.
+const SMALL_CAP: f32 = 6.0;
+const SMALL_MIDDLE: f32 = 3.5;
+/// The same for the minifont.
+const MINI_CAP: f32 = 5.0;
+const MINI_MIDDLE: f32 = 2.5;
+const MINI_ROOM: f32 = 1.25;
 /// Where a label's capitals are centred, below its top.
 const LABEL_MIDDLE: f32 = 4.5;
 /// The lines of a label that hold text.
@@ -58,6 +65,11 @@ pub fn erase(item: &Item, lcd: &mut [[bool; LCD_WIDTH]; LCD_HEIGHT]) {
                 lcd[item.y + y].fill(false);
             }
         }
+        Content::Text { .. } => {
+            for line in lcd.iter_mut().skip(item.y).take(item.rows.len()) {
+                line.iter_mut().skip(item.x).take(item.rows[0].len()).for_each(|pixel| *pixel = false);
+            }
+        }
     }
 }
 
@@ -70,18 +82,25 @@ pub fn draw(painter: &egui::Painter, item: &Item, pt: &dyn Fn(f32, f32) -> Pos2)
             let color = if dark_label(item, &columns) { LCD_BG } else { LCD_INK };
             let middle = [(item.x + center) as f32, item.y as f32 + LABEL_MIDDLE];
             let family = FontFamily::Name("mini".into());
-            draw_fitted_text(painter, &text(bytes), middle, *width as f32 - 1.5, 5.0, family, false, pt, color);
+            draw_fitted_text(painter, &text(bytes), middle, *width as f32 - 1.5, 5.0, family, Align::Center, pt, color);
         }
         Content::Row { text: bytes } => {
-            let shown = &bytes[..bytes.len().min(ROW_CHARS)];
-            // Words keep to the font's grid, so that columns line up. Stack
-            // levels are set against the right side of the display.
-            for (start, word) in words(shown) {
-                let room = (word.len() * CELL) as f32;
-                let middle = [item.x as f32 + (start * CELL) as f32 + room / 2.0, item.y as f32 + ROW_MIDDLE];
-                let right = start + word.len() == ROW_CHARS;
-                draw_fitted_text(painter, &text(word), middle, room, ROW_CAP, FontFamily::Proportional, right, pt, LCD_INK);
-            }
+            draw_words(painter, item, bytes, ROW_CAP, ROW_MIDDLE, pt);
+        }
+        Content::Text { text: bytes, font: Font::Small } => {
+            // A message reads as a sentence, in the font's own spacing.
+            let shown = text(&bytes[..bytes.len().min(ROW_CHARS)]);
+            let shown = shown.trim_end();
+            let room = (shown.chars().count() * CELL) as f32;
+            let middle = [item.x as f32 + room / 2.0, item.y as f32 + SMALL_MIDDLE];
+            draw_fitted_text(painter, shown, middle, room, SMALL_CAP, FontFamily::Proportional, Align::Min, pt, LCD_INK);
+        }
+        Content::Text { text: bytes, font: Font::Mini } => {
+            let room = item.rows[0].len() as f32;
+            let middle = [item.x as f32 + room / 2.0, item.y as f32 + MINI_MIDDLE];
+            // A real font needs more room than the minifont took.
+            let room = room * MINI_ROOM;
+            draw_fitted_text(painter, &text(bytes), middle, room, MINI_CAP, FontFamily::Proportional, Align::Center, pt, LCD_INK);
         }
         Content::Edit { text: bytes } => {
             // A character to a cell, so that the cursor lines up with them.
@@ -90,13 +109,25 @@ pub fn draw(painter: &egui::Painter, item: &Item, pt: &dyn Fn(f32, f32) -> Pos2)
                 if b != b' ' && Some(column) != under_cursor {
                     let middle = [item.x as f32 + ((column * CELL) as f32) + CELL as f32 / 2.0, item.y as f32 + ROW_MIDDLE];
                     let family = FontFamily::Proportional;
-                    draw_fitted_text(painter, &character(b).to_string(), middle, CELL as f32, ROW_CAP, family, false, pt, LCD_INK);
+                    draw_fitted_text(painter, &character(b).to_string(), middle, CELL as f32, ROW_CAP, family, Align::Center, pt, LCD_INK);
                 }
             }
             if let Some(cursor) = item.cursor {
                 draw_cursor(painter, cursor, item.y as f32, pt);
             }
         }
+    }
+}
+
+/// A row of text, with words keeping to the font's grid so that columns line
+/// up. Stack levels are set against the right side of the display.
+fn draw_words(painter: &egui::Painter, item: &Item, bytes: &[u8], cap: f32, line: f32, pt: &dyn Fn(f32, f32) -> Pos2) {
+    let shown = &bytes[..bytes.len().min(ROW_CHARS)];
+    for (start, word) in words(shown) {
+        let room = (word.len() * CELL) as f32;
+        let middle = [item.x as f32 + (start * CELL) as f32 + room / 2.0, item.y as f32 + line];
+        let align = if start + word.len() == ROW_CHARS { Align::Max } else { Align::Center };
+        draw_fitted_text(painter, &text(word), middle, room, cap, FontFamily::Proportional, align, pt, LCD_INK);
     }
 }
 

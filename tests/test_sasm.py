@@ -199,6 +199,19 @@ class Firmware(unittest.TestCase):
             (0x3A0C6, 0x3A0CB),  # DispEditRows: BigDisp(st,s) -> HiEditDisp
             (0x42976, 0x4297B),  # EdBackspace: DISPCHAR+PC -> HiDispChar
             (0x42B4D, 0x42B52),  # Echo1Char: the same
+            (0x1272F, 0x12734),  # DISPROW1*: $>GROB -> Hi$>GROB
+            (0x1273E, 0x12743),  # and GROB! -> HiGROB!
+            (0x12752, 0x12757),  # DISPROW2*: the same
+            (0x12766, 0x1276B),
+            (0x3963C, 0x39641),  # Blank&GROB!: $>grob -> Hi$>grob
+            (0x39669, 0x3966E),  # and GROB! -> HiGROB!
+            (0x398C7, 0x398CC),  # DispDir?Time: GROB! -> HiGROB!, twice
+            (0x398EA, 0x398EF),
+            (0x39A24, 0x39A29),  # PathStatus: RIGHT$3x6 -> HiRIGHT$3x6
+            (0x39A3D, 0x39A42),  # and $>grob -> Hi$>grob
+            (0x39ABA, 0x39ABF),  # HdrClock: $>grob -> Hi$>grob
+            (0x39ACE, 0x39AD3),  # and GROB! -> HiGROB!
+            (0x387AA, 0x387B4),  # SysErrBody: DISPROW1 and 2 -> HiDispRow1 and 2
             (0x39C11, 0x39C16),  # ?RollUpDA2: ScreenUpN -> HiScreenUpN
             (0x43A81, 0x43A86),  # the interactive stack: ScreenDnN -> HiScreenDnN
             (0x43B4E, 0x43B53),  # the same: ScreenUpN -> HiScreenUpN

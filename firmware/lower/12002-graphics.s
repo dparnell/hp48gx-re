@@ -709,12 +709,12 @@ DISPSTATUS2:
 * $ ->
 * refs (1): 12716
 DISPROW1*:
-        :: COERCE$22 $>GROB HBUFF_X_Y Clr8 GROB! ; * 12725
+        :: COERCE$22 Hi$>GROB HBUFF_X_Y Clr8 HiGROB! ; * 12725
 
 * $ ->
 * refs (1): 1271B
 DISPROW2*:
-        :: COERCE$22 $>GROB HBUFF_X_Y #8+ Clr8-15 GROB! ; * 12748
+        :: COERCE$22 Hi$>GROB HBUFF_X_Y #8+ Clr8-15 HiGROB! ; * 12748
 
 * $ -> $'
 * refs (3): 0E02E 1272A 1274D

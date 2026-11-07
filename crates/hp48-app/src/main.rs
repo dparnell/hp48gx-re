@@ -34,7 +34,7 @@ mod persist;
 mod plot;
 mod runner;
 
-use eframe::egui::{self, Align2, Color32, CornerRadius, FontId, Pos2, Rect, Sense, Stroke, UiBuilder, Vec2};
+use eframe::egui::{self, Align, Align2, Color32, CornerRadius, FontId, Pos2, Rect, Sense, Stroke, UiBuilder, Vec2};
 use face::{KeyCap, ShiftColor, Style, ROWS};
 use hp48::{Key, Machine, CPU_HZ, LCD_HEIGHT, LCD_WIDTH};
 use std::collections::{HashSet, VecDeque};
@@ -773,12 +773,12 @@ pub(crate) const CAP_TOP: f32 = 0.199;
 /// the screen.
 pub(crate) fn draw_mini_text(painter: &egui::Painter, t: &hp48_vector::Text, pt: &dyn Fn(f32, f32) -> Pos2, color: Color32) {
     let (centre, room) = ([t.x + t.w / 2.0, t.y + 2.5], t.w + 0.5);
-    draw_fitted_text(painter, &t.text, centre, room, 5.0, mini(), false, pt, color);
+    draw_fitted_text(painter, &t.text, centre, room, 5.0, mini(), Align::Center, pt, color);
 }
 
 /// Text in a box `room` wide around `centre`, with capitals `cap` tall, all in
-/// LCD pixels: centred, or against the box's right side. Text wider than the
-/// box is set tighter, then smaller.
+/// LCD pixels, placed in the box by `align`. Text wider than the box is set
+/// tighter, then smaller.
 #[allow(clippy::too_many_arguments)]
 pub(crate) fn draw_fitted_text(
     painter: &egui::Painter,
@@ -787,7 +787,7 @@ pub(crate) fn draw_fitted_text(
     room: f32,
     cap: f32,
     family: egui::FontFamily,
-    right: bool,
+    align: Align,
     pt: &dyn Fn(f32, f32) -> Pos2,
     color: Color32,
 ) {
@@ -811,7 +811,11 @@ pub(crate) fn draw_fitted_text(
         }
     }
     let centre = pt(centre[0], centre[1]);
-    let x = if right { centre.x + room / 2.0 - galley.size().x } else { centre.x - galley.size().x / 2.0 };
+    let x = match align {
+        Align::Min => centre.x - room / 2.0,
+        Align::Center => centre.x - galley.size().x / 2.0,
+        Align::Max => centre.x + room / 2.0 - galley.size().x,
+    };
     let pos = Pos2::new(x, centre.y - CAP * size / 2.0 - CAP_TOP * size);
     painter.galley(pos, galley, color);
 }
