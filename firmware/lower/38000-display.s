@@ -1609,7 +1609,7 @@ DispLevelML:
           #0=ITE DispLevelML~2 DispLevelML~5 5UNROLL DUPNULLCOMP? IT * 39D2E
           DispLevelML~3                          * 39D4C
           SWAPLOOP 2DROP DUPDUP #3+ UNROLL ZERO_DO ISTOP-INDEX #1+ROLL OVER * 39D51
-          ISTOP@ #- INDEX@ #+ #1+ BigDisp(st,s) LOOP DROPDUP BINT4 #= IT * 39D7E
+          ISTOP@ #- INDEX@ #+ #1+ HiBigDisp LOOP DROPDUP BINT4 #= IT * 39D7E
           SetNoRollDA2                           * 39DB5
         ;                                        * 39DBA
 
@@ -1617,7 +1617,7 @@ DispLevelML:
 * #level ob flag ->: draws a level on one row. With flag FALSE, only the "n:" of an empty level
 DispLevel1Row:
         :: ITE DispLevel1Row~1 #:>$              * 39DBF
-          SWAP BigDisp(st,s) ;                   * 39DD3
+          SWAP HiBigDisp ;                       * 39DD3
 
 * refs (1): 39DC9
 DispLevel1Row~1:

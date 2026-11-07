@@ -424,17 +424,32 @@ _DOT-_:
 * The hi-res display (crates/hp48/src/hires.rs). Not in ROM revision R, and
 * in free space, so that nothing moves and external programs keep working.
 
+* #command -> : sends a command, with its arguments on the stack
+HiSend:
+        CON(5)  (*)+5
+        ASSEMBLE
+        GOSBVL  POP#
+        GOSBVL  SAVPTR
+        D1=(5)  HIRES
+        DAT1=A  1
+        GOVLNG  GETPTRLOOP
+        RPL
+
 * #x #y grob -> : XYGROBDISP, and shows the grob on the hi-res display
 HiGrobDisp:
-        ::
-          CODE
-            GOSBVL  SAVPTR
-            D1=(5)  HIRES
-            LC(1)   1
-            DAT1=C  1
-            GOVLNG  GETPTRLOOP
-          ENDCODE
-          XYGROBDISP ;
+        :: BINT1 HiSend XYGROBDISP ;
+
+* $ #w #x grob -> grob' : MakeLabel, and tells the display which text made it
+HiMakeLabel:
+        :: 4PICK 4PICK 4PICK 4ROLL MakeLabel BINT2 HiSend 4UNROLL 3DROP ;
+
+* grob buffer #x #y -> : GROB! into the menu, and shows the label on the display
+HiMenuGrob!:
+        :: BINT3 HiSend GROB! ;
+
+* $ #row -> : BigDisp(st,s), and shows the row on the display
+HiBigDisp:
+        :: 2DUP BigDisp(st,s) BINT4 HiSend 2DROP ;
 
         FILLTO  #3EC71                           * 3E8F5  892 zero nibbles: the next entry stays at #3EC71
 

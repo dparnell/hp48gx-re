@@ -72,7 +72,7 @@ DispMenu.1:
 * #col grob ->
 * refs (8): 154C3 3A26F 3A2BF 3A31E 3F059 3F62E ...
 Grob>Menu:
-        :: HARDBUFF2 ROT BINT0 GROB! ;           * 3A297
+        :: HARDBUFF2 ROT BINT0 HiMenuGrob! ;     * 3A297
 
 * #col $ ->
 * refs (1): 3A279
@@ -104,7 +104,7 @@ MakeStdLabel:
 * refs (1): 412FB
 NullMenuLbl:
           GROBW   "images/3A337-NullMenuLbl.png" 21 * 3A337  21 x 8; the padding (gray) is not zero
-          MakeLabel INVGROB ;                    * 3A37B
+          HiMakeLabel INVGROB ;                  * 3A37B
 
 * $ -> grob
 * refs (3): 3ECA3 3ED1B 9DFBD
@@ -114,7 +114,7 @@ MakeBoxLabel:
 * 21x8 menu key with box
 BoxLabelGrob:
           GROBW   "images/3A399-BoxLabelGrob.png" 21 * 3A399  21 x 8; the padding (gray) is not zero
-          MakeLabel INVGROB ;                    * 3A3DD
+          HiMakeLabel INVGROB ;                  * 3A3DD
 
 * $ -> grob
 * refs (5): 3A30A 3ED7A 3F054 3F624 9DF53
@@ -124,7 +124,7 @@ MakeDirLabel:
 * 21x8 directory menu key
 DirLabelGrob:
           GROBW   "images/3A3FB-DirLabelGrob.png" 21 * 3A3FB  21 x 8; the padding (gray) is not zero
-          MakeLabel INVGROB ;                    * 3A43F
+          HiMakeLabel INVGROB ;                  * 3A43F
 
 * $ -> grob
 * refs (3): 154BE 9DF26 9E047
@@ -134,7 +134,7 @@ MakeInvLabel:
 * 21x8 inverse menu key
 InvLabelGrob:
           GROBW   "images/3A45D-InvLabelGrob.png" 21 * 3A45D  21 x 8; the padding (gray) is not zero
-          MakeLabel ;                            * 3A4A1
+          HiMakeLabel ;                          * 3A4A1
 
 * $ #w #x grob -> grob'
 * refs (5): 3A37B 3A3DD 3A43F 3A4A1 9E015

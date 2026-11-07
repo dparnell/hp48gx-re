@@ -51,10 +51,13 @@ def origins(src):
             if m:
                 pending.append(m.group(1))
             m = ORIGIN.search(line)
-            if m and line.strip() and not line.lstrip().startswith("*"):
+            text = line.strip()
+            if m and text and not text.startswith("*"):
                 for name in pending:
                     out[name] = int(m.group(1), 16)
                 pending = []
+            elif text and not text.startswith("*") and not LABEL.match(line) and text not in ("RPL", "ASSEMBLE"):
+                pending = []  # our own code: it has no original address
     return out
 
 

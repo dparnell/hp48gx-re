@@ -9,9 +9,14 @@
 //! it back.
 //!
 //! A command is one nibble written to [`reg::HIRES`](crate::hardware::reg),
-//! after `SAVPTR`: its arguments are on the RPL stack, at `DSKTOP`. A ROM word
-//! such as `HiGrobDisp` draws on the LCD as well, so code that reads the
-//! display (→PICT) still works.
+//! after `SAVPTR`: its arguments are on the RPL stack, at `DSKTOP`. The ROM's
+//! `Hi` words draw on the LCD as well, so code that reads the display (→PICT)
+//! still works.
+//!
+//! A menu label needs two commands, because no one routine knows both its
+//! text and its place: `MakeLabel` turns text into a grob, and `Grob>Menu`
+//! puts a grob in a column, sometimes much later. The display remembers which
+//! text made which grob, and looks the grob up when it reaches a menu.
 //!
 //! The LCD wins. An item lasts only while the LCD under it shows what it
 //! replaced ([`Hires::sync`]), so clearing the screen, scrolling, switching
@@ -21,29 +26,58 @@
 use crate::hardware::Hardware;
 use crate::machine::{LCD_HEIGHT, LCD_WIDTH};
 
-/// Command: `#x #y grob ->`, with the stack left as it is.
+// Commands. Each leaves the stack as it is.
+/// `#x #y grob`: a grob on the display.
 const GROB: u8 = 1;
+/// `$ #w #x grob`: this text, centred on `x` in a box `w` wide, made this label.
+const LABEL: u8 = 2;
+/// `grob buffer #x #y`: a grob in the menu.
+const MENU: u8 = 3;
+/// `$ #row`: a row of text in the big font has just been drawn.
+const ROW: u8 = 4;
 
 /// RAM word with the address of stack level 1, after `SAVPTR`.
 const DSKTOP: u32 = 0x806F8;
+/// RAM word with the address of the stack's display grob.
+const ADISP: u32 = 0x806D5;
 const DOGROB: u32 = 0x02B1E;
+const DOCSTR: u32 = 0x02A2C;
 
-/// A grob sent to the display. The host draws what it has for it, by
-/// [`Grob::hash`], and otherwise leaves it to the LCD.
+/// First LCD line of each row of big text, and how tall a row is.
+const ROW_LINES: [usize; 4] = [16, 26, 36, 46];
+const ROW_HEIGHT: usize = 10;
+/// The first LCD line of the menu.
+const MENU_LINE: usize = 56;
+/// Labels remembered, before starting again.
+const LABELS: usize = 512;
+
+/// What an item shows, beyond its pixels.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub struct Grob {
+pub enum Content {
+    /// A picture. The host draws what it has for its hash, if anything.
+    Grob,
+    /// A menu label: text centred on `center`, in a box `width` wide.
+    Label { text: Vec<u8>, center: usize, width: usize },
+    /// A row of text in the big font.
+    Row { text: Vec<u8> },
+}
+
+/// Something on the display, in place of these pixels on the LCD.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Item {
     pub x: usize,
     pub y: usize,
-    /// The grob's pixels by rows (dark is true).
+    /// The LCD's pixels by rows (dark is true).
     pub rows: Vec<Vec<bool>>,
     /// [`hash`] of `rows`.
     pub hash: u64,
-    /// It has reached the LCD: the command comes before the drawing.
+    pub content: Content,
+    /// It has reached the LCD: a command may come before the drawing.
     on_lcd: bool,
 }
 
-impl Grob {
-    /// Whether the LCD shows this grob at its place.
+impl Item {
+    /// Whether the LCD shows this item's pixels at its place.
     fn shown_on(&self, lcd: &[[bool; LCD_WIDTH]; LCD_HEIGHT]) -> bool {
         self.rows.iter().enumerate().all(|(y, row)| {
             let line = lcd.get(self.y + y);
@@ -55,10 +89,27 @@ impl Grob {
 /// What the display shows, last drawn last.
 #[derive(Clone, Debug, Default)]
 pub struct Hires {
-    pub items: Vec<Grob>,
+    pub items: Vec<Item>,
+    /// The text that made each label, by the [`hash`] of the label, plain
+    /// and inverted, as `MakeStdLabel` inverts what `MakeLabel` gives it.
+    labels: std::collections::HashMap<u64, Content>,
 }
 
 impl Hires {
+    /// The items to draw: those that have reached the LCD.
+    pub fn on_lcd(&self) -> impl Iterator<Item = &Item> {
+        self.items.iter().filter(|item| item.on_lcd)
+    }
+
+    /// Add an item, in place of what is at the same place.
+    fn show(&mut self, x: usize, y: usize, rows: Vec<Vec<bool>>, content: Content) {
+        let (width, height) = (rows[0].len(), rows.len());
+        let same_place = |item: &Item| (item.x, item.y, item.rows[0].len(), item.rows.len()) == (x, y, width, height);
+        self.items.retain(|item| !same_place(item));
+        let hash = hash(&rows);
+        self.items.push(Item { x, y, rows, hash, content, on_lcd: false });
+    }
+
     /// Remove the items whose pixels the LCD no longer shows.
     pub fn sync(&mut self, lcd: &[[bool; LCD_WIDTH]; LCD_HEIGHT]) {
         self.items.retain_mut(|item| {
@@ -81,45 +132,85 @@ fn word(hw: &Hardware, addr: u32) -> u32 {
 
 /// The grob at `addr`, or None if there is no grob there.
 fn read_rows(hw: &Hardware, addr: u32) -> Option<Vec<Vec<bool>>> {
+    read_area(hw, addr, 0, usize::MAX, usize::MAX)
+}
+
+/// `count` lines of the grob at `addr` from line `first`, at most `width`
+/// pixels wide. None if there is no grob there, or nothing in that area.
+fn read_area(hw: &Hardware, addr: u32, first: usize, count: usize, width: usize) -> Option<Vec<Vec<bool>>> {
     if word(hw, addr) != DOGROB {
         return None;
     }
-    let (height, width) = (word(hw, addr + 10) as usize, word(hw, addr + 15) as usize);
-    let stride = width.div_ceil(8) * 2;
+    let (height, full_width) = (word(hw, addr + 10) as usize, word(hw, addr + 15) as usize);
+    let stride = full_width.div_ceil(8) * 2;
     let pixel = |y: usize, x: usize| {
         let nibble = hw.peek(addr + 20 + (y * stride + x / 4) as u32);
         nibble >> (x % 4) & 1 != 0
     };
-    Some((0..height).map(|y| (0..width).map(|x| pixel(y, x)).collect()).collect())
+    let width = width.min(full_width);
+    let lines = first..first.saturating_add(count).min(height);
+    (width > 0 && !lines.is_empty()).then(|| lines.map(|y| (0..width).map(|x| pixel(y, x)).collect()).collect())
+}
+
+/// The string at `addr`, in the calculator's character set.
+fn read_text(hw: &Hardware, addr: u32) -> Option<Vec<u8>> {
+    if word(hw, addr) != DOCSTR {
+        return None;
+    }
+    let bytes = word(hw, addr + 5).saturating_sub(5) / 2;
+    let byte = |i: u32| hw.peek(addr + 10 + 2 * i) | hw.peek(addr + 11 + 2 * i) << 4;
+    Some((0..bytes.min(256)).map(byte).collect())
 }
 
 /// A command from the ROM.
 pub(crate) fn command(hw: &mut Hardware, code: u8) {
-    if code != GROB {
-        return;
-    }
     let stack = word(hw, DSKTOP);
     let level = |n: u32| word(hw, stack + 5 * (n - 1));
-    let Some(rows) = read_rows(hw, level(1)) else { return };
-    let (x, y) = (word(hw, level(3) + 5) as usize, word(hw, level(2) + 5) as usize);
-    let (width, height) = (rows[0].len(), rows.len());
-    let hash = hash(&rows);
-    // A new frame of an animation takes the place of the last one.
-    let same_place = |item: &Grob| (item.x, item.y, item.rows[0].len(), item.rows.len()) == (x, y, width, height);
-    hw.hires.items.retain(|item| !same_place(item));
-    hw.hires.items.push(Grob { x, y, rows, hash, on_lcd: false });
+    let number = |n: u32| word(hw, level(n) + 5) as usize;
+    match code {
+        GROB => {
+            let Some(rows) = read_rows(hw, level(1)) else { return };
+            let (x, y) = (number(3), number(2));
+            hw.hires.show(x, y, rows, Content::Grob);
+        }
+        LABEL => {
+            let (Some(rows), Some(text)) = (read_rows(hw, level(1)), read_text(hw, level(4))) else { return };
+            let label = Content::Label { text, center: number(2), width: number(3) };
+            let inverted: Vec<Vec<bool>> = rows.iter().map(|row| row.iter().map(|&on| !on).collect()).collect();
+            let labels = &mut hw.hires.labels;
+            if labels.len() >= LABELS {
+                labels.clear();
+            }
+            labels.insert(hash(&rows), label.clone());
+            labels.insert(hash(&inverted), label);
+        }
+        MENU => {
+            let Some(rows) = read_rows(hw, level(4)) else { return };
+            let content = hw.hires.labels.get(&hash(&rows)).cloned().unwrap_or(Content::Grob);
+            let (x, y) = (number(2), MENU_LINE + number(1));
+            hw.hires.show(x, y, rows, content);
+        }
+        ROW => {
+            let Some(&line) = number(1).checked_sub(1).and_then(|row| ROW_LINES.get(row)) else { return };
+            let Some(text) = read_text(hw, level(2)) else { return };
+            let display = word(hw, ADISP);
+            let Some(rows) = read_area(hw, display, line, ROW_HEIGHT, LCD_WIDTH) else { return };
+            hw.hires.show(0, line, rows, Content::Row { text });
+        }
+        _ => {}
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    fn grob() -> Grob {
+    fn grob() -> Item {
         let rows = vec![vec![true, false], vec![false, true]];
-        Grob { x: 3, y: 4, hash: hash(&rows), rows, on_lcd: false }
+        Item { x: 3, y: 4, hash: hash(&rows), rows, content: Content::Grob, on_lcd: false }
     }
 
-    fn lcd_with(item: &Grob) -> [[bool; LCD_WIDTH]; LCD_HEIGHT] {
+    fn lcd_with(item: &Item) -> [[bool; LCD_WIDTH]; LCD_HEIGHT] {
         let mut lcd = [[false; LCD_WIDTH]; LCD_HEIGHT];
         for (y, row) in item.rows.iter().enumerate() {
             for (x, &on) in row.iter().enumerate() {
@@ -131,7 +222,7 @@ mod tests {
 
     #[test]
     fn an_item_waits_for_the_lcd_then_lasts_while_it_shows() {
-        let mut hires = Hires { items: vec![grob()] };
+        let mut hires = Hires { items: vec![grob()], ..Default::default() };
         let blank = [[false; LCD_WIDTH]; LCD_HEIGHT];
         hires.sync(&blank);
         assert_eq!(hires.items.len(), 1, "the drawing comes after the command");

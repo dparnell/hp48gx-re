@@ -16,7 +16,7 @@
 
 use crate::{draw_polyline, CAP, CAP_TOP, LCD_BG, LCD_INK};
 use eframe::egui::{self, Color32, FontId, Pos2, Stroke};
-use hp48::hires::Grob;
+use hp48::hires::{Content, Item};
 use hp48::{LCD_HEIGHT, LCD_WIDTH};
 use hp48_vector::Polyline;
 
@@ -55,8 +55,8 @@ impl Diagram {
     }
 
     /// Whether this is the picture on the hi-res display.
-    pub fn is(&self, grob: &Grob) -> bool {
-        grob.hash == self.hash && (grob.x, grob.y) == (self.x, self.y)
+    pub fn is(&self, item: &Item) -> bool {
+        item.content == Content::Grob && item.hash == self.hash && (item.x, item.y) == (self.x, self.y)
     }
 
     /// Whether the LCD shows this picture and nothing else above the menu.
@@ -377,6 +377,11 @@ mod tests {
         Some(m)
     }
 
+    /// The pictures on the hi-res display of a machine, without menu labels.
+    fn pictures(m: &hp48::Machine) -> impl Iterator<Item = &Item> {
+        m.hw.hires.items.iter().filter(|item| item.y < AREA_ROWS && item.content == Content::Grob)
+    }
+
     fn enter_line(m: &mut hp48::Machine, line: &str) {
         m.type_text(line).unwrap();
         m.tap(Key::Enter);
@@ -392,27 +397,82 @@ mod tests {
                 m.tap(key);
                 m.run(2 * CPU_HZ);
             }
-            assert!(m.hw.hires.items.is_empty(), "nothing before the picture");
+            assert!(!pictures(&m).any(|_| true), "no picture before the picture");
             m.tap(Key::D); // PIC
             m.run(2 * CPU_HZ);
             let d = elastic_buckling();
             let lcd = m.sync_hires();
-            assert_eq!(m.hw.hires.items.len(), 1, "the viewer sent the picture");
-            assert!(d.is(&m.hw.hires.items[0]));
-            assert_eq!(m.hw.hires.items[0].rows, d.bitmap);
+            let item = pictures(&m).next().expect("the viewer sent the picture");
+            assert!(d.is(item));
+            assert_eq!(item.rows, d.bitmap);
             assert!(d.shown_on(&lcd.pixels));
             m.tap(Key::C); // VARS: the picture goes
             m.run(2 * CPU_HZ);
             m.sync_hires();
-            assert!(m.hw.hires.items.is_empty(), "the LCD changed, so the item went");
+            assert!(!pictures(&m).any(|_| true), "the LCD changed, so the item went");
         }
+    }
+
+    /// The rows of text on the hi-res display that have reached the LCD.
+    fn text_rows(m: &mut hp48::Machine) -> Vec<String> {
+        m.sync_hires();
+        let row = |item: &Item| match &item.content {
+            Content::Row { text } => Some(String::from_utf8_lossy(text).into_owned()),
+            _ => None,
+        };
+        m.hw.hires.on_lcd().filter_map(row).collect()
+    }
+
+    fn labels(m: &mut hp48::Machine) -> Vec<String> {
+        m.sync_hires();
+        let label = |item: &Item| match &item.content {
+            Content::Label { text, .. } => Some(String::from_utf8_lossy(text).into_owned()),
+            _ => None,
+        };
+        m.hw.hires.on_lcd().filter_map(label).collect()
+    }
+
+    #[test]
+    fn stack_levels_and_menu_labels_are_sent_as_text() {
+        for natives in [false, true] {
+            let Some(mut m) = machine(natives) else { return };
+            enter_line(&mut m, "1.5 'abc' STO 7");
+            m.tap(Key::Var);
+            m.run(2 * CPU_HZ);
+            let rows = text_rows(&mut m);
+            assert!(rows.iter().any(|r| r.starts_with("1:") && r.ends_with('7')), "{rows:?}");
+            let shown = labels(&mut m);
+            assert!(shown.iter().any(|l| l == "abc"), "lower case stays: {shown:?}");
+        }
+    }
+
+    #[test]
+    fn clearing_the_lcd_removes_what_was_on_it() {
+        let Some(mut m) = machine(true) else { return };
+        enter_line(&mut m, "7");
+        assert!(!text_rows(&mut m).is_empty());
+        enter_line(&mut m, "CLLCD 3 FREEZE");
+        assert!(text_rows(&mut m).is_empty(), "the ROM's own clear");
+    }
+
+    #[test]
+    fn a_program_writing_to_the_display_removes_what_is_under_it() {
+        let Some(mut m) = machine(true) else { return };
+        enter_line(&mut m, "7");
+        assert!(!text_rows(&mut m).is_empty());
+        // As an external program would: straight to memory, with no ROM call.
+        const RAM: u32 = 0x80000;
+        let grob = m.peek_value(0x806D5, 5) as u32;
+        let line = grob + 20 + 50 * 34; // in the last row of the stack
+        (0..34).for_each(|i| m.hw.ram[(line + i - RAM) as usize] = 0xF);
+        assert!(text_rows(&mut m).iter().all(|r| !r.starts_with("1:")));
     }
 
     #[test]
     fn a_picture_copied_to_pict_is_not_sent() {
         let Some(mut m) = machine(true) else { return };
         enter_line(&mut m, "1 1 1 SOLVEQN");
-        assert!(m.hw.hires.items.is_empty());
+        assert!(!pictures(&m).any(|_| true));
     }
 
     #[test]

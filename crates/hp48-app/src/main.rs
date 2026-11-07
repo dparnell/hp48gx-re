@@ -2,15 +2,16 @@
 //!
 //! hp48-app [--rom PATH] [--screenshot OUT.png] [--keys "K ..."] [--type "RPL text"]... [--persist] [--pixels] [--plot-only]
 //!          [--layout auto|calculator|desktop] [--size WxH] [--line "RPL text"]... [--live] [--full-speed]
-//!          [--then "K ..."] [--no-diagrams]
+//!          [--then "K ..."] [--no-hires]
 //!
 //! The layout follows the window: a narrow window shows the calculator
 //! alone; a wide one adds a desktop panel (desk.rs) with the stack as text,
 //! the menu keys as buttons and a command line typed on the computer's
 //! keyboard. The LCD's context menu can fix the layout.
 //!
-//! Equation Library pictures are drawn from vector art where there is some
-//! (diagram.rs), unless turned off in the LCD's context menu or --no-diagrams.
+//! The ROM's hi-res display (hp48::hires) is drawn over the LCD: pictures
+//! from vector art (diagram.rs), and text with real fonts (hires_text.rs),
+//! unless turned off in the LCD's context menu or with --no-hires.
 //!
 //! Ctrl+V types the clipboard text into the calculator. The plot window
 //! opens by itself when the calculator shows its graphics screen (DRAW,
@@ -28,6 +29,7 @@
 mod desk;
 mod diagram;
 mod face;
+mod hires_text;
 mod persist;
 mod plot;
 mod runner;
@@ -107,7 +109,8 @@ struct App {
     scene_cache: std::cell::RefCell<SceneCache>,
     /// Pictures redrawn as vector art, for the hi-res display.
     diagrams: Vec<diagram::Diagram>,
-    vector_diagrams: bool,
+    /// Draw the hi-res display over the LCD.
+    hires: bool,
     /// The ROM's minifont, recognised in the LCD and drawn with a real font.
     minifont: hp48_vector::MiniFont,
     mouse_keys: HashSet<Key>,
@@ -172,7 +175,7 @@ impl App {
             display: Display::Vector,
             scene_cache: std::cell::RefCell::new(None),
             diagrams: diagram::all(),
-            vector_diagrams: true,
+            hires: true,
             persistent,
             mouse_keys: HashSet::new(),
             kb_keys: HashSet::new(),
@@ -427,7 +430,7 @@ impl App {
         lcd_resp.context_menu(|ui| {
             ui.radio_value(&mut self.display, Display::Vector, "Vector display");
             ui.radio_value(&mut self.display, Display::Pixels, "Original pixels");
-            ui.checkbox(&mut self.vector_diagrams, "Redrawn Equation Library pictures");
+            ui.checkbox(&mut self.hires, "Hi-res display");
             ui.separator();
             ui.separator();
             ui.radio_value(&mut self.layout, Layout::Auto, "Layout follows the window");
@@ -535,11 +538,11 @@ impl App {
     }
 
     fn draw_lcd(&self, painter: &egui::Painter, to_screen: &dyn Fn(f32, f32) -> Pos2, scale: f32) {
-        let (lcd, diagram) = {
+        let (lcd, items) = {
             let mut m = self.m();
             let lcd = m.sync_hires();
-            let diagram = self.hires_diagram(&m.hw.hires, &lcd);
-            (lcd, diagram)
+            let items: Vec<hp48::hires::Item> = if self.hires { m.hw.hires.on_lcd().cloned().collect() } else { Vec::new() };
+            (lcd, items)
         };
         let x0 = MARGIN + 1.0;
         let bezel = Rect::from_min_max(to_screen(MARGIN, 1.0), to_screen(FACE_W - MARGIN, LCD_TOP + LCD_H + 2.0));
@@ -582,13 +585,14 @@ impl App {
                 }
             }
             Display::Vector => {
-                // A recognised picture is drawn from its vector art, and the
-                // rest of the LCD (the menu) is traced as usual.
-                let diagram = diagram.filter(|_| self.vector_diagrams);
+                // What the hi-res display holds is drawn at the window's
+                // resolution, and the rest of the LCD is traced as usual.
+                let diagram = self.hires_diagram(&items, &lcd);
                 let mut pixels = lcd.pixels;
                 if let Some(d) = diagram {
                     d.erase(&mut pixels);
                 }
+                items.iter().for_each(|item| hires_text::erase(item, &mut pixels));
                 let scene = self.vector_scene(&pixels);
                 for r in &scene.fills {
                     painter.rect_filled(Rect::from_min_max(pt(r.x, r.y), pt(r.x + r.w, r.y + r.h)), CornerRadius::ZERO, LCD_INK);
@@ -609,15 +613,15 @@ impl App {
                 if let Some(d) = diagram {
                     d.draw(painter, &pt, px * scale);
                 }
+                items.iter().for_each(|item| hires_text::draw(painter, item, &pt));
             }
         }
     }
 
     /// The picture to draw from the hi-res display, if it holds one we have
-    /// art for and the LCD has reached it.
-    fn hires_diagram(&self, hires: &hp48::hires::Hires, lcd: &hp48::Lcd) -> Option<&diagram::Diagram> {
-        let grob = hires.items.last()?;
-        self.diagrams.iter().find(|d| d.is(grob) && d.shown_on(&lcd.pixels))
+    /// art for.
+    fn hires_diagram(&self, items: &[hp48::hires::Item], lcd: &hp48::Lcd) -> Option<&diagram::Diagram> {
+        items.iter().find_map(|item| self.diagrams.iter().find(|d| d.is(item) && d.shown_on(&lcd.pixels)))
     }
 
     /// The vectorised LCD, recomputed only when the pixels change.
@@ -765,19 +769,38 @@ pub(crate) const CAP: f32 = 0.729;
 pub(crate) const CAP_TOP: f32 = 0.199;
 
 /// Draw recognised minifont text with a real font: capitals as tall as the
-/// glyphs' 5 rows, centred on their ink. Text wider than the ink is set
-/// tighter, then smaller. `pt` maps LCD pixel coordinates to the screen.
+/// glyphs' 5 rows, centred on their ink. `pt` maps LCD pixel coordinates to
+/// the screen.
 pub(crate) fn draw_mini_text(painter: &egui::Painter, t: &hp48_vector::Text, pt: &dyn Fn(f32, f32) -> Pos2, color: Color32) {
+    let (centre, room) = ([t.x + t.w / 2.0, t.y + 2.5], t.w + 0.5);
+    draw_fitted_text(painter, &t.text, centre, room, 5.0, mini(), false, pt, color);
+}
+
+/// Text in a box `room` wide around `centre`, with capitals `cap` tall, all in
+/// LCD pixels: centred, or against the box's right side. Text wider than the
+/// box is set tighter, then smaller.
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn draw_fitted_text(
+    painter: &egui::Painter,
+    text: &str,
+    centre: [f32; 2],
+    room: f32,
+    cap: f32,
+    family: egui::FontFamily,
+    right: bool,
+    pt: &dyn Fn(f32, f32) -> Pos2,
+    color: Color32,
+) {
     let px = pt(1.0, 0.0).x - pt(0.0, 0.0).x;
-    let room = (t.w + 0.5) * px;
-    let gaps = t.text.chars().count().saturating_sub(1) as f32;
+    let room = room * px;
+    let gaps = text.chars().count().saturating_sub(1) as f32;
     let layout = |size: f32, spacing: f32| {
         let mut job = egui::text::LayoutJob::default();
-        let format = egui::TextFormat { font_id: FontId::new(size, mini()), color, extra_letter_spacing: spacing, ..Default::default() };
-        job.append(&t.text, 0.0, format);
+        let format = egui::TextFormat { font_id: FontId::new(size, family.clone()), color, extra_letter_spacing: spacing, ..Default::default() };
+        job.append(text, 0.0, format);
         painter.layout_job(job)
     };
-    let mut size = 5.0 * px / CAP;
+    let mut size = cap * px / CAP;
     let mut galley = layout(size, 0.0);
     if galley.size().x > room {
         let spacing = ((room - galley.size().x) / gaps.max(1.0)).max(-0.06 * size);
@@ -787,8 +810,9 @@ pub(crate) fn draw_mini_text(painter: &egui::Painter, t: &hp48_vector::Text, pt:
             galley = layout(size, spacing * room / galley.size().x);
         }
     }
-    let centre = pt(t.x + t.w / 2.0, t.y + 2.5);
-    let pos = Pos2::new(centre.x - galley.size().x / 2.0, centre.y - CAP * size / 2.0 - CAP_TOP * size);
+    let centre = pt(centre[0], centre[1]);
+    let x = if right { centre.x + room / 2.0 - galley.size().x } else { centre.x - galley.size().x / 2.0 };
+    let pos = Pos2::new(x, centre.y - CAP * size / 2.0 - CAP_TOP * size);
     painter.galley(pos, galley, color);
 }
 
@@ -848,7 +872,7 @@ fn main() -> eframe::Result {
     let mut screenshot = None;
     let mut keys = Vec::new();
     let mut then = Vec::new();
-    let mut vector_diagrams = true;
+    let mut hires = true;
     let mut lines = Vec::new();
     let mut force_persist = false;
     let mut pixels = false;
@@ -894,7 +918,7 @@ fn main() -> eframe::Result {
                 keys = list.into_iter().chain(keys.drain(..)).collect();
             }
             "--then" => then = parse_keys(&args.next().expect("--then LIST")),
-            "--no-diagrams" => vector_diagrams = false,
+            "--no-hires" => hires = false,
             other => panic!("unknown argument {other}"),
         }
     }
@@ -932,7 +956,7 @@ fn main() -> eframe::Result {
             if pixels {
                 app.display = Display::Pixels;
             }
-            app.vector_diagrams = vector_diagrams;
+            app.hires = hires;
             app.plot_only = plot_only;
             app.layout = layout;
             Ok(Box::new(app))

@@ -188,6 +188,14 @@ class Firmware(unittest.TestCase):
             (0x3E8F5, 0x3EC71),  # free space: the hi-res display's words
             (0x9D1A7, 0x9D1AC),  # ELShowPic: XYGROBDISP -> HiGrobDisp
             (0x9D202, 0x9D207),  # the same, for an animation's frames
+            (0x39D97, 0x39D9C),  # DispLevelML: BigDisp(st,s) -> HiBigDisp
+            (0x39DD8, 0x39DDD),  # DispLevel1Row: the same
+            (0x3A2AB, 0x3A2B0),  # Grob>Menu: GROB! -> HiMenuGrob!
+            (0x3A37B, 0x3A380),  # the four label makers: MakeLabel -> HiMakeLabel
+            (0x3A3DD, 0x3A3E2),
+            (0x3A43F, 0x3A444),
+            (0x3A4A1, 0x3A4A6),
+            (0x9E015, 0x9E01A),  # MESLabel: the same
             (0x7FFFC, 0x80000),  # the CRC words
             (0xFFFFC, 0x100000),
         ]

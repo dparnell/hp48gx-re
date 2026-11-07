@@ -132,7 +132,7 @@ MESLabel:
           :: SWAP BINT1 #AND #0<> ITE MakeBoxLabel * 9DF9F
             :: BINT14 BINT10                     * 9DFC2
               GROBW   "images/9DFD1.png" 21      * 9DFD1  21 x 8; the padding (gray) is not zero
-              MakeLabel ;                        * 9E015
+              HiMakeLabel ;                      * 9E015
           ;                                      * 9E01F
           :: SWAP BINT1 #AND #0<> ITE MakeStdLabel MakeInvLabel * 9E024
           ;                                      * 9E04C

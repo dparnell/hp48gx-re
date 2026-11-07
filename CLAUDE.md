@@ -101,7 +101,7 @@ Run the Python tests from the repo root with `python -m unittest discover -s tes
   - `face.rs` holds the key layout and legends (left = purple left-shift, right = green right-shift). The faceplate is drawn with vector primitives scaled to the window.
   - The LCD is drawn either from the vector scene (the default, cached per frame contents) or as pixel rectangles.
   - `plot.rs` draws `hp48_rpl::plot` output in a separate resizable viewport, with zoom and pan. The viewport opens by itself when the calculator shows PICT (VDISP #806DA equals GDISP).
-  - `diagram.rs` draws Equation Library pictures from vector art (so far Elastic Buckling). The ROM's pictures are bitmaps, with no drawing code to scale, so the picture viewer sends the grob to the hi-res display, and the art for that grob (by contents) is drawn in the bitmap's place, as large as fits above the menu. The bitmap still goes to the LCD, so →PICT and SOLVEQN work on it. A picture in PICT isn't sent, so it stays traced, and so does every picture on the original ROM. Art uses the bitmap's coordinates, and its tests hold it to the bitmap in both directions (within 2 pixels). The LCD's context menu or `--no-diagrams` turns it off.
+  - `diagram.rs` draws Equation Library pictures from vector art (so far Elastic Buckling). The ROM's pictures are bitmaps, with no drawing code to scale, so the picture viewer sends the grob to the hi-res display, and the art for that grob (by contents) is drawn in the bitmap's place, as large as fits above the menu. The bitmap still goes to the LCD, so →PICT and SOLVEQN work on it. A picture in PICT isn't sent, so it stays traced, and so does every picture on the original ROM. Art uses the bitmap's coordinates, and its tests hold it to the bitmap in both directions (within 2 pixels). The LCD's context menu or `--no-hires` turns off the whole hi-res display.
   - Ctrl+V types the clipboard into the calculator.
   - `persist.rs` gives the calculator continuous memory: save on exit, and advance TIMER2 by the wall-clock time spent closed.
 
@@ -137,7 +137,12 @@ cargo run --release -p hp48 --example selftest
 **The hi-res display** (`crates/hp48/src/hires.rs`) is a second display over the LCD, held by the host, not in calculator memory. The ROM's code moves to it one call at a time; the LCD stays for whatever doesn't know about it, such as external programs.
 
 - A command is one nibble written to #00135 (`HIRES`, unused on the real calculator) after `SAVPTR`, with the arguments on the RPL stack at `DSKTOP`. Writes there do nothing on other hardware.
-- `HiGrobDisp` (`#x #y grob ->`) is XYGROBDISP that also sends the grob. So far only `ELShowPic` uses it.
+- `HiSend` (`#command ->`) sends a command. The words built on it, in `3E005-keys.s`:
+  - `HiGrobDisp` (`#x #y grob ->`), XYGROBDISP that also sends the grob. `ELShowPic` uses it.
+  - `HiMakeLabel` and `HiMenuGrob!`: every menu label. `MakeLabel` knows a label's text and `Grob>Menu` its column, so the display remembers which text made which grob and looks it up by contents, plain and inverted. Grob labels with no text stay on the LCD.
+  - `HiBigDisp` (`$ #row ->`): stack levels in the big font, drawn on a grid of 6-pixel cells by `hires_text.rs`. Its command comes after the drawing, so the row's pixels can be read.
+- While editing, the ROM scrolls the stack up in display memory instead of redrawing it, so the LCD no longer matches the rows and they show as traced pixels until ENTER. Items would have to follow the scroll to avoid that.
+- Not moved yet: the edit line (`DispEditRows`, whose blinking cursor would keep removing the item), the `DISPROWn`/`DISPN` family (status area, messages, browsers: about 100 calls, so they need a patch in the primitive at `DISPROW8.L3`, not pointer swaps), and `$>grob`-style text inside graphics.
 - The new words also draw on the LCD for now, so code that reads the display still works.
 - The LCD wins: `Hires::sync` removes an item once the LCD under it stops showing what it replaced. That covers clearing, scrolling, switching displays and programs writing to memory directly, with no ROM changes. It only works while the LCD has a copy to compare, so a word that draws on the hi-res display alone will need explicit commands from the routines that clear the LCD (`CLEARLCD`, `CLCD10`, `BLANKIT`, `CLEARVDISP`, ...).
 - The display isn't saved with continuous memory.
