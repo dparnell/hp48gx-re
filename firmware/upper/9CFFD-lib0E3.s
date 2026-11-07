@@ -51,9 +51,9 @@ PicLam1:
             BINT21 XLIB ELLam3 CARCOMP EVAL XLIB ELLam5 SWAP GETATELN DROP * 9D11D
             PTR CHR_: >T$ $>GROB XYGROBDISP ;    * 9D151
           :: DUP LENCOMP DUP BINT3 #= ITE        * 9D16A
-            :: DROP INCOMPDROP XLIB ~PCunpack XYGROBDISP ; * 9D18D
+            :: DROP INCOMPDROP XLIB ~PCunpack HiGrobDisp ; * 9D18D
             :: SWAP BINT21 BINT1 DO OVER #1+ BINT1 DO DUP INDEX@ NTHCOMPDROP * 9D1B1
-              EVAL INCOMPDROP XLIB ~PCunpack XYGROBDISP SLOW SLOW SLOW SLOW * 9D1ED
+              EVAL INCOMPDROP XLIB ~PCunpack HiGrobDisp SLOW SLOW SLOW SLOW * 9D1ED
               LOOP LOOP 2DROP ;                  * 9D21B
           ;                                      * 9D22F
           ClrDAsOK ' XLIB PicMenu RESOROMP XLIB PicKeys TRUE TRUE 5ROLL * 9D234

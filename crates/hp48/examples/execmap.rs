@@ -133,7 +133,7 @@ fn main() {
     if out == "--check" {
         return;
     }
-    let rom = std::fs::read("ROM/gxrom-r").expect("ROM/gxrom-r");
+    let rom = std::fs::read(hp48::default_rom_path()).expect("ROM image");
     let mut t = Tour { m: Machine::new(&rom), seen: BTreeSet::new(), objects: BTreeSet::new(), slots: BTreeSet::new(),
                          tables: BTreeSet::new(), reads: VecDeque::new() };
     t.run(3 * CPU_HZ);

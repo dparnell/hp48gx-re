@@ -144,7 +144,7 @@ fn percent(part: u64, whole: u64) -> f64 {
 
 fn main() {
     let mut args = std::env::args().skip(1);
-    let (mut path, mut hot) = ("ROM/gxrom-r".to_string(), 0);
+    let (mut path, mut hot) = (hp48::default_rom_path().display().to_string(), 0);
     while let Some(a) = args.next() {
         match a.as_str() {
             "--hot" => hot = args.next().and_then(|n| n.parse().ok()).expect("--hot N"),

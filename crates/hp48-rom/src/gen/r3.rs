@@ -15560,7 +15560,7 @@ pub(crate) fn code_3F0E8(r: &mut Run) {
     }
 }
 
-// SUB_3F13E: firmware/lower/3E005-keys.s:621
+// SUB_3F13E: firmware/lower/3E005-keys.s:637
 pub(crate) fn SUB_3F13E(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15620,7 +15620,7 @@ pub(crate) fn SUB_3F13E(r: &mut Run) {
 }
 
 // #chr #accent -> #chr': the same vowel (or N, Y) with the accent, by a table of the letters AEIOUYN
-// AccentChr: firmware/lower/3E005-keys.s:671
+// AccentChr: firmware/lower/3E005-keys.s:687
 pub(crate) fn AccentChr(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15723,7 +15723,7 @@ pub(crate) fn AccentChr(r: &mut Run) {
     }
 }
 
-// NumEntryLin(b).L1: firmware/lower/3E005-keys.s:812
+// NumEntryLin(b).L1: firmware/lower/3E005-keys.s:828
 pub(crate) fn NumEntryLin_b__L1(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15793,7 +15793,7 @@ pub(crate) fn NumEntryLin_b__L1(r: &mut Run) {
     }
 }
 
-// SUB_3F585: firmware/lower/3E005-keys.s:850
+// SUB_3F585: firmware/lower/3E005-keys.s:866
 pub(crate) fn SUB_3F585(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15811,7 +15811,7 @@ pub(crate) fn SUB_3F585(r: &mut Run) {
 }
 
 // -> flag
-// NonUsrKeyOK?: firmware/lower/3E005-keys.s:1158
+// NonUsrKeyOK?: firmware/lower/3E005-keys.s:1174
 pub(crate) fn NonUsrKeyOK_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15829,7 +15829,7 @@ pub(crate) fn NonUsrKeyOK_(r: &mut Run) {
 }
 
 // ->
-// SetNUsrKeyOK: firmware/lower/3E005-keys.s:1166
+// SetNUsrKeyOK: firmware/lower/3E005-keys.s:1182
 pub(crate) fn SetNUsrKeyOK(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15847,7 +15847,7 @@ pub(crate) fn SetNUsrKeyOK(r: &mut Run) {
 }
 
 // ->
-// ClrNUsrKeyOK: firmware/lower/3E005-keys.s:1173
+// ClrNUsrKeyOK: firmware/lower/3E005-keys.s:1189
 pub(crate) fn ClrNUsrKeyOK(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15864,7 +15864,7 @@ pub(crate) fn ClrNUsrKeyOK(r: &mut Run) {
     }
 }
 
-// 1USR?: firmware/lower/3E005-keys.s:1179
+// 1USR?: firmware/lower/3E005-keys.s:1195
 pub(crate) fn r1USR_(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15882,7 +15882,7 @@ pub(crate) fn r1USR_(r: &mut Run) {
 }
 
 // Turns on one-shot USER (internal flag #106)
-// Set1USR: firmware/lower/3E005-keys.s:1186
+// Set1USR: firmware/lower/3E005-keys.s:1202
 pub(crate) fn Set1USR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {
@@ -15900,7 +15900,7 @@ pub(crate) fn Set1USR(r: &mut Run) {
 }
 
 // Turns off one-shot USER
-// Clr1USR: firmware/lower/3E005-keys.s:1193
+// Clr1USR: firmware/lower/3E005-keys.s:1209
 pub(crate) fn Clr1USR(r: &mut Run) {
     let mut at = r.cpu.pc;
     loop {

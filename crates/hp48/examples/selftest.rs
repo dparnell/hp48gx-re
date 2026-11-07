@@ -18,7 +18,7 @@ use saturn::Op;
 const CRC: u32 = 0x00104;
 
 fn main() {
-    let path = std::env::args().nth(1).unwrap_or_else(|| "ROM/gxrom-r".into());
+    let path = std::env::args().nth(1).unwrap_or_else(|| hp48::default_rom_path().display().to_string());
     let mut m = Machine::new(&std::fs::read(&path).expect("ROM"));
     m.run(3 * CPU_HZ);
     m.tap(Key::F);

@@ -165,6 +165,8 @@ impl Machine {
         c.shutdown = r.bool()?;
 
         let hw = &mut self.hw;
+        // The hi-res display isn't saved: the ROM draws it again.
+        hw.hires = Default::default();
         r.nibbles(&mut hw.ram)?;
         r.nibbles(&mut hw.io)?;
         hw.crc = r.u16()?;

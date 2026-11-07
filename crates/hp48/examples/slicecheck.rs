@@ -2,7 +2,7 @@
 use hp48::{Key, Machine, CPU_HZ};
 
 fn trial(slice: u64, hold: f64) -> u8 {
-    let rom = std::fs::read("ROM/gxrom-r").unwrap();
+    let rom = std::fs::read(hp48::default_rom_path()).unwrap();
     let mut m = Machine::new(&rom);
     m.run(3 * CPU_HZ);
     m.tap(Key::F);

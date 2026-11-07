@@ -83,14 +83,6 @@ const DESK_MIN_WIDTH: f32 = 760.0;
 
 type SceneCache = Option<([[bool; LCD_WIDTH]; LCD_HEIGHT], std::rc::Rc<hp48_vector::Scene>)>;
 
-/// A picture the ROM has drawn, by its index in `App::diagrams`.
-#[derive(Clone, Copy)]
-struct DrawnDiagram {
-    index: usize,
-    /// It has reached the LCD: the call that draws it is seen first.
-    on_lcd: bool,
-}
-
 struct App {
     /// Shared with the thread that runs it (runner.rs).
     machine: Arc<Mutex<Machine>>,
@@ -113,11 +105,9 @@ struct App {
     desk: desk::Desk,
     display: Display,
     scene_cache: std::cell::RefCell<SceneCache>,
-    /// Pictures redrawn as vector art, shown in place of the ROM's bitmaps,
-    /// and the one the ROM last drew.
+    /// Pictures redrawn as vector art, for the hi-res display.
     diagrams: Vec<diagram::Diagram>,
     vector_diagrams: bool,
-    drawn_diagram: std::cell::Cell<Option<DrawnDiagram>>,
     /// The ROM's minifont, recognised in the LCD and drawn with a real font.
     minifont: hp48_vector::MiniFont,
     mouse_keys: HashSet<Key>,
@@ -164,8 +154,6 @@ impl App {
         if persistent {
             persist::load(&mut machine);
         }
-        let diagrams = diagram::all();
-        hp48::watch::install(&mut machine, diagrams.iter().map(diagram::Diagram::size).collect());
         App {
             minifont: read_minifont(&machine),
             machine: Arc::new(Mutex::new(machine)),
@@ -183,9 +171,8 @@ impl App {
             desk: desk::Desk::default(),
             display: Display::Vector,
             scene_cache: std::cell::RefCell::new(None),
-            diagrams,
+            diagrams: diagram::all(),
             vector_diagrams: true,
-            drawn_diagram: Default::default(),
             persistent,
             mouse_keys: HashSet::new(),
             kb_keys: HashSet::new(),
@@ -548,11 +535,12 @@ impl App {
     }
 
     fn draw_lcd(&self, painter: &egui::Painter, to_screen: &dyn Fn(f32, f32) -> Pos2, scale: f32) {
-        let (lcd, drawn) = {
+        let (lcd, diagram) = {
             let mut m = self.m();
-            (m.lcd(), m.hw.drawn_grob.take())
+            let lcd = m.sync_hires();
+            let diagram = self.hires_diagram(&m.hw.hires, &lcd);
+            (lcd, diagram)
         };
-        let diagram = self.diagram_on(&lcd, drawn);
         let x0 = MARGIN + 1.0;
         let bezel = Rect::from_min_max(to_screen(MARGIN, 1.0), to_screen(FACE_W - MARGIN, LCD_TOP + LCD_H + 2.0));
         painter.rect_filled(bezel, CornerRadius::same((1.0 * scale) as u8), BEZEL);
@@ -625,24 +613,11 @@ impl App {
         }
     }
 
-    /// The picture on the LCD, if the ROM drew one we have art for. The ROM
-    /// draws a picture but doesn't say when it goes, so the LCD is compared
-    /// with that one picture for as long as it is up, and not otherwise.
-    fn diagram_on(&self, lcd: &hp48::Lcd, drawn: Option<hp48::watch::DrawnGrob>) -> Option<&diagram::Diagram> {
-        if let Some(grob) = drawn {
-            let index = self.diagrams.iter().position(|d| d.is(&grob));
-            self.drawn_diagram.set(index.map(|index| DrawnDiagram { index, on_lcd: false }));
-        }
-        let shown = self.drawn_diagram.get()?;
-        let diagram = &self.diagrams[shown.index];
-        if diagram.shown_on(&lcd.pixels) {
-            self.drawn_diagram.set(Some(DrawnDiagram { on_lcd: true, ..shown }));
-            return Some(diagram);
-        }
-        if shown.on_lcd {
-            self.drawn_diagram.set(None);
-        }
-        None
+    /// The picture to draw from the hi-res display, if it holds one we have
+    /// art for and the LCD has reached it.
+    fn hires_diagram(&self, hires: &hp48::hires::Hires, lcd: &hp48::Lcd) -> Option<&diagram::Diagram> {
+        let grob = hires.items.last()?;
+        self.diagrams.iter().find(|d| d.is(grob) && d.shown_on(&lcd.pixels))
     }
 
     /// The vectorised LCD, recomputed only when the pixels change.

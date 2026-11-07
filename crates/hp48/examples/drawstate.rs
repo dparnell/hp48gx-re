@@ -18,7 +18,7 @@ fn show(m: &Machine, what: &str) {
 }
 
 fn main() {
-    let rom = std::fs::read("ROM/gxrom-r").unwrap();
+    let rom = std::fs::read(hp48::default_rom_path()).unwrap();
     let mut m = Machine::new(&rom);
     m.run(3 * CPU_HZ);
     m.tap(Key::F);

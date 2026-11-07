@@ -277,6 +277,15 @@ impl Machine {
         Ok(())
     }
 
+    /// The LCD, with the hi-res display brought up to date with it.
+    pub fn sync_hires(&mut self) -> Lcd {
+        let lcd = self.lcd();
+        if !self.hw.hires.items.is_empty() {
+            self.hw.hires.sync(&lcd.pixels);
+        }
+        lcd
+    }
+
     /// Assemble the current LCD contents from display memory.
     pub fn lcd(&self) -> Lcd {
         let hw = &self.hw;

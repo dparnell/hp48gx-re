@@ -20,6 +20,7 @@ LINECOUNT                EQU #00128
 TIMER1CTRL               EQU #0012E
 TIMER2CTRL               EQU #0012F
 MENUADDR                 EQU #00130
+HIRES                    EQU #00135
 TIMER1                   EQU #00137
 TIMER2                   EQU #00138
 posunferr                EQU #00301

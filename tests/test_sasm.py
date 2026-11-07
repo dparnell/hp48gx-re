@@ -169,8 +169,9 @@ class Source(unittest.TestCase):
 
 class Firmware(unittest.TestCase):
     """firmware/, the source to edit. It builds without the original ROM.
-    While it holds no fixes it must still give ROM revision R exactly:
-    change test_is_still_revision_r when it deliberately differs."""
+    It gives ROM/gxrom-hires, which differs from revision R only where it
+    was meant to: new code goes in free space, and nothing moves, because
+    external programs call the ROM by address."""
 
     def test_assembles(self):
         asm = sasm.Assembler().run(ROOT / "firmware" / "rom.s")
@@ -178,9 +179,27 @@ class Firmware(unittest.TestCase):
         self.assertEqual(sum(asm.written), sasm.ROM_SIZE)
 
     @unittest.skipUnless((ROOT / "ROM" / "gxrom-r").exists(), "needs ROM/gxrom-r")
-    def test_is_still_revision_r(self):
+    def test_differs_from_revision_r_only_where_meant(self):
         asm = sasm.Assembler().run(ROOT / "firmware" / "rom.s")
-        self.assertEqual(asm.image(), (ROOT / "ROM" / "gxrom-r").read_bytes())
+        new, old = asm.image(), (ROOT / "ROM" / "gxrom-r").read_bytes()
+        self.assertEqual(len(new), len(old))
+        # Addresses in nibbles, end excluded.
+        allowed = [
+            (0x3E8F5, 0x3EC71),  # free space: the hi-res display's words
+            (0x9D1A7, 0x9D1AC),  # ELShowPic: XYGROBDISP -> HiGrobDisp
+            (0x9D202, 0x9D207),  # the same, for an animation's frames
+            (0x7FFFC, 0x80000),  # the CRC words
+            (0xFFFFC, 0x100000),
+        ]
+        for i, (a, b) in enumerate(zip(new, old)):
+            for nibble in (2 * i, 2 * i + 1):
+                shift = 4 * (nibble % 2)
+                if (a >> shift) & 15 != (b >> shift) & 15:
+                    self.assertTrue(any(lo <= nibble < hi for lo, hi in allowed), f"#{nibble:05X} changed")
+
+    def test_gives_the_committed_image(self):
+        asm = sasm.Assembler().run(ROOT / "firmware" / "rom.s")
+        self.assertEqual(asm.image(), (ROOT / "ROM" / "gxrom-hires").read_bytes())
 
     @unittest.skipUnless((ROOT / "ROM" / "gxrom-r").exists(), "needs ROM/gxrom-r")
     def test_build_reports_an_edit(self):
@@ -198,7 +217,7 @@ class Firmware(unittest.TestCase):
             f.write_text(t.replace('$BODY   "Infinite Result"', '$BODY   "Infinite Result!"', 1), encoding="utf-8")
             out = io.StringIO()
             with redirect_stdout(out):
-                self.assertEqual(build.main(["build", "--src", str(src), "-o", str(Path(d) / "rom.bin")]), 0)
+                self.assertEqual(build.main(["build", "--src", str(src), "-o", str(Path(d) / "rom.bin"), "--compare", str(ROOT / "ROM" / "gxrom-hires")]), 0)
         text = out.getvalue()
         self.assertIn("+2 nibbles  from MsgTab(6)", text)
         self.assertIn("in 3 regions", text)

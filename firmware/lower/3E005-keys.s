@@ -420,6 +420,22 @@ _DOT+_:
 _DOT-_:
             $ "DOT-" ~3GETLAM;#1= ;              * 3E8CF
           {GRAPH\DOT-}~1 }                       * 3E8EB
+
+* The hi-res display (crates/hp48/src/hires.rs). Not in ROM revision R, and
+* in free space, so that nothing moves and external programs keep working.
+
+* #x #y grob -> : XYGROBDISP, and shows the grob on the hi-res display
+HiGrobDisp:
+        ::
+          CODE
+            GOSBVL  SAVPTR
+            D1=(5)  HIRES
+            LC(1)   1
+            DAT1=C  1
+            GOVLNG  GETPTRLOOP
+          ENDCODE
+          XYGROBDISP ;
+
         FILLTO  #3EC71                           * 3E8F5  892 zero nibbles: the next entry stays at #3EC71
 
 * ->

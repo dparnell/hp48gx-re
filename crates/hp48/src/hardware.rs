@@ -25,6 +25,8 @@ pub mod reg {
     pub const T1CTRL: usize = 0x2E;
     pub const T2CTRL: usize = 0x2F;
     pub const MENUADDR: usize = 0x30;
+    /// Not on the real calculator: commands to the hi-res display.
+    pub const HIRES: usize = 0x35;
     pub const TIMER1: usize = 0x37;
     pub const TIMER2: usize = 0x38;
 }
@@ -57,9 +59,8 @@ pub struct Hardware {
     pub wake: bool,
     /// Set the MP hardware status bit (card control "set module pulled").
     pub set_mp: bool,
-    /// Sizes of the grobs to report, and the last one drawn (see crate::watch).
-    pub watched_grobs: std::collections::HashSet<(u32, u32)>,
-    pub drawn_grob: Option<crate::watch::DrawnGrob>,
+    /// The hi-res display over the LCD.
+    pub hires: crate::hires::Hires,
 }
 
 impl Hardware {
@@ -84,8 +85,7 @@ impl Hardware {
             irq: false,
             wake: false,
             set_mp: false,
-            watched_grobs: Default::default(),
-            drawn_grob: None,
+            hires: Default::default(),
         }
     }
 
@@ -173,6 +173,7 @@ impl Hardware {
                 }
             }
             reg::CARDSTAT => {}
+            reg::HIRES => crate::hires::command(self, val),
             reg::CRER => self.io[reg::RCS] &= 0xB,
             reg::TBR | 0x17 => {
                 // Serial output is not connected: transmission completes at once.

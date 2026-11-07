@@ -1,5 +1,8 @@
 # HP 48GX ROM revision R, as source
 
+Revision R plus our own changes: see "Customising the ROM" in `CLAUDE.md`.
+It builds to `ROM/gxrom-hires`; `ROM/gxrom-r` is the original.
+
 This directory holds the complete firmware of the HP 48GX (ROM revision R,
 Copyright HP 1993) as commented assembler and RPL source. Built unchanged,
 it gives back the original ROM bit for bit. It is meant to be edited: to fix

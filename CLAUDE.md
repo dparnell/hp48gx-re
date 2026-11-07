@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This repository has three parts:
 
 1. **ROM analysis (Python, `tools/`).** It reverse engineers the HP 48GX ROM, revision R (`ROM/gxrom-r`). The findings are in `docs/rom-map.md`. Read that first: it covers the memory map, boot path, ROM library table, covered upper ROM, and the code idioms the analyser handles.
-2. **The ROM as editable source (`firmware/`).** The complete firmware as commented assembler and RPL, the master copy. `python tools/build.py` turns it into a ROM image. Built unchanged, it is identical to ROM R. It is meant for fixing ROM bugs; `firmware/README.md` is the guide.
+2. **The ROM as editable source (`firmware/`).** The complete firmware as commented assembler and RPL, the master copy. `python tools/build.py -o ROM/gxrom-hires` turns it into the ROM image the Rust code runs. It is ROM R plus our changes; `firmware/README.md` is the guide, and "Customising the ROM" below has the rules.
 3. **HP 48GX desktop calculator (Rust, `crates/`).** It runs the real ROM, with a vector-rendered UI and a native, resizable plot window. The goal is to remove CPU emulation entirely: the ROM's machine code is translated into Rust (`crates/hp48-rom`), hot routines get hand-written natives (`hle.rs`), and the RPL code is later to be reworked into a readable, editable form. Every step is checked against the interpreter.
 
 ## Commands
@@ -101,7 +101,7 @@ Run the Python tests from the repo root with `python -m unittest discover -s tes
   - `face.rs` holds the key layout and legends (left = purple left-shift, right = green right-shift). The faceplate is drawn with vector primitives scaled to the window.
   - The LCD is drawn either from the vector scene (the default, cached per frame contents) or as pixel rectangles.
   - `plot.rs` draws `hp48_rpl::plot` output in a separate resizable viewport, with zoom and pan. The viewport opens by itself when the calculator shows PICT (VDISP #806DA equals GDISP).
-  - `diagram.rs` draws Equation Library pictures from vector art (so far Elastic Buckling). The ROM's pictures are bitmaps, with no drawing code to scale, so `hp48::watch` reports what the ROM draws: a jump native on XYGROBDISP's code (#128C4) that always declines notes grobs of the diagrams' sizes, by contents, because objects from covered ROM are copied to RAM. The art is drawn in the bitmap's place, as large as fits above the menu, until the LCD stops showing that bitmap; the ROM says nothing when a picture goes, so that one picture is compared while it is up, and nothing is compared otherwise. The ROM is unchanged, so →PICT and SOLVEQN still work on the bitmap. A picture in PICT is not drawn by XYGROBDISP, so it stays traced, and so does everything under `--no-natives`, which clears the jump natives. Art uses the bitmap's coordinates, and its tests hold it to the bitmap in both directions (within 2 pixels). The LCD's context menu or `--no-diagrams` turns it off.
+  - `diagram.rs` draws Equation Library pictures from vector art (so far Elastic Buckling). The ROM's pictures are bitmaps, with no drawing code to scale, so the picture viewer sends the grob to the hi-res display, and the art for that grob (by contents) is drawn in the bitmap's place, as large as fits above the menu. The bitmap still goes to the LCD, so →PICT and SOLVEQN work on it. A picture in PICT isn't sent, so it stays traced, and so does every picture on the original ROM. Art uses the bitmap's coordinates, and its tests hold it to the bitmap in both directions (within 2 pixels). The LCD's context menu or `--no-diagrams` turns it off.
   - Ctrl+V types the clipboard into the calculator.
   - `persist.rs` gives the calculator continuous memory: save on exit, and advance TIMER2 by the wall-clock time spent closed.
 
@@ -120,6 +120,28 @@ Run the Python tests from the repo root with `python -m unittest discover -s tes
 - `cargo run --release -p hp48-rom --example speed` times a busy program: about 300 emulated MHz interpreted, 1100 translated, and about 950 with the natives too (their lookups before every run cost more than they save). Natives only run where the machine dispatches, so within a routine the translated code runs instead.
 - On the tour the interpreter now runs only code in RAM. Next: handle code that runs from RAM; structure the blocks as `if`/`loop` where the flow allows.
 
+### Customising the ROM
+
+`firmware/` is ROM R plus our own changes, and `ROM/gxrom-r` stays as the original. External programs call the ROM by address, so **nothing moves**: new code goes in free space (the 892-nibble gap before `FILLTO #3EC71` in `3E005-keys.s`; the zeros from #7E001 are hidden by the bank switcher), and existing code changes in place, at the same length. A call site moves to a new word by swapping its 5-nibble pointer.
+
+After changing `firmware/`:
+
+```
+cd tools && python build.py -o ../ROM/gxrom-hires && cd ..
+cargo run --release -p hp48 --example translate    # gen/ is tied to the image by its hash
+cargo run --release -p hp48 --example selftest
+```
+
+`build.py` lists what changed: it should report no moves. Add the addresses to `test_differs_from_revision_r_only_where_meant`. `tools/analyze.py`, `disasm.py` and the round-trip test still work on `ROM/gxrom-r`. New code is not translated, so it runs on the interpreter.
+
+**The hi-res display** (`crates/hp48/src/hires.rs`) is a second display over the LCD, held by the host, not in calculator memory. The ROM's code moves to it one call at a time; the LCD stays for whatever doesn't know about it, such as external programs.
+
+- A command is one nibble written to #00135 (`HIRES`, unused on the real calculator) after `SAVPTR`, with the arguments on the RPL stack at `DSKTOP`. Writes there do nothing on other hardware.
+- `HiGrobDisp` (`#x #y grob ->`) is XYGROBDISP that also sends the grob. So far only `ELShowPic` uses it.
+- The new words also draw on the LCD for now, so code that reads the display still works.
+- The LCD wins: `Hires::sync` removes an item once the LCD under it stops showing what it replaced. That covers clearing, scrolling, switching displays and programs writing to memory directly, with no ROM changes. It only works while the LCD has a copy to compare, so a word that draws on the hi-res display alone will need explicit commands from the routines that clear the LCD (`CLEARLCD`, `CLCD10`, `BLANKIT`, `CLEARVDISP`, ...).
+- The display isn't saved with continuous memory.
+
 ### Translating ROM routines to Rust (HLE)
 
 `crates/hp48/src/hle.rs` holds native replacements for machine-code ROM routines, registered in `NATIVES` by entry address. `Machine::run` calls a native in place of the routine and then performs the RTN. The app and `hp48-cli` install every native (`hle::install`) and the translated code (`hp48_rom::install`) unless given `--no-natives`; the Rust tests and examples run the plain ROM unless they install them.
@@ -136,7 +158,7 @@ Run the Python tests from the repo root with `python -m unittest discover -s tes
   - `hle::verify_jump` compares a jump native with the ROM after the same number of cycles (CPU, RAM, CRC). `tests/hle.rs` runs typed lines with every native installed, checks each jump native as it is reached (all calls at first, then a sample), and compares the final stack with a plain-ROM run. It compares objects, not addresses: the ROM's memory layout depends on timing, and natives take interrupts only between the units they replace. `cargo test --release -p hp48 --test hle -- --ignored` does the same over the whole tour (`HLE_CHECK_ALL=1` checks every call, about 90 s).
 - `cargo run --release -p hp48 --example coverage` measures progress: it runs the tour with the jump natives installed and reports the share of busy CPU cycles and instructions covered by natives (called natives count with everything they call; a jump native's instructions are its site's first run scaled by cycles). `--hot N` lists the N ROM routines that spend most of the uncovered cycles; `hp48-cli --profile` shows PC hot spots.
 - RPL-level routines (secondaries) will need a similar harness that compares the data stack instead of registers.
-- `firmware/` stays plain revision R; the known ROM bugs (`firmware/BUGS.md`) are to be fixed in the Rust implementation instead. When a native replaces a routine involved in one (DTAG's argument check, unit conversion of angles/rpm/Hz, `SAVESTACK` #61D41 with a negative depth, the MatrixWriter's GO→ handling, FFT's return-stack use), fix the bug on purpose: leave the inputs that trigger it out of the `verify` comparison, and say so in the native's comment. Running `knownbugs` with the natives installed should then show that bug fixed.
+- The known ROM bugs (`firmware/BUGS.md`) are to be fixed in the Rust implementation, not in `firmware/`. When a native replaces a routine involved in one (DTAG's argument check, unit conversion of angles/rpm/Hz, `SAVESTACK` #61D41 with a negative depth, the MatrixWriter's GO→ handling, FFT's return-stack use), fix the bug on purpose: leave the inputs that trigger it out of the `verify` comparison, and say so in the native's comment. Running `knownbugs` with the natives installed should then show that bug fixed.
 
 Addresses you will need again: fonts at #7A047 (10-row), #7B257 (8-row) and #7C102 (minifont, with remap table #7C793); `DSKTOP` #806F8 (stack level 1 pointer); `USEROB` #80711; `CONTEXT` #8071B; system flags #80843; user flags #80853; ROM library table #702C4.
 
@@ -159,7 +181,7 @@ Addresses you will need again: fonts at #7A047 (10-row), #7B257 (8-row) and #7C1
   - `data/regions.txt` says what each source file (by start address) and each library holds. The notes on libraries are printed at their headers.
   - The split into files comes from `data/rom-layout.txt` plus one region per upper-ROM library part. Both data files are our own notes: add names, comments and region descriptions there as the code is understood. Regenerating `firmware/` from them only makes sense while `firmware/` holds no hand edits.
   - Every generated line is assembled and compared with the ROM. A line that doesn't reproduce (three instructions with don't-care bits set) is written as `NIBHEX` with the original text in its comment.
-  - Tests: `test_sasm.Firmware` checks that `firmware/` assembles, and that it is still ROM R. Change that test when `firmware/` deliberately differs.
+  - Tests: `test_sasm.Firmware` checks that `firmware/` assembles to `ROM/gxrom-hires`, and that it differs from ROM R only at the addresses the test lists. Add to that list with each deliberate change.
   - The assembler builds its table of fixed instructions by running the decoder over every opcode prefix. A text with two encodings (`DAT0=A B`: `148` or `1506`) assembles to the shortest one.
 - **Editable source.**
   - Lengths are `LENGTH`…`ENDLENGTH` blocks, and RPL syntax uses the source's own `DOCOL`/`SEMI`/… labels.
@@ -190,7 +212,7 @@ Addresses you will need again: fonts at #7A047 (10-row), #7B257 (8-row) and #7C1
 - `data/entries48g.txt` and `data/vbl48gx-r.txt`: symbol tables derived from third-party lists, using ROM R addresses.
 - `crates/hp48-app/assets/`: DejaVu Sans (see `DejaVu-LICENSE`), used for faceplate symbols; the Condensed Bold face draws the LCD's minifont text.
 - `ROM/gxrom-r` is HP's firmware (Copyright HP 1993). HP has made the HP 48 ROM images freely available for use with emulators. The repository publishes it as source in `firmware/`, for study and for fixing ROM bugs. The Rust code reads fonts and objects from whatever ROM it runs.
-- `HP48_ROM=PATH` makes the CLI, the app and the Rust tests use another ROM image (e.g. `out/rom.bin`). The app keeps a saved state per ROM image. `hle::install` skips natives whose routine is not at its ROM R address, and the plot window finds the commands through `ROMPTAB` (`expr::Commands`).
+- `ROM/gxrom-hires` is what `firmware/` builds, and what everything runs by default. `HP48_ROM=PATH` (or the app's `--rom`) uses another image, such as `ROM/gxrom-r`. The app keeps a saved state per ROM image. `hle::install` skips natives whose routine is not at its ROM R address, and the plot window finds the commands through `ROMPTAB` (`expr::Commands`).
 
 ## Domain notes
 

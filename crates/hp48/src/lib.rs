@@ -1,6 +1,7 @@
 //! HP 48GX hardware emulation around the Saturn CPU core.
 
 pub mod hardware;
+pub mod hires;
 pub mod hle;
 pub mod keyboard;
 pub mod machine;
@@ -8,17 +9,17 @@ pub mod memory;
 pub mod state;
 pub mod translated;
 pub mod typing;
-pub mod watch;
 
 pub use keyboard::Key;
 pub use machine::{Jump, Lcd, Machine, Native, CPU_HZ, LCD_HEIGHT, LCD_WIDTH};
 pub use state::StateError;
 
-/// The ROM image to use when none is given: `$HP48_ROM` if set (e.g. a ROM
-/// built from firmware/ by tools/build.py), else `ROM/gxrom-r`. A relative
+/// The ROM image to use when none is given: `$HP48_ROM` if set, else
+/// `ROM/gxrom-hires`, the image firmware/ builds (ROM/gxrom-r is the original
+/// it started from). A relative
 /// path that does not exist here is taken from the repository root.
 pub fn default_rom_path() -> std::path::PathBuf {
-    let p = std::env::var_os("HP48_ROM").map_or_else(|| "ROM/gxrom-r".into(), std::path::PathBuf::from);
+    let p = std::env::var_os("HP48_ROM").map_or_else(|| "ROM/gxrom-hires".into(), std::path::PathBuf::from);
     if p.is_absolute() || p.exists() {
         return p;
     }

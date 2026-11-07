@@ -424,7 +424,7 @@ fn start_edit(name: &str, text: &str) {
 }
 
 fn main() {
-    let (mut path, mut edit) = ("ROM/gxrom-r".to_string(), BTreeSet::new());
+    let (mut path, mut edit) = (hp48::default_rom_path().display().to_string(), BTreeSet::new());
     let mut args = std::env::args().skip(1);
     while let Some(a) = args.next() {
         match a.as_str() {
