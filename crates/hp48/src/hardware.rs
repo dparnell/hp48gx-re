@@ -258,7 +258,9 @@ impl Bus for Hardware {
             Some(m) => {
                 let off = addr - m.base;
                 match m.kind {
-                    ModuleKind::Io => self.io_read_value(off as usize),
+                    // Not memory, so the CRC doesn't see it: the ROM reads the
+                    // CRC itself from here, a nibble at a time.
+                    ModuleKind::Io => return self.io_read_value(off as usize),
                     ModuleKind::Ram => self.ram[(off as usize) & (RAM_NIBBLES - 1)],
                     ModuleKind::Ce1 => {
                         // Reading the bank switcher latches the bank number

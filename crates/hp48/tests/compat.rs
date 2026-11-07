@@ -146,6 +146,50 @@ fn calling_the_rom_by_address_is_the_same() {
     assert!(bad.is_empty(), "{}", bad.join("\n"));
 }
 
+fn crc(nibbles: impl Iterator<Item = u8>) -> u64 {
+    nibbles.fold(0u64, |c, v| (c >> 4) ^ (((c ^ u64::from(v)) & 15) * 0x1081))
+}
+
+fn level(m: &Machine, n: u32) -> u32 {
+    let stack = m.peek_value(DSKTOP, 5) as u32;
+    m.peek_value(stack + 5 * (n - 1), 5) as u32
+}
+
+/// BYTES reads the CRC hardware: the ROM attaches libraries by it too.
+#[test]
+fn bytes_gives_the_crc_of_the_object() {
+    let Some(mut m) = boot("ROM/gxrom-hires") else { return };
+    for line in ["\"x\"", "\"HELLO\" DUP + DUP + DUP +", "{ 1 2 3 } 'X' + 1.5 +"] {
+        enter(&mut m, line);
+        let object = level(&m, 1);
+        let mut size = 0;
+        while m.peek_value(object + size, 5) != 0x0312B && size < 4000 {
+            size += 1;
+        }
+        let is_string = m.peek_value(object, 5) == 0x02A2C;
+        let size = if is_string { m.peek_value(object + 5, 5) as u32 + 5 } else { size + 5 };
+        let want = crc((0..size).map(|i| m.hw.peek(object + i)));
+        enter(&mut m, "BYTES DROP");
+        assert_eq!(m.peek_value(level(&m, 1) + 10, 4), want, "BYTES of {line}");
+        enter(&mut m, "DROP DROP");
+    }
+}
+
+/// An object with an odd number of nibbles, as libraries can have, must
+/// fill its temporary object exactly, or garbage collection loses it.
+#[test]
+fn an_object_of_an_odd_size_survives_garbage_collection() {
+    let Some(mut m) = boot("ROM/gxrom-hires") else { return };
+    // A code object of 11 nibbles: prolog, length 6, and one nibble of body.
+    let file = b"HPHP48-X\xCC\x2D\x60\x00\x00\x07";
+    m.push_object(file).unwrap();
+    enter(&mut m, "MEM DROP");
+    let object = level(&m, 1);
+    assert_eq!(m.peek_value(object, 5), DOCODE);
+    assert_eq!(m.peek_value(object + 5, 5), 6);
+    assert_eq!(m.peek_value(object + 10, 1), 7);
+}
+
 /// Put a program in a string on the stack, as a code object, and run it. The
 /// string's address is stable while nothing is typed that needs more memory.
 fn start(m: &mut Machine, program: &str) {

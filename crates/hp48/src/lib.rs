@@ -7,6 +7,7 @@ pub mod keyboard;
 pub mod machine;
 pub mod memory;
 pub mod state;
+pub mod transfer;
 pub mod translated;
 pub mod typing;
 
