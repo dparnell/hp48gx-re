@@ -57,6 +57,9 @@ pub struct Hardware {
     pub wake: bool,
     /// Set the MP hardware status bit (card control "set module pulled").
     pub set_mp: bool,
+    /// Sizes of the grobs to report, and the last one drawn (see crate::watch).
+    pub watched_grobs: std::collections::HashSet<(u32, u32)>,
+    pub drawn_grob: Option<crate::watch::DrawnGrob>,
 }
 
 impl Hardware {
@@ -81,6 +84,8 @@ impl Hardware {
             irq: false,
             wake: false,
             set_mp: false,
+            watched_grobs: Default::default(),
+            drawn_grob: None,
         }
     }
 

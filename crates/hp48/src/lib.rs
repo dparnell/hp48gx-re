@@ -8,6 +8,7 @@ pub mod memory;
 pub mod state;
 pub mod translated;
 pub mod typing;
+pub mod watch;
 
 pub use keyboard::Key;
 pub use machine::{Jump, Lcd, Machine, Native, CPU_HZ, LCD_HEIGHT, LCD_WIDTH};

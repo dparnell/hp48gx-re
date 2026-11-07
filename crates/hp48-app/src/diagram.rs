@@ -2,11 +2,12 @@
 //!
 //! The ROM holds these pictures as bitmaps of at most about 120x53 pixels
 //! and copies them to the LCD (`~PCunpack XYGROBDISP`), so nothing in it can
-//! draw them larger. The art here is drawn over the picture instead, at the
-//! window's resolution. The ROM is left alone: it still draws its bitmap, and
-//! the app recognises that bitmap on the LCD, so `→PICT` and SOLVEQN behave
-//! as before. A picture with anything drawn over it (the PICTURE cursor, say)
-//! doesn't match, and shows as traced pixels.
+//! draw them larger. The art here is drawn in the bitmap's place instead, at
+//! the window's resolution. The ROM is left alone: it still draws its bitmap,
+//! so `→PICT` and SOLVEQN behave as before. `hp48::watch` reports the draw
+//! call, and the art lasts until the LCD stops showing that bitmap. A picture
+//! that reaches the LCD another way (PICT, with the PICTURE cursor on it)
+//! isn't reported, and shows as traced pixels.
 //!
 //! Coordinates are in the bitmap's pixels: pixel (x, y) covers x..x+1, y..y+1.
 //! The tests hold the art to the bitmap, so a drawing can't drift from what
@@ -14,6 +15,7 @@
 
 use crate::{draw_polyline, CAP, CAP_TOP, LCD_BG, LCD_INK};
 use eframe::egui::{self, Color32, FontId, Pos2, Stroke};
+use hp48::watch::DrawnGrob;
 use hp48::{LCD_HEIGHT, LCD_WIDTH};
 use hp48_vector::Polyline;
 
@@ -36,21 +38,30 @@ pub struct Diagram {
     x: usize,
     y: usize,
     bitmap: Vec<Vec<bool>>,
+    /// `hp48::watch::hash` of the bitmap.
+    hash: u64,
     shapes: Vec<Shape>,
 }
 
 impl Diagram {
     fn new(x: usize, y: usize, png: &[u8], shapes: Vec<Shape>) -> Self {
-        Diagram { x, y, bitmap: decode(png), shapes }
+        let bitmap = decode(png);
+        Diagram { x, y, hash: hp48::watch::hash(&bitmap), bitmap, shapes }
     }
 
-    fn size(&self) -> (usize, usize) {
-        (self.bitmap[0].len(), self.bitmap.len())
+    /// Width and height of the bitmap.
+    pub fn size(&self) -> (u32, u32) {
+        (self.bitmap[0].len() as u32, self.bitmap.len() as u32)
+    }
+
+    /// Whether this is the picture the ROM drew.
+    pub fn is(&self, grob: &DrawnGrob) -> bool {
+        grob.hash == self.hash && (grob.width, grob.height) == self.size() && (grob.x, grob.y) == (self.x as u32, self.y as u32)
     }
 
     /// Whether the LCD shows this picture and nothing else above the menu.
     pub fn shown_on(&self, lcd: &[[bool; LCD_WIDTH]; LCD_HEIGHT]) -> bool {
-        let (w, h) = self.size();
+        let (w, h) = (self.bitmap[0].len(), self.bitmap.len());
         lcd[..AREA_ROWS].iter().enumerate().all(|(y, row)| {
             row.iter().enumerate().all(|(x, &on)| {
                 let inside = (self.x..self.x + w).contains(&x) && (self.y..self.y + h).contains(&y);
@@ -190,7 +201,7 @@ fn column(x: f32, top: f32, bottom: f32) -> Shape {
 
 /// A label under the column at `x`.
 fn k_label(text: &'static str, x: f32) -> Shape {
-    Shape::Text { text, x: x - 8.0, w: 16.0, baseline: 52.0, cap: 5.0 }
+    Shape::Text { text, x: x - 9.0, w: 18.0, baseline: 52.0, cap: 5.0 }
 }
 
 /// Euler's four cases of a column under load, with their factors K.
@@ -247,6 +258,7 @@ pub fn all() -> Vec<Diagram> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use hp48::{Key, CPU_HZ};
 
     /// How far art may stray from the bitmap's ink, in pixels. Art is smooth
     /// where the bitmap has stairs and hatching, so it can't follow it exactly.
@@ -348,6 +360,57 @@ mod tests {
             beside[55][130] = true;
             assert!(!d.shown_on(&beside), "something else above the menu");
         }
+    }
+
+    /// A booted machine watching the diagrams' sizes, with or without the
+    /// natives and the translated code. None without the ROM.
+    fn machine(natives: bool) -> Option<hp48::Machine> {
+        let rom = std::fs::read(hp48::default_rom_path()).ok()?;
+        let mut m = hp48::Machine::new(&rom);
+        if natives {
+            hp48::hle::install(&mut m);
+            hp48_rom::install(&mut m);
+        }
+        hp48::watch::install(&mut m, all().iter().map(Diagram::size).collect());
+        m.run(3 * CPU_HZ);
+        m.tap(Key::F); // "Try To Recover Memory?" NO
+        m.run(4 * CPU_HZ);
+        Some(m)
+    }
+
+    fn enter_line(m: &mut hp48::Machine, line: &str) {
+        m.type_text(line).unwrap();
+        m.tap(Key::Enter);
+        m.run(2 * CPU_HZ);
+    }
+
+    #[test]
+    fn the_viewer_reports_the_picture_it_draws() {
+        for natives in [false, true] {
+            let Some(mut m) = machine(natives) else { return };
+            enter_line(&mut m, "EQNLIB");
+            for key in [Key::Enter, Key::Enter] {
+                m.tap(key);
+                m.run(2 * CPU_HZ);
+            }
+            assert_eq!(m.hw.drawn_grob, None, "nothing of a watched size before the picture");
+            m.tap(Key::D); // PIC
+            m.run(2 * CPU_HZ);
+            let d = elastic_buckling();
+            let grob = m.hw.drawn_grob.expect("the draw call was seen");
+            assert!(d.is(&grob), "{grob:?}");
+            assert!(d.shown_on(&m.lcd().pixels));
+            m.tap(Key::C); // VARS: the picture goes
+            m.run(2 * CPU_HZ);
+            assert!(!d.shown_on(&m.lcd().pixels));
+        }
+    }
+
+    #[test]
+    fn a_picture_copied_to_pict_is_not_reported() {
+        let Some(mut m) = machine(true) else { return };
+        enter_line(&mut m, "1 1 1 SOLVEQN");
+        assert_eq!(m.hw.drawn_grob, None);
     }
 
     #[test]
