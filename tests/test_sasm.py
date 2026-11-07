@@ -196,6 +196,9 @@ class Firmware(unittest.TestCase):
             (0x3A43F, 0x3A444),
             (0x3A4A1, 0x3A4A6),
             (0x9E015, 0x9E01A),  # MESLabel: the same
+            (0x3A0C6, 0x3A0CB),  # DispEditRows: BigDisp(st,s) -> HiEditDisp
+            (0x42976, 0x4297B),  # EdBackspace: DISPCHAR+PC -> HiDispChar
+            (0x42B4D, 0x42B52),  # Echo1Char: the same
             (0x39C11, 0x39C16),  # ?RollUpDA2: ScreenUpN -> HiScreenUpN
             (0x43A81, 0x43A86),  # the interactive stack: ScreenDnN -> HiScreenDnN
             (0x43B4E, 0x43B53),  # the same: ScreenUpN -> HiScreenUpN

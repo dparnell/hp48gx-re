@@ -479,6 +479,83 @@ mod tests {
         assert!(!rows.iter().any(|r| r.starts_with("2:")), "the marker's row is on the LCD: {rows:?}");
     }
 
+    /// The text of the edit line's rows on the hi-res display.
+    fn edit_rows(m: &mut hp48::Machine) -> Vec<String> {
+        m.sync_hires();
+        let row = |item: &Item| match &item.content {
+            Content::Edit { text } => Some(String::from_utf8_lossy(text).trim_end().to_string()),
+            _ => None,
+        };
+        m.hw.hires.on_lcd().filter_map(row).collect()
+    }
+
+    fn tap_all(m: &mut hp48::Machine, keys: &[Key]) {
+        for &key in keys {
+            m.tap(key);
+        }
+        m.run(CPU_HZ / 2);
+    }
+
+    #[test]
+    fn the_edit_line_follows_typing_and_deleting() {
+        for natives in [false, true] {
+            let Some(mut m) = machine(natives) else { return };
+            tap_all(&mut m, &[Key::N1, Key::N2, Key::N3]);
+            assert_eq!(edit_rows(&mut m), ["123"]);
+            tap_all(&mut m, &[Key::Backspace]);
+            assert_eq!(edit_rows(&mut m), ["12"]);
+            tap_all(&mut m, &[Key::Left, Key::N9]);
+            assert_eq!(edit_rows(&mut m), ["192"], "inserted before the 2");
+            tap_all(&mut m, &[Key::Enter]);
+            assert!(edit_rows(&mut m).is_empty(), "the row is the stack's again");
+        }
+    }
+
+    #[test]
+    fn the_blinking_cursor_leaves_the_edit_row_on_the_display() {
+        let Some(mut m) = machine(true) else { return };
+        tap_all(&mut m, &[Key::N1, Key::N2]);
+        let (mut on, mut off) = (0, 0);
+        for _ in 0..40 {
+            m.run(CPU_HZ / 10);
+            m.sync_hires();
+            let item = m.hw.hires.on_lcd().find(|i| matches!(i.content, Content::Edit { .. })).expect("the row stays");
+            match item.cursor {
+                Some(cursor) => {
+                    assert_eq!(cursor.column, 2);
+                    on += 1;
+                }
+                None => off += 1,
+            }
+        }
+        assert!(on > 0 && off > 0, "it blinks: on {on}, off {off}");
+    }
+
+    #[test]
+    fn a_long_edit_stays_on_the_display() {
+        let Some(mut m) = machine(true) else { return };
+        // Long enough to scroll sideways.
+        m.type_text("1234567890123456789012345678").unwrap();
+        m.run(CPU_HZ / 2);
+        let rows = edit_rows(&mut m);
+        assert_eq!(rows.len(), 1, "{rows:?}");
+        assert!(rows[0].ends_with("5678"), "{rows:?}");
+    }
+
+    #[test]
+    fn a_multi_line_edit_stays_on_the_display() {
+        let Some(mut m) = machine(true) else { return };
+        enter_line(&mut m, "1 2 3 4");
+        m.type_text("12").unwrap();
+        // Newline is the right-shifted decimal point key.
+        tap_all(&mut m, &[Key::RightShift, Key::Dot]);
+        m.type_text("34").unwrap();
+        m.run(CPU_HZ / 2);
+        let rows = edit_rows(&mut m);
+        assert_eq!(rows, ["12", "34"], "{rows:?}");
+        assert_eq!(text_rows(&mut m).len(), 2, "two stack levels are left");
+    }
+
     #[test]
     fn clearing_the_lcd_removes_what_was_on_it() {
         let Some(mut m) = machine(true) else { return };

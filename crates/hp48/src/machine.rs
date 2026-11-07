@@ -281,7 +281,8 @@ impl Machine {
     pub fn sync_hires(&mut self) -> Lcd {
         let lcd = self.lcd();
         if !self.hw.hires.items.is_empty() {
-            self.hw.hires.sync(&lcd.pixels);
+            let cursor = crate::hires::cursor_place(&self.hw);
+            self.hw.hires.sync(&lcd.pixels, cursor);
         }
         lcd
     }

@@ -18,6 +18,10 @@
 //! puts a grob in a column, sometimes much later. The display remembers which
 //! text made which grob, and looks the grob up when it reaches a menu.
 //!
+//! The edit line's cursor blinks by overwriting one character cell, which the
+//! ROM does with no command, so a row of the edit line ignores that cell when
+//! it is compared with the LCD. A difference there means the cursor is on.
+//!
 //! The LCD wins. An item shows only while the LCD under it shows what it
 //! replaced ([`Hires::sync`]), so clearing the screen, switching to another
 //! display or an external program writing straight to memory all hide it, and
@@ -41,6 +45,10 @@ const ROW: u8 = 4;
 const SCROLL_UP: u8 = 5;
 /// `#n`: the top `n` rows are about to move down one row.
 const SCROLL_DOWN: u8 = 6;
+/// `$ #row`: a row of the edit line has just been drawn.
+const EDIT_ROW: u8 = 7;
+/// `chr #row`: a character has just been drawn before the cursor.
+const EDIT_CHAR: u8 = 8;
 
 /// RAM word with the address of stack level 1, after `SAVPTR`.
 const DSKTOP: u32 = 0x806F8;
@@ -48,10 +56,18 @@ const DSKTOP: u32 = 0x806F8;
 const ADISP: u32 = 0x806D5;
 const DOGROB: u32 = 0x02B1E;
 const DOCSTR: u32 = 0x02A2C;
+const DOCHAR: u32 = 0x029BF;
+/// RAM word with the cursor's column on the edit line's row.
+const CURSOROFFSET: u32 = 0x8088C;
+/// RAM words with where the cursor is on the LCD, in pixels.
+const CURSORX: u32 = 0x808B9;
+const CURSORY: u32 = 0x808BE;
 
 /// First LCD line of each row of big text, and how tall a row is.
 const ROW_LINES: [usize; 4] = [16, 26, 36, 46];
 const ROW_HEIGHT: usize = 10;
+/// How wide a character of the big font is.
+pub const CELL_WIDTH: usize = 6;
 /// The first LCD line of the menu.
 const MENU_LINE: usize = 56;
 /// Labels remembered, before starting again.
@@ -68,6 +84,24 @@ pub enum Content {
     Label { text: Vec<u8>, center: usize, width: usize },
     /// A row of text in the big font.
     Row { text: Vec<u8> },
+    /// A row of the edit line: text in the big font, a character to a cell.
+    Edit { text: Vec<u8> },
+}
+
+impl Content {
+    /// Whether this is a row of big text, which moves when the stack scrolls.
+    fn is_row(&self) -> bool {
+        matches!(self, Content::Row { .. } | Content::Edit { .. })
+    }
+}
+
+/// The edit line's cursor, while it shows on a row.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct Cursor {
+    /// The character cell it is in.
+    pub column: usize,
+    /// Replacing, shown as a block. Otherwise inserting, shown as an arrow.
+    pub block: bool,
 }
 
 /// Something on the display, in place of these pixels on the LCD.
@@ -80,17 +114,39 @@ pub struct Item {
     /// [`hash`] of `rows`.
     pub hash: u64,
     pub content: Content,
+    /// The cursor, on a row of the edit line.
+    pub cursor: Option<Cursor>,
     /// The LCD shows the item's pixels. A command may come before the drawing.
     on_lcd: bool,
 }
 
 impl Item {
-    /// Whether the LCD shows this item's pixels at its place.
-    fn shown_on(&self, lcd: &[[bool; LCD_WIDTH]; LCD_HEIGHT]) -> bool {
+    /// Whether the LCD shows this item's pixels at its place, but for the
+    /// columns in `skip`.
+    fn shown_on(&self, lcd: &[[bool; LCD_WIDTH]; LCD_HEIGHT], skip: std::ops::Range<usize>) -> bool {
         self.rows.iter().enumerate().all(|(y, row)| {
             let line = lcd.get(self.y + y);
-            row.iter().enumerate().all(|(x, &on)| line.and_then(|l| l.get(self.x + x)).is_none_or(|&pixel| pixel == on))
+            row.iter().enumerate().all(|(x, &on)| {
+                skip.contains(&(self.x + x)) || line.and_then(|l| l.get(self.x + x)).is_none_or(|&pixel| pixel == on)
+            })
         })
+    }
+
+    /// Bring the item up to date with the LCD, with the cursor's cell at
+    /// `cursor` (its left and top, in pixels).
+    fn sync(&mut self, lcd: &[[bool; LCD_WIDTH]; LCD_HEIGHT], cursor: (usize, usize)) {
+        self.cursor = None;
+        let (left, top) = cursor;
+        if !matches!(self.content, Content::Edit { .. }) || top != self.y {
+            self.on_lcd = self.shown_on(lcd, 0..0);
+            return;
+        }
+        let cell = left..left + CELL_WIDTH;
+        self.on_lcd = self.shown_on(lcd, cell.clone());
+        if self.on_lcd && !self.shown_on(lcd, 0..0) {
+            // The block fills the cell's corner, and the arrow doesn't.
+            self.cursor = Some(Cursor { column: left / CELL_WIDTH, block: lcd[top][left] });
+        }
     }
 }
 
@@ -115,9 +171,9 @@ impl Hires {
     fn scroll(&mut self, first: usize, count: usize, up: bool) {
         let moved = first..first + count * ROW_HEIGHT;
         let lost = if up { first - ROW_HEIGHT } else { moved.end };
-        self.items.retain(|item| !(matches!(item.content, Content::Row { .. }) && item.y == lost));
+        self.items.retain(|item| !(item.content.is_row() && item.y == lost));
         for item in &mut self.items {
-            if matches!(item.content, Content::Row { .. }) && moved.contains(&item.y) {
+            if item.content.is_row() && moved.contains(&item.y) {
                 item.y = if up { item.y - ROW_HEIGHT } else { item.y + ROW_HEIGHT };
             }
         }
@@ -132,12 +188,13 @@ impl Hires {
             self.items.remove(0);
         }
         let hash = hash(&rows);
-        self.items.push(Item { x, y, rows, hash, content, on_lcd: false });
+        self.items.push(Item { x, y, rows, hash, content, cursor: None, on_lcd: false });
     }
 
-    /// Show the items whose pixels the LCD shows, and hide the rest.
-    pub fn sync(&mut self, lcd: &[[bool; LCD_WIDTH]; LCD_HEIGHT]) {
-        self.items.iter_mut().for_each(|item| item.on_lcd = item.shown_on(lcd));
+    /// Show the items whose pixels the LCD shows, and hide the rest. `cursor`
+    /// is the left and top of the edit line's cursor, in pixels.
+    pub fn sync(&mut self, lcd: &[[bool; LCD_WIDTH]; LCD_HEIGHT], cursor: (usize, usize)) {
+        self.items.iter_mut().for_each(|item| item.sync(lcd, cursor));
     }
 }
 
@@ -183,6 +240,25 @@ fn read_text(hw: &Hardware, addr: u32) -> Option<Vec<u8>> {
     Some((0..bytes.min(256)).map(byte).collect())
 }
 
+/// The character of a character object, or the first of a string.
+fn read_char(hw: &Hardware, addr: u32) -> Option<u8> {
+    let byte = |at: u32| hw.peek(at) | hw.peek(at + 1) << 4;
+    match word(hw, addr) {
+        DOCHAR => Some(byte(addr + 5)),
+        _ => read_text(hw, addr)?.first().copied(),
+    }
+}
+
+/// The cursor's place on the LCD, for [`Hires::sync`].
+pub(crate) fn cursor_place(hw: &Hardware) -> (usize, usize) {
+    (word(hw, CURSORX) as usize, word(hw, CURSORY) as usize)
+}
+
+/// A row of the display's grob at `line`, as the LCD will show it.
+fn read_row(hw: &Hardware, line: usize) -> Option<Vec<Vec<bool>>> {
+    read_area(hw, word(hw, ADISP), line, ROW_HEIGHT, LCD_WIDTH)
+}
+
 /// A command from the ROM.
 pub(crate) fn command(hw: &mut Hardware, code: u8) {
     let stack = word(hw, DSKTOP);
@@ -213,10 +289,30 @@ pub(crate) fn command(hw: &mut Hardware, code: u8) {
         }
         ROW => {
             let Some(&line) = number(1).checked_sub(1).and_then(|row| ROW_LINES.get(row)) else { return };
-            let Some(text) = read_text(hw, level(2)) else { return };
-            let display = word(hw, ADISP);
-            let Some(rows) = read_area(hw, display, line, ROW_HEIGHT, LCD_WIDTH) else { return };
+            let (Some(text), Some(rows)) = (read_text(hw, level(2)), read_row(hw, line)) else { return };
             hw.hires.show(0, line, rows, Content::Row { text });
+        }
+        EDIT_ROW => {
+            let Some(&line) = number(1).checked_sub(1).and_then(|row| ROW_LINES.get(row)) else { return };
+            let (Some(text), Some(rows)) = (read_text(hw, level(2)), read_row(hw, line)) else { return };
+            hw.hires.show(0, line, rows, Content::Edit { text });
+        }
+        EDIT_CHAR => {
+            let Some(&line) = number(1).checked_sub(1).and_then(|row| ROW_LINES.get(row)) else { return };
+            let (Some(chr), Some(rows)) = (read_char(hw, level(2)), read_row(hw, line)) else { return };
+            // DISPCHAR+PC draws in the cell before the cursor's offset.
+            let offset = hw.peek(CURSOROFFSET) as usize | (hw.peek(CURSOROFFSET + 1) as usize) << 4;
+            let Some(column) = offset.checked_sub(1) else { return };
+            let old = hw.hires.items.iter().find(|item| item.y == line).map(|item| &item.content);
+            let mut text = match old {
+                Some(Content::Edit { text }) => text.clone(),
+                _ => Vec::new(),
+            };
+            if text.len() <= column {
+                text.resize(column + 1, b' ');
+            }
+            text[column] = chr;
+            hw.hires.show(0, line, rows, Content::Edit { text });
         }
         SCROLL_UP => {
             let count = number(1);
@@ -234,9 +330,35 @@ pub(crate) fn command(hw: &mut Hardware, code: u8) {
 mod tests {
     use super::*;
 
+    const NO_CURSOR: (usize, usize) = (0, 0);
+
+    #[test]
+    fn the_cursor_cell_of_an_edit_row_may_differ() {
+        let rows = vec![vec![false; 12]; ROW_HEIGHT];
+        let item = Item { x: 0, y: 46, hash: hash(&rows), rows, content: Content::Edit { text: Vec::new() }, cursor: None, on_lcd: false };
+        let mut hires = Hires { items: vec![item], ..Default::default() };
+        let mut lcd = [[false; LCD_WIDTH]; LCD_HEIGHT];
+
+        hires.sync(&lcd, (6, 46));
+        assert_eq!(hires.on_lcd().next().unwrap().cursor, None, "blinked off");
+
+        lcd[46][6] = true;
+        hires.sync(&lcd, (6, 46));
+        assert_eq!(hires.on_lcd().next().unwrap().cursor, Some(Cursor { column: 1, block: true }));
+
+        lcd[46][6] = false;
+        lcd[50][7] = true;
+        hires.sync(&lcd, (6, 46));
+        assert_eq!(hires.on_lcd().next().unwrap().cursor, Some(Cursor { column: 1, block: false }));
+
+        lcd[50][1] = true;
+        hires.sync(&lcd, (6, 46));
+        assert_eq!(hires.on_lcd().count(), 0, "any other cell still counts");
+    }
+
     fn grob() -> Item {
         let rows = vec![vec![true, false], vec![false, true]];
-        Item { x: 3, y: 4, hash: hash(&rows), rows, content: Content::Grob, on_lcd: false }
+        Item { x: 3, y: 4, hash: hash(&rows), rows, content: Content::Grob, cursor: None, on_lcd: false }
     }
 
     fn lcd_with(item: &Item) -> [[bool; LCD_WIDTH]; LCD_HEIGHT] {
@@ -250,7 +372,7 @@ mod tests {
     }
 
     fn rows(lines: &[usize]) -> Hires {
-        let row = |&y: &usize| Item { x: 0, y, content: Content::Row { text: vec![y as u8] }, on_lcd: true, ..grob() };
+        let row = |&y: &usize| Item { x: 0, y, content: Content::Row { text: vec![y as u8] }, ..grob() };
         Hires { items: lines.iter().map(row).collect(), ..Default::default() }
     }
 
@@ -277,22 +399,22 @@ mod tests {
     fn an_item_shows_only_while_the_lcd_does() {
         let mut hires = Hires { items: vec![grob()], ..Default::default() };
         let blank = [[false; LCD_WIDTH]; LCD_HEIGHT];
-        hires.sync(&blank);
+        hires.sync(&blank, NO_CURSOR);
         assert_eq!(hires.on_lcd().count(), 0, "the drawing comes after the command");
 
         let shown = lcd_with(&hires.items[0]);
-        hires.sync(&shown);
+        hires.sync(&shown, NO_CURSOR);
         assert_eq!(hires.on_lcd().count(), 1);
 
         let mut elsewhere = shown;
         elsewhere[40][100] = true;
-        hires.sync(&elsewhere);
+        hires.sync(&elsewhere, NO_CURSOR);
         assert_eq!(hires.on_lcd().count(), 1, "a change outside the item leaves it");
 
-        hires.sync(&blank);
+        hires.sync(&blank, NO_CURSOR);
         assert_eq!(hires.on_lcd().count(), 0, "clearing the LCD hides it");
 
-        hires.sync(&shown);
+        hires.sync(&shown, NO_CURSOR);
         assert_eq!(hires.on_lcd().count(), 1, "the same pixels bring it back");
     }
 

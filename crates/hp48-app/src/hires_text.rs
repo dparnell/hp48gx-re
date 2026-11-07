@@ -6,12 +6,11 @@
 //! label's frame) is traced.
 
 use crate::{draw_fitted_text, LCD_BG, LCD_INK};
-use eframe::egui::{self, FontFamily, Pos2};
-use hp48::hires::{Content, Item};
+use eframe::egui::{self, FontFamily, Pos2, Rect, Stroke};
+use hp48::hires::{Content, Cursor, Item, CELL_WIDTH as CELL};
 use hp48::{LCD_HEIGHT, LCD_WIDTH};
 
-/// A character cell of the big font, and its capitals' height.
-const CELL: usize = 6;
+/// The characters on a row of the big font, and its capitals' height.
 const ROW_CHARS: usize = 22;
 const ROW_CAP: f32 = 7.0;
 /// Where the big font's capitals are centred, below the top of a row.
@@ -21,8 +20,13 @@ const LABEL_MIDDLE: f32 = 4.5;
 /// The lines of a label that hold text.
 const LABEL_LINES: std::ops::Range<usize> = 1..8;
 
+/// The ROM marks text cut short with character 31.
+fn character(b: u8) -> char {
+    if b == 31 { '…' } else { hp48_rpl::hp_char(b) }
+}
+
 fn text(bytes: &[u8]) -> String {
-    bytes.iter().map(|&b| hp48_rpl::hp_char(b)).collect()
+    bytes.iter().map(|&b| character(b)).collect()
 }
 
 /// The columns of a label's text box, relative to the label.
@@ -49,7 +53,7 @@ pub fn erase(item: &Item, lcd: &mut [[bool; LCD_WIDTH]; LCD_HEIGHT]) {
                 columns.clone().filter(|x| item.x + x < LCD_WIDTH).for_each(|x| row[item.x + x] = dark);
             }
         }
-        Content::Row { .. } => {
+        Content::Row { .. } | Content::Edit { .. } => {
             for y in 0..item.rows.len() {
                 lcd[item.y + y].fill(false);
             }
@@ -79,6 +83,33 @@ pub fn draw(painter: &egui::Painter, item: &Item, pt: &dyn Fn(f32, f32) -> Pos2)
                 draw_fitted_text(painter, &text(word), middle, room, ROW_CAP, FontFamily::Proportional, right, pt, LCD_INK);
             }
         }
+        Content::Edit { text: bytes } => {
+            // A character to a cell, so that the cursor lines up with them.
+            let under_cursor = item.cursor.map(|cursor| cursor.column);
+            for (column, &b) in bytes.iter().enumerate().take(ROW_CHARS) {
+                if b != b' ' && Some(column) != under_cursor {
+                    let middle = [item.x as f32 + ((column * CELL) as f32) + CELL as f32 / 2.0, item.y as f32 + ROW_MIDDLE];
+                    let family = FontFamily::Proportional;
+                    draw_fitted_text(painter, &character(b).to_string(), middle, CELL as f32, ROW_CAP, family, false, pt, LCD_INK);
+                }
+            }
+            if let Some(cursor) = item.cursor {
+                draw_cursor(painter, cursor, item.y as f32, pt);
+            }
+        }
+    }
+}
+
+/// The edit line's cursor, in the shapes of the ROM's CURSOR1 and CURSOR2.
+fn draw_cursor(painter: &egui::Painter, cursor: Cursor, top: f32, pt: &dyn Fn(f32, f32) -> Pos2) {
+    let left = (cursor.column * CELL) as f32;
+    let at = |x: f32, y: f32| pt(left + x, top + y);
+    if cursor.block {
+        painter.rect_filled(Rect::from_min_max(at(0.0, 0.0), at(5.0, 9.0)), 0.0, LCD_INK);
+    } else {
+        let shape = [(0.0, 4.5), (3.4, 1.0), (4.0, 1.0), (5.0, 3.0), (5.0, 6.0), (4.0, 8.0), (3.4, 8.0)];
+        let points = shape.iter().map(|&(x, y)| at(x, y)).collect();
+        painter.add(egui::Shape::convex_polygon(points, LCD_INK, Stroke::NONE));
     }
 }
 

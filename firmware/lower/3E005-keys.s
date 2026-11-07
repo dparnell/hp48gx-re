@@ -451,6 +451,14 @@ HiMenuGrob!:
 HiBigDisp:
         :: 2DUP BigDisp(st,s) BINT4 HiSend 2DROP ;
 
+* $ #row -> : BigDisp(st,s), and shows the row of the edit line on the display
+HiEditDisp:
+        :: 2DUP BigDisp(st,s) BINT7 HiSend 2DROP ;
+
+* chr #row -> : DISPCHAR+PC, and shows the character on the display
+HiDispChar:
+        :: 2DUP DISPCHAR+PC BINT8 HiSend 2DROP ;
+
 * #n -> : ScreenUpN, and moves the display's rows of text with it
 HiScreenUpN:
         :: BINT5 HiSend ScreenUpN ;

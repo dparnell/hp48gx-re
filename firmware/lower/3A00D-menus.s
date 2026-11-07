@@ -18,7 +18,7 @@ DispEditRows:
           DO dup2;spos(st,RC) DUP#0=IT           * 3A06C
           :: DROP OVERLEN$ #1+ ; 3PICK ROT FIRSTC@ #+ 3PICKOVER 2DUP#< ITE * 3A07B
           ~4DROP;_chr(31)_ EdRowVisible          * 3A0B7
-          INDEX@ BigDisp(st,s) #1+ LOOP 2DROP OBJ_42831 ; * 3A0C1
+          INDEX@ HiEditDisp #1+ LOOP 2DROP OBJ_42831 ; * 3A0C1
 
 * refs (1): 3A049
 * $ #n -> $ #pos: the position in the text of the row that shows first

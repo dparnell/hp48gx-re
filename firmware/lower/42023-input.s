@@ -423,7 +423,7 @@ OBJ_428F9:
 EdBackspace:
         :: OnTheFirstCol? ?SEMI                  * 42935
           cursorblink- CURSOR_END? CURSOR_OFF #>1 AND DUP IT * 42944
-          :: CHR_Space ROWNUM DISPCHAR+PC ;      * 42967
+          :: CHR_Space ROWNUM HiDispChar ;       * 42967
           LCursor DelCursChr ?SKIP DispEditLine  * 42980
           OBJ_42831 cursorblink+ ;               * 42994
 
@@ -532,7 +532,7 @@ Echo1Char:
         :: NoEditLine? OVER Char>Edit caseDROP CURSOR_OFF * 42B02
           BINT20 #< NOTcaseDROP INSERT?          * 42B20
           CURSOR_END? NOTAND caseDROP cursorblink- * 42B34
-          ROWNUM DISPCHAR+PC cursorblink+ SetDA2bNoCh ; * 42B48
+          ROWNUM HiDispChar cursorblink+ SetDA2bNoCh ; * 42B48
 
 * refs (3): 3E11F 3EEFB 42CB5
 * Adds a newline to the command line
