@@ -166,8 +166,8 @@ impl App {
         hp48::hle::install(&mut machine);
         // The rest of the ROM's machine code, translated into Rust.
         hp48_rom::install(&mut machine);
-        if persistent {
-            persist::load(&mut machine);
+        if persistent && !persist::load(&mut machine) {
+            first_start(&mut machine);
         }
         App {
             minifont: read_minifont(&machine),
@@ -538,6 +538,14 @@ impl App {
         self.mouse_keys = new_mouse;
 
     }
+}
+
+/// A calculator with nothing saved has no memory to recover, so the ROM's
+/// "Try To Recover Memory?" is answered before the window opens.
+fn first_start(m: &mut Machine) {
+    m.run(3 * CPU_HZ);
+    m.tap(Key::F); // NO
+    m.run(4 * CPU_HZ);
 }
 
 /// A menu label's text for a real font. The ROM spells CANCL with brackets,
@@ -1165,6 +1173,23 @@ mod tests {
         fn menu(&self) -> Vec<[bool; LCD_WIDTH]> {
             self.app.m().lcd().pixels[56..].to_vec()
         }
+    }
+
+    #[test]
+    fn a_first_start_goes_straight_to_the_stack() {
+        let Ok(rom) = std::fs::read(hp48::default_rom_path()) else { return };
+        let mut m = Machine::new(&rom);
+        first_start(&mut m);
+        m.type_text("1 2 +").unwrap();
+        m.tap(Key::Enter);
+        m.run(2 * CPU_HZ);
+        let _ = m.sync_hires();
+        let row = |item: &hp48::hires::Item| match &item.content {
+            Content::Row { text } => Some(String::from_utf8_lossy(text).to_string()),
+            _ => None,
+        };
+        let rows: Vec<String> = m.hw.hires.on_lcd().filter_map(row).collect();
+        assert!(rows.iter().any(|row| row.starts_with("1:") && row.trim_end().ends_with('3')), "{rows:?}");
     }
 
     #[test]
