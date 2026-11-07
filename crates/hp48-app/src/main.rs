@@ -49,8 +49,14 @@ const MARGIN: f32 = 2.0;
 const LCD_TOP: f32 = 5.0;
 const LCD_W: f32 = FACE_W - 2.0 * MARGIN - 2.0;
 const LCD_H: f32 = LCD_W * LCD_HEIGHT as f32 / LCD_WIDTH as f32;
-const KEYS_TOP: f32 = LCD_TOP + LCD_H + 5.0;
-const ROW_PITCH: f32 = (FACE_H - KEYS_TOP - MARGIN) / 9.0;
+const BEZEL_BOTTOM: f32 = LCD_TOP + LCD_H + 2.0;
+/// Where a key starts in its row: the legends go above it.
+const KEY_TOP: f32 = 0.38;
+/// The menu keys have no legends, so they sit just under the bezel, and their
+/// row's legend band runs up behind it.
+const MENU_KEYS_TOP: f32 = BEZEL_BOTTOM + 1.0;
+const ROW_PITCH: f32 = (FACE_H - MENU_KEYS_TOP - MARGIN) / (9.0 - KEY_TOP);
+const KEYS_TOP: f32 = MENU_KEYS_TOP - KEY_TOP * ROW_PITCH;
 
 const BODY: Color32 = Color32::from_rgb(0x2A, 0x2B, 0x30);
 const BEZEL: Color32 = Color32::from_rgb(0x1B, 0x1C, 0x20);
@@ -425,7 +431,7 @@ impl App {
         );
 
         self.draw_lcd(&painter, &to_screen, scale);
-        let lcd_rect = Rect::from_min_max(to_screen(MARGIN, 1.0), to_screen(FACE_W - MARGIN, LCD_TOP + LCD_H + 2.0));
+        let lcd_rect = Rect::from_min_max(to_screen(MARGIN, 1.0), to_screen(FACE_W - MARGIN, BEZEL_BOTTOM));
         let lcd_resp = ui.interact(lcd_rect, ui.id().with("lcd"), Sense::click());
         lcd_resp.context_menu(|ui| {
             ui.radio_value(&mut self.display, Display::Vector, "Vector display");
@@ -464,7 +470,7 @@ impl App {
                 col += cap.span;
                 let w = col_w * cap.span;
                 let key_rect = Rect::from_min_max(
-                    to_screen(x + 0.6, y + ROW_PITCH * 0.38),
+                    to_screen(x + 0.6, y + ROW_PITCH * KEY_TOP),
                     to_screen(x + w - 0.6, y + ROW_PITCH * 0.92),
                 );
                 let resp = ui.interact(key_rect, ui.id().with(("key", cap.key)), Sense::click_and_drag());
@@ -545,7 +551,7 @@ impl App {
             (lcd, items)
         };
         let x0 = MARGIN + 1.0;
-        let bezel = Rect::from_min_max(to_screen(MARGIN, 1.0), to_screen(FACE_W - MARGIN, LCD_TOP + LCD_H + 2.0));
+        let bezel = Rect::from_min_max(to_screen(MARGIN, 1.0), to_screen(FACE_W - MARGIN, BEZEL_BOTTOM));
         painter.rect_filled(bezel, CornerRadius::same((1.0 * scale) as u8), BEZEL);
         let screen = Rect::from_min_max(to_screen(x0, LCD_TOP - 2.5), to_screen(x0 + LCD_W, LCD_TOP + LCD_H + 0.5));
         painter.rect_filled(screen, CornerRadius::same((0.5 * scale) as u8), LCD_BG);
