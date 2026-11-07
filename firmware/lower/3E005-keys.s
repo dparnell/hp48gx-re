@@ -451,6 +451,14 @@ HiMenuGrob!:
 HiBigDisp:
         :: 2DUP BigDisp(st,s) BINT4 HiSend 2DROP ;
 
+* #n -> : ScreenUpN, and moves the display's rows of text with it
+HiScreenUpN:
+        :: BINT5 HiSend ScreenUpN ;
+
+* #n -> : ScreenDnN, and moves the display's rows of text with it
+HiScreenDnN:
+        :: BINT6 HiSend ScreenDnN ;
+
         FILLTO  #3EC71                           * 3E8F5  892 zero nibbles: the next entry stays at #3EC71
 
 * ->

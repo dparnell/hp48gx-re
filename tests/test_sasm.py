@@ -196,6 +196,9 @@ class Firmware(unittest.TestCase):
             (0x3A43F, 0x3A444),
             (0x3A4A1, 0x3A4A6),
             (0x9E015, 0x9E01A),  # MESLabel: the same
+            (0x39C11, 0x39C16),  # ?RollUpDA2: ScreenUpN -> HiScreenUpN
+            (0x43A81, 0x43A86),  # the interactive stack: ScreenDnN -> HiScreenDnN
+            (0x43B4E, 0x43B53),  # the same: ScreenUpN -> HiScreenUpN
             (0x7FFFC, 0x80000),  # the CRC words
             (0xFFFFC, 0x100000),
         ]

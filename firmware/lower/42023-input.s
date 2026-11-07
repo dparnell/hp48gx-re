@@ -938,7 +938,7 @@ IStackUp:
 IStackUpStep:
         :: 3GETLAM ~DEPTH;4GETLAM;#- #3- #= ?SEMI * 43A36
           \ShowColon 3GETLAM #1+ 3PUTLAM 2GETLAM BINT1 #=ITE * 43A54
-          :: BINT3 ScreenDnN BINT1 3GETLAM DUP #4+ ~4GETLAM;#+ pick(s)? * 43A77
+          :: BINT3 HiScreenDnN BINT1 3GETLAM DUP #4+ ~4GETLAM;#+ pick(s)? * 43A77
             DispLevel1Row ;                      * 43AA4
           :: 2GETLAM #1- 2PUTLAM ; \ShowPointer ; * 43AAE
 
@@ -953,7 +953,7 @@ IStackDown:
 IStackDownStep:
         :: 3GETLAM #1= ?SEMI                     * 43B0D
           \ShowColon 3GETLAM #1- 3PUTLAM 2GETLAM BINT4 #=ITE * 43B21
-          :: BINT3 ScreenUpN BINT4 3GETLAM DUP #4+ ~4GETLAM;#+ pick(s)? * 43B44
+          :: BINT3 HiScreenUpN BINT4 3GETLAM DUP #4+ ~4GETLAM;#+ pick(s)? * 43B44
             DispLevel1Row ;                      * 43B71
           :: 2GETLAM #1+ 2PUTLAM ; \ShowPointer ; * 43B7B
 

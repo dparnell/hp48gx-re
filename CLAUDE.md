@@ -141,10 +141,10 @@ cargo run --release -p hp48 --example selftest
   - `HiGrobDisp` (`#x #y grob ->`), XYGROBDISP that also sends the grob. `ELShowPic` uses it.
   - `HiMakeLabel` and `HiMenuGrob!`: every menu label. `MakeLabel` knows a label's text and `Grob>Menu` its column, so the display remembers which text made which grob and looks it up by contents, plain and inverted. Grob labels with no text stay on the LCD.
   - `HiBigDisp` (`$ #row ->`): stack levels in the big font, drawn on a grid of 6-pixel cells by `hires_text.rs`. Its command comes after the drawing, so the row's pixels can be read.
-- While editing, the ROM scrolls the stack up in display memory instead of redrawing it, so the LCD no longer matches the rows and they show as traced pixels until ENTER. Items would have to follow the scroll to avoid that.
+  - `HiScreenUpN` and `HiScreenDnN` (`#n ->`): the ROM scrolls the stack in display memory instead of redrawing it, by exactly one 10-line row, when editing starts and in the interactive stack. These tell the display first, so the rows move with their pixels.
 - Not moved yet: the edit line (`DispEditRows`, whose blinking cursor would keep removing the item), the `DISPROWn`/`DISPN` family (status area, messages, browsers: about 100 calls, so they need a patch in the primitive at `DISPROW8.L3`, not pointer swaps), and `$>grob`-style text inside graphics.
 - The new words also draw on the LCD for now, so code that reads the display still works.
-- The LCD wins: `Hires::sync` removes an item once the LCD under it stops showing what it replaced. That covers clearing, scrolling, switching displays and programs writing to memory directly, with no ROM changes. It only works while the LCD has a copy to compare, so a word that draws on the hi-res display alone will need explicit commands from the routines that clear the LCD (`CLEARLCD`, `CLCD10`, `BLANKIT`, `CLEARVDISP`, ...).
+- The LCD wins: `Hires::sync` shows an item only while the LCD under it shows what it replaced, and shows it again if those pixels come back (the same pixels mean the same text). That covers clearing, switching displays, the interactive stack's marker and programs writing to memory directly, with no ROM changes. It only works while the LCD has a copy to compare, so a word that draws on the hi-res display alone will need explicit commands from the routines that clear the LCD (`CLEARLCD`, `CLCD10`, `BLANKIT`, `CLEARVDISP`, ...).
 - The display isn't saved with continuous memory.
 
 ### Translating ROM routines to Rust (HLE)

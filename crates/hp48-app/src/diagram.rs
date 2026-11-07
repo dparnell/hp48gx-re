@@ -379,7 +379,7 @@ mod tests {
 
     /// The pictures on the hi-res display of a machine, without menu labels.
     fn pictures(m: &hp48::Machine) -> impl Iterator<Item = &Item> {
-        m.hw.hires.items.iter().filter(|item| item.y < AREA_ROWS && item.content == Content::Grob)
+        m.hw.hires.on_lcd().filter(|item| item.y < AREA_ROWS && item.content == Content::Grob)
     }
 
     fn enter_line(m: &mut hp48::Machine, line: &str) {
@@ -444,6 +444,39 @@ mod tests {
             let shown = labels(&mut m);
             assert!(shown.iter().any(|l| l == "abc"), "lower case stays: {shown:?}");
         }
+    }
+
+    #[test]
+    fn stack_rows_survive_the_scroll_when_editing_starts() {
+        for natives in [false, true] {
+            let Some(mut m) = machine(natives) else { return };
+            enter_line(&mut m, "1 2 3 4");
+            assert_eq!(text_rows(&mut m).len(), 4);
+            m.tap(Key::N5);
+            m.run(CPU_HZ);
+            let rows = text_rows(&mut m);
+            assert_eq!(rows.len(), 3, "the top level has gone: {rows:?}");
+            assert!(rows.iter().any(|r| r.starts_with("1:") && r.ends_with('4')), "{rows:?}");
+            m.tap(Key::Enter);
+            m.run(CPU_HZ);
+            let rows = text_rows(&mut m);
+            assert_eq!(rows.len(), 4, "{rows:?}");
+            assert!(rows.iter().any(|r| r.starts_with("1:") && r.ends_with('5')), "{rows:?}");
+        }
+    }
+
+    #[test]
+    fn rows_come_back_when_the_interactive_stack_moves_on() {
+        let Some(mut m) = machine(true) else { return };
+        enter_line(&mut m, "1 2 3 4");
+        for _ in 0..2 {
+            m.tap(Key::Up);
+            m.run(CPU_HZ);
+        }
+        // The marker has passed level 1, and now sits on level 2.
+        let rows = text_rows(&mut m);
+        assert!(rows.iter().any(|r| r.starts_with("1:")), "{rows:?}");
+        assert!(!rows.iter().any(|r| r.starts_with("2:")), "the marker's row is on the LCD: {rows:?}");
     }
 
     #[test]

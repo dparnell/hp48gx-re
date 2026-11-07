@@ -18,10 +18,12 @@
 //! puts a grob in a column, sometimes much later. The display remembers which
 //! text made which grob, and looks the grob up when it reaches a menu.
 //!
-//! The LCD wins. An item lasts only while the LCD under it shows what it
-//! replaced ([`Hires::sync`]), so clearing the screen, scrolling, switching
-//! to another display or an external program writing straight to memory all
-//! remove it, and none of them has to know about this display.
+//! The LCD wins. An item shows only while the LCD under it shows what it
+//! replaced ([`Hires::sync`]), so clearing the screen, switching to another
+//! display or an external program writing straight to memory all hide it, and
+//! none of them has to know about this display. It shows again if those
+//! pixels come back, as when the interactive stack's marker moves on: the same
+//! pixels mean the same text.
 
 use crate::hardware::Hardware;
 use crate::machine::{LCD_HEIGHT, LCD_WIDTH};
@@ -35,6 +37,10 @@ const LABEL: u8 = 2;
 const MENU: u8 = 3;
 /// `$ #row`: a row of text in the big font has just been drawn.
 const ROW: u8 = 4;
+/// `#n`: `n` rows are about to move up one row, over the top one.
+const SCROLL_UP: u8 = 5;
+/// `#n`: the top `n` rows are about to move down one row.
+const SCROLL_DOWN: u8 = 6;
 
 /// RAM word with the address of stack level 1, after `SAVPTR`.
 const DSKTOP: u32 = 0x806F8;
@@ -50,6 +56,8 @@ const ROW_HEIGHT: usize = 10;
 const MENU_LINE: usize = 56;
 /// Labels remembered, before starting again.
 const LABELS: usize = 512;
+/// Items kept, most of them hidden.
+const ITEMS: usize = 64;
 
 /// What an item shows, beyond its pixels.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -72,7 +80,7 @@ pub struct Item {
     /// [`hash`] of `rows`.
     pub hash: u64,
     pub content: Content,
-    /// It has reached the LCD: a command may come before the drawing.
+    /// The LCD shows the item's pixels. A command may come before the drawing.
     on_lcd: bool,
 }
 
@@ -96,9 +104,23 @@ pub struct Hires {
 }
 
 impl Hires {
-    /// The items to draw: those that have reached the LCD.
+    /// The items to draw: those the LCD shows.
     pub fn on_lcd(&self) -> impl Iterator<Item = &Item> {
         self.items.iter().filter(|item| item.on_lcd)
+    }
+
+    /// Move the rows of text from line `first`, `count` of them, by one row
+    /// up or down, like the ROM's ScreenUpN and ScreenDnN. A row they land on
+    /// is gone.
+    fn scroll(&mut self, first: usize, count: usize, up: bool) {
+        let moved = first..first + count * ROW_HEIGHT;
+        let lost = if up { first - ROW_HEIGHT } else { moved.end };
+        self.items.retain(|item| !(matches!(item.content, Content::Row { .. }) && item.y == lost));
+        for item in &mut self.items {
+            if matches!(item.content, Content::Row { .. }) && moved.contains(&item.y) {
+                item.y = if up { item.y - ROW_HEIGHT } else { item.y + ROW_HEIGHT };
+            }
+        }
     }
 
     /// Add an item, in place of what is at the same place.
@@ -106,17 +128,16 @@ impl Hires {
         let (width, height) = (rows[0].len(), rows.len());
         let same_place = |item: &Item| (item.x, item.y, item.rows[0].len(), item.rows.len()) == (x, y, width, height);
         self.items.retain(|item| !same_place(item));
+        if self.items.len() >= ITEMS {
+            self.items.remove(0);
+        }
         let hash = hash(&rows);
         self.items.push(Item { x, y, rows, hash, content, on_lcd: false });
     }
 
-    /// Remove the items whose pixels the LCD no longer shows.
+    /// Show the items whose pixels the LCD shows, and hide the rest.
     pub fn sync(&mut self, lcd: &[[bool; LCD_WIDTH]; LCD_HEIGHT]) {
-        self.items.retain_mut(|item| {
-            let shown = item.shown_on(lcd);
-            item.on_lcd |= shown;
-            shown || !item.on_lcd
-        });
+        self.items.iter_mut().for_each(|item| item.on_lcd = item.shown_on(lcd));
     }
 }
 
@@ -197,6 +218,14 @@ pub(crate) fn command(hw: &mut Hardware, code: u8) {
             let Some(rows) = read_area(hw, display, line, ROW_HEIGHT, LCD_WIDTH) else { return };
             hw.hires.show(0, line, rows, Content::Row { text });
         }
+        SCROLL_UP => {
+            let count = number(1);
+            hw.hires.scroll(ROW_LINES[1], count, true);
+        }
+        SCROLL_DOWN => {
+            let count = number(1);
+            hw.hires.scroll(ROW_LINES[0], count, false);
+        }
         _ => {}
     }
 }
@@ -220,24 +249,60 @@ mod tests {
         lcd
     }
 
+    fn rows(lines: &[usize]) -> Hires {
+        let row = |&y: &usize| Item { x: 0, y, content: Content::Row { text: vec![y as u8] }, on_lcd: true, ..grob() };
+        Hires { items: lines.iter().map(row).collect(), ..Default::default() }
+    }
+
+    fn lines(hires: &Hires) -> Vec<(u8, usize)> {
+        let line = |item: &Item| match &item.content {
+            Content::Row { text } => (text[0], item.y),
+            _ => unreachable!(),
+        };
+        hires.items.iter().map(line).collect()
+    }
+
     #[test]
-    fn an_item_waits_for_the_lcd_then_lasts_while_it_shows() {
+    fn rows_follow_the_scroll() {
+        let mut hires = rows(&ROW_LINES);
+        hires.scroll(ROW_LINES[1], 3, true);
+        assert_eq!(lines(&hires), [(26, 16), (36, 26), (46, 36)], "the top row is overwritten");
+
+        let mut hires = rows(&ROW_LINES);
+        hires.scroll(ROW_LINES[0], 3, false);
+        assert_eq!(lines(&hires), [(16, 26), (26, 36), (36, 46)], "the bottom row is overwritten");
+    }
+
+    #[test]
+    fn an_item_shows_only_while_the_lcd_does() {
         let mut hires = Hires { items: vec![grob()], ..Default::default() };
         let blank = [[false; LCD_WIDTH]; LCD_HEIGHT];
         hires.sync(&blank);
-        assert_eq!(hires.items.len(), 1, "the drawing comes after the command");
+        assert_eq!(hires.on_lcd().count(), 0, "the drawing comes after the command");
 
         let shown = lcd_with(&hires.items[0]);
         hires.sync(&shown);
-        hires.sync(&shown);
-        assert_eq!(hires.items.len(), 1);
+        assert_eq!(hires.on_lcd().count(), 1);
 
         let mut elsewhere = shown;
         elsewhere[40][100] = true;
         hires.sync(&elsewhere);
-        assert_eq!(hires.items.len(), 1, "a change outside the item leaves it");
+        assert_eq!(hires.on_lcd().count(), 1, "a change outside the item leaves it");
 
         hires.sync(&blank);
-        assert!(hires.items.is_empty(), "clearing the LCD removes it");
+        assert_eq!(hires.on_lcd().count(), 0, "clearing the LCD hides it");
+
+        hires.sync(&shown);
+        assert_eq!(hires.on_lcd().count(), 1, "the same pixels bring it back");
+    }
+
+    #[test]
+    fn hidden_items_are_not_kept_for_ever() {
+        let mut hires = Hires::default();
+        for x in 0..2 * ITEMS {
+            hires.show(x, 0, vec![vec![true]], Content::Grob);
+        }
+        assert_eq!(hires.items.len(), ITEMS);
+        assert_eq!(hires.items.last().unwrap().x, 2 * ITEMS - 1, "the newest stays");
     }
 }

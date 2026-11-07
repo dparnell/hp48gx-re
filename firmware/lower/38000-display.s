@@ -1577,7 +1577,7 @@ DispStack2a:
 * refs (1): 39BC6
 ?RollUpDA2:
         :: SetDA2aValid NoRollDA2? case ClrNoRollDA2 * 39BF3
-          BINT3 ScreenUpN ;                      * 39C0C
+          BINT3 HiScreenUpN ;                    * 39C0C
 
 * refs (2): 39BDA 39C8E
 * Draws stack levels until the rows in LINESOFSTACK are full
