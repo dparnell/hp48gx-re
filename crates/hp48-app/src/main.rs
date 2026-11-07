@@ -20,7 +20,8 @@
 //! State is kept in %APPDATA%/HP48GX/state.bin (or $XDG_DATA_HOME/HP48GX);
 //! set HP48GX_STATE to use another file.
 //!
-//! Menu labels on the LCD work as the menu keys under them.
+//! Menu labels on the LCD work as the menu keys under them. While a shift
+//! or alpha mode is on, the keys show what they do in it.
 //!
 //! The calculator runs on a thread of its own (runner.rs), and the window
 //! is drawn again only when what it shows changes. At full speed (the
@@ -37,7 +38,7 @@ mod plot;
 mod runner;
 
 use eframe::egui::{self, Align, Align2, Color32, CornerRadius, FontId, Pos2, Rect, Sense, Stroke, UiBuilder, Vec2};
-use face::{KeyCap, ShiftColor, Style, ROWS};
+use face::{KeyCap, Mode, ShiftColor, Style, ROWS};
 use hp48::{Key, Machine, CPU_HZ, LCD_HEIGHT, LCD_WIDTH};
 use std::collections::{HashSet, VecDeque};
 use std::sync::atomic::Ordering;
@@ -65,6 +66,8 @@ const BEZEL: Color32 = Color32::from_rgb(0x1B, 0x1C, 0x20);
 const KEY_FACE: Color32 = Color32::from_rgb(0x46, 0x48, 0x50);
 const KEY_FACE_NUM: Color32 = Color32::from_rgb(0x5A, 0x5C, 0x66);
 const KEY_DOWN: Color32 = Color32::from_rgb(0x30, 0x31, 0x37);
+/// A key that does nothing in the current mode.
+const KEY_IDLE: Color32 = Color32::from_rgb(0x34, 0x35, 0x3B);
 const LEFT_SHIFT: Color32 = Color32::from_rgb(0xB0, 0x86, 0xD6);
 const RIGHT_SHIFT: Color32 = Color32::from_rgb(0x63, 0xC2, 0x9A);
 const ALPHA: Color32 = Color32::from_rgb(0xE8, 0xC2, 0x4A);
@@ -207,6 +210,15 @@ impl App {
         if let Err(e) = persist::save(&self.m()) {
             eprintln!("could not save calculator state: {e}");
         }
+    }
+
+    /// The mode the keys show. Typed text passes through the modes too
+    /// quickly to be worth showing.
+    fn mode(&self) -> Mode {
+        if self.is_typing() {
+            return Mode::Normal;
+        }
+        Mode::from_annunciators(self.m().hw.annunciators())
     }
 
     fn set_key(&self, key: Key, down: bool) {
@@ -475,6 +487,7 @@ impl App {
 
         let mut new_mouse: HashSet<Key> = label_held.into_iter().collect();
         let keyboard_live = self.m().hw.keyboard.input(0x1FF) != 0;
+        let mode = self.mode();
         for (row_i, row) in ROWS.iter().enumerate() {
             // ENTER is double width, so its row also uses a six-column grid.
             let cols: f32 = if row_i < 5 { 6.0 } else { 5.0 };
@@ -494,7 +507,7 @@ impl App {
                     new_mouse.insert(cap.key);
                 }
                 let down = keyboard_live && (self.mouse_keys.contains(&cap.key) || self.kb_keys.contains(&cap.key));
-                draw_key(&painter, cap, key_rect, Rect::from_min_max(to_screen(x, y), to_screen(x + w, y + ROW_PITCH)), scale, down);
+                draw_key(&painter, cap, key_rect, Rect::from_min_max(to_screen(x, y), to_screen(x + w, y + ROW_PITCH)), scale, down, mode);
             }
         }
         // Mouse press/release edges.
@@ -710,8 +723,8 @@ pub(crate) fn draw_polyline(
     }
 }
 
-fn draw_key(painter: &egui::Painter, cap: &KeyCap, key: Rect, cell: Rect, scale: f32, down: bool) {
-    let face = match cap.style {
+fn draw_key(painter: &egui::Painter, cap: &KeyCap, key: Rect, cell: Rect, scale: f32, down: bool, mode: Mode) {
+    let usual = match cap.style {
         Style::Shift(ShiftColor::Left) => LEFT_SHIFT,
         Style::Shift(ShiftColor::Right) => RIGHT_SHIFT,
         Style::Shift(ShiftColor::Alpha) => ALPHA,
@@ -719,19 +732,44 @@ fn draw_key(painter: &egui::Painter, cap: &KeyCap, key: Rect, cell: Rect, scale:
         Style::Menu => Color32::from_rgb(0xDE, 0xDE, 0xE2),
         Style::Normal => KEY_FACE,
     };
+    let dark_text = matches!(cap.style, Style::Shift(_) | Style::Menu);
+    let mode_face = match mode {
+        Mode::Normal => usual,
+        Mode::Left | Mode::AlphaLeft => LEFT_SHIFT,
+        Mode::Right | Mode::AlphaRight => RIGHT_SHIFT,
+        Mode::Alpha => ALPHA,
+    };
+    // A mode's own key and the plain shift keys stay as they are; keys with
+    // something to do in the mode take its colour and show that; in alpha
+    // mode digits and the like go on doing what they usually do, and the
+    // menu keys still mean whatever the LCD labels them.
+    let plain_shift = cap.label.is_empty() && cap.style != Style::Menu;
+    let (face, label, dark_text) = match cap.legend(mode) {
+        _ if mode == Mode::Normal || mode.is_on(cap.key) || plain_shift => (usual, cap.label, dark_text),
+        Some(text) => (mode_face, text, true),
+        None if mode == Mode::Alpha || cap.style == Style::Menu => (usual, cap.label, dark_text),
+        None => (KEY_IDLE, "", false),
+    };
     let face = if down { KEY_DOWN } else { face };
     let r = CornerRadius::same((0.7 * scale) as u8);
     painter.rect_filled(key.translate(Vec2::new(0.0, 0.25 * scale)), r, Color32::from_black_alpha(140));
     painter.rect_filled(key, r, face);
     painter.rect_stroke(key, r, Stroke::new(0.08 * scale, Color32::from_black_alpha(90)), egui::StrokeKind::Inside);
+    if mode.is_on(cap.key) {
+        painter.rect_stroke(key, r, Stroke::new(0.3 * scale, LEGEND), egui::StrokeKind::Inside);
+    }
 
-    let text_color = match cap.style {
-        Style::Shift(_) | Style::Menu => Color32::from_rgb(0x20, 0x20, 0x24),
-        _ => LEGEND,
-    };
-    let main_size = if cap.label.chars().count() > 3 { 1.8 } else { 2.4 };
-    painter.text(key.center(), Align2::CENTER_CENTER, cap.label, FontId::new(main_size * scale, bold()), text_color);
+    let text_color = if dark_text { Color32::from_rgb(0x20, 0x20, 0x24) } else { LEGEND };
+    let main_size = if label.chars().count() > 3 { 1.8 } else { 2.4 } * scale;
+    // Long legends shown in a mode have to fit on the key.
+    let width = painter.layout_no_wrap(label.to_string(), FontId::new(main_size, bold()), text_color).size().x;
+    let main_size = main_size * (key.width() * 0.92 / width.max(1.0)).min(1.0);
+    painter.text(key.center(), Align2::CENTER_CENTER, label, FontId::new(main_size, bold()), text_color);
 
+    // The legends around the key are for when no mode is on.
+    if mode != Mode::Normal {
+        return;
+    }
     let legend_y = cell.top() + cell.height() * 0.2;
     // Shrink the shifted legends if both together would not fit above the key.
     let measure = |t: &str, size: f32| {
@@ -1070,6 +1108,42 @@ mod tests {
 
         fn menu(&self) -> Vec<[bool; LCD_WIDTH]> {
             self.app.m().lcd().pixels[56..].to_vec()
+        }
+    }
+
+    #[test]
+    fn the_keys_follow_the_mode() {
+        let Some(mut window) = Window::new() else { return };
+        let mut check = |keys: &[Key], want: Mode| {
+            for &key in keys {
+                window.app.m().tap(key);
+            }
+            window.run(0.5);
+            window.frame(Vec::new());
+            assert_eq!(window.app.mode(), want, "after {keys:?}");
+        };
+        check(&[], Mode::Normal);
+        check(&[Key::LeftShift], Mode::Left);
+        check(&[Key::LeftShift], Mode::Normal);
+        check(&[Key::RightShift], Mode::Right);
+        check(&[Key::RightShift], Mode::Normal);
+        check(&[Key::Alpha], Mode::Alpha);
+        check(&[Key::LeftShift], Mode::AlphaLeft);
+        check(&[Key::A], Mode::Normal);
+        check(&[Key::On], Mode::Normal);
+        check(&[Key::Alpha, Key::RightShift], Mode::AlphaRight);
+    }
+
+    /// The legend `KeyCap::legend` gives these in left shift is theirs.
+    #[test]
+    fn the_left_shift_opens_the_menus_of_the_number_keys() {
+        for key in [Key::N7, Key::N8, Key::N9, Key::N4, Key::N5, Key::N6, Key::N1, Key::N2, Key::N3] {
+            let Some(window) = Window::new() else { return };
+            let before = window.app.m().lcd().pixels[56..].to_vec();
+            window.app.m().tap(Key::LeftShift);
+            window.app.m().tap(key);
+            window.run(1.0);
+            assert_ne!(window.app.m().lcd().pixels[56..].to_vec(), before, "{key:?}");
         }
     }
 

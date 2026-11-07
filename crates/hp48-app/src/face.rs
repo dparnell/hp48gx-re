@@ -4,6 +4,9 @@
 //! with the ROM: right-shift 7 opens the SOLVE application, left-shift 7 the
 //! SOLVE menu). `left` is the purple left-shift legend, `right` the green
 //! right-shift legend, `alpha` the letter typed in alpha mode.
+//!
+//! While a shift or alpha mode is on, the keys show what they do in it
+//! (`Mode`, `KeyCap::legend`).
 
 use eframe::egui;
 use hp48::Key;
@@ -48,6 +51,112 @@ const fn k(
 const fn wide(mut c: KeyCap) -> KeyCap {
     c.span = 2.0;
     c
+}
+
+/// What the next key press means, from the LCD's annunciators.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub enum Mode {
+    Normal,
+    Left,
+    Right,
+    Alpha,
+    AlphaLeft,
+    AlphaRight,
+}
+
+impl Mode {
+    pub fn from_annunciators(bits: u8) -> Mode {
+        const ON: u8 = 0x80;
+        const LEFT: u8 = 0x01;
+        const RIGHT: u8 = 0x02;
+        const ALPHA: u8 = 0x04;
+        if bits & ON == 0 {
+            return Mode::Normal;
+        }
+        match (bits & ALPHA != 0, bits & LEFT != 0, bits & RIGHT != 0) {
+            (false, false, false) => Mode::Normal,
+            (false, true, _) => Mode::Left,
+            (false, false, true) => Mode::Right,
+            (true, false, false) => Mode::Alpha,
+            (true, true, _) => Mode::AlphaLeft,
+            (true, false, true) => Mode::AlphaRight,
+        }
+    }
+
+    /// Whether this is the mode's own key, which turns it off.
+    pub fn is_on(self, key: Key) -> bool {
+        match key {
+            Key::LeftShift => matches!(self, Mode::Left | Mode::AlphaLeft),
+            Key::RightShift => matches!(self, Mode::Right | Mode::AlphaRight),
+            Key::Alpha => matches!(self, Mode::Alpha | Mode::AlphaLeft | Mode::AlphaRight),
+            _ => false,
+        }
+    }
+}
+
+impl KeyCap {
+    /// What the key does in a mode, if the mode gives it something.
+    pub fn legend(&self, mode: Mode) -> Option<&'static str> {
+        let text = match mode {
+            Mode::Normal => self.label,
+            // One legend names both: the left shift opens the menu of what
+            // the right shift opens the application of.
+            Mode::Left if self.left.is_empty() && self.style == Number => self.right,
+            Mode::Left => self.left,
+            Mode::Right => self.right,
+            Mode::Alpha => self.alpha,
+            Mode::AlphaLeft => alpha_shifted(self.key).0,
+            Mode::AlphaRight => alpha_shifted(self.key).1,
+        };
+        (!text.is_empty()).then_some(text)
+    }
+}
+
+/// What a key types in alpha mode after the left and right shifts, from the
+/// ROM (`examples/alphachars.rs`).
+fn alpha_shifted(key: Key) -> (&'static str, &'static str) {
+    match key {
+        Key::A => ("a", "α"),
+        Key::B => ("b", "ß"),
+        Key::C => ("c", "Δ"),
+        Key::D => ("d", "δ"),
+        Key::E => ("e", "ε"),
+        Key::F => ("f", "θ"),
+        Key::Mth => ("g", "γ"),
+        Key::Prg => ("h", "η"),
+        Key::Cst => ("i", "∞"),
+        Key::Var => ("j", "|"),
+        Key::Up => ("k", "↑"),
+        Key::Nxt => ("l", "λ"),
+        Key::Quote => ("m", "'"),
+        Key::Sto => ("n", "µ"),
+        Key::Eval => ("o", "Ω"),
+        Key::Left => ("p", "←"),
+        Key::Down => ("q", "↓"),
+        Key::Right => ("r", "ρ"),
+        Key::Sin => ("s", "σ"),
+        Key::Cos => ("t", "τ"),
+        Key::Tan => ("u", "%"),
+        Key::Sqrt => ("v", "~"),
+        Key::Power => ("w", "ω"),
+        Key::Inv => ("x", "ẋ"),
+        Key::Neg => ("y", "±"),
+        Key::Eex => ("z", "Π"),
+        Key::Div => ("( )", "#"),
+        Key::N4 => ("$", "¢"),
+        Key::N5 => ("£", "¥"),
+        Key::N6 => ("¤", "°"),
+        Key::Mul => ("[ ]", "_"),
+        Key::N1 => ("==", "≠"),
+        Key::N2 => ("<", ">"),
+        Key::N3 => ("≤", "≥"),
+        Key::Minus => ("« »", "\" \""),
+        Key::N0 => ("=", "→"),
+        Key::Dot => (",", "↵"),
+        Key::Space => ("π", "∡"),
+        Key::Plus => ("{ }", ":"),
+        _ => ("", ""),
+    }
 }
 
 use Style::*;
@@ -181,4 +290,35 @@ pub fn key_for(key: egui::Key) -> Option<Key> {
             return None;
         }
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn cap(key: Key) -> &'static KeyCap {
+        ROWS.iter().flat_map(|row| row.iter()).find(|c| c.key == key).unwrap()
+    }
+
+    #[test]
+    fn modes_come_from_the_annunciators() {
+        assert_eq!(Mode::from_annunciators(0x80), Mode::Normal);
+        assert_eq!(Mode::from_annunciators(0x81), Mode::Left);
+        assert_eq!(Mode::from_annunciators(0x82), Mode::Right);
+        assert_eq!(Mode::from_annunciators(0x84), Mode::Alpha);
+        assert_eq!(Mode::from_annunciators(0x85), Mode::AlphaLeft);
+        assert_eq!(Mode::from_annunciators(0x86), Mode::AlphaRight);
+        assert_eq!(Mode::from_annunciators(0x04), Mode::Normal, "the annunciators are off");
+    }
+
+    #[test]
+    fn keys_give_their_legend_for_the_mode() {
+        let sin = cap(Key::Sin);
+        let found = [Mode::Normal, Mode::Left, Mode::Right, Mode::Alpha, Mode::AlphaLeft, Mode::AlphaRight]
+            .map(|mode| sin.legend(mode).unwrap());
+        assert_eq!(found, ["SIN", "ASIN", "∂", "S", "s", "σ"]);
+        assert_eq!(cap(Key::N7).legend(Mode::Left), Some("SOLVE"));
+        assert_eq!(cap(Key::N7).legend(Mode::Alpha), None);
+        assert_eq!(cap(Key::Prg).legend(Mode::Right), None);
+    }
 }
