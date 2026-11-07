@@ -2,11 +2,15 @@
 //!
 //! hp48-app [--rom PATH] [--screenshot OUT.png] [--keys "K ..."] [--type "RPL text"]... [--persist] [--pixels] [--plot-only]
 //!          [--layout auto|calculator|desktop] [--size WxH] [--line "RPL text"]... [--live] [--full-speed]
+//!          [--then "K ..."] [--no-diagrams]
 //!
 //! The layout follows the window: a narrow window shows the calculator
 //! alone; a wide one adds a desktop panel (desk.rs) with the stack as text,
 //! the menu keys as buttons and a command line typed on the computer's
 //! keyboard. The LCD's context menu can fix the layout.
+//!
+//! Equation Library pictures are drawn from vector art where there is some
+//! (diagram.rs), unless turned off in the LCD's context menu or --no-diagrams.
 //!
 //! Ctrl+V types the clipboard text into the calculator. The plot window
 //! opens by itself when the calculator shows its graphics screen (DRAW,
@@ -22,6 +26,7 @@
 //! step it frame by frame instead, unless given --live.
 
 mod desk;
+mod diagram;
 mod face;
 mod persist;
 mod plot;
@@ -100,6 +105,9 @@ struct App {
     desk: desk::Desk,
     display: Display,
     scene_cache: std::cell::RefCell<SceneCache>,
+    /// Pictures redrawn as vector art, shown in place of the ROM's bitmaps.
+    diagrams: Vec<diagram::Diagram>,
+    vector_diagrams: bool,
     /// The ROM's minifont, recognised in the LCD and drawn with a real font.
     minifont: hp48_vector::MiniFont,
     mouse_keys: HashSet<Key>,
@@ -163,6 +171,8 @@ impl App {
             desk: desk::Desk::default(),
             display: Display::Vector,
             scene_cache: std::cell::RefCell::new(None),
+            diagrams: diagram::all(),
+            vector_diagrams: true,
             persistent,
             mouse_keys: HashSet::new(),
             kb_keys: HashSet::new(),
@@ -417,6 +427,7 @@ impl App {
         lcd_resp.context_menu(|ui| {
             ui.radio_value(&mut self.display, Display::Vector, "Vector display");
             ui.radio_value(&mut self.display, Display::Pixels, "Original pixels");
+            ui.checkbox(&mut self.vector_diagrams, "Redrawn Equation Library pictures");
             ui.separator();
             ui.separator();
             ui.radio_value(&mut self.layout, Layout::Auto, "Layout follows the window");
@@ -566,7 +577,14 @@ impl App {
                 }
             }
             Display::Vector => {
-                let scene = self.vector_scene(&lcd);
+                // A recognised picture is drawn from its vector art, and the
+                // rest of the LCD (the menu) is traced as usual.
+                let diagram = self.diagrams.iter().find(|d| self.vector_diagrams && d.shown_on(&lcd.pixels));
+                let mut pixels = lcd.pixels;
+                if let Some(d) = diagram {
+                    d.erase(&mut pixels);
+                }
+                let scene = self.vector_scene(&pixels);
                 for r in &scene.fills {
                     painter.rect_filled(Rect::from_min_max(pt(r.x, r.y), pt(r.x + r.w, r.y + r.h)), CornerRadius::ZERO, LCD_INK);
                 }
@@ -583,20 +601,23 @@ impl App {
                 for t in &scene.text {
                     draw_mini_text(painter, t, &pt, if t.light { LCD_BG } else { LCD_INK });
                 }
+                if let Some(d) = diagram {
+                    d.draw(painter, &pt, px * scale);
+                }
             }
         }
     }
 
     /// The vectorised LCD, recomputed only when the pixels change.
-    fn vector_scene(&self, lcd: &hp48::Lcd) -> std::rc::Rc<hp48_vector::Scene> {
+    fn vector_scene(&self, lcd: &[[bool; LCD_WIDTH]; LCD_HEIGHT]) -> std::rc::Rc<hp48_vector::Scene> {
         let mut cache = self.scene_cache.borrow_mut();
         if let Some((pixels, scene)) = cache.as_ref() {
-            if pixels == &lcd.pixels {
+            if pixels == lcd {
                 return scene.clone();
             }
         }
-        let scene = std::rc::Rc::new(hp48_vector::vectorize_with(&hp48_vector::Bitmap::from_rows(&lcd.pixels), Some(&self.minifont)));
-        *cache = Some((lcd.pixels, scene.clone()));
+        let scene = std::rc::Rc::new(hp48_vector::vectorize_with(&hp48_vector::Bitmap::from_rows(lcd), Some(&self.minifont)));
+        *cache = Some((*lcd, scene.clone()));
         scene
     }
 }
@@ -726,14 +747,15 @@ fn read_minifont(m: &Machine) -> hp48_vector::MiniFont {
     hp48_vector::MiniFont::new(glyphs)
 }
 
+/// DejaVu Sans: capitals are 0.729 em tall, their tops 0.199 em below the
+/// top of the line.
+pub(crate) const CAP: f32 = 0.729;
+pub(crate) const CAP_TOP: f32 = 0.199;
+
 /// Draw recognised minifont text with a real font: capitals as tall as the
 /// glyphs' 5 rows, centred on their ink. Text wider than the ink is set
 /// tighter, then smaller. `pt` maps LCD pixel coordinates to the screen.
 pub(crate) fn draw_mini_text(painter: &egui::Painter, t: &hp48_vector::Text, pt: &dyn Fn(f32, f32) -> Pos2, color: Color32) {
-    // DejaVu Sans: capitals are 0.729 em tall, their tops 0.199 em below
-    // the top of the line.
-    const CAP: f32 = 0.729;
-    const CAP_TOP: f32 = 0.199;
     let px = pt(1.0, 0.0).x - pt(0.0, 0.0).x;
     let room = (t.w + 0.5) * px;
     let gaps = t.text.chars().count().saturating_sub(1) as f32;
@@ -780,6 +802,21 @@ fn install_fonts(ctx: &egui::Context) {
     ctx.set_fonts(fonts);
 }
 
+/// A key script: names of keys, and `wait` for a second (None).
+fn parse_keys(list: &str) -> Vec<Option<Key>> {
+    list.split_whitespace()
+        .map(|n| {
+            if n.eq_ignore_ascii_case("wait") {
+                return None;
+            }
+            Some(Key::ALL
+                .into_iter()
+                .find(|k| format!("{k:?}").eq_ignore_ascii_case(n) || format!("{k:?}").eq_ignore_ascii_case(&format!("N{n}")))
+                .unwrap_or_else(|| panic!("unknown key {n}")))
+        })
+        .collect()
+}
+
 fn save_png(path: &str, image: &egui::ColorImage) {
     let [w, h] = image.size;
     let mut raw = Vec::with_capacity(w * h * 3);
@@ -798,6 +835,8 @@ fn main() -> eframe::Result {
     let mut rom_path = hp48::default_rom_path().display().to_string();
     let mut screenshot = None;
     let mut keys = Vec::new();
+    let mut then = Vec::new();
+    let mut vector_diagrams = true;
     let mut lines = Vec::new();
     let mut force_persist = false;
     let mut pixels = false;
@@ -839,27 +878,15 @@ fn main() -> eframe::Result {
                 keys.push(None);
             }
             "--keys" => {
-                keys = args
-                    .next()
-                    .expect("--keys LIST")
-                    .split_whitespace()
-                    .map(|n| {
-                        if n.eq_ignore_ascii_case("wait") {
-                            return None;
-                        }
-                        Some(Key::ALL
-                            .into_iter()
-                            .find(|k| format!("{k:?}").eq_ignore_ascii_case(n) || format!("{k:?}").eq_ignore_ascii_case(&format!("N{n}")))
-                            .unwrap_or_else(|| panic!("unknown key {n}")))
-                    })
-                    .collect::<Vec<_>>()
-                    .into_iter()
-                    .chain(keys.drain(..))
-                    .collect()
+                let list = parse_keys(&args.next().expect("--keys LIST"));
+                keys = list.into_iter().chain(keys.drain(..)).collect();
             }
+            "--then" => then = parse_keys(&args.next().expect("--then LIST")),
+            "--no-diagrams" => vector_diagrams = false,
             other => panic!("unknown argument {other}"),
         }
     }
+    keys.extend(then);
     let rom = std::fs::read(&rom_path).unwrap_or_else(|e| panic!("reading {rom_path}: {e}"));
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
@@ -893,6 +920,7 @@ fn main() -> eframe::Result {
             if pixels {
                 app.display = Display::Pixels;
             }
+            app.vector_diagrams = vector_diagrams;
             app.plot_only = plot_only;
             app.layout = layout;
             Ok(Box::new(app))
