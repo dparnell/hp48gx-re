@@ -8,7 +8,7 @@
 use crate::{draw_fitted_text, LCD_BG, LCD_INK};
 use eframe::egui::{self, Align, FontFamily, Pos2, Rect, Stroke};
 use hp48::hires::{Content, Cursor, Font, Item, CELL_WIDTH as CELL};
-use hp48::{LCD_HEIGHT, LCD_WIDTH};
+use hp48::{Key, LCD_HEIGHT, LCD_WIDTH};
 
 /// The characters on a row of the big font, and its capitals' height.
 const ROW_CHARS: usize = 22;
@@ -47,10 +47,27 @@ fn dark_label(item: &Item, columns: &std::ops::Range<usize>) -> bool {
     item.rows[LABEL_LINES.start][columns.start.min(item.rows[0].len() - 1)]
 }
 
-/// Take the text out of the LCD's pixels.
-pub fn erase(item: &Item, lcd: &mut [[bool; LCD_WIDTH]; LCD_HEIGHT]) {
+/// Take the text out of the LCD's pixels, last drawn last. A box puts back
+/// what was taken from under it.
+pub fn erase_all(items: &[Item], lcd: &mut [[bool; LCD_WIDTH]; LCD_HEIGHT]) {
+    let original = *lcd;
+    for item in items {
+        if item.content == Content::Box {
+            let [left, top, right, bottom] = item.area();
+            for y in top..bottom.min(LCD_HEIGHT) {
+                let columns = left.min(LCD_WIDTH)..right.min(LCD_WIDTH);
+                lcd[y][columns.clone()].copy_from_slice(&original[y][columns]);
+            }
+        } else {
+            erase(item, lcd);
+        }
+    }
+}
+
+/// Take an item's text out of the LCD's pixels.
+fn erase(item: &Item, lcd: &mut [[bool; LCD_WIDTH]; LCD_HEIGHT]) {
     match &item.content {
-        Content::Grob => {}
+        Content::Grob | Content::Box => {}
         Content::Label { center, width, .. } => {
             let columns = label_box(*center, *width);
             let dark = dark_label(item, &columns);
@@ -65,6 +82,12 @@ pub fn erase(item: &Item, lcd: &mut [[bool; LCD_WIDTH]; LCD_HEIGHT]) {
                 lcd[item.y + y].fill(false);
             }
         }
+        Content::ListRow { .. } => {
+            let dark = item.rows[0][0];
+            for line in lcd.iter_mut().skip(item.y).take(item.rows.len()) {
+                line.iter_mut().skip(item.x).take(item.rows[0].len()).for_each(|pixel| *pixel = dark);
+            }
+        }
         Content::Text { .. } => {
             for line in lcd.iter_mut().skip(item.y).take(item.rows.len()) {
                 line.iter_mut().skip(item.x).take(item.rows[0].len()).for_each(|pixel| *pixel = false);
@@ -73,19 +96,91 @@ pub fn erase(item: &Item, lcd: &mut [[bool; LCD_WIDTH]; LCD_HEIGHT]) {
     }
 }
 
-/// Draw the item's text, if it has any. `pt` maps LCD pixels to the screen.
+/// The keys that do what a click at this point of a list means: a row is
+/// chosen, and an arrow turns the page. Nothing else in a list is a target.
+pub fn list_keys<'a>(items: impl Iterator<Item = &'a Item>, x: f32, y: f32) -> Option<Vec<Key>> {
+    // Arrows are small, so they take clicks close by.
+    const ARROW_MARGIN: f32 = 2.0;
+    let holds = |item: &Item, margin: f32| {
+        let [left, top, right, bottom] = item.area().map(|edge| edge as f32);
+        (left - margin..right + margin).contains(&x) && (top - margin..bottom + margin).contains(&y)
+    };
+    // In a box over a box, only the top one counts.
+    let items: Vec<&Item> = items.filter(|item| item.covers.is_empty()).collect();
+    let mut rows: Vec<&Item> = items.iter().copied().filter(|item| matches!(item.content, Content::ListRow { .. })).collect();
+    rows.sort_by_key(|item| item.y);
+    if rows.is_empty() {
+        return None;
+    }
+    let arrow = |item: &Item| match &item.content {
+        Content::Text { text, font: Font::Small } if text.len() == 1 => match hp48_rpl::hp_char(text[0]) {
+            '↑' => Some(Key::Up),
+            '↓' => Some(Key::Down),
+            _ => None,
+        },
+        _ => None,
+    };
+    if let Some(key) = items.iter().filter(|item| holds(item, ARROW_MARGIN)).find_map(|item| arrow(item)) {
+        return Some(vec![Key::LeftShift, key]);
+    }
+    let clicked = rows.iter().position(|item| holds(item, 0.0))?;
+    let highlighted = rows.iter().position(|item| item.rows[0][0])?;
+    let key = if clicked < highlighted { Key::Up } else { Key::Down };
+    let mut keys = vec![key; clicked.abs_diff(highlighted)];
+    keys.push(Key::Enter);
+    Some(keys)
+}
+
+/// The parts of the LCD outside the boxes.
+fn outside(covers: &[[usize; 4]]) -> Vec<[usize; 4]> {
+    let mut parts = vec![[0, 0, LCD_WIDTH, LCD_HEIGHT]];
+    for &[left, top, right, bottom] in covers {
+        parts = parts
+            .iter()
+            .flat_map(|&[l, t, r, b]| {
+                let (t2, b2) = (t.max(top), b.min(bottom));
+                [[l, t, r, b.min(top)], [l, b2.max(t), r, b], [l, t2, r.min(left), b2], [l.max(right), t2, r, b2]]
+            })
+            .filter(|&[l, t, r, b]| l < r && t < b)
+            .collect();
+    }
+    parts
+}
+
+/// Draw the item's text, if it has any, around the boxes over it. `pt` maps
+/// LCD pixels to the screen.
 pub fn draw(painter: &egui::Painter, item: &Item, pt: &dyn Fn(f32, f32) -> Pos2) {
+    if item.covers.is_empty() {
+        return draw_item(painter, item, pt);
+    }
+    for [left, top, right, bottom] in outside(&item.covers) {
+        let part = Rect::from_min_max(pt(left as f32, top as f32), pt(right as f32, bottom as f32));
+        draw_item(&painter.with_clip_rect(part), item, pt);
+    }
+}
+
+fn draw_item(painter: &egui::Painter, item: &Item, pt: &dyn Fn(f32, f32) -> Pos2) {
     match &item.content {
-        Content::Grob => {}
+        Content::Grob | Content::Box => {}
         Content::Label { text: bytes, center, width } => {
             let columns = label_box(*center, *width);
             let color = if dark_label(item, &columns) { LCD_BG } else { LCD_INK };
             let middle = [(item.x + center) as f32, item.y as f32 + LABEL_MIDDLE];
             let family = FontFamily::Name("mini".into());
-            draw_fitted_text(painter, &text(bytes), middle, *width as f32 - 1.5, 5.0, family, Align::Center, pt, color);
+            let label = crate::menu_word(text(bytes));
+            draw_fitted_text(painter, &label, middle, *width as f32 - 1.5, 5.0, family, Align::Center, pt, color);
         }
         Content::Row { text: bytes } => {
             draw_words(painter, item, bytes, ROW_CAP, ROW_MIDDLE, pt);
+        }
+        Content::ListRow { text: bytes, indent } => {
+            let shown = text(bytes);
+            let shown = shown.trim_end();
+            let room = (shown.chars().count() * CELL) as f32;
+            let left = (item.x + indent) as f32;
+            let middle = [left + room / 2.0, item.y as f32 + SMALL_MIDDLE];
+            let color = if item.rows[0][0] { LCD_BG } else { LCD_INK };
+            draw_fitted_text(painter, shown, middle, room, SMALL_CAP, FontFamily::Proportional, Align::Min, pt, color);
         }
         Content::Text { text: bytes, font: Font::Small } => {
             // A message reads as a sentence, in the font's own spacing.
@@ -162,6 +257,16 @@ mod tests {
     fn words_keep_their_columns() {
         let found: Vec<_> = words(b"1:   2.5 x").collect();
         assert_eq!(found, [(0, &b"1:"[..]), (5, &b"2.5"[..]), (9, &b"x"[..])]);
+    }
+
+    #[test]
+    fn what_is_outside_a_box_goes_round_it() {
+        let parts = outside(&[[10, 20, 30, 40]]);
+        let area: usize = parts.iter().map(|[l, t, r, b]| (r - l) * (b - t)).sum();
+        assert_eq!(area, LCD_WIDTH * LCD_HEIGHT - 20 * 20);
+        let inside = |x, y| parts.iter().any(|&[l, t, r, b]| (l..r).contains(&x) && (t..b).contains(&y));
+        assert!(inside(9, 25) && inside(30, 25) && inside(15, 19) && inside(15, 40));
+        assert!(!inside(10, 20) && !inside(29, 39));
     }
 
     #[test]

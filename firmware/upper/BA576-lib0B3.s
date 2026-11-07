@@ -251,7 +251,7 @@ BBScrollUp1:
         :: DA2bBad? ?SEMI                        * BB06B
           10GETLAM 9GETLAM 2DUP 7GETLAM #+ OVER 8GETLAM #+ OVER 11GETLAM #1- * BB07A
           7GETLAM #* #+ HARDBUFF 5UNROLL 6GETLAM XLIB BBInvertRow SUBGROB * BB0B1
-          3UNROLL HARDBUFF 3UNROLL GROB! 18GETLAM 6GETLAM XLIB LEDispItem * BB0DF
+          3UNROLL HARDBUFF 3UNROLL HiGROB! 18GETLAM 6GETLAM XLIB LEDispItem * BB0DF
           XLIB BBDispArrows SetDA2bNoCh ;        * BB108
 
 * ROMPTR 0B3 017
@@ -261,7 +261,7 @@ BBScrollDown1:
         :: DA2bBad? ?SEMI                        * BB11D
           10GETLAM 9GETLAM 2DUP OVER 8GETLAM #+ OVER 11GETLAM #1- 7GETLAM #* * BB12C
           #+ HARDBUFF 5UNROLL 6GETLAM XLIB BBInvertRow SUBGROB 3UNROLL * BB163
-          7GETLAM #+ HARDBUFF 3UNROLL GROB! 18GETLAM 6GETLAM XLIB LEDispItem * BB18C
+          7GETLAM #+ HARDBUFF 3UNROLL HiGROB! 18GETLAM 6GETLAM XLIB LEDispItem * BB18C
           XLIB BBDispArrows SetDA2bNoCh ;        * BB1BA
 
 * ROMPTR 0B3 018
@@ -450,7 +450,7 @@ DoCKeyOK:
           XLIB BBStdBox? case XLIB BBDrawStdBox  * BB9F9
           7GETLAM 11GETLAM #* XLIB BBAddTitle #7+ 8GETLAM XLIB BBAddArrows * BBA14
           #7+ MAKEGROB HARDBUFF 10GETLAM #3- 9GETLAM XLIB BBSubTitle #3- * BBA43
-          GROB! 10GETLAM #2- 9GETLAM XLIB BBSubTitle #2- OVER 8GETLAM * BBA71
+          HiBoxGROB! 10GETLAM #2- 9GETLAM XLIB BBSubTitle #2- OVER 8GETLAM * BBA71
           XLIB BBAddArrows #+ #3+ OVER 7GETLAM 11GETLAM #* #+ * BBA9F
           XLIB BBAddTitle #3+ 4PICK 4PICK 4PICKOVER LINEON OVER 4PICKOVER * BBACD
           4PICK LINEON 4PICKOVER 4PICKOVER LINEON 4PICKOVER OVER 6PICK * BBAFB
@@ -462,7 +462,7 @@ DoCKeyOK:
 LEDispPrompt:
         :: BINT66 XLIB BBMsg ?SEMI               * BBB78
           XLIB BBPromptGrob HARDBUFF XLIB BBPromptPos XLIB BBClearPrompt * BBB92
-          GROB! 14GETLAM ?SEMI                   * BBBB8
+          HiGROB! 14GETLAM ?SEMI                 * BBBB8
           XLIB BBPromptLine ;                    * BBBC7
 
 * ROMPTR 0B3 031
@@ -485,7 +485,7 @@ BBPromptBig:
 * -> grob: the title for a pop-up box: message 69
 BBPromptSmall:
         :: BINT69 XLIB BBMsg ?SEMI               * BBC4B
-          XLIB BBPrompt$ $>grob ;                * BBC65
+          XLIB BBPrompt$ Hi$>grob ;              * BBC65
 
 * ROMPTR 0B3 034
 * refs (1): BA576
@@ -508,7 +508,7 @@ LEDispList:
 LEDispItem:
         :: BINT79 XLIB BBMsg ?SEMI               * BBD42
           OVER XLIB ~BBGetNGrob ROT 18GETLAM #= 17GETLAM NOTAND IT INVGROB * BBD5C
-          HARDBUFF 10GETLAM 4ROLL #1- 7GETLAM #* 9GETLAM #+ GROB! ; * BBD8F
+          HARDBUFF 10GETLAM 4ROLL #1- 7GETLAM #* 9GETLAM #+ HiGROB! ; * BBD8F
 
 * ROMPTR 0B3 037
 * refs (1): BA576
@@ -517,9 +517,9 @@ LEDispItem:
           DUP XLIB ~BBGetNStr DUP LEN$ 8GETLAM 16GETLAM IT * BBDDB
           :: BINT7 #- ;                          * BBE04
           BINT6 #/ SWAPDROP DUPUNROT #>ITE       * BBE18
-          :: 1_#1-SUB$ CHR_... >T$ ; DROP $>GROB 7GETLAM 8GETLAM MAKEGROB * BBE31
+          :: 1_#1-SUB$ CHR_... >T$ ; DROP Hi$>GROB 7GETLAM 8GETLAM MAKEGROB * BBE31
           DUPUNROT 16GETLAM ITE BINT7 BINT1      * BBE63
-          BINT1 GROB! 16GETLAM NOTcase SWAPDROP  * BBE7C
+          BINT1 HiIntoGrob 16GETLAM NOTcase SWAPDROP * BBE7C
           SWAP XLIB ~BBIsChecked? NOT?SEMI       * BBE95
           XLIB IFCheckGrob1 OVER ZEROZERO GROB! ; * BBEAA
 
@@ -550,7 +550,7 @@ BBRestScreen:
         :: BINT87 XLIB BBMsg ?SEMI               * BBFF2
           5GETLAM HARDBUFF 14GETLAM ITE ZEROZERO * BC00C
           :: 10GETLAM #3- 9GETLAM XLIB BBSubTitle #3- ; * BC025
-          GROB! 4GETLAM HARDBUFF2 ZEROZERO GROB! ; * BC04E
+          HiGROB! 4GETLAM HARDBUFF2 ZEROZERO GROB! ; * BC04E
 
 * ROMPTR 0B3 03B
 * refs (1): BA576
@@ -622,7 +622,7 @@ BBDrawStdBox:
           11GETLAM 7GETLAM #* BINT9 #/ SWAPDROP #2- #2* #1+ XLIB BBHasTitle? * BC38F
           IT #1+                                 * BC3C7
           NTHCOMPROM@ HARDBUFF 10GETLAM #3- 9GETLAM XLIB BBSubTitle #3- * BC3D1
-          GROB! ;                                * BC3FA
+          HiBoxGROB! ;                           * BC3FA
 
 * ROMPTR 0B3 043
 * refs (1): BA576
@@ -699,7 +699,7 @@ BBInvertRow:
         :: DA2bBad? caseDROP 17GETLAM            * BC5AF
           caseDROP 10GETLAM                      * BC5C3
           9GETLAM ROT #1- 7GETLAM #* #+ 2DUP OVER 8GETLAM #+ OVER 7GETLAM #+ * BC5CD
-          HARDBUFF 5UNROLL SUBGROB INVGROB 3UNROLL HARDBUFF 3UNROLL GROB! ; * BC60E
+          HARDBUFF 5UNROLL SUBGROB INVGROB 3UNROLL HARDBUFF 3UNROLL HiGROB! ; * BC60E
 
 * ROMPTR 0B3 04F
 * refs (1): BA576
@@ -707,9 +707,9 @@ BBInvertRow:
 BBDispArrows:
         :: XLIB BBScrolls? NOT?SEMI              * BC63B
           XLIB BBMoreAbove? ITE XLIB ~BBUpArrow XLIB ~BBSpace * BC650
-          HARDBUFF 10GETLAM 8GETLAM #+ #1+ DUP4UNROLL 9GETLAM #1+ GROB! * BC676
+          HARDBUFF 10GETLAM 8GETLAM #+ #1+ DUP4UNROLL 9GETLAM #1+ HiGROB! * BC676
           XLIB BBMoreBelow? ITE XLIB ~BBDownArrow XLIB ~BBSpace * BC6A3
-          HARDBUFF ROT 9GETLAM 11GETLAM #1- 7GETLAM #* #+ #1+ GROB! ; * BC6C9
+          HARDBUFF ROT 9GETLAM 11GETLAM #1- 7GETLAM #* #+ #1+ HiGROB! ; * BC6C9
 
 * ROMPTR 0B3 050
 * refs (1): BA576
@@ -726,17 +726,17 @@ BBMoreBelow?:
 * ROMPTR 0B3 052
 * refs (1): BA576
 ~BBUpArrow:
-        :: $ "↑" $>GROB ;                        * BC746
+        :: $ "↑" Hi$>GROB ;                      * BC746
 
 * ROMPTR 0B3 053
 * refs (1): BA576
 ~BBDownArrow:
-        :: $ "↓" $>GROB ;                        * BC761
+        :: $ "↓" Hi$>GROB ;                      * BC761
 
 * ROMPTR 0B3 054
 * refs (1): BA576
 ~BBSpace:
-        :: $ " " $>GROB ;                        * BC77C
+        :: $ " " Hi$>GROB ;                      * BC77C
 
 * ROMPTR 0B3 055
 * refs (1): BA576

@@ -463,6 +463,16 @@ HiDispChar:
 HiGROB!:
         :: BINT9 HiSend GROB! ;
 
+* grob buffer #x #y -> : GROB! into a grob, and tells the display which text
+* the buffer now holds, as a row of a list
+HiIntoGrob:
+        :: BINT13 HiSend GROB! ;
+
+* grob buffer #x #y -> : GROB!, and tells the display that a box covers this
+* area, so that what it covers needn't show
+HiBoxGROB!:
+        :: BINT14 HiSend GROB! ;
+
 * $ grob -> grob : tells the display which minifont text made the grob
 HiText:
         :: BINT10 HiSend SWAPDROP ;

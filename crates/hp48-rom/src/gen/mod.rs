@@ -33,7 +33,7 @@ mod rd;
 pub(crate) use rd::*;
 
 /// `hp48::rom_hash` of the ROM's nibbles.
-pub const ROM_HASH: u64 = 0xBCB50A4F9EFABF5C;
+pub const ROM_HASH: u64 = 0xBFDE6EBAB6EE2221;
 
 use hp48::translated::Block;
 

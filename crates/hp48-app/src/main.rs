@@ -20,7 +20,8 @@
 //! State is kept in %APPDATA%/HP48GX/state.bin (or $XDG_DATA_HOME/HP48GX);
 //! set HP48GX_STATE to use another file.
 //!
-//! Menu labels on the LCD work as the menu keys under them. While a shift
+//! Menu labels on the LCD work as the menu keys under them, and a click on
+//! a row of a Choose box chooses it, or on its arrows turns the page. While a shift
 //! or alpha mode is on, the keys show what they do in it.
 //!
 //! The calculator runs on a thread of its own (runner.rs), and the window
@@ -472,13 +473,28 @@ impl App {
         }
 
         // The menu labels on the LCD work as their keys.
-        let label_at = |app: &Self, p: Pos2| {
+        let lcd_point = |p: Pos2| {
             let face = (p - origin) / scale;
             let px = LCD_W / LCD_WIDTH as f32;
-            menu_key_at(&app.m(), (face.x - MARGIN - 1.0) / px, (face.y - LCD_TOP) / px)
+            ((face.x - MARGIN - 1.0) / px, (face.y - LCD_TOP) / px)
         };
-        if lcd_resp.hover_pos().is_some_and(|p| label_at(self, p).is_some()) {
+        let label_at = |app: &Self, p: Pos2| {
+            let (x, y) = lcd_point(p);
+            menu_key_at(&app.m(), x, y)
+        };
+        // So do the rows and arrows of a list.
+        let list_at = |app: &Self, p: Pos2| {
+            let (x, y) = lcd_point(p);
+            hires_text::list_keys(app.m().hw.hires.on_lcd(), x, y)
+        };
+        if lcd_resp.hover_pos().is_some_and(|p| label_at(self, p).is_some() || list_at(self, p).is_some()) {
             ui.ctx().set_cursor_icon(egui::CursorIcon::PointingHand);
+        }
+        if lcd_resp.clicked() {
+            if let Some(keys) = lcd_resp.interact_pointer_pos().and_then(|p| list_at(self, p)) {
+                self.typing.extend(keys);
+                ui.ctx().request_repaint();
+            }
         }
         let label_held = ui
             .input(|i| i.pointer.primary_down().then(|| i.pointer.press_origin()).flatten())
@@ -522,6 +538,12 @@ impl App {
         self.mouse_keys = new_mouse;
 
     }
+}
+
+/// A menu label's text for a real font. The ROM spells CANCL with brackets,
+/// which are narrower in the minifont.
+fn menu_word(text: String) -> String {
+    if text == "(AN(L" { "CANCL".to_string() } else { text }
 }
 
 /// The menu key whose label is at a point on the LCD, in pixels. The rows
@@ -647,7 +669,7 @@ impl App {
                 if let Some(d) = diagram {
                     d.erase(&mut pixels);
                 }
-                items.iter().for_each(|item| hires_text::erase(item, &mut pixels));
+                hires_text::erase_all(&items, &mut pixels);
                 let scene = self.vector_scene(&pixels);
                 for r in &scene.fills {
                     painter.rect_filled(Rect::from_min_max(pt(r.x, r.y), pt(r.x + r.w, r.y + r.h)), CornerRadius::ZERO, LCD_INK);
@@ -853,7 +875,7 @@ pub(crate) const CAP_TOP: f32 = 0.199;
 /// the screen.
 pub(crate) fn draw_mini_text(painter: &egui::Painter, t: &hp48_vector::Text, pt: &dyn Fn(f32, f32) -> Pos2, color: Color32) {
     let (centre, room) = ([t.x + t.w / 2.0, t.y + 2.5], t.w + 0.5);
-    draw_fitted_text(painter, &t.text, centre, room, 5.0, mini(), Align::Center, pt, color);
+    draw_fitted_text(painter, &menu_word(t.text.clone()), centre, room, 5.0, mini(), Align::Center, pt, color);
 }
 
 /// Text in a box `room` wide around `centre`, with capitals `cap` tall, all in
@@ -1052,6 +1074,7 @@ fn main() -> eframe::Result {
 mod tests {
     use super::*;
     use egui::{Event, Modifiers, PointerButton, RawInput};
+    use hp48::hires::Content;
 
     /// A window on a booted calculator, with exactly 7.5 pixels to a unit.
     struct Window {
@@ -1106,6 +1129,39 @@ mod tests {
             held
         }
 
+        /// Click at an LCD pixel, and let the keys it sends take effect.
+        fn click(&mut self, x: f32, y: f32) {
+            self.hold(PointerButton::Primary, x, y);
+            while self.app.is_typing() {
+                self.app.type_ahead();
+            }
+            self.run(1.0);
+            let _ = self.app.m().sync_hires();
+        }
+
+        /// The middle of the items of the display that pass `pick`, top first.
+        fn places(&self, pick: impl Fn(&hp48::hires::Item) -> bool) -> Vec<(f32, f32)> {
+            let m = self.app.m();
+            let mut found: Vec<_> = m.hw.hires.on_lcd().filter(|item| pick(item)).map(|item| item.area()).collect();
+            found.sort_by_key(|area| area[1]);
+            found.iter().map(|&[l, t, r, b]| ((l + r) as f32 / 2.0, (t + b) as f32 / 2.0)).collect()
+        }
+
+        fn rows(&self) -> Vec<String> {
+            let m = self.app.m();
+            let row = |item: &hp48::hires::Item| match &item.content {
+                Content::ListRow { text, .. } | Content::Row { text } => Some(String::from_utf8_lossy(text).trim().to_string()),
+                _ => None,
+            };
+            m.hw.hires.on_lcd().filter_map(row).collect()
+        }
+
+        fn choose(&mut self) {
+            self.line("\"T\" { 11 22 33 44 55 66 77 88 99 } 1 CHOOSE");
+            let _ = self.app.m().sync_hires();
+            self.frame(Vec::new());
+        }
+
         fn menu(&self) -> Vec<[bool; LCD_WIDTH]> {
             self.app.m().lcd().pixels[56..].to_vec()
         }
@@ -1154,6 +1210,50 @@ mod tests {
         let before = window.menu();
         assert_eq!(window.hold(PointerButton::Primary, 22.0 * 2.0 + 10.0, 60.0), [Key::C]);
         assert_ne!(window.menu(), before, "LIST opens its own menu");
+    }
+
+    fn list_row(item: &hp48::hires::Item) -> bool {
+        matches!(item.content, Content::ListRow { .. })
+    }
+
+    #[test]
+    fn a_click_on_a_row_chooses_it() {
+        let Some(mut window) = Window::new() else { return };
+        window.choose();
+        let (x, y) = window.places(list_row)[2];
+        window.click(x, y);
+        assert!(window.places(list_row).is_empty(), "the box has gone");
+        let rows = window.rows();
+        assert!(rows.iter().any(|row| row.starts_with("2:") && row.ends_with("33")), "{rows:?}");
+    }
+
+    #[test]
+    fn a_click_on_an_arrow_turns_the_page() {
+        let Some(mut window) = Window::new() else { return };
+        window.choose();
+        let first = window.rows();
+        let down = |item: &hp48::hires::Item| matches!(&item.content, Content::Text { text, .. } if text.len() == 1 && hp48_rpl::hp_char(text[0]) == '↓');
+        let (x, y) = window.places(down)[0];
+        window.click(x, y);
+        assert!(!window.places(list_row).is_empty(), "the box stays");
+        assert_ne!(window.rows(), first);
+        let up = |item: &hp48::hires::Item| matches!(&item.content, Content::Text { text, .. } if text.len() == 1 && hp48_rpl::hp_char(text[0]) == '↑');
+        let (x, y) = window.places(up)[0];
+        window.click(x, y);
+        let mut back = window.rows();
+        back.sort();
+        let mut first = first;
+        first.sort();
+        assert_eq!(back, first);
+    }
+
+    #[test]
+    fn a_click_beside_the_rows_does_nothing() {
+        let Some(mut window) = Window::new() else { return };
+        window.choose();
+        let first = window.rows();
+        window.click(2.0, 30.0);
+        assert_eq!(window.rows(), first);
     }
 
     #[test]

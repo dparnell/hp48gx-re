@@ -57,6 +57,11 @@ const MINI_TEXT: u8 = 10;
 const SMALL_TEXT: u8 = 11;
 /// `$ #line`: a row of the 8-line font has just been drawn from this line.
 const SMALL_ROW: u8 = 12;
+/// `grob buffer #x #y`, before a GROB! into a grob: the buffer holds a row of
+/// a list.
+const INTO_GROB: u8 = 13;
+/// `grob buffer #x #y`, before a GROB!: a box over what is on the display.
+const BOX: u8 = 14;
 
 /// RAM word with the address of stack level 1, after `SAVPTR`.
 const DSKTOP: u32 = 0x806F8;
@@ -95,6 +100,12 @@ pub enum Content {
     Row { text: Vec<u8> },
     /// A row of the edit line: text in the big font, a character to a cell.
     Edit { text: Vec<u8> },
+    /// A box drawn over the display. What it holds changes, so only its edge
+    /// tells whether it still shows. Items under it show around it.
+    Box,
+    /// A row of a list in a box, plain or inverted, with its text `indent`
+    /// pixels in.
+    ListRow { text: Vec<u8>, indent: usize },
     /// Text that the ROM made into a grob: the status line, the path, the
     /// clock and messages.
     Text { text: Vec<u8>, font: Font },
@@ -137,18 +148,47 @@ pub struct Item {
     pub content: Content,
     /// The cursor, on a row of the edit line.
     pub cursor: Option<Cursor>,
+    /// The boxes over the item, as left, top, right and bottom.
+    pub covers: Vec<[usize; 4]>,
     /// The LCD shows the item's pixels. A command may come before the drawing.
     on_lcd: bool,
 }
 
 impl Item {
+    /// The item's area, as left, top, right and bottom.
+    pub fn area(&self) -> [usize; 4] {
+        [self.x, self.y, self.x + self.rows[0].len(), self.y + self.rows.len()]
+    }
+
+    /// Whether a box covers the pixel.
+    fn covered(&self, x: usize, y: usize) -> bool {
+        self.covers.iter().any(|&[left, top, right, bottom]| (left..right).contains(&x) && (top..bottom).contains(&y))
+    }
+
     /// Whether the LCD shows this item's pixels at its place, but for the
-    /// columns in `skip`.
+    /// columns in `skip` and what boxes cover. All of it covered doesn't show.
     fn shown_on(&self, lcd: &[[bool; LCD_WIDTH]; LCD_HEIGHT], skip: std::ops::Range<usize>) -> bool {
-        self.rows.iter().enumerate().all(|(y, row)| {
+        let mut seen = false;
+        let same = self.rows.iter().enumerate().all(|(y, row)| {
             let line = lcd.get(self.y + y);
             row.iter().enumerate().all(|(x, &on)| {
-                skip.contains(&(self.x + x)) || line.and_then(|l| l.get(self.x + x)).is_none_or(|&pixel| pixel == on)
+                let (px, py) = (self.x + x, self.y + y);
+                if self.covered(px, py) {
+                    return true;
+                }
+                seen = true;
+                skip.contains(&px) || line.and_then(|l| l.get(px)).is_none_or(|&pixel| pixel == on)
+            })
+        });
+        same && seen
+    }
+
+    /// Whether the LCD shows the edge of this item's pixels.
+    fn edge_on(&self, lcd: &[[bool; LCD_WIDTH]; LCD_HEIGHT]) -> bool {
+        let (width, height) = (self.rows[0].len(), self.rows.len());
+        self.rows.iter().enumerate().all(|(y, row)| {
+            row.iter().enumerate().filter(|&(x, _)| y == 0 || y + 1 == height || x == 0 || x + 1 == width).all(|(x, &on)| {
+                lcd.get(self.y + y).and_then(|l| l.get(self.x + x)).is_none_or(|&pixel| pixel == on)
             })
         })
     }
@@ -157,6 +197,10 @@ impl Item {
     /// `cursor` (its left and top, in pixels).
     fn sync(&mut self, lcd: &[[bool; LCD_WIDTH]; LCD_HEIGHT], cursor: (usize, usize)) {
         self.cursor = None;
+        if self.content == Content::Box {
+            self.on_lcd = self.edge_on(lcd);
+            return;
+        }
         let (left, top) = cursor;
         if !matches!(self.content, Content::Edit { .. }) || top != self.y {
             self.on_lcd = self.shown_on(lcd, 0..0);
@@ -209,22 +253,57 @@ impl Hires {
         self.labels.insert(hash(rows), content);
     }
 
+    /// A grob copied to the display: what it shows, or the rows of a list
+    /// moved in one piece when the list scrolls.
+    fn show_copy(&mut self, x: usize, y: usize, rows: Vec<Vec<bool>>) {
+        if let Some(content) = self.labels.get(&hash(&rows)).cloned() {
+            return self.show(x, y, rows, content);
+        }
+        let width = rows[0].len();
+        let list = |item: &&Item| matches!(item.content, Content::ListRow { .. }) && (item.x, item.rows[0].len()) == (x, width);
+        let height = self.items.iter().find(list).map(|item| item.rows.len());
+        let known = |row: &[Vec<bool>]| self.labels.get(&hash(row)).cloned();
+        let moved: Option<Vec<_>> = height.and_then(|h| rows.chunks(h).map(|row| Some((row.to_vec(), known(row)?))).collect());
+        match moved {
+            Some(moved) => {
+                for (i, (row, content)) in moved.into_iter().enumerate() {
+                    let top = y + i * row.len();
+                    self.show(x, top, row, content);
+                }
+            }
+            None => self.show(x, y, rows, Content::Grob),
+        }
+    }
+
     /// Add an item, in place of what is at the same place.
     fn show(&mut self, x: usize, y: usize, rows: Vec<Vec<bool>>, content: Content) {
         let (width, height) = (rows[0].len(), rows.len());
         let same_place = |item: &Item| (item.x, item.y, item.rows[0].len(), item.rows.len()) == (x, y, width, height);
-        self.items.retain(|item| !same_place(item));
+        // What is put back over a box is the end of the box.
+        let boxed = |item: &Item| {
+            let [left, top, right, bottom] = item.area();
+            item.content == Content::Box && left >= x && top >= y && right <= x + width && bottom <= y + height
+        };
+        self.items.retain(|item| !same_place(item) && !boxed(item));
         if self.items.len() >= ITEMS {
             self.items.remove(0);
         }
         let hash = hash(&rows);
-        self.items.push(Item { x, y, rows, hash, content, cursor: None, on_lcd: false });
+        self.items.push(Item { x, y, rows, hash, content, cursor: None, covers: Vec::new(), on_lcd: false });
     }
 
     /// Show the items whose pixels the LCD shows, and hide the rest. `cursor`
     /// is the left and top of the edit line's cursor, in pixels.
     pub fn sync(&mut self, lcd: &[[bool; LCD_WIDTH]; LCD_HEIGHT], cursor: (usize, usize)) {
-        self.items.iter_mut().for_each(|item| item.sync(lcd, cursor));
+        // Last drawn first, so that each item knows the boxes over it.
+        let mut covers = Vec::new();
+        for item in self.items.iter_mut().rev() {
+            item.covers.clone_from(&covers);
+            item.sync(lcd, cursor);
+            if item.content == Content::Box && item.on_lcd {
+                covers.push(item.area());
+            }
+        }
     }
 }
 
@@ -320,9 +399,25 @@ pub(crate) fn command(hw: &mut Hardware, code: u8) {
         }
         DISPLAY => {
             let Some(rows) = read_rows(hw, level(4)) else { return };
-            let content = hw.hires.labels.get(&hash(&rows)).cloned().unwrap_or(Content::Grob);
             let (x, y) = (number(2), number(1));
-            hw.hires.show(x, y, rows, content);
+            hw.hires.show_copy(x, y, rows);
+        }
+        BOX => {
+            let Some(rows) = read_rows(hw, level(4)) else { return };
+            let (x, y) = (number(2), number(1));
+            hw.hires.show(x, y, rows, Content::Box);
+        }
+        INTO_GROB => {
+            let (Some(source), Some(mut rows)) = (read_rows(hw, level(4)), read_rows(hw, level(3))) else { return };
+            let Some(Content::Text { text, .. }) = hw.hires.labels.get(&hash(&source)).cloned() else { return };
+            let (x, y) = (number(2), number(1));
+            for (line, from) in rows.iter_mut().skip(y).zip(&source) {
+                line.iter_mut().skip(x).zip(from).for_each(|(pixel, &on)| *pixel = on);
+            }
+            let inverted: Vec<Vec<bool>> = rows.iter().map(|row| row.iter().map(|&on| !on).collect()).collect();
+            let row = Content::ListRow { text, indent: x };
+            hw.hires.remember(&rows, row.clone());
+            hw.hires.remember(&inverted, row);
         }
         MENU => {
             let Some(rows) = read_rows(hw, level(4)) else { return };
@@ -378,7 +473,7 @@ mod tests {
     #[test]
     fn the_cursor_cell_of_an_edit_row_may_differ() {
         let rows = vec![vec![false; 12]; ROW_HEIGHT];
-        let item = Item { x: 0, y: 46, hash: hash(&rows), rows, content: Content::Edit { text: Vec::new() }, cursor: None, on_lcd: false };
+        let item = Item { x: 0, y: 46, hash: hash(&rows), rows, content: Content::Edit { text: Vec::new() }, cursor: None, covers: Vec::new(), on_lcd: false };
         let mut hires = Hires { items: vec![item], ..Default::default() };
         let mut lcd = [[false; LCD_WIDTH]; LCD_HEIGHT];
 
@@ -401,7 +496,7 @@ mod tests {
 
     fn grob() -> Item {
         let rows = vec![vec![true, false], vec![false, true]];
-        Item { x: 3, y: 4, hash: hash(&rows), rows, content: Content::Grob, cursor: None, on_lcd: false }
+        Item { x: 3, y: 4, hash: hash(&rows), rows, content: Content::Grob, cursor: None, covers: Vec::new(), on_lcd: false }
     }
 
     fn lcd_with(item: &Item) -> [[bool; LCD_WIDTH]; LCD_HEIGHT] {

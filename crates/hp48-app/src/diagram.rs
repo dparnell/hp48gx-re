@@ -593,6 +593,80 @@ mod tests {
         assert!(shown.iter().any(|t| t == "RAD"), "{shown:?}");
     }
 
+    /// The rows of a list on the display, top first, with whether each is
+    /// inverted.
+    fn list_rows(m: &mut hp48::Machine) -> Vec<(String, bool)> {
+        let _ = m.sync_hires();
+        let mut rows: Vec<&Item> = m.hw.hires.on_lcd().filter(|item| matches!(item.content, Content::ListRow { .. })).collect();
+        rows.sort_by_key(|item| item.y);
+        let row = |item: &&Item| match &item.content {
+            Content::ListRow { text, .. } => (String::from_utf8_lossy(text).trim_end().to_string(), item.rows[0][0]),
+            _ => unreachable!(),
+        };
+        rows.iter().map(row).collect()
+    }
+
+    #[test]
+    fn a_choose_box_is_sent_as_text() {
+        let Some(mut m) = machine(false) else { return };
+        tap_all(&mut m, &[Key::RightShift, Key::N1]);
+        m.run(CPU_HZ);
+        let rows = list_rows(&mut m);
+        assert!(rows.len() >= 4, "{rows:?}");
+        assert_eq!(rows.iter().filter(|row| row.1).count(), 1, "one row is highlighted: {rows:?}");
+        assert!(rows[0].1, "{rows:?}");
+        tap_all(&mut m, &[Key::Down]);
+        m.run(CPU_HZ / 2);
+        let moved = list_rows(&mut m);
+        assert_eq!(moved.iter().map(|r| &r.0).collect::<Vec<_>>(), rows.iter().map(|r| &r.0).collect::<Vec<_>>());
+        assert!(moved[1].1 && !moved[0].1, "the highlight moves: {moved:?}");
+    }
+
+    #[test]
+    fn a_choose_box_stays_on_the_display_while_it_scrolls() {
+        let Some(mut m) = machine(false) else { return };
+        m.type_text("\"T\" { A B C D E F G H I J } 1 CHOOSE").unwrap();
+        m.tap(Key::Enter);
+        m.run(2 * CPU_HZ);
+        let page = list_rows(&mut m).len();
+        assert!((3..10).contains(&page), "{page}");
+        for _ in 0..page + 2 {
+            tap_all(&mut m, &[Key::Down]);
+            m.run(CPU_HZ / 2);
+            assert_eq!(list_rows(&mut m).len(), page);
+        }
+        let rows = list_rows(&mut m);
+        let highlighted: Vec<_> = rows.iter().filter(|row| row.1).collect();
+        assert_eq!(highlighted.len(), 1, "{rows:?}");
+        assert_eq!(highlighted[0].0, ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"][page + 2], "{rows:?}");
+        tap_all(&mut m, &[Key::Up, Key::Up, Key::Up, Key::Up]);
+        m.run(CPU_HZ / 2);
+        assert_eq!(list_rows(&mut m).len(), page);
+    }
+
+    #[test]
+    fn what_a_box_covers_stays_on_the_display() {
+        let Some(mut m) = machine(false) else { return };
+        enter_line(&mut m, "1.5");
+        let before = text_rows(&mut m);
+        tap_all(&mut m, &[Key::RightShift, Key::N1]);
+        m.run(CPU_HZ);
+        assert_eq!(text_rows(&mut m), before, "the rows show around the box");
+    }
+
+    #[test]
+    fn a_choose_box_leaves_the_stack_as_it_was() {
+        let Some(mut m) = machine(false) else { return };
+        enter_line(&mut m, "1.5");
+        let before = text_rows(&mut m);
+        tap_all(&mut m, &[Key::RightShift, Key::N1]);
+        m.run(CPU_HZ);
+        tap_all(&mut m, &[Key::On]);
+        m.run(CPU_HZ);
+        assert_eq!(text_rows(&mut m), before);
+        assert!(list_rows(&mut m).is_empty());
+    }
+
     #[test]
     fn clearing_the_lcd_removes_what_was_on_it() {
         let Some(mut m) = machine(true) else { return };
