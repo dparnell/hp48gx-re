@@ -600,7 +600,7 @@ mod tests {
         let mut rows: Vec<&Item> = m.hw.hires.on_lcd().filter(|item| matches!(item.content, Content::ListRow { .. })).collect();
         rows.sort_by_key(|item| item.y);
         let row = |item: &&Item| match &item.content {
-            Content::ListRow { text, .. } => (String::from_utf8_lossy(text).trim_end().to_string(), item.rows[0][0]),
+            Content::ListRow { text, .. } => (String::from_utf8_lossy(text).trim_end().to_string(), item.inverted()),
             _ => unreachable!(),
         };
         rows.iter().map(row).collect()
@@ -642,6 +642,43 @@ mod tests {
         tap_all(&mut m, &[Key::Up, Key::Up, Key::Up, Key::Up]);
         m.run(CPU_HZ / 2);
         assert_eq!(list_rows(&mut m).len(), page);
+    }
+
+    #[test]
+    fn the_equation_library_browser_is_sent_as_text() {
+        let Some(mut m) = machine(false) else { return };
+        enter_line(&mut m, "EQNLIB");
+        m.run(2 * CPU_HZ);
+        let rows = list_rows(&mut m);
+        assert_eq!(rows.len(), 6, "{rows:?}");
+        assert_eq!(rows[0], ("Columns and Beams".to_string(), true));
+        tap_all(&mut m, &[Key::Down, Key::Down]);
+        m.run(CPU_HZ / 2);
+        let rows = list_rows(&mut m);
+        assert_eq!(rows[2], ("Fluids".to_string(), true), "{rows:?}");
+        assert!(!rows[0].1, "{rows:?}");
+        for _ in 0..6 {
+            tap_all(&mut m, &[Key::Down]);
+            m.run(CPU_HZ / 2);
+            let rows = list_rows(&mut m);
+            assert_eq!(rows.len(), 6, "{rows:?}");
+            assert_eq!(rows.iter().filter(|row| row.1).count(), 1, "{rows:?}");
+        }
+    }
+
+    #[test]
+    fn the_browser_gives_way_to_a_picture() {
+        let Some(mut m) = machine(false) else { return };
+        enter_line(&mut m, "EQNLIB");
+        m.run(2 * CPU_HZ);
+        tap_all(&mut m, &[Key::Enter]);
+        m.run(2 * CPU_HZ);
+        tap_all(&mut m, &[Key::Enter]);
+        m.run(2 * CPU_HZ);
+        tap_all(&mut m, &[Key::D]);
+        m.run(2 * CPU_HZ);
+        assert!(list_rows(&mut m).is_empty());
+        assert_eq!(pictures(&m).count(), 1);
     }
 
     #[test]

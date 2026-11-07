@@ -473,6 +473,14 @@ HiIntoGrob:
 HiBoxGROB!:
         :: BINT14 HiSend GROB! ;
 
+* #x #y grob -> : XYGROBDISP of a grob of text, as a row of a list
+HiRowDisp:
+        :: BINT15 HiSend XYGROBDISP ;
+
+* #x #y grob -> : XYGROBDISP of an arrow of a list, or of the blank in its place
+HiArrowDisp:
+        :: BINT0 HiSend XYGROBDISP ;
+
 * $ grob -> grob : tells the display which minifont text made the grob
 HiText:
         :: BINT10 HiSend SWAPDROP ;

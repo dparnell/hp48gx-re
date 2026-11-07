@@ -62,6 +62,13 @@ const SMALL_ROW: u8 = 12;
 const INTO_GROB: u8 = 13;
 /// `grob buffer #x #y`, before a GROB!: a box over what is on the display.
 const BOX: u8 = 14;
+/// `#x #y grob`: a row of a list, from text the display knows.
+const LIST_ROW: u8 = 15;
+/// `#x #y grob`: a scroll arrow, drawn as a grob, or a blank.
+const ARROW: u8 = 0;
+/// The arrows in the calculator's character set.
+const UP_ARROW: u8 = 144;
+const DOWN_ARROW: u8 = 143;
 
 /// RAM word with the address of stack level 1, after `SAVPTR`.
 const DSKTOP: u32 = 0x806F8;
@@ -160,6 +167,12 @@ impl Item {
         [self.x, self.y, self.x + self.rows[0].len(), self.y + self.rows.len()]
     }
 
+    /// Whether more of it is dark than light, as a highlighted row is.
+    pub fn inverted(&self) -> bool {
+        let pixels = self.rows.iter().flatten();
+        2 * pixels.clone().filter(|&&on| on).count() > pixels.count()
+    }
+
     /// Whether a box covers the pixel.
     fn covered(&self, x: usize, y: usize) -> bool {
         self.covers.iter().any(|&[left, top, right, bottom]| (left..right).contains(&x) && (top..bottom).contains(&y))
@@ -253,25 +266,62 @@ impl Hires {
         self.labels.insert(hash(rows), content);
     }
 
-    /// A grob copied to the display: what it shows, or the rows of a list
-    /// moved in one piece when the list scrolls.
+    /// The row of a list in these pixels, if they make one the display knows.
+    /// A blank says nothing, and could be part of anything.
+    fn list_row(&self, rows: &[Vec<bool>]) -> Option<Content> {
+        let mut pixels = rows.iter().flatten();
+        let first = pixels.next()?;
+        if pixels.all(|pixel| pixel == first) {
+            return None;
+        }
+        self.labels.get(&hash(rows)).filter(|content| matches!(content, Content::ListRow { .. })).cloned()
+    }
+
+    /// A grob copied to the display: what it shows, or the rows of a list in
+    /// it: moved in one piece when the list scrolls, or under a highlight
+    /// bigger than the row.
     fn show_copy(&mut self, x: usize, y: usize, rows: Vec<Vec<bool>>) {
         if let Some(content) = self.labels.get(&hash(&rows)).cloned() {
             return self.show(x, y, rows, content);
         }
-        let width = rows[0].len();
-        let list = |item: &&Item| matches!(item.content, Content::ListRow { .. }) && (item.x, item.rows[0].len()) == (x, width);
-        let height = self.items.iter().find(list).map(|item| item.rows.len());
-        let known = |row: &[Vec<bool>]| self.labels.get(&hash(row)).cloned();
-        let moved: Option<Vec<_>> = height.and_then(|h| rows.chunks(h).map(|row| Some((row.to_vec(), known(row)?))).collect());
-        match moved {
-            Some(moved) => {
-                for (i, (row, content)) in moved.into_iter().enumerate() {
-                    let top = y + i * row.len();
-                    self.show(x, top, row, content);
+        let (width, height) = (rows[0].len(), rows.len());
+        let list = |item: &Item| matches!(item.content, Content::ListRow { .. }).then(|| (item.rows[0].len(), item.rows.len()));
+        let mut sizes: Vec<(usize, usize)> = self.items.iter().filter_map(list).collect();
+        sizes.sort_unstable();
+        sizes.dedup();
+        let mut found = Vec::new();
+        for (w, h) in sizes.into_iter().filter(|&(w, h)| w <= width && h <= height) {
+            let mut top = 0;
+            while top + h <= height {
+                let cut = |left: usize| rows[top..top + h].iter().map(|row| row[left..left + w].to_vec()).collect::<Vec<_>>();
+                let row = (0..=width - w).find_map(|left| self.list_row(&cut(left)).map(|content| (left, cut(left), content)));
+                match row {
+                    Some((left, pixels, content)) => {
+                        found.push((x + left, y + top, pixels, content));
+                        top += h;
+                    }
+                    None => top += 1,
                 }
             }
-            None => self.show(x, y, rows, Content::Grob),
+        }
+        if found.is_empty() {
+            return self.show(x, y, rows, Content::Grob);
+        }
+        // A highlight can reach into the row next to it.
+        for item in self.items.iter_mut().filter(|item| matches!(item.content, Content::ListRow { .. })) {
+            let (left, top) = (item.x, item.y);
+            for (line, row) in item.rows.iter_mut().enumerate() {
+                for (column, pixel) in row.iter_mut().enumerate() {
+                    let from = (top + line).checked_sub(y).and_then(|v| rows.get(v));
+                    if let Some(&on) = from.and_then(|from| (left + column).checked_sub(x).and_then(|h| from.get(h))) {
+                        *pixel = on;
+                    }
+                }
+            }
+            item.hash = hash(&item.rows);
+        }
+        for (x, y, pixels, content) in found {
+            self.show(x, y, pixels, content);
         }
     }
 
@@ -339,6 +389,18 @@ fn read_area(hw: &Hardware, addr: u32, first: usize, count: usize, width: usize)
     (width > 0 && !lines.is_empty()).then(|| lines.map(|y| (0..width).map(|x| pixel(y, x)).collect()).collect())
 }
 
+/// A browser's arrow: a grob 4 wide in a library, whose part of the ROM may
+/// be covered by now, so it is read from the ROM itself.
+fn read_rom_arrow(hw: &Hardware, addr: u32) -> Option<Vec<Vec<bool>>> {
+    let at = addr as usize;
+    let word = |a: usize| hw.rom.get(a..a + 5).map(|n| n.iter().rev().fold(0usize, |v, &d| v << 4 | usize::from(d)));
+    if word(at)? != DOGROB as usize || word(at + 15)? != 4 {
+        return None;
+    }
+    let row = |y: usize| Some((0..4).map(|x| hw.rom.get(at + 20 + 2 * y).is_some_and(|&n| n >> x & 1 != 0)).collect());
+    (0..word(at + 10)?).map(row).collect()
+}
+
 /// The string at `addr`, in the calculator's character set.
 fn read_text(hw: &Hardware, addr: u32) -> Option<Vec<u8>> {
     if word(hw, addr) != DOCSTR {
@@ -377,7 +439,30 @@ pub(crate) fn command(hw: &mut Hardware, code: u8) {
         GROB => {
             let Some(rows) = read_rows(hw, level(1)) else { return };
             let (x, y) = (number(3), number(2));
-            hw.hires.show(x, y, rows, Content::Grob);
+            hw.hires.show_copy(x, y, rows);
+        }
+        LIST_ROW => {
+            let Some(rows) = read_rows(hw, level(1)) else { return };
+            let (x, y) = (number(3), number(2));
+            let Some(Content::Text { text, .. }) = hw.hires.labels.get(&hash(&rows)).cloned() else { return };
+            let inverted: Vec<Vec<bool>> = rows.iter().map(|row| row.iter().map(|&on| !on).collect()).collect();
+            let row = Content::ListRow { text, indent: 0 };
+            hw.hires.remember(&rows, row.clone());
+            hw.hires.remember(&inverted, row.clone());
+            hw.hires.show(x, y, rows, row);
+        }
+        ARROW => {
+            let Some(rows) = read_rom_arrow(hw, level(1)) else { return };
+            let (x, y) = (number(3), number(2));
+            let dark = |row: &Vec<bool>| row.iter().filter(|&&on| on).count();
+            // The head is the wide row, next to one end.
+            let (near_top, near_bottom) = (rows.get(1).map_or(0, dark), rows.len().checked_sub(2).map_or(0, |y| dark(&rows[y])));
+            let content = match near_top.cmp(&near_bottom) {
+                std::cmp::Ordering::Greater => Content::Text { text: vec![UP_ARROW], font: Font::Small },
+                std::cmp::Ordering::Less => Content::Text { text: vec![DOWN_ARROW], font: Font::Small },
+                std::cmp::Ordering::Equal => Content::Text { text: vec![b' '], font: Font::Small },
+            };
+            hw.hires.show(x, y, rows, content);
         }
         LABEL => {
             let (Some(rows), Some(text)) = (read_rows(hw, level(1)), read_text(hw, level(4))) else { return };

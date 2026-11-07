@@ -591,8 +591,8 @@ BRDispRow.L2:
           :: 2DUP#= ITE 2DROP                    * D09DF
             :: #- Blank$ &$ ;                    * D09F3
           ;                                      * D0A0C
-          $>GROB SWAP XLIB BRTop@ #- #8* XLIB BRY0@ #+ ONESWAP ROT * D0A11
-          XYGROBDISP ;                           * D0A4A
+          Hi$>GROB SWAP XLIB BRTop@ #- #8* XLIB BRY0@ #+ ONESWAP ROT * D0A11
+          HiRowDisp ;                            * D0A4A
 
 * ROMPTR 0E0 048
 * refs (1): CF38C
@@ -600,14 +600,14 @@ BRDispRow.L2:
 BRArrows:
         :: # 7F DUP XLIB BRY0@ XLIB BRTop@ #1= ITE XLIB BRArrowOff * D0A54
           XLIB BRArrowUp                         * D0A93
-          XYGROBDISP BINT48 XLIB BRBot@ XLIB BRCount@ #=ITE XLIB BRArrowOff * D0A9E
-          XLIB BRArrowDn XYGROBDISP ;            * D0ACE
+          HiArrowDisp BINT48 XLIB BRBot@ XLIB BRCount@ #=ITE XLIB BRArrowOff * D0A9E
+          XLIB BRArrowDn HiArrowDisp ;           * D0ACE
 
 * ROMPTR 0E0 049
 * refs (1): CF38C
 BRinverse:
         :: HARDBUFF BINT0 XLIB BRHiTop@ 2DUP 5PICK 3UNROLL # 7F * D0AE3
-          XLIB BRHiBot@ SUBGROB INVGROB 4UNROLL GROB! ; * D0B16
+          XLIB BRHiBot@ SUBGROB INVGROB 4UNROLL HiGROB! ; * D0B16
 
 * ROMPTR 0E0 04A
 * refs (1): CF38C
@@ -615,7 +615,7 @@ BRinverse:
 BRScrollDn:
         :: BINT1 XLIB BRLineXY HARDBUFF XLIB BRRows@ BINT2 #- BINT0 * D0B3A
           XLIB BRLineBox 3PICK 6UNROLL SUBGROB SWAP ZEROSWAP * D0B6E
-          XLIB BRBlankLine XYGROBDISP XYGROBDISP ; * D0B92
+          XLIB BRBlankLine XYGROBDISP HiGrobDisp ; * D0B92
 
 * ROMPTR 0E0 04B
 * refs (1): CF38C
@@ -631,7 +631,7 @@ BRBlankLine:
 BRScrollUp:
         :: BINT0 XLIB BRLineXY HARDBUFF XLIB BRRows@ #1- BINT1 * D0CCA
           XLIB BRLineBox DUP BINT7 #- 6UNROLL SUBGROB SWAP#1- ZEROSWAP * D0CF9
-          XLIB BRBlankLine XYGROBDISP XYGROBDISP ; * D0D27
+          XLIB BRBlankLine XYGROBDISP HiGrobDisp ; * D0D27
 
 * ROMPTR 0E0 04D
 * refs (1): CF38C

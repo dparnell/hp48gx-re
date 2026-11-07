@@ -186,22 +186,30 @@ class Firmware(unittest.TestCase):
         # Addresses in nibbles, end excluded.
         allowed = [
             (0x3E8F5, 0x3EC71),  # free space: the hi-res display's words
-            (0xBB0EE, 0xBB0F3),  # Choose box: words that tell the display
-            (0xBB1A0, 0xBB1A5),  # Choose box: words that tell the display
-            (0xBBA71, 0xBBA76),  # Choose box: words that tell the display
-            (0xBBBB8, 0xBBBBD),  # Choose box: words that tell the display
-            (0xBBC71, 0xBBC75),  # Choose box: words that tell the display
-            (0xBBDB7, 0xBBDBC),  # Choose box: words that tell the display
-            (0xBBE4F, 0xBBE54),  # Choose box: words that tell the display
-            (0xBBE81, 0xBBE86),  # Choose box: words that tell the display
-            (0xBC04E, 0xBC053),  # Choose box: words that tell the display
-            (0xBC3FA, 0xBC3FF),  # Choose box: words that tell the display
-            (0xBC631, 0xBC636),  # Choose box: words that tell the display
-            (0xBC69E, 0xBC6A3),  # Choose box: words that tell the display
-            (0xBC6F6, 0xBC6FB),  # Choose box: words that tell the display
-            (0xBC757, 0xBC75C),  # Choose box: words that tell the display
-            (0xBC772, 0xBC777),  # Choose box: words that tell the display
-            (0xBC78D, 0xBC792),  # Choose box: words that tell the display
+            (0xBB0EE, 0xBB0F3),  # Choose box and browser: words that tell the display
+            (0xBB1A0, 0xBB1A5),  # Choose box and browser: words that tell the display
+            (0xBBA71, 0xBBA76),  # Choose box and browser: words that tell the display
+            (0xBBBB8, 0xBBBBD),  # Choose box and browser: words that tell the display
+            (0xBBC70, 0xBBC71),  # Choose box and browser: words that tell the display
+            (0xBBC72, 0xBBC75),  # Choose box and browser: words that tell the display
+            (0xBBDB7, 0xBBDBC),  # Choose box and browser: words that tell the display
+            (0xBBE4F, 0xBBE54),  # Choose box and browser: words that tell the display
+            (0xBBE81, 0xBBE86),  # Choose box and browser: words that tell the display
+            (0xBC04E, 0xBC053),  # Choose box and browser: words that tell the display
+            (0xBC3FA, 0xBC3FF),  # Choose box and browser: words that tell the display
+            (0xBC631, 0xBC636),  # Choose box and browser: words that tell the display
+            (0xBC69E, 0xBC6A3),  # Choose box and browser: words that tell the display
+            (0xBC6F6, 0xBC6FB),  # Choose box and browser: words that tell the display
+            (0xBC757, 0xBC75C),  # Choose box and browser: words that tell the display
+            (0xBC772, 0xBC777),  # Choose box and browser: words that tell the display
+            (0xBC78D, 0xBC792),  # Choose box and browser: words that tell the display
+            (0xD0A11, 0xD0A16),  # Choose box and browser: words that tell the display
+            (0xD0A4A, 0xD0A4F),  # Choose box and browser: words that tell the display
+            (0xD0A9F, 0xD0AA3),  # Choose box and browser: words that tell the display
+            (0xD0ADA, 0xD0ADE),  # Choose box and browser: words that tell the display
+            (0xD0B30, 0xD0B35),  # Choose box and browser: words that tell the display
+            (0xD0BA2, 0xD0BA7),  # Choose box and browser: words that tell the display
+            (0xD0D37, 0xD0D3C),  # Choose box and browser: words that tell the display
             (0x9D1A7, 0x9D1AC),  # ELShowPic: XYGROBDISP -> HiGrobDisp
             (0x9D202, 0x9D207),  # the same, for an animation's frames
             (0x39D97, 0x39D9C),  # DispLevelML: BigDisp(st,s) -> HiBigDisp

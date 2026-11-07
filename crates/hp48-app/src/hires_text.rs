@@ -83,9 +83,10 @@ fn erase(item: &Item, lcd: &mut [[bool; LCD_WIDTH]; LCD_HEIGHT]) {
             }
         }
         Content::ListRow { .. } => {
-            let dark = item.rows[0][0];
-            for line in lcd.iter_mut().skip(item.y).take(item.rows.len()) {
-                line.iter_mut().skip(item.x).take(item.rows[0].len()).for_each(|pixel| *pixel = dark);
+            // Line by line, as the next row's highlight can reach into it.
+            for (line, row) in lcd.iter_mut().skip(item.y).zip(&item.rows) {
+                let dark = 2 * row.iter().filter(|&&on| on).count() > row.len();
+                line.iter_mut().skip(item.x).take(row.len()).for_each(|pixel| *pixel = dark);
             }
         }
         Content::Text { .. } => {
@@ -124,7 +125,7 @@ pub fn list_keys<'a>(items: impl Iterator<Item = &'a Item>, x: f32, y: f32) -> O
         return Some(vec![Key::LeftShift, key]);
     }
     let clicked = rows.iter().position(|item| holds(item, 0.0))?;
-    let highlighted = rows.iter().position(|item| item.rows[0][0])?;
+    let highlighted = rows.iter().position(|item| item.inverted())?;
     let key = if clicked < highlighted { Key::Up } else { Key::Down };
     let mut keys = vec![key; clicked.abs_diff(highlighted)];
     keys.push(Key::Enter);
@@ -179,7 +180,7 @@ fn draw_item(painter: &egui::Painter, item: &Item, pt: &dyn Fn(f32, f32) -> Pos2
             let room = (shown.chars().count() * CELL) as f32;
             let left = (item.x + indent) as f32;
             let middle = [left + room / 2.0, item.y as f32 + SMALL_MIDDLE];
-            let color = if item.rows[0][0] { LCD_BG } else { LCD_INK };
+            let color = if item.inverted() { LCD_BG } else { LCD_INK };
             draw_fitted_text(painter, shown, middle, room, SMALL_CAP, FontFamily::Proportional, Align::Min, pt, color);
         }
         Content::Text { text: bytes, font: Font::Small } => {

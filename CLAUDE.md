@@ -138,7 +138,7 @@ cargo run --release -p hp48 --example selftest
 
 **The hi-res display** (`crates/hp48/src/hires.rs`) is a second display over the LCD, held by the host, not in calculator memory. The ROM's code moves to it one call at a time; the LCD stays for whatever doesn't know about it, such as external programs.
 
-- A command is one nibble written to #00135 (`HIRES`, unused on the real calculator) after `SAVPTR`, with the arguments on the RPL stack at `DSKTOP`. Writes there do nothing on other hardware.
+- A command is one nibble written to #00135 (`HIRES`, unused on the real calculator) after `SAVPTR`, with the arguments on the RPL stack at `DSKTOP`. Writes there do nothing on other hardware. All 16 codes are in use, so another command needs a second nibble or an argument.
 - `HiSend` (`#command ->`) sends a command. The words built on it, in `3E005-keys.s`:
   - `HiGrobDisp` (`#x #y grob ->`), XYGROBDISP that also sends the grob. `ELShowPic` uses it.
   - `HiMakeLabel` and `HiMenuGrob!`: every menu label. `MakeLabel` knows a label's text and `Grob>Menu` its column, so the display remembers which text made which grob and looks it up by contents, plain and inverted. Grob labels with no text stay on the LCD.
@@ -148,6 +148,7 @@ cargo run --release -p hp48 --example selftest
   - `Hi$>grob`, `Hi$>GROB`, `HiRIGHT$3x6` and `HiGROB!`: the status line, path, clock and two-line messages (`DISPSTATUS2`). Like labels, the text that made a grob is remembered by its contents, and `HiGROB!` looks it up when the grob reaches the display.
   - `HiDispRow1` and `HiDispRow2`: error messages, which call `DISPROW1` and `DISPROW2` directly.
   - `HiIntoGrob` and `HiBoxGROB!`: Choose boxes (library 0B3). A row's text goes into a row grob, so the display remembers the row grob's contents, plain and inverted (`Content::ListRow`); `HiGROB!` finds it when the row is drawn, inverted for the highlight, or moved as one block by a scroll (`Hires::show_copy` cuts the block into rows). `HiBoxGROB!` says a box covers an area: only its edge is compared with the LCD (`Content::Box`), and items under it show around it (`Item::covers`). A grob copied over the whole box ends it.
+  - `HiRowDisp` and `HiArrowDisp`: the browser (library 0E0: the Equation Library's lists and the MES). Its rows are drawn straight from text, and its highlight is a row and a line bigger than the row, so `show_copy` looks for known rows anywhere in a grob it doesn't know. Its arrows are grobs, told apart by their shape and shown as `↑` and `↓`.
 - `cargo run --release -p hp48 --example hiresdump -- "1 Enter 0 Div"` prints what the display holds after a key script, with the expected and actual pixels of hidden items.
 - Not moved yet: the other calls of the `DISPROWn`/`DISPN` family (about 100, in applications and browsers: a wrapper per row costs about 40 nibbles, so all of them at once would want a patch in the primitive), the rest of the `$>grob` and `$>GROB` calls, and the grobs of INFORM and the like. Choose boxes with check marks stay traced, row by row.
 - The new words also draw on the LCD for now, so code that reads the display still works.

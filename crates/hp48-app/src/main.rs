@@ -1248,6 +1248,37 @@ mod tests {
     }
 
     #[test]
+    fn a_click_in_the_equation_library_opens_a_subject() {
+        let Some(mut window) = Window::new() else { return };
+        window.line("EQNLIB");
+        window.run(2.0);
+        let _ = window.app.m().sync_hires();
+        window.frame(Vec::new());
+        let places = window.places(list_row);
+        assert_eq!(places.len(), 6);
+        let (x, y) = places[2];
+        window.click(x, y);
+        window.run(2.0);
+        let _ = window.app.m().sync_hires();
+        let rows = window.rows();
+        assert!(rows.iter().any(|row| row == "Pressure at Depth"), "{rows:?}");
+    }
+
+    #[test]
+    fn a_click_on_the_browser_arrow_turns_the_page() {
+        let Some(mut window) = Window::new() else { return };
+        window.line("EQNLIB");
+        window.run(2.0);
+        let _ = window.app.m().sync_hires();
+        window.frame(Vec::new());
+        let first = window.rows();
+        let down = |item: &hp48::hires::Item| matches!(&item.content, Content::Text { text, .. } if text.len() == 1 && hp48_rpl::hp_char(text[0]) == '↓');
+        let (x, y) = window.places(down)[0];
+        window.click(x, y);
+        assert_ne!(window.rows(), first);
+    }
+
+    #[test]
     fn a_click_beside_the_rows_does_nothing() {
         let Some(mut window) = Window::new() else { return };
         window.choose();
