@@ -150,6 +150,7 @@ cargo run --release -p hp48 --example selftest
 - The new words also draw on the LCD for now, so code that reads the display still works.
 - The LCD wins: `Hires::sync` shows an item only while the LCD under it shows what it replaced, and shows it again if those pixels come back (the same pixels mean the same text). That covers clearing, switching displays, the interactive stack's marker and programs writing to memory directly, with no ROM changes. It only works while the LCD has a copy to compare, so a word that draws on the hi-res display alone will need explicit commands from the routines that clear the LCD (`CLEARLCD`, `CLCD10`, `BLANKIT`, `CLEARVDISP`, ...).
 - The display isn't saved with continuous memory.
+- `crates/hp48/tests/compat.rs` holds the customised ROM to revision R for what external programs can see: the same LCD over the tour, from a fresh boot for each line, the same free memory, the same display read back, calls by address, and machine code run from RAM that writes to display memory or points `DISPADDR` at its own screen.
 
 ### Translating ROM routines to Rust (HLE)
 
