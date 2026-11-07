@@ -102,6 +102,7 @@ Run the Python tests from the repo root with `python -m unittest discover -s tes
   - The LCD is drawn either from the vector scene (the default, cached per frame contents) or as pixel rectangles.
   - `plot.rs` draws `hp48_rpl::plot` output in a separate resizable viewport, with zoom and pan. The viewport opens by itself when the calculator shows PICT (VDISP #806DA equals GDISP).
   - `diagram.rs` draws Equation Library pictures from vector art (so far Elastic Buckling). The ROM's pictures are bitmaps, with no drawing code to scale, so the picture viewer sends the grob to the hi-res display, and the art for that grob (by contents) is drawn in the bitmap's place, as large as fits above the menu. The bitmap still goes to the LCD, so →PICT and SOLVEQN work on it. A picture in PICT isn't sent, so it stays traced, and so does every picture on the original ROM. Art uses the bitmap's coordinates, and its tests hold it to the bitmap in both directions (within 2 pixels). The LCD's context menu or `--no-hires` turns off the whole hi-res display.
+  - Menu labels on the LCD work as the menu keys under them (`menu_key_at`): press and hold follow the mouse's left button, and an empty slot or a hidden menu does nothing.
   - Ctrl+V types the clipboard into the calculator.
   - `persist.rs` gives the calculator continuous memory: save on exit, and advance TIMER2 by the wall-clock time spent closed.
 

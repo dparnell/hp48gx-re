@@ -20,7 +20,7 @@ pub enum Action {
     Key(Key),
 }
 
-const MENU_KEYS: [Key; 6] = [Key::A, Key::B, Key::C, Key::D, Key::E, Key::F];
+pub const MENU_KEYS: [Key; 6] = [Key::A, Key::B, Key::C, Key::D, Key::E, Key::F];
 /// Most levels shown; deeper levels are counted only.
 const MAX_LEVELS: usize = 500;
 

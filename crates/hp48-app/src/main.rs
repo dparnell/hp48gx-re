@@ -20,6 +20,8 @@
 //! State is kept in %APPDATA%/HP48GX/state.bin (or $XDG_DATA_HOME/HP48GX);
 //! set HP48GX_STATE to use another file.
 //!
+//! Menu labels on the LCD work as the menu keys under them.
+//!
 //! The calculator runs on a thread of its own (runner.rs), and the window
 //! is drawn again only when what it shows changes. At full speed (the
 //! LCD's context menu, or --full-speed) the CPU runs as fast as the computer
@@ -457,7 +459,21 @@ impl App {
             self.show_plot(ui.ctx());
         }
 
-        let mut new_mouse: HashSet<Key> = HashSet::new();
+        // The menu labels on the LCD work as their keys.
+        let label_at = |app: &Self, p: Pos2| {
+            let face = (p - origin) / scale;
+            let px = LCD_W / LCD_WIDTH as f32;
+            menu_key_at(&app.m(), (face.x - MARGIN - 1.0) / px, (face.y - LCD_TOP) / px)
+        };
+        if lcd_resp.hover_pos().is_some_and(|p| label_at(self, p).is_some()) {
+            ui.ctx().set_cursor_icon(egui::CursorIcon::PointingHand);
+        }
+        let label_held = ui
+            .input(|i| i.pointer.primary_down().then(|| i.pointer.press_origin()).flatten())
+            .filter(|_| lcd_resp.is_pointer_button_down_on())
+            .and_then(|p| label_at(self, p));
+
+        let mut new_mouse: HashSet<Key> = label_held.into_iter().collect();
         let keyboard_live = self.m().hw.keyboard.input(0x1FF) != 0;
         for (row_i, row) in ROWS.iter().enumerate() {
             // ENTER is double width, so its row also uses a six-column grid.
@@ -493,6 +509,26 @@ impl App {
         self.mouse_keys = new_mouse;
 
     }
+}
+
+/// The menu key whose label is at a point on the LCD, in pixels. The rows
+/// after the line count show the menu, when there are any. An empty slot is
+/// a plain bar (or blank): below its top row, all one colour.
+fn menu_key_at(m: &Machine, x: f32, y: f32) -> Option<Key> {
+    let top = match m.hw.line_count() {
+        0 | 63 => return None,
+        lines => usize::from(lines) + 1,
+    };
+    let inside = (0.0..LCD_WIDTH as f32).contains(&x) && (top as f32..LCD_HEIGHT as f32).contains(&y);
+    let lcd = m.lcd();
+    if !inside || !lcd.on {
+        return None;
+    }
+    let slot = x as usize / 22;
+    let columns = 22 * slot..(22 * slot + 21).min(LCD_WIDTH);
+    let mut label = lcd.pixels[top + 1..].iter().flat_map(|row| &row[columns.clone()]);
+    let first = label.next()?;
+    label.any(|pixel| pixel != first).then_some(desk::MENU_KEYS[slot])
 }
 
 impl App {
@@ -972,4 +1008,105 @@ fn main() -> eframe::Result {
             Ok(Box::new(app))
         }),
     )
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use egui::{Event, Modifiers, PointerButton, RawInput};
+
+    /// A window on a booted calculator, with exactly 7.5 pixels to a unit.
+    struct Window {
+        app: App,
+        ctx: egui::Context,
+    }
+
+    impl Window {
+        fn new() -> Option<Self> {
+            let rom = std::fs::read(hp48::default_rom_path()).ok()?;
+            let ctx = egui::Context::default();
+            install_fonts(&ctx);
+            let app = App::new(&rom, Some(String::new()), Vec::new(), false);
+            let window = Window { app, ctx };
+            window.run(3.0);
+            window.app.m().tap(Key::F); // "Try To Recover Memory?" NO
+            window.run(4.0);
+            Some(window)
+        }
+
+        fn run(&self, seconds: f64) {
+            self.app.m().run((seconds * CPU_HZ as f64) as u64);
+        }
+
+        fn line(&self, line: &str) {
+            let mut m = self.app.m();
+            m.type_text(line).unwrap();
+            m.tap(Key::Enter);
+            m.run(2 * CPU_HZ);
+        }
+
+        fn frame(&mut self, events: Vec<Event>) {
+            let rect = Rect::from_min_size(Pos2::ZERO, Vec2::new(450.0, 840.0));
+            let input = RawInput { screen_rect: Some(rect), events, ..Default::default() };
+            let (app, ctx) = (&mut self.app, &self.ctx);
+            let _ = ctx.run_ui(input, |ui| app.calculator_ui(ui, rect));
+        }
+
+        /// Hold a button at an LCD pixel, and say which keys that holds.
+        fn hold(&mut self, button: PointerButton, x: f32, y: f32) -> Vec<Key> {
+            let px = LCD_W / LCD_WIDTH as f32;
+            let pos = Pos2::new(MARGIN + 1.0 + x * px, LCD_TOP + y * px) * 7.5;
+            let press = |pressed| Event::PointerButton { pos, button, pressed, modifiers: Modifiers::NONE };
+            self.frame(vec![Event::PointerMoved(pos)]);
+            self.frame(vec![press(true)]);
+            let held = self.app.mouse_keys.iter().copied().collect();
+            self.run(0.2);
+            self.frame(vec![press(false)]);
+            self.frame(Vec::new());
+            assert!(self.app.mouse_keys.is_empty());
+            self.run(1.0);
+            held
+        }
+
+        fn menu(&self) -> Vec<[bool; LCD_WIDTH]> {
+            self.app.m().lcd().pixels[56..].to_vec()
+        }
+    }
+
+    #[test]
+    fn a_label_on_the_lcd_presses_its_key() {
+        let Some(mut window) = Window::new() else { return };
+        window.frame(Vec::new());
+        let before = window.menu();
+        assert_eq!(window.hold(PointerButton::Primary, 22.0 * 2.0 + 10.0, 60.0), [Key::C]);
+        assert_ne!(window.menu(), before, "LIST opens its own menu");
+    }
+
+    #[test]
+    fn the_context_menu_button_presses_nothing() {
+        let Some(mut window) = Window::new() else { return };
+        window.frame(Vec::new());
+        assert_eq!(window.hold(PointerButton::Secondary, 10.0, 60.0), []);
+    }
+
+    #[test]
+    fn only_the_labels_are_keys() {
+        let Some(mut window) = Window::new() else { return };
+        window.line("{ A } TMENU");
+        window.frame(Vec::new());
+        assert_eq!(window.hold(PointerButton::Primary, 10.0, 30.0), [], "above the menu");
+        assert_eq!(window.hold(PointerButton::Primary, 22.0 * 3.0 + 10.0, 60.0), [], "an empty slot");
+        assert_eq!(window.hold(PointerButton::Primary, 10.0, 60.0), [Key::A]);
+    }
+
+    #[test]
+    fn with_the_menu_hidden_there_are_no_labels() {
+        let Some(mut window) = Window::new() else { return };
+        window.line("PICTURE");
+        window.app.m().tap(Key::Minus);
+        window.run(1.0);
+        window.frame(Vec::new());
+        assert_eq!(window.app.m().hw.line_count() & 63, 63);
+        assert_eq!(window.hold(PointerButton::Primary, 10.0, 60.0), []);
+    }
 }
