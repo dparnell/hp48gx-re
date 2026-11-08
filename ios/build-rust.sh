@@ -12,4 +12,10 @@ esac
 unset SDKROOT LIBRARY_PATH
 cd "$PROJECT_DIR/.."
 rustup target add "$target" >/dev/null 2>&1 || true
-exec cargo build --release -p hp48-ios --target "$target"
+# Debug builds can run a script at launch, for ios/screenshots.sh; App
+# Store builds (Release) can't.
+features=
+if [ "${CONFIGURATION:-}" = Debug ]; then
+    features="--features demo-script"
+fi
+exec cargo build --release -p hp48-ios --target "$target" $features

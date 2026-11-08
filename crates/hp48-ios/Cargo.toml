@@ -11,3 +11,6 @@ crate-type = ["staticlib", "rlib"]
 [dependencies]
 hp48-app = { path = "../hp48-app" }
 log = "0.4"
+
+[features]
+demo-script = ["hp48-app/demo-script"]

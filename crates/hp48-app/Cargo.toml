@@ -12,3 +12,8 @@ hp48-rpl = { version = "0.1.0", path = "../hp48-rpl" }
 hp48-vector = { version = "0.1.0", path = "../hp48-vector" }
 png = "0.18.1"
 cpal = "0.18.2"
+
+[features]
+# Run a script from HP48_SCRIPT at launch on iOS, to stage screenshots
+# (ios/screenshots.sh). ios/build-rust.sh turns it on for Debug builds only.
+demo-script = []

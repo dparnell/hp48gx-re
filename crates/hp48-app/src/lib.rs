@@ -145,6 +145,10 @@ struct App {
     typing: VecDeque<Key>,
     typing_down: Option<Key>,
     typing_at: u64,
+    /// A demonstration script still to run, and the end of its current
+    /// wait (`parse_demo`).
+    demo: VecDeque<DemoStep>,
+    demo_wait: Option<Instant>,
     layout: Layout,
     desk: desk::Desk,
     display: Display,
@@ -219,6 +223,8 @@ impl App {
             typing: VecDeque::new(),
             typing_down: None,
             typing_at: 0,
+            demo: VecDeque::new(),
+            demo_wait: None,
             layout: Layout::Auto,
             desk: desk::Desk::default(),
             display: Display::Vector,
@@ -304,6 +310,28 @@ impl App {
                 Ok(keys) => break self.typing.extend(keys),
                 Err(c) => text.retain(|t| t != c),
             }
+        }
+    }
+
+    /// Go on with the demonstration script: its keys and text go through
+    /// the typing queue, and a wait starts once they are typed.
+    fn run_demo(&mut self, ctx: &egui::Context) {
+        while !self.is_typing() {
+            if let Some(until) = self.demo_wait {
+                let now = Instant::now();
+                if now < until {
+                    ctx.request_repaint_after(until - now);
+                    return;
+                }
+                self.demo_wait = None;
+            }
+            match self.demo.pop_front() {
+                None => return,
+                Some(DemoStep::Key(k)) => self.typing.push_back(k),
+                Some(DemoStep::Type(text)) => self.type_text(&text),
+                Some(DemoStep::Wait(s)) => self.demo_wait = Some(Instant::now() + Duration::from_secs_f64(s)),
+            }
+            ctx.request_repaint();
         }
     }
 
@@ -422,9 +450,12 @@ impl eframe::App for App {
                 self.idle_frames += 1;
                 ctx.request_repaint_after(Duration::from_secs_f64((self.end_time - self.script_time).max(0.0) + 0.05));
             }
-        } else if self.is_typing() {
-            self.type_ahead();
-            ctx.request_repaint();
+        } else {
+            self.run_demo(ctx);
+            if self.is_typing() {
+                self.type_ahead();
+                ctx.request_repaint();
+            }
         }
         self.handle_keyboard(ctx);
         self.watch_pict();
@@ -1112,10 +1143,47 @@ fn parse_keys(list: &str) -> Vec<Option<Key>> {
             if n.eq_ignore_ascii_case("wait") {
                 return None;
             }
-            Some(Key::ALL
-                .into_iter()
-                .find(|k| format!("{k:?}").eq_ignore_ascii_case(n) || format!("{k:?}").eq_ignore_ascii_case(&format!("N{n}")))
-                .unwrap_or_else(|| panic!("unknown key {n}")))
+            Some(key_named(n).unwrap_or_else(|| panic!("unknown key {n}")))
+        })
+        .collect()
+}
+
+/// A key by its `Key` variant name, ignoring case; digits may drop the N.
+fn key_named(n: &str) -> Option<Key> {
+    Key::ALL
+        .into_iter()
+        .find(|k| format!("{k:?}").eq_ignore_ascii_case(n) || format!("{k:?}").eq_ignore_ascii_case(&format!("N{n}")))
+}
+
+/// A step of a demonstration script (`App::demo`).
+// Only builds with the `demo-script` feature read a script (mobile.rs).
+#[cfg_attr(not(feature = "demo-script"), allow(dead_code))]
+#[derive(Clone, Debug, PartialEq)]
+enum DemoStep {
+    Key(Key),
+    /// Text typed as keystrokes.
+    Type(String),
+    /// Seconds to wait, from when the keys before are typed.
+    Wait(f64),
+}
+
+/// A demonstration script, as `hp48-app --keys` takes but with typing:
+/// key names, `wait` (one second) or `wait:SECONDS`, and `type:TEXT` with
+/// `~` for a space. Used to stage screenshots on iOS (mobile.rs).
+#[cfg_attr(not(feature = "demo-script"), allow(dead_code))]
+fn parse_demo(script: &str) -> Result<Vec<DemoStep>, String> {
+    script
+        .split_whitespace()
+        .map(|t| {
+            if t.eq_ignore_ascii_case("wait") {
+                Ok(DemoStep::Wait(1.0))
+            } else if let Some(s) = t.strip_prefix("wait:") {
+                s.parse().map(DemoStep::Wait).map_err(|_| format!("bad wait {t}"))
+            } else if let Some(text) = t.strip_prefix("type:") {
+                Ok(DemoStep::Type(text.replace('~', " ")))
+            } else {
+                key_named(t).map(DemoStep::Key).ok_or_else(|| format!("unknown key {t}"))
+            }
         })
         .collect()
 }
@@ -1399,6 +1467,24 @@ mod tests {
         let before = window.menu();
         assert_eq!(window.hold(PointerButton::Primary, 22.0 * 2.0 + 10.0, 60.0), [Key::C]);
         assert_ne!(window.menu(), before, "LIST opens its own menu");
+    }
+
+    #[test]
+    fn demo_scripts_parse() {
+        assert_eq!(
+            parse_demo("F wait type:1~2 Enter wait:0.5 N7 7").unwrap(),
+            [
+                DemoStep::Key(Key::F),
+                DemoStep::Wait(1.0),
+                DemoStep::Type("1 2".into()),
+                DemoStep::Key(Key::Enter),
+                DemoStep::Wait(0.5),
+                DemoStep::Key(Key::N7),
+                DemoStep::Key(Key::N7),
+            ]
+        );
+        assert!(parse_demo("Nope").is_err());
+        assert!(parse_demo("wait:x").is_err());
     }
 
     #[test]

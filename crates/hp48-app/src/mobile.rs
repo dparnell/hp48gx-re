@@ -40,6 +40,16 @@ pub fn run(rom: Vec<u8>) -> eframe::Result {
             app.mobile = true;
             let _ = MACHINE.set(app.machine.clone());
             app.start(&cc.egui_ctx);
+            // Debug builds only (the `demo-script` feature): a script to
+            // stage screenshots with (`ios/screenshots.sh`). App Store
+            // builds have no such hook.
+            #[cfg(feature = "demo-script")]
+            if let Ok(script) = std::env::var("HP48_SCRIPT") {
+                match crate::parse_demo(&script) {
+                    Ok(steps) => app.demo = steps.into(),
+                    Err(e) => eprintln!("HP48_SCRIPT: {e}"),
+                }
+            }
             Ok(Box::new(app))
         }),
     )

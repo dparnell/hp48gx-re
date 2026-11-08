@@ -39,6 +39,32 @@ Only Apple Silicon simulators are built (`EXCLUDED_ARCHS = x86_64`).
 Info.plist declares no non-exempt encryption (`ITSAppUsesNonExemptEncryption`),
 so App Store Connect doesn't ask about export compliance.
 
+## Screenshots
+
+`ios/screenshots/` holds App Store screenshots: 6.9-inch iPhone (1320 × 2868)
+and 13-inch iPad (2064 × 2752) in portrait, and one iPad shot in landscape
+(2752 × 2064) with the stack panel beside the calculator. App Store Connect
+scales them down for smaller devices. To take the portrait ones again:
+
+```bash
+ios/screenshots.sh
+```
+
+It builds the Debug app and, for each shot, installs it afresh, sets a clean
+status bar (9:41, full battery), and launches it with a script in
+`HP48_SCRIPT`. Debug builds run that script at launch (the `demo-script`
+feature that `build-rust.sh` turns on for Debug); Release builds, and so App
+Store builds, don't contain it. The script has key names, `wait` or
+`wait:SECONDS`, and `type:TEXT` with `~` for a space. `ONLY="2-plot"` retakes
+just the shots named. A line that ends in an operator runs as the key is
+pressed, so its script has no `Enter` after it (unless `{` or `«` put the
+command line in program-entry mode).
+
+`simctl` can't rotate a simulator, so the landscape shot
+(`ipad-13/5-landscape-desktop.png`) was taken by hand: launch the stack
+scene on the iPad, rotate it (Device ▸ Rotate Left), and save it with
+`xcrun simctl io booted screenshot`, which comes out upright.
+
 ## How the app behaves
 
 - UIKit requires the scene life cycle, which winit (under eframe) doesn't
