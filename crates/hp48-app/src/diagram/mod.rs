@@ -332,9 +332,45 @@ mod tests {
         for shape in &d.shapes {
             match shape {
                 Shape::Stroke(l) => out.extend(along(&l.points, l.closed)),
-                Shape::Fill { points, light: false } => out.extend(along(points, true)),
+                Shape::Fill { points, light: false } => {
+                    out.extend(along(points, true));
+                    out.extend(inside(points));
+                }
                 _ => {}
             }
+        }
+        out
+    }
+
+    /// Points inside a convex polygon, half a pixel apart.
+    fn inside(points: &[[f32; 2]]) -> Vec<[f32; 2]> {
+        let (mut lo, mut hi) = ([f32::MAX; 2], [f32::MIN; 2]);
+        for p in points {
+            for i in 0..2 {
+                lo[i] = lo[i].min(p[i]);
+                hi[i] = hi[i].max(p[i]);
+            }
+        }
+        // Inside: on the same side of every edge.
+        let side = |q: [f32; 2], i: usize| {
+            let (a, b) = (points[i], points[(i + 1) % points.len()]);
+            (b[0] - a[0]) * (q[1] - a[1]) - (b[1] - a[1]) * (q[0] - a[0])
+        };
+        let within = |q: [f32; 2]| {
+            let sides: Vec<f32> = (0..points.len()).map(|i| side(q, i)).collect();
+            sides.iter().all(|&v| v >= 0.0) || sides.iter().all(|&v| v <= 0.0)
+        };
+        let mut out = Vec::new();
+        let mut y = lo[1];
+        while y <= hi[1] {
+            let mut x = lo[0];
+            while x <= hi[0] {
+                if within([x, y]) {
+                    out.push([x, y]);
+                }
+                x += 0.5;
+            }
+            y += 0.5;
         }
         out
     }
@@ -362,6 +398,42 @@ mod tests {
         let wanted = |d: &&Diagram| only.as_deref().is_none_or(|name| name == d.name);
         let problems: Vec<String> = all().iter().filter(wanted).filter_map(|d| check(d).map(|p| format!("{}: {p}", d.name))).collect();
         assert!(problems.is_empty(), "{}", problems.join("\n"));
+    }
+
+    /// The Equation Library's pictures in the firmware source: each label
+    /// `EqPicName:` and the position on the line after it, `{ BINTx BINTy`.
+    fn rom_pictures() -> Vec<(String, usize, usize)> {
+        let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../firmware/upper");
+        let mut found = Vec::new();
+        for entry in std::fs::read_dir(dir).expect("firmware/upper") {
+            let path = entry.unwrap().path();
+            if !path.to_string_lossy().ends_with("-lib0E2.s") {
+                continue;
+            }
+            let source = std::fs::read_to_string(&path).unwrap();
+            let mut lines = source.lines();
+            while let Some(line) = lines.next() {
+                let Some(name) = line.strip_prefix("EqPic").and_then(|rest| rest.strip_suffix(':')) else { continue };
+                let words: Vec<&str> = lines.next().unwrap().split_whitespace().collect();
+                let bint = |word: &str| word.strip_prefix("BINT").and_then(|n| n.parse().ok()).unwrap_or_else(|| panic!("{name}: {word}"));
+                assert_eq!(words[0], "{", "{name}");
+                found.push((name.to_string(), bint(words[1]), bint(words[2])));
+            }
+        }
+        found
+    }
+
+    #[test]
+    fn every_picture_has_art_where_the_rom_puts_it() {
+        let rom = rom_pictures();
+        assert_eq!(rom.len(), 63);
+        let art = all();
+        let missing: Vec<_> = rom.iter().filter(|(name, ..)| !art.iter().any(|d| d.name == name)).map(|p| &p.0).collect();
+        assert!(missing.is_empty(), "no art for {missing:?}");
+        for d in &art {
+            let place = rom.iter().find(|(name, ..)| name == d.name).map(|&(_, x, y)| (x, y));
+            assert_eq!(place, Some((d.x, d.y)), "{}", d.name);
+        }
     }
 
     #[test]
