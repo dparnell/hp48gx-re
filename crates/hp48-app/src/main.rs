@@ -1,6 +1,6 @@
 //! HP 48GX desktop calculator.
 //!
-//! hp48-app [--rom PATH] [--screenshot OUT.png] [--keys "K ..."] [--type "RPL text"]... [--persist] [--pixels] [--plot-only]
+//! hp48-app [--rom PATH] [--screenshot OUT.png] [--diagram NAME [--diagram-under]] [--keys "K ..."] [--type "RPL text"]... [--persist] [--pixels] [--plot-only]
 //!          [--layout auto|calculator|desktop] [--size WxH] [--line "RPL text"]... [--live] [--full-speed]
 //!          [--then "K ..."] [--no-hires]
 //!
@@ -121,6 +121,10 @@ struct App {
     scene_cache: std::cell::RefCell<SceneCache>,
     /// Pictures redrawn as vector art, for the hi-res display.
     diagrams: Vec<diagram::Diagram>,
+    /// Debug: draw this picture's art whatever the LCD shows, and maybe its
+    /// bitmap faintly under it (`--diagram NAME`, `--diagram-under`).
+    forced_diagram: Option<String>,
+    diagram_under: bool,
     /// Draw the hi-res display over the LCD.
     hires: bool,
     /// The ROM's minifont, recognised in the LCD and drawn with a real font.
@@ -187,6 +191,8 @@ impl App {
             display: Display::Vector,
             scene_cache: std::cell::RefCell::new(None),
             diagrams: diagram::all(),
+            forced_diagram: None,
+            diagram_under: false,
             hires: true,
             persistent,
             mouse_keys: HashSet::new(),
@@ -400,6 +406,18 @@ impl eframe::App for App {
         }
         let full = ui.max_rect();
         ui.painter().rect_filled(full, CornerRadius::ZERO, Color32::from_rgb(0x12, 0x12, 0x14));
+        if let Some(d) = self.forced_diagram.as_ref().and_then(|name| self.diagrams.iter().find(|d| d.name == name)) {
+            // Debug: the picture alone, filling the window.
+            let px = (full.width() / LCD_WIDTH as f32).min(full.height() / diagram::AREA_ROWS as f32);
+            let area = Rect::from_min_size(full.min, Vec2::new(LCD_WIDTH as f32, diagram::AREA_ROWS as f32) * px);
+            ui.painter().rect_filled(area, CornerRadius::ZERO, LCD_BG);
+            let pt = |x: f32, y: f32| full.min + Vec2::new(x, y) * px;
+            if self.diagram_under {
+                d.draw_bitmap(ui.painter(), &pt);
+            }
+            d.draw(ui.painter(), &pt, px);
+            return;
+        }
         let desktop = match self.layout {
             Layout::Auto => full.width() >= DESK_MIN_WIDTH && full.width() >= full.height(),
             Layout::Calculator => false,
@@ -696,6 +714,9 @@ impl App {
                     draw_mini_text(painter, t, &pt, if t.light { LCD_BG } else { LCD_INK });
                 }
                 if let Some(d) = diagram {
+                    if self.diagram_under {
+                        d.draw_bitmap(painter, &pt);
+                    }
                     d.draw(painter, &pt, px * scale);
                 }
                 items.iter().for_each(|item| hires_text::draw(painter, item, &pt));
@@ -706,6 +727,9 @@ impl App {
     /// The picture to draw from the hi-res display, if it holds one we have
     /// art for.
     fn hires_diagram(&self, items: &[hp48::hires::Item], lcd: &hp48::Lcd) -> Option<&diagram::Diagram> {
+        if let Some(name) = &self.forced_diagram {
+            return self.diagrams.iter().find(|d| d.name == name);
+        }
         items.iter().find_map(|item| self.diagrams.iter().find(|d| d.is(item) && d.shown_on(&lcd.pixels)))
     }
 
@@ -994,6 +1018,8 @@ fn main() -> eframe::Result {
     let mut live = false;
     let mut full_speed = false;
     let mut natives = true;
+    let mut forced_diagram = None;
+    let mut diagram_under = false;
     let mut layout = Layout::Auto;
     let mut size = [420.0, 784.0];
     while let Some(a) = args.next() {
@@ -1033,6 +1059,13 @@ fn main() -> eframe::Result {
             }
             "--then" => then = parse_keys(&args.next().expect("--then LIST")),
             "--no-hires" => hires = false,
+            "--diagram" => {
+                let name = args.next().expect("--diagram NAME");
+                let names: Vec<_> = diagram::all().iter().map(|d| d.name).collect();
+                assert!(names.contains(&name.as_str()), "--diagram: one of {names:?}");
+                forced_diagram = Some(name);
+            }
+            "--diagram-under" => diagram_under = true,
             other => panic!("unknown argument {other}"),
         }
     }
@@ -1072,6 +1105,8 @@ fn main() -> eframe::Result {
             }
             app.hires = hires;
             app.plot_only = plot_only;
+            app.forced_diagram = forced_diagram;
+            app.diagram_under = diagram_under;
             app.layout = layout;
             Ok(Box::new(app))
         }),

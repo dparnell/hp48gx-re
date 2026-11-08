@@ -13,6 +13,28 @@
 //! Coordinates are in the bitmap's pixels: pixel (x, y) covers x..x+1, y..y+1.
 //! The tests hold the art to the bitmap, so a drawing can't drift from what
 //! the ROM shows or leave part of it out.
+//!
+//! The pictures are in a file per subject, named as the ROM names them
+//! (`EqPicElasticBuckling` in `firmware/upper/F3F3C-lib0E2.s` is
+//! `ElasticBuckling`), with the drawing helpers they share here.
+//! `hp48-app --diagram NAME --screenshot OUT.png` draws one of them whatever
+//! the calculator shows, and `--diagram-under` adds its bitmap, faintly.
+
+mod circuits;
+mod columns;
+mod devices;
+mod electricity;
+mod fluids;
+mod forces;
+mod gases;
+mod heat;
+mod magnetism;
+mod motion;
+mod optics;
+mod oscillations;
+mod plane;
+mod solid;
+mod stress;
 
 use crate::{draw_polyline, CAP, CAP_TOP, LCD_BG, LCD_INK};
 use eframe::egui::{self, Color32, FontId, Pos2, Stroke};
@@ -21,7 +43,7 @@ use hp48::{LCD_HEIGHT, LCD_WIDTH};
 use hp48_vector::Polyline;
 
 /// LCD rows above the menu, the area a picture is fitted to.
-const AREA_ROWS: usize = 56;
+pub const AREA_ROWS: usize = 56;
 /// Stroke width of thin lines, in bitmap pixels.
 const LINE: f32 = 0.7;
 
@@ -35,6 +57,8 @@ enum Shape {
 }
 
 pub struct Diagram {
+    /// The ROM's name for the picture, without `EqPic`.
+    pub name: &'static str,
     /// Where the ROM puts the bitmap, and the bitmap by rows.
     x: usize,
     y: usize,
@@ -45,9 +69,10 @@ pub struct Diagram {
 }
 
 impl Diagram {
-    fn new(x: usize, y: usize, png: &[u8], shapes: Vec<Shape>) -> Self {
+    /// The art for the picture `name`, which the ROM puts at (`x`, `y`).
+    fn new(name: &'static str, x: usize, y: usize, png: &[u8], shapes: Vec<Shape>) -> Self {
         let bitmap = decode(png);
-        Diagram { x, y, hash: hp48::hires::hash(&bitmap), bitmap, shapes }
+        Diagram { name, x, y, hash: hp48::hires::hash(&bitmap), bitmap, shapes }
     }
 
     fn size(&self) -> (usize, usize) {
@@ -78,11 +103,7 @@ impl Diagram {
     /// Draw the picture as large as it fits above the menu. `pt` maps LCD
     /// pixels to the screen, and `pixel` is an LCD pixel's size on it.
     pub fn draw(&self, painter: &egui::Painter, pt: &dyn Fn(f32, f32) -> Pos2, pixel: f32) {
-        let (w, h) = self.size();
-        let (w, h) = (w as f32, h as f32);
-        let (area_w, area_h) = (LCD_WIDTH as f32, AREA_ROWS as f32);
-        let scale = ((area_w - 2.0) / w).min((area_h - 2.0) / h);
-        let (left, top) = ((area_w - w * scale) / 2.0, (area_h - h * scale) / 2.0);
+        let (left, top, scale) = self.place();
         let at = |x: f32, y: f32| pt(left + x * scale, top + y * scale);
         let unit = pixel * scale;
         for shape in &self.shapes {
@@ -96,6 +117,31 @@ impl Diagram {
                 Shape::Text { text, x, w, baseline, cap } => {
                     draw_text(painter, text, at(*x, *baseline), w * unit, cap * unit);
                 }
+            }
+        }
+    }
+}
+
+impl Diagram {
+    /// Where the picture goes, in LCD pixels: its left and top, and how many
+    /// LCD pixels a bitmap pixel takes.
+    fn place(&self) -> (f32, f32, f32) {
+        let (w, h) = self.size();
+        let (w, h) = (w as f32, h as f32);
+        let (area_w, area_h) = (LCD_WIDTH as f32, AREA_ROWS as f32);
+        let scale = ((area_w - 2.0) / w).min((area_h - 2.0) / h);
+        ((area_w - w * scale) / 2.0, (area_h - h * scale) / 2.0, scale)
+    }
+
+    /// Debug: the bitmap, faintly, where the art goes.
+    pub fn draw_bitmap(&self, painter: &egui::Painter, pt: &dyn Fn(f32, f32) -> Pos2) {
+        let (left, top, scale) = self.place();
+        let faint = Color32::from_rgba_unmultiplied(255, 0, 0, 70);
+        for (y, row) in self.bitmap.iter().enumerate() {
+            for (x, _) in row.iter().enumerate().filter(|(_, &on)| on) {
+                let (x, y) = (x as f32, y as f32);
+                let r = egui::Rect::from_min_max(pt(left + x * scale, top + y * scale), pt(left + (x + 1.0) * scale, top + (y + 1.0) * scale));
+                painter.rect_filled(r, 0.0, faint);
             }
         }
     }
@@ -146,6 +192,52 @@ fn arrow(from: [f32; 2], tip: [f32; 2]) -> Vec<Shape> {
     vec![line(&[from, [bx, by]]), fill(&[tip, [bx - 1.6 * uy, by + 1.6 * ux], [bx + 1.6 * uy, by - 1.6 * ux]])]
 }
 
+/// An open line along an ellipse centred on (`cx`, `cy`), from angle `from`
+/// to `to` in degrees: 0 points right and 90 down (y grows down).
+fn arc(cx: f32, cy: f32, rx: f32, ry: f32, from: f32, to: f32) -> Shape {
+    Shape::Stroke(Polyline { points: arc_points(cx, cy, rx, ry, from, to), closed: false })
+}
+
+fn arc_points(cx: f32, cy: f32, rx: f32, ry: f32, from: f32, to: f32) -> Vec<[f32; 2]> {
+    let steps = (((to - from).abs() / 360.0) * 48.0).ceil().max(2.0) as usize;
+    (0..=steps)
+        .map(|i| {
+            let a = (from + (to - from) * i as f32 / steps as f32).to_radians();
+            [cx + rx * a.cos(), cy + ry * a.sin()]
+        })
+        .collect()
+}
+
+/// A whole ellipse, as a closed line.
+fn ellipse(cx: f32, cy: f32, rx: f32, ry: f32) -> Shape {
+    let mut points = arc_points(cx, cy, rx, ry, 0.0, 360.0);
+    points.pop();
+    Shape::Stroke(Polyline { points, closed: true })
+}
+
+/// A circle, as a closed line.
+fn circle(cx: f32, cy: f32, r: f32) -> Shape {
+    ellipse(cx, cy, r, r)
+}
+
+/// A filled dot.
+fn dot(cx: f32, cy: f32, r: f32) -> Shape {
+    let mut points = arc_points(cx, cy, r, r, 0.0, 360.0);
+    points.pop();
+    fill(&points)
+}
+
+/// A closed line through the points.
+fn closed(points: &[[f32; 2]]) -> Shape {
+    Shape::Stroke(Polyline { points: points.to_vec(), closed: true })
+}
+
+/// Text centred in the box `x`..`x + w`, standing on `baseline`, its
+/// capitals `cap` tall. It shrinks to fit the box.
+fn text(text: &'static str, x: f32, w: f32, baseline: f32, cap: f32) -> Shape {
+    Shape::Text { text, x, w, baseline, cap }
+}
+
 /// A dashed horizontal line: dashes of 3 pixels, gaps of 2.
 fn dashes(x0: f32, x1: f32, y: f32) -> Vec<Shape> {
     let mut shapes = Vec::new();
@@ -186,73 +278,28 @@ fn pin(x: f32, y: f32) -> Vec<Shape> {
     vec![Shape::Fill { points: points.clone(), light: true }, Shape::Stroke(Polyline { points, closed: true })]
 }
 
-/// The pinned foot of a column: a triangle on hatched ground, under a pin.
-fn pinned_foot(x: f32) -> Vec<Shape> {
-    let mut shapes = vec![line(&[[x, 38.0], [x - 3.2, 41.5]]), line(&[[x, 38.0], [x + 3.2, 41.5]])];
-    shapes.extend(wall([x - 3.5, 41.5], [x + 3.5, 41.5], -2.5, 3.0));
-    shapes.extend(pin(x, 38.0));
-    shapes
-}
-
-/// A column, as thick as the bitmap's.
-fn column(x: f32, top: f32, bottom: f32) -> Shape {
-    rect(x - 1.5, top, x + 1.5, bottom)
-}
-
-/// A label under the column at `x`.
-fn k_label(text: &'static str, x: f32) -> Shape {
-    Shape::Text { text, x: x - 9.0, w: 18.0, baseline: 52.0, cap: 5.0 }
-}
-
-/// Euler's four cases of a column under load, with their factors K.
-fn elastic_buckling() -> Diagram {
-    let (c1, c2, c3, c4) = (22.5, 44.5, 69.5, 91.5);
-    let (top, foot) = (9.5, 37.5);
-    let mut s = vec![Shape::Text { text: "Pcr", x: 0.0, w: 15.0, baseline: 7.0, cap: 7.0 }];
-
-    // The load on each column.
-    s.extend(arrow([c1, 0.2], [c1, 5.0]));
-    s.extend(arrow([c2, 0.2], [c2, 5.0]));
-    s.extend(arrow([c3, 2.2], [c3, 7.0]));
-    s.extend(arrow([c4, 3.2], [c4, 8.0]));
-
-    // The lines through the ends of the columns.
-    for (from, to, y) in [(28.0, 40.0, top), (50.0, 67.0, top), (79.0, 87.0, top), (28.0, 40.0, foot), (48.0, 66.0, foot), (73.0, 86.0, foot)] {
-        s.extend(dashes(from, to, y));
-    }
-
-    // K=.5: fixed at both ends.
-    s.push(column(c1, top, foot));
-    s.extend(wall([c1 - 3.5, top], [c1 + 3.5, top], -2.5, -3.0));
-    s.extend(wall([c1 - 3.5, foot], [c1 + 3.5, foot], -2.5, 3.0));
-    // K=.7: fixed at the top, pinned at the foot.
-    s.push(column(c2, top, foot - 0.5));
-    s.extend(wall([c2 - 3.5, top], [c2 + 3.5, top], -2.5, -3.0));
-    s.extend(pinned_foot(c2));
-    // K=1: pinned at both ends, the top held from the side.
-    s.push(column(c3, top, foot - 0.5));
-    s.push(line(&[[c3, top], [74.0, 6.5]]));
-    s.push(line(&[[c3, top], [74.0, 12.5]]));
-    s.extend(wall([74.5, 6.0], [74.5, 13.0], 3.0, -2.0));
-    s.extend(pin(c3, top));
-    s.extend(pinned_foot(c3));
-    // K=2: fixed at the foot, free at the top.
-    s.push(column(c4, top, foot));
-    s.extend(wall([c4 - 3.5, foot], [c4 + 3.5, foot], -2.5, 3.0));
-
-    // The column's length.
-    s.push(line(&[[97.3, top], [103.7, top]]));
-    s.push(line(&[[97.3, foot], [103.7, foot]]));
-    s.extend(arrow([100.5, 16.0], [100.5, top + 0.4]));
-    s.extend(arrow([100.5, 30.0], [100.5, foot - 0.4]));
-    s.push(Shape::Text { text: "L", x: 97.0, w: 7.0, baseline: 27.0, cap: 7.0 });
-
-    s.extend([k_label("K=.5", c1), k_label("K=.7", c2), k_label("K=1", c3), k_label("K=2", c4)]);
-    Diagram::new(8, 2, include_bytes!("../../../firmware/images/F50DC-packed.png"), s)
-}
-
+/// Every picture with art, by subject.
 pub fn all() -> Vec<Diagram> {
-    vec![elastic_buckling()]
+    [
+        columns::all(),
+        circuits::all(),
+        electricity::all(),
+        fluids::all(),
+        forces::all(),
+        gases::all(),
+        heat::all(),
+        magnetism::all(),
+        motion::all(),
+        optics::all(),
+        oscillations::all(),
+        plane::all(),
+        solid::all(),
+        devices::all(),
+        stress::all(),
+    ]
+    .into_iter()
+    .flatten()
+    .collect()
 }
 
 #[cfg(test)]
@@ -308,20 +355,37 @@ mod tests {
         out
     }
 
+    /// Fails with every problem `check` finds, by picture. `DIAGRAM=NAME`
+    /// checks only that picture.
+    fn each(check: impl Fn(&Diagram) -> Option<String>) {
+        let only = std::env::var("DIAGRAM").ok();
+        let wanted = |d: &&Diagram| only.as_deref().is_none_or(|name| name == d.name);
+        let problems: Vec<String> = all().iter().filter(wanted).filter_map(|d| check(d).map(|p| format!("{}: {p}", d.name))).collect();
+        assert!(problems.is_empty(), "{}", problems.join("\n"));
+    }
+
+    #[test]
+    fn names_are_unique() {
+        let mut names: Vec<_> = all().iter().map(|d| d.name).collect();
+        names.sort_unstable();
+        let count = names.len();
+        names.dedup();
+        assert_eq!(names.len(), count);
+    }
+
     #[test]
     fn art_lies_on_the_bitmap() {
-        for d in all() {
-            let dark = dark_pixels(&d);
-            for p in ink(&d) {
-                assert!(dark.iter().any(|&q| near(p, q)), "art at {p:?} has no ink near it in the bitmap");
-            }
-        }
+        each(|d| {
+            let dark = dark_pixels(d);
+            let stray: Vec<_> = ink(d).into_iter().filter(|&p| !dark.iter().any(|&q| near(p, q))).collect();
+            (!stray.is_empty()).then(|| format!("{} points of art with no ink near them in the bitmap, first {:?}", stray.len(), stray[0]))
+        });
     }
 
     #[test]
     fn art_covers_the_bitmap() {
-        for d in all() {
-            let art = ink(&d);
+        each(|d| {
+            let art = ink(d);
             let in_text = |p: [f32; 2]| {
                 d.shapes.iter().any(|s| match s {
                     Shape::Text { x, w, baseline, cap, .. } => {
@@ -330,10 +394,9 @@ mod tests {
                     _ => false,
                 })
             };
-            for p in dark_pixels(&d) {
-                assert!(in_text(p) || art.iter().any(|&q| near(p, q)), "bitmap ink at {p:?} is not in the art");
-            }
-        }
+            let missed: Vec<_> = dark_pixels(d).into_iter().filter(|&p| !in_text(p) && !art.iter().any(|&q| near(p, q))).collect();
+            (!missed.is_empty()).then(|| format!("{} bitmap pixels not in the art, first {:?}", missed.len(), missed[0]))
+        });
     }
 
     /// An LCD showing the picture over a menu.
@@ -350,16 +413,23 @@ mod tests {
 
     #[test]
     fn recognises_the_picture_alone() {
-        for d in all() {
-            let shown = lcd(&d);
-            assert!(d.shown_on(&shown));
-            let mut cursor = shown;
-            cursor[20][60] ^= true;
-            assert!(!d.shown_on(&cursor), "a changed pixel inside the picture");
+        each(|d| {
+            let shown = lcd(d);
+            let (w, h) = d.size();
+            let mut inside = shown;
+            inside[d.y + h / 2][d.x + w / 2] ^= true;
             let mut beside = shown;
             beside[55][130] = true;
-            assert!(!d.shown_on(&beside), "something else above the menu");
-        }
+            if !d.shown_on(&shown) {
+                Some("not recognised".to_string())
+            } else if d.shown_on(&inside) {
+                Some("recognised with a changed pixel inside".to_string())
+            } else if d.shown_on(&beside) {
+                Some("recognised with something else above the menu".to_string())
+            } else {
+                None
+            }
+        });
     }
 
     /// A booted machine, with or without the
@@ -400,7 +470,7 @@ mod tests {
             assert!(!pictures(&m).any(|_| true), "no picture before the picture");
             m.tap(Key::D); // PIC
             m.run(2 * CPU_HZ);
-            let d = elastic_buckling();
+            let d = all().into_iter().find(|d| d.name == "ElasticBuckling").unwrap();
             let lcd = m.sync_hires();
             let item = pictures(&m).next().expect("the viewer sent the picture");
             assert!(d.is(item));
@@ -735,7 +805,7 @@ mod tests {
 
     #[test]
     fn erasing_leaves_the_menu() {
-        let d = elastic_buckling();
+        let d = all().into_iter().next().unwrap();
         let mut shown = lcd(&d);
         d.erase(&mut shown);
         assert!(shown[..AREA_ROWS].iter().flatten().all(|&on| !on));
