@@ -1,3 +1,46 @@
 out/
 __pycache__/
 target/
+.DS_Store
+
+# Xcode: per-user state (window layout, breakpoints, personal schemes)
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout
+DerivedData/
+build/
+
+# iOS signing: certificates, private keys and provisioning profiles
+*.p12
+*.pfx
+*.cer
+*.certSigningRequest
+*.mobileprovision
+*.provisionprofile
+*.keychain
+*.keychain-db
+
+# App Store Connect API keys, and export settings that name the team and profiles
+*.p8
+ExportOptions*.plist
+
+# Build products: archives, apps and debug symbols
+*.ipa
+*.xcarchive
+*.dSYM/
+*.dSYM.zip
+*.app/
+
+# Local overrides and secrets (signing team, bundle id, tokens)
+*.local.xcconfig
+Local.xcconfig
+.env
+.env.*
+
+# fastlane, if it is ever used: reports, screenshots and its credentials
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/
+fastlane/.env*

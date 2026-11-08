@@ -20,7 +20,10 @@ pub fn state_path() -> Option<PathBuf> {
     if let Some(p) = std::env::var_os("HP48GX_STATE") {
         return Some(PathBuf::from(p));
     }
-    let base = if cfg!(windows) {
+    let base = if cfg!(target_os = "ios") {
+        // The app's sandbox: backed up, and kept across updates.
+        std::env::home_dir().map(|h| h.join("Library").join("Application Support"))
+    } else if cfg!(windows) {
         std::env::var_os("APPDATA").map(PathBuf::from)
     } else {
         std::env::var_os("XDG_DATA_HOME")
