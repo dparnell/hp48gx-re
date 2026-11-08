@@ -3,3 +3,4 @@ __pycache__/
 target/
 xcuserdata/
 *.xcworkspace/xcuserdata/
+.DS_Store
