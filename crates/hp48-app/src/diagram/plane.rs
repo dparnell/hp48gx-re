@@ -119,16 +119,32 @@ fn regular_polygon() -> Diagram {
     Diagram::new("RegularPolygon", 32, 5, include_bytes!("../../../../firmware/images/FCA75-packed.png"), s)
 }
 
+/// A line that hatching stops short of: at x = `at` if `vertical`, else at
+/// y = `at`, from `from` to `to` along it.
+struct Break {
+    vertical: bool,
+    at: f32,
+    from: f32,
+    to: f32,
+}
+
 /// Hatching across the ring between circles of radii `inner` and `outer`
 /// about (`cx`, `cy`): lines going down to the right, where x - y is
-/// `first` plus a multiple of `step`.
-fn ring_hatching(cx: f32, cy: f32, inner: f32, outer: f32, first: f32, step: f32) -> Vec<Shape> {
+/// `first` plus a multiple of `step`. Each stroke ends a little inside the
+/// ring, so that it doesn't run over the circles, and stops short of the
+/// lines in `breaks`.
+fn ring_hatching(cx: f32, cy: f32, inner: f32, outer: f32, first: f32, step: f32, breaks: &[Break]) -> Vec<Shape> {
+    // The room left between a stroke's end and a circle, and between a
+    // stroke and a line it breaks for (along the stroke's height).
+    const MARGIN: f32 = 0.6;
+    const GAP: f32 = 1.2;
     // Along the line x = y + c, with u = y - cy, a circle of radius r is
     // crossed where 2u² + 2ku + k² - r² = 0, k = c - (cx - cy).
     let cross = |k: f32, r: f32| {
         let d = 2.0 * r * r - k * k;
         (d > 0.0).then(|| ((-k - d.sqrt()) / 2.0, (-k + d.sqrt()) / 2.0))
     };
+    let (inner, outer) = (inner + MARGIN, outer - MARGIN);
     let mut shapes = Vec::new();
     let mut c = first;
     while c - (cx - cy) > -outer * std::f32::consts::SQRT_2 {
@@ -137,13 +153,20 @@ fn ring_hatching(cx: f32, cy: f32, inner: f32, outer: f32, first: f32, step: f32
     while c - (cx - cy) < outer * std::f32::consts::SQRT_2 {
         let k = c - (cx - cy);
         if let Some((u0, u1)) = cross(k, outer) {
-            // A line that only grazes the inner circle stops short of it.
-            let segments = match cross(k, inner).or_else(|| cross(k, inner + 0.8)) {
+            let mut pieces = match cross(k, inner) {
                 Some((v0, v1)) => vec![(u0, v0), (v1, u1)],
                 None => vec![(u0, u1)],
             };
-            for (a, b) in segments.into_iter().filter(|(a, b)| b - a > 0.4) {
-                shapes.push(line(&[[cy + a + c, cy + a], [cy + b + c, cy + b]]));
+            for b in breaks {
+                // Where the stroke meets the line: its u, and how far along
+                // the line that is.
+                let (u, along) = if b.vertical { (b.at - c - cy, b.at - c) } else { (b.at - cy, b.at + c) };
+                if (b.from..=b.to).contains(&along) {
+                    pieces = pieces.into_iter().flat_map(|(p, q)| [(p, q.min(u - GAP)), (p.max(u + GAP), q)]).collect();
+                }
+            }
+            for (p, q) in pieces.into_iter().filter(|(p, q)| q - p > 0.6) {
+                shapes.push(line(&[[cy + p + c, cy + p], [cy + q + c, cy + q]]));
             }
         }
         c += step;
@@ -155,7 +178,14 @@ fn ring_hatching(cx: f32, cy: f32, inner: f32, outer: f32, first: f32, step: f32
 /// axis at distance d.
 fn circular_ring() -> Diagram {
     let (cx, cy) = (33.5, 22.5);
-    let mut s = ring_hatching(cx, cy, 11.0, 16.0, 1.0, 3.0);
+    // The hatching stops short of the axes and of the lines of d and ri.
+    let breaks = [
+        Break { vertical: false, at: cy, from: 0.0, to: 72.0 },
+        Break { vertical: true, at: cx, from: 0.0, to: 47.0 },
+        Break { vertical: false, at: 9.5, from: cx, to: 64.5 },
+        Break { vertical: false, at: 33.5, from: 4.0, to: cx },
+    ];
+    let mut s = ring_hatching(cx, cy, 11.0, 16.0, 1.0, 3.0, &breaks);
     s.extend(axes([cx, cy], 4.0, 47.0, 0.0, 65.0, 23.0, 66.5));
     s.push(circle(cx, cy, 16.0));
     s.push(circle(cx, cy, 11.0));
