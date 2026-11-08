@@ -8,7 +8,7 @@ This repository has three parts:
 
 1. **ROM analysis (Python, `tools/`).** It reverse engineers the HP 48GX ROM, revision R (`ROM/gxrom-r`). The findings are in `docs/rom-map.md`. Read that first: it covers the memory map, boot path, ROM library table, covered upper ROM, and the code idioms the analyser handles.
 2. **The ROM as editable source (`firmware/`).** The complete firmware as commented assembler and RPL, the master copy. `python tools/build.py -o ROM/gxrom-hires` turns it into the ROM image the Rust code runs. It is ROM R plus our changes; `firmware/README.md` is the guide, and "Customising the ROM" below has the rules.
-3. **HP 48GX desktop calculator (Rust, `crates/`).** It runs the real ROM, with a vector-rendered UI and a native, resizable plot window. The goal is to remove CPU emulation entirely: the ROM's machine code is translated into Rust (`crates/hp48-rom`), hot routines get hand-written natives (`hle.rs`), and the RPL code is later to be reworked into a readable, editable form. Every step is checked against the interpreter.
+3. **HP 48GX desktop calculator (Rust, `crates/`).** It also builds as an iOS app (`ios/`, see `ios/README.md`). It runs the real ROM, with a vector-rendered UI and a native, resizable plot window. The goal is to remove CPU emulation entirely: the ROM's machine code is translated into Rust (`crates/hp48-rom`), hot routines get hand-written natives (`hle.rs`), and the RPL code is later to be reworked into a readable, editable form. Every step is checked against the interpreter.
 
 ## Commands
 
@@ -90,7 +90,8 @@ Run the Python tests from the repo root with `python -m unittest discover -s tes
   - `stack()` lists the data stack, counted as `SAVESTACK` counts it: (`EDITLINE` − `DSKTOP`)/5 − 1.
   - `hp_char` maps the calculator's character set (128–159: ∡ ẋ ∇ √ ∫ Σ ▶ π ∂ ≤ ≥ ≠ α → ← ↓ ↑ γ δ ε η θ λ ρ σ τ ω Δ Π Ω ■ ∞).
   - Decoder details: unit operators (`um*` … `umEND`, five adjacent empty lists) stay `Builtin`. A tagged object may hold a pointer to a ROM object.
-- **`crates/hp48-app`: the eframe/egui UI.**
+- **`crates/hp48-app`: the eframe/egui UI.** It is a library: `main.rs` only calls `run_desktop` (the command line), and `mobile.rs` runs it on iOS for `crates/hp48-ios`.
+  - `crates/hp48-ios` is a static library with the ROM built in (`hp48_main`, `hp48_suspend`, `hp48_resume` for `ios/HP48GX/main.m`). `ios/HP48GX.xcodeproj` builds it through `ios/build-rust.sh` and links it. iOS asks for wgpu's downlevel limits, because the simulator's Metal falls short of the defaults; state is saved when the app goes to the background.
   - Layout follows the window. Below 760 px wide, or when taller than wide, it shows the calculator alone, which suits small screens. Wider windows add `desk.rs` beside it:
     - the stack as text (`hp48_rpl::show`), with level 1 at the bottom and a Copy context menu;
     - the six menu labels, cut from the LCD's bottom 8 rows, as buttons;

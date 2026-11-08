@@ -1,0 +1,13 @@
+[package]
+name = "hp48-ios"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+description = "The HP 48GX calculator as an iOS app: a static library for ios/HP48GX.xcodeproj"
+
+[lib]
+crate-type = ["staticlib", "rlib"]
+
+[dependencies]
+hp48-app = { path = "../hp48-app" }
+log = "0.4"

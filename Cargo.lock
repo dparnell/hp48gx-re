@@ -1411,6 +1411,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "hp48-ios"
+version = "0.1.0"
+dependencies = [
+ "hp48-app",
+ "log",
+]
+
+[[package]]
 name = "hp48-rom"
 version = "0.1.0"
 dependencies = [
