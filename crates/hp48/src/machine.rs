@@ -136,6 +136,7 @@ impl Machine {
             self.service();
             return;
         }
+        let start = self.cpu.cycles;
         let c = match self.natives.get(&self.cpu.pc) {
             Some(native) => {
                 native(&mut self.cpu, &mut self.hw);
@@ -166,6 +167,10 @@ impl Machine {
                 },
             },
         };
+        // OUT may have changed the speaker: log it at the cycle the
+        // instruction started. Translated code logs its changes as they
+        // happen (`Run::out_c`), so this catches the interpreter's.
+        self.hw.speaker.out(self.cpu.out, start);
         let cycles = u64::from(self.spare) + u64::from(c);
         self.time += cycles / u64::from(self.speed);
         self.spare = (cycles % u64::from(self.speed)) as u32;

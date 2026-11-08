@@ -41,6 +41,7 @@ pub mod mobile;
 mod persist;
 mod plot;
 mod runner;
+mod sound;
 
 use eframe::egui::{self, Align, Align2, Color32, CornerRadius, FontId, Pos2, Rect, Sense, Stroke, UiBuilder, Vec2};
 use face::{KeyCap, Mode, ShiftColor, Style, ROWS};
@@ -105,6 +106,8 @@ struct App {
     /// Shared with the thread that runs it (runner.rs).
     machine: Arc<Mutex<Machine>>,
     runner: Option<runner::Runner>,
+    /// The speaker's output, while the runner runs the calculator.
+    sound: Option<sound::Sound>,
     speed: Arc<runner::Speed>,
     plot_open: bool,
     /// Debug: show the plot in the main window (for scripted screenshots).
@@ -181,6 +184,7 @@ impl App {
             minifont: read_minifont(&machine),
             machine: Arc::new(Mutex::new(machine)),
             runner: None,
+            sound: None,
             speed: Arc::default(),
             plot_open: false,
             plot_only: false,
@@ -209,6 +213,14 @@ impl App {
             lines: Vec::new(),
             end_time,
         }
+    }
+
+    /// Run the calculator on its own thread in real time (runner.rs), with
+    /// the speaker on the computer's sound output if it has one.
+    fn start(&mut self, ctx: &egui::Context) {
+        self.sound = sound::Sound::open();
+        let feed = self.sound.as_ref().map(sound::Sound::feed);
+        self.runner = Some(runner::Runner::start(self.machine.clone(), ctx.clone(), self.persistent, self.speed.clone(), feed));
     }
 
     /// The machine, while the returned guard lives. Don't call another
@@ -1111,8 +1123,7 @@ pub fn run_desktop() -> eframe::Result {
             }
             if !scripted || live {
                 app.speed.full.store(full_speed, Ordering::Relaxed);
-                let speed = app.speed.clone();
-                app.runner = Some(runner::Runner::start(app.machine.clone(), cc.egui_ctx.clone(), app.persistent, speed));
+                app.start(&cc.egui_ctx);
             }
             if pixels {
                 app.display = Display::Pixels;

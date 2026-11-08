@@ -70,6 +70,7 @@ Run the Python tests from the repo root with `python -m unittest discover -s tes
   - `memory.rs`: the daisy-chain controller. Modules are configured in the order HDW, RAM, CE1, CE2, NCE3, matched by `(addr & mask) == base`, read with priority HDW > RAM > CE2 > CE1 > NCE3 > ROM. C=ID returns the IDs the ROM checks at #099C0.
   - `hardware.rs`: the I/O page, CRC, timers (SRQ mirrors the sign bit; INT fires when a timer goes negative; WAKE ends SHUTDN) and the bank switcher. It implements `Bus`.
   - `machine.rs`: time is counted in CPU cycles at 4 MHz. TIMER2 ticks at 8192 Hz and TIMER1 at 16 Hz. `set_speed(n)` makes the CPU n times faster while the timers, clock and LCD keep real time: an instruction's cycles advance time by 1/n (the remainder carries over). SHUTDN fast-forwards to the next timer tick, which is why the emulator runs far faster than real time when idle.
+  - `speaker.rs`: the speaker is OUT bit 11. With `hw.speaker.record` on, each change is logged with its CPU cycle (the interpreter after each step, translated code in `Run::out_c` at the exact cycle), and the host takes them with `take`. `speaker::clock` is the rate to play them at: our cycle table makes `clkspd`'s timer-reading loop cheap relative to `makebeep`'s register loop, so `CSPEED` comes out low and the ROM's beeps are ~28% high at 4 MHz; playing at the clock `CSPEED` implies gives them their pitch and length. `crates/hp48-rom/tests/speaker.rs` checks BEEP's pitch and length and that translated code and natives log the same tone.
   - `machine.rs` also builds the LCD frame from the display/menu address registers. `keyboard.rs` holds the matrix codes ((OUT line, IN bit); ON is IN bit 15), and `state.rs` does snapshots.
 - **`crates/hp48-rom`: the ROM's machine code translated into Rust** (see "Translated ROM code").
 - **`crates/hp48-vector`: LCD to vector scene.**
@@ -106,6 +107,7 @@ Run the Python tests from the repo root with `python -m unittest discover -s tes
   - Menu labels on the LCD work as the menu keys under them (`menu_key_at`): press and hold follow the mouse's left button, and an empty slot or a hidden menu does nothing. A click on a Choose box's row sends the keys that move the highlight there and press ENTER, and on an arrow left shift and ▲ or ▼, a page (`hires_text::list_keys`).
   - The keys show the mode the annunciators give (`face::Mode`, `KeyCap::legend`): the left shift, right shift and alpha legends on keys in that colour, alpha with a shift too, from the ROM's character table. Keys with nothing in a shift mode go blank. Typed text doesn't show.
   - Ctrl+V types the clipboard into the calculator.
+  - `sound.rs` plays the speaker through cpal: the runner thread passes each tick's changes and `speaker::clock`, and the output stream plays them as a square wave 40 ms behind, with a DC blocker. It opens only when the runner runs (not in scripted screenshots or tests). On Linux cpal needs the ALSA headers (`libasound2-dev`).
   - `persist.rs` gives the calculator continuous memory: save on exit, and advance TIMER2 by the wall-clock time spent closed.
 
 ### Translated ROM code

@@ -16248,7 +16248,7 @@ pub(crate) fn code_7A452(r: &mut Run) {
             }
             // #7A467:
             0x7A467..=0x7A46A => {
-                op!(r, at, 0x7A467..0x7A46A, 5, r.cpu.out_cs()); // OUT=CS
+                op!(r, at, 0x7A467..0x7A46A, 5, r.out_cs()); // OUT=CS
                 jump!(r, at, 9, r.cpu.rtn(RtnKind::Interrupt)); // RTI
             }
             // #7A46C:

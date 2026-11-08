@@ -315,7 +315,7 @@ pub(crate) fn Interrupt_L8(r: &mut Run) {
                 op!(r, at, 0x0026D..0x00270, 5, r.cpu.d_from_r(0, R::C, false)); // D0=C
                 op!(r, at, 0x00270..0x00276, 8, r.cpu.d_load(1, 4, 0x642)); // D1=(4) #0642
                 io!(r, at, 0x00276..0x0027A, 17, r.cpu.load(1, R::C, Field::X, r.hw)); // C=DAT1 X
-                op!(r, at, 0x0027A..0x0027D, 5, r.cpu.out_c()); // OUT=C
+                op!(r, at, 0x0027A..0x0027D, 5, r.out_c()); // OUT=C
                 branch!(r, at, 0x00283, 8, r.cpu.call(0x01160)); // GOSUBL CINRTN
             }
             // #00283:
@@ -1360,7 +1360,7 @@ pub(crate) fn BITMAP(r: &mut Run) {
                 op!(r, at, 0x008E8..0x008ED, 7, r.cpu.load_const(R::C, 3, 0x1)); // LC(3) #001
                 op!(r, at, 0x008ED..0x008F0, 5, r.cpu.exch(R::C, R::A, Field::W)); // CAEX W
                 op!(r, at, 0x008F0..0x008F3, 5, r.cpu.copy(R::C, R::A, Field::X)); // C=A X
-                op!(r, at, 0x008F3..0x008F6, 5, r.cpu.out_c()); // OUT=C
+                op!(r, at, 0x008F3..0x008F6, 5, r.out_c()); // OUT=C
                 io!(r, at, 0x008F6..0x008F9, 5, r.cpu.input(R::C, r.hw)); // C=IN
                 op!(r, at, 0x008F9..0x008FC, 5, r.cpu.rotate(R::C, false)); // CSRC
                 op!(r, at, 0x008FC..0x008FF, 5, r.cpu.hst_clear(2)); // SB=0
@@ -1384,7 +1384,7 @@ pub(crate) fn BITMAP(r: &mut Run) {
             0x00923..=0x0093B => {
                 op!(r, at, 0x00923..0x00926, 5, r.cpu.add(R::A, R::A, Field::X)); // A=A+A X
                 op!(r, at, 0x00926..0x00929, 5, r.cpu.copy(R::C, R::A, Field::X)); // C=A X
-                op!(r, at, 0x00929..0x0092C, 5, r.cpu.out_c()); // OUT=C
+                op!(r, at, 0x00929..0x0092C, 5, r.out_c()); // OUT=C
                 io!(r, at, 0x0092C..0x0092F, 5, r.cpu.input(R::C, r.hw)); // C=IN
                 op!(r, at, 0x0092F..0x00932, 5, r.cpu.rotate(R::C, false)); // CSRC
                 op!(r, at, 0x00932..0x00935, 5, r.cpu.rotate(R::C, false)); // CSRC
@@ -1400,7 +1400,7 @@ pub(crate) fn BITMAP(r: &mut Run) {
             0x00946..=0x0095E => {
                 op!(r, at, 0x00946..0x00949, 5, r.cpu.add(R::A, R::A, Field::X)); // A=A+A X
                 op!(r, at, 0x00949..0x0094C, 5, r.cpu.copy(R::C, R::A, Field::X)); // C=A X
-                op!(r, at, 0x0094C..0x0094F, 5, r.cpu.out_c()); // OUT=C
+                op!(r, at, 0x0094C..0x0094F, 5, r.out_c()); // OUT=C
                 op!(r, at, 0x0094F..0x00952, 5, r.cpu.zero(R::C, Field::X)); // C=0 X
                 io!(r, at, 0x00952..0x00955, 5, r.cpu.input(R::C, r.hw)); // C=IN
                 op!(r, at, 0x00955..0x00958, 5, r.cpu.rotate(R::C, false)); // CSRC
@@ -1432,7 +1432,7 @@ pub(crate) fn BITMAP_L3(r: &mut Run) {
         match at {
             0x0097C..=0x0099C => {
                 op!(r, at, 0x0097C..0x00981, 7, r.cpu.load_const(R::C, 3, 0x1FF)); // LC(3) #1FF
-                op!(r, at, 0x00981..0x00984, 5, r.cpu.out_c()); // OUT=C
+                op!(r, at, 0x00981..0x00984, 5, r.out_c()); // OUT=C
                 io!(r, at, 0x00984..0x00987, 5, r.cpu.input(R::C, r.hw)); // C=IN
                 op!(r, at, 0x00987..0x0098A, 5, r.cpu.shr(R::C, Field::W)); // CSR W
                 op!(r, at, 0x0098A..0x0098D, 5, r.cpu.shr(R::C, Field::W)); // CSR W
@@ -1828,7 +1828,7 @@ pub(crate) fn AlphaDown_(r: &mut Run) {
             }
             // AlphaDown?.L1:
             0x00D2B..=0x00D2E => {
-                op!(r, at, 0x00D2B..0x00D2E, 5, r.cpu.out_c()); // OUT=C
+                op!(r, at, 0x00D2B..0x00D2E, 5, r.out_c()); // OUT=C
                 branch!(r, at, 0x00D32, 6, r.cpu.call(0x01160)); // GOSUB CINRTN
             }
             // #00D32:
@@ -2060,7 +2060,7 @@ pub(crate) fn KbdOutC(r: &mut Run) {
             0x00E21..=0x00E31 => {
                 op!(r, at, 0x00E21..0x00E27, 8, r.cpu.d_load(1, 4, 0x642)); // D1=(4) #0642
                 io!(r, at, 0x00E27..0x00E2B, 17, r.cpu.store(1, R::C, Field::X, r.hw)); // DAT1=C X
-                op!(r, at, 0x00E2B..0x00E2E, 5, r.cpu.out_c()); // OUT=C
+                op!(r, at, 0x00E2B..0x00E2E, 5, r.out_c()); // OUT=C
                 io!(r, at, 0x00E2E..0x00E31, 5, r.cpu.input(R::C, r.hw)); // C=IN
                 branch!(r, at, 0x00E36, 7, r.cpu.test(Test::NonZero(R::C), Field::A, None)); // ?C#0 A / RTNYES
             }
@@ -2095,7 +2095,7 @@ pub(crate) fn OnKeyCombo(r: &mut Run) {
             0x00E50..=0x00E61 => {
                 op!(r, at, 0x00E50..0x00E52, 4, r.cpu.p = 0); // P= 0
                 op!(r, at, 0x00E52..0x00E57, 7, r.cpu.load_const(R::C, 3, 0x1FF)); // LC(3) #1FF
-                op!(r, at, 0x00E57..0x00E5A, 5, r.cpu.out_c()); // OUT=C
+                op!(r, at, 0x00E57..0x00E5A, 5, r.out_c()); // OUT=C
                 op!(r, at, 0x00E5A..0x00E61, 9, r.cpu.load_const(R::C, 5, 0x4E)); // LC(5) #0004E
                 op!(r, at, 0x00E61..0x00E63, 4, r.cpu.zero(R::A, Field::A)); // A=0 A
                 at = 0x00E63;
@@ -3932,7 +3932,7 @@ pub(crate) fn addrORghost(r: &mut Run) {
             }
             // #018B2:
             0x018B2..=0x018B5 => {
-                op!(r, at, 0x018B2..0x018B5, 5, r.cpu.out_c()); // OUT=C
+                op!(r, at, 0x018B2..0x018B5, 5, r.out_c()); // OUT=C
                 op!(r, at, 0x018B5..0x018B8, 5, r.cpu.copy(R::A, R::B, Field::X)); // A=B X
                 at = 0x018B8;
             }
@@ -3950,7 +3950,7 @@ pub(crate) fn addrORghost(r: &mut Run) {
             // addrORghost.L3:
             0x018C8..=0x018DC => {
                 io!(r, at, 0x018C8..0x018CC, 17, r.cpu.load(1, R::C, Field::X, r.hw)); // C=DAT1 X
-                op!(r, at, 0x018CC..0x018CF, 5, r.cpu.out_c()); // OUT=C
+                op!(r, at, 0x018CC..0x018CF, 5, r.out_c()); // OUT=C
                 op!(r, at, 0x018CF..0x018D6, 9, r.cpu.d_load(1, 5, 0x12E)); // D1=(5) TIMER1CTRL
                 io!(r, at, 0x018D6..0x018DA, 15, r.cpu.store(1, R::C, Field::S, r.hw)); // DAT1=C S
                 op!(r, at, 0x018DA..0x018DC, 4, r.cpu.p = 0); // P= 0
@@ -4353,7 +4353,7 @@ pub(crate) fn RCKBp(r: &mut Run) {
             }
             // RCKBp.loop1:
             0x01B16..=0x01B1D => {
-                op!(r, at, 0x01B16..0x01B19, 5, r.cpu.out_c()); // OUT=C
+                op!(r, at, 0x01B16..0x01B19, 5, r.out_c()); // OUT=C
                 op!(r, at, 0x01B19..0x01B1D, 6, r.cpu.p_from_c(4)); // P=C 4
                 branch!(r, at, 0x01B24, 9, r.cpu.bit_test(R::C, 11, true, Some(0x01B30))); // ?CBIT=1 11 / GOYES RCKBp.L2
             }
@@ -4412,7 +4412,7 @@ pub(crate) fn KbdOutRestore(r: &mut Run) {
                 op!(r, at, 0x01B73..0x01B76, 5, r.cpu.d_from_r(1, R::C, false)); // D1=C
                 op!(r, at, 0x01B76..0x01B7C, 8, r.cpu.d_load(1, 4, 0x642)); // D1=(4) #0642
                 io!(r, at, 0x01B7C..0x01B80, 17, r.cpu.load(1, R::C, Field::X, r.hw)); // C=DAT1 X
-                op!(r, at, 0x01B80..0x01B83, 5, r.cpu.out_c()); // OUT=C
+                op!(r, at, 0x01B80..0x01B83, 5, r.out_c()); // OUT=C
                 r.cpu.kbd_int_enabled = true; // INTON
                 r.end(0x01B87, 6);
                 return;
@@ -5086,7 +5086,7 @@ pub(crate) fn OUT_CC_in(r: &mut Run) {
     loop {
         match at {
             0x01EEC..=0x01EEF => {
-                op!(r, at, 0x01EEC..0x01EEF, 5, r.cpu.out_c()); // OUT=C
+                op!(r, at, 0x01EEC..0x01EEF, 5, r.out_c()); // OUT=C
                 jump!(r, at, 9, r.cpu.pc = 0x01160); // GOVLNG CINRTN
             }
             _ => {
@@ -12023,7 +12023,7 @@ pub(crate) fn KbdResume(r: &mut Run) {
                 op!(r, at, 0x0477E..0x04783, 7, r.cpu.load_const(R::C, 3, 0x1FF)); // LC(3) #1FF
                 op!(r, at, 0x04783..0x0478A, 9, r.cpu.d_load(1, 5, 0x80642)); // D1=(5) SAVE_OR
                 io!(r, at, 0x0478A..0x0478E, 17, r.cpu.store(1, R::C, Field::Nibbles(3), r.hw)); // DAT1=C 3
-                op!(r, at, 0x0478E..0x04791, 5, r.cpu.out_c()); // OUT=C
+                op!(r, at, 0x0478E..0x04791, 5, r.out_c()); // OUT=C
                 op!(r, at, 0x04791..0x04798, 9, r.cpu.d_load(1, 5, 0x8065B)); // D1=(5) DISABLE_KBD
                 op!(r, at, 0x04798..0x0479B, 5, r.cpu.load_const(R::C, 1, 0x1)); // LC(1) #1
                 io!(r, at, 0x0479B..0x0479F, 15, r.cpu.store(1, R::C, Field::Nibbles(1), r.hw)); // DAT1=C 1

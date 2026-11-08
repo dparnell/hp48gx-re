@@ -271,6 +271,12 @@
 					QuartzCore,
 					"-framework",
 					CoreGraphics,
+					"-framework",
+					AVFAudio,
+					"-framework",
+					AudioToolbox,
+					"-framework",
+					CoreAudio,
 					"-liconv",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.automagic-software.i48x2";
@@ -310,6 +316,12 @@
 					QuartzCore,
 					"-framework",
 					CoreGraphics,
+					"-framework",
+					AVFAudio,
+					"-framework",
+					AudioToolbox,
+					"-framework",
+					CoreAudio,
 					"-liconv",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.automagic-software.i48x2";

@@ -98,6 +98,21 @@ impl<'a> Run<'a> {
         false
     }
 
+    /// OUT=C, logging a change of the speaker at the cycle it happens
+    /// (a beep switches it many times within one run).
+    #[inline]
+    pub fn out_c(&mut self) {
+        self.cpu.out_c();
+        self.hw.speaker.out(self.cpu.out, self.cpu.cycles + u64::from(self.spent));
+    }
+
+    /// OUT=CS, as `out_c`.
+    #[inline]
+    pub fn out_cs(&mut self) {
+        self.cpu.out_cs();
+        self.hw.speaker.out(self.cpu.out, self.cpu.cycles + u64::from(self.spent));
+    }
+
     /// The last instruction of a run, which leaves PC at `next`.
     #[inline]
     pub fn end(&mut self, next: u32, cycles: u32) {

@@ -55,6 +55,9 @@ so App Store Connect doesn't ask about export compliance.
   It's saved when the app goes to the background (iOS may end a background app
   without warning) and every minute while running. When the app comes back,
   the calculator's clock catches up with the time away.
+- Sound: the calculator's beeps play through the audio session's Ambient
+  category (`main.m`), so they mix with other apps' audio and the Ring/Silent
+  switch silences them. If there is no sound, check that switch.
 - A tap whose touch starts and ends between two frames is still sent to the
   calculator, held as long as a typed key is.
 - The LCD's context menu (full speed, pixels or vectors, layout) should open

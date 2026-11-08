@@ -61,6 +61,8 @@ pub struct Hardware {
     pub set_mp: bool,
     /// The hi-res display over the LCD.
     pub hires: crate::hires::Hires,
+    /// The speaker (OUT bit 11), and the changes logged for the host.
+    pub speaker: crate::speaker::Speaker,
 }
 
 impl Hardware {
@@ -86,6 +88,7 @@ impl Hardware {
             wake: false,
             set_mp: false,
             hires: Default::default(),
+            speaker: Default::default(),
         }
     }
 

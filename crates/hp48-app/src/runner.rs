@@ -51,7 +51,15 @@ pub struct Runner {
 impl Runner {
     /// Run `machine` in real time, asking `ctx` for a repaint whenever what
     /// it shows changes. `persistent`: save its state now and then.
-    pub fn start(machine: Arc<Mutex<Machine>>, ctx: egui::Context, persistent: bool, speed: Arc<Speed>) -> Runner {
+    /// `sound`: where the speaker's changes go (the machine logs them).
+    pub fn start(
+        machine: Arc<Mutex<Machine>>,
+        ctx: egui::Context,
+        persistent: bool,
+        speed: Arc<Speed>,
+        sound: Option<crate::sound::Feed>,
+    ) -> Runner {
+        machine.lock().unwrap().hw.speaker.record = sound.is_some();
         let stop = Arc::new(AtomicBool::new(false));
         let flag = stop.clone();
         let thread = std::thread::spawn(move || {
@@ -83,6 +91,9 @@ impl Runner {
                     }
                 }
                 speed.khz.store((factor * CPU_HZ as f64 / 1000.0) as u32, Ordering::Relaxed);
+                if let Some(sound) = &sound {
+                    sound.push(m.hw.speaker.take(), hp48::speaker::clock(&m));
+                }
                 let shown = shown(&m);
                 if persistent && last_save.elapsed() >= SAVE_EVERY {
                     if let Err(e) = crate::persist::save(&m) {

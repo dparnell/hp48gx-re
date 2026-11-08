@@ -9,6 +9,7 @@
 // window without a scene the app's scene, or to keep it until the scene
 // connects.
 
+#import <AVFAudio/AVFAudio.h>
 #import <UIKit/UIKit.h>
 #import <objc/runtime.h>
 
@@ -74,6 +75,9 @@ static void hp48MakeKeyAndVisible(UIWindow *self, SEL _cmd) {
 
 int main(int argc, char *argv[]) {
     @autoreleasepool {
+        // The calculator's beeps are interface sounds: they mix with other
+        // apps' audio, and the Ring/Silent switch silences them.
+        [AVAudioSession.sharedInstance setCategory:AVAudioSessionCategoryAmbient error:nil];
         waitingWindows = [NSMutableArray array];
         Method method = class_getInstanceMethod([UIWindow class], @selector(makeKeyAndVisible));
         originalMakeKeyAndVisible = method_setImplementation(method, (IMP)hp48MakeKeyAndVisible);

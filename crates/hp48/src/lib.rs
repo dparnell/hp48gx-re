@@ -6,6 +6,7 @@ pub mod hle;
 pub mod keyboard;
 pub mod machine;
 pub mod memory;
+pub mod speaker;
 pub mod state;
 pub mod transfer;
 pub mod translated;

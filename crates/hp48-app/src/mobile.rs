@@ -6,7 +6,7 @@
 //! `suspend` when the app goes to the background and `resume` when it comes
 //! back, which advances the calculator's clock by the time spent away.
 
-use crate::{install_fonts, persist, runner, App};
+use crate::{install_fonts, persist, App};
 use eframe::{egui, egui_wgpu, wgpu};
 use hp48::Machine;
 use std::sync::{Arc, Mutex, OnceLock};
@@ -38,7 +38,7 @@ pub fn run(rom: Vec<u8>) -> eframe::Result {
             // ROM's "Try To Recover Memory?" itself.
             let mut app = App::new(&rom, None, Vec::new(), true);
             let _ = MACHINE.set(app.machine.clone());
-            app.runner = Some(runner::Runner::start(app.machine.clone(), cc.egui_ctx.clone(), true, app.speed.clone()));
+            app.start(&cc.egui_ctx);
             Ok(Box::new(app))
         }),
     )
