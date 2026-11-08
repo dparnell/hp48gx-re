@@ -221,8 +221,13 @@ fn draw_words(painter: &egui::Painter, item: &Item, bytes: &[u8], cap: f32, line
     let shown = &bytes[..bytes.len().min(ROW_CHARS)];
     for (start, word) in words(shown) {
         let room = (word.len() * CELL) as f32;
-        let middle = [item.x as f32 + (start * CELL) as f32 + room / 2.0, item.y as f32 + line];
+        let mut middle = [item.x as f32 + (start * CELL) as f32 + room / 2.0, item.y as f32 + line];
         let align = if start + word.len() == ROW_CHARS { Align::Max } else { Align::Center };
+        if align == Align::Max {
+            // A cell is a glyph and a column of space after it, and the
+            // row's last cell has no space: it ends at the LCD's edge.
+            middle[0] -= 1.0;
+        }
         draw_fitted_text(painter, &text(word), middle, room, cap, FontFamily::Proportional, align, pt, LCD_INK);
     }
 }
