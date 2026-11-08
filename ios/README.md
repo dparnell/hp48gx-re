@@ -41,6 +41,11 @@ so App Store Connect doesn't ask about export compliance.
 
 ## How the app behaves
 
+- UIKit requires the scene life cycle, which winit (under eframe) doesn't
+  support: it makes a plain `UIWindow` at launch. `main.m` declares a scene
+  (`HP48SceneDelegate`, in Info.plist) and wraps `makeKeyAndVisible`, so
+  winit's window is given that scene, after it connects if need be.
+
 - It uses the same layout rules as the desktop: on an iPhone, and on an iPad
   in portrait, you get the calculator alone; on an iPad in landscape, the
   desktop panel is beside it. iPhones stay in portrait.

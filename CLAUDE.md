@@ -91,7 +91,7 @@ Run the Python tests from the repo root with `python -m unittest discover -s tes
   - `hp_char` maps the calculator's character set (128–159: ∡ ẋ ∇ √ ∫ Σ ▶ π ∂ ≤ ≥ ≠ α → ← ↓ ↑ γ δ ε η θ λ ρ σ τ ω Δ Π Ω ■ ∞).
   - Decoder details: unit operators (`um*` … `umEND`, five adjacent empty lists) stay `Builtin`. A tagged object may hold a pointer to a ROM object.
 - **`crates/hp48-app`: the eframe/egui UI.** It is a library: `main.rs` only calls `run_desktop` (the command line), and `mobile.rs` runs it on iOS for `crates/hp48-ios`.
-  - `crates/hp48-ios` is a static library with the ROM built in (`hp48_main`, `hp48_suspend`, `hp48_resume` for `ios/HP48GX/main.m`). `ios/HP48GX.xcodeproj` builds it through `ios/build-rust.sh` and links it. iOS asks for wgpu's downlevel limits, because the simulator's Metal falls short of the defaults; state is saved when the app goes to the background.
+  - `crates/hp48-ios` is a static library with the ROM built in (`hp48_main`, `hp48_suspend`, `hp48_resume` for `ios/HP48GX/main.m`). `ios/HP48GX.xcodeproj` builds it through `ios/build-rust.sh` and links it. winit has no UIScene support, so `main.m` gives its window the app's scene; iOS asks for wgpu's downlevel limits, because the simulator's Metal falls short of the defaults; state is saved when the app goes to the background.
   - Layout follows the window. Below 760 px wide, or when taller than wide, it shows the calculator alone, which suits small screens. Wider windows add `desk.rs` beside it:
     - the stack as text (`hp48_rpl::show`), with level 1 at the bottom and a Copy context menu;
     - the six menu labels, cut from the LCD's bottom 8 rows, as buttons;
