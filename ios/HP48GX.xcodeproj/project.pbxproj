@@ -251,7 +251,7 @@
 				DEAD_CODE_STRIPPING = YES;
 				EXCLUDED_ARCHS = x86_64;
 				INFOPLIST_FILE = HP48GX/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "i48 x 2";
+				INFOPLIST_KEY_CFBundleDisplayName = "i48 v2";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -290,7 +290,7 @@
 				DEAD_CODE_STRIPPING = YES;
 				EXCLUDED_ARCHS = x86_64;
 				INFOPLIST_FILE = HP48GX/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "i48 x 2";
+				INFOPLIST_KEY_CFBundleDisplayName = "i48 v2";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
 				LD_RUNPATH_SEARCH_PATHS = (
