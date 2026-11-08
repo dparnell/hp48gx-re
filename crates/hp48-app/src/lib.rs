@@ -97,6 +97,25 @@ enum Layout {
     Desktop,
 }
 
+/// How the plot is shown (`App::plot_style_for`).
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+enum PlotStyle {
+    /// A native window of its own (desktop).
+    Viewport,
+    /// A window over the calculator that can be closed (tablets).
+    Floating,
+    /// Over the whole screen, under a bar with a Close button big enough
+    /// for a finger (phones: no room for a window beside the keys).
+    FullScreen,
+}
+
+/// The height of the bar over a full-screen plot, in points.
+const PLOT_BAR_HEIGHT: f32 = 48.0;
+
+/// The shorter side of the smallest mobile screen that shows the plot in a
+/// window, in points: every iPad (744 and up) but no iPhone (440 at most).
+const TABLET_MIN_SIDE: f32 = 600.0;
+
 /// Narrowest window that gets the desktop layout in `Layout::Auto`.
 const DESK_MIN_WIDTH: f32 = 760.0;
 
@@ -109,6 +128,10 @@ struct App {
     /// The speaker's output, while the runner runs the calculator.
     sound: Option<sound::Sound>,
     speed: Arc<runner::Speed>,
+    /// Running as a phone or tablet app (mobile.rs): one window, touch.
+    mobile: bool,
+    /// How the plot can be shown on this screen, worked out each frame.
+    plot_style: PlotStyle,
     plot_open: bool,
     /// Debug: show the plot in the main window (for scripted screenshots).
     plot_only: bool,
@@ -186,6 +209,8 @@ impl App {
             runner: None,
             sound: None,
             speed: Arc::default(),
+            mobile: false,
+            plot_style: PlotStyle::Viewport,
             plot_open: false,
             plot_only: false,
             plot: plot::PlotWindow::default(),
@@ -350,6 +375,7 @@ impl eframe::App for App {
     /// asked for here while typing ahead, and in scripted runs, which step
     /// the calculator frame by frame instead of with the thread.
     fn logic(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        self.plot_style = self.plot_style_for(ctx.viewport_rect().size());
         if self.screenshot.is_some() {
             // Deterministic timing for scripted screenshots, or with --live
             // the wall clock and the runner thread, as in interactive use.
@@ -506,7 +532,11 @@ impl App {
             }
         });
         if self.plot_open {
-            self.show_plot(ui.ctx());
+            match self.plot_style {
+                PlotStyle::Viewport => self.show_plot(ui.ctx()),
+                PlotStyle::Floating => self.show_floating_plot(ui.ctx()),
+                PlotStyle::FullScreen => self.show_full_screen_plot(ui.ctx()),
+            }
         }
 
         // The menu labels on the LCD work as their keys.
@@ -618,6 +648,18 @@ fn menu_key_at(m: &Machine, x: f32, y: f32) -> Option<Key> {
 }
 
 impl App {
+    /// How the plot can be shown on a screen of `size` points.
+    fn plot_style_for(&self, size: Vec2) -> PlotStyle {
+        if !self.mobile {
+            PlotStyle::Viewport
+        } else if size.min_elem() >= TABLET_MIN_SIDE {
+            PlotStyle::Floating
+        } else {
+            PlotStyle::FullScreen
+        }
+    }
+
+    /// The plot in a window of its own (desktop).
     fn show_plot(&mut self, ctx: &egui::Context) {
         let machine = self.machine.clone();
         self.plot.refresh(&machine.lock().unwrap(), false);
@@ -636,6 +678,68 @@ impl App {
         if close {
             self.plot_open = false;
         }
+    }
+
+    /// The plot over the whole screen, under a bar with a Close button
+    /// (phones). It takes all input while it shows.
+    fn show_full_screen_plot(&mut self, ctx: &egui::Context) {
+        let machine = self.machine.clone();
+        self.plot.refresh(&machine.lock().unwrap(), false);
+        let full = ctx.viewport_rect();
+        // The bar and the plot keep clear of the notch and the home
+        // indicator; the background goes behind them.
+        let safe = ctx.content_rect();
+        let bar = Rect::from_min_size(safe.min, Vec2::new(safe.width(), PLOT_BAR_HEIGHT));
+        let plot = &mut self.plot;
+        let mut close = false;
+        egui::Area::new(egui::Id::new("hp48-plot-full-screen"))
+            .order(egui::Order::Foreground)
+            .fixed_pos(full.min)
+            .show(ctx, |ui| {
+                // Swallow input that misses the bar and the plot, so the
+                // keys under them don't get it.
+                ui.allocate_rect(full, Sense::click_and_drag());
+                ui.painter().rect_filled(full, CornerRadius::ZERO, BODY);
+                ui.painter().text(bar.center(), Align2::CENTER_CENTER, "Plot", FontId::proportional(18.0), LEGEND);
+                let button = Rect::from_min_max(
+                    Pos2::new(bar.right() - 104.0, bar.top() + 6.0),
+                    Pos2::new(bar.right() - 10.0, bar.bottom() - 6.0),
+                );
+                let text = egui::RichText::new("Close").size(18.0).color(LEGEND);
+                if ui.put(button, egui::Button::new(text).fill(KEY_FACE)).clicked() {
+                    close = true;
+                }
+                let area = Rect::from_min_max(Pos2::new(safe.left(), bar.bottom()), safe.max);
+                ui.scope_builder(UiBuilder::new().max_rect(area), |ui| plot.ui(ui));
+            });
+        if close {
+            self.plot_open = false;
+        }
+    }
+
+    /// The plot in a window over the calculator, which can be moved,
+    /// resized and closed (tablets, which have one window).
+    fn show_floating_plot(&mut self, ctx: &egui::Context) {
+        let machine = self.machine.clone();
+        self.plot.refresh(&machine.lock().unwrap(), false);
+        let screen = ctx.content_rect();
+        let size = (screen.size() * 0.6).max(Vec2::new(320.0, 220.0)).min(screen.size());
+        let plot = &mut self.plot;
+        let mut open = self.plot_open;
+        egui::Window::new("Plot")
+            .id(egui::Id::new("hp48-plot-window"))
+            .open(&mut open)
+            .collapsible(false)
+            .resizable(true)
+            .default_size(size)
+            .min_size(Vec2::new(240.0, 160.0))
+            .default_pos(screen.center() - size / 2.0)
+            .constrain_to(screen)
+            .show(ctx, |ui| {
+                let (rect, _) = ui.allocate_exact_size(ui.available_size(), Sense::hover());
+                ui.scope_builder(UiBuilder::new().max_rect(rect), |ui| plot.ui(ui));
+            });
+        self.plot_open = open;
     }
 
     /// Scripted runs: once the key script has finished, grab a frame and exit.
@@ -1295,6 +1399,128 @@ mod tests {
         let before = window.menu();
         assert_eq!(window.hold(PointerButton::Primary, 22.0 * 2.0 + 10.0, 60.0), [Key::C]);
         assert_ne!(window.menu(), before, "LIST opens its own menu");
+    }
+
+    #[test]
+    fn the_plot_shows_by_screen() {
+        let Some(mut window) = Window::new() else { return };
+        let phone = Vec2::new(402.0, 874.0);
+        let tablet = Vec2::new(744.0, 1133.0);
+        assert_eq!(window.app.plot_style_for(phone), PlotStyle::Viewport, "desktop");
+        window.app.mobile = true;
+        assert_eq!(window.app.plot_style_for(phone), PlotStyle::FullScreen);
+        assert_eq!(window.app.plot_style_for(Vec2::new(874.0, 402.0)), PlotStyle::FullScreen, "phone on its side");
+        assert_eq!(window.app.plot_style_for(tablet), PlotStyle::Floating);
+        assert_eq!(window.app.plot_style_for(Vec2::new(1366.0, 1024.0)), PlotStyle::Floating);
+    }
+
+    /// Plot SIN(X) and show PICT on a mobile screen of `size`; says whether
+    /// the plot opened.
+    fn draw_on(size: Vec2) -> Option<(Window, bool)> {
+        let mut window = Window::new()?;
+        window.app.mobile = true;
+        window.app.plot_style = window.app.plot_style_for(size);
+        window.line("'SIN(X)' STEQ");
+        window.app.watch_pict();
+        window.line("PICTURE");
+        window.app.watch_pict();
+        let open = window.app.plot_open;
+        Some((window, open))
+    }
+
+    #[test]
+    fn a_phone_shows_the_plot_full_screen_with_a_close_button() {
+        let Some((mut window, open)) = draw_on(Vec2::new(402.0, 874.0)) else { return };
+        assert!(window.app.showing_pict, "the calculator shows PICT");
+        assert!(open);
+        window.frame(Vec::new());
+        window.frame(Vec::new());
+        let area = window.ctx.memory(|m| m.area_rect(egui::Id::new("hp48-plot-full-screen"))).expect("the plot is shown");
+        let screen = Rect::from_min_size(Pos2::ZERO, Vec2::new(450.0, 840.0));
+        assert!(area.contains_rect(screen.shrink(1.0)), "it covers the screen: {area:?}");
+        // A tap on the keys under it does nothing.
+        let held = window.hold(PointerButton::Primary, 65.0, 90.0);
+        assert!(held.is_empty(), "{held:?}");
+        assert!(window.app.plot_open);
+        // Close, at the right of the bar.
+        let close = Pos2::new(screen.right() - 57.0, screen.top() + PLOT_BAR_HEIGHT / 2.0);
+        let press = |pressed| Event::PointerButton { pos: close, button: PointerButton::Primary, pressed, modifiers: Modifiers::NONE };
+        window.frame(vec![Event::PointerMoved(close)]);
+        window.frame(vec![press(true)]);
+        window.frame(vec![press(false)]);
+        window.frame(Vec::new());
+        assert!(!window.app.plot_open, "closed");
+    }
+
+    #[test]
+    fn a_tablet_shows_the_plot_in_a_window_that_closes() {
+        let Some((mut window, open)) = draw_on(Vec2::new(744.0, 1133.0)) else { return };
+        assert!(open);
+        window.frame(Vec::new());
+        window.frame(Vec::new());
+        let id = egui::Id::new("hp48-plot-window");
+        let area = window.ctx.memory(|m| m.area_rect(id)).expect("the plot window is shown");
+        assert!(area.width() >= 240.0 && area.height() >= 160.0, "{area:?}");
+        // The close button is at the right of the title bar.
+        let close = Pos2::new(area.right() - 14.0, area.top() + 14.0);
+        let press = |pressed| Event::PointerButton { pos: close, button: PointerButton::Primary, pressed, modifiers: Modifiers::NONE };
+        window.frame(vec![Event::PointerMoved(close)]);
+        window.frame(vec![press(true)]);
+        window.frame(vec![press(false)]);
+        window.frame(Vec::new());
+        assert!(!window.app.plot_open, "closed");
+    }
+
+    #[test]
+    fn pinching_the_plot_zooms_it() {
+        use egui::{TouchDeviceId, TouchId, TouchPhase};
+        let Some((mut window, open)) = draw_on(Vec2::new(744.0, 1133.0)) else { return };
+        assert!(open);
+        window.frame(Vec::new());
+        window.frame(Vec::new());
+        let area = window.ctx.memory(|m| m.area_rect(egui::Id::new("hp48-plot-window"))).unwrap();
+        let centre = area.center() + Vec2::new(0.0, 10.0);
+        let width = |w: &Window| {
+            let v = w.app.plot.view().expect("the plot was drawn");
+            v.x1 - v.x0
+        };
+        let start = width(&window);
+        // What egui-winit sends for a finger: a touch event, and for the
+        // first finger down the pointer events that stand in for a mouse.
+        let finger = |id: u64, phase, pos| {
+            let mut events = vec![Event::Touch { device_id: TouchDeviceId(0), id: TouchId(id), phase, pos, force: None }];
+            if id == 1 {
+                let button = |pressed| Event::PointerButton { pos, button: PointerButton::Primary, pressed, modifiers: Modifiers::NONE };
+                match phase {
+                    TouchPhase::Start => events.extend([Event::PointerMoved(pos), button(true)]),
+                    TouchPhase::Move => events.push(Event::PointerMoved(pos)),
+                    _ => events.extend([button(false), Event::PointerGone]),
+                }
+            }
+            events
+        };
+        // Two fingers `gap` apart, either side of the centre, moving apart
+        // or together in steps, then lifted.
+        let pinch = |window: &mut Window, from: f32, to: f32| {
+            let at = |gap: f32| (centre - Vec2::new(gap / 2.0, 0.0), centre + Vec2::new(gap / 2.0, 0.0));
+            let both = |phase, gap: f32| {
+                let (a, b) = at(gap);
+                [finger(1, phase, a), finger(2, phase, b)].concat()
+            };
+            window.frame(both(TouchPhase::Start, from));
+            for step in 1..=5 {
+                window.frame(both(TouchPhase::Move, from + (to - from) * step as f32 / 5.0));
+            }
+            window.frame(both(TouchPhase::End, to));
+            window.frame(Vec::new());
+        };
+        pinch(&mut window, 60.0, 120.0);
+        let zoomed_in = width(&window);
+        assert!(zoomed_in < start * 0.7, "fingers apart zoom in: {start} -> {zoomed_in}");
+        pinch(&mut window, 120.0, 60.0);
+        let zoomed_out = width(&window);
+        assert!((zoomed_out / start - 1.0).abs() < 0.2, "fingers together zoom back out: {start} -> {zoomed_out}");
+        assert!(window.app.plot_open, "the window stays open");
     }
 
     /// A touch can start and end between two frames: the key must still

@@ -55,6 +55,10 @@ so App Store Connect doesn't ask about export compliance.
   It's saved when the app goes to the background (iOS may end a background app
   without warning) and every minute while running. When the app comes back,
   the calculator's clock catches up with the time away.
+- The plot: on an iPad (a screen at least 600 points on its shorter side) it
+  opens in a window over the calculator that can be moved, resized and closed
+  with its ✕. On an iPhone it fills the screen, under a bar with a Close
+  button. Either way, pinch to zoom.
 - Sound: the calculator's beeps play through the audio session's Ambient
   category (`main.m`), so they mix with other apps' audio and the Ring/Silent
   switch silences them. If there is no sound, check that switch.
@@ -67,7 +71,6 @@ so App Store Connect doesn't ask about export compliance.
 
 - No on-screen keyboard for the desktop panel's command line (iPad landscape):
   a hardware keyboard works, the calculator's own keys always do.
-- The plot window shows as a window inside the app, because iOS has only one.
 - Ctrl+V (paste) needs a hardware keyboard, and eframe has no iOS clipboard.
 - The icon (`HP48GX/Assets.xcassets/AppIcon.appiconset/icon-1024.png`) is cut
   from a screenshot of the app; replace it with designed art.

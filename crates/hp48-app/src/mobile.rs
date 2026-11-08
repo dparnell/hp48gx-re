@@ -37,6 +37,7 @@ pub fn run(rom: Vec<u8>) -> eframe::Result {
             // `App::new` restores the saved state, or answers the fresh
             // ROM's "Try To Recover Memory?" itself.
             let mut app = App::new(&rom, None, Vec::new(), true);
+            app.mobile = true;
             let _ = MACHINE.set(app.machine.clone());
             app.start(&cc.egui_ctx);
             Ok(Box::new(app))

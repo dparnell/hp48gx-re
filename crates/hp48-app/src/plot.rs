@@ -103,6 +103,12 @@ impl PlotWindow {
         self.traced = None;
     }
 
+    /// The part of the plane shown, once the plot has been drawn.
+    #[cfg(test)]
+    pub fn view(&self) -> Option<View> {
+        self.view
+    }
+
     pub fn ui(&mut self, ui: &mut egui::Ui) {
         let rect = ui.max_rect();
         let painter = ui.painter_at(rect);
@@ -116,8 +122,9 @@ impl PlotWindow {
         };
         let mut v = self.view.unwrap_or(spec.view());
 
-        // Interaction: drag to pan, wheel to zoom about the pointer,
-        // double-click to return to PPAR.
+        // Interaction: drag to pan, wheel to zoom about the pointer, pinch
+        // to zoom about the fingers and pan with them, double-click to
+        // return to PPAR.
         let resp = ui.interact(rect, ui.id().with("plot"), Sense::click_and_drag());
         let to_plot = |p: Pos2, v: View| {
             (
@@ -125,18 +132,31 @@ impl PlotWindow {
                 v.y1 - (p.y - rect.top()) as f64 / rect.height() as f64 * (v.y1 - v.y0),
             )
         };
-        if resp.dragged() {
-            let d = resp.drag_delta();
+        let pan = |v: View, d: Vec2| {
             let dx = -(d.x as f64) / rect.width() as f64 * (v.x1 - v.x0);
             let dy = (d.y as f64) / rect.height() as f64 * (v.y1 - v.y0);
-            v = View { x0: v.x0 + dx, x1: v.x1 + dx, y0: v.y0 + dy, y1: v.y1 + dy };
+            View { x0: v.x0 + dx, x1: v.x1 + dx, y0: v.y0 + dy, y1: v.y1 + dy }
+        };
+        // Zoom by `f` (below 1: in) keeping the point at `p` where it is.
+        let zoom = |v: View, p: Pos2, f: f64| {
+            let (px, py) = to_plot(p, v);
+            View { x0: px + (v.x0 - px) * f, x1: px + (v.x1 - px) * f, y0: py + (v.y0 - py) * f, y1: py + (v.y1 - py) * f }
+        };
+        // Two or more fingers on the plot: the first one also drives the
+        // pointer, so its drag is left out while they pinch.
+        let pinch = ui.input(|i| i.multi_touch()).filter(|t| rect.contains(t.center_pos));
+        if let Some(touch) = pinch {
+            v = pan(v, touch.translation_delta);
+            if touch.zoom_delta > 0.0 {
+                v = zoom(v, touch.center_pos, 1.0 / f64::from(touch.zoom_delta));
+            }
+        } else if resp.dragged() {
+            v = pan(v, resp.drag_delta());
         }
         if let Some(p) = resp.hover_pos() {
             let scroll = ui.input(|i| i.smooth_scroll_delta.y);
             if scroll != 0.0 {
-                let f = (-(scroll as f64) / 400.0).exp();
-                let (px, py) = to_plot(p, v);
-                v = View { x0: px + (v.x0 - px) * f, x1: px + (v.x1 - px) * f, y0: py + (v.y0 - py) * f, y1: py + (v.y1 - py) * f };
+                v = zoom(v, p, (-(scroll as f64) / 400.0).exp());
             }
         }
         if resp.double_clicked() {
@@ -239,7 +259,7 @@ impl PlotWindow {
                 TEXT,
             );
         }
-        let hint = "drag: pan   wheel: zoom   double-click: reset";
+        let hint = "drag: pan   wheel or pinch: zoom   double-click: reset";
         painter.text(rect.left_bottom() + Vec2::new(10.0, -8.0), Align2::LEFT_BOTTOM, hint, FontId::proportional(11.0), GRID.gamma_multiply(0.5));
     }
 }
