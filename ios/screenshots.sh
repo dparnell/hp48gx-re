@@ -1,6 +1,7 @@
 #!/bin/sh
-# App Store screenshots from the simulators: 6.9-inch iPhone (1320x2868)
-# and 13-inch iPad (2064x2752), portrait, into ios/screenshots/.
+# App Store screenshots from the simulators: 6.3-inch iPhone (1206x2622)
+# and 13-inch iPad (2064x2752), portrait, into ios/screenshots/. The sizes
+# App Store Connect accepts are in ios/README.md; the script checks them.
 #
 # Each shot installs the app afresh (so the calculator starts with an empty
 # stack), sets a clean status bar, and launches it with a script in
@@ -8,13 +9,14 @@
 # crates/hp48-app, `parse_demo`): key names, `wait`/`wait:SECONDS`, and
 # `type:TEXT` with `~` for a space.
 #
-# Usage: ios/screenshots.sh [IPHONE_NAME] [IPAD_NAME]
+# Usage: ios/screenshots.sh [IPHONE_NAME] [IPAD_NAME]   (a name of - skips
+# that device)
 # ONLY="4-shifted-keys ..." takes just those shots.
 set -eu
 cd "$(dirname "$0")"
 export DEVELOPER_DIR="${DEVELOPER_DIR:-/Applications/Xcode.app/Contents/Developer}"
 
-IPHONE="${1:-iPhone 17 Pro Max}"
+IPHONE="${1:-iPhone 17 Pro}"
 IPAD="${2:-iPad Pro 13-inch (M5)}"
 BUNDLE=com.automagic-software.i48x2
 OUT=screenshots
@@ -50,8 +52,9 @@ PLOT="wait:2 type:RAD~'SIN(X)*EXP(-X/5)'~STEQ~0~20~XRNG~-1~1~YRNG~ERASE~DRAW Ent
 EQLIB="wait:2 type:EQNLIB Enter wait:2 Enter wait:2 Enter wait:2 D wait:3"
 SHIFT="wait:2 type:«~→~X~'X^2+1'~» Enter wait type:{~1~2~3~}~10~* Enter wait type:#FFh~#10h~+ wait:2 LeftShift wait:2"
 
-for pair in "$IPHONE|iphone-6.9" "$IPAD|ipad-13"; do
+for pair in "$IPHONE|iphone-6.3" "$IPAD|ipad-13"; do
     name=${pair%|*} dir=${pair#*|}
+    [ "$name" != - ] || continue
     dev=$(udid "$name")
     [ -n "$dev" ] || { echo "no simulator named $name" >&2; exit 1; }
     # A simulator that this script boots, it shuts down again: each one
@@ -73,3 +76,15 @@ for pair in "$IPHONE|iphone-6.9" "$IPAD|ipad-13"; do
         xcrun simctl shutdown "$dev"
     fi
 done
+
+# Every shot must be a size App Store Connect takes for its device.
+bad=0
+for f in "$OUT"/*/*.png; do
+    size=$(sips -g pixelWidth -g pixelHeight "$f" | awk '/pixel/ { print $2 }' | paste -sd x -)
+    case "$f:$size" in
+        */iphone-6.3/*:1206x2622 | */iphone-6.3/*:2622x1206 | */iphone-6.3/*:1179x2556 | */iphone-6.3/*:2556x1179) ;;
+        */ipad-13/*:2064x2752 | */ipad-13/*:2752x2064 | */ipad-13/*:2048x2732 | */ipad-13/*:2732x2048) ;;
+        *) echo "wrong size for App Store Connect: $f is $size" >&2; bad=1 ;;
+    esac
+done
+exit $bad

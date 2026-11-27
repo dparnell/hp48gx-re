@@ -41,10 +41,12 @@ so App Store Connect doesn't ask about export compliance.
 
 ## Screenshots
 
-`ios/screenshots/` holds App Store screenshots: 6.9-inch iPhone (1320 × 2868)
-and 13-inch iPad (2064 × 2752) in portrait, and one iPad shot in landscape
-(2752 × 2064) with the stack panel beside the calculator. App Store Connect
-scales them down for smaller devices. To take the portrait ones again:
+`ios/screenshots/` holds App Store screenshots: 6.3-inch iPhone (1206 × 2622,
+from the iPhone 17 Pro simulator) and 13-inch iPad (2064 × 2752) in portrait,
+and one iPad shot in landscape (2752 × 2064) with the stack panel beside the
+calculator. These are sizes App Store Connect accepts (see "Screen Shorts for
+the app store" below); the script fails if a shot is any other size. To take
+the portrait ones again:
 
 ```bash
 ios/screenshots.sh
@@ -56,7 +58,8 @@ status bar (9:41, full battery), and launches it with a script in
 feature that `build-rust.sh` turns on for Debug); Release builds, and so App
 Store builds, don't contain it. The script has key names, `wait` or
 `wait:SECONDS`, and `type:TEXT` with `~` for a space. `ONLY="2-plot"` retakes
-just the shots named. A line that ends in an operator runs as the key is
+just the shots named, and `-` for a device name skips it
+(`ios/screenshots.sh "iPhone 17 Pro" -` takes only the iPhone's). A line that ends in an operator runs as the key is
 pressed, so its script has no `Enter` after it (unless `{` or `«` put the
 command line in program-entry mode).
 
