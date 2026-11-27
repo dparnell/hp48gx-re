@@ -1,5 +1,6 @@
 """The launch screen's picture: the calculator's face with its keys, the
-screen black, and "i48 Next Gen" on it.
+screen black, and "i48 Next Gen" on it, all greyed out (`grey_out`) to
+show the calculator isn't working yet.
 
     python3 ios/launch/make_launch.py
 
@@ -43,6 +44,13 @@ SCREEN = (MARGIN + 0.5, LCD_TOP - 3.0, MARGIN + 1.5 + LCD_W, LCD_TOP + LCD_H + 1
 LCD_GREEN = "#BCC6A9"
 TITLE = "i48 Next Gen"
 
+# The picture is greyed out, as a control that can't be used yet is: no
+# colour, and its contrast against the launch background (LaunchBackground,
+# #121214) cut to this share, so the keys read as not ready until the
+# calculator replaces them.
+BACKGROUND = (0x12, 0x12, 0x14)
+CONTRAST = 0.45
+
 
 def face(path):
     """The desktop app's calculator, with nothing typed."""
@@ -74,6 +82,16 @@ def overlay(face_png):
     ), side
 
 
+def grey_out(row):
+    """An RGB row in grey, pulled toward the background."""
+    out = bytearray(len(row))
+    for i in range(0, len(row), 3):
+        y = 0.299 * row[i] + 0.587 * row[i + 1] + 0.114 * row[i + 2]
+        for c in range(3):
+            out[i + c] = round(BACKGROUND[c] + (y - BACKGROUND[c]) * CONTRAST)
+    return bytes(out)
+
+
 def main():
     if sys.platform != "darwin":
         sys.exit("make_launch.py renders with macOS Quick Look (qlmanage)")
@@ -92,7 +110,7 @@ def main():
     # Cut the face back out of the square.
     left = (side - W) // 2
     rgb = flatten(rows, w)
-    cut = [row[3 * left : 3 * (left + W)] for row in rgb[:H]]
+    cut = [grey_out(row[3 * left : 3 * (left + W)]) for row in rgb[:H]]
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     write_png_rgb(OUT, W, H, cut)
     print(os.path.relpath(OUT, ROOT), f"{W}x{H}")
