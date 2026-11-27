@@ -100,3 +100,22 @@ scene on the iPad, rotate it (Device ▸ Rotate Left), and save it with
 - Ctrl+V (paste) needs a hardware keyboard, and eframe has no iOS clipboard.
 - The icon (`HP48GX/Assets.xcassets/AppIcon.appiconset/icon-1024.png`) is cut
   from a screenshot of the app; replace it with designed art.
+
+
+## Screen Shorts for the app store
+
+The following is taken from the appstore connect website:
+
+For iPhone with Dynamic Island:
+
+```
+Drag and drop to add assets or choose from your Asset Library for iPhone 6.1" or 6.3" displays. Supported sizes for app previews include 1920 × 886px and 886 × 1920px. For app screenshots, supported sizes include 2556 × 1179px, 1179 × 2556px, 2622 × 1206px and 1206 × 2622px.
+```
+
+
+iPad 13" display
+
+```
+Drag and drop to add assets or choose from your Asset Library for iPad 12.9" or 13" displays. Supported sizes for app previews include 1600 × 1200px and 1200 × 1600px. For app screenshots, supported sizes include 2732 × 2048px, 2048 × 2732px, 2752 × 2064px and 2064 × 2752px.
+```
+
