@@ -29,6 +29,12 @@ impl log::Log for Logger {
     fn flush(&self) {}
 }
 
+extern "C" {
+    /// In main.m: the first frames are on screen, so the cover that keeps
+    /// the launch screen up can go.
+    fn hp48_shown();
+}
+
 /// Run the app. It never returns: UIKit's run loop takes over the main
 /// thread, and the system ends the app.
 #[no_mangle]
@@ -36,7 +42,7 @@ pub extern "C" fn hp48_main() {
     if log::set_logger(&Logger).is_ok() {
         log::set_max_level(log::LevelFilter::Warn);
     }
-    if let Err(e) = hp48_app::mobile::run(ROM.to_vec()) {
+    if let Err(e) = hp48_app::mobile::run(ROM.to_vec(), || unsafe { hp48_shown() }) {
         eprintln!("HP 48GX: {e}");
         std::process::exit(1);
     }

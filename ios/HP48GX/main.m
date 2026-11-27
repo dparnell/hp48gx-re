@@ -8,6 +8,11 @@
 // scene with HP48SceneDelegate, and makeKeyAndVisible is wrapped to give a
 // window without a scene the app's scene, or to keep it until the scene
 // connects.
+//
+// The app's window shows black until its first frame is drawn, so a cover
+// made from the launch storyboard sits over it until Rust calls
+// hp48_shown (its first frames are on screen), and then fades out: the
+// launch screen goes straight to the calculator.
 
 #import <AVFAudio/AVFAudio.h>
 #import <UIKit/UIKit.h>
@@ -24,6 +29,52 @@ static NSMutableArray<UIWindow *> *waitingWindows;
 /// UIWindow's own makeKeyAndVisible.
 static IMP originalMakeKeyAndVisible;
 
+/// The launch screen's view over the app's window, until its first frames
+/// are drawn; and whether they have been.
+static UIView *launchCover;
+static BOOL shown;
+
+/// Longest the cover stays if hp48_shown never comes.
+static const NSTimeInterval launchCoverLimit = 5.0;
+
+/// Called by Rust (crates/hp48-ios): the first frames are on screen.
+void hp48_shown(void) {
+    shown = YES;
+    UIView *cover = launchCover;
+    launchCover = nil;
+    if (cover == nil) {
+        return;
+    }
+    [UIView animateWithDuration:0.15
+        animations:^{
+          cover.alpha = 0;
+        }
+        completion:^(BOOL finished) {
+          [cover removeFromSuperview];
+        }];
+}
+
+/// Put the launch storyboard's view over `window`, the first time it shows.
+static void coverWithLaunchScreen(UIWindow *window) {
+    if (shown || launchCover != nil) {
+        return;
+    }
+    UIStoryboard *board = [UIStoryboard storyboardWithName:@"LaunchScreen" bundle:nil];
+    UIView *view = [board instantiateInitialViewController].view;
+    if (view == nil) {
+        return;
+    }
+    view.frame = window.bounds;
+    view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    view.userInteractionEnabled = NO;
+    [window addSubview:view];
+    launchCover = view;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(launchCoverLimit * NSEC_PER_SEC)),
+                   dispatch_get_main_queue(), ^{
+                     hp48_shown();
+                   });
+}
+
 static void hp48MakeKeyAndVisible(UIWindow *self, SEL _cmd) {
     if (self.windowScene == nil) {
         if (appScene == nil) {
@@ -36,6 +87,7 @@ static void hp48MakeKeyAndVisible(UIWindow *self, SEL _cmd) {
         self.frame = appScene.coordinateSpace.bounds;
     }
     ((void (*)(id, SEL))originalMakeKeyAndVisible)(self, _cmd);
+    coverWithLaunchScreen(self);
 }
 
 @interface HP48SceneDelegate : UIResponder <UIWindowSceneDelegate>

@@ -97,6 +97,9 @@ enum Layout {
     Desktop,
 }
 
+/// Frames drawn before the first is surely on screen (`App::frame_drawn`).
+const FRAMES_BEFORE_SHOWN: u32 = 2;
+
 /// How the plot is shown (`App::plot_style_for`).
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 enum PlotStyle {
@@ -130,6 +133,10 @@ struct App {
     speed: Arc<runner::Speed>,
     /// Running as a phone or tablet app (mobile.rs): one window, touch.
     mobile: bool,
+    /// Called once the first frames are on screen (mobile.rs: the host
+    /// keeps the launch screen up until then), and the frames drawn so far.
+    on_shown: Option<Box<dyn FnOnce()>>,
+    frames_drawn: u32,
     /// How the plot can be shown on this screen, worked out each frame.
     plot_style: PlotStyle,
     plot_open: bool,
@@ -214,6 +221,8 @@ impl App {
             sound: None,
             speed: Arc::default(),
             mobile: false,
+            on_shown: None,
+            frames_drawn: 0,
             plot_style: PlotStyle::Viewport,
             plot_open: false,
             plot_only: false,
@@ -243,6 +252,23 @@ impl App {
             script_time: 0.0,
             lines: Vec::new(),
             end_time,
+        }
+    }
+
+    /// Count a frame, and call `on_shown` once two are drawn: by the
+    /// second, the first is on screen. Until then ask for frames, so an idle
+    /// calculator can't hold the launch screen up.
+    fn frame_drawn(&mut self, ctx: &egui::Context) {
+        if self.on_shown.is_none() {
+            return;
+        }
+        self.frames_drawn += 1;
+        if self.frames_drawn >= FRAMES_BEFORE_SHOWN {
+            if let Some(shown) = self.on_shown.take() {
+                shown();
+            }
+        } else {
+            ctx.request_repaint();
         }
     }
 
@@ -471,6 +497,7 @@ impl eframe::App for App {
     }
 
     fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
+        self.frame_drawn(ui.ctx());
         if self.plot_only {
             let machine = self.machine.clone();
             self.plot.refresh(&machine.lock().unwrap(), false);
@@ -1467,6 +1494,25 @@ mod tests {
         let before = window.menu();
         assert_eq!(window.hold(PointerButton::Primary, 22.0 * 2.0 + 10.0, 60.0), [Key::C]);
         assert_ne!(window.menu(), before, "LIST opens its own menu");
+    }
+
+    #[test]
+    fn on_shown_is_called_once_after_the_second_frame() {
+        let Some(mut window) = Window::new() else { return };
+        let calls = std::rc::Rc::new(std::cell::Cell::new(0));
+        let counter = calls.clone();
+        window.app.on_shown = Some(Box::new(move || counter.set(counter.get() + 1)));
+        let ctx = window.ctx.clone();
+        let frame = |app: &mut App| {
+            let _ = ctx.run_ui(RawInput::default(), |ui| app.frame_drawn(ui.ctx()));
+        };
+        frame(&mut window.app);
+        assert_eq!(calls.get(), 0, "not after the first frame");
+        assert!(ctx.has_requested_repaint(), "it asks for the next frame");
+        frame(&mut window.app);
+        assert_eq!(calls.get(), 1);
+        frame(&mut window.app);
+        assert_eq!(calls.get(), 1, "only once");
     }
 
     #[test]

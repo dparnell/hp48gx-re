@@ -23,7 +23,9 @@ fn now_secs() -> f64 {
 }
 
 /// Run the app on `rom`. On iOS this never returns: the system ends the app.
-pub fn run(rom: Vec<u8>) -> eframe::Result {
+/// `shown` is called once the app's first frames are on screen, for the
+/// host to take its launch screen away.
+pub fn run(rom: Vec<u8>, shown: impl FnOnce() + 'static) -> eframe::Result {
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default().with_title("HP 48GX"),
         wgpu_options: wgpu_options(),
@@ -38,6 +40,7 @@ pub fn run(rom: Vec<u8>) -> eframe::Result {
             // ROM's "Try To Recover Memory?" itself.
             let mut app = App::new(&rom, None, Vec::new(), true);
             app.mobile = true;
+            app.on_shown = Some(Box::new(shown));
             let _ = MACHINE.set(app.machine.clone());
             app.start(&cc.egui_ctx);
             // Debug builds only (the `demo-script` feature): a script to

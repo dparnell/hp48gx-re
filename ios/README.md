@@ -75,6 +75,17 @@ scene on the iPad, rotate it (Device ▸ Rotate Left), and save it with
   (`HP48SceneDelegate`, in Info.plist) and wraps `makeKeyAndVisible`, so
   winit's window is given that scene, after it connects if need be.
 
+- The launch screen (`HP48GX/LaunchScreen.storyboard`) shows the calculator's
+  keys with the screen black and "i48 Next Gen" on it, fitted into the safe
+  area as the app fits the calculator, so the keys don't move when the app
+  starts. Its picture (`LaunchFace` in the asset catalog) comes from
+  `python3 ios/launch/make_launch.py`, which screenshots the desktop app's
+  face and draws the screen and title over it; run it again after changing
+  the faceplate. iOS draws a launch screen only for a signed app: a build
+  with `CODE_SIGNING_ALLOWED=NO` (as `screenshots.sh` makes) starts on black.
+  The app's window is black until its first frame, so `main.m` covers it with
+  the launch storyboard's view and fades that out when Rust calls
+  `hp48_shown`, two frames in (`App::frame_drawn`), or after 5 s at most.
 - It uses the same layout rules as the desktop: on an iPhone, and on an iPad
   in portrait, you get the calculator alone; on an iPad in landscape, the
   desktop panel is beside it. iPhones stay in portrait.
@@ -102,7 +113,15 @@ scene on the iPad, rotate it (Device ▸ Rotate Left), and save it with
   a hardware keyboard works, the calculator's own keys always do.
 - Ctrl+V (paste) needs a hardware keyboard, and eframe has no iOS clipboard.
 - The icon (`HP48GX/Assets.xcassets/AppIcon.appiconset/icon-1024.png`) is cut
-  from a screenshot of the app; replace it with designed art.
+  from a screenshot of the app; replace it with designed art. `icon-ideas/`
+  has six example designs (SVG, and 1024 × 1024 opaque PNG) and
+  `preview.png` showing them at home-screen and Settings sizes;
+  `python3 ios/icon-ideas/make_icons.py` makes them again. Each is also an
+  icon set in the asset catalog (`AppIcon-StackDisplay`, `AppIcon-ShiftKeys`,
+  `AppIcon-Plot`, `AppIcon-DotMatrix48`, `AppIcon-RPNStack`,
+  `AppIcon-Calculator`), not built into the app until chosen: pick one under
+  the target's General ▸ App Icons (`ASSETCATALOG_COMPILER_APPICON_NAME`).
+  After changing a design, copy its PNG over that set's `icon-1024.png`.
 
 
 ## Screen Shorts for the app store
