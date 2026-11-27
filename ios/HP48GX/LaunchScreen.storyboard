@@ -23,7 +23,7 @@
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="LCh-sa-001"/>
-                        <color key="backgroundColor" name="LaunchBackground"/>
+                        <color key="backgroundColor" red="0.070588235294117646" green="0.070588235294117646" blue="0.078431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="LCh-im-001" firstAttribute="top" secondItem="LCh-sa-001" secondAttribute="top" id="LCh-ct-001"/>
                             <constraint firstItem="LCh-sa-001" firstAttribute="bottom" secondItem="LCh-im-001" secondAttribute="bottom" id="LCh-ct-002"/>
@@ -39,8 +39,5 @@
     </scenes>
     <resources>
         <image name="LaunchFace" width="435" height="812"/>
-        <namedColor name="LaunchBackground">
-            <color red="0.070588235294117646" green="0.070588235294117646" blue="0.078431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
     </resources>
 </document>

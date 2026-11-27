@@ -45,7 +45,7 @@ LCD_GREEN = "#BCC6A9"
 TITLE = "i48 Next Gen"
 
 # The picture is greyed out, as a control that can't be used yet is: no
-# colour, and its contrast against the launch background (LaunchBackground,
+# colour, and its contrast against the launch background (LaunchScreen.storyboard,
 # #121214) cut to this share, so the keys read as not ready until the
 # calculator replaces them.
 BACKGROUND = (0x12, 0x12, 0x14)
